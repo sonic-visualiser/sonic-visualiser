@@ -15,11 +15,12 @@
 
 #include "MainWindow.h"
 
-#include "base/System.h"
+#include "system/System.h"
+#include "system/Init.h"
 #include "base/TempDirectory.h"
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
-#include "fileio/ConfigFile.h"
+#include "base/ConfigFile.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -46,8 +47,6 @@ signalHandler(int /* signal */)
     TempDirectory::getInstance()->cleanup();
     exit(0); // without releasing mutex
 }
-
-extern void svSystemSpecificInitialisation();
 
 int
 main(int argc, char **argv)

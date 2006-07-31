@@ -19,14 +19,14 @@
 #include "plugin/PluginXml.h"
 #include "vamp-sdk/Plugin.h"
 
-#include "base/Model.h"
+#include "data/model/Model.h"
 #include "base/Window.h"
-#include "model/SparseOneDimensionalModel.h"
-#include "model/SparseTimeValueModel.h"
-#include "model/DenseThreeDimensionalModel.h"
-#include "model/DenseTimeValueModel.h"
-#include "model/NoteModel.h"
-#include "fileio/FFTFuzzyAdapter.h"
+#include "data/model/SparseOneDimensionalModel.h"
+#include "data/model/SparseTimeValueModel.h"
+#include "data/model/DenseThreeDimensionalModel.h"
+#include "data/model/DenseTimeValueModel.h"
+#include "data/model/NoteModel.h"
+#include "data/fft/FFTFuzzyAdapter.h"
 
 #include <fftw3.h>
 

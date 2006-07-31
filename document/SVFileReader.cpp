@@ -15,23 +15,23 @@
 
 #include "SVFileReader.h"
 
-#include "base/Layer.h"
-#include "base/View.h"
+#include "layer/Layer.h"
+#include "view/View.h"
 #include "base/PlayParameters.h"
 #include "base/PlayParameterRepository.h"
 
-#include "AudioFileReaderFactory.h"
+#include "data/fileio/AudioFileReaderFactory.h"
 
-#include "model/WaveFileModel.h"
-#include "model/DenseThreeDimensionalModel.h"
-#include "model/SparseOneDimensionalModel.h"
-#include "model/SparseTimeValueModel.h"
-#include "model/NoteModel.h"
-#include "model/TextModel.h"
+#include "data/model/WaveFileModel.h"
+#include "data/model/DenseThreeDimensionalModel.h"
+#include "data/model/SparseOneDimensionalModel.h"
+#include "data/model/SparseTimeValueModel.h"
+#include "data/model/NoteModel.h"
+#include "data/model/TextModel.h"
 
-#include "widgets/Pane.h"
+#include "view/Pane.h"
 
-#include "main/Document.h"
+#include "Document.h"
 
 #include <QString>
 #include <QMessageBox>

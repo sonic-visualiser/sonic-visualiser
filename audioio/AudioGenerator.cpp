@@ -21,9 +21,9 @@
 #include "base/Pitch.h"
 #include "base/Exceptions.h"
 
-#include "model/NoteModel.h"
-#include "model/DenseTimeValueModel.h"
-#include "model/SparseOneDimensionalModel.h"
+#include "data/model/NoteModel.h"
+#include "data/model/DenseTimeValueModel.h"
+#include "data/model/SparseOneDimensionalModel.h"
 
 #include "plugin/RealTimePluginFactory.h"
 #include "plugin/RealTimePluginInstance.h"

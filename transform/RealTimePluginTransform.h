@@ -17,7 +17,7 @@
 #define _REAL_TIME_PLUGIN_TRANSFORM_H_
 
 #include "Transform.h"
-#include "RealTimePluginInstance.h"
+#include "plugin/RealTimePluginInstance.h"
 
 class DenseTimeValueModel;
 

@@ -20,9 +20,9 @@
 #include "plugin/RealTimePluginInstance.h"
 #include "plugin/PluginXml.h"
 
-#include "base/Model.h"
-#include "model/SparseTimeValueModel.h"
-#include "model/DenseTimeValueModel.h"
+#include "data/model/Model.h"
+#include "data/model/SparseTimeValueModel.h"
+#include "data/model/DenseTimeValueModel.h"
 
 #include <iostream>
 
