@@ -23,10 +23,10 @@
 #include "base/Window.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "data/model/SparseTimeValueModel.h"
-#include "data/model/DenseThreeDimensionalModel.h"
+#include "data/model/EditableDenseThreeDimensionalModel.h"
 #include "data/model/DenseTimeValueModel.h"
 #include "data/model/NoteModel.h"
-#include "data/fft/FFTFuzzyAdapter.h"
+#include "data/model/FFTModel.h"
 
 #include <fftw3.h>
 
@@ -190,15 +190,15 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 
     } else {
 	
-	m_output = new DenseThreeDimensionalModel(modelRate, modelResolution,
-						  binCount, false);
+	m_output = new EditableDenseThreeDimensionalModel
+            (modelRate, modelResolution, binCount, false);
 
 	if (!m_descriptor->binNames.empty()) {
 	    std::vector<QString> names;
 	    for (size_t i = 0; i < m_descriptor->binNames.size(); ++i) {
 		names.push_back(m_descriptor->binNames[i].c_str());
 	    }
-	    (dynamic_cast<DenseThreeDimensionalModel *>(m_output))
+	    (dynamic_cast<EditableDenseThreeDimensionalModel *>(m_output))
 		->setBinNames(names);
 	}
     }
@@ -243,11 +243,11 @@ FeatureExtractionPluginTransform::run()
 
     bool frequencyDomain = (m_plugin->getInputDomain() ==
                             Vamp::Plugin::FrequencyDomain);
-    std::vector<FFTFuzzyAdapter *> fftAdapters;
+    std::vector<FFTModel *> fftModels;
 
     if (frequencyDomain) {
         for (size_t ch = 0; ch < channelCount; ++ch) {
-            fftAdapters.push_back(new FFTFuzzyAdapter
+            fftModels.push_back(new FFTModel
                                   (getInput(),
                                    channelCount == 1 ? m_channel : ch,
                                    HanningWindow,
@@ -285,7 +285,7 @@ FeatureExtractionPluginTransform::run()
             if (frequencyDomain) {
                 int column = (blockFrame - startFrame) / m_stepSize;
                 for (size_t i = 0; i < m_blockSize/2; ++i) {
-                    fftAdapters[ch]->getValuesAt
+                    fftModels[ch]->getValuesAt
                         (column, i, buffers[ch][i*2], buffers[ch][i*2+1]);
                 }
 /*!!!
@@ -330,7 +330,7 @@ FeatureExtractionPluginTransform::run()
 
     if (frequencyDomain) {
         for (size_t ch = 0; ch < channelCount; ++ch) {
-            delete fftAdapters[ch];
+            delete fftModels[ch];
         }
     }
 
@@ -450,7 +450,8 @@ FeatureExtractionPluginTransform::addFeature(size_t blockFrame,
 	
 	DenseThreeDimensionalModel::BinValueSet values = feature.values;
 	
-	DenseThreeDimensionalModel *model = getOutput<DenseThreeDimensionalModel>();
+	EditableDenseThreeDimensionalModel *model =
+            getOutput<EditableDenseThreeDimensionalModel>();
 	if (!model) return;
 
 	model->setBinValues(frame, values);
@@ -486,7 +487,8 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 
     } else {
 
-	DenseThreeDimensionalModel *model = getOutput<DenseThreeDimensionalModel>();
+	EditableDenseThreeDimensionalModel *model =
+            getOutput<EditableDenseThreeDimensionalModel>();
 	if (!model) return;
 	model->setCompletion(completion);
     }
