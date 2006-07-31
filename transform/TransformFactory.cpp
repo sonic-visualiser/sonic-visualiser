@@ -24,7 +24,7 @@
 
 #include "widgets/PluginParameterDialog.h"
 
-#include "model/DenseTimeValueModel.h"
+#include "data/model/DenseTimeValueModel.h"
 
 #include <iostream>
 #include <set>

@@ -22,11 +22,11 @@
 #include <QPointer>
 
 #include "base/Command.h"
-#include "base/ViewManager.h"
+#include "view/ViewManager.h"
 #include "base/PropertyContainer.h"
 #include "layer/LayerFactory.h"
 #include "transform/Transform.h"
-#include "fileio/SVFileReader.h"
+#include "document/SVFileReader.h"
 #include <map>
 
 class Document;

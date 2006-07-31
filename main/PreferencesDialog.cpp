@@ -31,7 +31,7 @@
 #include <fftw3.h>
 
 #include "base/Preferences.h"
-#include "fileio/ConfigFile.h"
+#include "base/ConfigFile.h"
 
 PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     QDialog(parent, flags)

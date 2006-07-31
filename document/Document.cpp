@@ -15,11 +15,11 @@
 
 #include "Document.h"
 
-#include "model/WaveFileModel.h"
-#include "base/Layer.h"
+#include "data/model/WaveFileModel.h"
+#include "layer/Layer.h"
 #include "base/CommandHistory.h"
 #include "base/Command.h"
-#include "base/View.h"
+#include "view/View.h"
 #include "base/PlayParameterRepository.h"
 #include "base/PlayParameters.h"
 #include "transform/TransformFactory.h"

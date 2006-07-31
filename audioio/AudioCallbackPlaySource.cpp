@@ -17,11 +17,11 @@
 
 #include "AudioGenerator.h"
 
-#include "base/Model.h"
-#include "base/ViewManager.h"
+#include "data/model/Model.h"
+#include "view/ViewManager.h"
 #include "base/PlayParameterRepository.h"
-#include "model/DenseTimeValueModel.h"
-#include "model/SparseOneDimensionalModel.h"
+#include "data/model/DenseTimeValueModel.h"
+#include "data/model/SparseOneDimensionalModel.h"
 #include "IntegerTimeStretcher.h"
 
 #include <iostream>

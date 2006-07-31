@@ -16,9 +16,9 @@
 #ifndef _TRANSFORM_H_
 #define _TRANSFORM_H_
 
-#include "Thread.h"
+#include "base/Thread.h"
 
-#include "base/Model.h"
+#include "data/model/Model.h"
 
 typedef QString TransformName;
 
