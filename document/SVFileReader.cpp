@@ -23,7 +23,7 @@
 #include "data/fileio/AudioFileReaderFactory.h"
 
 #include "data/model/WaveFileModel.h"
-#include "data/model/DenseThreeDimensionalModel.h"
+#include "data/model/EditableDenseThreeDimensionalModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "data/model/SparseTimeValueModel.h"
 #include "data/model/NoteModel.h"
@@ -423,8 +423,9 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 	    READ_MANDATORY(int, windowSize, toInt);
 	    READ_MANDATORY(int, yBinCount, toInt);
 	    
-	    DenseThreeDimensionalModel *model =
-		new DenseThreeDimensionalModel(sampleRate, windowSize, yBinCount);
+            EditableDenseThreeDimensionalModel *model =
+		new EditableDenseThreeDimensionalModel
+                (sampleRate, windowSize, yBinCount);
 	    
 	    float minimum = attributes.value("minimum").trimmed().toFloat(&ok);
 	    if (ok) model->setMinimumLevel(minimum);
@@ -710,7 +711,7 @@ SVFileReader::readDatasetStart(const QXmlAttributes &attributes)
 
     case 3:
 	if (dynamic_cast<NoteModel *>(model)) good = true;
-	else if (dynamic_cast<DenseThreeDimensionalModel *>(model)) {
+	else if (dynamic_cast<EditableDenseThreeDimensionalModel *>(model)) {
 	    m_datasetSeparator = attributes.value("separator");
 	    good = true;
 	}
@@ -784,7 +785,8 @@ SVFileReader::addPointToDataset(const QXmlAttributes &attributes)
 bool
 SVFileReader::addBinToDataset(const QXmlAttributes &attributes)
 {
-    DenseThreeDimensionalModel *dtdm = dynamic_cast<DenseThreeDimensionalModel *>
+    EditableDenseThreeDimensionalModel *dtdm = 
+        dynamic_cast<EditableDenseThreeDimensionalModel *>
 	(m_currentDataset);
 
     if (dtdm) {
@@ -832,7 +834,8 @@ SVFileReader::addRowToDataset(const QXmlAttributes &attributes)
 bool
 SVFileReader::readRowData(const QString &text)
 {
-    DenseThreeDimensionalModel *dtdm = dynamic_cast<DenseThreeDimensionalModel *>
+    EditableDenseThreeDimensionalModel *dtdm =
+        dynamic_cast<EditableDenseThreeDimensionalModel *>
 	(m_currentDataset);
 
     bool warned = false;
@@ -863,7 +866,7 @@ SVFileReader::readRowData(const QString &text)
 	    }
 	}
 
-	size_t windowStartFrame = m_rowNumber * dtdm->getWindowSize();
+	size_t windowStartFrame = m_rowNumber * dtdm->getResolution();
 
 	dtdm->setBinValues(windowStartFrame, values);
 	return true;
