@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-SV_UNIT_PACKAGES = fftw3f samplerate jack portaudio mad oggz fishsound lrdf raptor sndfile
+SV_UNIT_PACKAGES = vamp vamp-sdk fftw3f samplerate jack portaudio mad oggz fishsound lrdf raptor sndfile
 load(../sv.prf)
 
 CONFIG += sv qt thread warn_on stl rtti exceptions
@@ -12,6 +12,9 @@ TARGET = sonic-visualiser
 DEPENDPATH += . .. audioio document i18n main transform
 INCLUDEPATH += . .. audioio document transform main
 LIBPATH = ../view ../layer ../data ../widgets ../plugin ../base ../system $$LIBPATH
+
+contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
+
 LIBS = -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 OBJECTS_DIR = tmp_obj
