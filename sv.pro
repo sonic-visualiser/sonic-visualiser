@@ -17,6 +17,14 @@ contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
 LIBS = -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
 
+PRE_TARGETDEPS += ../view/libsvview.a \
+                  ../layer/libsvlayer.a \
+                  ../data/libsvdata.a \
+                  ../widgets/libsvwidgets.a \
+                  ../plugin/libsvplugin.a \
+                  ../base/libsvbase.a \
+                  ../system/libsvsystem.a
+
 OBJECTS_DIR = tmp_obj
 MOC_DIR = tmp_moc
 
