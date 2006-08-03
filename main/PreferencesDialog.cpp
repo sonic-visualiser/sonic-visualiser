@@ -31,7 +31,6 @@
 #include <fftw3.h>
 
 #include "base/Preferences.h"
-#include "base/ConfigFile.h"
 
 PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     QDialog(parent, flags)
@@ -352,7 +351,6 @@ void
 PreferencesDialog::okClicked()
 {
     applyClicked();
-    Preferences::getInstance()->getConfigFile()->commit();
     accept();
 }
 
