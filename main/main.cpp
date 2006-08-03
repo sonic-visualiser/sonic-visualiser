@@ -20,7 +20,6 @@
 #include "base/TempDirectory.h"
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
-#include "base/ConfigFile.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -64,9 +63,9 @@ main(int argc, char **argv)
 
     svSystemSpecificInitialisation();
 
-    QApplication::setOrganizationName("Sonic Visualiser");
+    QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
-    QApplication::setApplicationName("Sonic Visualiser");
+    QApplication::setApplicationName("sonic-visualiser");
 
     QString language = QLocale::system().name();
 
@@ -127,7 +126,6 @@ main(int argc, char **argv)
 
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
-    Preferences::getInstance()->getConfigFile()->commit();
 
     return rv;
 }
