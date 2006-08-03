@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QTranslator>
 #include <QLocale>
+#include <QSettings>
 
 #include <iostream>
 #include <signal.h>
@@ -63,6 +64,10 @@ main(int argc, char **argv)
 
     svSystemSpecificInitialisation();
 
+    QApplication::setOrganizationName("Sonic Visualiser");
+    QApplication::setOrganizationDomain("sonicvisualiser.org");
+    QApplication::setApplicationName("Sonic Visualiser");
+
     QString language = QLocale::system().name();
 
     QTranslator qtTranslator;
@@ -91,7 +96,15 @@ main(int argc, char **argv)
     if (height < 450) height = available.height() * 2 / 3;
     if (width > height * 2) width = height * 2;
 
-    gui.resize(width, height);
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    QSize size = settings.value("size", QSize(width, height)).toSize();
+    gui.resize(size);
+    if (settings.contains("position")) {
+        gui.move(settings.value("position").toPoint());
+    }
+    settings.endGroup();
+    
     gui.show();
 
     if (argc > 1) {
@@ -115,5 +128,6 @@ main(int argc, char **argv)
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
     Preferences::getInstance()->getConfigFile()->commit();
+
     return rv;
 }

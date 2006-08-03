@@ -74,6 +74,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
+#include <QSettings>
 
 #include <iostream>
 #include <cstdio>
@@ -2114,6 +2115,12 @@ MainWindow::closeEvent(QCloseEvent *e)
 	e->ignore();
 	return;
     }
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("size", size());
+    settings.setValue("position", pos());
+    settings.endGroup();
 
     e->accept();
     return;
