@@ -118,7 +118,9 @@ protected slots:
 
     void showNoOverlays();
     void showBasicOverlays();
-    void showAllOverlays();
+    void showAllTextOverlays();
+
+    void toggleZoomWheels();
 
     void play();
     void ffwd();
