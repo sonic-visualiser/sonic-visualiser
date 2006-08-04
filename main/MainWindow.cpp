@@ -74,6 +74,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QProcess>
+#include <QShortcut>
 #include <QSettings>
 
 #include <iostream>
@@ -179,7 +180,7 @@ MainWindow::MainWindow() :
     setupMenus();
     setupToolbars();
 
-//    statusBar()->addWidget(m_descriptionLabel);
+    statusBar()->addWidget(m_descriptionLabel);
 
     newSession();
 }
@@ -405,6 +406,10 @@ MainWindow::setupMenus()
 	connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
 	menu->addAction(action);
 
+        // Laptop shortcut (no keypad Enter key)
+        connect(new QShortcut(tr(";"), this), SIGNAL(activated()),
+                this, SLOT(insertInstant()));
+
 	menu = menuBar()->addMenu(tr("&View"));
 
         QActionGroup *overlayGroup = new QActionGroup(this);
@@ -430,7 +435,7 @@ MainWindow::setupMenus()
         action = new QAction(tr("&All Text Overlays"), this);
 	action->setShortcut(tr("8"));
 	action->setStatusTip(tr("Show texts for frame times, layer names etc"));
-	connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
+	connect(action, SIGNAL(triggered()), this, SLOT(showAllTextOverlays()));
         action->setCheckable(true);
         action->setChecked(false);
         overlayGroup->addAction(action);
@@ -493,6 +498,14 @@ MainWindow::setupMenus()
 	action->setStatusTip(tr("Zoom to show the whole file"));
 	connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
 	connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
+	menu->addAction(action);
+        
+        action = new QAction(tr("Show &Zoom Wheels"), this);
+	action->setShortcut(tr("Z"));
+	action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
+	connect(action, SIGNAL(triggered()), this, SLOT(toggleZoomWheels()));
+        action->setCheckable(true);
+        action->setChecked(m_viewManager->getZoomWheelsEnabled());
 	menu->addAction(action);
 
 /*!!! This one doesn't work properly yet
@@ -612,7 +625,8 @@ MainWindow::setupMenus()
 	LayerFactory::Waveform,
 	LayerFactory::Spectrogram,
 	LayerFactory::MelodicRangeSpectrogram,
-	LayerFactory::PeakFrequencySpectrogram
+	LayerFactory::PeakFrequencySpectrogram,
+        LayerFactory::Spectrum
     };
 
     for (unsigned int i = 0;
@@ -684,6 +698,16 @@ MainWindow::setupMenus()
 			tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
 		    }
 		    break;
+
+                case LayerFactory::Spectrum:
+                    mainText = tr("Add Spectr&um");
+		    if (menuType == 0) {
+			shortcutText = tr("Alt+U");
+			tipText = tr("Add a new pane showing a frequency spectrum");
+		    } else {
+			tipText = tr("Add a new layer showing a frequency spectrum");
+		    }
+                    break;
 
 		default: break;
 		}
@@ -2382,9 +2406,19 @@ MainWindow::showBasicOverlays()
 }
 
 void
-MainWindow::showAllOverlays()
+MainWindow::showAllTextOverlays()
 {
     m_viewManager->setOverlayMode(ViewManager::AllOverlays);
+}
+
+void
+MainWindow::toggleZoomWheels()
+{
+    if (m_viewManager->getZoomWheelsEnabled()) {
+        m_viewManager->setZoomWheelsEnabled(false);
+    } else {
+        m_viewManager->setZoomWheelsEnabled(true);
+    }
 }
 
 void
@@ -2492,6 +2526,10 @@ MainWindow::addPane()
     CommandHistory::getInstance()->addCommand(command);
 
     Pane *pane = command->getPane();
+
+    if (i->second.layer == LayerFactory::Spectrum) {
+        pane->setPlaybackFollow(View::PlaybackScrollContinuous);
+    }
 
     if (i->second.layer != LayerFactory::TimeRuler) {
 	if (!m_timeRulerLayer) {

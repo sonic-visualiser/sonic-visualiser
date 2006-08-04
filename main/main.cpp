@@ -28,6 +28,7 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QSettings>
+#include <QIcon>
 
 #include <iostream>
 #include <signal.h>
@@ -66,6 +67,8 @@ main(int argc, char **argv)
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName("sonic-visualiser");
+
+    QApplication::setWindowIcon(QIcon(":icons/waveform.png"));
 
     QString language = QLocale::system().name();
 
