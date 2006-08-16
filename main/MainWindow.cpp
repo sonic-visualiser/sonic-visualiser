@@ -2531,7 +2531,9 @@ MainWindow::addPane()
         pane->setPlaybackFollow(View::PlaybackScrollContinuous);
     }
 
-    if (i->second.layer != LayerFactory::TimeRuler) {
+    if (i->second.layer != LayerFactory::TimeRuler &&
+        i->second.layer != LayerFactory::Spectrum) {
+
 	if (!m_timeRulerLayer) {
 //	    std::cerr << "no time ruler layer, creating one" << std::endl;
 	    m_timeRulerLayer = m_document->createMainModelLayer
