@@ -23,13 +23,11 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QHBoxLayout>
-#include <QPainter>
-#include <QPainterPath>
-#include <QFont>
 #include <QString>
 
 #include <fftw3.h>
 
+#include "widgets/WindowTypeSelector.h"
 #include "base/Preferences.h"
 
 PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
@@ -53,39 +51,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     // refer to it
     m_applyButton = new QPushButton(tr("Apply"));
 
-    // The WindowType enum is in rather a ragbag order -- reorder it here
-    // in a more sensible order
-    m_windows = new WindowType[9];
-    m_windows[0] = HanningWindow;
-    m_windows[1] = HammingWindow;
-    m_windows[2] = BlackmanWindow;
-    m_windows[3] = BlackmanHarrisWindow;
-    m_windows[4] = NuttallWindow;
-    m_windows[5] = GaussianWindow;
-    m_windows[6] = ParzenWindow;
-    m_windows[7] = BartlettWindow;
-    m_windows[8] = RectangularWindow;
-
-    QComboBox *windowCombo = new QComboBox;
     int min, max, i;
-    int window = prefs->getPropertyRangeAndValue("Window Type", &min, &max);
-    m_windowType = window;
-    int index = 0;
-    
-    for (i = 0; i <= 8; ++i) {
-        windowCombo->addItem(prefs->getPropertyValueLabel("Window Type",
-                                                          m_windows[i]));
-        if (m_windows[i] == window) index = i;
-    }
 
-    windowCombo->setCurrentIndex(index);
+    m_windowType = WindowType(prefs->getPropertyRangeAndValue
+                              ("Window Type", &min, &max));
+    m_windowTypeSelector = new WindowTypeSelector(m_windowType);
 
-    m_windowTimeExampleLabel = new QLabel;
-    m_windowFreqExampleLabel = new QLabel;
-
-    connect(windowCombo, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(windowTypeChanged(int)));
-    windowTypeChanged(index);
+    connect(m_windowTypeSelector, SIGNAL(windowTypeChanged(WindowType)),
+            this, SLOT(windowTypeChanged(WindowType)));
 
     QCheckBox *smoothing = new QCheckBox;
     m_smoothSpectrogram = prefs->getSmoothSpectrogram();
@@ -141,10 +114,9 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Window Type"))),
                        row, 0);
-    subgrid->addWidget(windowCombo, row++, 1, 1, 2);
-
-    subgrid->addWidget(m_windowTimeExampleLabel, row, 1);
-    subgrid->addWidget(m_windowFreqExampleLabel, row, 2);
+    subgrid->addWidget(m_windowTypeSelector, row++, 1, 2, 2);
+    subgrid->setRowStretch(row, 10);
+    row++;
     
     QHBoxLayout *hbox = new QHBoxLayout;
     grid->addLayout(hbox, 1, 0);
@@ -165,163 +137,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 PreferencesDialog::~PreferencesDialog()
 {
     std::cerr << "PreferencesDialog::~PreferencesDialog()" << std::endl;
-
-    delete[] m_windows;
 }
 
 void
-PreferencesDialog::windowTypeChanged(int value)
+PreferencesDialog::windowTypeChanged(WindowType type)
 {
-    int step = 24;
-    int peak = 48;
-    int w = step * 4, h = 64;
-    WindowType type = m_windows[value];
-    Window<float> windower = Window<float>(type, step * 2);
-
-    QPixmap timeLabel(w, h + 1);
-    timeLabel.fill(Qt::white);
-    QPainter timePainter(&timeLabel);
-
-    QPainterPath path;
-
-    path.moveTo(0, h - peak + 1);
-    path.lineTo(w, h - peak + 1);
-
-    timePainter.setPen(Qt::gray);
-    timePainter.setRenderHint(QPainter::Antialiasing, true);
-    timePainter.drawPath(path);
-    
-    path = QPainterPath();
-
-    float acc[w];
-    for (int i = 0; i < w; ++i) acc[i] = 0.f;
-    for (int j = 0; j < 3; ++j) {
-        for (int i = 0; i < step * 2; ++i) {
-            acc[j * step + i] += windower.getValue(i);
-        }
-    }
-    for (int i = 0; i < w; ++i) {
-        int y = h - int(peak * acc[i] + 0.001) + 1;
-        if (i == 0) path.moveTo(i, y);
-        else path.lineTo(i, y);
-    }
-
-    timePainter.drawPath(path);
-    timePainter.setRenderHint(QPainter::Antialiasing, false);
-
-    path = QPainterPath();
-
-    timePainter.setPen(Qt::black);
-    
-    for (int i = 0; i < step * 2; ++i) {
-        int y = h - int(peak * windower.getValue(i) + 0.001) + 1;
-        if (i == 0) path.moveTo(i + step, float(y));
-        else path.lineTo(i + step, float(y));
-    }
-
-    if (type == RectangularWindow) {
-        timePainter.drawPath(path);
-        path = QPainterPath();
-    }
-
-    timePainter.setRenderHint(QPainter::Antialiasing, true);
-    path.addRect(0, 0, w, h + 1);
-    timePainter.drawPath(path);
-
-    QFont font;
-    font.setPixelSize(10);
-    font.setItalic(true);
-    timePainter.setFont(font);
-    QString label = tr("V / time");
-    timePainter.drawText(w - timePainter.fontMetrics().width(label) - 4,
-                         timePainter.fontMetrics().ascent() + 1, label);
-
-    m_windowTimeExampleLabel->setPixmap(timeLabel);
-    
-    int fw = 100;
-
-    QPixmap freqLabel(fw, h + 1);
-    freqLabel.fill(Qt::white);
-    QPainter freqPainter(&freqLabel);
-    path = QPainterPath();
-
-    size_t fftsize = 512;
-
-    float *input = (float *)fftwf_malloc(fftsize * sizeof(float));
-    fftwf_complex *output =
-        (fftwf_complex *)fftwf_malloc(fftsize * sizeof(fftwf_complex));
-    fftwf_plan plan = fftwf_plan_dft_r2c_1d(fftsize, input, output,
-                                            FFTW_ESTIMATE);
-    for (int i = 0; i < fftsize; ++i) input[i] = 0.f;
-    for (int i = 0; i < step * 2; ++i) {
-        input[fftsize/2 - step + i] = windower.getValue(i);
-    }
-    
-    fftwf_execute(plan);
-    fftwf_destroy_plan(plan);
-
-    float maxdb = 0.f;
-    float mindb = 0.f;
-    bool first = true;
-    for (int i = 0; i < fftsize/2; ++i) {
-        float power = output[i][0] * output[i][0] + output[i][1] * output[i][1];
-        float db = mindb;
-        if (power > 0) {
-            db = 20 * log10(power);
-            if (first || db > maxdb) maxdb = db;
-            if (first || db < mindb) mindb = db;
-            first = false;
-        }
-    }
-
-    if (mindb > -80.f) mindb = -80.f;
-
-    // -- no, don't use the actual mindb -- it's easier to compare
-    // plots with a fixed min value
-    mindb = -170.f;
-
-    float maxval = maxdb + -mindb;
-
-    float ly = h - ((-80.f + -mindb) / maxval) * peak + 1;
-
-    path.moveTo(0, h - peak + 1);
-    path.lineTo(fw, h - peak + 1);
-
-    freqPainter.setPen(Qt::gray);
-    freqPainter.setRenderHint(QPainter::Antialiasing, true);
-    freqPainter.drawPath(path);
-    
-    path = QPainterPath();
-    freqPainter.setPen(Qt::black);
-
-//    std::cerr << "maxdb = " << maxdb << ", mindb = " << mindb << ", maxval = " <<maxval << std::endl;
-
-    for (int i = 0; i < fftsize/2; ++i) {
-        float power = output[i][0] * output[i][0] + output[i][1] * output[i][1];
-        float db = 20 * log10(power);
-        float val = db + -mindb;
-        if (val < 0) val = 0;
-        float norm = val / maxval;
-        float x = (fw / float(fftsize/2)) * i;
-        float y = h - norm * peak + 1;
-        if (i == 0) path.moveTo(x, y);
-        else path.lineTo(x, y);
-    }
-
-    freqPainter.setRenderHint(QPainter::Antialiasing, true);
-    path.addRect(0, 0, fw, h + 1);
-    freqPainter.drawPath(path);
-
-    fftwf_free(input);
-    fftwf_free(output);
-
-    freqPainter.setFont(font);
-    label = tr("dB / freq");
-    freqPainter.drawText(fw - freqPainter.fontMetrics().width(label) - 4,
-                         freqPainter.fontMetrics().ascent() + 1, label);
-
-    m_windowFreqExampleLabel->setPixmap(freqLabel);
-
     m_windowType = type;
     m_applyButton->setEnabled(true);
 }
