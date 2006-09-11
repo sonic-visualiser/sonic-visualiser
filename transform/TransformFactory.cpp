@@ -363,10 +363,17 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
     Vamp::PluginBase *plugin = 0;
 
+    bool frequency = false;
+
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
 
-        plugin = FeatureExtractionPluginFactory::instanceFor(id)->instantiatePlugin
+        Vamp::Plugin *vp =
+            FeatureExtractionPluginFactory::instanceFor(id)->instantiatePlugin
             (id, inputModel->getSampleRate());
+        if (vp) {
+            plugin = vp;
+            frequency = (vp->getInputDomain() == Vamp::Plugin::FrequencyDomain);
+        }
 
     } else if (RealTimePluginFactory::instanceFor(id)) {
 
@@ -398,7 +405,9 @@ TransformFactory::getConfigurationForTransform(TransformName name,
                                                                   sourceChannels,
                                                                   targetChannels,
                                                                   defaultChannel,
-                                                                  output);
+                                                                  output,
+                                                                  true,
+                                                                  frequency);
         if (dialog->exec() == QDialog::Accepted) {
             ok = true;
         }
