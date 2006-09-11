@@ -20,7 +20,7 @@
 
 #include "base/Window.h"
 
-class QLabel;
+class WindowTypeSelector;
 class QPushButton;
 
 class PreferencesDialog : public QDialog
@@ -29,10 +29,10 @@ class PreferencesDialog : public QDialog
 
 public:
     PreferencesDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
-    ~PreferencesDialog();
+    virtual ~PreferencesDialog();
 
 protected slots:
-    void windowTypeChanged(int type);
+    void windowTypeChanged(WindowType type);
     void smoothSpectrogramChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
@@ -42,14 +42,10 @@ protected slots:
     void cancelClicked();
 
 protected:
-    QLabel *m_windowTimeExampleLabel;
-    QLabel *m_windowFreqExampleLabel;
-
-    WindowType *m_windows;
-
+    WindowTypeSelector *m_windowTypeSelector;
     QPushButton *m_applyButton;
     
-    int   m_windowType;
+    WindowType m_windowType;
     bool  m_smoothSpectrogram;
     int   m_propertyLayout;
     float m_tuningFrequency;
