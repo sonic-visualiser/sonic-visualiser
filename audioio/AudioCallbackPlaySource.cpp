@@ -597,11 +597,13 @@ AudioCallbackPlaySource::TimeStretcherData::TimeStretcherData(size_t channels,
 //    std::cerr << "TimeStretcherData::TimeStretcherData(" << channels << ", " << factor << ", " << blockSize << ")" << std::endl;
 
     for (size_t ch = 0; ch < channels; ++ch) {
+
 	m_stretcher[ch] = StretcherBuffer
-	    //!!! We really need to measure performance and work out
-	    //what sort of quality level to use -- or at least to
-	    //allow the user to configure it
-	    (new IntegerTimeStretcher(factor, blockSize, 1024),
+//!!!
+	    (new IntegerTimeStretcher(factor,
+                                      blockSize,
+//                                      128),
+                                      (blockSize/2) / factor),
 	     new float[lrintf(blockSize * factor)]);
     }
     m_stretchInputBuffer = new float[blockSize];
@@ -660,7 +662,10 @@ AudioCallbackPlaySource::setSlowdownFactor(float factor)
     if (factor != 1) {
 	TimeStretcherData *newStretcher = new TimeStretcherData
 	    (getTargetChannelCount(), factor,
-             factor > 1 ? getTargetBlockSize() : getTargetBlockSize() / factor);
+//             factor > 1 ? getTargetBlockSize() : getTargetBlockSize() / factor);
+             //!!! doesn't work if the block size > getTargetBlockSize(), but it
+             // should be made to
+             getTargetBlockSize());
 	m_slowdownCounter = 0;
 	m_timeStretcher = newStretcher;
     } else {

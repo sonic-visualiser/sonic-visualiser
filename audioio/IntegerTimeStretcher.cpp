@@ -38,6 +38,7 @@ IntegerTimeStretcher::IntegerTimeStretcher(float ratio,
     m_freq = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
     m_dbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
     m_mashbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+    m_modulationbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
     m_prevPhase = (float *)fftwf_malloc(sizeof(float) * m_wlen);
     m_prevAdjustedPhase = (float *)fftwf_malloc(sizeof(float) * m_wlen);
 
@@ -46,6 +47,7 @@ IntegerTimeStretcher::IntegerTimeStretcher(float ratio,
 
     for (int i = 0; i < m_wlen; ++i) {
 	m_mashbuf[i] = 0.0;
+	m_modulationbuf[i] = 0.0;
         m_prevPhase[i] = 0.0;
         m_prevAdjustedPhase[i] = 0.0;
     }
@@ -62,6 +64,7 @@ IntegerTimeStretcher::~IntegerTimeStretcher()
     fftwf_free(m_freq);
     fftwf_free(m_dbuf);
     fftwf_free(m_mashbuf);
+    fftwf_free(m_modulationbuf);
     fftwf_free(m_prevPhase);
     fftwf_free(m_prevAdjustedPhase);
 
@@ -125,19 +128,29 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
 	    size_t got = m_inbuf.peek(m_dbuf, m_wlen);
 	    assert(got == m_wlen);
 		
-	    processBlock(m_dbuf, m_mashbuf);
+	    processBlock(m_dbuf, m_mashbuf, m_modulationbuf);
 
 #ifdef DEBUG_INTEGER_TIME_STRETCHER
 	    std::cerr << "writing first " << m_n2 << " from mashbuf, skipping " << m_n1 << " on inbuf " << std::endl;
 #endif
 	    m_inbuf.skip(m_n1);
+
+            for (size_t i = 0; i < m_n2; ++i) {
+                if (m_modulationbuf[i] > 0.f) {
+                    m_mashbuf[i] /= m_modulationbuf[i];
+                }
+            }
+
 	    m_outbuf.write(m_mashbuf, m_n2);
 
 	    for (size_t i = 0; i < m_wlen - m_n2; ++i) {
 		m_mashbuf[i] = m_mashbuf[i + m_n2];
+                m_modulationbuf[i] = m_modulationbuf[i + m_n2];
 	    }
+
 	    for (size_t i = m_wlen - m_n2; i < m_wlen; ++i) {
 		m_mashbuf[i] = 0.0f;
+                m_modulationbuf[i] = 0.0f;
 	    }
 	}
 
@@ -171,7 +184,7 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
 }
 
 void
-IntegerTimeStretcher::processBlock(float *buf, float *out)
+IntegerTimeStretcher::processBlock(float *buf, float *out, float *modulation)
 {
     size_t i;
 
@@ -232,14 +245,15 @@ IntegerTimeStretcher::processBlock(float *buf, float *out)
     }
     
     m_window->cut(buf);
-    
+/*    
     int div = m_wlen / m_n2;
     if (div > 1) div /= 2;
     for (i = 0; i < m_wlen; ++i) {
 	buf[i] /= div;
     }
-
+*/
     for (i = 0; i < m_wlen; ++i) {
 	out[i] += buf[i];
+        modulation[i] += m_window->getValue(i);
     }
 }
