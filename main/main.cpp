@@ -29,6 +29,7 @@
 #include <QLocale>
 #include <QSettings>
 #include <QIcon>
+#include <QSessionManager>
 
 #include <iostream>
 #include <signal.h>
@@ -49,10 +50,33 @@ signalHandler(int /* signal */)
     exit(0); // without releasing mutex
 }
 
+class SVApplication : public QApplication
+{
+public:
+    SVApplication(int argc, char **argv) :
+        QApplication(argc, argv),
+        m_mainWindow(0) { }
+    virtual ~SVApplication() { }
+
+    void setMainWindow(MainWindow *mw) { m_mainWindow = mw; }
+    void releaseMainWindow() { m_mainWindow = 0; }
+
+    virtual void commitData(QSessionManager &manager) {
+        if (!m_mainWindow) return;
+        bool mayAskUser = manager.allowsInteraction();
+        bool success = m_mainWindow->commitData(mayAskUser);
+        manager.release();
+        if (!success) manager.cancel();
+    }
+
+protected:
+    MainWindow *m_mainWindow;
+};
+
 int
 main(int argc, char **argv)
 {
-    QApplication application(argc, argv);
+    SVApplication application(argc, argv);
 
     signal(SIGINT,  signalHandler);
     signal(SIGTERM, signalHandler);
@@ -89,6 +113,7 @@ main(int argc, char **argv)
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
     MainWindow gui;
+    application.setMainWindow(&gui);
 
     QDesktopWidget *desktop = QApplication::desktop();
     QRect available = desktop->availableGeometry();
@@ -129,6 +154,7 @@ main(int argc, char **argv)
 
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
+    application.releaseMainWindow();
 
     return rv;
 }

@@ -66,6 +66,7 @@ public:
     bool openLayerFile(QString path);
     bool openSessionFile(QString path);
     bool saveSessionFile(QString path);
+    bool commitData(bool mayAskUser); // on session shutdown
 
 signals:
     // Used to toggle the availability of menu actions

@@ -76,6 +76,8 @@
 #include <QProcess>
 #include <QShortcut>
 #include <QSettings>
+#include <QDateTime>
+#include <QProcess>
 
 #include <iostream>
 #include <cstdio>
@@ -2148,6 +2150,42 @@ MainWindow::closeEvent(QCloseEvent *e)
 
     e->accept();
     return;
+}
+
+bool
+MainWindow::commitData(bool mayAskUser)
+{
+    if (mayAskUser) {
+        return checkSaveModified();
+    } else {
+        if (!m_documentModified) return true;
+
+        // If we can't check with the user first, then we can't save
+        // to the original session file (even if we have it) -- have
+        // to use a temporary file
+
+        QString svDirBase = ".sv1";
+        QString svDir = QDir::home().filePath(svDirBase);
+
+        if (!QFileInfo(svDir).exists()) {
+            if (!QDir::home().mkdir(svDirBase)) return false;
+        } else {
+            if (!QFileInfo(svDir).isDir()) return false;
+        }
+        
+        // This name doesn't have to be unguessable
+
+        QString fname = QString("tmp-%1-%2.sv")
+            .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"))
+            .arg(QProcess().pid());
+        QString fpath = QDir(svDir).filePath(fname);
+        if (saveSessionFile(fpath)) {
+            RecentFiles::getInstance()->addFile(fpath);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 bool
