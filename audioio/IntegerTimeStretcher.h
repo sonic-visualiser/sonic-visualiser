@@ -34,13 +34,17 @@
 class IntegerTimeStretcher
 {
 public:
-    IntegerTimeStretcher(size_t ratio,
+    IntegerTimeStretcher(float ratio,
 			 size_t maxProcessInputBlockSize,
 			 size_t inputIncrement = 64,
 			 size_t windowSize = 2048,
 			 WindowType windowType = HanningWindow);
     virtual ~IntegerTimeStretcher();
 
+    /**
+     * Process a block.  The input array contains the given number of
+     * samples; the output has enough space for samples * m_ratio.
+     */
     void process(float *input, float *output, size_t samples);
 
     /**
@@ -63,14 +67,14 @@ public:
      */
     WindowType getWindowType() const { return m_window->getType(); }
 
-    size_t getRatio() const { return m_ratio; }
+    float getRatio() const { return m_ratio; }
     size_t getOutputIncrement() const { return getInputIncrement() * getRatio(); }
     size_t getProcessingLatency() const;
 
 protected:
     void processBlock(float *in, float *out);
 
-    size_t m_ratio;
+    float m_ratio;
     size_t m_n1;
     size_t m_n2;
     size_t m_wlen;
@@ -79,6 +83,8 @@ protected:
     fftwf_complex *m_time;
     fftwf_complex *m_freq;
     float *m_dbuf;
+    float *m_prevPhase;
+    float *m_prevAdjustedPhase;
 
     fftwf_plan m_plan;
     fftwf_plan m_iplan;
