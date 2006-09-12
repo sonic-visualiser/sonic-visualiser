@@ -72,7 +72,20 @@ public:
     size_t getProcessingLatency() const;
 
 protected:
-    void processBlock(float *in, float *out);
+    /**
+     * Process a single phase vocoder frame.
+     * 
+     * Take m_wlen time-domain source samples from in, perform an FFT,
+     * phase shift, and IFFT, and add the results to out (presumably
+     * overlapping parts of existing data from prior frames).
+     *
+     * Also add to the modulation output the results of windowing a
+     * set of 1s with the resynthesis window -- this can then be used
+     * to ensure the output has the correct magnitude in cases where
+     * the window overlap varies or otherwise results in something
+     * other than a flat sum.
+     */
+    void processBlock(float *in, float *out, float *modulation);
 
     float m_ratio;
     size_t m_n1;
@@ -92,6 +105,7 @@ protected:
     RingBuffer<float> m_inbuf;
     RingBuffer<float> m_outbuf;
     float *m_mashbuf;
+    float *m_modulationbuf;
 };
 
 #endif
