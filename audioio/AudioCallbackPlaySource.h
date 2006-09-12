@@ -177,7 +177,7 @@ public:
      */
     size_t getSourceSamples(size_t count, float **buffer);
 
-    void setSlowdownFactor(size_t factor);
+    void setSlowdownFactor(float factor);
 
 signals:
     void modelReplaced();
@@ -247,10 +247,10 @@ protected:
     class TimeStretcherData
     {
     public:
-	TimeStretcherData(size_t channels, size_t factor, size_t blockSize);
+	TimeStretcherData(size_t channels, float factor, size_t blockSize);
 	~TimeStretcherData();
 
-	size_t getFactor() const { return m_factor; }
+	float getFactor() const { return m_factor; }
 	IntegerTimeStretcher *getStretcher(size_t channel);
 	float *getOutputBuffer(size_t channel);
 	float *getInputBuffer();
@@ -264,7 +264,7 @@ protected:
 	typedef std::pair<IntegerTimeStretcher *, float *> StretcherBuffer;
 	std::map<size_t, StretcherBuffer> m_stretcher;
 	float *m_stretchInputBuffer;
-	size_t m_factor;
+	float m_factor;
 	size_t m_blockSize;
     };
 

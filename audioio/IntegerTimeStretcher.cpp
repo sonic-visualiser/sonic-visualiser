@@ -20,30 +20,34 @@
 
 //#define DEBUG_INTEGER_TIME_STRETCHER 1
 
-IntegerTimeStretcher::IntegerTimeStretcher(size_t ratio,
+IntegerTimeStretcher::IntegerTimeStretcher(float ratio,
 					   size_t maxProcessInputBlockSize,
 					   size_t inputIncrement,
 					   size_t windowSize,
 					   WindowType windowType) :
     m_ratio(ratio),
     m_n1(inputIncrement),
-    m_n2(m_n1 * ratio),
+    m_n2(lrintf(m_n1 * ratio)),
     m_wlen(std::max(windowSize, m_n2 * 2)),
     m_inbuf(m_wlen),
-    m_outbuf(maxProcessInputBlockSize * ratio)
+    m_outbuf(maxProcessInputBlockSize * ratio + 1024) //!!!
 {
     m_window = new Window<float>(windowType, m_wlen),
 
     m_time = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
     m_freq = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
     m_dbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+    m_mashbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+    m_prevPhase = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+    m_prevAdjustedPhase = (float *)fftwf_malloc(sizeof(float) * m_wlen);
 
     m_plan = fftwf_plan_dft_1d(m_wlen, m_time, m_freq, FFTW_FORWARD, FFTW_ESTIMATE);
     m_iplan = fftwf_plan_dft_c2r_1d(m_wlen, m_freq, m_dbuf, FFTW_ESTIMATE);
 
-    m_mashbuf = new float[m_wlen];
     for (int i = 0; i < m_wlen; ++i) {
 	m_mashbuf[i] = 0.0;
+        m_prevPhase[i] = 0.0;
+        m_prevAdjustedPhase[i] = 0.0;
     }
 }
 
@@ -57,9 +61,11 @@ IntegerTimeStretcher::~IntegerTimeStretcher()
     fftwf_free(m_time);
     fftwf_free(m_freq);
     fftwf_free(m_dbuf);
+    fftwf_free(m_mashbuf);
+    fftwf_free(m_prevPhase);
+    fftwf_free(m_prevAdjustedPhase);
 
     delete m_window;
-    delete m_mashbuf;
 }	
 
 size_t
@@ -143,18 +149,20 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
 #endif
     }
 
-    if (m_outbuf.getReadSpace() < samples * m_ratio) {
-	std::cerr << "WARNING: IntegerTimeStretcher::process: not enough data (yet?) (" << m_outbuf.getReadSpace() << " < " << (samples * m_ratio) << ")" << std::endl;
-	size_t fill = samples * m_ratio - m_outbuf.getReadSpace();
+    size_t toRead = lrintf(samples * m_ratio);
+
+    if (m_outbuf.getReadSpace() < toRead) {
+	std::cerr << "WARNING: IntegerTimeStretcher::process: not enough data (yet?) (" << m_outbuf.getReadSpace() << " < " << toRead << ")" << std::endl;
+	size_t fill = toRead - m_outbuf.getReadSpace();
 	for (size_t i = 0; i < fill; ++i) {
 	    output[i] = 0.0;
 	}
 	m_outbuf.read(output + fill, m_outbuf.getReadSpace());
     } else {
 #ifdef DEBUG_INTEGER_TIME_STRETCHER
-	std::cerr << "enough data - writing " << samples * m_ratio << " from outbuf" << std::endl;
+	std::cerr << "enough data - writing " << toRead << " from outbuf" << std::endl;
 #endif
-	m_outbuf.read(output, samples * m_ratio);
+	m_outbuf.read(output, toRead);
     }
 
 #ifdef DEBUG_INTEGER_TIME_STRETCHER
@@ -194,14 +202,25 @@ IntegerTimeStretcher::processBlock(float *buf, float *out)
 	float mag = sqrtf(m_freq[i][0] * m_freq[i][0] +
 			  m_freq[i][1] * m_freq[i][1]);
 		
-	float phase = atan2f(m_freq[i][1], m_freq[i][0]);
+        float phase = princargf(atan2f(m_freq[i][1], m_freq[i][0]));
+
+        float omega = (2 * M_PI * m_n1 * i) / m_wlen;
 	
-	phase = phase * m_ratio;
+        float expectedPhase = m_prevPhase[i] + omega;
+
+        float phaseError = princargf(phase - expectedPhase);
+
+        float phaseIncrement = (omega + phaseError) / m_n1;
+
+        float adjustedPhase = m_prevAdjustedPhase[i] + m_n2 * phaseIncrement;
 	
-	float real = mag * cosf(phase);
-	float imag = mag * sinf(phase);
+	float real = mag * cosf(adjustedPhase);
+	float imag = mag * sinf(adjustedPhase);
 	m_freq[i][0] = real;
 	m_freq[i][1] = imag;
+
+        m_prevPhase[i] = phase;
+        m_prevAdjustedPhase[i] = adjustedPhase;
     }
     
     fftwf_execute(m_iplan); // m_freq -> in, inverse fft

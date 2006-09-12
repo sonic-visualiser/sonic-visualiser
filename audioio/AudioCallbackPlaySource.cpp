@@ -28,7 +28,7 @@
 #include <cassert>
 
 //#define DEBUG_AUDIO_PLAY_SOURCE 1
-//#define DEBUG_AUDIO_PLAY_SOURCE_PLAYING 1
+#define DEBUG_AUDIO_PLAY_SOURCE_PLAYING 1
 
 //const size_t AudioCallbackPlaySource::m_ringBufferSize = 102400;
 const size_t AudioCallbackPlaySource::m_ringBufferSize = 131071;
@@ -589,7 +589,7 @@ AudioCallbackPlaySource::getSourceSampleRate() const
 }
 
 AudioCallbackPlaySource::TimeStretcherData::TimeStretcherData(size_t channels,
-							      size_t factor,
+							      float factor,
 							      size_t blockSize) :
     m_factor(factor),
     m_blockSize(blockSize)
@@ -601,8 +601,8 @@ AudioCallbackPlaySource::TimeStretcherData::TimeStretcherData(size_t channels,
 	    //!!! We really need to measure performance and work out
 	    //what sort of quality level to use -- or at least to
 	    //allow the user to configure it
-	    (new IntegerTimeStretcher(factor, blockSize, 128),
-	     new float[blockSize * factor]);
+	    (new IntegerTimeStretcher(factor, blockSize, 1024),
+	     new float[lrintf(blockSize * factor)]);
     }
     m_stretchInputBuffer = new float[blockSize];
 }
@@ -646,7 +646,7 @@ AudioCallbackPlaySource::TimeStretcherData::run(size_t channel)
 }
 
 void
-AudioCallbackPlaySource::setSlowdownFactor(size_t factor)
+AudioCallbackPlaySource::setSlowdownFactor(float factor)
 {
     // Avoid locks -- create, assign, mark old one for scavenging
     // later (as a call to getSourceSamples may still be using it)
@@ -657,9 +657,10 @@ AudioCallbackPlaySource::setSlowdownFactor(size_t factor)
 	return;
     }
 
-    if (factor > 1) {
+    if (factor != 1) {
 	TimeStretcherData *newStretcher = new TimeStretcherData
-	    (getTargetChannelCount(), factor, getTargetBlockSize());
+	    (getTargetChannelCount(), factor,
+             factor > 1 ? getTargetBlockSize() : getTargetBlockSize() / factor);
 	m_slowdownCounter = 0;
 	m_timeStretcher = newStretcher;
     } else {
@@ -718,6 +719,7 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 	return got;
     }
 
+/*!!!
     if (m_slowdownCounter == 0) {
 
 	size_t got = 0;
@@ -733,7 +735,7 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 		if (ch > 0) request = got; // see above
 		got = rb->read(buffer[ch], request);
 
-#ifdef DEBUG_AUDIO_PLAY_SOURCE
+#ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
 		std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " samples on channel " << ch << ", running time stretcher" << std::endl;
 #endif
 
@@ -755,7 +757,7 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 
 	float *ob = timeStretcher->getOutputBuffer(ch);
 
-#ifdef DEBUG_AUDIO_PLAY_SOURCE
+#ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
 	std::cerr << "AudioCallbackPlaySource::getSamples: Copying from (" << (m_slowdownCounter * count) << "," << count << ") to buffer" << std::endl;
 #endif
 
@@ -763,9 +765,45 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 	    buffer[ch][i] = ob[m_slowdownCounter * count + i];
 	}
     }
+*/
+
+    for (size_t ch = 0; ch < getTargetChannelCount(); ++ch) {
+
+        RingBuffer<float> *rb = getReadRingBuffer(ch);
+
+        if (rb) {
+
+            float ratio = timeStretcher->getStretcher(ch)->getRatio();
+            size_t request = lrintf(count / ratio);
+//            if (ch > 0) request = got; // see above
+
+            float *ib = new float[request]; //!!!
+
+            size_t got = rb->read(ib, request);
+
+#ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
+            std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " samples on channel " << ch << " (count=" << count << ", ratio=" << timeStretcher->getStretcher(ch)->getRatio() << ", got*ratio=" << got * ratio << "), running time stretcher" << std::endl;
+#endif
+
+            timeStretcher->getStretcher(ch)->process(ib, buffer[ch], request);
+            
+            delete[] ib;
+
+//            for (size_t i = 0; i < count; ++i) {
+//                ib[i] = buffer[ch][i];
+//            }
+	    
+//            timeStretcher->run(ch);
+
+            
+
+        }
+    }
+
+    
 
 //!!!    if (m_slowdownCounter == 0) m_condition.wakeAll();
-    m_slowdownCounter = (m_slowdownCounter + 1) % timeStretcher->getFactor();
+//    m_slowdownCounter = (m_slowdownCounter + 1) % timeStretcher->getFactor();
     return count;
 }
 
