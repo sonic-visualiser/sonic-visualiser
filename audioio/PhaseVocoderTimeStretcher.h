@@ -33,41 +33,43 @@
 class PhaseVocoderTimeStretcher
 {
 public:
-    PhaseVocoderTimeStretcher(float ratio,
-			 size_t maxProcessInputBlockSize,
-			 size_t inputIncrement = 64,
-			 size_t windowSize = 2048,
-			 WindowType windowType = HanningWindow);
+    PhaseVocoderTimeStretcher(float ratio, size_t maxProcessInputBlockSize);
     virtual ~PhaseVocoderTimeStretcher();
 
     /**
      * Process a block.  The input array contains the given number of
-     * samples; the output has enough space for samples * m_ratio.
+     * samples; the output must have space for lrintf(samples * m_ratio).
      */
     void process(float *input, float *output, size_t samples);
 
     /**
-     * Get the hop size for input.  Smaller values may produce better
-     * results, at a cost in processing time.  Larger values are
-     * faster but increase the likelihood of echo-like effects.  The
-     * default is 64, which is usually pretty good, though heavy on
-     * processor power.
+     * Get the hop size for input.
      */
     size_t getInputIncrement() const { return m_n1; }
 
     /**
-     * Get the window size for FFT processing.  Must be larger than
-     * the input and output increments.  The default is 2048.
+     * Get the hop size for output.
+     */
+    size_t getOutputIncrement() const { return getInputIncrement() * getRatio(); }
+
+    /**
+     * Get the window size for FFT processing.
      */
     size_t getWindowSize() const { return m_wlen; }
 
     /**
-     * Get the window type.  The default is a Hanning window.
+     * Get the window type.
      */
     WindowType getWindowType() const { return m_window->getType(); }
 
+    /**
+     * Get the stretch ratio set in the constructor.
+     */
     float getRatio() const { return m_ratio; }
-    size_t getOutputIncrement() const { return getInputIncrement() * getRatio(); }
+
+    /**
+     * Get the latency added by the time stretcher, in sample frames.
+     */
     size_t getProcessingLatency() const;
 
 protected:
@@ -101,8 +103,8 @@ protected:
     fftwf_plan m_plan;
     fftwf_plan m_iplan;
     
-    RingBuffer<float> m_inbuf;
-    RingBuffer<float> m_outbuf;
+    RingBuffer<float> *m_inbuf;
+    RingBuffer<float> *m_outbuf;
     float *m_mashbuf;
     float *m_modulationbuf;
 };

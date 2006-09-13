@@ -21,18 +21,34 @@
 //#define DEBUG_PHASE_VOCODER_TIME_STRETCHER 1
 
 PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(float ratio,
-					   size_t maxProcessInputBlockSize,
-					   size_t inputIncrement,
-					   size_t windowSize,
-					   WindowType windowType) :
-    m_ratio(ratio),
-    m_n1(inputIncrement),
-    m_n2(lrintf(m_n1 * ratio)),
-    m_wlen(std::max(windowSize, m_n2 * 2)),
-    m_inbuf(m_wlen),
-    m_outbuf(maxProcessInputBlockSize * ratio + 1024) //!!!
+                                                     size_t maxProcessInputBlockSize) :
+    m_ratio(ratio)
+                                                    //,
+                                                    //    m_n1(inputIncrement),
+                                                    //    m_n2(lrintf(m_n1 * ratio)),
+                                                    //    m_wlen(std::max(windowSize, m_n2 * 2)),
+                                                    //    m_inbuf(m_wlen),
+                                                    //    m_outbuf(maxProcessInputBlockSize * ratio + 1024) //!!!
 {
-    m_window = new Window<float>(windowType, m_wlen),
+    if (ratio < 1) {
+        m_n1 = 512;
+        m_n2 = m_n1 * ratio;
+        m_wlen = 1024;
+    } else {
+        m_n2 = 512;
+        m_n1 = m_n2 / ratio;
+        m_wlen = 1024;
+    }
+    
+    m_inbuf = new RingBuffer<float>(m_wlen);
+    m_outbuf = new RingBuffer<float>
+        (lrintf((maxProcessInputBlockSize + m_wlen) * ratio));
+
+    std::cerr << "PhaseVocoderTimeStretcher: ratio = " << ratio
+              << ", n1 = " << m_n1 << ", n2 = " << m_n2 << ", wlen = "
+              << m_wlen << ", max = " << maxProcessInputBlockSize << ", outbuflen = " << m_outbuf->getSize() << std::endl;
+
+    m_window = new Window<float>(HanningWindow, m_wlen),
 
     m_time = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
     m_freq = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
@@ -68,6 +84,9 @@ PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
     fftwf_free(m_prevPhase);
     fftwf_free(m_prevAdjustedPhase);
 
+    delete m_inbuf;
+    delete m_outbuf;
+
     delete m_window;
 }	
 
@@ -97,12 +116,12 @@ PhaseVocoderTimeStretcher::process(float *input, float *output, size_t samples)
     size_t consumed = 0;
 
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
-    std::cerr << "PhaseVocoderTimeStretcher::process(" << samples << ", consumed = " << consumed << "), writable " << m_inbuf.getWriteSpace() <<", readable "<< m_outbuf.getReadSpace() << std::endl;
+    std::cerr << "PhaseVocoderTimeStretcher::process(" << samples << ", consumed = " << consumed << "), writable " << m_inbuf->getWriteSpace() <<", readable "<< m_outbuf->getReadSpace() << std::endl;
 #endif
 
     while (consumed < samples) {
 
-	size_t writable = m_inbuf.getWriteSpace();
+	size_t writable = m_inbuf->getWriteSpace();
 	writable = std::min(writable, samples - consumed);
 
 	if (writable == 0) {
@@ -114,18 +133,18 @@ PhaseVocoderTimeStretcher::process(float *input, float *output, size_t samples)
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	std::cerr << "writing " << writable << " from index " << consumed << " to inbuf, consumed will be " << consumed + writable << std::endl;
 #endif
-	m_inbuf.write(input + consumed, writable);
+	m_inbuf->write(input + consumed, writable);
 	consumed += writable;
 
-	while (m_inbuf.getReadSpace() >= m_wlen &&
-	       m_outbuf.getWriteSpace() >= m_n2) {
+	while (m_inbuf->getReadSpace() >= m_wlen &&
+	       m_outbuf->getWriteSpace() >= m_n2) {
 
 	    // We know we have at least m_wlen samples available
-	    // in m_inbuf.  We need to peek m_wlen of them for
+	    // in m_inbuf->  We need to peek m_wlen of them for
 	    // processing, and then read m_n1 to advance the read
 	    // pointer.
 
-	    size_t got = m_inbuf.peek(m_dbuf, m_wlen);
+	    size_t got = m_inbuf->peek(m_dbuf, m_wlen);
 	    assert(got == m_wlen);
 		
 	    processBlock(m_dbuf, m_mashbuf, m_modulationbuf);
@@ -133,7 +152,7 @@ PhaseVocoderTimeStretcher::process(float *input, float *output, size_t samples)
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	    std::cerr << "writing first " << m_n2 << " from mashbuf, skipping " << m_n1 << " on inbuf " << std::endl;
 #endif
-	    m_inbuf.skip(m_n1);
+	    m_inbuf->skip(m_n1);
 
             for (size_t i = 0; i < m_n2; ++i) {
                 if (m_modulationbuf[i] > 0.f) {
@@ -141,7 +160,7 @@ PhaseVocoderTimeStretcher::process(float *input, float *output, size_t samples)
                 }
             }
 
-	    m_outbuf.write(m_mashbuf, m_n2);
+	    m_outbuf->write(m_mashbuf, m_n2);
 
 	    for (size_t i = 0; i < m_wlen - m_n2; ++i) {
 		m_mashbuf[i] = m_mashbuf[i + m_n2];
@@ -154,28 +173,28 @@ PhaseVocoderTimeStretcher::process(float *input, float *output, size_t samples)
 	    }
 	}
 
-//	std::cerr << "WARNING: PhaseVocoderTimeStretcher::process: writespace not enough for output increment (" << m_outbuf.getWriteSpace() << " < " << m_n2 << ")" << std::endl;
+//	std::cerr << "WARNING: PhaseVocoderTimeStretcher::process: writespace not enough for output increment (" << m_outbuf->getWriteSpace() << " < " << m_n2 << ")" << std::endl;
 //	}
 
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
-	std::cerr << "loop ended: inbuf read space " << m_inbuf.getReadSpace() << ", outbuf write space " << m_outbuf.getWriteSpace() << std::endl;
+	std::cerr << "loop ended: inbuf read space " << m_inbuf->getReadSpace() << ", outbuf write space " << m_outbuf->getWriteSpace() << std::endl;
 #endif
     }
 
     size_t toRead = lrintf(samples * m_ratio);
 
-    if (m_outbuf.getReadSpace() < toRead) {
-	std::cerr << "WARNING: PhaseVocoderTimeStretcher::process: not enough data (yet?) (" << m_outbuf.getReadSpace() << " < " << toRead << ")" << std::endl;
-	size_t fill = toRead - m_outbuf.getReadSpace();
+    if (m_outbuf->getReadSpace() < toRead) {
+	std::cerr << "WARNING: PhaseVocoderTimeStretcher::process: not enough data (yet?) (" << m_outbuf->getReadSpace() << " < " << toRead << ")" << std::endl;
+	size_t fill = toRead - m_outbuf->getReadSpace();
 	for (size_t i = 0; i < fill; ++i) {
 	    output[i] = 0.0;
 	}
-	m_outbuf.read(output + fill, m_outbuf.getReadSpace());
+	m_outbuf->read(output + fill, m_outbuf->getReadSpace());
     } else {
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	std::cerr << "enough data - writing " << toRead << " from outbuf" << std::endl;
 #endif
-	m_outbuf.read(output, toRead);
+	m_outbuf->read(output, toRead);
     }
 
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
@@ -252,8 +271,13 @@ PhaseVocoderTimeStretcher::processBlock(float *buf, float *out, float *modulatio
 	buf[i] /= div;
     }
 */
+
+    float area = m_window->getArea();
+
     for (i = 0; i < m_wlen; ++i) {
 	out[i] += buf[i];
-        modulation[i] += m_window->getValue(i);
+        float val = m_window->getValue(i);
+        modulation[i] += val * area;
     }
 }
+
