@@ -598,15 +598,11 @@ AudioCallbackPlaySource::TimeStretcherData::TimeStretcherData(size_t channels,
 
     for (size_t ch = 0; ch < channels; ++ch) {
 
-	m_stretcher[ch] = StretcherBuffer
-//!!!
-	    (new PhaseVocoderTimeStretcher(factor,
-                                      blockSize,
+	m_stretcher[ch] = new PhaseVocoderTimeStretcher(factor, blockSize);
 //                                      128),
-                                      (blockSize/2) / factor),
-	     new float[lrintf(blockSize * factor)]);
+//                                      (blockSize/2) / factor),
+//	     new float[lrintf(blockSize * factor)]);
     }
-    m_stretchInputBuffer = new float[blockSize];
 }
 
 AudioCallbackPlaySource::TimeStretcherData::~TimeStretcherData()
@@ -614,19 +610,19 @@ AudioCallbackPlaySource::TimeStretcherData::~TimeStretcherData()
 //    std::cerr << "TimeStretcherData::~TimeStretcherData" << std::endl;
 
     while (!m_stretcher.empty()) {
-	delete m_stretcher.begin()->second.first;
-	delete[] m_stretcher.begin()->second.second;
+	delete m_stretcher.begin()->second;
+//	delete[] m_stretcher.begin()->second.second;
 	m_stretcher.erase(m_stretcher.begin());
     }
-    delete m_stretchInputBuffer;
+//    delete m_stretchInputBuffer;
 }
 
 PhaseVocoderTimeStretcher *
 AudioCallbackPlaySource::TimeStretcherData::getStretcher(size_t channel)
 {
-    return m_stretcher[channel].first;
+    return m_stretcher[channel];
 }
-
+/*
 float *
 AudioCallbackPlaySource::TimeStretcherData::getOutputBuffer(size_t channel)
 {
@@ -646,7 +642,7 @@ AudioCallbackPlaySource::TimeStretcherData::run(size_t channel)
 				   getOutputBuffer(channel),
 				   m_blockSize);
 }
-
+*/
 void
 AudioCallbackPlaySource::setSlowdownFactor(float factor)
 {
@@ -665,7 +661,8 @@ AudioCallbackPlaySource::setSlowdownFactor(float factor)
 //             factor > 1 ? getTargetBlockSize() : getTargetBlockSize() / factor);
              //!!! doesn't work if the block size > getTargetBlockSize(), but it
              // should be made to
-             getTargetBlockSize());
+//             getTargetBlockSize());
+             lrintf(getTargetBlockSize() / factor));
 	m_slowdownCounter = 0;
 	m_timeStretcher = newStretcher;
     } else {

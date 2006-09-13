@@ -252,18 +252,16 @@ protected:
 
 	float getFactor() const { return m_factor; }
 	PhaseVocoderTimeStretcher *getStretcher(size_t channel);
-	float *getOutputBuffer(size_t channel);
-	float *getInputBuffer();
+//	float *getOutputBuffer(size_t channel);
+//	float *getInputBuffer();
 	
-	void run(size_t channel);
+//	void run(size_t channel);
 
     protected:
 	TimeStretcherData(const TimeStretcherData &); // not provided
 	TimeStretcherData &operator=(const TimeStretcherData &); // not provided
 
-	typedef std::pair<PhaseVocoderTimeStretcher *, float *> StretcherBuffer;
-	std::map<size_t, StretcherBuffer> m_stretcher;
-	float *m_stretchInputBuffer;
+	std::map<size_t, PhaseVocoderTimeStretcher *> m_stretcher;
 	float m_factor;
 	size_t m_blockSize;
     };
