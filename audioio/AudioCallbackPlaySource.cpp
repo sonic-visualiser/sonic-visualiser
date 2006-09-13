@@ -51,7 +51,6 @@ AudioCallbackPlaySource::AudioCallbackPlaySource(ViewManager *manager) :
     m_lastModelEndFrame(0),
     m_outputLeft(0.0),
     m_outputRight(0.0),
-    m_slowdownCounter(0),
     m_timeStretcher(0),
     m_fillThread(0),
     m_converter(0)
@@ -427,10 +426,10 @@ AudioCallbackPlaySource::getCurrentPlayingFrame()
 
     size_t latency = m_playLatency;
     if (resample) latency = size_t(m_playLatency * ratio + 0.1);
-    
-    TimeStretcherData *timeStretcher = m_timeStretcher;
+
+    PhaseVocoderTimeStretcher *timeStretcher = m_timeStretcher;
     if (timeStretcher) {
-	latency += timeStretcher->getStretcher(0)->getProcessingLatency();
+	latency += timeStretcher->getProcessingLatency();
     }
 
     latency += readSpace;
@@ -588,82 +587,26 @@ AudioCallbackPlaySource::getSourceSampleRate() const
     return m_sourceSampleRate;
 }
 
-AudioCallbackPlaySource::TimeStretcherData::TimeStretcherData(size_t channels,
-							      float factor,
-							      size_t blockSize) :
-    m_factor(factor),
-    m_blockSize(blockSize)
-{
-//    std::cerr << "TimeStretcherData::TimeStretcherData(" << channels << ", " << factor << ", " << blockSize << ")" << std::endl;
-
-    for (size_t ch = 0; ch < channels; ++ch) {
-
-	m_stretcher[ch] = new PhaseVocoderTimeStretcher(factor, blockSize);
-//                                      128),
-//                                      (blockSize/2) / factor),
-//	     new float[lrintf(blockSize * factor)]);
-    }
-}
-
-AudioCallbackPlaySource::TimeStretcherData::~TimeStretcherData()
-{
-//    std::cerr << "TimeStretcherData::~TimeStretcherData" << std::endl;
-
-    while (!m_stretcher.empty()) {
-	delete m_stretcher.begin()->second;
-//	delete[] m_stretcher.begin()->second.second;
-	m_stretcher.erase(m_stretcher.begin());
-    }
-//    delete m_stretchInputBuffer;
-}
-
-PhaseVocoderTimeStretcher *
-AudioCallbackPlaySource::TimeStretcherData::getStretcher(size_t channel)
-{
-    return m_stretcher[channel];
-}
-/*
-float *
-AudioCallbackPlaySource::TimeStretcherData::getOutputBuffer(size_t channel)
-{
-    return m_stretcher[channel].second;
-}
-
-float *
-AudioCallbackPlaySource::TimeStretcherData::getInputBuffer()
-{
-    return m_stretchInputBuffer;
-}
-
 void
-AudioCallbackPlaySource::TimeStretcherData::run(size_t channel)
-{
-    getStretcher(channel)->process(getInputBuffer(),
-				   getOutputBuffer(channel),
-				   m_blockSize);
-}
-*/
-void
-AudioCallbackPlaySource::setSlowdownFactor(float factor)
+AudioCallbackPlaySource::setSlowdownFactor(float factor, bool sharpen)
 {
     // Avoid locks -- create, assign, mark old one for scavenging
     // later (as a call to getSourceSamples may still be using it)
 
-    TimeStretcherData *existingStretcher = m_timeStretcher;
+    PhaseVocoderTimeStretcher *existingStretcher = m_timeStretcher;
 
-    if (existingStretcher && existingStretcher->getFactor() == factor) {
+    if (existingStretcher &&
+        existingStretcher->getRatio() == factor &&
+        existingStretcher->getSharpening() == sharpen) {
 	return;
     }
 
     if (factor != 1) {
-	TimeStretcherData *newStretcher = new TimeStretcherData
-	    (getTargetChannelCount(), factor,
-//             factor > 1 ? getTargetBlockSize() : getTargetBlockSize() / factor);
-             //!!! doesn't work if the block size > getTargetBlockSize(), but it
-             // should be made to
-//             getTargetBlockSize());
+	PhaseVocoderTimeStretcher *newStretcher = new PhaseVocoderTimeStretcher
+	    (getTargetChannelCount(),
+             factor,
+             sharpen,
              lrintf(getTargetBlockSize() / factor));
-	m_slowdownCounter = 0;
 	m_timeStretcher = newStretcher;
     } else {
 	m_timeStretcher = 0;
@@ -686,9 +629,9 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 	return 0;
     }
 
-    TimeStretcherData *timeStretcher = m_timeStretcher;
+    PhaseVocoderTimeStretcher *ts = m_timeStretcher;
 
-    if (!timeStretcher || timeStretcher->getFactor() == 1) {
+    if (!ts || ts->getRatio() == 1) {
 
 	size_t got = 0;
 
@@ -721,91 +664,102 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 	return got;
     }
 
+    float ratio = ts->getRatio();
+
+//            std::cout << "ratio = " << ratio << std::endl;
+
+    size_t available;
+
+    while ((available = ts->getAvailableOutputSamples()) < count) {
+
+        size_t reqd = lrintf((count - available) / ratio);
+        reqd = std::max(reqd, ts->getRequiredInputSamples());
+        if (reqd == 0) reqd = 1;
+                
+        size_t channels = getTargetChannelCount();
+
+        float *ib[channels];
+
+        size_t got = reqd;
+
+        for (size_t c = 0; c < channels; ++c) {
+            ib[c] = new float[reqd]; //!!! fix -- this is a rt function
+            RingBuffer<float> *rb = getReadRingBuffer(c);
+            if (rb) {
+                size_t gotHere = rb->read(ib[c], got);
+                if (gotHere < got) got = gotHere;
+            }
+        }
+
+        if (got < reqd) {
+            std::cerr << "WARNING: Read underrun in playback ("
+                      << got << " < " << reqd << ")" << std::endl;
+        }
+                
+        ts->putInput(ib, got);
+
+        for (size_t c = 0; c < channels; ++c) {
+            delete[] ib[c];
+        }
+
+        if (got == 0) break;
+
+        if (ts->getAvailableOutputSamples() == available) {
+            std::cerr << "WARNING: AudioCallbackPlaySource::getSamples: Added " << got << " samples to time stretcher, created no new available output samples" << std::endl;
+            break;
+        }
+    }
+
+    ts->getOutput(buffer, count);
+
+
 /*!!!
-    if (m_slowdownCounter == 0) {
-
-	size_t got = 0;
-	float *ib = timeStretcher->getInputBuffer();
-
-	for (size_t ch = 0; ch < getTargetChannelCount(); ++ch) {
-
-	    RingBuffer<float> *rb = getReadRingBuffer(ch);
-
-	    if (rb) {
-
-		size_t request = count;
-		if (ch > 0) request = got; // see above
-		got = rb->read(buffer[ch], request);
-
-#ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
-		std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " samples on channel " << ch << ", running time stretcher" << std::endl;
-#endif
-
-		for (size_t i = 0; i < count; ++i) {
-		    ib[i] = buffer[ch][i];
-		}
-	    
-		timeStretcher->run(ch);
-	    }
-	}
-
-    } else if (m_slowdownCounter >= timeStretcher->getFactor()) {
-	// reset this in case the factor has changed leaving the
-	// counter out of range
-	m_slowdownCounter = 0;
-    }
-
-    for (size_t ch = 0; ch < getTargetChannelCount(); ++ch) {
-
-	float *ob = timeStretcher->getOutputBuffer(ch);
-
-#ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
-	std::cerr << "AudioCallbackPlaySource::getSamples: Copying from (" << (m_slowdownCounter * count) << "," << count << ") to buffer" << std::endl;
-#endif
-
-	for (size_t i = 0; i < count; ++i) {
-	    buffer[ch][i] = ob[m_slowdownCounter * count + i];
-	}
-    }
-*/
-
     for (size_t ch = 0; ch < getTargetChannelCount(); ++ch) {
 
         RingBuffer<float> *rb = getReadRingBuffer(ch);
 
         if (rb) {
 
-            float ratio = timeStretcher->getStretcher(ch)->getRatio();
-            size_t request = lrintf(count / ratio);
-//            if (ch > 0) request = got; // see above
+            float ratio = ts->getRatio();
 
-            float *ib = new float[request]; //!!!
+//            std::cout << "ratio = " << ratio << std::endl;
 
-            size_t got = rb->read(ib, request);
+            size_t available;
+
+            while ((available = ts->getAvailableOutputSamples()) < count) {
+
+                size_t reqd = lrintf((count - available) / ratio);
+                reqd = std::max(reqd, ts->getRequiredInputSamples());
+                if (reqd == 0) reqd = 1;
+
+                float ib[reqd];
+                size_t got = rb->read(ib, reqd);
 
 #ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
-            std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " samples on channel " << ch << " (count=" << count << ", ratio=" << timeStretcher->getStretcher(ch)->getRatio() << ", got*ratio=" << got * ratio << "), running time stretcher" << std::endl;
+                std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " samples on channel " << ch << " (reqd=" << reqd << ", count=" << count << ", ratio=" << ratio << ", got*ratio=" << got * ratio << "), running time stretcher" << std::endl;
 #endif
 
-            timeStretcher->getStretcher(ch)->process(ib, buffer[ch], request);
-            
-            delete[] ib;
+                if (got < reqd) {
+                    std::cerr << "WARNING: Read underrun in playback ("
+                              << got << " < " << reqd << ")" << std::endl;
+                }
+                
+                ts->putInput(ib, got);
 
-//            for (size_t i = 0; i < count; ++i) {
-//                ib[i] = buffer[ch][i];
-//            }
-	    
-//            timeStretcher->run(ch);
+                if (got == 0) break;
 
-            
+                if (ts->getAvailableOutputSamples() == available) {
+                    std::cerr << "WARNING: AudioCallbackPlaySource::getSamples: Added " << got << " samples to time stretcher, created no new available output samples" << std::endl;
+		    break;
+                }
+            }
 
+            ts->getOutput(buffer[ch], count);
         }
     }
+*/
+    m_condition.wakeAll();
 
-    
-
-//!!!    if (m_slowdownCounter == 0) m_condition.wakeAll();
-//    m_slowdownCounter = (m_slowdownCounter + 1) % timeStretcher->getFactor();
     return count;
 }
 

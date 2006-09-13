@@ -33,14 +33,45 @@
 class PhaseVocoderTimeStretcher
 {
 public:
-    PhaseVocoderTimeStretcher(float ratio, size_t maxProcessInputBlockSize);
+    PhaseVocoderTimeStretcher(size_t channels,
+                              float ratio,
+                              bool sharpen,
+                              size_t maxProcessInputBlockSize);
     virtual ~PhaseVocoderTimeStretcher();
 
     /**
      * Process a block.  The input array contains the given number of
-     * samples; the output must have space for lrintf(samples * m_ratio).
+     * samples (on each channel); the output must have space for
+     * lrintf(samples * m_ratio).
+     * 
+     * This should work correctly for some ratios, e.g. small powers
+     * of two.  For other ratios it may drop samples -- use putInput
+     * in a loop followed by getOutput (when getAvailableOutputSamples
+     * reports enough) instead.
+     *
+     * Do not mix process calls with putInput/getOutput calls.
      */
-    void process(float *input, float *output, size_t samples);
+    void process(float **input, float **output, size_t samples);
+
+    /**
+     * Return the number of samples that would need to be added via
+     * putInput in order to provoke the time stretcher into doing some
+     * time stretching and making more output samples available.
+     */
+    size_t getRequiredInputSamples() const;
+
+    /**
+     * Put (and possibly process) a given number of input samples.
+     * Number must not exceed the maxProcessInputBlockSize passed to
+     * constructor.
+     */
+    void putInput(float **input, size_t samples);
+
+    size_t getAvailableOutputSamples() const;
+
+    void getOutput(float **output, size_t samples);
+
+    //!!! and reset?
 
     /**
      * Get the hop size for input.
@@ -50,7 +81,7 @@ public:
     /**
      * Get the hop size for output.
      */
-    size_t getOutputIncrement() const { return getInputIncrement() * getRatio(); }
+    size_t getOutputIncrement() const { return m_n2; }
 
     /**
      * Get the window size for FFT processing.
@@ -63,9 +94,14 @@ public:
     WindowType getWindowType() const { return m_window->getType(); }
 
     /**
-     * Get the stretch ratio set in the constructor.
+     * Get the stretch ratio.
      */
-    float getRatio() const { return m_ratio; }
+    float getRatio() const { return float(m_n2) / float(m_n1); }
+
+    /**
+     * Return whether this time stretcher will attempt to sharpen transients.
+     */
+    bool getSharpening() const { return m_sharpen; }
 
     /**
      * Get the latency added by the time stretcher, in sample frames.
@@ -86,26 +122,33 @@ protected:
      * the window overlap varies or otherwise results in something
      * other than a flat sum.
      */
-    void processBlock(float *in, float *out, float *modulation);
+    bool processBlock(size_t channel,
+                      float *in, float *out,
+                      float *modulation,
+                      bool knownPercussive);
 
+    size_t m_channels;
     float m_ratio;
+    bool m_sharpen;
     size_t m_n1;
     size_t m_n2;
     size_t m_wlen;
     Window<float> *m_window;
 
+    float **m_prevPhase;
+    float **m_prevAdjustedPhase;
+    float **m_prevMag;
+    int *m_prevPercussiveCount;
+
+    float *m_dbuf;
     fftwf_complex *m_time;
     fftwf_complex *m_freq;
-    float *m_dbuf;
-    float *m_prevPhase;
-    float *m_prevAdjustedPhase;
-
     fftwf_plan m_plan;
     fftwf_plan m_iplan;
     
-    RingBuffer<float> *m_inbuf;
-    RingBuffer<float> *m_outbuf;
-    float *m_mashbuf;
+    RingBuffer<float> **m_inbuf;
+    RingBuffer<float> **m_outbuf;
+    float **m_mashbuf;
     float *m_modulationbuf;
 };
 
