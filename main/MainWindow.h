@@ -44,6 +44,7 @@ class CommandHistory;
 class QMenu;
 class AudioDial;
 class QLabel;
+class QCheckBox;
 class PreferencesDialog;
 
 
@@ -139,6 +140,7 @@ protected slots:
     void playLoopToggled();
     void playSelectionToggled();
     void playSpeedChanged(int);
+    void playSharpenToggled();
     void sampleRateMismatch(size_t, size_t, bool);
 
     void outputLevelsChanged(float, float);
@@ -203,6 +205,7 @@ protected:
     Panner                  *m_panner;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
+    QCheckBox               *m_playSharpen;
     WaveformLayer           *m_panLayer;
     Layer                   *m_timeRulerLayer;
 

@@ -78,6 +78,7 @@
 #include <QSettings>
 #include <QDateTime>
 #include <QProcess>
+#include <QCheckBox>
 
 #include <iostream>
 #include <cstdio>
@@ -165,10 +166,21 @@ MainWindow::MainWindow() :
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
 
-    layout->addWidget(m_paneStack, 0, 0, 1, 3);
+    m_playSharpen = new QCheckBox(frame);
+    m_playSharpen->setToolTip(tr("Sharpen"));
+    m_playSharpen->setEnabled(false);
+    m_playSharpen->setChecked(false);
+    connect(m_playSharpen, SIGNAL(clicked()),
+            this, SLOT(playSharpenToggled()));
+
+    layout->addWidget(m_paneStack, 0, 0, 1, 4);
     layout->addWidget(m_panner, 1, 0);
     layout->addWidget(m_fader, 1, 1);
     layout->addWidget(m_playSpeed, 1, 2);
+    layout->addWidget(m_playSharpen, 1, 3);
+
+    layout->setColumnStretch(0, 10);
+
     frame->setLayout(layout);
 
     connect(m_viewManager, SIGNAL(outputLevelsChanged(float, float)),
@@ -2870,7 +2882,15 @@ MainWindow::playSpeedChanged(int speed)
 			    .arg(factor != 1 ?
 				 QString("1/%1").arg(factor) :
 				 tr("Full")));
-    m_playSource->setSlowdownFactor(factor);
+    m_playSharpen->setEnabled(speed != 10);
+    bool sharpen = (speed != 10 && m_playSharpen->isChecked());
+    m_playSource->setSlowdownFactor(factor, sharpen);
+}
+
+void
+MainWindow::playSharpenToggled()
+{
+    playSpeedChanged(m_playSpeed->value());
 }
 
 void

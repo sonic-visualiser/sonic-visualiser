@@ -177,7 +177,7 @@ public:
      */
     size_t getSourceSamples(size_t count, float **buffer);
 
-    void setSlowdownFactor(float factor);
+    void setSlowdownFactor(float factor, bool sharpen);
 
 signals:
     void modelReplaced();
@@ -244,31 +244,8 @@ protected:
     void clearRingBuffers(bool haveLock = false, size_t count = 0);
     void unifyRingBuffers();
 
-    class TimeStretcherData
-    {
-    public:
-	TimeStretcherData(size_t channels, float factor, size_t blockSize);
-	~TimeStretcherData();
-
-	float getFactor() const { return m_factor; }
-	PhaseVocoderTimeStretcher *getStretcher(size_t channel);
-//	float *getOutputBuffer(size_t channel);
-//	float *getInputBuffer();
-	
-//	void run(size_t channel);
-
-    protected:
-	TimeStretcherData(const TimeStretcherData &); // not provided
-	TimeStretcherData &operator=(const TimeStretcherData &); // not provided
-
-	std::map<size_t, PhaseVocoderTimeStretcher *> m_stretcher;
-	float m_factor;
-	size_t m_blockSize;
-    };
-
-    size_t m_slowdownCounter;
-    TimeStretcherData *m_timeStretcher;
-    Scavenger<TimeStretcherData> m_timeStretcherScavenger;
+    PhaseVocoderTimeStretcher *m_timeStretcher;
+    Scavenger<PhaseVocoderTimeStretcher> m_timeStretcherScavenger;
 
     // Called from fill thread, m_playing true, mutex held
     // Return true if work done
