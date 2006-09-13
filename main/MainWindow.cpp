@@ -2860,12 +2860,12 @@ MainWindow::playSpeedChanged(int speed)
 //    int factor = 11 - speed;
     if (speed > 10) factor = 1.0 / factor;
     std::cerr << "factor = " << factor << std::endl;
-
+/*
     int iinc = 128;
     int oinc = lrintf(iinc * factor);
     factor = (float(oinc) + 0.01) / iinc;
     std::cerr << "corrected factor = " << factor << std::endl;
-
+*/
     m_playSpeed->setToolTip(tr("Playback speed: %1")
 			    .arg(factor != 1 ?
 				 QString("1/%1").arg(factor) :

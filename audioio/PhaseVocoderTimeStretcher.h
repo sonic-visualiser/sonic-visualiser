@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _INTEGER_TIME_STRETCHER_H_
-#define _INTEGER_TIME_STRETCHER_H_
+#ifndef _PHASE_VOCODER_TIME_STRETCHER_H_
+#define _PHASE_VOCODER_TIME_STRETCHER_H_
 
 #include "base/Window.h"
 #include "base/RingBuffer.h"
@@ -22,24 +22,23 @@
 #include <fftw3.h>
 
 /**
- * A time stretcher that slows down audio by an integer multiple of
- * its original duration, preserving pitch.  This uses the simple
- * phase vocoder technique from DAFX pp275-276, adding a block-based
- * stream oriented API.
+ * A time stretcher that alters the performance speed of audio,
+ * preserving pitch.  This uses the simple phase vocoder technique
+ * from DAFX pp275-276, adding a block-based stream oriented API.
  *
  * Causes significant transient smearing, but sounds good for steady
  * notes and is generally predictable.
  */
 
-class IntegerTimeStretcher
+class PhaseVocoderTimeStretcher
 {
 public:
-    IntegerTimeStretcher(float ratio,
+    PhaseVocoderTimeStretcher(float ratio,
 			 size_t maxProcessInputBlockSize,
 			 size_t inputIncrement = 64,
 			 size_t windowSize = 2048,
 			 WindowType windowType = HanningWindow);
-    virtual ~IntegerTimeStretcher();
+    virtual ~PhaseVocoderTimeStretcher();
 
     /**
      * Process a block.  The input array contains the given number of
