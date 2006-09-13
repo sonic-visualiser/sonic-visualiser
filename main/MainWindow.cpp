@@ -167,7 +167,7 @@ MainWindow::MainWindow() :
 	    this, SLOT(playSpeedChanged(int)));
 
     m_playSharpen = new QCheckBox(frame);
-    m_playSharpen->setToolTip(tr("Sharpen"));
+    m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
     m_playSharpen->setEnabled(false);
     m_playSharpen->setChecked(false);
     connect(m_playSharpen, SIGNAL(clicked()),

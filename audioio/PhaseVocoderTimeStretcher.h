@@ -125,7 +125,7 @@ protected:
     bool processBlock(size_t channel,
                       float *in, float *out,
                       float *modulation,
-                      bool knownPercussive);
+                      bool lastPercussive);
 
     size_t m_channels;
     float m_ratio;
@@ -139,6 +139,7 @@ protected:
     float **m_prevAdjustedPhase;
     float **m_prevMag;
     int *m_prevPercussiveCount;
+    bool m_prevPercussive;
 
     float *m_dbuf;
     fftwf_complex *m_time;

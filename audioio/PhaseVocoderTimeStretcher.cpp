@@ -40,7 +40,7 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
             m_n1 = 256;
         }
         if (m_sharpen) {
-            m_n1 /= 2;
+//            m_n1 /= 2;
             m_wlen = 2048;
         }
         m_n2 = m_n1 * ratio;
@@ -55,7 +55,7 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
             m_n2 = 256;
         }
         if (m_sharpen) {
-            m_n2 /= 2;
+//            m_n2 /= 2;
             if (m_wlen < 2048) m_wlen = 2048;
         }
         m_n1 = m_n2 / ratio;
@@ -68,6 +68,7 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
     if (m_sharpen) m_prevMag = new float *[m_channels];
     else m_prevMag = 0;
     m_prevPercussiveCount = new int[m_channels];
+    m_prevPercussive = false;
 
     m_dbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
     m_time = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
@@ -231,7 +232,7 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
                 bool thisChannelPercussive =
                     processBlock(c, m_dbuf, m_mashbuf[c],
                                  c == 0 ? m_modulationbuf : 0,
-                                 isPercussive);
+                                 m_prevPercussive);
 
                 if (thisChannelPercussive && c == 0) {
                     isPercussive = true;
@@ -262,6 +263,8 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
                     m_mashbuf[c][i] = 0.0f;
                 }
             }
+
+            m_prevPercussive = isPercussive;
 
             for (size_t i = 0; i < m_wlen - n2; ++i) {
                 m_modulationbuf[i] = m_modulationbuf[i + n2];
@@ -319,10 +322,10 @@ bool
 PhaseVocoderTimeStretcher::processBlock(size_t c,
                                         float *buf, float *out,
                                         float *modulation,
-                                        bool knownPercussive)
+                                        bool lastPercussive)
 {
     size_t i;
-    bool isPercussive = knownPercussive;
+    bool isPercussive = false;
 
     // buf contains m_wlen samples; out contains enough space for
     // m_wlen * ratio samples (we mix into out, rather than replacing)
@@ -363,7 +366,7 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
             m_prevMag[c][i] = mag;
         }
         
-        if (count > m_wlen / 6 &&
+        if (count > m_wlen / 4 && //!!!
             count > m_prevPercussiveCount[c] * 1.2) {
             isPercussive = true;
             std::cerr << "isPercussive (count = " << count << ", prev = " << m_prevPercussiveCount[c] << ")" << std::endl;
@@ -373,7 +376,7 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
     }
 
     size_t n2 = m_n2;
-    if (isPercussive) n2 = m_n1;
+    if (lastPercussive) n2 = m_n1;
 	
     for (i = 0; i < m_wlen; ++i) {
 
