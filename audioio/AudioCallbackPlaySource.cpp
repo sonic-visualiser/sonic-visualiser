@@ -22,13 +22,13 @@
 #include "base/PlayParameterRepository.h"
 #include "data/model/DenseTimeValueModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
-#include "IntegerTimeStretcher.h"
+#include "PhaseVocoderTimeStretcher.h"
 
 #include <iostream>
 #include <cassert>
 
 //#define DEBUG_AUDIO_PLAY_SOURCE 1
-#define DEBUG_AUDIO_PLAY_SOURCE_PLAYING 1
+//#define DEBUG_AUDIO_PLAY_SOURCE_PLAYING 1
 
 //const size_t AudioCallbackPlaySource::m_ringBufferSize = 102400;
 const size_t AudioCallbackPlaySource::m_ringBufferSize = 131071;
@@ -600,7 +600,7 @@ AudioCallbackPlaySource::TimeStretcherData::TimeStretcherData(size_t channels,
 
 	m_stretcher[ch] = StretcherBuffer
 //!!!
-	    (new IntegerTimeStretcher(factor,
+	    (new PhaseVocoderTimeStretcher(factor,
                                       blockSize,
 //                                      128),
                                       (blockSize/2) / factor),
@@ -621,7 +621,7 @@ AudioCallbackPlaySource::TimeStretcherData::~TimeStretcherData()
     delete m_stretchInputBuffer;
 }
 
-IntegerTimeStretcher *
+PhaseVocoderTimeStretcher *
 AudioCallbackPlaySource::TimeStretcherData::getStretcher(size_t channel)
 {
     return m_stretcher[channel].first;

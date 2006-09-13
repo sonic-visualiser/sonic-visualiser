@@ -35,7 +35,7 @@ class Model;
 class ViewManager;
 class AudioGenerator;
 class PlayParameters;
-class IntegerTimeStretcher;
+class PhaseVocoderTimeStretcher;
 
 /**
  * AudioCallbackPlaySource manages audio data supply to callback-based
@@ -251,7 +251,7 @@ protected:
 	~TimeStretcherData();
 
 	float getFactor() const { return m_factor; }
-	IntegerTimeStretcher *getStretcher(size_t channel);
+	PhaseVocoderTimeStretcher *getStretcher(size_t channel);
 	float *getOutputBuffer(size_t channel);
 	float *getInputBuffer();
 	
@@ -261,7 +261,7 @@ protected:
 	TimeStretcherData(const TimeStretcherData &); // not provided
 	TimeStretcherData &operator=(const TimeStretcherData &); // not provided
 
-	typedef std::pair<IntegerTimeStretcher *, float *> StretcherBuffer;
+	typedef std::pair<PhaseVocoderTimeStretcher *, float *> StretcherBuffer;
 	std::map<size_t, StretcherBuffer> m_stretcher;
 	float *m_stretchInputBuffer;
 	float m_factor;

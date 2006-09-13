@@ -36,7 +36,7 @@ HEADERS += audioio/AudioCallbackPlaySource.h \
            audioio/AudioJACKTarget.h \
            audioio/AudioPortAudioTarget.h \
            audioio/AudioTargetFactory.h \
-           audioio/IntegerTimeStretcher.h \
+           audioio/PhaseVocoderTimeStretcher.h \
            document/Document.h \
            document/SVFileReader.h \
            main/MainWindow.h \
@@ -52,7 +52,7 @@ SOURCES += audioio/AudioCallbackPlaySource.cpp \
            audioio/AudioJACKTarget.cpp \
            audioio/AudioPortAudioTarget.cpp \
            audioio/AudioTargetFactory.cpp \
-           audioio/IntegerTimeStretcher.cpp \
+           audioio/PhaseVocoderTimeStretcher.cpp \
            document/Document.cpp \
            document/SVFileReader.cpp \
            main/main.cpp \

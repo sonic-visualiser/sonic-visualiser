@@ -13,14 +13,14 @@
     COPYING included with this distribution for more information.
 */
 
-#include "IntegerTimeStretcher.h"
+#include "PhaseVocoderTimeStretcher.h"
 
 #include <iostream>
 #include <cassert>
 
-//#define DEBUG_INTEGER_TIME_STRETCHER 1
+//#define DEBUG_PHASE_VOCODER_TIME_STRETCHER 1
 
-IntegerTimeStretcher::IntegerTimeStretcher(float ratio,
+PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(float ratio,
 					   size_t maxProcessInputBlockSize,
 					   size_t inputIncrement,
 					   size_t windowSize,
@@ -53,9 +53,9 @@ IntegerTimeStretcher::IntegerTimeStretcher(float ratio,
     }
 }
 
-IntegerTimeStretcher::~IntegerTimeStretcher()
+PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
 {
-    std::cerr << "IntegerTimeStretcher::~IntegerTimeStretcher" << std::endl;
+    std::cerr << "PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher" << std::endl;
 
     fftwf_destroy_plan(m_plan);
     fftwf_destroy_plan(m_iplan);
@@ -72,13 +72,13 @@ IntegerTimeStretcher::~IntegerTimeStretcher()
 }	
 
 size_t
-IntegerTimeStretcher::getProcessingLatency() const
+PhaseVocoderTimeStretcher::getProcessingLatency() const
 {
     return getWindowSize() - getInputIncrement();
 }
 
 void
-IntegerTimeStretcher::process(float *input, float *output, size_t samples)
+PhaseVocoderTimeStretcher::process(float *input, float *output, size_t samples)
 {
     // We need to add samples from input to our internal buffer.  When
     // we have m_windowSize samples in the buffer, we can process it,
@@ -96,8 +96,8 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
 
     size_t consumed = 0;
 
-#ifdef DEBUG_INTEGER_TIME_STRETCHER
-    std::cerr << "IntegerTimeStretcher::process(" << samples << ", consumed = " << consumed << "), writable " << m_inbuf.getWriteSpace() <<", readable "<< m_outbuf.getReadSpace() << std::endl;
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
+    std::cerr << "PhaseVocoderTimeStretcher::process(" << samples << ", consumed = " << consumed << "), writable " << m_inbuf.getWriteSpace() <<", readable "<< m_outbuf.getReadSpace() << std::endl;
 #endif
 
     while (consumed < samples) {
@@ -107,11 +107,11 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
 
 	if (writable == 0) {
 	    //!!! then what? I don't think this should happen, but
-	    std::cerr << "WARNING: IntegerTimeStretcher::process: writable == 0" << std::endl;
+	    std::cerr << "WARNING: PhaseVocoderTimeStretcher::process: writable == 0" << std::endl;
 	    break;
 	}
 
-#ifdef DEBUG_INTEGER_TIME_STRETCHER
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	std::cerr << "writing " << writable << " from index " << consumed << " to inbuf, consumed will be " << consumed + writable << std::endl;
 #endif
 	m_inbuf.write(input + consumed, writable);
@@ -130,7 +130,7 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
 		
 	    processBlock(m_dbuf, m_mashbuf, m_modulationbuf);
 
-#ifdef DEBUG_INTEGER_TIME_STRETCHER
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	    std::cerr << "writing first " << m_n2 << " from mashbuf, skipping " << m_n1 << " on inbuf " << std::endl;
 #endif
 	    m_inbuf.skip(m_n1);
@@ -154,10 +154,10 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
 	    }
 	}
 
-//	std::cerr << "WARNING: IntegerTimeStretcher::process: writespace not enough for output increment (" << m_outbuf.getWriteSpace() << " < " << m_n2 << ")" << std::endl;
+//	std::cerr << "WARNING: PhaseVocoderTimeStretcher::process: writespace not enough for output increment (" << m_outbuf.getWriteSpace() << " < " << m_n2 << ")" << std::endl;
 //	}
 
-#ifdef DEBUG_INTEGER_TIME_STRETCHER
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	std::cerr << "loop ended: inbuf read space " << m_inbuf.getReadSpace() << ", outbuf write space " << m_outbuf.getWriteSpace() << std::endl;
 #endif
     }
@@ -165,34 +165,34 @@ IntegerTimeStretcher::process(float *input, float *output, size_t samples)
     size_t toRead = lrintf(samples * m_ratio);
 
     if (m_outbuf.getReadSpace() < toRead) {
-	std::cerr << "WARNING: IntegerTimeStretcher::process: not enough data (yet?) (" << m_outbuf.getReadSpace() << " < " << toRead << ")" << std::endl;
+	std::cerr << "WARNING: PhaseVocoderTimeStretcher::process: not enough data (yet?) (" << m_outbuf.getReadSpace() << " < " << toRead << ")" << std::endl;
 	size_t fill = toRead - m_outbuf.getReadSpace();
 	for (size_t i = 0; i < fill; ++i) {
 	    output[i] = 0.0;
 	}
 	m_outbuf.read(output + fill, m_outbuf.getReadSpace());
     } else {
-#ifdef DEBUG_INTEGER_TIME_STRETCHER
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	std::cerr << "enough data - writing " << toRead << " from outbuf" << std::endl;
 #endif
 	m_outbuf.read(output, toRead);
     }
 
-#ifdef DEBUG_INTEGER_TIME_STRETCHER
-    std::cerr << "IntegerTimeStretcher::process returning" << std::endl;
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
+    std::cerr << "PhaseVocoderTimeStretcher::process returning" << std::endl;
 #endif
 }
 
 void
-IntegerTimeStretcher::processBlock(float *buf, float *out, float *modulation)
+PhaseVocoderTimeStretcher::processBlock(float *buf, float *out, float *modulation)
 {
     size_t i;
 
     // buf contains m_wlen samples; out contains enough space for
     // m_wlen * ratio samples (we mix into out, rather than replacing)
 
-#ifdef DEBUG_INTEGER_TIME_STRETCHER
-    std::cerr << "IntegerTimeStretcher::processBlock" << std::endl;
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
+    std::cerr << "PhaseVocoderTimeStretcher::processBlock" << std::endl;
 #endif
 
     m_window->cut(buf);
