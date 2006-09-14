@@ -91,7 +91,7 @@ public:
     /**
      * Get the window type.
      */
-    WindowType getWindowType() const { return m_window->getType(); }
+//    WindowType getWindowType() const { return m_window->getType(); }
 
     /**
      * Get the stretch ratio.
@@ -122,10 +122,14 @@ protected:
      * the window overlap varies or otherwise results in something
      * other than a flat sum.
      */
-    bool processBlock(size_t channel,
-                      float *in, float *out,
-                      float *modulation,
-                      size_t lastStep);
+    
+
+    void analyseBlock(size_t channel, float *in); // into m_freq[channel]
+    
+    bool isTransient(); // operates on m_freq[0..m_channels-1]
+
+    void synthesiseBlock(size_t channel, float *out, float *modulation,
+                         size_t lastStep);
 
     size_t m_channels;
     float m_ratio;
@@ -133,19 +137,21 @@ protected:
     size_t m_n1;
     size_t m_n2;
     size_t m_wlen;
-    Window<float> *m_window;
+    Window<float> *m_analysisWindow;
+    Window<float> *m_synthesisWindow;
 
     float **m_prevPhase;
     float **m_prevAdjustedPhase;
-    float **m_prevMag;
-    int *m_prevPercussiveCount;
-    bool m_prevPercussive;
 
-    float *m_dbuf;
-    float *m_time;
-    fftwf_complex *m_freq;
-    fftwf_plan m_plan;
-    fftwf_plan m_iplan;
+    float *m_prevTransientMag;
+    int  m_prevTransientCount;
+    bool m_prevTransient;
+
+    float *m_tempbuf;
+    float **m_time;
+    fftwf_complex **m_freq;
+    fftwf_plan *m_plan;
+    fftwf_plan *m_iplan;
     
     RingBuffer<float> **m_inbuf;
     RingBuffer<float> **m_outbuf;
