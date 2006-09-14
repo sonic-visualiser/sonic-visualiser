@@ -61,21 +61,22 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
         m_n1 = m_n2 / ratio;
     }
         
-    m_window = new Window<float>(HanningWindow, m_wlen);
+    m_analysisWindow = new Window<float>(HanningWindow, m_wlen);
+    m_synthesisWindow = new Window<float>(HanningWindow, m_wlen);
 
     m_prevPhase = new float *[m_channels];
     m_prevAdjustedPhase = new float *[m_channels];
-    if (m_sharpen) m_prevMag = new float *[m_channels];
-    else m_prevMag = 0;
-    m_prevPercussiveCount = new int[m_channels];
-    m_prevPercussive = false;
 
-    m_dbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
-    m_time = (float *)fftwf_malloc(sizeof(float) * m_wlen);
-    m_freq = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
-        
-    m_plan = fftwf_plan_dft_r2c_1d(m_wlen, m_time, m_freq, FFTW_ESTIMATE);
-    m_iplan = fftwf_plan_dft_c2r_1d(m_wlen, m_freq, m_time, FFTW_ESTIMATE);
+    m_prevTransientMag = (float *)fftwf_malloc(sizeof(float) * (m_wlen / 2 + 1));
+    m_prevTransientCount = 0;
+    m_prevTransient = false;
+
+    m_tempbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+
+    m_time = new float *[m_channels];
+    m_freq = new fftwf_complex *[m_channels];
+    m_plan = new fftwf_plan[m_channels];
+    m_iplan = new fftwf_plan[m_channels];
 
     m_inbuf = new RingBuffer<float> *[m_channels];
     m_outbuf = new RingBuffer<float> *[m_channels];
@@ -85,12 +86,15 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
         
     for (size_t c = 0; c < m_channels; ++c) {
 
-        m_prevPhase[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
-        m_prevAdjustedPhase[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+        m_prevPhase[c] = (float *)fftwf_malloc(sizeof(float) * (m_wlen / 2 + 1));
+        m_prevAdjustedPhase[c] = (float *)fftwf_malloc(sizeof(float) * (m_wlen / 2 + 1));
 
-        if (m_sharpen) {
-            m_prevMag[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
-        }
+        m_time[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+        m_freq[c] = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) *
+                                                  (m_wlen / 2 + 1));
+        
+        m_plan[c] = fftwf_plan_dft_r2c_1d(m_wlen, m_time[c], m_freq[c], FFTW_ESTIMATE);
+        m_iplan[c] = fftwf_plan_dft_c2r_1d(m_wlen, m_freq[c], m_time[c], FFTW_ESTIMATE);
 
         m_inbuf[c] = new RingBuffer<float>(m_wlen);
         m_outbuf[c] = new RingBuffer<float>
@@ -100,16 +104,20 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
         
         for (int i = 0; i < m_wlen; ++i) {
             m_mashbuf[c][i] = 0.0;
+        }
+
+        for (int i = 0; i <= m_wlen/2; ++i) {
             m_prevPhase[c][i] = 0.0;
             m_prevAdjustedPhase[c][i] = 0.0;
-            if (m_sharpen) m_prevMag[c][i] = 0.0;
         }
-        
-        m_prevPercussiveCount[c] = 0;
     }
 
     for (int i = 0; i < m_wlen; ++i) {
         m_modulationbuf[i] = 0.0;
+    }
+
+    for (int i = 0; i <= m_wlen/2; ++i) {
+        m_prevTransientMag[i] = 0.0;
     }
 
     std::cerr << "PhaseVocoderTimeStretcher: channels = " << channels
@@ -123,35 +131,38 @@ PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
 {
     std::cerr << "PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher" << std::endl;
 
-    fftwf_destroy_plan(m_plan);
-    fftwf_destroy_plan(m_iplan);
-
-    fftwf_free(m_time);
-    fftwf_free(m_freq);
-    fftwf_free(m_dbuf);
-
     for (size_t c = 0; c < m_channels; ++c) {
+
+        fftwf_destroy_plan(m_plan[c]);
+        fftwf_destroy_plan(m_iplan[c]);
+
+        fftwf_free(m_time[c]);
+        fftwf_free(m_freq[c]);
 
         fftwf_free(m_mashbuf[c]);
         fftwf_free(m_prevPhase[c]);
         fftwf_free(m_prevAdjustedPhase[c]);
-        if (m_sharpen) fftwf_free(m_prevMag[c]);
 
         delete m_inbuf[c];
         delete m_outbuf[c];
     }
 
+    fftwf_free(m_tempbuf);
     fftwf_free(m_modulationbuf);
+    fftwf_free(m_prevTransientMag);
 
     delete[] m_prevPhase;
     delete[] m_prevAdjustedPhase;
-    if (m_sharpen) delete[] m_prevMag;
-    delete[] m_prevPercussiveCount;
     delete[] m_inbuf;
     delete[] m_outbuf;
     delete[] m_mashbuf;
+    delete[] m_time;
+    delete[] m_freq;
+    delete[] m_plan;
+    delete[] m_iplan;
 
-    delete m_window;
+    delete m_analysisWindow;
+    delete m_synthesisWindow;
 }	
 
 size_t
@@ -221,26 +232,29 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
 	    // processing, and then read m_n1 to advance the read
 	    // pointer.
             
+            for (size_t c = 0; c < m_channels; ++c) {
+
+                size_t got = m_inbuf[c]->peek(m_tempbuf, m_wlen);
+                assert(got == m_wlen);
+
+                analyseBlock(c, m_tempbuf);
+            }
+
+            bool transient = false;
+            if (m_sharpen) transient = isTransient();
+
             size_t n2 = m_n2;
-            bool isPercussive = false;
+
+            if (transient) {
+                n2 = m_n1;
+            }
 
             for (size_t c = 0; c < m_channels; ++c) {
 
-                size_t got = m_inbuf[c]->peek(m_dbuf, m_wlen);
-                assert(got == m_wlen);
-		
-                bool thisChannelPercussive =
-                    processBlock(c, m_dbuf, m_mashbuf[c],
-                                 c == 0 ? m_modulationbuf : 0,
-                                 m_prevPercussive ? m_n1 : m_n2);
+                synthesiseBlock(c, m_mashbuf[c],
+                                c == 0 ? m_modulationbuf : 0,
+                                m_prevTransient ? m_n1 : m_n2);
 
-                if (thisChannelPercussive && c == 0) {
-                    isPercussive = true;
-                } 
-
-                if (isPercussive) {
-                    n2 = m_n1;
-                }
 
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
                 std::cerr << "writing first " << m_n2 << " from mashbuf, skipping " << m_n1 << " on inbuf " << std::endl;
@@ -264,7 +278,7 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
                 }
             }
 
-            m_prevPercussive = isPercussive;
+            m_prevTransient = transient;
 
             for (size_t i = 0; i < m_wlen - n2; ++i) {
                 m_modulationbuf[i] = m_modulationbuf[i + n2];
@@ -318,23 +332,18 @@ PhaseVocoderTimeStretcher::getOutput(float **output, size_t samples)
 #endif
 }
 
-bool
-PhaseVocoderTimeStretcher::processBlock(size_t c,
-                                        float *buf, float *out,
-                                        float *modulation,
-                                        size_t lastStep)
+void
+PhaseVocoderTimeStretcher::analyseBlock(size_t c, float *buf)
 {
     size_t i;
-    bool isPercussive = false;
 
-    // buf contains m_wlen samples; out contains enough space for
-    // m_wlen * ratio samples (we mix into out, rather than replacing)
+    // buf contains m_wlen samples
 
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
-    std::cerr << "PhaseVocoderTimeStretcher::processBlock (channel " << c << ")" << std::endl;
+    std::cerr << "PhaseVocoderTimeStretcher::analyseBlock (channel " << c << ")" << std::endl;
 #endif
 
-    m_window->cut(buf);
+    m_analysisWindow->cut(buf);
 
     for (i = 0; i < m_wlen/2; ++i) {
 	float temp = buf[i];
@@ -343,107 +352,117 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
     }
 
     for (i = 0; i < m_wlen; ++i) {
-	m_time[i] = buf[i];
+	m_time[c][i] = buf[i];
     }
 
-    fftwf_execute(m_plan); // m_time -> m_freq
+    fftwf_execute(m_plan[c]); // m_time -> m_freq
+}
 
-    if (m_sharpen && c == 0) { //!!!
-        
-        int count = 0;
+bool
+PhaseVocoderTimeStretcher::isTransient()
+{
+    int count = 0;
 
-        for (i = 0; i < m_wlen; ++i) {
-            
-            float mag = sqrtf(m_freq[i][0] * m_freq[i][0] +
-                              m_freq[i][1] * m_freq[i][1]);
+    for (int i = 0; i <= m_wlen/2; ++i) {
 
-            if (m_prevMag[c][i] > 0) {
-                float magdiff = 20.f * log10f(mag / m_prevMag[c][i]);
-                if (magdiff > 3.f) ++count;
-            }
-            
-            m_prevMag[c][i] = mag;
-        }
-        
-        if (count > m_wlen / 4 && //!!!
-            count > m_prevPercussiveCount[c] * 1.2) {
-            isPercussive = true;
-            std::cerr << "isPercussive (count = " << count << ", prev = " << m_prevPercussiveCount[c] << ")" << std::endl;
+        float real = 0.f, imag = 0.f;
+
+        for (size_t c = 0; c < m_channels; ++c) {
+            real += m_freq[c][i][0];
+            imag += m_freq[c][i][1];
         }
 
-        m_prevPercussiveCount[c] = count;
+        float sqrmag = (real * real + imag * imag);
+
+        if (m_prevTransientMag[i] > 0.f) {
+            float diff = 10.f * log10f(sqrmag / m_prevTransientMag[i]);
+            if (diff > 3.f) ++count;
+        }
+
+        m_prevTransientMag[i] = sqrmag;
     }
 
-    for (i = 0; i < m_wlen; ++i) { //!!! /2
+    bool isTransient = false;
 
-        float mag;
+    if (count > m_wlen / 4.5 && //!!!
+        count > m_prevTransientCount * 1.2) {
+        isTransient = true;
+        std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientCount << ")" << std::endl;
+    }
 
-        if (m_sharpen && c == 0) {
-            mag = m_prevMag[c][i]; // can reuse this
-        } else {
-            mag = sqrtf(m_freq[i][0] * m_freq[i][0] +
-                        m_freq[i][1] * m_freq[i][1]);
-        }
+    m_prevTransientCount = count;
+
+    return isTransient;
+}
+
+void
+PhaseVocoderTimeStretcher::synthesiseBlock(size_t c,
+                                           float *out,
+                                           float *modulation,
+                                           size_t lastStep)
+{
+    int i;
+
+    bool unchanged = (lastStep == m_n1);
+
+    for (i = 0; i <= m_wlen/2; ++i) {
 		
-        float phase = princargf(atan2f(m_freq[i][1], m_freq[i][0]));
-
-        float omega = (2 * M_PI * m_n1 * i) / m_wlen;
-	
-        float expectedPhase = m_prevPhase[c][i] + omega;
-
-        float phaseError = princargf(phase - expectedPhase);
-
+        float phase = princargf(atan2f(m_freq[c][i][1], m_freq[c][i][0]));
         float adjustedPhase = phase;
 
-        if (!isPercussive) {
-//            if (fabsf(phaseError) < (1.1f * (lastStep * M_PI) / m_wlen)) {
+        if (!unchanged) {
 
-                float phaseIncrement = (omega + phaseError) / m_n1;
+            float mag = sqrtf(m_freq[c][i][0] * m_freq[c][i][0] +
+                              m_freq[c][i][1] * m_freq[c][i][1]);
 
-                adjustedPhase = m_prevAdjustedPhase[c][i] +
-                    lastStep * phaseIncrement;
-//            }
-        }
-
-//        if (isPercussive) adjustedPhase = phase;
+            float omega = (2 * M_PI * m_n1 * i) / m_wlen;
 	
-	float real = mag * cosf(adjustedPhase);
-	float imag = mag * sinf(adjustedPhase);
-	m_freq[i][0] = real;
-	m_freq[i][1] = imag;
+            float expectedPhase = m_prevPhase[c][i] + omega;
+
+            float phaseError = princargf(phase - expectedPhase);
+
+            float phaseIncrement = (omega + phaseError) / m_n1;
+            
+            adjustedPhase = m_prevAdjustedPhase[c][i] +
+                lastStep * phaseIncrement;
+            
+            float real = mag * cosf(adjustedPhase);
+            float imag = mag * sinf(adjustedPhase);
+            m_freq[c][i][0] = real;
+            m_freq[c][i][1] = imag;
+        }
 
         m_prevPhase[c][i] = phase;
         m_prevAdjustedPhase[c][i] = adjustedPhase;
     }
-    
-    fftwf_execute(m_iplan); // m_freq -> m_time, inverse fft
+
+    fftwf_execute(m_iplan[c]); // m_freq -> m_time, inverse fft
 
     for (i = 0; i < m_wlen/2; ++i) {
-	float temp = m_time[i];
-	m_time[i] = m_time[i + m_wlen/2];
-	m_time[i + m_wlen/2] = temp;
+        float temp = m_time[c][i];
+        m_time[c][i] = m_time[c][i + m_wlen/2];
+        m_time[c][i + m_wlen/2] = temp;
+    }
+    
+    for (i = 0; i < m_wlen; ++i) {
+        m_time[c][i] = m_time[c][i] / m_wlen;
     }
 
-    for (i = 0; i < m_wlen; ++i) {
-	m_time[i] = m_time[i] / m_wlen;
-    }
-
-    m_window->cut(m_time);
+    m_synthesisWindow->cut(m_time[c]);
 
     for (i = 0; i < m_wlen; ++i) {
-        out[i] += m_time[i];
+        out[i] += m_time[c][i];
     }
 
     if (modulation) {
 
-        float area = m_window->getArea();
+        float area = m_analysisWindow->getArea();
 
         for (i = 0; i < m_wlen; ++i) {
-            float val = m_window->getValue(i);
+            float val = m_synthesisWindow->getValue(i);
             modulation[i] += val * area;
         }
     }
-
-    return isPercussive;
 }
+
 
