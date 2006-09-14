@@ -140,11 +140,15 @@ protected:
     Window<float> *m_analysisWindow;
     Window<float> *m_synthesisWindow;
 
+    int m_totalCount;
+    int m_transientCount;
+    int m_n2sum;
+
     float **m_prevPhase;
     float **m_prevAdjustedPhase;
 
     float *m_prevTransientMag;
-    int  m_prevTransientCount;
+    int  m_prevTransientScore;
     bool m_prevTransient;
 
     float *m_tempbuf;

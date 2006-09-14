@@ -26,9 +26,16 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
                                                      size_t maxProcessInputBlockSize) :
     m_channels(channels),
     m_ratio(ratio),
-    m_sharpen(sharpen)
+    m_sharpen(sharpen),
+    m_totalCount(0),
+    m_transientCount(0),
+    m_n2sum(0)
 {
     m_wlen = 1024;
+
+    //!!! In transient sharpening mode, we need to pick the window
+    //length so as to be more or less fixed in audio duration (i.e. we
+    //need to know the sample rate)
 
     if (ratio < 1) {
         if (ratio < 0.4) {
@@ -40,7 +47,6 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
             m_n1 = 256;
         }
         if (m_sharpen) {
-//            m_n1 /= 2;
             m_wlen = 2048;
         }
         m_n2 = m_n1 * ratio;
@@ -55,7 +61,6 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
             m_n2 = 256;
         }
         if (m_sharpen) {
-//            m_n2 /= 2;
             if (m_wlen < 2048) m_wlen = 2048;
         }
         m_n1 = m_n2 / ratio;
@@ -68,7 +73,7 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
     m_prevAdjustedPhase = new float *[m_channels];
 
     m_prevTransientMag = (float *)fftwf_malloc(sizeof(float) * (m_wlen / 2 + 1));
-    m_prevTransientCount = 0;
+    m_prevTransientScore = 0;
     m_prevTransient = false;
 
     m_tempbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
@@ -249,6 +254,29 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
                 n2 = m_n1;
             }
 
+            ++m_totalCount;
+            if (transient) ++m_transientCount;
+            m_n2sum += n2;
+
+//            std::cerr << "ratio for last 10: " <<last10num << "/" << (10 * m_n1) << " = " << float(last10num) / float(10 * m_n1) << " (should be " << m_ratio << ")" << std::endl;
+            
+            if (m_totalCount > 50 && m_transientCount < m_totalCount) {
+
+                int fixed = lrintf(m_transientCount * m_n1);
+                int squashy = m_n2sum - fixed;
+
+                int idealTotal = lrintf(m_totalCount * m_n1 * m_ratio);
+                int idealSquashy = idealTotal - fixed;
+
+                int squashyCount = m_totalCount - m_transientCount;
+                
+                n2 = lrintf(idealSquashy / squashyCount);
+
+                if (n2 != m_n2) {
+                    std::cerr << m_n2 << " -> " << n2 << std::endl;
+                }
+            }
+
             for (size_t c = 0; c < m_channels; ++c) {
 
                 synthesiseBlock(c, m_mashbuf[c],
@@ -287,6 +315,8 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
 	    for (size_t i = m_wlen - n2; i < m_wlen; ++i) {
                 m_modulationbuf[i] = 0.0f;
 	    }
+
+            if (!transient) m_n2 = n2;
 	}
 
 
@@ -298,6 +328,9 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
     std::cerr << "PhaseVocoderTimeStretcher::putInput returning" << std::endl;
 #endif
+
+//    std::cerr << "ratio: nominal: " << getRatio() << " actual: "
+//              << m_total2 << "/" << m_total1 << " = " << float(m_total2) / float(m_total1) << " ideal: " << m_ratio << std::endl;
 }
 
 size_t
@@ -385,12 +418,12 @@ PhaseVocoderTimeStretcher::isTransient()
     bool isTransient = false;
 
     if (count > m_wlen / 4.5 && //!!!
-        count > m_prevTransientCount * 1.2) {
+        count > m_prevTransientScore * 1.2) {
         isTransient = true;
-        std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientCount << ")" << std::endl;
+        std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientScore << ")" << std::endl;
     }
 
-    m_prevTransientCount = count;
+    m_prevTransientScore = count;
 
     return isTransient;
 }

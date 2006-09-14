@@ -169,7 +169,12 @@ MainWindow::MainWindow() :
     m_playSharpen = new QCheckBox(frame);
     m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
     m_playSharpen->setEnabled(false);
-    m_playSharpen->setChecked(false);
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    m_playSharpen->setChecked(settings.value("playsharpen", false).toBool());
+    settings.endGroup();
+
     connect(m_playSharpen, SIGNAL(clicked()),
             this, SLOT(playSharpenToggled()));
 
@@ -2869,19 +2874,19 @@ MainWindow::playSpeedChanged(int speed)
         1.0, 1.1, 1.2, 1.3, 1.5, 1.7, 2.0, 3.0, 4.0, 6.0, 10.0
     };
     float factor = factors[speed >= 10 ? speed - 10 : 10 - speed];
-//    int factor = 11 - speed;
-    if (speed > 10) factor = 1.0 / factor;
+
+    int pc = lrintf((factor - 1.0) * 100);
+
+    if (speed > 10) {
+        factor = 1.0 / factor;
+    }
+
     std::cerr << "factor = " << factor << std::endl;
-/*
-    int iinc = 128;
-    int oinc = lrintf(iinc * factor);
-    factor = (float(oinc) + 0.01) / iinc;
-    std::cerr << "corrected factor = " << factor << std::endl;
-*/
-    m_playSpeed->setToolTip(tr("Playback speed: %1")
-			    .arg(factor != 1 ?
-				 QString("1/%1").arg(factor) :
-				 tr("Full")));
+
+    m_playSpeed->setToolTip(tr("Playback speed: %1%2%")
+                            .arg(speed >= 10 ? "+" : "-")
+			    .arg(pc));
+
     m_playSharpen->setEnabled(speed != 10);
     bool sharpen = (speed != 10 && m_playSharpen->isChecked());
     m_playSource->setSlowdownFactor(factor, sharpen);
@@ -2890,6 +2895,11 @@ MainWindow::playSpeedChanged(int speed)
 void
 MainWindow::playSharpenToggled()
 {
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("playsharpen", m_playSharpen->isChecked());
+    settings.endGroup();
+
     playSpeedChanged(m_playSpeed->value());
 }
 
