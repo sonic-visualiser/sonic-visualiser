@@ -232,7 +232,7 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
                 bool thisChannelPercussive =
                     processBlock(c, m_dbuf, m_mashbuf[c],
                                  c == 0 ? m_modulationbuf : 0,
-                                 m_prevPercussive);
+                                 m_prevPercussive ? m_n1 : m_n2);
 
                 if (thisChannelPercussive && c == 0) {
                     isPercussive = true;
@@ -322,7 +322,7 @@ bool
 PhaseVocoderTimeStretcher::processBlock(size_t c,
                                         float *buf, float *out,
                                         float *modulation,
-                                        bool lastPercussive)
+                                        size_t lastStep)
 {
     size_t i;
     bool isPercussive = false;
@@ -375,9 +375,6 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
         m_prevPercussiveCount[c] = count;
     }
 
-    size_t n2 = m_n2;
-    if (lastPercussive) n2 = m_n1;
-	
     for (i = 0; i < m_wlen; ++i) {
 
         float mag;
@@ -399,7 +396,8 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
 
         float phaseIncrement = (omega + phaseError) / m_n1;
 
-        float adjustedPhase = m_prevAdjustedPhase[c][i] + n2 * phaseIncrement;
+        float adjustedPhase = m_prevAdjustedPhase[c][i] +
+            lastStep * phaseIncrement;
 
         if (isPercussive) adjustedPhase = phase;
 	
