@@ -125,7 +125,7 @@ protected:
     bool processBlock(size_t channel,
                       float *in, float *out,
                       float *modulation,
-                      bool lastPercussive);
+                      size_t lastStep);
 
     size_t m_channels;
     float m_ratio;
