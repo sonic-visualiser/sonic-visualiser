@@ -142,7 +142,7 @@ protected:
     bool m_prevPercussive;
 
     float *m_dbuf;
-    fftwf_complex *m_time;
+    float *m_time;
     fftwf_complex *m_freq;
     fftwf_plan m_plan;
     fftwf_plan m_iplan;

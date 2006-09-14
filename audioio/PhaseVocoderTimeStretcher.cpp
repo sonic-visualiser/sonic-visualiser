@@ -71,11 +71,11 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
     m_prevPercussive = false;
 
     m_dbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
-    m_time = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
+    m_time = (float *)fftwf_malloc(sizeof(float) * m_wlen);
     m_freq = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) * m_wlen);
         
-    m_plan = fftwf_plan_dft_1d(m_wlen, m_time, m_freq, FFTW_FORWARD, FFTW_ESTIMATE);
-    m_iplan = fftwf_plan_dft_c2r_1d(m_wlen, m_freq, m_dbuf, FFTW_ESTIMATE);
+    m_plan = fftwf_plan_dft_r2c_1d(m_wlen, m_time, m_freq, FFTW_ESTIMATE);
+    m_iplan = fftwf_plan_dft_c2r_1d(m_wlen, m_freq, m_time, FFTW_ESTIMATE);
 
     m_inbuf = new RingBuffer<float> *[m_channels];
     m_outbuf = new RingBuffer<float> *[m_channels];
@@ -341,10 +341,9 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
 	buf[i] = buf[i + m_wlen/2];
 	buf[i + m_wlen/2] = temp;
     }
-    
+
     for (i = 0; i < m_wlen; ++i) {
-	m_time[i][0] = buf[i];
-	m_time[i][1] = 0.0;
+	m_time[i] = buf[i];
     }
 
     fftwf_execute(m_plan); // m_time -> m_freq
@@ -375,7 +374,7 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
         m_prevPercussiveCount[c] = count;
     }
 
-    for (i = 0; i < m_wlen; ++i) {
+    for (i = 0; i < m_wlen; ++i) { //!!! /2
 
         float mag;
 
@@ -394,12 +393,19 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
 
         float phaseError = princargf(phase - expectedPhase);
 
-        float phaseIncrement = (omega + phaseError) / m_n1;
+        float adjustedPhase = phase;
 
-        float adjustedPhase = m_prevAdjustedPhase[c][i] +
-            lastStep * phaseIncrement;
+        if (!isPercussive) {
+//            if (fabsf(phaseError) < (1.1f * (lastStep * M_PI) / m_wlen)) {
 
-        if (isPercussive) adjustedPhase = phase;
+                float phaseIncrement = (omega + phaseError) / m_n1;
+
+                adjustedPhase = m_prevAdjustedPhase[c][i] +
+                    lastStep * phaseIncrement;
+//            }
+        }
+
+//        if (isPercussive) adjustedPhase = phase;
 	
 	float real = mag * cosf(adjustedPhase);
 	float imag = mag * sinf(adjustedPhase);
@@ -410,18 +416,22 @@ PhaseVocoderTimeStretcher::processBlock(size_t c,
         m_prevAdjustedPhase[c][i] = adjustedPhase;
     }
     
-    fftwf_execute(m_iplan); // m_freq -> in, inverse fft
-    
+    fftwf_execute(m_iplan); // m_freq -> m_time, inverse fft
+
     for (i = 0; i < m_wlen/2; ++i) {
-	float temp = buf[i] / m_wlen;
-	buf[i] = buf[i + m_wlen/2] / m_wlen;
-	buf[i + m_wlen/2] = temp;
+	float temp = m_time[i];
+	m_time[i] = m_time[i + m_wlen/2];
+	m_time[i + m_wlen/2] = temp;
     }
-    
-    m_window->cut(buf);
 
     for (i = 0; i < m_wlen; ++i) {
-        out[i] += buf[i];
+	m_time[i] = m_time[i] / m_wlen;
+    }
+
+    m_window->cut(m_time);
+
+    for (i = 0; i < m_wlen; ++i) {
+        out[i] += m_time[i];
     }
 
     if (modulation) {
