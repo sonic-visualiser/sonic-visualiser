@@ -20,10 +20,12 @@
 
 //#define DEBUG_PHASE_VOCODER_TIME_STRETCHER 1
 
-PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
+PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
+                                                     size_t channels,
                                                      float ratio,
                                                      bool sharpen,
                                                      size_t maxProcessInputBlockSize) :
+    m_sampleRate(sampleRate),
     m_channels(channels),
     m_ratio(ratio),
     m_sharpen(sharpen),
@@ -35,7 +37,10 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
 
     //!!! In transient sharpening mode, we need to pick the window
     //length so as to be more or less fixed in audio duration (i.e. we
-    //need to know the sample rate)
+    //need to exploit the sample rate)
+
+    //!!! have to work out the relationship between wlen and transient
+    //threshold
 
     if (ratio < 1) {
         if (ratio < 0.4) {
@@ -65,6 +70,8 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t channels,
         }
         m_n1 = m_n2 / ratio;
     }
+
+    m_transientThreshold = m_wlen / 4.5;
         
     m_analysisWindow = new Window<float>(HanningWindow, m_wlen);
     m_synthesisWindow = new Window<float>(HanningWindow, m_wlen);
@@ -417,7 +424,7 @@ PhaseVocoderTimeStretcher::isTransient()
 
     bool isTransient = false;
 
-    if (count > m_wlen / 4.5 && //!!!
+    if (count > m_transientThreshold &&
         count > m_prevTransientScore * 1.2) {
         isTransient = true;
         std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientScore << ")" << std::endl;

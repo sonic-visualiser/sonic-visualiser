@@ -603,7 +603,8 @@ AudioCallbackPlaySource::setSlowdownFactor(float factor, bool sharpen)
 
     if (factor != 1) {
 	PhaseVocoderTimeStretcher *newStretcher = new PhaseVocoderTimeStretcher
-	    (getTargetChannelCount(),
+	    (getTargetSampleRate(),
+             getTargetChannelCount(),
              factor,
              sharpen,
              lrintf(getTargetBlockSize() / factor));
@@ -712,52 +713,6 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 
     ts->getOutput(buffer, count);
 
-
-/*!!!
-    for (size_t ch = 0; ch < getTargetChannelCount(); ++ch) {
-
-        RingBuffer<float> *rb = getReadRingBuffer(ch);
-
-        if (rb) {
-
-            float ratio = ts->getRatio();
-
-//            std::cout << "ratio = " << ratio << std::endl;
-
-            size_t available;
-
-            while ((available = ts->getAvailableOutputSamples()) < count) {
-
-                size_t reqd = lrintf((count - available) / ratio);
-                reqd = std::max(reqd, ts->getRequiredInputSamples());
-                if (reqd == 0) reqd = 1;
-
-                float ib[reqd];
-                size_t got = rb->read(ib, reqd);
-
-#ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
-                std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " samples on channel " << ch << " (reqd=" << reqd << ", count=" << count << ", ratio=" << ratio << ", got*ratio=" << got * ratio << "), running time stretcher" << std::endl;
-#endif
-
-                if (got < reqd) {
-                    std::cerr << "WARNING: Read underrun in playback ("
-                              << got << " < " << reqd << ")" << std::endl;
-                }
-                
-                ts->putInput(ib, got);
-
-                if (got == 0) break;
-
-                if (ts->getAvailableOutputSamples() == available) {
-                    std::cerr << "WARNING: AudioCallbackPlaySource::getSamples: Added " << got << " samples to time stretcher, created no new available output samples" << std::endl;
-		    break;
-                }
-            }
-
-            ts->getOutput(buffer[ch], count);
-        }
-    }
-*/
     m_condition.wakeAll();
 
     return count;
