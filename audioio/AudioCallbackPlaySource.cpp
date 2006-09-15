@@ -602,6 +602,13 @@ AudioCallbackPlaySource::setSlowdownFactor(float factor, bool sharpen)
     }
 
     if (factor != 1) {
+
+        if (existingStretcher &&
+            existingStretcher->getSharpening() == sharpen) {
+            existingStretcher->setRatio(factor);
+            return;
+        }
+
 	PhaseVocoderTimeStretcher *newStretcher = new PhaseVocoderTimeStretcher
 	    (getTargetSampleRate(),
              getTargetChannelCount(),
