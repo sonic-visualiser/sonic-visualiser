@@ -49,10 +49,11 @@ public:
      * samples (on each channel); the output must have space for
      * lrintf(samples * m_ratio).
      * 
-     * This should work correctly for some ratios, e.g. small powers
-     * of two.  For other ratios it may drop samples -- use putInput
-     * in a loop followed by getOutput (when getAvailableOutputSamples
-     * reports enough) instead.
+     * This function isn't really recommended, and I may yet remove it.
+     * It should work correctly for some ratios, e.g. small powers of
+     * two, if transient sharpening is off.  For other ratios it may
+     * drop samples -- use putInput in a loop followed by getOutput
+     * (when getAvailableOutputSamples reports enough) instead.
      *
      * Do not mix process calls with putInput/getOutput calls.
      */
@@ -62,6 +63,7 @@ public:
      * Return the number of samples that would need to be added via
      * putInput in order to provoke the time stretcher into doing some
      * time stretching and making more output samples available.
+     * This will be an estimate, if transient sharpening is on.
      */
     size_t getRequiredInputSamples() const;
 
@@ -72,8 +74,14 @@ public:
      */
     void putInput(float **input, size_t samples);
 
+    /**
+     * Get the number of processed samples ready for reading.
+     */
     size_t getAvailableOutputSamples() const;
 
+    /**
+     * Get some processed samples.
+     */
     void getOutput(float **output, size_t samples);
 
     //!!! and reset?
@@ -94,11 +102,6 @@ public:
     size_t getWindowSize() const { return m_wlen; }
 
     /**
-     * Get the window type.
-     */
-//    WindowType getWindowType() const { return m_window->getType(); }
-
-    /**
      * Get the stretch ratio.
      */
     float getRatio() const { return float(m_n2) / float(m_n1); }
@@ -110,29 +113,31 @@ public:
 
     /**
      * Get the latency added by the time stretcher, in sample frames.
+     * This will be exact if transient sharpening is off, or approximate
+     * if it is on.
      */
     size_t getProcessingLatency() const;
 
 protected:
     /**
-     * Process a single phase vocoder frame.
-     * 
-     * Take m_wlen time-domain source samples from in, perform an FFT,
-     * phase shift, and IFFT, and add the results to out (presumably
-     * overlapping parts of existing data from prior frames).
-     *
-     * Also add to the modulation output the results of windowing a
-     * set of 1s with the resynthesis window -- this can then be used
-     * to ensure the output has the correct magnitude in cases where
-     * the window overlap varies or otherwise results in something
-     * other than a flat sum.
+     * Process a single phase vocoder frame from "in" into
+     * m_freq[channel].
      */
-    
-
     void analyseBlock(size_t channel, float *in); // into m_freq[channel]
-    
-    bool isTransient(); // operates on m_freq[0..m_channels-1]
 
+    /**
+     * Examine m_freq[0..m_channels-1] and return whether a percussive
+     * transient is found.
+     */
+    bool isTransient(); 
+
+    /**
+     * Resynthesise from m_freq[channel] adding in to "out",
+     * adjusting phases on the basis of a prior step size of lastStep.
+     * Also add the window shape in to the modulation array (if
+     * present) -- for use in ensuring the output has the correct
+     * magnitude afterwards.
+     */
     void synthesiseBlock(size_t channel, float *out, float *modulation,
                          size_t lastStep);
 
