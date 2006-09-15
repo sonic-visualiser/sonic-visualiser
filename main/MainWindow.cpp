@@ -172,7 +172,7 @@ MainWindow::MainWindow() :
 
     QSettings settings;
     settings.beginGroup("MainWindow");
-    m_playSharpen->setChecked(settings.value("playsharpen", false).toBool());
+    m_playSharpen->setChecked(settings.value("playsharpen", true).toBool());
     settings.endGroup();
 
     connect(m_playSharpen, SIGNAL(clicked()),
