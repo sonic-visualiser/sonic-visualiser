@@ -18,6 +18,8 @@
 #include <iostream>
 #include <cassert>
 
+#include <QMutexLocker>
+
 //#define DEBUG_PHASE_VOCODER_TIME_STRETCHER 1
 
 PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
@@ -27,51 +29,38 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
                                                      size_t maxProcessInputBlockSize) :
     m_sampleRate(sampleRate),
     m_channels(channels),
+    m_maxProcessInputBlockSize(maxProcessInputBlockSize),
     m_ratio(ratio),
     m_sharpen(sharpen),
     m_totalCount(0),
     m_transientCount(0),
-    m_n2sum(0)
+    m_n2sum(0),
+    m_mutex(new QMutex())
 {
-    m_wlen = 1024;
+    initialise();
 
-    //!!! In transient sharpening mode, we need to pick the window
-    //length so as to be more or less fixed in audio duration (i.e. we
-    //need to exploit the sample rate)
+    std::cerr << "PhaseVocoderTimeStretcher: channels = " << m_channels
+              << ", ratio = " << m_ratio
+              << ", n1 = " << m_n1 << ", n2 = " << m_n2 << ", wlen = "
+              << m_wlen << ", max = " << maxProcessInputBlockSize
+              << ", outbuflen = " << m_outbuf[0]->getSize() << std::endl;
+}
 
-    //!!! have to work out the relationship between wlen and transient
-    //threshold
+PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
+{
+    std::cerr << "PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher" << std::endl;
 
-    if (ratio < 1) {
-        if (ratio < 0.4) {
-            m_n1 = 1024;
-            m_wlen = 2048;
-        } else if (ratio < 0.8) {
-            m_n1 = 512;
-        } else {
-            m_n1 = 256;
-        }
-        if (m_sharpen) {
-            m_wlen = 2048;
-        }
-        m_n2 = m_n1 * ratio;
-    } else {
-        if (ratio > 2) {
-            m_n2 = 512;
-            m_wlen = 4096; 
-        } else if (ratio > 1.6) {
-            m_n2 = 384;
-            m_wlen = 2048;
-        } else {
-            m_n2 = 256;
-        }
-        if (m_sharpen) {
-            if (m_wlen < 2048) m_wlen = 2048;
-        }
-        m_n1 = m_n2 / ratio;
-    }
+    cleanup();
+    
+    delete m_mutex;
+}
 
-    m_transientThreshold = m_wlen / 4.5;
+void
+PhaseVocoderTimeStretcher::initialise()
+{
+    std::cerr << "PhaseVocoderTimeStretcher::initialise" << std::endl;
+
+    calculateParameters();
         
     m_analysisWindow = new Window<float>(HanningWindow, m_wlen);
     m_synthesisWindow = new Window<float>(HanningWindow, m_wlen);
@@ -110,7 +99,7 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
 
         m_inbuf[c] = new RingBuffer<float>(m_wlen);
         m_outbuf[c] = new RingBuffer<float>
-            (lrintf((maxProcessInputBlockSize + m_wlen) * ratio));
+            (lrintf((m_maxProcessInputBlockSize + m_wlen) * m_ratio));
             
         m_mashbuf[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
         
@@ -131,17 +120,58 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
     for (int i = 0; i <= m_wlen/2; ++i) {
         m_prevTransientMag[i] = 0.0;
     }
-
-    std::cerr << "PhaseVocoderTimeStretcher: channels = " << channels
-              << ", ratio = " << ratio
-              << ", n1 = " << m_n1 << ", n2 = " << m_n2 << ", wlen = "
-              << m_wlen << ", max = " << maxProcessInputBlockSize
-              << ", outbuflen = " << m_outbuf[0]->getSize() << std::endl;
 }
 
-PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
+void
+PhaseVocoderTimeStretcher::calculateParameters()
 {
-    std::cerr << "PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher" << std::endl;
+    std::cerr << "PhaseVocoderTimeStretcher::calculateParameters" << std::endl;
+
+    m_wlen = 1024;
+
+    //!!! In transient sharpening mode, we need to pick the window
+    //length so as to be more or less fixed in audio duration (i.e. we
+    //need to exploit the sample rate)
+
+    //!!! have to work out the relationship between wlen and transient
+    //threshold
+
+    if (m_ratio < 1) {
+        if (m_ratio < 0.4) {
+            m_n1 = 1024;
+            m_wlen = 2048;
+        } else if (m_ratio < 0.8) {
+            m_n1 = 512;
+        } else {
+            m_n1 = 256;
+        }
+        if (m_sharpen) {
+            m_wlen = 2048;
+        }
+        m_n2 = m_n1 * m_ratio;
+    } else {
+        if (m_ratio > 2) {
+            m_n2 = 512;
+            m_wlen = 4096; 
+        } else if (m_ratio > 1.6) {
+            m_n2 = 384;
+            m_wlen = 2048;
+        } else {
+            m_n2 = 256;
+        }
+        if (m_sharpen) {
+            if (m_wlen < 2048) m_wlen = 2048;
+        }
+        m_n1 = m_n2 / m_ratio;
+    }
+
+    m_transientThreshold = m_wlen / 4.5;
+}
+
+void
+PhaseVocoderTimeStretcher::cleanup()
+{
+    std::cerr << "PhaseVocoderTimeStretcher::cleanup" << std::endl;
 
     for (size_t c = 0; c < m_channels; ++c) {
 
@@ -177,6 +207,60 @@ PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
     delete m_synthesisWindow;
 }	
 
+void
+PhaseVocoderTimeStretcher::setRatio(float ratio)
+{
+    QMutexLocker locker(m_mutex);
+
+    float formerRatio = m_ratio;
+    size_t formerWlen = m_wlen;
+
+    m_ratio = ratio;
+
+    calculateParameters();
+
+    if (m_wlen == formerWlen) {
+
+        // This is the only container whose size depends on m_ratio
+
+        RingBuffer<float> **newout = new RingBuffer<float> *[m_channels];
+
+        size_t formerSize = m_outbuf[0]->getSize();
+        size_t newSize = lrintf((m_maxProcessInputBlockSize + m_wlen) * m_ratio);
+        size_t ready = m_outbuf[0]->getReadSpace();
+
+        for (size_t c = 0; c < m_channels; ++c) {
+            newout[c] = new RingBuffer<float>(newSize);
+        }
+
+        if (ready > 0) {
+
+            size_t copy = std::min(ready, newSize);
+            float *tmp = new float[ready];
+
+            for (size_t c = 0; c < m_channels; ++c) {
+                m_outbuf[c]->read(tmp, ready);
+                newout[c]->write(tmp + ready - copy, copy);
+            }
+
+            delete[] tmp;
+        }
+
+        for (size_t c = 0; c < m_channels; ++c) {
+            delete m_outbuf[c];
+        }
+
+        delete[] m_outbuf;
+        m_outbuf = newout;
+
+    } else {
+        
+        std::cerr << "wlen changed" << std::endl;
+        cleanup();
+        initialise();
+    }
+}
+
 size_t
 PhaseVocoderTimeStretcher::getProcessingLatency() const
 {
@@ -193,6 +277,8 @@ PhaseVocoderTimeStretcher::process(float **input, float **output, size_t samples
 size_t
 PhaseVocoderTimeStretcher::getRequiredInputSamples() const
 {
+    QMutexLocker locker(m_mutex);
+
     if (m_inbuf[0]->getReadSpace() >= m_wlen) return 0;
     return m_wlen - m_inbuf[0]->getReadSpace();
 }
@@ -200,6 +286,8 @@ PhaseVocoderTimeStretcher::getRequiredInputSamples() const
 void
 PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
 {
+    QMutexLocker locker(m_mutex);
+
     // We need to add samples from input to our internal buffer.  When
     // we have m_windowSize samples in the buffer, we can process it,
     // move the samples back by m_n1 and write the output onto our
@@ -343,12 +431,16 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
 size_t
 PhaseVocoderTimeStretcher::getAvailableOutputSamples() const
 {
+    QMutexLocker locker(m_mutex);
+
     return m_outbuf[0]->getReadSpace();
 }
 
 void
 PhaseVocoderTimeStretcher::getOutput(float **output, size_t samples)
 {
+    QMutexLocker locker(m_mutex);
+
     if (m_outbuf[0]->getReadSpace() < samples) {
 	std::cerr << "WARNING: PhaseVocoderTimeStretcher::getOutput: not enough data (yet?) (" << m_outbuf[0]->getReadSpace() << " < " << samples << ")" << std::endl;
 	size_t fill = samples - m_outbuf[0]->getReadSpace();

@@ -155,14 +155,14 @@ MainWindow::MainWindow() :
 
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
-    m_playSpeed->setMaximum(20);
-    m_playSpeed->setValue(10);
+    m_playSpeed->setMaximum(199);
+    m_playSpeed->setValue(100);
     m_playSpeed->setFixedWidth(24);
     m_playSpeed->setFixedHeight(24);
     m_playSpeed->setNotchesVisible(true);
-    m_playSpeed->setPageStep(1);
-    m_playSpeed->setToolTip(tr("Playback speed: Full"));
-    m_playSpeed->setDefaultValue(10);
+    m_playSpeed->setPageStep(10);
+    m_playSpeed->setToolTip(tr("Playback speed: +0%"));
+    m_playSpeed->setDefaultValue(100);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
 
@@ -2870,25 +2870,44 @@ MainWindow::renameCurrentLayer()
 void
 MainWindow::playSpeedChanged(int speed)
 {
-    static float factors[] = {
-        1.0, 1.1, 1.2, 1.3, 1.5, 1.7, 2.0, 3.0, 4.0, 6.0, 10.0
-    };
-    float factor = factors[speed >= 10 ? speed - 10 : 10 - speed];
+//    static float factors[] = {
+//        1.0, 1.1, 1.2, 1.3, 1.5, 1.7, 2.0, 3.0, 4.0, 6.0, 10.0
+//    };
+//    float factor = factors[speed >= 10 ? speed - 10 : 10 - speed];
+
+    bool slow = false;
+    bool something = false;
+    float factor;
+
+    if (speed < 100) {
+        slow = true;
+        speed = 100 - speed;
+    } else {
+        speed = speed - 100;
+    }
+
+    // speed is 0 -> 100
+
+    if (speed == 0) {
+        factor = 1.0;
+    } else {
+        factor = speed;
+        factor = 1.0 + (factor * factor) / 1000.f;
+        something = true;
+    }
 
     int pc = lrintf((factor - 1.0) * 100);
 
-    if (speed > 10) {
-        factor = 1.0 / factor;
-    }
+    if (!slow) factor = 1.0 / factor;
 
-    std::cerr << "factor = " << factor << std::endl;
+    std::cerr << "speed = " << speed << " factor = " << factor << std::endl;
 
     m_playSpeed->setToolTip(tr("Playback speed: %1%2%")
-                            .arg(speed >= 10 ? "+" : "-")
+                            .arg(!slow ? "+" : "-")
 			    .arg(pc));
 
-    m_playSharpen->setEnabled(speed != 10);
-    bool sharpen = (speed != 10 && m_playSharpen->isChecked());
+    m_playSharpen->setEnabled(something);
+    bool sharpen = (something && m_playSharpen->isChecked());
     m_playSource->setSlowdownFactor(factor, sharpen);
 }
 

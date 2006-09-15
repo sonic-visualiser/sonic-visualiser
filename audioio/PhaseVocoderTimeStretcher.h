@@ -21,6 +21,8 @@
 
 #include <fftw3.h>
 
+#include <QMutex>
+
 /**
  * A time stretcher that alters the performance speed of audio,
  * preserving pitch.
@@ -87,6 +89,11 @@ public:
     //!!! and reset?
 
     /**
+     * Change the time stretch ratio.
+     */
+    void setRatio(float ratio);
+
+    /**
      * Get the hop size for input.
      */
     size_t getInputIncrement() const { return m_n1; }
@@ -141,8 +148,13 @@ protected:
     void synthesiseBlock(size_t channel, float *out, float *modulation,
                          size_t lastStep);
 
+    void initialise();
+    void calculateParameters();
+    void cleanup();
+
     size_t m_sampleRate;
     size_t m_channels;
+    size_t m_maxProcessInputBlockSize;
     float m_ratio;
     bool m_sharpen;
     size_t m_n1;
@@ -173,6 +185,8 @@ protected:
     RingBuffer<float> **m_outbuf;
     float **m_mashbuf;
     float *m_modulationbuf;
+
+    QMutex *m_mutex;
 };
 
 #endif
