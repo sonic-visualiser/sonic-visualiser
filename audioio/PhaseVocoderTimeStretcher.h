@@ -23,17 +23,22 @@
 
 /**
  * A time stretcher that alters the performance speed of audio,
- * preserving pitch.  This uses the simple phase vocoder technique
- * from DAFX pp275-276, adding a block-based stream oriented API.
+ * preserving pitch.
  *
- * Causes significant transient smearing, but sounds good for steady
- * notes and is generally predictable.
+ * This is based on the straightforward phase vocoder with phase
+ * unwrapping (as in e.g. the DAFX book pp275-), with optional
+ * percussive transient detection to avoid smearing percussive notes
+ * and resynchronise phases, and adding a stream API for real-time
+ * use.  Principles and methods from Chris Duxbury, AES 2002 and 2004
+ * thesis; Emmanuel Ravelli, DAFX 2005; Dan Barry, ISSC 2005 on
+ * percussion detection; code by Chris Cannam.
  */
 
 class PhaseVocoderTimeStretcher
 {
 public:
-    PhaseVocoderTimeStretcher(size_t channels,
+    PhaseVocoderTimeStretcher(size_t sampleRate,
+                              size_t channels,
                               float ratio,
                               bool sharpen,
                               size_t maxProcessInputBlockSize);
@@ -131,6 +136,7 @@ protected:
     void synthesiseBlock(size_t channel, float *out, float *modulation,
                          size_t lastStep);
 
+    size_t m_sampleRate;
     size_t m_channels;
     float m_ratio;
     bool m_sharpen;
@@ -149,6 +155,7 @@ protected:
 
     float *m_prevTransientMag;
     int  m_prevTransientScore;
+    int  m_transientThreshold;
     bool m_prevTransient;
 
     float *m_tempbuf;
