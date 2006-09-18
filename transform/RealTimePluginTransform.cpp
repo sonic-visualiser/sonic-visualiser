@@ -31,12 +31,16 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
                                                  int channel,
                                                  QString configurationXml,
                                                  QString units,
-                                                 int output) :
+                                                 int output,
+                                                 size_t blockSize) :
     Transform(inputModel),
     m_plugin(0),
     m_channel(channel),
-    m_outputNo(output)
+    m_outputNo(output),
+    m_blockSize(blockSize)
 {
+    if (!m_blockSize) m_blockSize = 1024;
+
     std::cerr << "RealTimePluginTransform::RealTimePluginTransform: plugin " << pluginId.toStdString() << ", output " << output << std::endl;
 
     RealTimePluginFactory *factory =
@@ -52,7 +56,7 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
     if (!input) return;
 
     m_plugin = factory->instantiatePlugin(pluginId, 0, 0, m_input->getSampleRate(),
-                                          1024, //!!! wants to be configurable
+                                          m_blockSize,
                                           input->getChannelCount());
 
     if (!m_plugin) {
@@ -71,8 +75,7 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
     }
 	
     SparseTimeValueModel *model = new SparseTimeValueModel
-        (input->getSampleRate(), 1024, //!!!
-         0.0, 0.0, false);
+        (input->getSampleRate(), m_blockSize, 0.0, 0.0, false);
 
     if (units != "") model->setScaleUnits(units);
 

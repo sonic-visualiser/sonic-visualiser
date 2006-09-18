@@ -166,23 +166,38 @@ MainWindow::MainWindow() :
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
 
-    m_playSharpen = new QCheckBox(frame);
+    m_playSharpen = new QPushButton(frame);
     m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
+    m_playSharpen->setFixedSize(20, 20);
+//    m_playSharpen->setFlat(true);
     m_playSharpen->setEnabled(false);
+    m_playSharpen->setCheckable(true);
+    m_playSharpen->setChecked(false);
+    m_playSharpen->setIcon(QIcon(":icons/sharpen.png"));
+    connect(m_playSharpen, SIGNAL(clicked()), this, SLOT(playSharpenToggled()));
+
+    m_playMono = new QPushButton(frame);
+    m_playMono->setToolTip(tr("Run time stretcher in mono only"));
+    m_playMono->setFixedSize(20, 20);
+//    m_playMono->setFlat(true);
+    m_playMono->setEnabled(false);
+    m_playMono->setCheckable(true);
+    m_playMono->setChecked(false);
+    m_playMono->setIcon(QIcon(":icons/mono.png"));
+    connect(m_playMono, SIGNAL(clicked()), this, SLOT(playMonoToggled()));
 
     QSettings settings;
     settings.beginGroup("MainWindow");
     m_playSharpen->setChecked(settings.value("playsharpen", true).toBool());
+    m_playMono->setChecked(settings.value("playmono", false).toBool());
     settings.endGroup();
 
-    connect(m_playSharpen, SIGNAL(clicked()),
-            this, SLOT(playSharpenToggled()));
-
-    layout->addWidget(m_paneStack, 0, 0, 1, 4);
+    layout->addWidget(m_paneStack, 0, 0, 1, 5);
     layout->addWidget(m_panner, 1, 0);
     layout->addWidget(m_fader, 1, 1);
     layout->addWidget(m_playSpeed, 1, 2);
     layout->addWidget(m_playSharpen, 1, 3);
+    layout->addWidget(m_playMono, 1, 4);
 
     layout->setColumnStretch(0, 10);
 
@@ -2870,11 +2885,6 @@ MainWindow::renameCurrentLayer()
 void
 MainWindow::playSpeedChanged(int speed)
 {
-//    static float factors[] = {
-//        1.0, 1.1, 1.2, 1.3, 1.5, 1.7, 2.0, 3.0, 4.0, 6.0, 10.0
-//    };
-//    float factor = factors[speed >= 10 ? speed - 10 : 10 - speed];
-
     bool slow = false;
     bool something = false;
     float factor;
@@ -2907,8 +2917,10 @@ MainWindow::playSpeedChanged(int speed)
 			    .arg(pc));
 
     m_playSharpen->setEnabled(something);
+    m_playMono->setEnabled(something);
     bool sharpen = (something && m_playSharpen->isChecked());
-    m_playSource->setSlowdownFactor(factor, sharpen);
+    bool mono = (something && m_playMono->isChecked());
+    m_playSource->setTimeStretch(factor, sharpen, mono);
 }
 
 void
@@ -2921,6 +2933,17 @@ MainWindow::playSharpenToggled()
 
     playSpeedChanged(m_playSpeed->value());
 }
+
+void
+MainWindow::playMonoToggled()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("playmono", m_playMono->isChecked());
+    settings.endGroup();
+
+    playSpeedChanged(m_playSpeed->value());
+}    
 
 void
 MainWindow::outputLevelsChanged(float left, float right)

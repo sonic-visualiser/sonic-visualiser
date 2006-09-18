@@ -588,34 +588,41 @@ AudioCallbackPlaySource::getSourceSampleRate() const
 }
 
 void
-AudioCallbackPlaySource::setSlowdownFactor(float factor, bool sharpen)
+AudioCallbackPlaySource::setTimeStretch(float factor, bool sharpen, bool mono)
 {
     // Avoid locks -- create, assign, mark old one for scavenging
     // later (as a call to getSourceSamples may still be using it)
 
     PhaseVocoderTimeStretcher *existingStretcher = m_timeStretcher;
 
+    size_t channels = getTargetChannelCount();
+    if (mono) channels = 1;
+
     if (existingStretcher &&
         existingStretcher->getRatio() == factor &&
-        existingStretcher->getSharpening() == sharpen) {
+        existingStretcher->getSharpening() == sharpen &&
+        existingStretcher->getChannelCount() == channels) {
 	return;
     }
 
     if (factor != 1) {
 
         if (existingStretcher &&
-            existingStretcher->getSharpening() == sharpen) {
+            existingStretcher->getSharpening() == sharpen &&
+            existingStretcher->getChannelCount() == channels) {
             existingStretcher->setRatio(factor);
             return;
         }
 
 	PhaseVocoderTimeStretcher *newStretcher = new PhaseVocoderTimeStretcher
 	    (getTargetSampleRate(),
-             getTargetChannelCount(),
+             channels,
              factor,
              sharpen,
              lrintf(getTargetBlockSize() / factor));
+
 	m_timeStretcher = newStretcher;
+
     } else {
 	m_timeStretcher = 0;
     }
@@ -624,7 +631,7 @@ AudioCallbackPlaySource::setSlowdownFactor(float factor, bool sharpen)
 	m_timeStretcherScavenger.claim(existingStretcher);
     }
 }
-	    
+
 size_t
 AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 {
@@ -676,6 +683,9 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 
 //            std::cout << "ratio = " << ratio << std::endl;
 
+    size_t channels = getTargetChannelCount();
+    bool mix = (channels > 1 && ts->getChannelCount() == 1);
+
     size_t available;
 
     while ((available = ts->getAvailableOutputSamples()) < count) {
@@ -684,18 +694,30 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
         reqd = std::max(reqd, ts->getRequiredInputSamples());
         if (reqd == 0) reqd = 1;
                 
-        size_t channels = getTargetChannelCount();
-
         float *ib[channels];
 
         size_t got = reqd;
 
-        for (size_t c = 0; c < channels; ++c) {
-            ib[c] = new float[reqd]; //!!! fix -- this is a rt function
-            RingBuffer<float> *rb = getReadRingBuffer(c);
-            if (rb) {
-                size_t gotHere = rb->read(ib[c], got);
-                if (gotHere < got) got = gotHere;
+        if (mix) {
+            for (size_t c = 0; c < channels; ++c) {
+                if (c == 0) ib[c] = new float[reqd]; //!!! fix -- this is a rt function
+                else ib[c] = 0;
+                RingBuffer<float> *rb = getReadRingBuffer(c);
+                if (rb) {
+                    size_t gotHere;
+                    if (c > 0) gotHere = rb->readAdding(ib[0], got);
+                    else gotHere = rb->read(ib[0], got);
+                    if (gotHere < got) got = gotHere;
+                }
+            }
+        } else {
+            for (size_t c = 0; c < channels; ++c) {
+                ib[c] = new float[reqd]; //!!! fix -- this is a rt function
+                RingBuffer<float> *rb = getReadRingBuffer(c);
+                if (rb) {
+                    size_t gotHere = rb->read(ib[c], got);
+                    if (gotHere < got) got = gotHere;
+                }
             }
         }
 
@@ -719,6 +741,17 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
     }
 
     ts->getOutput(buffer, count);
+
+    if (mix) {
+        for (size_t c = 1; c < channels; ++c) {
+            for (size_t i = 0; i < count; ++i) {
+                buffer[c][i] = buffer[0][i] / channels;
+            }
+        }
+        for (size_t i = 0; i < count; ++i) {
+            buffer[0][i] /= channels;
+        }
+    }
 
     m_condition.wakeAll();
 

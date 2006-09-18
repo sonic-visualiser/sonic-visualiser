@@ -29,7 +29,8 @@ public:
                             int channel,
 			    QString configurationXml = "",
                             QString units = "",
-			    int output = 0);
+			    int output = 0,
+                            size_t blockSize = 0);
     virtual ~RealTimePluginTransform();
 
 protected:
@@ -38,6 +39,7 @@ protected:
     RealTimePluginInstance *m_plugin;
     int m_channel;
     int m_outputNo;
+    size_t m_blockSize;
 
     // just casts
     DenseTimeValueModel *getInput();

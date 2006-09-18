@@ -66,7 +66,8 @@ public:
      * asking the user, most likely).  Returns true if the transform
      * is acceptable, false if the operation should be cancelled.
      */
-    bool getConfigurationForTransform(TransformName name, Model *inputModel,
+    bool getConfigurationForTransform(TransformName name,
+                                      Model *inputModel,
                                       int &channel,
                                       QString &configurationXml);
 

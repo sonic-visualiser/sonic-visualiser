@@ -413,6 +413,10 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         }
         configurationXml = PluginXml(plugin).toXmlString();
         channel = dialog->getChannel();
+
+        //!!! where now for step size, block size, etc?
+//        dialog->getProcessingParameters(stepSize, blockSize, windowType);
+
         delete dialog;
         delete plugin;
     }
