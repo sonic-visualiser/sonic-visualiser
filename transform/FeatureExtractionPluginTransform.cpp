@@ -36,12 +36,16 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 								   QString pluginId,
                                                                    int channel,
                                                                    QString configurationXml,
-								   QString outputName) :
+								   QString outputName,
+                                                                   size_t stepSize,
+                                                                   size_t blockSize,
+                                                                   WindowType windowType) :
     Transform(inputModel),
     m_plugin(0),
     m_channel(channel),
     m_stepSize(0),
     m_blockSize(0),
+    m_windowType(windowType),
     m_descriptor(0),
     m_outputFeatureNo(0)
 {
@@ -68,11 +72,17 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
         PluginXml(m_plugin).setParametersFromXml(configurationXml);
     }
 
-    m_blockSize = m_plugin->getPreferredBlockSize();
-    m_stepSize = m_plugin->getPreferredStepSize();
+    if (m_blockSize == 0) m_blockSize = m_plugin->getPreferredBlockSize();
+    if (m_stepSize == 0) m_stepSize = m_plugin->getPreferredStepSize();
 
-    if (m_blockSize == 0) m_blockSize = 1024; //!!! todo: ask user
-    if (m_stepSize == 0) m_stepSize = m_blockSize; //!!! likewise
+    if (m_blockSize == 0) m_blockSize = 1024;
+    if (m_stepSize == 0) {
+        if (m_plugin->getInputDomain() == Vamp::Plugin::FrequencyDomain) {
+            m_stepSize = m_blockSize / 2;
+        } else {
+            m_stepSize = m_blockSize;
+        }
+    }
 
     DenseTimeValueModel *input = getInput();
     if (!input) return;
@@ -250,7 +260,7 @@ FeatureExtractionPluginTransform::run()
             fftModels.push_back(new FFTModel
                                   (getInput(),
                                    channelCount == 1 ? m_channel : ch,
-                                   HanningWindow,
+                                   m_windowType,
                                    m_blockSize,
                                    m_stepSize,
                                    m_blockSize,

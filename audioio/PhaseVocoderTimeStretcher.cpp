@@ -39,11 +39,6 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
 {
     initialise();
 
-    std::cerr << "PhaseVocoderTimeStretcher: channels = " << m_channels
-              << ", ratio = " << m_ratio
-              << ", n1 = " << m_n1 << ", n2 = " << m_n2 << ", wlen = "
-              << m_wlen << ", max = " << maxProcessInputBlockSize
-              << ", outbuflen = " << m_outbuf[0]->getSize() << std::endl;
 }
 
 PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
@@ -166,6 +161,17 @@ PhaseVocoderTimeStretcher::calculateParameters()
     }
 
     m_transientThreshold = m_wlen / 4.5;
+
+    m_totalCount = 0;
+    m_transientCount = 0;
+    m_n2sum = 0;
+
+
+    std::cerr << "PhaseVocoderTimeStretcher: channels = " << m_channels
+              << ", ratio = " << m_ratio
+              << ", n1 = " << m_n1 << ", n2 = " << m_n2 << ", wlen = "
+              << m_wlen << ", max = " << m_maxProcessInputBlockSize << std::endl;
+//              << ", outbuflen = " << m_outbuf[0]->getSize() << std::endl;
 }
 
 void
@@ -516,10 +522,17 @@ PhaseVocoderTimeStretcher::isTransient()
 
     bool isTransient = false;
 
-    if (count > m_transientThreshold &&
-        count > m_prevTransientScore * 1.2) {
+//    if (count > m_transientThreshold &&
+//        count > m_prevTransientScore * 1.2) {
+    if (count > m_prevTransientScore &&
+        count > m_transientThreshold &&
+        count - m_prevTransientScore > m_wlen / 20) {
         isTransient = true;
-        std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientScore << ")" << std::endl;
+
+
+        std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientScore << ", diff = " << count - m_prevTransientScore << ", ratio = " << (m_totalCount > 0 ? (float (m_n2sum) / float(m_totalCount * m_n1)) : 1.f) << ", ideal = " << m_ratio << ")" << std::endl;
+//    } else {
+//        std::cerr << " !transient (count = " << count << ", prev = " << m_prevTransientScore << ", diff = " << count - m_prevTransientScore << ")" << std::endl;
     }
 
     m_prevTransientScore = count;

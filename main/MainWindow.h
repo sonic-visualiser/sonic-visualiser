@@ -46,6 +46,7 @@ class AudioDial;
 class QLabel;
 class QCheckBox;
 class PreferencesDialog;
+class QPushButton;
 
 
 class MainWindow : public QMainWindow
@@ -141,6 +142,7 @@ protected slots:
     void playSelectionToggled();
     void playSpeedChanged(int);
     void playSharpenToggled();
+    void playMonoToggled();
     void sampleRateMismatch(size_t, size_t, bool);
 
     void outputLevelsChanged(float, float);
@@ -205,7 +207,8 @@ protected:
     Panner                  *m_panner;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
-    QCheckBox               *m_playSharpen;
+    QPushButton             *m_playSharpen;
+    QPushButton             *m_playMono;
     WaveformLayer           *m_panLayer;
     Layer                   *m_timeRulerLayer;
 

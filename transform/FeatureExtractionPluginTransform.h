@@ -18,6 +18,8 @@
 
 #include "Transform.h"
 
+#include "base/Window.h"
+
 #include "vamp-sdk/Plugin.h"
 
 class DenseTimeValueModel;
@@ -29,7 +31,10 @@ public:
 				     QString plugin,
                                      int channel,
                                      QString configurationXml = "",
-				     QString outputName = "");
+				     QString outputName = "",
+                                     size_t stepSize = 0,
+                                     size_t blockSize = 0,
+                                     WindowType windowType = HanningWindow);
     virtual ~FeatureExtractionPluginTransform();
 
 protected:
@@ -39,6 +44,7 @@ protected:
     int m_channel;
     size_t m_stepSize;
     size_t m_blockSize;
+    WindowType m_windowType;
     Vamp::Plugin::OutputDescriptor *m_descriptor;
     int m_outputFeatureNo;
 

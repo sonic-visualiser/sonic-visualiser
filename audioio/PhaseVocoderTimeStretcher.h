@@ -119,6 +119,11 @@ public:
     bool getSharpening() const { return m_sharpen; }
 
     /**
+     * Return the number of channels for this time stretcher.
+     */
+    size_t getChannelCount() const { return m_channels; }
+
+    /**
      * Get the latency added by the time stretcher, in sample frames.
      * This will be exact if transient sharpening is off, or approximate
      * if it is on.

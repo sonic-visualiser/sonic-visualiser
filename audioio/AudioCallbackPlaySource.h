@@ -177,7 +177,7 @@ public:
      */
     size_t getSourceSamples(size_t count, float **buffer);
 
-    void setSlowdownFactor(float factor, bool sharpen);
+    void setTimeStretch(float factor, bool sharpen, bool mono);
 
 signals:
     void modelReplaced();

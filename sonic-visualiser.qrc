@@ -48,6 +48,9 @@
     <file>icons/editcut.png</file>
     <file>icons/editcopy.png</file>
     <file>icons/editpaste.png</file>
+    <file>icons/mono.png</file>
+    <file>icons/stereo.png</file>
+    <file>icons/sharpen.png</file>
     <file>samples/bass.wav</file>
     <file>samples/beep.wav</file>
     <file>samples/bounce.wav</file>
