@@ -2790,6 +2790,9 @@ MainWindow::addLayer()
 
     bool needConfiguration = false;
 
+    //!!! actually we should probably always ask for configuration
+    //because we need the execution context
+
     if (factory->isTransformConfigurable(transform)) {
         needConfiguration = true;
     } else {
@@ -2803,21 +2806,23 @@ MainWindow::addLayer()
         }
     }
 
+    PluginTransform::ExecutionContext context(channel);
+
     if (needConfiguration) {
         bool ok =
             factory->getConfigurationForTransform
-            (transform, m_document->getMainModel(), channel, configurationXml);
+            (transform, m_document->getMainModel(), context, configurationXml);
         if (!ok) return;
     }
 
     Layer *newLayer = m_document->createDerivedLayer(transform,
                                                      m_document->getMainModel(),
-                                                     channel,
+                                                     context,
                                                      configurationXml);
 
     if (newLayer) {
         m_document->addLayerToView(pane, newLayer);
-        m_document->setChannel(newLayer, channel);
+        m_document->setChannel(newLayer, context.channel);
     }
 
     updateMenuStates();

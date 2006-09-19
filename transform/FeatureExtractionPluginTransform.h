@@ -16,35 +16,24 @@
 #ifndef _FEATURE_EXTRACTION_PLUGIN_TRANSFORM_H_
 #define _FEATURE_EXTRACTION_PLUGIN_TRANSFORM_H_
 
-#include "Transform.h"
-
-#include "base/Window.h"
-
-#include "vamp-sdk/Plugin.h"
+#include "PluginTransform.h"
 
 class DenseTimeValueModel;
 
-class FeatureExtractionPluginTransform : public Transform
+class FeatureExtractionPluginTransform : public PluginTransform
 {
 public:
     FeatureExtractionPluginTransform(Model *inputModel,
 				     QString plugin,
-                                     int channel,
+                                     const ExecutionContext &context,
                                      QString configurationXml = "",
-				     QString outputName = "",
-                                     size_t stepSize = 0,
-                                     size_t blockSize = 0,
-                                     WindowType windowType = HanningWindow);
+				     QString outputName = "");
     virtual ~FeatureExtractionPluginTransform();
 
 protected:
     virtual void run();
 
     Vamp::Plugin *m_plugin;
-    int m_channel;
-    size_t m_stepSize;
-    size_t m_blockSize;
-    WindowType m_windowType;
     Vamp::Plugin::OutputDescriptor *m_descriptor;
     int m_outputFeatureNo;
 

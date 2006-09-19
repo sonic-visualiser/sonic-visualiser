@@ -42,6 +42,7 @@ HEADERS += audioio/AudioCallbackPlaySource.h \
            main/MainWindow.h \
            main/PreferencesDialog.h \
            transform/FeatureExtractionPluginTransform.h \
+           transform/PluginTransform.h \
            transform/RealTimePluginTransform.h \
            transform/Transform.h \
            transform/TransformFactory.h
@@ -59,6 +60,7 @@ SOURCES += audioio/AudioCallbackPlaySource.cpp \
            main/MainWindow.cpp \
            main/PreferencesDialog.cpp \
            transform/FeatureExtractionPluginTransform.cpp \
+           transform/PluginTransform.cpp \
            transform/RealTimePluginTransform.cpp \
            transform/Transform.cpp \
            transform/TransformFactory.cpp

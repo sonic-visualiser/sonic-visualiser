@@ -161,11 +161,11 @@ Document::createDerivedLayer(LayerFactory::LayerType type,
 Layer *
 Document::createDerivedLayer(TransformName transform,
                              Model *inputModel, 
-                             int channel,
+                             const PluginTransform::ExecutionContext &context,
                              QString configurationXml)
 {
     Model *newModel = createModelForTransform(transform, inputModel,
-                                              channel, configurationXml);
+                                              context, configurationXml);
     if (!newModel) {
         // error already printed to stderr by createModelForTransform
         emit modelGenerationFailed(transform);
@@ -252,12 +252,12 @@ Document::setMainModel(WaveFileModel *model)
 	    // model: regenerate it.
 	    
 	    TransformName transform = m_models[model].transform;
-            int channel = m_models[model].channel;
+            PluginTransform::ExecutionContext context = m_models[model].context;
 	    
 	    Model *replacementModel =
                 createModelForTransform(transform,
                                         m_mainModel,
-                                        channel,
+                                        context,
                                         m_models[model].configurationXml);
 	    
 	    if (!replacementModel) {
@@ -288,7 +288,7 @@ Document::setMainModel(WaveFileModel *model)
 void
 Document::addDerivedModel(TransformName transform,
                           Model *inputModel,
-                          int channel,
+                          const PluginTransform::ExecutionContext &context,
                           Model *outputModelToAdd,
                           QString configurationXml)
 {
@@ -301,7 +301,7 @@ Document::addDerivedModel(TransformName transform,
     ModelRecord rec;
     rec.source = inputModel;
     rec.transform = transform;
-    rec.channel = channel;
+    rec.context = context;
     rec.configurationXml = configurationXml;
     rec.refcount = 0;
 
@@ -323,7 +323,6 @@ Document::addImportedModel(Model *model)
     ModelRecord rec;
     rec.source = 0;
     rec.transform = "";
-    rec.channel = -1;
     rec.refcount = 0;
 
     m_models[model] = rec;
@@ -334,7 +333,7 @@ Document::addImportedModel(Model *model)
 Model *
 Document::createModelForTransform(TransformName transform,
                                   Model *inputModel,
-                                  int channel,
+                                  const PluginTransform::ExecutionContext &context,
                                   QString configurationXml)
 {
     Model *model = 0;
@@ -342,19 +341,19 @@ Document::createModelForTransform(TransformName transform,
     for (ModelMap::iterator i = m_models.begin(); i != m_models.end(); ++i) {
 	if (i->second.transform == transform &&
 	    i->second.source == inputModel && 
-            i->second.channel == channel &&
+            i->second.context == context &&
             i->second.configurationXml == configurationXml) {
 	    return i->first;
 	}
     }
 
     model = TransformFactory::getInstance()->transform
-	(transform, inputModel, channel, configurationXml);
+	(transform, inputModel, context, configurationXml);
 
     if (!model) {
 	std::cerr << "WARNING: Document::createModelForTransform: no output model for transform " << transform.toStdString() << std::endl;
     } else {
-	addDerivedModel(transform, inputModel, channel, model, configurationXml);
+	addDerivedModel(transform, inputModel, context, model, configurationXml);
     }
 
     return model;
@@ -696,11 +695,13 @@ Document::toXml(QTextStream &out, QString indent, QString extraAttributes) const
 
 	if (rec.source && rec.transform != "") {
 	    
+            //!!! stream the rest of the execution context in both directions (i.e. not just channel)
+
 	    out << indent;
 	    out << QString("  <derivation source=\"%1\" model=\"%2\" channel=\"%3\" transform=\"%4\"")
 		.arg(XmlExportable::getObjectExportId(rec.source))
 		.arg(XmlExportable::getObjectExportId(i->first))
-                .arg(rec.channel)
+                .arg(rec.context.channel)
 		.arg(XmlExportable::encodeEntities(rec.transform));
 
             if (rec.configurationXml != "") {

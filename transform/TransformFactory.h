@@ -17,6 +17,7 @@
 #define _TRANSFORM_FACTORY_H_
 
 #include "Transform.h"
+#include "PluginTransform.h"
 
 #include <map>
 
@@ -68,7 +69,7 @@ public:
      */
     bool getConfigurationForTransform(TransformName name,
                                       Model *inputModel,
-                                      int &channel,
+                                      PluginTransform::ExecutionContext &context,
                                       QString &configurationXml);
 
     /**
@@ -85,7 +86,8 @@ public:
      * when no longer needed.
      */
     Model *transform(TransformName name, Model *inputModel,
-                     int channel, QString configurationXml = "");
+                     const PluginTransform::ExecutionContext &context,
+                     QString configurationXml = "");
 
     /**
      * Full description of a transform, suitable for putting on a menu.
@@ -128,7 +130,8 @@ protected slots:
 
 protected:
     Transform *createTransform(TransformName name, Model *inputModel,
-                               int channel, QString configurationXml, bool start);
+                               const PluginTransform::ExecutionContext &context,
+                               QString configurationXml, bool start);
 
     struct TransformIdent
     {

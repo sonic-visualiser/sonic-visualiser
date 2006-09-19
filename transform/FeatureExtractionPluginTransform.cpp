@@ -34,18 +34,11 @@
 
 FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputModel,
 								   QString pluginId,
-                                                                   int channel,
+                                                                   const ExecutionContext &context,
                                                                    QString configurationXml,
-								   QString outputName,
-                                                                   size_t stepSize,
-                                                                   size_t blockSize,
-                                                                   WindowType windowType) :
-    Transform(inputModel),
+								   QString outputName) :
+    PluginTransform(inputModel, context),
     m_plugin(0),
-    m_channel(channel),
-    m_stepSize(0),
-    m_blockSize(0),
-    m_windowType(windowType),
     m_descriptor(0),
     m_outputFeatureNo(0)
 {
@@ -72,18 +65,6 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
         PluginXml(m_plugin).setParametersFromXml(configurationXml);
     }
 
-    if (m_blockSize == 0) m_blockSize = m_plugin->getPreferredBlockSize();
-    if (m_stepSize == 0) m_stepSize = m_plugin->getPreferredStepSize();
-
-    if (m_blockSize == 0) m_blockSize = 1024;
-    if (m_stepSize == 0) {
-        if (m_plugin->getInputDomain() == Vamp::Plugin::FrequencyDomain) {
-            m_stepSize = m_blockSize / 2;
-        } else {
-            m_stepSize = m_blockSize;
-        }
-    }
-
     DenseTimeValueModel *input = getInput();
     if (!input) return;
 
@@ -100,7 +81,13 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 	return;
     }
 
-    if (!m_plugin->initialise(channelCount, m_stepSize, m_blockSize)) {
+    std::cerr << "Initialising feature extraction plugin with channels = "
+              << channelCount << ", step = " << m_context.stepSize
+              << ", block = " << m_context.blockSize << std::endl;
+
+    if (!m_plugin->initialise(channelCount,
+                              m_context.stepSize,
+                              m_context.blockSize)) {
         std::cerr << "FeatureExtractionPluginTransform: Plugin "
                   << m_plugin->getName() << " failed to initialise!" << std::endl;
         return;
@@ -160,7 +147,7 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 	break;
 
     case Vamp::Plugin::OutputDescriptor::OneSamplePerStep:
-	modelResolution = m_stepSize;
+	modelResolution = m_context.stepSize;
 	break;
 
     case Vamp::Plugin::OutputDescriptor::FixedSampleRate:
@@ -248,7 +235,7 @@ FeatureExtractionPluginTransform::run()
 
     float **buffers = new float*[channelCount];
     for (size_t ch = 0; ch < channelCount; ++ch) {
-	buffers[ch] = new float[m_blockSize];
+	buffers[ch] = new float[m_context.blockSize];
     }
 
     bool frequencyDomain = (m_plugin->getInputDomain() ==
@@ -259,11 +246,11 @@ FeatureExtractionPluginTransform::run()
         for (size_t ch = 0; ch < channelCount; ++ch) {
             fftModels.push_back(new FFTModel
                                   (getInput(),
-                                   channelCount == 1 ? m_channel : ch,
-                                   m_windowType,
-                                   m_blockSize,
-                                   m_stepSize,
-                                   m_blockSize,
+                                   channelCount == 1 ? m_context.channel : ch,
+                                   m_context.windowType,
+                                   m_context.blockSize,
+                                   m_context.stepSize,
+                                   m_context.blockSize,
                                    false));
         }
     }
@@ -277,7 +264,7 @@ FeatureExtractionPluginTransform::run()
     while (1) {
 
         if (frequencyDomain) {
-            if (blockFrame - int(m_blockSize)/2 > endFrame) break;
+            if (blockFrame - int(m_context.blockSize)/2 > endFrame) break;
         } else {
             if (blockFrame >= endFrame) break;
         }
@@ -286,21 +273,21 @@ FeatureExtractionPluginTransform::run()
 //		  << blockFrame << std::endl;
 
 	long completion =
-	    (((blockFrame - startFrame) / m_stepSize) * 99) /
-	    (   (endFrame - startFrame) / m_stepSize);
+	    (((blockFrame - startFrame) / m_context.stepSize) * 99) /
+	    (   (endFrame - startFrame) / m_context.stepSize);
 
 	// channelCount is either m_input->channelCount or 1
 
         for (size_t ch = 0; ch < channelCount; ++ch) {
             if (frequencyDomain) {
-                int column = (blockFrame - startFrame) / m_stepSize;
-                for (size_t i = 0; i < m_blockSize/2; ++i) {
+                int column = (blockFrame - startFrame) / m_context.stepSize;
+                for (size_t i = 0; i < m_context.blockSize/2; ++i) {
                     fftModels[ch]->getValuesAt
                         (column, i, buffers[ch][i*2], buffers[ch][i*2+1]);
                 }
 /*!!!
                 float sum = 0.0;
-                for (size_t i = 0; i < m_blockSize/2; ++i) {
+                for (size_t i = 0; i < m_context.blockSize/2; ++i) {
                     sum += buffers[ch][i*2];
                 }
                 if (fabs(sum) < 0.0001) {
@@ -309,7 +296,7 @@ FeatureExtractionPluginTransform::run()
 */
             } else {
                 getFrames(ch, channelCount, 
-                          blockFrame, m_blockSize, buffers[ch]);
+                          blockFrame, m_context.blockSize, buffers[ch]);
             }                
         }
 
@@ -327,7 +314,7 @@ FeatureExtractionPluginTransform::run()
 	    prevCompletion = completion;
 	}
 
-	blockFrame += m_stepSize;
+	blockFrame += m_context.stepSize;
     }
 
     Vamp::Plugin::FeatureSet features = m_plugin->getRemainingFeatures();
@@ -365,7 +352,7 @@ FeatureExtractionPluginTransform::getFrames(int channel, int channelCount,
     }
 
     long got = getInput()->getValues
-        ((channelCount == 1 ? m_channel : channel),
+        ((channelCount == 1 ? m_context.channel : channel),
          startFrame, startFrame + size, buffer + offset);
 
     while (got < size) {
@@ -373,7 +360,7 @@ FeatureExtractionPluginTransform::getFrames(int channel, int channelCount,
         ++got;
     }
 
-    if (m_channel == -1 && channelCount == 1 &&
+    if (m_context.channel == -1 && channelCount == 1 &&
         getInput()->getChannelCount() > 1) {
         // use mean instead of sum, as plugin input
         int cc = getInput()->getChannelCount();
