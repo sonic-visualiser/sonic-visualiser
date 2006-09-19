@@ -18,6 +18,7 @@
 
 #include "layer/LayerFactory.h"
 #include "transform/Transform.h"
+#include "transform/PluginTransform.h"
 #include "base/Command.h"
 
 #include <map>
@@ -113,7 +114,7 @@ public:
      */
     Layer *createDerivedLayer(TransformName,
                               Model *inputModel, 
-                              int inputChannel, // -1 -> all
+                              const PluginTransform::ExecutionContext &context,
                               QString configurationXml);
 
     /**
@@ -136,7 +137,7 @@ public:
      */
     void addDerivedModel(TransformName,
                          Model *inputModel,
-                         int inputChannel, // -1 -> all
+                         const PluginTransform::ExecutionContext &context,
                          Model *outputModelToAdd,
                          QString configurationXml);
 
@@ -194,7 +195,7 @@ signals:
 protected:
     Model *createModelForTransform(TransformName transform,
                                    Model *inputModel,
-                                   int channel,
+                                   const PluginTransform::ExecutionContext &context,
                                    QString configurationXml);
     void releaseModel(Model *model);
 
@@ -230,7 +231,7 @@ protected:
 	// since being generated from it.
 	const Model *source;
 	TransformName transform;
-        int channel;
+        PluginTransform::ExecutionContext context;
         QString configurationXml;
 
 	// Count of the number of layers using this model.

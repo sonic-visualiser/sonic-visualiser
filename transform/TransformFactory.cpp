@@ -350,7 +350,7 @@ TransformFactory::getChannelRange(TransformName name, Vamp::PluginBase *plugin,
 bool
 TransformFactory::getConfigurationForTransform(TransformName name,
                                                Model *inputModel,
-                                               int &channel,
+                                               PluginTransform::ExecutionContext &context,
                                                QString &configurationXml)
 {
     QString id = name.section(':', 0, 2);
@@ -382,6 +382,9 @@ TransformFactory::getConfigurationForTransform(TransformName name,
     }
 
     if (plugin) {
+
+        context = PluginTransform::ExecutionContext(context.channel, plugin);
+
         if (configurationXml != "") {
             PluginXml(plugin).setParametersFromXml(configurationXml);
         }
@@ -399,7 +402,7 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         if (sourceChannels < minChannels) targetChannels = minChannels;
         if (sourceChannels > maxChannels) targetChannels = maxChannels;
 
-        int defaultChannel = channel;
+        int defaultChannel = context.channel;
 
         PluginParameterDialog *dialog = new PluginParameterDialog(plugin,
                                                                   sourceChannels,
@@ -412,10 +415,13 @@ TransformFactory::getConfigurationForTransform(TransformName name,
             ok = true;
         }
         configurationXml = PluginXml(plugin).toXmlString();
-        channel = dialog->getChannel();
+        context.channel = dialog->getChannel();
 
-        //!!! where now for step size, block size, etc?
-//        dialog->getProcessingParameters(stepSize, blockSize, windowType);
+        dialog->getProcessingParameters(context.stepSize,
+                                        context.blockSize,
+                                        context.windowType);
+
+        context.makeConsistentWithPlugin(plugin);
 
         delete dialog;
         delete plugin;
@@ -428,25 +434,24 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
 Transform *
 TransformFactory::createTransform(TransformName name, Model *inputModel,
-                                  int channel, QString configurationXml, bool start)
+                                  const PluginTransform::ExecutionContext &context,
+                                  QString configurationXml, bool start)
 {
     Transform *transform = 0;
 
-    //!!! use channel
-    
     QString id = name.section(':', 0, 2);
     QString output = name.section(':', 3);
 
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
         transform = new FeatureExtractionPluginTransform(inputModel,
                                                          id,
-                                                         channel,
+                                                         context,
                                                          configurationXml,
                                                          output);
     } else if (RealTimePluginFactory::instanceFor(id)) {
         transform = new RealTimePluginTransform(inputModel,
                                                 id,
-                                                channel,
+                                                context,
                                                 configurationXml,
                                                 getTransformUnits(name),
                                                 output.toInt());
@@ -463,9 +468,10 @@ TransformFactory::createTransform(TransformName name, Model *inputModel,
 
 Model *
 TransformFactory::transform(TransformName name, Model *inputModel,
-                            int channel, QString configurationXml)
+                            const PluginTransform::ExecutionContext &context,
+                            QString configurationXml)
 {
-    Transform *t = createTransform(name, inputModel, channel,
+    Transform *t = createTransform(name, inputModel, context,
                                    configurationXml, false);
 
     if (!t) return 0;

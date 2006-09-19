@@ -28,18 +28,15 @@
 
 RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
                                                  QString pluginId,
-                                                 int channel,
+                                                 const ExecutionContext &context,
                                                  QString configurationXml,
                                                  QString units,
-                                                 int output,
-                                                 size_t blockSize) :
-    Transform(inputModel),
+                                                 int output) :
+    PluginTransform(inputModel, context),
     m_plugin(0),
-    m_channel(channel),
-    m_outputNo(output),
-    m_blockSize(blockSize)
+    m_outputNo(output)
 {
-    if (!m_blockSize) m_blockSize = 1024;
+    if (!m_context.blockSize) m_context.blockSize = 1024;
 
     std::cerr << "RealTimePluginTransform::RealTimePluginTransform: plugin " << pluginId.toStdString() << ", output " << output << std::endl;
 
@@ -56,7 +53,7 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
     if (!input) return;
 
     m_plugin = factory->instantiatePlugin(pluginId, 0, 0, m_input->getSampleRate(),
-                                          m_blockSize,
+                                          m_context.blockSize,
                                           input->getChannelCount());
 
     if (!m_plugin) {
@@ -75,7 +72,7 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
     }
 	
     SparseTimeValueModel *model = new SparseTimeValueModel
-        (input->getSampleRate(), m_blockSize, 0.0, 0.0, false);
+        (input->getSampleRate(), m_context.blockSize, 0.0, 0.0, false);
 
     if (units != "") model->setScaleUnits(units);
 
@@ -111,7 +108,7 @@ RealTimePluginTransform::run()
 
     size_t sampleRate = input->getSampleRate();
     int channelCount = input->getChannelCount();
-    if (m_channel != -1) channelCount = 1;
+    if (m_context.channel != -1) channelCount = 1;
 
     size_t blockSize = m_plugin->getBufferSize();
 
@@ -135,11 +132,11 @@ RealTimePluginTransform::run()
 
 	if (channelCount == 1) {
 	    got = input->getValues
-		(m_channel, blockFrame, blockFrame + blockSize, buffers[0]);
+		(m_context.channel, blockFrame, blockFrame + blockSize, buffers[0]);
 	    while (got < blockSize) {
 		buffers[0][got++] = 0.0;
 	    }
-            if (m_channel == -1 && channelCount > 1) {
+            if (m_context.channel == -1 && channelCount > 1) {
                 // use mean instead of sum, as plugin input
                 for (size_t i = 0; i < got; ++i) {
                     buffers[0][i] /= channelCount;

@@ -16,30 +16,27 @@
 #ifndef _REAL_TIME_PLUGIN_TRANSFORM_H_
 #define _REAL_TIME_PLUGIN_TRANSFORM_H_
 
-#include "Transform.h"
+#include "PluginTransform.h"
 #include "plugin/RealTimePluginInstance.h"
 
 class DenseTimeValueModel;
 
-class RealTimePluginTransform : public Transform
+class RealTimePluginTransform : public PluginTransform
 {
 public:
     RealTimePluginTransform(Model *inputModel,
 			    QString plugin,
-                            int channel,
+                            const ExecutionContext &context,
 			    QString configurationXml = "",
                             QString units = "",
-			    int output = 0,
-                            size_t blockSize = 0);
+			    int output = 0);
     virtual ~RealTimePluginTransform();
 
 protected:
     virtual void run();
 
     RealTimePluginInstance *m_plugin;
-    int m_channel;
     int m_outputNo;
-    size_t m_blockSize;
 
     // just casts
     DenseTimeValueModel *getInput();
