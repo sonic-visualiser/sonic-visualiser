@@ -262,7 +262,7 @@ SVFileReader::endElement(const QString &, const QString &,
         if (m_currentDerivedModel) {
             m_document->addDerivedModel(m_currentTransform,
                                         m_document->getMainModel(), //!!!
-                                        m_currentTransformChannel,
+                                        m_currentTransformContext,
                                         m_currentDerivedModel,
                                         m_currentTransformConfiguration);
             m_addedModels.insert(m_currentDerivedModel);
@@ -897,10 +897,23 @@ SVFileReader::readDerivation(const QXmlAttributes &attributes)
         m_currentTransform = transform;
         m_currentTransformConfiguration = "";
 
+        m_currentTransformContext = PluginTransform::ExecutionContext();
+
         bool ok = false;
         int channel = attributes.value("channel").trimmed().toInt(&ok);
-        if (ok) m_currentTransformChannel = channel;
-        else m_currentTransformChannel = -1;
+        if (ok) m_currentTransformContext.channel = channel;
+
+        int domain = attributes.value("domain").trimmed().toInt(&ok);
+        if (ok) m_currentTransformContext.domain = Vamp::Plugin::InputDomain(domain);
+
+        int stepSize = attributes.value("stepSize").trimmed().toInt(&ok);
+        if (ok) m_currentTransformContext.stepSize = stepSize;
+
+        int blockSize = attributes.value("blockSize").trimmed().toInt(&ok);
+        if (ok) m_currentTransformContext.blockSize = blockSize;
+
+        int windowType = attributes.value("windowType").trimmed().toInt(&ok);
+        if (ok) m_currentTransformContext.windowType = WindowType(windowType);
 
     } else {
 	std::cerr << "WARNING: SV-XML: Unknown derived model " << modelId
