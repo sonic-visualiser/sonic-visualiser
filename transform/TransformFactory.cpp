@@ -26,6 +26,8 @@
 
 #include "data/model/DenseTimeValueModel.h"
 
+#include "vamp-sdk/PluginHostAdapter.h"
+
 #include <iostream>
 #include <set>
 
@@ -338,7 +340,8 @@ TransformFactory::getChannelRange(TransformName name, Vamp::PluginBase *plugin,
                                   int &minChannels, int &maxChannels)
 {
     Vamp::Plugin *vp = 0;
-    if ((vp = dynamic_cast<Vamp::Plugin *>(plugin))) {
+    if ((vp = dynamic_cast<Vamp::Plugin *>(plugin)) ||
+        (vp = dynamic_cast<Vamp::PluginHostAdapter *>(plugin))) {
         minChannels = vp->getMinChannelCount();
         maxChannels = vp->getMaxChannelCount();
         return true;

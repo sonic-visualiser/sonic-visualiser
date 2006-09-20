@@ -15,6 +15,8 @@
 
 #include "PluginTransform.h"
 
+#include "vamp-sdk/PluginHostAdapter.h"
+
 PluginTransform::PluginTransform(Model *inputModel,
 				 const ExecutionContext &context) :
     Transform(inputModel),
@@ -66,6 +68,9 @@ void
 PluginTransform::ExecutionContext::makeConsistentWithPlugin(const Vamp::PluginBase *_plugin)
 {
     const Vamp::Plugin *vp = dynamic_cast<const Vamp::Plugin *>(_plugin);
+    if (!vp) {
+        vp = dynamic_cast<const Vamp::PluginHostAdapter *>(_plugin); //!!! why?
+    }
 
     if (!vp) {
         domain = Vamp::Plugin::TimeDomain;
