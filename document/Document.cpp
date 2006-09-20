@@ -698,10 +698,14 @@ Document::toXml(QTextStream &out, QString indent, QString extraAttributes) const
             //!!! stream the rest of the execution context in both directions (i.e. not just channel)
 
 	    out << indent;
-	    out << QString("  <derivation source=\"%1\" model=\"%2\" channel=\"%3\" transform=\"%4\"")
+	    out << QString("  <derivation source=\"%1\" model=\"%2\" channel=\"%3\" domain=\"%4\" stepSize=\"%5\" blockSize=\"%6\" windowType=\"%7\" transform=\"%8\"")
 		.arg(XmlExportable::getObjectExportId(rec.source))
 		.arg(XmlExportable::getObjectExportId(i->first))
                 .arg(rec.context.channel)
+                .arg(rec.context.domain)
+                .arg(rec.context.stepSize)
+                .arg(rec.context.blockSize)
+                .arg(int(rec.context.windowType))
 		.arg(XmlExportable::encodeEntities(rec.transform));
 
             if (rec.configurationXml != "") {

@@ -18,6 +18,7 @@
 
 #include "layer/LayerFactory.h"
 #include "transform/Transform.h"
+#include "transform/PluginTransform.h"
 
 #include <QXmlDefaultHandler>
 
@@ -93,7 +94,7 @@ protected:
     Model *m_currentDerivedModel;
     PlayParameters *m_currentPlayParameters;
     QString m_currentTransform;
-    int m_currentTransformChannel;
+    PluginTransform::ExecutionContext m_currentTransformContext;
     QString m_currentTransformConfiguration;
     QString m_datasetSeparator;
     bool m_inRow;
