@@ -94,6 +94,20 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     connect(frequency, SIGNAL(valueChanged(double)),
             this, SLOT(tuningFrequencyChanged(double)));
 
+    QComboBox *resampleQuality = new QComboBox;
+
+    int rsq = prefs->getPropertyRangeAndValue("Resample Quality", &min, &max);
+    m_resampleQuality = rsq;
+
+    for (i = min; i <= max; ++i) {
+        resampleQuality->addItem(prefs->getPropertyValueLabel("Resample Quality", i));
+    }
+
+    resampleQuality->setCurrentIndex(rsq);
+
+    connect(resampleQuality, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(resampleQualityChanged(int)));
+
     int row = 0;
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
@@ -105,6 +119,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                                                 ("Tuning Frequency"))),
                        row, 0);
     subgrid->addWidget(frequency, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Resample Quality"))),
+                       row, 0);
+    subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(prefs->getPropertyLabel
                                   ("Smooth Spectrogram")),
@@ -168,6 +187,13 @@ PreferencesDialog::tuningFrequencyChanged(double freq)
 }
 
 void
+PreferencesDialog::resampleQualityChanged(int q)
+{
+    m_resampleQuality = q;
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -183,6 +209,7 @@ PreferencesDialog::applyClicked()
     prefs->setPropertyBoxLayout(Preferences::PropertyBoxLayout
                                 (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
+    prefs->setResampleQuality(m_resampleQuality);
     m_applyButton->setEnabled(false);
 }    
 
