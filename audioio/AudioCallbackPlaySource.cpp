@@ -20,6 +20,7 @@
 #include "data/model/Model.h"
 #include "view/ViewManager.h"
 #include "base/PlayParameterRepository.h"
+#include "base/Preferences.h"
 #include "data/model/DenseTimeValueModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "PhaseVocoderTimeStretcher.h"
@@ -53,7 +54,9 @@ AudioCallbackPlaySource::AudioCallbackPlaySource(ViewManager *manager) :
     m_outputRight(0.0),
     m_timeStretcher(0),
     m_fillThread(0),
-    m_converter(0)
+    m_converter(0),
+    m_crapConverter(0),
+    m_resampleQuality(Preferences::getInstance()->getResampleQuality())
 {
     m_viewManager->setAudioPlaySource(this);
 
@@ -67,6 +70,10 @@ AudioCallbackPlaySource::AudioCallbackPlaySource(ViewManager *manager) :
     connect(PlayParameterRepository::getInstance(),
 	    SIGNAL(playParametersChanged(PlayParameters *)),
 	    this, SLOT(playParametersChanged(PlayParameters *)));
+
+    connect(Preferences::getInstance(),
+            SIGNAL(propertyChanged(PropertyContainer::PropertyName)),
+            this, SLOT(preferenceChanged(PropertyContainer::PropertyName)));
 }
 
 AudioCallbackPlaySource::~AudioCallbackPlaySource()
@@ -168,7 +175,9 @@ AudioCallbackPlaySource::addModel(Model *model)
     if (buffersChanged || srChanged) {
 	if (m_converter) {
 	    src_delete(m_converter);
+            src_delete(m_crapConverter);
 	    m_converter = 0;
+            m_crapConverter = 0;
 	}
     }
 
@@ -202,7 +211,9 @@ AudioCallbackPlaySource::removeModel(Model *model)
     if (m_models.empty()) {
 	if (m_converter) {
 	    src_delete(m_converter);
+            src_delete(m_crapConverter);
 	    m_converter = 0;
+            m_crapConverter = 0;
 	}
 	m_sourceSampleRate = 0;
     }
@@ -232,7 +243,9 @@ AudioCallbackPlaySource::clearModels()
 
     if (m_converter) {
 	src_delete(m_converter);
+        src_delete(m_crapConverter);
 	m_converter = 0;
+        m_crapConverter = 0;
     }
 
     m_lastModelEndFrame = 0;
@@ -322,8 +335,10 @@ AudioCallbackPlaySource::play(size_t startFrame)
 	    }
 	}
 	if (m_converter) src_reset(m_converter);
+        if (m_crapConverter) src_reset(m_crapConverter);
     } else {
 	if (m_converter) src_reset(m_converter);
+        if (m_crapConverter) src_reset(m_crapConverter);
 	m_readBufferFill = m_writeBufferFill = startFrame;
     }
     m_mutex.unlock();
@@ -371,6 +386,14 @@ void
 AudioCallbackPlaySource::playParametersChanged(PlayParameters *params)
 {
     clearRingBuffers();
+}
+
+void
+AudioCallbackPlaySource::preferenceChanged(PropertyContainer::PropertyName n)
+{
+    if (n == "Resample Quality") {
+        setResampleQuality(Preferences::getInstance()->getResampleQuality());
+    }
 }
 
 void
@@ -538,27 +561,82 @@ void
 AudioCallbackPlaySource::setTargetSampleRate(size_t sr)
 {
     m_targetSampleRate = sr;
+    initialiseConverter();
+}
+
+void
+AudioCallbackPlaySource::initialiseConverter()
+{
+    m_mutex.lock();
+
+    if (m_converter) {
+        src_delete(m_converter);
+        src_delete(m_crapConverter);
+        m_converter = 0;
+        m_crapConverter = 0;
+    }
 
     if (getSourceSampleRate() != getTargetSampleRate()) {
 
 	int err = 0;
-	m_converter = src_new(SRC_SINC_BEST_QUALITY,
+
+	m_converter = src_new(m_resampleQuality == 2 ? SRC_SINC_BEST_QUALITY :
+                              m_resampleQuality == 1 ? SRC_SINC_MEDIUM_QUALITY :
+                              m_resampleQuality == 0 ? SRC_SINC_FASTEST :
+                                                       SRC_SINC_MEDIUM_QUALITY,
 			      getTargetChannelCount(), &err);
-	if (!m_converter) {
+
+        if (m_converter) {
+            m_crapConverter = src_new(SRC_LINEAR,
+                                      getTargetChannelCount(),
+                                      &err);
+        }
+
+	if (!m_converter || !m_crapConverter) {
 	    std::cerr
 		<< "AudioCallbackPlaySource::setModel: ERROR in creating samplerate converter: "
 		<< src_strerror(err) << std::endl;
+
+            if (m_converter) {
+                src_delete(m_converter);
+                m_converter = 0;
+            } 
+
+            if (m_crapConverter) {
+                src_delete(m_crapConverter);
+                m_crapConverter = 0;
+            }
+
+            m_mutex.unlock();
 
             emit sampleRateMismatch(getSourceSampleRate(),
                                     getTargetSampleRate(),
                                     false);
 	} else {
 
+            m_mutex.unlock();
+
             emit sampleRateMismatch(getSourceSampleRate(),
                                     getTargetSampleRate(),
                                     true);
         }
+    } else {
+        m_mutex.unlock();
     }
+}
+
+void
+AudioCallbackPlaySource::setResampleQuality(int q)
+{
+    if (q == m_resampleQuality) return;
+    m_resampleQuality = q;
+
+#ifdef DEBUG_AUDIO_PLAY_SOURCE
+    std::cerr << "AudioCallbackPlaySource::setResampleQuality: setting to "
+              << m_resampleQuality << std::endl;
+#endif
+
+    initialiseConverter();
 }
 
 size_t
@@ -894,8 +972,17 @@ AudioCallbackPlaySource::fillBuffers()
 	data.src_ratio = ratio;
 	data.end_of_input = 0;
 	
-	int err = src_process(m_converter, &data);
-//	size_t toCopy = size_t(work * ratio + 0.1);
+	int err = 0;
+
+        if (m_timeStretcher && m_timeStretcher->getRatio() < 0.4) {
+#ifdef DEBUG_AUDIO_PLAY_SOURCE
+            std::cerr << "Using crappy converter" << std::endl;
+#endif
+            src_process(m_crapConverter, &data);
+        } else {
+            src_process(m_converter, &data);
+        }
+
 	size_t toCopy = size_t(got * ratio + 0.1);
 
 	if (err) {

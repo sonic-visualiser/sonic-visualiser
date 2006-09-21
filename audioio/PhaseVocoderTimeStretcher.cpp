@@ -38,7 +38,6 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
     m_mutex(new QMutex())
 {
     initialise();
-
 }
 
 PhaseVocoderTimeStretcher::~PhaseVocoderTimeStretcher()
@@ -144,7 +143,7 @@ PhaseVocoderTimeStretcher::calculateParameters()
         } else {
             m_n1 = 256;
         }
-        if (m_sharpen) {
+        if (shouldSharpen()) {
             m_wlen = 2048;
         }
         m_n2 = lrintf(m_n1 * m_ratio);
@@ -158,7 +157,7 @@ PhaseVocoderTimeStretcher::calculateParameters()
         } else {
             m_n2 = 256;
         }
-        if (m_sharpen) {
+        if (shouldSharpen()) {
             if (m_wlen < 2048) m_wlen = 2048;
         }
         m_n1 = lrintf(m_n2 / m_ratio);
@@ -318,11 +317,12 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
 	writable = std::min(writable, samples - consumed);
 
 	if (writable == 0) {
-	    //!!! then what? I don't think this should happen, but
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
 	    std::cerr << "WARNING: PhaseVocoderTimeStretcher::putInput: writable == 0 (inbuf has " << m_inbuf[0]->getReadSpace() << " samples available for reading, space for " << m_inbuf[0]->getWriteSpace() << " more)" << std::endl;
+#endif
             if (m_inbuf[0]->getReadSpace() < m_wlen ||
                 m_outbuf[0]->getWriteSpace() < m_n2) {
-                std::cerr << "Outbuf has space for " << m_outbuf[0]->getWriteSpace() << " (n2 = " << m_n2 << "), won't be able to process" << std::endl;
+                std::cerr << "WARNING: PhaseVocoderTimeStretcher::putInput: Inbuf has " << m_inbuf[0]->getReadSpace() << ", outbuf has space for " << m_outbuf[0]->getWriteSpace() << " (n2 = " << m_n2 << ", wlen = " << m_wlen << "), won't be able to process" << std::endl;
                 break;
             }
 	} else {
@@ -354,7 +354,7 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
             }
 
             bool transient = false;
-            if (m_sharpen) transient = isTransient();
+            if (shouldSharpen()) transient = isTransient();
 
             size_t n2 = m_n2;
 
@@ -380,9 +380,11 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
                 
                 n2 = lrintf(idealSquashy / squashyCount);
 
+#ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
                 if (n2 != m_n2) {
                     std::cerr << m_n2 << " -> " << n2 << std::endl;
                 }
+#endif
             }
 
             for (size_t c = 0; c < m_channels; ++c) {

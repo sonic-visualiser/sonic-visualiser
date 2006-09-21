@@ -36,6 +36,7 @@ protected slots:
     void smoothSpectrogramChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
+    void resampleQualityChanged(int quality);
 
     void okClicked();
     void applyClicked();
@@ -49,6 +50,7 @@ protected:
     bool  m_smoothSpectrogram;
     int   m_propertyLayout;
     float m_tuningFrequency;
+    int   m_resampleQuality;
 };
 
 #endif

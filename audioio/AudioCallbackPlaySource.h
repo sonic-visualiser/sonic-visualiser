@@ -18,6 +18,7 @@
 
 #include "base/RingBuffer.h"
 #include "base/AudioPlaySource.h"
+#include "base/PropertyContainer.h"
 #include "base/Scavenger.h"
 
 #include <QObject>
@@ -177,7 +178,19 @@ public:
      */
     size_t getSourceSamples(size_t count, float **buffer);
 
+    /**
+     * Set the time stretcher factor (i.e. playback speed).  Also
+     * specify whether the time stretcher will be variable rate
+     * (sharpening transients), and whether time stretching will be
+     * carried out on data mixed down to mono for speed.
+     */
     void setTimeStretch(float factor, bool sharpen, bool mono);
+
+    /**
+     * Set the resampler quality, 0 - 2 where 0 is fastest and 2 is
+     * highest quality.
+     */
+    void setResampleQuality(int q);
 
 signals:
     void modelReplaced();
@@ -191,6 +204,7 @@ protected slots:
     void playLoopModeChanged();
     void playSelectionModeChanged();
     void playParametersChanged(PlayParameters *);
+    void preferenceChanged(PropertyContainer::PropertyName);
 
 protected:
     ViewManager                     *m_viewManager;
@@ -274,6 +288,9 @@ protected:
     QWaitCondition m_condition;
     AudioCallbackPlaySourceFillThread *m_fillThread;
     SRC_STATE *m_converter;
+    SRC_STATE *m_crapConverter; // for use when playing very fast
+    int m_resampleQuality;
+    void initialiseConverter();
 };
 
 #endif

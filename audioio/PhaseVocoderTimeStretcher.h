@@ -143,6 +143,10 @@ protected:
     void calculateParameters();
     void cleanup();
 
+    bool shouldSharpen() {
+        return m_sharpen && (m_ratio > 0.25);
+    }
+
     size_t m_sampleRate;
     size_t m_channels;
     size_t m_maxOutputBlockSize;
