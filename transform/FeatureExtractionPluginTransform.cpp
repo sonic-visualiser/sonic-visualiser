@@ -269,8 +269,8 @@ FeatureExtractionPluginTransform::run()
             if (blockFrame >= endFrame) break;
         }
 
-	std::cerr << "FeatureExtractionPluginTransform::run: blockFrame "
-		  << blockFrame << std::endl;
+//	std::cerr << "FeatureExtractionPluginTransform::run: blockFrame "
+//		  << blockFrame << std::endl;
 
 	long completion =
 	    (((blockFrame - startFrame) / m_context.stepSize) * 99) /
@@ -463,16 +463,21 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 	binCount = m_descriptor->binCount;
     }
 
+    std::cerr << "FeatureExtractionPluginTransform::setCompletion("
+              << completion << ")" << std::endl;
+
     if (binCount == 0) {
 
 	SparseOneDimensionalModel *model = getOutput<SparseOneDimensionalModel>();
 	if (!model) return;
+        std::cerr << "setting on SparseOneDimensionalModel" << std::endl;
 	model->setCompletion(completion);
 
     } else if (binCount == 1) {
 
 	SparseTimeValueModel *model = getOutput<SparseTimeValueModel>();
 	if (!model) return;
+        std::cerr << "setting on SparseTimeValueModel" << std::endl;
 	model->setCompletion(completion);
 
     } else if (m_descriptor->sampleType ==
@@ -480,6 +485,7 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 
 	NoteModel *model = getOutput<NoteModel>();
 	if (!model) return;
+        std::cerr << "setting on NoteModel" << std::endl;
 	model->setCompletion(completion);
 
     } else {
@@ -487,6 +493,7 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 	EditableDenseThreeDimensionalModel *model =
             getOutput<EditableDenseThreeDimensionalModel>();
 	if (!model) return;
+        std::cerr << "setting on EditableDenseThreeDimensionalModel" << std::endl;
 	model->setCompletion(completion);
     }
 }
