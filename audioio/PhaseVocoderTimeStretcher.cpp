@@ -26,10 +26,10 @@ PhaseVocoderTimeStretcher::PhaseVocoderTimeStretcher(size_t sampleRate,
                                                      size_t channels,
                                                      float ratio,
                                                      bool sharpen,
-                                                     size_t maxProcessInputBlockSize) :
+                                                     size_t maxOutputBlockSize) :
     m_sampleRate(sampleRate),
     m_channels(channels),
-    m_maxProcessInputBlockSize(maxProcessInputBlockSize),
+    m_maxOutputBlockSize(maxOutputBlockSize),
     m_ratio(ratio),
     m_sharpen(sharpen),
     m_totalCount(0),
@@ -92,27 +92,31 @@ PhaseVocoderTimeStretcher::initialise()
         m_plan[c] = fftwf_plan_dft_r2c_1d(m_wlen, m_time[c], m_freq[c], FFTW_ESTIMATE);
         m_iplan[c] = fftwf_plan_dft_c2r_1d(m_wlen, m_freq[c], m_time[c], FFTW_ESTIMATE);
 
-        m_inbuf[c] = new RingBuffer<float>(m_wlen);
         m_outbuf[c] = new RingBuffer<float>
-            (lrintf((m_maxProcessInputBlockSize + m_wlen) * m_ratio));
-            
+            ((m_maxOutputBlockSize + m_wlen) * 2);
+        m_inbuf[c] = new RingBuffer<float>
+            (lrintf(m_outbuf[c]->getSize() / m_ratio) + m_wlen);
+
+        std::cerr << "making inbuf size " << m_inbuf[c]->getSize() << " (outbuf size is " << m_outbuf[c]->getSize() << ", ratio " << m_ratio << ")" << std::endl;
+
+           
         m_mashbuf[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
         
-        for (int i = 0; i < m_wlen; ++i) {
+        for (size_t i = 0; i < m_wlen; ++i) {
             m_mashbuf[c][i] = 0.0;
         }
 
-        for (int i = 0; i <= m_wlen/2; ++i) {
+        for (size_t i = 0; i <= m_wlen/2; ++i) {
             m_prevPhase[c][i] = 0.0;
             m_prevAdjustedPhase[c][i] = 0.0;
         }
     }
 
-    for (int i = 0; i < m_wlen; ++i) {
+    for (size_t i = 0; i < m_wlen; ++i) {
         m_modulationbuf[i] = 0.0;
     }
 
-    for (int i = 0; i <= m_wlen/2; ++i) {
+    for (size_t i = 0; i <= m_wlen/2; ++i) {
         m_prevTransientMag[i] = 0.0;
     }
 }
@@ -143,7 +147,7 @@ PhaseVocoderTimeStretcher::calculateParameters()
         if (m_sharpen) {
             m_wlen = 2048;
         }
-        m_n2 = m_n1 * m_ratio;
+        m_n2 = lrintf(m_n1 * m_ratio);
     } else {
         if (m_ratio > 2) {
             m_n2 = 512;
@@ -157,10 +161,10 @@ PhaseVocoderTimeStretcher::calculateParameters()
         if (m_sharpen) {
             if (m_wlen < 2048) m_wlen = 2048;
         }
-        m_n1 = m_n2 / m_ratio;
+        m_n1 = lrintf(m_n2 / m_ratio);
     }
 
-    m_transientThreshold = m_wlen / 4.5;
+    m_transientThreshold = lrintf(m_wlen / 4.5);
 
     m_totalCount = 0;
     m_transientCount = 0;
@@ -170,7 +174,7 @@ PhaseVocoderTimeStretcher::calculateParameters()
     std::cerr << "PhaseVocoderTimeStretcher: channels = " << m_channels
               << ", ratio = " << m_ratio
               << ", n1 = " << m_n1 << ", n2 = " << m_n2 << ", wlen = "
-              << m_wlen << ", max = " << m_maxProcessInputBlockSize << std::endl;
+              << m_wlen << ", max = " << m_maxOutputBlockSize << std::endl;
 //              << ", outbuflen = " << m_outbuf[0]->getSize() << std::endl;
 }
 
@@ -218,9 +222,7 @@ PhaseVocoderTimeStretcher::setRatio(float ratio)
 {
     QMutexLocker locker(m_mutex);
 
-    float formerRatio = m_ratio;
     size_t formerWlen = m_wlen;
-
     m_ratio = ratio;
 
     calculateParameters();
@@ -229,35 +231,42 @@ PhaseVocoderTimeStretcher::setRatio(float ratio)
 
         // This is the only container whose size depends on m_ratio
 
-        RingBuffer<float> **newout = new RingBuffer<float> *[m_channels];
+        RingBuffer<float> **newin = new RingBuffer<float> *[m_channels];
 
-        size_t formerSize = m_outbuf[0]->getSize();
-        size_t newSize = lrintf((m_maxProcessInputBlockSize + m_wlen) * m_ratio);
-        size_t ready = m_outbuf[0]->getReadSpace();
+        size_t formerSize = m_inbuf[0]->getSize();
+        size_t newSize = lrintf(m_outbuf[0]->getSize() / m_ratio) + m_wlen;
 
-        for (size_t c = 0; c < m_channels; ++c) {
-            newout[c] = new RingBuffer<float>(newSize);
-        }
+        std::cerr << "resizing inbuf from " << formerSize << " to "
+                  << newSize << " (outbuf size is " << m_outbuf[0]->getSize() << ", ratio " << m_ratio << ")" << std::endl;
 
-        if (ready > 0) {
+        if (formerSize != newSize) {
 
-            size_t copy = std::min(ready, newSize);
-            float *tmp = new float[ready];
+            size_t ready = m_inbuf[0]->getReadSpace();
 
             for (size_t c = 0; c < m_channels; ++c) {
-                m_outbuf[c]->read(tmp, ready);
-                newout[c]->write(tmp + ready - copy, copy);
+                newin[c] = new RingBuffer<float>(newSize);
             }
 
-            delete[] tmp;
-        }
+            if (ready > 0) {
 
-        for (size_t c = 0; c < m_channels; ++c) {
-            delete m_outbuf[c];
-        }
+                size_t copy = std::min(ready, newSize);
+                float *tmp = new float[ready];
 
-        delete[] m_outbuf;
-        m_outbuf = newout;
+                for (size_t c = 0; c < m_channels; ++c) {
+                    m_inbuf[c]->read(tmp, ready);
+                    newin[c]->write(tmp + ready - copy, copy);
+                }
+                
+                delete[] tmp;
+            }
+            
+            for (size_t c = 0; c < m_channels; ++c) {
+                delete m_inbuf[c];
+            }
+            
+            delete[] m_inbuf;
+            m_inbuf = newin;
+        }
 
     } else {
         
@@ -271,13 +280,6 @@ size_t
 PhaseVocoderTimeStretcher::getProcessingLatency() const
 {
     return getWindowSize() - getInputIncrement();
-}
-
-void
-PhaseVocoderTimeStretcher::process(float **input, float **output, size_t samples)
-{
-    putInput(input, samples);
-    getOutput(output, lrintf(samples * m_ratio));
 }
 
 size_t
@@ -317,18 +319,23 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
 
 	if (writable == 0) {
 	    //!!! then what? I don't think this should happen, but
-	    std::cerr << "WARNING: PhaseVocoderTimeStretcher::putInput: writable == 0" << std::endl;
-	    break;
-	}
+	    std::cerr << "WARNING: PhaseVocoderTimeStretcher::putInput: writable == 0 (inbuf has " << m_inbuf[0]->getReadSpace() << " samples available for reading, space for " << m_inbuf[0]->getWriteSpace() << " more)" << std::endl;
+            if (m_inbuf[0]->getReadSpace() < m_wlen ||
+                m_outbuf[0]->getWriteSpace() < m_n2) {
+                std::cerr << "Outbuf has space for " << m_outbuf[0]->getWriteSpace() << " (n2 = " << m_n2 << "), won't be able to process" << std::endl;
+                break;
+            }
+	} else {
 
 #ifdef DEBUG_PHASE_VOCODER_TIME_STRETCHER
-	std::cerr << "writing " << writable << " from index " << consumed << " to inbuf, consumed will be " << consumed + writable << std::endl;
+            std::cerr << "writing " << writable << " from index " << consumed << " to inbuf, consumed will be " << consumed + writable << std::endl;
 #endif
 
-        for (size_t c = 0; c < m_channels; ++c) {
-            m_inbuf[c]->write(input[c] + consumed, writable);
+            for (size_t c = 0; c < m_channels; ++c) {
+                m_inbuf[c]->write(input[c] + consumed, writable);
+            }
+            consumed += writable;
         }
-	consumed += writable;
 
 	while (m_inbuf[0]->getReadSpace() >= m_wlen &&
 	       m_outbuf[0]->getWriteSpace() >= m_n2) {
@@ -501,7 +508,7 @@ PhaseVocoderTimeStretcher::isTransient()
 {
     int count = 0;
 
-    for (int i = 0; i <= m_wlen/2; ++i) {
+    for (size_t i = 0; i <= m_wlen/2; ++i) {
 
         float real = 0.f, imag = 0.f;
 
@@ -546,11 +553,9 @@ PhaseVocoderTimeStretcher::synthesiseBlock(size_t c,
                                            float *modulation,
                                            size_t lastStep)
 {
-    int i;
-
     bool unchanged = (lastStep == m_n1);
 
-    for (i = 0; i <= m_wlen/2; ++i) {
+    for (size_t i = 0; i <= m_wlen/2; ++i) {
 		
         float phase = princargf(atan2f(m_freq[c][i][1], m_freq[c][i][0]));
         float adjustedPhase = phase;
@@ -583,19 +588,19 @@ PhaseVocoderTimeStretcher::synthesiseBlock(size_t c,
 
     fftwf_execute(m_iplan[c]); // m_freq -> m_time, inverse fft
 
-    for (i = 0; i < m_wlen/2; ++i) {
+    for (size_t i = 0; i < m_wlen/2; ++i) {
         float temp = m_time[c][i];
         m_time[c][i] = m_time[c][i + m_wlen/2];
         m_time[c][i + m_wlen/2] = temp;
     }
     
-    for (i = 0; i < m_wlen; ++i) {
+    for (size_t i = 0; i < m_wlen; ++i) {
         m_time[c][i] = m_time[c][i] / m_wlen;
     }
 
     m_synthesisWindow->cut(m_time[c]);
 
-    for (i = 0; i < m_wlen; ++i) {
+    for (size_t i = 0; i < m_wlen; ++i) {
         out[i] += m_time[c][i];
     }
 
@@ -603,7 +608,7 @@ PhaseVocoderTimeStretcher::synthesiseBlock(size_t c,
 
         float area = m_analysisWindow->getArea();
 
-        for (i = 0; i < m_wlen; ++i) {
+        for (size_t i = 0; i < m_wlen; ++i) {
             float val = m_synthesisWindow->getValue(i);
             modulation[i] += val * area;
         }

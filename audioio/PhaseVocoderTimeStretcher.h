@@ -43,36 +43,22 @@ public:
                               size_t channels,
                               float ratio,
                               bool sharpen,
-                              size_t maxProcessInputBlockSize);
+                              size_t maxOutputBlockSize);
     virtual ~PhaseVocoderTimeStretcher();
-
-    /**
-     * Process a block.  The input array contains the given number of
-     * samples (on each channel); the output must have space for
-     * lrintf(samples * m_ratio).
-     * 
-     * This function isn't really recommended, and I may yet remove it.
-     * It should work correctly for some ratios, e.g. small powers of
-     * two, if transient sharpening is off.  For other ratios it may
-     * drop samples -- use putInput in a loop followed by getOutput
-     * (when getAvailableOutputSamples reports enough) instead.
-     *
-     * Do not mix process calls with putInput/getOutput calls.
-     */
-    void process(float **input, float **output, size_t samples);
 
     /**
      * Return the number of samples that would need to be added via
      * putInput in order to provoke the time stretcher into doing some
      * time stretching and making more output samples available.
-     * This will be an estimate, if transient sharpening is on.
+     * This will be an estimate, if transient sharpening is on; the 
+     * caller may need to do the put/get/test cycle more than once.
      */
     size_t getRequiredInputSamples() const;
 
     /**
      * Put (and possibly process) a given number of input samples.
-     * Number must not exceed the maxProcessInputBlockSize passed to
-     * constructor.
+     * Number should usually equal the value returned from
+     * getRequiredInputSamples().
      */
     void putInput(float **input, size_t samples);
 
@@ -159,7 +145,7 @@ protected:
 
     size_t m_sampleRate;
     size_t m_channels;
-    size_t m_maxProcessInputBlockSize;
+    size_t m_maxOutputBlockSize;
     float m_ratio;
     bool m_sharpen;
     size_t m_n1;
