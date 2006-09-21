@@ -619,7 +619,7 @@ AudioCallbackPlaySource::setTimeStretch(float factor, bool sharpen, bool mono)
              channels,
              factor,
              sharpen,
-             lrintf(getTargetBlockSize() / factor));
+             getTargetBlockSize());
 
 	m_timeStretcher = newStretcher;
 
@@ -688,6 +688,21 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 
     size_t available;
 
+    int warned = 0;
+
+    
+
+    //!!!
+    // We want output blocks of e.g. 1024 (probably fixed, certainly
+    // bounded).  We can provide input blocks of any size (unbounded)
+    // at the timestretcher's request.  The input block for a given
+    // output is approx output / ratio, but we can't predict it
+    // exactly, for an adaptive timestretcher.  The stretcher will
+    // need some additional buffer space.
+
+
+
+
     while ((available = ts->getAvailableOutputSamples()) < count) {
 
         size_t reqd = lrintf((count - available) / ratio);
@@ -735,8 +750,8 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
         if (got == 0) break;
 
         if (ts->getAvailableOutputSamples() == available) {
-            std::cerr << "WARNING: AudioCallbackPlaySource::getSamples: Added " << got << " samples to time stretcher, created no new available output samples" << std::endl;
-            break;
+            std::cerr << "WARNING: AudioCallbackPlaySource::getSamples: Added " << got << " samples to time stretcher, created no new available output samples (warned = " << warned << ")" << std::endl;
+            if (++warned == 5) break;
         }
     }
 
