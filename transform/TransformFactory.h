@@ -42,13 +42,16 @@ public:
 
     struct TransformDesc {
         TransformDesc() { }
-	TransformDesc(QString _type, TransformName _name, QString _description,
+	TransformDesc(QString _type, QString _category,
+                      TransformName _name, QString _description,
                       QString _friendlyName, QString _maker,
                       QString _units, bool _configurable) :
-	    type(_type), name(_name), description(_description),
+	    type(_type), category(_category),
+            name(_name), description(_description),
             friendlyName(_friendlyName),
             maker(_maker), units(_units), configurable(_configurable) { }
         QString type;
+        QString category;
 	TransformName name;
 	QString description;
         QString friendlyName;
@@ -61,6 +64,9 @@ public:
     TransformList getAllTransforms();
 
     std::vector<QString> getAllTransformTypes();
+
+    std::vector<QString> getTransformCategories(QString transformType);
+    std::vector<QString> getTransformMakers(QString transformType);
 
     /**
      * Get a configuration XML string for the given transform (by

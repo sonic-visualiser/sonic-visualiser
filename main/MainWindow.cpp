@@ -87,6 +87,10 @@
 using std::cerr;
 using std::endl;
 
+using std::vector;
+using std::map;
+using std::set;
+
 
 MainWindow::MainWindow() :
     m_document(0),
@@ -571,14 +575,80 @@ MainWindow::setupMenus()
     TransformFactory::TransformList transforms =
 	TransformFactory::getInstance()->getAllTransforms();
 
-    std::vector<QString> types =
+    vector<QString> types =
         TransformFactory::getInstance()->getAllTransformTypes();
 
-    std::map<QString, QMenu *> transformMenus;
+    map<QString, map<QString, QMenu *> > categoryMenus;
+    map<QString, map<QString, QMenu *> > makerMenus;
 
-    for (std::vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
-        transformMenus[*i] = m_layerMenu->addMenu(*i);
-        m_rightButtonLayerMenu->addMenu(transformMenus[*i]);
+    map<QString, QMenu *> byPluginNameMenus;
+    map<QString, map<QString, QMenu *> > pluginNameMenus;
+
+    for (vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
+
+        if (i != types.begin()) {
+            m_layerMenu->addSeparator();
+            m_rightButtonLayerMenu->addSeparator();
+        }
+
+        QString byCategoryLabel = tr("%1 by Category").arg(*i);
+        QMenu *byCategoryMenu = m_layerMenu->addMenu(byCategoryLabel);
+        m_rightButtonLayerMenu->addMenu(byCategoryMenu);
+
+        vector<QString> categories = 
+            TransformFactory::getInstance()->getTransformCategories(*i);
+
+        for (vector<QString>::iterator j = categories.begin();
+             j != categories.end(); ++j) {
+
+            QString category = *j;
+            if (category == "") category = tr("Unclassified");
+
+            if (categories.size() < 2) {
+                categoryMenus[*i][category] = byCategoryMenu;
+                continue;
+            }
+
+            QStringList components = category.split(" > ");
+            QString key;
+
+            for (QStringList::iterator k = components.begin();
+                 k != components.end(); ++k) {
+
+                QString parentKey = key;
+                if (key != "") key += " > ";
+                key += *k;
+
+                if (categoryMenus[*i].find(key) == categoryMenus[*i].end()) {
+                    if (parentKey == "") {
+                        categoryMenus[*i][key] = byCategoryMenu->addMenu(*k);
+                    } else {
+                        categoryMenus[*i][key] =
+                            categoryMenus[*i][parentKey]->addMenu(*k);
+                    }
+                }
+            }
+        }
+
+        QString byMakerLabel = tr("%1 by Maker").arg(*i);
+        QMenu *byMakerMenu = m_layerMenu->addMenu(byMakerLabel);
+        m_rightButtonLayerMenu->addMenu(byMakerMenu);
+
+        vector<QString> makers = 
+            TransformFactory::getInstance()->getTransformMakers(*i);
+        
+        for (vector<QString>::iterator j = makers.begin();
+             j != makers.end(); ++j) {
+
+            QString maker = *j;
+            if (maker == "") maker = tr("Unknown");
+            
+            makerMenus[*i][maker] = byMakerMenu->addMenu(maker);
+        }
+
+        QString byPluginNameLabel = tr("%1 by Plugin Name").arg(*i);
+        byPluginNameMenus[*i] = m_layerMenu->addMenu(byPluginNameLabel);
+        m_rightButtonLayerMenu->addMenu(byPluginNameMenus[*i]);
     }
 
     for (unsigned int i = 0; i < transforms.size(); ++i) {
@@ -586,16 +656,63 @@ MainWindow::setupMenus()
 	QString description = transforms[i].description;
 	if (description == "") description = transforms[i].name;
 
-	QString actionText = description;
-        if (transforms[i].configurable) {
-            actionText = QString("%1...").arg(actionText);
-        }
+        QString type = transforms[i].type;
 
-	action = new QAction(actionText, this);
+        QString category = transforms[i].category;
+        if (category == "") category = tr("Unclassified");
+
+        QString maker = transforms[i].maker;
+        if (maker == "") maker = tr("Unknown");
+
+        QString pluginName = description.section(": ", 0, 0);
+        QString output = description.section(": ", 1);
+
+	action = new QAction(tr("%1...").arg(description), this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
 	m_layerTransformActions[action] = transforms[i].name;
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	transformMenus[transforms[i].type]->addAction(action);
+
+        if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
+            std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+                      << "No category menu for transform \""
+                      << description.toStdString() << "\" (category = \""
+                      << category.toStdString() << "\")" << std::endl;
+        } else {
+            categoryMenus[type][category]->addAction(action);
+        }
+
+        if (makerMenus[type].find(maker) == makerMenus[type].end()) {
+            std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+                      << "No maker menu for transform \""
+                      << description.toStdString() << "\" (maker = \""
+                      << maker.toStdString() << "\")" << std::endl;
+        } else {
+            makerMenus[type][maker]->addAction(action);
+        }
+
+        action = new QAction(tr("%1...").arg(output == "" ? pluginName : output), this);
+        connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+        m_layerTransformActions[action] = transforms[i].name;
+        connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+
+        if (pluginNameMenus[type].find(pluginName) ==
+            pluginNameMenus[type].end()) {
+
+            if (output == "") {
+                byPluginNameMenus[type]->addAction(action);
+            } else {
+                pluginNameMenus[type][pluginName] =
+                    byPluginNameMenus[type]->addMenu(pluginName);
+                connect(this, SIGNAL(canAddLayer(bool)),
+                        pluginNameMenus[type][pluginName],
+                        SLOT(setEnabled(bool)));
+            }
+        }
+
+        if (pluginNameMenus[type].find(pluginName) !=
+            pluginNameMenus[type].end()) {
+            pluginNameMenus[type][pluginName]->addAction(action);
+        }
     }
 
     m_rightButtonLayerMenu->addSeparator();
@@ -871,7 +988,7 @@ void
 MainWindow::setupRecentFilesMenu()
 {
     m_recentFilesMenu->clear();
-    std::vector<QString> files = RecentFiles::getInstance()->getRecentFiles();
+    vector<QString> files = RecentFiles::getInstance()->getRecentFiles();
     for (size_t i = 0; i < files.size(); ++i) {
 	QAction *action = new QAction(files[i], this);
 	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
@@ -889,8 +1006,8 @@ MainWindow::setupExistingLayersMenu()
     m_existingLayersMenu->clear();
     m_existingLayerActions.clear();
 
-    std::vector<Layer *> orderedLayers;
-    std::set<Layer *> observedLayers;
+    vector<Layer *> orderedLayers;
+    set<Layer *> observedLayers;
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -914,7 +1031,7 @@ MainWindow::setupExistingLayersMenu()
 	}
     }
 
-    std::map<QString, int> observedNames;
+    map<QString, int> observedNames;
 
     for (int i = 0; i < orderedLayers.size(); ++i) {
 	
@@ -2788,32 +2905,16 @@ MainWindow::addLayer()
 	}
     }
 
-    bool needConfiguration = false;
-
-    //!!! actually we should probably always ask for configuration
-    //because we need the execution context
-
-    if (factory->isTransformConfigurable(transform)) {
-        needConfiguration = true;
-    } else {
-        int minChannels, maxChannels;
-        int myChannels = m_document->getMainModel()->getChannelCount();
-        if (factory->getTransformChannelRange(transform,
-                                              minChannels,
-                                              maxChannels)) {
-//            std::cerr << "myChannels: " << myChannels << ", minChannels: " << minChannels << ", maxChannels: " << maxChannels << std::endl;
-            needConfiguration = (myChannels > maxChannels && maxChannels == 1);
-        }
-    }
+    // We always ask for configuration, even if the plugin isn't
+    // supposed to be configurable, because we need to let the user
+    // change the execution context (block size etc).
 
     PluginTransform::ExecutionContext context(channel);
 
-    if (needConfiguration) {
-        bool ok =
-            factory->getConfigurationForTransform
-            (transform, m_document->getMainModel(), context, configurationXml);
-        if (!ok) return;
-    }
+    bool ok =
+        factory->getConfigurationForTransform
+        (transform, m_document->getMainModel(), context, configurationXml);
+    if (!ok) return;
 
     Layer *newLayer = m_document->createDerivedLayer(transform,
                                                      m_document->getMainModel(),

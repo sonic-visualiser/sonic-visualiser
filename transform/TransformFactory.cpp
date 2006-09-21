@@ -79,6 +79,60 @@ TransformFactory::getAllTransformTypes()
     return rv;
 }
 
+std::vector<QString>
+TransformFactory::getTransformCategories(QString transformType)
+{
+    if (m_transforms.empty()) populateTransforms();
+
+    std::set<QString> categories;
+    for (TransformDescriptionMap::const_iterator i = m_transforms.begin();
+         i != m_transforms.end(); ++i) {
+        if (i->second.type == transformType) {
+            categories.insert(i->second.category);
+        }
+    }
+
+    bool haveEmpty = false;
+    
+    std::vector<QString> rv;
+    for (std::set<QString>::iterator i = categories.begin(); 
+         i != categories.end(); ++i) {
+        if (*i != "") rv.push_back(*i);
+        else haveEmpty = true;
+    }
+
+    if (haveEmpty) rv.push_back(""); // make sure empty category sorts last
+
+    return rv;
+}
+
+std::vector<QString>
+TransformFactory::getTransformMakers(QString transformType)
+{
+    if (m_transforms.empty()) populateTransforms();
+
+    std::set<QString> makers;
+    for (TransformDescriptionMap::const_iterator i = m_transforms.begin();
+         i != m_transforms.end(); ++i) {
+        if (i->second.type == transformType) {
+            makers.insert(i->second.maker);
+        }
+    }
+
+    bool haveEmpty = false;
+    
+    std::vector<QString> rv;
+    for (std::set<QString>::iterator i = makers.begin(); 
+         i != makers.end(); ++i) {
+        if (*i != "") rv.push_back(*i);
+        else haveEmpty = true;
+    }
+
+    if (haveEmpty) rv.push_back(""); // make sure empty category sorts last
+
+    return rv;
+}
+
 void
 TransformFactory::populateTransforms()
 {
@@ -151,6 +205,8 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
 	}
 		
 	QString pluginDescription = plugin->getDescription().c_str();
+        QString category = factory->getPluginCategory(pluginId);
+
 	Vamp::Plugin::OutputList outputs =
 	    plugin->getOutputDescriptors();
 
@@ -178,6 +234,7 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
 
 	    transforms[transformName] = 
                 TransformDesc(tr("Analysis Plugins"),
+                              category,
                               transformName,
                               userDescription,
                               friendlyName,
@@ -222,6 +279,7 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 //        std::cout << "TransformFactory::populateRealTimePlugins: plugin " << pluginId.toStdString() << " has " << descriptor->controlOutputPortCount << " output ports" << std::endl;
 	
 	QString pluginDescription = descriptor->name.c_str();
+        QString category = factory->getPluginCategory(pluginId);
 
 	for (size_t j = 0; j < descriptor->controlOutputPortCount; ++j) {
 
@@ -258,6 +316,7 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
 	    transforms[transformName] = 
                 TransformDesc(tr("Other Plugins"),
+                              category,
                               transformName,
                               userDescription,
                               userDescription,
