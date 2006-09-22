@@ -51,10 +51,16 @@ TransformFactory::getAllTransforms()
 {
     if (m_transforms.empty()) populateTransforms();
 
-    TransformList list;
+    std::set<TransformDesc> dset;
     for (TransformDescriptionMap::const_iterator i = m_transforms.begin();
 	 i != m_transforms.end(); ++i) {
-	list.push_back(i->second);
+	dset.insert(i->second);
+    }
+
+    TransformList list;
+    for (std::set<TransformDesc>::const_iterator i = dset.begin();
+	 i != dset.end(); ++i) {
+	list.push_back(*i);
     }
 
     return list;
@@ -233,7 +239,7 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
                                  !plugin->getParameterDescriptors().empty());
 
 	    transforms[transformName] = 
-                TransformDesc(tr("Analysis Plugins"),
+                TransformDesc(tr("Analysis"),
                               category,
                               transformName,
                               userDescription,
@@ -251,7 +257,7 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
     std::vector<QString> plugs =
 	RealTimePluginFactory::getAllPluginIdentifiers();
 
-    QRegExp unitRE("[\\[\\(]([A-Za-z0-9/]+)[\\)\\]]$");
+    static QRegExp unitRE("[\\[\\(]([A-Za-z0-9/]+)[\\)\\]]$");
 
     for (size_t i = 0; i < plugs.size(); ++i) {
         
@@ -273,57 +279,81 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 	    continue;
 	}
 	
-        if (descriptor->controlOutputPortCount == 0 ||
-            descriptor->audioInputPortCount == 0) continue;
+//!!!        if (descriptor->controlOutputPortCount == 0 ||
+//            descriptor->audioInputPortCount == 0) continue;
 
-//        std::cout << "TransformFactory::populateRealTimePlugins: plugin " << pluginId.toStdString() << " has " << descriptor->controlOutputPortCount << " output ports" << std::endl;
+        std::cout << "TransformFactory::populateRealTimePlugins: plugin " << pluginId.toStdString() << " has " << descriptor->controlOutputPortCount << " control output ports, " << descriptor->audioOutputPortCount << " audio outputs, " << descriptor->audioInputPortCount << " audio inputs" << std::endl;
 	
 	QString pluginDescription = descriptor->name.c_str();
         QString category = factory->getPluginCategory(pluginId);
+        bool configurable = (descriptor->parameterCount > 0);
 
-	for (size_t j = 0; j < descriptor->controlOutputPortCount; ++j) {
+        if (descriptor->audioInputPortCount > 0) {
 
-	    QString transformName = QString("%1:%2").arg(pluginId).arg(j);
-	    QString userDescription;
-            QString units;
+            for (size_t j = 0; j < descriptor->controlOutputPortCount; ++j) {
 
-	    if (j < descriptor->controlOutputPortNames.size() &&
-                descriptor->controlOutputPortNames[j] != "") {
+                QString transformName = QString("%1:%2").arg(pluginId).arg(j);
+                QString userDescription;
+                QString units;
 
-                QString portName = descriptor->controlOutputPortNames[j].c_str();
+                if (j < descriptor->controlOutputPortNames.size() &&
+                    descriptor->controlOutputPortNames[j] != "") {
 
-		userDescription = tr("%1: %2")
-                    .arg(pluginDescription)
-                    .arg(portName);
+                    QString portName = descriptor->controlOutputPortNames[j].c_str();
 
-                if (unitRE.indexIn(portName) >= 0) {
-                    units = unitRE.cap(1);
+                    userDescription = tr("%1: %2")
+                        .arg(pluginDescription)
+                        .arg(portName);
+
+                    if (unitRE.indexIn(portName) >= 0) {
+                        units = unitRE.cap(1);
+                    }
+
+                } else if (descriptor->controlOutputPortCount > 1) {
+
+                    userDescription = tr("%1: Output %2")
+                        .arg(pluginDescription)
+                        .arg(j + 1);
+
+                } else {
+
+                    userDescription = pluginDescription;
                 }
 
-	    } else if (descriptor->controlOutputPortCount > 1) {
 
-		userDescription = tr("%1: Output %2")
-		    .arg(pluginDescription)
-		    .arg(j + 1);
-
-	    } else {
-
-                userDescription = pluginDescription;
+                transforms[transformName] = 
+                    TransformDesc(tr("Effects Measurements"),
+                                  category,
+                                  transformName,
+                                  userDescription,
+                                  userDescription,
+                                  descriptor->maker.c_str(),
+                                  units,
+                                  configurable);
             }
+        }
 
+        if (!descriptor->isSynth || descriptor->audioInputPortCount > 0) {
 
-            bool configurable = (descriptor->parameterCount > 0);
+            if (descriptor->audioOutputPortCount > 0) {
 
-	    transforms[transformName] = 
-                TransformDesc(tr("Other Plugins"),
-                              category,
-                              transformName,
-                              userDescription,
-                              userDescription,
-                              descriptor->maker.c_str(),
-                              units,
-                              configurable);
-	}
+                QString transformName = QString("%1:A").arg(pluginId);
+                QString type = tr("Effects");
+                if (descriptor->audioInputPortCount == 0) {
+                    type = tr("Generators");
+                }
+
+                transforms[transformName] =
+                    TransformDesc(type,
+                                  category,
+                                  transformName,
+                                  pluginDescription,
+                                  pluginDescription,
+                                  descriptor->maker.c_str(),
+                                  "",
+                                  configurable);
+            }
+        }
     }
 }
 
@@ -516,6 +546,7 @@ TransformFactory::createTransform(TransformName name, Model *inputModel,
                                                 context,
                                                 configurationXml,
                                                 getTransformUnits(name),
+                                                output == "A" ? -1 :
                                                 output.toInt());
     } else {
         std::cerr << "TransformFactory::createTransform: Unknown transform \""

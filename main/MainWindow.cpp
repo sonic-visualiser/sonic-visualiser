@@ -100,12 +100,18 @@ MainWindow::MainWindow() :
     m_timeRulerLayer(0),
     m_playSource(0),
     m_playTarget(0),
+    m_recentFiles("RecentFiles"),
+    m_recentTransforms("RecentTransforms"),
     m_mainMenusCreated(false),
     m_paneMenu(0),
     m_layerMenu(0),
+    m_transformsMenu(0),
     m_existingLayersMenu(0),
+    m_recentFilesMenu(0),
+    m_recentTransformsMenu(0),
     m_rightButtonMenu(0),
     m_rightButtonLayerMenu(0),
+    m_rightButtonTransformsMenu(0),
     m_documentModified(false),
     m_preferencesDialog(0)
 {
@@ -250,6 +256,13 @@ MainWindow::setupMenus()
         m_rightButtonMenu->addSeparator();
     }
 
+    if (m_rightButtonTransformsMenu) {
+        m_rightButtonTransformsMenu->clear();
+    } else {
+        m_rightButtonTransformsMenu = m_rightButtonMenu->addMenu(tr("&Transform"));
+        m_rightButtonMenu->addSeparator();
+    }
+
     if (!m_mainMenusCreated) {
 
         CommandHistory::getInstance()->registerMenu(m_rightButtonMenu);
@@ -337,9 +350,8 @@ MainWindow::setupMenus()
 
 	menu->addSeparator();
         m_recentFilesMenu = menu->addMenu(tr("&Recent Files"));
-        menu->addMenu(m_recentFilesMenu);
         setupRecentFilesMenu();
-        connect(RecentFiles::getInstance(), SIGNAL(recentFilesChanged()),
+        connect(&m_recentFiles, SIGNAL(recentChanged()),
                 this, SLOT(setupRecentFilesMenu()));
 
 	menu->addSeparator();
@@ -565,11 +577,18 @@ MainWindow::setupMenus()
     }
 
     if (m_layerMenu) {
-	m_layerTransformActions.clear();
 	m_layerActions.clear();
 	m_layerMenu->clear();
     } else {
 	m_layerMenu = menuBar()->addMenu(tr("&Layer"));
+    }
+
+    if (m_transformsMenu) {
+        m_transformActions.clear();
+        m_transformActionsReverse.clear();
+        m_transformsMenu->clear();
+    } else {
+	m_transformsMenu = menuBar()->addMenu(tr("&Transform"));
     }
 
     TransformFactory::TransformList transforms =
@@ -584,16 +603,24 @@ MainWindow::setupMenus()
     map<QString, QMenu *> byPluginNameMenus;
     map<QString, map<QString, QMenu *> > pluginNameMenus;
 
+    m_recentTransformsMenu = m_transformsMenu->addMenu(tr("&Recent Transforms"));
+    m_rightButtonTransformsMenu->addMenu(m_recentTransformsMenu);
+    connect(&m_recentTransforms, SIGNAL(recentChanged()),
+            this, SLOT(setupRecentTransformsMenu()));
+
+    m_transformsMenu->addSeparator();
+    m_rightButtonTransformsMenu->addSeparator();
+    
     for (vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
 
         if (i != types.begin()) {
-            m_layerMenu->addSeparator();
-            m_rightButtonLayerMenu->addSeparator();
+            m_transformsMenu->addSeparator();
+            m_rightButtonTransformsMenu->addSeparator();
         }
 
         QString byCategoryLabel = tr("%1 by Category").arg(*i);
-        QMenu *byCategoryMenu = m_layerMenu->addMenu(byCategoryLabel);
-        m_rightButtonLayerMenu->addMenu(byCategoryMenu);
+        QMenu *byCategoryMenu = m_transformsMenu->addMenu(byCategoryLabel);
+        m_rightButtonTransformsMenu->addMenu(byCategoryMenu);
 
         vector<QString> categories = 
             TransformFactory::getInstance()->getTransformCategories(*i);
@@ -630,9 +657,13 @@ MainWindow::setupMenus()
             }
         }
 
+        QString byPluginNameLabel = tr("%1 by Plugin Name").arg(*i);
+        byPluginNameMenus[*i] = m_transformsMenu->addMenu(byPluginNameLabel);
+        m_rightButtonTransformsMenu->addMenu(byPluginNameMenus[*i]);
+
         QString byMakerLabel = tr("%1 by Maker").arg(*i);
-        QMenu *byMakerMenu = m_layerMenu->addMenu(byMakerLabel);
-        m_rightButtonLayerMenu->addMenu(byMakerMenu);
+        QMenu *byMakerMenu = m_transformsMenu->addMenu(byMakerLabel);
+        m_rightButtonTransformsMenu->addMenu(byMakerMenu);
 
         vector<QString> makers = 
             TransformFactory::getInstance()->getTransformMakers(*i);
@@ -645,12 +676,95 @@ MainWindow::setupMenus()
             
             makerMenus[*i][maker] = byMakerMenu->addMenu(maker);
         }
-
-        QString byPluginNameLabel = tr("%1 by Plugin Name").arg(*i);
-        byPluginNameMenus[*i] = m_layerMenu->addMenu(byPluginNameLabel);
-        m_rightButtonLayerMenu->addMenu(byPluginNameMenus[*i]);
     }
 
+    map<QString, set<QString> > pluginNameLists;
+    map<QString, map<QString, QMenu *> > pluginNameToChunkMenuMap;
+
+    for (unsigned int i = 0; i < transforms.size(); ++i) {
+	QString description = transforms[i].description;
+	if (description == "") description = transforms[i].name;
+        QString type = transforms[i].type;
+        QString pluginName = description.section(": ", 0, 0);
+        pluginNameLists[type].insert(pluginName);
+    }
+
+    for (vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
+
+        size_t total = pluginNameLists[*i].size();
+        size_t chunk = 14;
+        
+        if (total < (chunk * 3) / 2) continue;
+
+        size_t count = 0;
+        QMenu *chunkMenu = new QMenu();
+
+        QString firstNameInChunk;
+        QChar firstInitialInChunk;
+        bool discriminateStartInitial = false;
+
+        for (set<QString>::iterator j = pluginNameLists[*i].begin();
+             j != pluginNameLists[*i].end();
+             ++j) {
+
+            pluginNameToChunkMenuMap[*i][*j] = chunkMenu;
+
+            set<QString>::iterator k = j;
+            ++k;
+
+            QChar initial = (*j)[0];
+
+            if (count == 0) {
+                firstNameInChunk = *j;
+                firstInitialInChunk = initial;
+            }
+
+            bool lastInChunk = (k == pluginNameLists[*i].end() ||
+                                (count >= chunk-1 &&
+                                 (count == (5*chunk) / 2 ||
+                                  (*k)[0] != initial)));
+
+            ++count;
+
+            if (lastInChunk) {
+
+                bool discriminateEndInitial = (k != pluginNameLists[*i].end() &&
+                                               (*k)[0] == initial);
+
+                bool initialsEqual = (firstInitialInChunk == initial);
+
+                QString from = QString("%1").arg(firstInitialInChunk);
+                if (discriminateStartInitial ||
+                    (discriminateEndInitial && initialsEqual)) {
+                    from = firstNameInChunk.left(3);
+                }
+
+                QString to = QString("%1").arg(initial);
+                if (discriminateEndInitial ||
+                    (discriminateStartInitial && initialsEqual)) {
+                    to = j->left(3);
+                }
+
+                QString menuText;
+
+                if (from == to) menuText = from;
+                else menuText = tr("%1 - %2").arg(from).arg(to);
+
+                discriminateStartInitial = discriminateEndInitial;
+
+                chunkMenu->setTitle(menuText);
+                
+                byPluginNameMenus[*i]->addMenu(chunkMenu);
+
+                chunkMenu = new QMenu();
+
+                count = 0;
+            }
+        }
+
+        if (count == 0) delete chunkMenu;
+    }
+    
     for (unsigned int i = 0; i < transforms.size(); ++i) {
 	
 	QString description = transforms[i].description;
@@ -669,7 +783,8 @@ MainWindow::setupMenus()
 
 	action = new QAction(tr("%1...").arg(description), this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	m_layerTransformActions[action] = transforms[i].name;
+	m_transformActions[action] = transforms[i].name;
+        m_transformActionsReverse[transforms[i].name] = action;
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
@@ -692,17 +807,22 @@ MainWindow::setupMenus()
 
         action = new QAction(tr("%1...").arg(output == "" ? pluginName : output), this);
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-        m_layerTransformActions[action] = transforms[i].name;
+        m_transformActions[action] = transforms[i].name;
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+
+//        cerr << "Transform: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
 
         if (pluginNameMenus[type].find(pluginName) ==
             pluginNameMenus[type].end()) {
 
+            QMenu *parentMenu = pluginNameToChunkMenuMap[type][pluginName];
+            if (!parentMenu) parentMenu = byPluginNameMenus[type];
+
             if (output == "") {
-                byPluginNameMenus[type]->addAction(action);
+                parentMenu->addAction(action);
             } else {
-                pluginNameMenus[type][pluginName] =
-                    byPluginNameMenus[type]->addMenu(pluginName);
+                pluginNameMenus[type][pluginName] = 
+                    parentMenu->addMenu(pluginName);
                 connect(this, SIGNAL(canAddLayer(bool)),
                         pluginNameMenus[type][pluginName],
                         SLOT(setEnabled(bool)));
@@ -715,7 +835,7 @@ MainWindow::setupMenus()
         }
     }
 
-    m_rightButtonLayerMenu->addSeparator();
+    setupRecentTransformsMenu();
 
     menu = m_paneMenu;
 
@@ -731,7 +851,7 @@ MainWindow::setupMenus()
 
     menu = m_layerMenu;
 
-    menu->addSeparator();
+//    menu->addSeparator();
 
     LayerFactory::LayerTypeSet emptyLayerTypes =
 	LayerFactory::getInstance()->getValidEmptyLayerTypes();
@@ -988,11 +1108,29 @@ void
 MainWindow::setupRecentFilesMenu()
 {
     m_recentFilesMenu->clear();
-    vector<QString> files = RecentFiles::getInstance()->getRecentFiles();
+    vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
 	QAction *action = new QAction(files[i], this);
 	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
 	m_recentFilesMenu->addAction(action);
+    }
+}
+
+void
+MainWindow::setupRecentTransformsMenu()
+{
+    m_recentTransformsMenu->clear();
+    vector<QString> transforms = m_recentTransforms.getRecent();
+    for (size_t i = 0; i < transforms.size(); ++i) {
+        TransformActionReverseMap::iterator ti =
+            m_transformActionsReverse.find(transforms[i]);
+        if (ti == m_transformActionsReverse.end()) {
+            std::cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
+                      << "Unknown transform \"" << transforms[i].toStdString()
+                      << "\" in recent transforms list" << std::endl;
+            continue;
+        }
+	m_recentTransformsMenu->addAction(ti->second);
     }
 }
 
@@ -1702,7 +1840,7 @@ MainWindow::exportAudio()
 
     if (ok) {
         if (!multiple) {
-            RecentFiles::getInstance()->addFile(path);
+            m_recentFiles.addFile(path);
         }
     } else {
 	QMessageBox::critical(this, tr("Failed to write file"), error);
@@ -1783,7 +1921,7 @@ MainWindow::openLayerFile(QString path)
             return false;
         }
 
-        RecentFiles::getInstance()->addFile(path);
+        m_recentFiles.addFile(path);
         return true;
         
     } else {
@@ -1794,7 +1932,7 @@ MainWindow::openLayerFile(QString path)
             Layer *newLayer = m_document->createImportedLayer(model);
             if (newLayer) {
                 m_document->addLayerToView(pane, newLayer);
-                RecentFiles::getInstance()->addFile(path);
+                m_recentFiles.addFile(path);
                 return true;
             }
         }
@@ -1862,7 +2000,7 @@ MainWindow::exportLayer()
     if (error != "") {
         QMessageBox::critical(this, tr("Failed to write file"), error);
     } else {
-        RecentFiles::getInstance()->addFile(path);
+        m_recentFiles.addFile(path);
     }
 }
 
@@ -1970,7 +2108,7 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
     }
 
     updateMenuStates();
-    RecentFiles::getInstance()->addFile(path);
+    m_recentFiles.addFile(path);
 
     return true;
 }
@@ -2275,7 +2413,7 @@ MainWindow::openSessionFile(QString path)
 	CommandHistory::getInstance()->documentSaved();
 	m_documentModified = false;
 	updateMenuStates();
-        RecentFiles::getInstance()->addFile(path);
+        m_recentFiles.addFile(path);
     } else {
 	setWindowTitle(tr("Sonic Visualiser"));
     }
@@ -2329,7 +2467,7 @@ MainWindow::commitData(bool mayAskUser)
             .arg(QProcess().pid());
         QString fpath = QDir(svDir).filePath(fname);
         if (saveSessionFile(fpath)) {
-            RecentFiles::getInstance()->addFile(fpath);
+            m_recentFiles.addFile(fpath);
             return true;
         } else {
             return false;
@@ -2438,7 +2576,7 @@ MainWindow::saveSessionAs()
 	m_sessionFile = path;
 	CommandHistory::getInstance()->documentSaved();
 	documentRestored();
-        RecentFiles::getInstance()->addFile(path);
+        m_recentFiles.addFile(path);
     }
 }
 
@@ -2855,9 +2993,9 @@ MainWindow::addLayer()
 	return;
     }
 
-    TransformActionMap::iterator i = m_layerTransformActions.find(action);
+    TransformActionMap::iterator i = m_transformActions.find(action);
 
-    if (i == m_layerTransformActions.end()) {
+    if (i == m_transformActions.end()) {
 
 	LayerActionMap::iterator i = m_layerActions.find(action);
 	
@@ -2924,6 +3062,7 @@ MainWindow::addLayer()
     if (newLayer) {
         m_document->addLayerToView(pane, newLayer);
         m_document->setChannel(newLayer, context.channel);
+        m_recentTransforms.add(transform);
     }
 
     updateMenuStates();
@@ -3170,7 +3309,7 @@ MainWindow::modelGenerationFailed(QString transformName)
     QMessageBox::warning
         (this,
          tr("Failed to generate layer"),
-         tr("The layer transform \"%1\" failed to run.\nThis probably means that a plugin failed to initialise.")
+         tr("Failed to generate a derived layer.\n\nThe layer transform \"%1\" failed.\n\nThis probably means that a plugin failed to initialise, perhaps because it\nrejected the processing block size that was requested.")
          .arg(transformName),
          QMessageBox::Ok, 0);
 }
@@ -3181,7 +3320,7 @@ MainWindow::modelRegenerationFailed(QString layerName, QString transformName)
     QMessageBox::warning
         (this,
          tr("Failed to regenerate layer"),
-         tr("Failed to regenerate derived layer \"%1\".\nThe layer transform \"%2\" failed to run.\nThis probably means the layer used a plugin that is not currently available.")
+         tr("Failed to regenerate derived layer \"%1\".\n\nThe layer transform \"%2\" failed to run.\n\nThis probably means the layer used a plugin that is not currently available.")
          .arg(layerName).arg(transformName),
          QMessageBox::Ok, 0);
 }

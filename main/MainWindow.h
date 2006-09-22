@@ -24,6 +24,7 @@
 #include "base/Command.h"
 #include "view/ViewManager.h"
 #include "base/PropertyContainer.h"
+#include "base/RecentFiles.h"
 #include "layer/LayerFactory.h"
 #include "transform/Transform.h"
 #include "document/SVFileReader.h"
@@ -189,6 +190,7 @@ protected slots:
     void preferenceChanged(PropertyContainer::PropertyName);
 
     void setupRecentFilesMenu();
+    void setupRecentTransformsMenu();
 
     void showLayerTree();
 
@@ -215,13 +217,19 @@ protected:
     AudioCallbackPlaySource *m_playSource;
     AudioCallbackPlayTarget *m_playTarget;
 
+    RecentFiles              m_recentFiles;
+    RecentFiles              m_recentTransforms;
+
     bool                     m_mainMenusCreated;
     QMenu                   *m_paneMenu;
     QMenu                   *m_layerMenu;
+    QMenu                   *m_transformsMenu;
     QMenu                   *m_existingLayersMenu;
     QMenu                   *m_recentFilesMenu;
+    QMenu                   *m_recentTransformsMenu;
     QMenu                   *m_rightButtonMenu;
     QMenu                   *m_rightButtonLayerMenu;
+    QMenu                   *m_rightButtonTransformsMenu;
 
     bool                     m_documentModified;
 
@@ -243,7 +251,10 @@ protected:
     PaneActionMap m_paneActions;
 
     typedef std::map<QAction *, TransformName> TransformActionMap;
-    TransformActionMap m_layerTransformActions;
+    TransformActionMap m_transformActions;
+
+    typedef std::map<TransformName, QAction *> TransformActionReverseMap;
+    TransformActionReverseMap m_transformActionsReverse;
 
     typedef std::map<QAction *, LayerFactory::LayerType> LayerActionMap;
     LayerActionMap m_layerActions;
