@@ -41,6 +41,7 @@ public:
     // to be user-readable, for use in menus.
 
     struct TransformDesc {
+
         TransformDesc() { }
 	TransformDesc(QString _type, QString _category,
                       TransformName _name, QString _description,
@@ -50,6 +51,7 @@ public:
             name(_name), description(_description),
             friendlyName(_friendlyName),
             maker(_maker), units(_units), configurable(_configurable) { }
+
         QString type;
         QString category;
 	TransformName name;
@@ -58,6 +60,10 @@ public:
         QString maker;
         QString units;
         bool configurable;
+
+        bool operator<(const TransformDesc &od) const {
+            return (description < od.description);
+        };
     };
     typedef std::vector<TransformDesc> TransformList;
 
@@ -119,7 +125,7 @@ public:
      * If the transform has a prescribed number or range of channel
      * inputs, return true and set minChannels and maxChannels to the
      * minimum and maximum number of channel inputs the transform can
-     * accept.
+     * accept.  Return false if it doesn't care.
      */
     bool getTransformChannelRange(TransformName name,
                                   int &minChannels, int &maxChannels);

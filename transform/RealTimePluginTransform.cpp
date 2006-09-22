@@ -66,17 +66,24 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
         PluginXml(m_plugin).setParametersFromXml(configurationXml);
     }
 
-    if (m_outputNo >= m_plugin->getControlOutputCount()) {
+    if (m_outputNo >= 0 && m_outputNo >= m_plugin->getControlOutputCount()) {
         std::cerr << "RealTimePluginTransform: Plugin has fewer than desired " << m_outputNo << " control outputs" << std::endl;
         return;
     }
+
+    if (m_outputNo == -1) {
+
+        //!!! process audio!
+
+    } else {
 	
-    SparseTimeValueModel *model = new SparseTimeValueModel
-        (input->getSampleRate(), m_context.blockSize, 0.0, 0.0, false);
+        SparseTimeValueModel *model = new SparseTimeValueModel
+            (input->getSampleRate(), m_context.blockSize, 0.0, 0.0, false);
 
-    if (units != "") model->setScaleUnits(units);
+        if (units != "") model->setScaleUnits(units);
 
-    m_output = model;
+        m_output = model;
+    }
 }
 
 RealTimePluginTransform::~RealTimePluginTransform()

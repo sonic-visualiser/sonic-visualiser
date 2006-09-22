@@ -29,7 +29,7 @@ public:
                             const ExecutionContext &context,
 			    QString configurationXml = "",
                             QString units = "",
-			    int output = 0);
+			    int output = -1); // -1 -> audio, 0+ -> data
     virtual ~RealTimePluginTransform();
 
 protected:
