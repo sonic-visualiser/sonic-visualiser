@@ -37,6 +37,7 @@
 #include "widgets/AudioDial.h"
 #include "widgets/LayerTree.h"
 #include "widgets/ListInputDialog.h"
+#include "widgets/SubdividingMenu.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
@@ -600,7 +601,7 @@ MainWindow::setupMenus()
     map<QString, map<QString, QMenu *> > categoryMenus;
     map<QString, map<QString, QMenu *> > makerMenus;
 
-    map<QString, QMenu *> byPluginNameMenus;
+    map<QString, SubdividingMenu *> byPluginNameMenus;
     map<QString, map<QString, QMenu *> > pluginNameMenus;
 
     m_recentTransformsMenu = m_transformsMenu->addMenu(tr("&Recent Transforms"));
@@ -658,7 +659,8 @@ MainWindow::setupMenus()
         }
 
         QString byPluginNameLabel = tr("%1 by Plugin Name").arg(*i);
-        byPluginNameMenus[*i] = m_transformsMenu->addMenu(byPluginNameLabel);
+        byPluginNameMenus[*i] = new SubdividingMenu(byPluginNameLabel);
+        m_transformsMenu->addMenu(byPluginNameMenus[*i]);
         m_rightButtonTransformsMenu->addMenu(byPluginNameMenus[*i]);
 
         QString byMakerLabel = tr("%1 by Maker").arg(*i);
@@ -679,90 +681,17 @@ MainWindow::setupMenus()
     }
 
     map<QString, set<QString> > pluginNameLists;
-    map<QString, map<QString, QMenu *> > pluginNameToChunkMenuMap;
 
     for (unsigned int i = 0; i < transforms.size(); ++i) {
 	QString description = transforms[i].description;
 	if (description == "") description = transforms[i].name;
         QString type = transforms[i].type;
         QString pluginName = description.section(": ", 0, 0);
-        pluginNameLists[type].insert(pluginName);
+        pluginNameLists[type].insert(tr("%1").arg(pluginName));
     }
 
     for (vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
-
-        size_t total = pluginNameLists[*i].size();
-        size_t chunk = 14;
-        
-        if (total < (chunk * 3) / 2) continue;
-
-        size_t count = 0;
-        QMenu *chunkMenu = new QMenu();
-
-        QString firstNameInChunk;
-        QChar firstInitialInChunk;
-        bool discriminateStartInitial = false;
-
-        for (set<QString>::iterator j = pluginNameLists[*i].begin();
-             j != pluginNameLists[*i].end();
-             ++j) {
-
-            pluginNameToChunkMenuMap[*i][*j] = chunkMenu;
-
-            set<QString>::iterator k = j;
-            ++k;
-
-            QChar initial = (*j)[0];
-
-            if (count == 0) {
-                firstNameInChunk = *j;
-                firstInitialInChunk = initial;
-            }
-
-            bool lastInChunk = (k == pluginNameLists[*i].end() ||
-                                (count >= chunk-1 &&
-                                 (count == (5*chunk) / 2 ||
-                                  (*k)[0] != initial)));
-
-            ++count;
-
-            if (lastInChunk) {
-
-                bool discriminateEndInitial = (k != pluginNameLists[*i].end() &&
-                                               (*k)[0] == initial);
-
-                bool initialsEqual = (firstInitialInChunk == initial);
-
-                QString from = QString("%1").arg(firstInitialInChunk);
-                if (discriminateStartInitial ||
-                    (discriminateEndInitial && initialsEqual)) {
-                    from = firstNameInChunk.left(3);
-                }
-
-                QString to = QString("%1").arg(initial);
-                if (discriminateEndInitial ||
-                    (discriminateStartInitial && initialsEqual)) {
-                    to = j->left(3);
-                }
-
-                QString menuText;
-
-                if (from == to) menuText = from;
-                else menuText = tr("%1 - %2").arg(from).arg(to);
-
-                discriminateStartInitial = discriminateEndInitial;
-
-                chunkMenu->setTitle(menuText);
-                
-                byPluginNameMenus[*i]->addMenu(chunkMenu);
-
-                chunkMenu = new QMenu();
-
-                count = 0;
-            }
-        }
-
-        if (count == 0) delete chunkMenu;
+        byPluginNameMenus[*i]->setEntries(pluginNameLists[*i]);
     }
     
     for (unsigned int i = 0; i < transforms.size(); ++i) {
@@ -815,11 +744,10 @@ MainWindow::setupMenus()
         if (pluginNameMenus[type].find(pluginName) ==
             pluginNameMenus[type].end()) {
 
-            QMenu *parentMenu = pluginNameToChunkMenuMap[type][pluginName];
-            if (!parentMenu) parentMenu = byPluginNameMenus[type];
+            SubdividingMenu *parentMenu = byPluginNameMenus[type];
 
             if (output == "") {
-                parentMenu->addAction(action);
+                parentMenu->addAction(pluginName, action);
             } else {
                 pluginNameMenus[type][pluginName] = 
                     parentMenu->addMenu(pluginName);
