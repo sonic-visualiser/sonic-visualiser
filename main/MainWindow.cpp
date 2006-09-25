@@ -598,11 +598,13 @@ MainWindow::setupMenus()
     vector<QString> types =
         TransformFactory::getInstance()->getAllTransformTypes();
 
-    map<QString, map<QString, QMenu *> > categoryMenus;
-    map<QString, map<QString, QMenu *> > makerMenus;
+    map<QString, map<QString, SubdividingMenu *> > categoryMenus;
+    map<QString, map<QString, SubdividingMenu *> > makerMenus;
 
     map<QString, SubdividingMenu *> byPluginNameMenus;
     map<QString, map<QString, QMenu *> > pluginNameMenus;
+
+    set<SubdividingMenu *> pendingMenus;
 
     m_recentTransformsMenu = m_transformsMenu->addMenu(tr("&Recent Transforms"));
     m_rightButtonTransformsMenu->addMenu(m_recentTransformsMenu);
@@ -620,8 +622,11 @@ MainWindow::setupMenus()
         }
 
         QString byCategoryLabel = tr("%1 by Category").arg(*i);
-        QMenu *byCategoryMenu = m_transformsMenu->addMenu(byCategoryLabel);
+        SubdividingMenu *byCategoryMenu = new SubdividingMenu(byCategoryLabel,
+                                                              20, 40);
+        m_transformsMenu->addMenu(byCategoryMenu);
         m_rightButtonTransformsMenu->addMenu(byCategoryMenu);
+        pendingMenus.insert(byCategoryMenu);
 
         vector<QString> categories = 
             TransformFactory::getInstance()->getTransformCategories(*i);
@@ -648,11 +653,13 @@ MainWindow::setupMenus()
                 key += *k;
 
                 if (categoryMenus[*i].find(key) == categoryMenus[*i].end()) {
+                    SubdividingMenu *m = new SubdividingMenu(*k, 20, 40);
+                    pendingMenus.insert(m);
+                    categoryMenus[*i][key] = m;
                     if (parentKey == "") {
-                        categoryMenus[*i][key] = byCategoryMenu->addMenu(*k);
+                        byCategoryMenu->addMenu(m);
                     } else {
-                        categoryMenus[*i][key] =
-                            categoryMenus[*i][parentKey]->addMenu(*k);
+                        categoryMenus[*i][parentKey]->addMenu(m);
                     }
                 }
             }
@@ -662,38 +669,29 @@ MainWindow::setupMenus()
         byPluginNameMenus[*i] = new SubdividingMenu(byPluginNameLabel);
         m_transformsMenu->addMenu(byPluginNameMenus[*i]);
         m_rightButtonTransformsMenu->addMenu(byPluginNameMenus[*i]);
+        pendingMenus.insert(byPluginNameMenus[*i]);
 
         QString byMakerLabel = tr("%1 by Maker").arg(*i);
-        QMenu *byMakerMenu = m_transformsMenu->addMenu(byMakerLabel);
+        SubdividingMenu *byMakerMenu = new SubdividingMenu(byMakerLabel, 20, 40);
+        m_transformsMenu->addMenu(byMakerMenu);
         m_rightButtonTransformsMenu->addMenu(byMakerMenu);
+        pendingMenus.insert(byMakerMenu);
 
         vector<QString> makers = 
             TransformFactory::getInstance()->getTransformMakers(*i);
-        
+
         for (vector<QString>::iterator j = makers.begin();
              j != makers.end(); ++j) {
 
             QString maker = *j;
             if (maker == "") maker = tr("Unknown");
             
-            makerMenus[*i][maker] = byMakerMenu->addMenu(maker);
+            makerMenus[*i][maker] = new SubdividingMenu(maker, 30, 40);
+            byMakerMenu->addMenu(makerMenus[*i][maker]);
+            pendingMenus.insert(makerMenus[*i][maker]);
         }
     }
 
-    map<QString, set<QString> > pluginNameLists;
-
-    for (unsigned int i = 0; i < transforms.size(); ++i) {
-	QString description = transforms[i].description;
-	if (description == "") description = transforms[i].name;
-        QString type = transforms[i].type;
-        QString pluginName = description.section(": ", 0, 0);
-        pluginNameLists[type].insert(tr("%1").arg(pluginName));
-    }
-
-    for (vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
-        byPluginNameMenus[*i]->setEntries(pluginNameLists[*i]);
-    }
-    
     for (unsigned int i = 0; i < transforms.size(); ++i) {
 	
 	QString description = transforms[i].description;
@@ -731,7 +729,7 @@ MainWindow::setupMenus()
                       << description.toStdString() << "\" (maker = \""
                       << maker.toStdString() << "\")" << std::endl;
         } else {
-            makerMenus[type][maker]->addAction(action);
+            makerMenus[type][maker]->addAction(pluginName, action);
         }
 
         action = new QAction(tr("%1...").arg(output == "" ? pluginName : output), this);
@@ -761,6 +759,11 @@ MainWindow::setupMenus()
             pluginNameMenus[type].end()) {
             pluginNameMenus[type][pluginName]->addAction(action);
         }
+    }
+
+    for (set<SubdividingMenu *>::iterator i = pendingMenus.begin();
+         i != pendingMenus.end(); ++i) {
+        (*i)->entriesAdded();
     }
 
     setupRecentTransformsMenu();
