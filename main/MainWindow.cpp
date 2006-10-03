@@ -152,7 +152,7 @@ MainWindow::MainWindow() :
     m_panLayer = new WaveformLayer;
     m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
 //    m_panLayer->setScale(WaveformLayer::MeterScale);
-    m_panLayer->setAutoNormalize(true);
+//    m_panLayer->setAutoNormalize(true);
     m_panLayer->setBaseColour(Qt::darkGreen);
     m_panLayer->setAggressiveCacheing(true);
     m_panner->addLayer(m_panLayer);
