@@ -145,24 +145,28 @@ RealTimePluginTransform::run()
 	size_t got = 0;
 
 	if (channelCount == 1) {
-	    got = input->getValues
-		(m_context.channel, blockFrame, blockFrame + blockSize, buffers[0]);
-	    while (got < blockSize) {
-		buffers[0][got++] = 0.0;
-	    }
-            if (m_context.channel == -1 && channelCount > 1) {
-                // use mean instead of sum, as plugin input
-                for (size_t i = 0; i < got; ++i) {
-                    buffers[0][i] /= channelCount;
+            if (buffers && buffers[0]) {
+                got = input->getValues
+                    (m_context.channel, blockFrame, blockFrame + blockSize, buffers[0]);
+                while (got < blockSize) {
+                    buffers[0][got++] = 0.0;
                 }
-            }                
+                if (m_context.channel == -1 && channelCount > 1) {
+                    // use mean instead of sum, as plugin input
+                    for (size_t i = 0; i < got; ++i) {
+                        buffers[0][i] /= channelCount;
+                    }
+                }                
+            }
 	} else {
 	    for (size_t ch = 0; ch < channelCount; ++ch) {
-		got = input->getValues
-		    (ch, blockFrame, blockFrame + blockSize, buffers[ch]);
-		while (got < blockSize) {
-		    buffers[ch][got++] = 0.0;
-		}
+                if (buffers && buffers[ch]) {
+                    got = input->getValues
+                        (ch, blockFrame, blockFrame + blockSize, buffers[ch]);
+                    while (got < blockSize) {
+                        buffers[ch][got++] = 0.0;
+                    }
+                }
 	    }
 	}
 
@@ -183,17 +187,24 @@ RealTimePluginTransform::run()
 
             float **buffers = m_plugin->getAudioOutputBuffers();
 
-            if (blockFrame >= latency) {
-                wwfm->addSamples(buffers, blockSize);
-            } else if (blockFrame + blockSize >= latency) {
-                size_t offset = latency - blockFrame;
-                size_t count = blockSize - offset;
-                float **tmp = new float *[channelCount];
-                for (size_t c = 0; c < channelCount; ++c) {
-                    tmp[c] = buffers[c] + offset;
+            if (buffers) {
+
+                //!!! This will fail if any buffers[c] is null or
+                //uninitialised.  The plugin instance should ensure
+                //that that can't happen -- but it doesn't
+
+                if (blockFrame >= latency) {
+                    wwfm->addSamples(buffers, blockSize);
+                } else if (blockFrame + blockSize >= latency) {
+                    size_t offset = latency - blockFrame;
+                    size_t count = blockSize - offset;
+                    float **tmp = new float *[channelCount];
+                    for (size_t c = 0; c < channelCount; ++c) {
+                        tmp[c] = buffers[c] + offset;
+                    }
+                    wwfm->addSamples(tmp, count);
+                    delete[] tmp;
                 }
-                wwfm->addSamples(tmp, count);
-                delete[] tmp;
             }
         }
 
