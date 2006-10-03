@@ -1667,18 +1667,14 @@ MainWindow::exportAudio()
     bool ok = false;
     QString error;
 
-    WavFileWriter *writer = 0;
     MultiSelection ms = m_viewManager->getSelection();
     MultiSelection::SelectionList selections = m_viewManager->getSelections();
 
     bool multiple = false;
 
-    if (selections.empty()) {
+    MultiSelection *selectionToWrite = 0;
 
-	writer = new WavFileWriter(path, getMainModel()->getSampleRate(),
-				   getMainModel(), 0);
-    
-    } else if (selections.size() == 1) {
+    if (selections.size() == 1) {
 
 	QStringList items;
 	items << tr("Export the selected region only")
@@ -1692,24 +1688,15 @@ MainWindow::exportAudio()
 	
 	if (!ok || item.isEmpty()) return;
 	
-	if (item == items[0]) {
+	if (item == items[0]) selectionToWrite = &ms;
 
-	    writer = new WavFileWriter(path, getMainModel()->getSampleRate(),
-				       getMainModel(), &ms);
-
-	} else {
-
-	    writer = new WavFileWriter(path, getMainModel()->getSampleRate(),
-				       getMainModel(), 0);
-	}
-    } else {
+    } else if (selections.size() > 1) {
 
 	QStringList items;
 	items << tr("Export the selected regions into a single audio file")
 	      << tr("Export the selected regions into separate files")
 	      << tr("Export the whole audio file");
 
-	bool ok = false;
 	QString item = ListInputDialog::getItem
 	    (this, tr("Select region to export"),
 	     tr("Multiple regions of the original audio file are selected.\nWhat do you want to export?"),
@@ -1719,15 +1706,9 @@ MainWindow::exportAudio()
 
 	if (item == items[0]) {
 
-	    writer = new WavFileWriter(path, getMainModel()->getSampleRate(),
-				       getMainModel(), &ms);
+            selectionToWrite = &ms;
 
-	} else if (item == items[2]) {
-
-	    writer = new WavFileWriter(path, getMainModel()->getSampleRate(),
-				       getMainModel(), 0);
-
-	} else {
+        } else if (item == items[1]) {
 
             multiple = true;
 
@@ -1749,9 +1730,10 @@ MainWindow::exportAudio()
 		    break;
 		}
 
-		WavFileWriter subwriter(subpath, getMainModel()->getSampleRate(),
-					getMainModel(), &subms);
-		subwriter.write();
+		WavFileWriter subwriter(subpath,
+                                        getMainModel()->getSampleRate(),
+                                        getMainModel()->getChannelCount());
+                subwriter.writeModel(getMainModel(), &subms);
 		ok = subwriter.isOK();
 
 		if (!ok) {
@@ -1762,11 +1744,13 @@ MainWindow::exportAudio()
 	}
     }
 
-    if (writer) {
-	writer->write();
-	ok = writer->isOK();
-	error = writer->getError();
-	delete writer;
+    if (!multiple) {
+        WavFileWriter writer(path,
+                             getMainModel()->getSampleRate(),
+                             getMainModel()->getChannelCount());
+        writer.writeModel(getMainModel(), selectionToWrite);
+	ok = writer.isOK();
+	error = writer.getError();
     }
 
     if (ok) {
