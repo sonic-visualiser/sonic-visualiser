@@ -23,6 +23,7 @@
 #include "data/model/Model.h"
 #include "data/model/SparseTimeValueModel.h"
 #include "data/model/DenseTimeValueModel.h"
+#include "data/model/WritableWaveFileModel.h"
 
 #include <iostream>
 
@@ -73,7 +74,10 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
 
     if (m_outputNo == -1) {
 
-        //!!! process audio!
+        WritableWaveFileModel *model = new WritableWaveFileModel
+            (input->getSampleRate(), input->getChannelCount()); //!!!
+
+        m_output = model;
 
     } else {
 	
@@ -108,10 +112,11 @@ RealTimePluginTransform::run()
     DenseTimeValueModel *input = getInput();
     if (!input) return;
 
-    SparseTimeValueModel *model = dynamic_cast<SparseTimeValueModel *>(m_output);
-    if (!model) return;
+    SparseTimeValueModel *stvm = dynamic_cast<SparseTimeValueModel *>(m_output);
+    WritableWaveFileModel *wwfm = dynamic_cast<WritableWaveFileModel *>(m_output);
+    if (!stvm && !wwfm) return;
 
-    if (m_outputNo >= m_plugin->getControlOutputCount()) return;
+    if (stvm && (m_outputNo >= m_plugin->getControlOutputCount())) return;
 
     size_t sampleRate = input->getSampleRate();
     int channelCount = input->getChannelCount();
@@ -126,6 +131,8 @@ RealTimePluginTransform::run()
     size_t blockFrame = startFrame;
 
     size_t prevCompletion = 0;
+
+    size_t latency = m_plugin->getLatency();
 
     int i = 0;
 
@@ -161,19 +168,44 @@ RealTimePluginTransform::run()
 
         m_plugin->run(Vamp::RealTime::frame2RealTime(blockFrame, sampleRate));
 
-        float value = m_plugin->getControlOutputValue(m_outputNo);
+        if (stvm) {
 
-	model->addPoint(SparseTimeValueModel::Point
-                        (blockFrame - m_plugin->getLatency(), value, ""));
+            float value = m_plugin->getControlOutputValue(m_outputNo);
+
+            size_t pointFrame = blockFrame;
+            if (pointFrame > latency) pointFrame -= latency;
+            else pointFrame = 0;
+
+            stvm->addPoint(SparseTimeValueModel::Point
+                           (pointFrame, value, ""));
+
+        } else if (wwfm) {
+
+            float **buffers = m_plugin->getAudioOutputBuffers();
+
+            if (blockFrame >= latency) {
+                wwfm->addSamples(buffers, blockSize);
+            } else if (blockFrame + blockSize >= latency) {
+                size_t offset = latency - blockFrame;
+                size_t count = blockSize - offset;
+                float **tmp = new float *[channelCount];
+                for (size_t c = 0; c < channelCount; ++c) {
+                    tmp[c] = buffers[c] + offset;
+                }
+                wwfm->addSamples(tmp, count);
+                delete[] tmp;
+            }
+        }
 
 	if (blockFrame == startFrame || completion > prevCompletion) {
-	    model->setCompletion(completion);
+	    if (stvm) stvm->setCompletion(completion);
 	    prevCompletion = completion;
 	}
         
 	blockFrame += blockSize;
     }
     
-    model->setCompletion(100);
+    if (stvm) stvm->setCompletion(100);
+    if (wwfm) wwfm->sync();
 }
 
