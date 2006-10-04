@@ -53,7 +53,8 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
     DenseTimeValueModel *input = getInput();
     if (!input) return;
 
-    m_plugin = factory->instantiatePlugin(pluginId, 0, 0, m_input->getSampleRate(),
+    m_plugin = factory->instantiatePlugin(pluginId, 0, 0,
+                                          m_input->getSampleRate(),
                                           m_context.blockSize,
                                           input->getChannelCount());
 
@@ -120,7 +121,7 @@ RealTimePluginTransform::run()
 
     size_t sampleRate = input->getSampleRate();
     int channelCount = input->getChannelCount();
-    if (m_context.channel != -1) channelCount = 1;
+    if (!wwfm && m_context.channel != -1) channelCount = 1;
 
     size_t blockSize = m_plugin->getBufferSize();
 
