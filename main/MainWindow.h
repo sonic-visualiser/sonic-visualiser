@@ -145,6 +145,7 @@ protected slots:
     void playSharpenToggled();
     void playMonoToggled();
     void sampleRateMismatch(size_t, size_t, bool);
+    void audioOverloadPluginDisabled();
 
     void outputLevelsChanged(float, float);
 

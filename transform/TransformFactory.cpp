@@ -534,6 +534,7 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         if (dialog->exec() == QDialog::Accepted) {
             ok = true;
         }
+
         configurationXml = PluginXml(plugin).toXmlString();
         context.channel = dialog->getChannel();
 
