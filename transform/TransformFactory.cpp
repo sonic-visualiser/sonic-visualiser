@@ -28,6 +28,8 @@
 
 #include "vamp-sdk/PluginHostAdapter.h"
 
+#include "sv/audioio/AudioCallbackPlaySource.h" //!!! shouldn't include here
+
 #include <iostream>
 #include <set>
 
@@ -443,7 +445,8 @@ bool
 TransformFactory::getConfigurationForTransform(TransformName name,
                                                Model *inputModel,
                                                PluginTransform::ExecutionContext &context,
-                                               QString &configurationXml)
+                                               QString &configurationXml,
+                                               AudioCallbackPlaySource *source)
 {
     QString id = name.section(':', 0, 2);
     QString output = name.section(':', 3);
@@ -456,6 +459,7 @@ TransformFactory::getConfigurationForTransform(TransformName name,
     Vamp::PluginBase *plugin = 0;
 
     bool frequency = false;
+    bool effect = false;
 
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
 
@@ -469,8 +473,32 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
     } else if (RealTimePluginFactory::instanceFor(id)) {
 
-        plugin = RealTimePluginFactory::instanceFor(id)->instantiatePlugin
-            (id, 0, 0, inputModel->getSampleRate(), 1024, 1);
+        RealTimePluginFactory *factory = RealTimePluginFactory::instanceFor(id);
+        const RealTimePluginDescriptor *desc = factory->getPluginDescriptor(id);
+
+        if (desc->audioInputPortCount > 0 && 
+            desc->audioOutputPortCount > 0 &&
+            !desc->isSynth) {
+            effect = true;
+        }
+
+        size_t sampleRate = inputModel->getSampleRate();
+        size_t blockSize = 1024;
+        size_t channels = 1;
+        if (effect && source) {
+            sampleRate = source->getTargetSampleRate();
+            blockSize = source->getTargetBlockSize();
+            channels = source->getTargetChannelCount();
+        }
+
+        RealTimePluginInstance *rtp = factory->instantiatePlugin
+            (id, 0, 0, sampleRate, blockSize, channels);
+
+        plugin = rtp;
+
+        if (effect && source && rtp) {
+            source->setAuditioningPlugin(rtp);
+        }
     }
 
     if (plugin) {
@@ -516,7 +544,12 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         context.makeConsistentWithPlugin(plugin);
 
         delete dialog;
-        delete plugin;
+
+        if (effect && source) {
+            source->setAuditioningPlugin(0); // will delete our plugin
+        } else {
+            delete plugin;
+        }
     }
 
     if (ok) m_lastConfigurations[name] = configurationXml;

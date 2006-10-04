@@ -42,8 +42,10 @@ public slots:
 
 protected:
     int process(jack_nframes_t nframes);
+    int xrun();
 
     static int processStatic(jack_nframes_t, void *);
+    static int xrunStatic(void *);
 
     jack_client_t              *m_client;
     std::vector<jack_port_t *>  m_outputs;

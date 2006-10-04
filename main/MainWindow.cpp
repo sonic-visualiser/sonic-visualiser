@@ -2964,9 +2964,11 @@ MainWindow::addLayer()
 
     PluginTransform::ExecutionContext context(channel);
 
-    bool ok =
-        factory->getConfigurationForTransform
-        (transform, m_document->getMainModel(), context, configurationXml);
+    bool ok = factory->getConfigurationForTransform(transform,
+                                                    m_document->getMainModel(),
+                                                    context,
+                                                    configurationXml,
+                                                    m_playSource);
     if (!ok) return;
 
     Layer *newLayer = m_document->createDerivedLayer(transform,

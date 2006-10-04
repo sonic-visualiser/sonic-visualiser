@@ -37,6 +37,7 @@ class ViewManager;
 class AudioGenerator;
 class PlayParameters;
 class PhaseVocoderTimeStretcher;
+class RealTimePluginInstance;
 
 /**
  * AudioCallbackPlaySource manages audio data supply to callback-based
@@ -192,6 +193,23 @@ public:
      */
     void setResampleQuality(int q);
 
+    /**
+     * Set a single real-time plugin as a processing effect for
+     * auditioning during playback.
+     *
+     * The plugin must have been initialised with
+     * getTargetChannelCount() channels and a getTargetBlockSize()
+     * sample frame processing block size.
+     *
+     * This playback source takes ownership of the plugin, which will
+     * be deleted at some point after the following call to
+     * setAuditioningPlugin (depending on real-time constraints).
+     *
+     * Pass a null pointer to remove the current auditioning plugin,
+     * if any.
+     */
+    void setAuditioningPlugin(RealTimePluginInstance *plugin);
+
 signals:
     void modelReplaced();
 
@@ -220,23 +238,25 @@ protected:
 	}
     };
 
-    std::set<Model *>                m_models;
-    RingBufferVector                *m_readBuffers;
-    RingBufferVector                *m_writeBuffers;
-    size_t                           m_readBufferFill;
-    size_t                           m_writeBufferFill;
-    Scavenger<RingBufferVector>      m_bufferScavenger;
-    size_t                           m_sourceChannelCount;
-    size_t                           m_blockSize;
-    size_t                           m_sourceSampleRate;
-    size_t                           m_targetSampleRate;
-    size_t                           m_playLatency;
-    bool                             m_playing;
-    bool                             m_exiting;
-    size_t                           m_lastModelEndFrame;
-    static const size_t              m_ringBufferSize;
-    float                            m_outputLeft;
-    float                            m_outputRight;
+    std::set<Model *>                 m_models;
+    RingBufferVector                 *m_readBuffers;
+    RingBufferVector                 *m_writeBuffers;
+    size_t                            m_readBufferFill;
+    size_t                            m_writeBufferFill;
+    Scavenger<RingBufferVector>       m_bufferScavenger;
+    size_t                            m_sourceChannelCount;
+    size_t                            m_blockSize;
+    size_t                            m_sourceSampleRate;
+    size_t                            m_targetSampleRate;
+    size_t                            m_playLatency;
+    bool                              m_playing;
+    bool                              m_exiting;
+    size_t                            m_lastModelEndFrame;
+    static const size_t               m_ringBufferSize;
+    float                             m_outputLeft;
+    float                             m_outputRight;
+    RealTimePluginInstance           *m_auditioningPlugin;
+    Scavenger<RealTimePluginInstance> m_pluginScavenger;
 
     RingBuffer<float> *getWriteRingBuffer(size_t c) {
 	if (m_writeBuffers && c < m_writeBuffers->size()) {
@@ -270,6 +290,9 @@ protected:
     // new buffered frame position (which may be earlier than the
     // frame argument passed in, in the case of looping).
     size_t mixModels(size_t &frame, size_t count, float **buffers);
+
+    // Called from getSourceSamples.
+    void applyAuditioningEffect(size_t count, float **buffers);
 
     class AudioCallbackPlaySourceFillThread : public Thread
     {
