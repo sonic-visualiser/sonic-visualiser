@@ -519,8 +519,10 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         getChannelRange(name, plugin, minChannels, maxChannels);
 
         int targetChannels = sourceChannels;
-        if (sourceChannels < minChannels) targetChannels = minChannels;
-        if (sourceChannels > maxChannels) targetChannels = maxChannels;
+        if (!effect) {
+            if (sourceChannels < minChannels) targetChannels = minChannels;
+            if (sourceChannels > maxChannels) targetChannels = maxChannels;
+        }
 
         int defaultChannel = context.channel;
 
