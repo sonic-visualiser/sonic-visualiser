@@ -887,21 +887,21 @@ AudioCallbackPlaySource::applyAuditioningEffect(size_t count, float **buffers)
     if (!plugin) return;
 
     if (plugin->getAudioInputCount() != getTargetChannelCount()) {
-        std::cerr << "plugin input count " << plugin->getAudioInputCount() 
-                  << " != our channel count " << getTargetChannelCount()
-                  << std::endl;
+//        std::cerr << "plugin input count " << plugin->getAudioInputCount() 
+//                  << " != our channel count " << getTargetChannelCount()
+//                  << std::endl;
         return;
     }
     if (plugin->getAudioOutputCount() != getTargetChannelCount()) {
-        std::cerr << "plugin output count " << plugin->getAudioOutputCount() 
-                  << " != our channel count " << getTargetChannelCount()
-                  << std::endl;
+//        std::cerr << "plugin output count " << plugin->getAudioOutputCount() 
+//                  << " != our channel count " << getTargetChannelCount()
+//                  << std::endl;
         return;
     }
     if (plugin->getBufferSize() != count) {
-        std::cerr << "plugin buffer size " << plugin->getBufferSize() 
-                  << " != our block size " << count
-                  << std::endl;
+//        std::cerr << "plugin buffer size " << plugin->getBufferSize() 
+//                  << " != our block size " << count
+//                  << std::endl;
         return;
     }
 
