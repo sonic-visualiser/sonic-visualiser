@@ -217,6 +217,11 @@ signals:
 
     void sampleRateMismatch(size_t requested, size_t available, bool willResample);
 
+    void audioOverloadPluginDisabled();
+
+public slots:
+    void audioProcessingOverload();
+
 protected slots:
     void selectionChanged();
     void playLoopModeChanged();
@@ -256,6 +261,7 @@ protected:
     float                             m_outputLeft;
     float                             m_outputRight;
     RealTimePluginInstance           *m_auditioningPlugin;
+    bool                              m_auditioningPluginBypassed;
     Scavenger<RealTimePluginInstance> m_pluginScavenger;
 
     RingBuffer<float> *getWriteRingBuffer(size_t c) {

@@ -161,6 +161,8 @@ MainWindow::MainWindow() :
 
     connect(m_playSource, SIGNAL(sampleRateMismatch(size_t, size_t, bool)),
 	    this,           SLOT(sampleRateMismatch(size_t, size_t, bool)));
+    connect(m_playSource, SIGNAL(audioOverloadPluginDisabled()),
+            this,           SLOT(audioOverloadPluginDisabled()));
 
     m_fader = new Fader(frame, false);
 
@@ -3136,6 +3138,14 @@ MainWindow::sampleRateMismatch(size_t requested, size_t actual,
 */
 
     updateDescriptionLabel();
+}
+
+void
+MainWindow::audioOverloadPluginDisabled()
+{
+    QMessageBox::information
+        (this, tr("Audio processing overload"),
+         tr("Audio effects plugin auditioning has been disabled\ndue to a processing overload."));
 }
 
 void

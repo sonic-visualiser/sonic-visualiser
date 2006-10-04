@@ -54,6 +54,7 @@ AudioCallbackPlaySource::AudioCallbackPlaySource(ViewManager *manager) :
     m_outputLeft(0.0),
     m_outputRight(0.0),
     m_auditioningPlugin(0),
+    m_auditioningPluginBypassed(false),
     m_timeStretcher(0),
     m_fillThread(0),
     m_converter(0),
@@ -401,6 +402,16 @@ AudioCallbackPlaySource::preferenceChanged(PropertyContainer::PropertyName n)
 }
 
 void
+AudioCallbackPlaySource::audioProcessingOverload()
+{
+    RealTimePluginInstance *ap = m_auditioningPlugin;
+    if (ap && m_playing && !m_auditioningPluginBypassed) {
+        m_auditioningPluginBypassed = true;
+        emit audioOverloadPluginDisabled();
+    }
+}
+
+void
 AudioCallbackPlaySource::setTargetBlockSize(size_t size)
 {
 //    std::cerr << "AudioCallbackPlaySource::setTargetBlockSize() -> " << size << std::endl;
@@ -648,6 +659,7 @@ AudioCallbackPlaySource::setAuditioningPlugin(RealTimePluginInstance *plugin)
 {
     RealTimePluginInstance *formerPlugin = m_auditioningPlugin;
     m_auditioningPlugin = plugin;
+    m_auditioningPluginBypassed = false;
     if (formerPlugin) m_pluginScavenger.claim(formerPlugin);
 }
 
@@ -870,6 +882,7 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 void
 AudioCallbackPlaySource::applyAuditioningEffect(size_t count, float **buffers)
 {
+    if (m_auditioningPluginBypassed) return;
     RealTimePluginInstance *plugin = m_auditioningPlugin;
     if (!plugin) return;
 
