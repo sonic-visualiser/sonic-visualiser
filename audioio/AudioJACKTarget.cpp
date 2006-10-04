@@ -78,6 +78,19 @@ static int dynamic_jack_set_process_callback(jack_client_t *client,
     return f(client, process_callback, arg);
 }
 
+static int dynamic_jack_set_xrun_callback(jack_client_t *client,
+                                          JackXRunCallback xrun_callback,
+                                          void *arg)
+{
+    typedef int (*func)(jack_client_t *client,
+                        JackXRunCallback xrun_callback,
+                        void *arg);
+    void *s = symbol("jack_set_xrun_callback");
+    if (!s) return 1;
+    func f = (func)s;
+    return f(client, xrun_callback, arg);
+}
+
 static const char **dynamic_jack_get_ports(jack_client_t *client, 
                                            const char *port_name_pattern, 
                                            const char *type_name_pattern, 
@@ -165,6 +178,7 @@ dynamic1(const char *, jack_port_name, const jack_port_t *, 0);
 #define jack_get_buffer_size dynamic_jack_get_buffer_size
 #define jack_get_sample_rate dynamic_jack_get_sample_rate
 #define jack_set_process_callback dynamic_jack_set_process_callback
+#define jack_set_xrun_callback dynamic_jack_set_xrun_callback
 #define jack_activate dynamic_jack_activate
 #define jack_deactivate dynamic_jack_deactivate
 #define jack_client_close dynamic_jack_client_close
@@ -204,6 +218,7 @@ AudioJACKTarget::AudioJACKTarget(AudioCallbackPlaySource *source) :
     m_bufferSize = jack_get_buffer_size(m_client);
     m_sampleRate = jack_get_sample_rate(m_client);
 
+    jack_set_xrun_callback(m_client, xrunStatic, this);
     jack_set_process_callback(m_client, processStatic, this);
 
     if (jack_activate(m_client)) {
@@ -234,6 +249,12 @@ int
 AudioJACKTarget::processStatic(jack_nframes_t nframes, void *arg)
 {
     return ((AudioJACKTarget *)arg)->process(nframes);
+}
+
+int
+AudioJACKTarget::xrunStatic(void *arg)
+{
+    return ((AudioJACKTarget *)arg)->xrun();
 }
 
 void
@@ -365,6 +386,11 @@ AudioJACKTarget::process(jack_nframes_t nframes)
     return 0;
 }
 
+int
+AudioJACKTarget::xrun()
+{
+    std::cerr << "AudioJACKTarget: xrun!" << std::endl;
+}
 
 #ifdef INCLUDE_MOCFILES
 #include "AudioJACKTarget.moc.cpp"

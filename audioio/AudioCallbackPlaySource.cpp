@@ -23,6 +23,7 @@
 #include "base/Preferences.h"
 #include "data/model/DenseTimeValueModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
+#include "plugin/RealTimePluginInstance.h"
 #include "PhaseVocoderTimeStretcher.h"
 
 #include <iostream>
@@ -52,6 +53,7 @@ AudioCallbackPlaySource::AudioCallbackPlaySource(ViewManager *manager) :
     m_lastModelEndFrame(0),
     m_outputLeft(0.0),
     m_outputRight(0.0),
+    m_auditioningPlugin(0),
     m_timeStretcher(0),
     m_fillThread(0),
     m_converter(0),
@@ -97,6 +99,8 @@ AudioCallbackPlaySource::~AudioCallbackPlaySource()
     delete m_audioGenerator;
 
     m_bufferScavenger.scavenge(true);
+    m_pluginScavenger.scavenge(true);
+    m_timeStretcherScavenger.scavenge(true);
 }
 
 void
@@ -639,6 +643,14 @@ AudioCallbackPlaySource::setResampleQuality(int q)
     initialiseConverter();
 }
 
+void
+AudioCallbackPlaySource::setAuditioningPlugin(RealTimePluginInstance *plugin)
+{
+    RealTimePluginInstance *formerPlugin = m_auditioningPlugin;
+    m_auditioningPlugin = plugin;
+    if (formerPlugin) m_pluginScavenger.claim(formerPlugin);
+}
+
 size_t
 AudioCallbackPlaySource::getTargetSampleRate() const
 {
@@ -753,6 +765,8 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 	    }
 	}
 
+        applyAuditioningEffect(count, buffer);
+
         m_condition.wakeAll();
 	return got;
     }
@@ -846,10 +860,55 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
         }
     }
 
+    applyAuditioningEffect(count, buffer);
+
     m_condition.wakeAll();
 
     return count;
 }
+
+void
+AudioCallbackPlaySource::applyAuditioningEffect(size_t count, float **buffers)
+{
+    RealTimePluginInstance *plugin = m_auditioningPlugin;
+    if (!plugin) return;
+
+    if (plugin->getAudioInputCount() != getTargetChannelCount()) {
+        std::cerr << "plugin input count " << plugin->getAudioInputCount() 
+                  << " != our channel count " << getTargetChannelCount()
+                  << std::endl;
+        return;
+    }
+    if (plugin->getAudioOutputCount() != getTargetChannelCount()) {
+        std::cerr << "plugin output count " << plugin->getAudioOutputCount() 
+                  << " != our channel count " << getTargetChannelCount()
+                  << std::endl;
+        return;
+    }
+    if (plugin->getBufferSize() != count) {
+        std::cerr << "plugin buffer size " << plugin->getBufferSize() 
+                  << " != our block size " << count
+                  << std::endl;
+        return;
+    }
+
+    float **ib = plugin->getAudioInputBuffers();
+    float **ob = plugin->getAudioOutputBuffers();
+
+    for (size_t c = 0; c < getTargetChannelCount(); ++c) {
+        for (size_t i = 0; i < count; ++i) {
+            ib[c][i] = buffers[c][i];
+        }
+    }
+
+    plugin->run(Vamp::RealTime::zeroTime);
+    
+    for (size_t c = 0; c < getTargetChannelCount(); ++c) {
+        for (size_t i = 0; i < count; ++i) {
+            buffers[c][i] = ob[c][i];
+        }
+    }
+}    
 
 // Called from fill thread, m_playing true, mutex held
 bool
@@ -1286,6 +1345,7 @@ AudioCallbackPlaySource::AudioCallbackPlaySourceFillThread::run()
 
 	s.unifyRingBuffers();
 	s.m_bufferScavenger.scavenge();
+        s.m_pluginScavenger.scavenge();
 	s.m_timeStretcherScavenger.scavenge();
 
 	if (work && s.m_playing && s.getSourceSampleRate()) {

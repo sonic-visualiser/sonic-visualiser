@@ -23,6 +23,8 @@
 
 namespace Vamp { class PluginBase; }
 
+class AudioCallbackPlaySource;
+
 class TransformFactory : public QObject
 {
     Q_OBJECT
@@ -78,11 +80,14 @@ public:
      * Get a configuration XML string for the given transform (by
      * asking the user, most likely).  Returns true if the transform
      * is acceptable, false if the operation should be cancelled.
+     * Audio callback play source may be used to audition effects
+     * plugins, if provided.
      */
     bool getConfigurationForTransform(TransformName name,
                                       Model *inputModel,
                                       PluginTransform::ExecutionContext &context,
-                                      QString &configurationXml);
+                                      QString &configurationXml,
+                                      AudioCallbackPlaySource *source = 0);
 
     /**
      * Return the output model resulting from applying the named
