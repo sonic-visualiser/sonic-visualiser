@@ -169,7 +169,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
-    m_playSpeed->setMaximum(199);
+    m_playSpeed->setMaximum(200);
     m_playSpeed->setValue(100);
     m_playSpeed->setFixedWidth(24);
     m_playSpeed->setFixedHeight(24);
