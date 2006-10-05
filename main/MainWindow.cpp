@@ -93,12 +93,13 @@ using std::map;
 using std::set;
 
 
-MainWindow::MainWindow() :
+MainWindow::MainWindow(bool withAudioOutput) :
     m_document(0),
     m_paneStack(0),
     m_viewManager(0),
     m_panner(0),
     m_timeRulerLayer(0),
+    m_audioOutput(withAudioOutput),
     m_playSource(0),
     m_playTarget(0),
     m_recentFiles("RecentFiles"),
@@ -3220,7 +3221,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     updateDescriptionLabel();
     m_panLayer->setModel(model);
     if (model) m_viewManager->setMainModelSampleRate(model->getSampleRate());
-    if (model && !m_playTarget) createPlayTarget();
+    if (model && !m_playTarget && m_audioOutput) createPlayTarget();
 }
 
 void
