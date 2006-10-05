@@ -103,7 +103,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_playSource(0),
     m_playTarget(0),
     m_recentFiles("RecentFiles"),
-    m_recentTransforms("RecentTransforms"),
+    m_recentTransforms("RecentTransforms", 20),
     m_mainMenusCreated(false),
     m_paneMenu(0),
     m_layerMenu(0),
