@@ -228,7 +228,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     setupMenus();
     setupToolbars();
 
-    statusBar()->addWidget(m_descriptionLabel);
+//    statusBar()->addWidget(m_descriptionLabel);
 
     newSession();
 }
