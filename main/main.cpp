@@ -78,6 +78,8 @@ main(int argc, char **argv)
 {
     SVApplication application(argc, argv);
 
+    QStringList args = application.arguments();
+
     signal(SIGINT,  signalHandler);
     signal(SIGTERM, signalHandler);
 
@@ -87,6 +89,9 @@ main(int argc, char **argv)
 #endif
 
     svSystemSpecificInitialisation();
+
+    bool audioOutput = true;
+    if (args.contains("--no-audio")) audioOutput = false;
 
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
@@ -112,7 +117,7 @@ main(int argc, char **argv)
     qRegisterMetaType<size_t>("size_t");
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow gui;
+    MainWindow gui(audioOutput);
     application.setMainWindow(&gui);
 
     QDesktopWidget *desktop = QApplication::desktop();
@@ -134,8 +139,16 @@ main(int argc, char **argv)
     
     gui.show();
 
-    if (argc > 1) {
-	QString path = argv[1];
+    QString path;
+    for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
+        if (i == args.begin()) continue;
+        if (!i->startsWith('-')) {
+            path = *i;
+            break;
+        }
+    }
+
+    if (!path.isEmpty()) {
         bool success = false;
         if (path.endsWith(".sv")) {
             success = gui.openSessionFile(path);

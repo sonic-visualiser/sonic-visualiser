@@ -55,7 +55,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow();
+    MainWindow(bool withAudioOutput = true);
     virtual ~MainWindow();
     
     enum AudioFileOpenMode {
@@ -215,6 +215,7 @@ protected:
     WaveformLayer           *m_panLayer;
     Layer                   *m_timeRulerLayer;
 
+    bool                     m_audioOutput;
     AudioCallbackPlaySource *m_playSource;
     AudioCallbackPlayTarget *m_playTarget;
 
