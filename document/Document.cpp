@@ -233,7 +233,12 @@ Document::setMainModel(WaveFileModel *model)
 	Layer *layer = *i;
 	Model *model = layer->getModel();
 
+        std::cerr << "Document::setMainModel: inspecting model "
+                  << (model ? model->objectName().toStdString() : "(null)") << " in layer "
+                  << layer->objectName().toStdString() << std::endl;
+
 	if (model == oldMainModel) {
+            std::cerr << "... it uses the old main model, replacing" << std::endl;
 	    LayerFactory::getInstance()->setModel(layer, m_mainModel);
 	    continue;
 	}
@@ -247,6 +252,8 @@ Document::setMainModel(WaveFileModel *model)
 	}
 	    
 	if (m_models[model].source == oldMainModel) {
+
+            std::cerr << "... it uses a model derived from the old main model, regenerating" << std::endl;
 
 	    // This model was derived from the previous main
 	    // model: regenerate it.
@@ -270,6 +277,19 @@ Document::setMainModel(WaveFileModel *model)
                 }
 		obsoleteLayers.push_back(layer);
 	    } else {
+                std::cerr << "Replacing model " << model << " (type "
+                          << typeid(*model).name() << ") with model "
+                          << replacementModel << " (type "
+                          << typeid(*replacementModel).name() << ") in layer "
+                          << layer << " (name " << layer->objectName().toStdString() << ")"
+                          << std::endl;
+                RangeSummarisableTimeValueModel *rm =
+                    dynamic_cast<RangeSummarisableTimeValueModel *>(replacementModel);
+                if (rm) {
+                    std::cerr << "new model has " << rm->getChannelCount() << " channels " << std::endl;
+                } else {
+                    std::cerr << "new model is not a RangeSummarisableTimeValueModel!" << std::endl;
+                }
 		setModel(layer, replacementModel);
 	    }
 	}	    
@@ -469,12 +489,11 @@ Document::setModel(Layer *layer, Model *model)
 	return;
     }
 
-    if (layer->getModel()) {
-	if (layer->getModel() == model) {
-	    std::cerr << "WARNING: Document::setModel: Layer is already set to this model" << std::endl;
-	    return;
-	}
-	releaseModel(layer->getModel());
+    Model *previousModel = layer->getModel();
+
+    if (previousModel == model) {
+        std::cerr << "WARNING: Document::setModel: Layer is already set to this model" << std::endl;
+        return;
     }
 
     if (model && model != m_mainModel) {
@@ -482,6 +501,10 @@ Document::setModel(Layer *layer, Model *model)
     }
 
     LayerFactory::getInstance()->setModel(layer, model);
+
+    if (previousModel) {
+        releaseModel(previousModel);
+    }
 }
 
 void
