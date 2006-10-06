@@ -407,7 +407,7 @@ FeatureExtractionPluginTransform::addFeature(size_t blockFrame,
 	    frame = Vamp::RealTime::realTime2Frame(feature.timestamp,
                                                    m_descriptor->sampleRate);
 	} else {
-	    frame = m_output->getEndFrame() + 1;
+	    frame = m_output->getEndFrame();
 	}
     }
 	
