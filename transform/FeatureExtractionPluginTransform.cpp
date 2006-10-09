@@ -445,13 +445,13 @@ FeatureExtractionPluginTransform::addFeature(size_t blockFrame,
 	
     } else {
 	
-	DenseThreeDimensionalModel::BinValueSet values = feature.values;
+	DenseThreeDimensionalModel::Column values = feature.values;
 	
 	EditableDenseThreeDimensionalModel *model =
             getOutput<EditableDenseThreeDimensionalModel>();
 	if (!model) return;
 
-	model->setBinValues(frame, values);
+	model->setColumn(frame / model->getResolution(), values);
     }
 }
 
