@@ -843,11 +843,11 @@ SVFileReader::readRowData(const QString &text)
     if (dtdm) {
 	QStringList data = text.split(m_datasetSeparator);
 
-	DenseThreeDimensionalModel::BinValueSet values;
+	DenseThreeDimensionalModel::Column values;
 
 	for (QStringList::iterator i = data.begin(); i != data.end(); ++i) {
 
-	    if (values.size() == dtdm->getYBinCount()) {
+	    if (values.size() == dtdm->getHeight()) {
 		if (!warned) {
 		    std::cerr << "WARNING: SV-XML: Too many y-bins in 3-D dataset row "
 			      << m_rowNumber << std::endl;
@@ -866,9 +866,7 @@ SVFileReader::readRowData(const QString &text)
 	    }
 	}
 
-	size_t windowStartFrame = m_rowNumber * dtdm->getResolution();
-
-	dtdm->setBinValues(windowStartFrame, values);
+	dtdm->setColumn(m_rowNumber, values);
 	return true;
     }
 
