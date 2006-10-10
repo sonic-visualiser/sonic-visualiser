@@ -75,8 +75,13 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
 
     if (m_outputNo == -1) {
 
+        size_t outputChannels = m_plugin->getAudioOutputCount();
+        if (outputChannels > input->getChannelCount()) {
+            outputChannels = input->getChannelCount();
+        }
+
         WritableWaveFileModel *model = new WritableWaveFileModel
-            (input->getSampleRate(), input->getChannelCount()); //!!!
+            (input->getSampleRate(), outputChannels);
 
         m_output = model;
 

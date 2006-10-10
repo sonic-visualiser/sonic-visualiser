@@ -324,7 +324,7 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
 
                 transforms[transformName] = 
-                    TransformDesc(tr("Effects Measurements"),
+                    TransformDesc(tr("Effects Data"),
                                   category,
                                   transformName,
                                   userDescription,
