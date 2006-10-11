@@ -441,15 +441,20 @@ TransformFactory::getChannelRange(TransformName name, Vamp::PluginBase *plugin,
     }
 }
 
-bool
+Model *
 TransformFactory::getConfigurationForTransform(TransformName name,
-                                               Model *inputModel,
+                                               const std::vector<Model *> &candidateInputModels,
                                                PluginTransform::ExecutionContext &context,
                                                QString &configurationXml,
                                                AudioCallbackPlaySource *source)
 {
+    if (candidateInputModels.empty()) return 0;
+
+    Model *inputModel = candidateInputModels[0]; //!!! for now
+
     QString id = name.section(':', 0, 2);
     QString output = name.section(':', 3);
+    QString outputLabel = "";
     
     bool ok = false;
     configurationXml = m_lastConfigurations[name];
@@ -466,9 +471,22 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         Vamp::Plugin *vp =
             FeatureExtractionPluginFactory::instanceFor(id)->instantiatePlugin
             (id, inputModel->getSampleRate());
+
         if (vp) {
+
             plugin = vp;
             frequency = (vp->getInputDomain() == Vamp::Plugin::FrequencyDomain);
+
+            std::vector<Vamp::Plugin::OutputDescriptor> od =
+                vp->getOutputDescriptors();
+            if (od.size() > 1) {
+                for (size_t i = 0; i < od.size(); ++i) {
+                    if (od[i].name == output.toStdString()) {
+                        outputLabel = od[i].description.c_str();
+                        break;
+                    }
+                }
+            }
         }
 
     } else if (RealTimePluginFactory::instanceFor(id)) {
@@ -480,6 +498,13 @@ TransformFactory::getConfigurationForTransform(TransformName name,
             desc->audioOutputPortCount > 0 &&
             !desc->isSynth) {
             effect = true;
+        }
+
+        if (output != "A") {
+            int outputNo = output.toInt();
+            if (outputNo >= 0 && outputNo < desc->controlOutputPortCount) {
+                outputLabel = desc->controlOutputPortNames[outputNo].c_str();
+            }
         }
 
         size_t sampleRate = inputModel->getSampleRate();
@@ -526,13 +551,15 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
         int defaultChannel = context.channel;
 
-        PluginParameterDialog *dialog = new PluginParameterDialog(plugin,
-                                                                  sourceChannels,
-                                                                  targetChannels,
-                                                                  defaultChannel,
-                                                                  output,
-                                                                  true,
-                                                                  frequency);
+        PluginParameterDialog *dialog = new PluginParameterDialog(plugin);
+
+        dialog->setChannelArrangement(sourceChannels, targetChannels,
+                                      defaultChannel);
+        
+        dialog->setOutputLabel(outputLabel);
+        
+        dialog->setShowProcessingOptions(true, frequency);
+
         if (dialog->exec() == QDialog::Accepted) {
             ok = true;
         }
@@ -557,7 +584,7 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
     if (ok) m_lastConfigurations[name] = configurationXml;
 
-    return ok;
+    return ok ? inputModel : 0;
 }
 
 Transform *

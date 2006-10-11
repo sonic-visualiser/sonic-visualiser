@@ -2967,8 +2967,34 @@ MainWindow::addLayer()
 
     PluginTransform::ExecutionContext context(channel);
 
+    std::vector<Model *> candidateInputModels;
+    candidateInputModels.push_back(m_document->getMainModel());
+
+    //!!! rationalise this (via document method for example)
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+        Pane *ip = m_paneStack->getPane(i);
+        if (!ip) continue;
+        for (int j = 0; j < ip->getLayerCount(); ++j) {
+            Layer *jl = ip->getLayer(j);
+            if (jl) {
+                Model *model = jl->getModel();
+                DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>
+                    (model);
+                if (dtvm) {
+                    int k;
+                    for (k = 0; k < candidateInputModels.size(); ++k) {
+                        if (candidateInputModels[k] == dtvm) break;
+                    }
+                    if (k == candidateInputModels.size()) {
+                        candidateInputModels.push_back(dtvm);
+                    }
+                }
+            }
+        }
+    }
+
     bool ok = factory->getConfigurationForTransform(transform,
-                                                    m_document->getMainModel(),
+                                                    candidateInputModels,
                                                     context,
                                                     configurationXml,
                                                     m_playSource);
