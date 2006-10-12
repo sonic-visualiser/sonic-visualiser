@@ -64,7 +64,7 @@ public:
         AskUser
     };
 
-    bool openSomeFile(QString path);
+    bool openSomeFile(QString path, AudioFileOpenMode = AskUser);
     bool openAudioFile(QString path, AudioFileOpenMode = AskUser);
     bool openLayerFile(QString path);
     bool openSessionFile(QString path);

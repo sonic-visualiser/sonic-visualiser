@@ -138,17 +138,56 @@ main(int argc, char **argv)
     settings.endGroup();
     
     gui.show();
-
-    QString path;
+/*
+    QStringList pathList;
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
         if (i == args.begin()) continue;
         if (!i->startsWith('-')) {
-            path = *i;
-            break;
+            pathList.push_back(*i);
         }
     }
+*/
+    bool haveSession = false;
+    bool haveMainModel = false;
 
-    if (!path.isEmpty()) {
+    for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
+
+        bool success = false;
+
+        if (i == args.begin()) continue;
+        if (i->startsWith('-')) continue;
+
+        QString path = *i;
+
+        if (path.endsWith("sv")) {
+            if (!haveSession) {
+                success = gui.openSessionFile(path);
+                if (success) {
+                    haveSession = true;
+                    haveMainModel = true;
+                }
+            } else {
+                std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
+                success = true;
+            }
+        }
+        if (!success) {
+            if (!haveMainModel) {
+                success = gui.openSomeFile(path, MainWindow::ReplaceMainModel);
+                if (success) haveMainModel = true;
+            } else {
+                success = gui.openSomeFile(path, MainWindow::CreateAdditionalModel);
+            }
+        }
+        if (!success) {
+	    QMessageBox::critical
+                (&gui, QMessageBox::tr("Failed to open file"),
+                 QMessageBox::tr("File \"%1\" could not be opened").arg(path));
+        }
+    }            
+    /*       
+
+    if (!pathList.isEmpty()) {
         bool success = false;
         if (path.endsWith(".sv")) {
             success = gui.openSessionFile(path);
@@ -161,6 +200,7 @@ main(int argc, char **argv)
 				  QMessageBox::tr("File \"%1\" could not be opened").arg(path));
 	}
     }
+    */
 
     int rv = application.exec();
     std::cerr << "application.exec() returned " << rv << std::endl;

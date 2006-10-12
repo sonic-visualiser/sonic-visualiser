@@ -2282,9 +2282,9 @@ MainWindow::openRecentFile()
 }
 
 bool
-MainWindow::openSomeFile(QString path)
+MainWindow::openSomeFile(QString path, AudioFileOpenMode mode)
 {
-    if (openAudioFile(path)) {
+    if (openAudioFile(path, mode)) {
 	return true;
     } else if (openSessionFile(path)) {
 	return true;
@@ -2993,15 +2993,17 @@ MainWindow::addLayer()
         }
     }
 
-    bool ok = factory->getConfigurationForTransform(transform,
-                                                    candidateInputModels,
-                                                    context,
-                                                    configurationXml,
-                                                    m_playSource);
-    if (!ok) return;
+    Model *inputModel = factory->getConfigurationForTransform(transform,
+                                                              candidateInputModels,
+                                                              context,
+                                                              configurationXml,
+                                                              m_playSource);
+    if (!inputModel) return;
+
+    std::cerr << "Input model is " << inputModel << " \"" << inputModel->objectName().toStdString() << std::endl;
 
     Layer *newLayer = m_document->createDerivedLayer(transform,
-                                                     m_document->getMainModel(),
+                                                     inputModel,
                                                      context,
                                                      configurationXml);
 

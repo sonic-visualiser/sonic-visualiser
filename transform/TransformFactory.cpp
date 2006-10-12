@@ -450,7 +450,22 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 {
     if (candidateInputModels.empty()) return 0;
 
+    //!!! This will need revision -- we'll have to have a callback
+    //from the dialog for when the candidate input model is changed,
+    //as we'll need to reinitialise the channel settings in the dialog
     Model *inputModel = candidateInputModels[0]; //!!! for now
+    QStringList candidateModelNames;
+    std::map<QString, Model *> modelMap;
+    for (size_t i = 0; i < candidateInputModels.size(); ++i) {
+        QString modelName = candidateInputModels[i]->objectName();
+        QString origModelName = modelName;
+        int dupcount = 1;
+        while (modelMap.find(modelName) != modelMap.end()) {
+            modelName = tr("%1 <%2>").arg(origModelName).arg(++dupcount);
+        }
+        modelMap[modelName] = candidateInputModels[i];
+        candidateModelNames.push_back(modelName);
+    }
 
     QString id = name.section(':', 0, 2);
     QString output = name.section(':', 3);
@@ -553,6 +568,10 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
         PluginParameterDialog *dialog = new PluginParameterDialog(plugin);
 
+        if (candidateModelNames.size() > 1) {
+            dialog->setCandidateInputModels(candidateModelNames);
+        }
+
         dialog->setChannelArrangement(sourceChannels, targetChannels,
                                       defaultChannel);
         
@@ -562,6 +581,16 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
         if (dialog->exec() == QDialog::Accepted) {
             ok = true;
+        }
+
+        QString selectedInput = dialog->getInputModel();
+        if (selectedInput != "") {
+            if (modelMap.find(selectedInput) != modelMap.end()) {
+                inputModel = modelMap[selectedInput];
+                std::cerr << "Found selected input \"" << selectedInput.toStdString() << "\" in model map, result is " << inputModel << std::endl;
+            } else {
+                std::cerr << "Failed to find selected input \"" << selectedInput.toStdString() << "\" in model map" << std::endl;
+            }
         }
 
         configurationXml = PluginXml(plugin).toXmlString();
