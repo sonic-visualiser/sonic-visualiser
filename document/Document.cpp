@@ -318,6 +318,8 @@ Document::addDerivedModel(TransformName transform,
 	return;
     }
 
+    std::cerr << "Document::addDerivedModel: source is " << inputModel << " \"" << inputModel->objectName().toStdString() << std::endl;
+
     ModelRecord rec;
     rec.source = inputModel;
     rec.transform = transform;
