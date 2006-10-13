@@ -664,7 +664,23 @@ TransformFactory::transform(TransformName name, Model *inputModel,
     connect(t, SIGNAL(finished()), this, SLOT(transformFinished()));
 
     t->start();
-    return t->detachOutputModel();
+    Model *model = t->detachOutputModel();
+
+    if (model) {
+        QString imn = inputModel->objectName();
+        QString trn = getTransformFriendlyName(name);
+        if (imn != "") {
+            if (trn != "") {
+                model->setObjectName(tr("%1: %2").arg(imn).arg(trn));
+            } else {
+                model->setObjectName(imn);
+            }
+        } else if (trn != "") {
+            model->setObjectName(trn);
+        }
+    }
+
+    return model;
 }
 
 void

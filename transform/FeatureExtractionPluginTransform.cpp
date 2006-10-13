@@ -27,6 +27,7 @@
 #include "data/model/DenseTimeValueModel.h"
 #include "data/model/NoteModel.h"
 #include "data/model/FFTModel.h"
+#include "data/model/WaveFileModel.h"
 
 #include <fftw3.h>
 
@@ -223,6 +224,12 @@ FeatureExtractionPluginTransform::run()
 {
     DenseTimeValueModel *input = getInput();
     if (!input) return;
+
+    while (!input->isReady()) {
+        if (dynamic_cast<WaveFileModel *>(input)) break; // no need to wait
+        std::cerr << "FeatureExtractionPluginTransform::run: Waiting for input model to be ready..." << std::endl;
+        sleep(1);
+    }
 
     if (!m_output) return;
 

@@ -130,10 +130,18 @@ public:
     WaveFileModel *getMainModel() { return m_mainModel; }
 
     /**
-     * Add a derived model associated with the given transform name.
-     * This is necessary to register any derived model that was not
-     * created by the document using
-     * e.g. createDerivedLayer(TransformName) above.
+     * Add a derived model associated with the given transform,
+     * running the transform and returning the resulting model.
+     */
+    Model *addDerivedModel(TransformName transform,
+                           Model *inputModel,
+                           const PluginTransform::ExecutionContext &context,
+                           QString configurationXml);
+
+    /**
+     * Add a derived model associated with the given transform.  This
+     * is necessary to register any derived model that was not created
+     * by the document using createDerivedModel or createDerivedLayer.
      */
     void addDerivedModel(TransformName,
                          Model *inputModel,
@@ -193,10 +201,6 @@ signals:
     void modelRegenerationFailed(QString layerName, QString transformName);
 
 protected:
-    Model *createModelForTransform(TransformName transform,
-                                   Model *inputModel,
-                                   const PluginTransform::ExecutionContext &context,
-                                   QString configurationXml);
     void releaseModel(Model *model);
 
     /**
