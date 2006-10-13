@@ -92,8 +92,10 @@ protected:
     std::map<int, int> m_awaitingDatasets; // map dataset id -> model id
     Model *m_currentDataset;
     Model *m_currentDerivedModel;
+    int m_currentDerivedModelId;
     PlayParameters *m_currentPlayParameters;
     QString m_currentTransform;
+    Model *m_currentTransformSource;
     PluginTransform::ExecutionContext m_currentTransformContext;
     QString m_currentTransformConfiguration;
     QString m_datasetSeparator;

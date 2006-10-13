@@ -24,6 +24,7 @@
 #include "data/model/SparseTimeValueModel.h"
 #include "data/model/DenseTimeValueModel.h"
 #include "data/model/WritableWaveFileModel.h"
+#include "data/model/WaveFileModel.h"
 
 #include <iostream>
 
@@ -118,6 +119,12 @@ RealTimePluginTransform::run()
     DenseTimeValueModel *input = getInput();
     if (!input) return;
 
+    while (!input->isReady()) {
+        if (dynamic_cast<WaveFileModel *>(input)) break; // no need to wait
+        std::cerr << "FeatureExtractionPluginTransform::run: Waiting for input model to be ready..." << std::endl;
+        sleep(1);
+    }
+
     SparseTimeValueModel *stvm = dynamic_cast<SparseTimeValueModel *>(m_output);
     WritableWaveFileModel *wwfm = dynamic_cast<WritableWaveFileModel *>(m_output);
     if (!stvm && !wwfm) return;
@@ -195,10 +202,6 @@ RealTimePluginTransform::run()
 
             if (buffers) {
 
-                //!!! This will fail if any buffers[c] is null or
-                //uninitialised.  The plugin instance should ensure
-                //that that can't happen -- but it doesn't
-
                 if (blockFrame >= latency) {
                     wwfm->addSamples(buffers, blockSize);
                 } else if (blockFrame + blockSize >= latency) {
@@ -216,6 +219,7 @@ RealTimePluginTransform::run()
 
 	if (blockFrame == startFrame || completion > prevCompletion) {
 	    if (stvm) stvm->setCompletion(completion);
+	    if (wwfm) wwfm->setCompletion(completion);
 	    prevCompletion = completion;
 	}
         
@@ -223,6 +227,6 @@ RealTimePluginTransform::run()
     }
     
     if (stvm) stvm->setCompletion(100);
-    if (wwfm) wwfm->sync();
+    if (wwfm) wwfm->setCompletion(100);
 }
 

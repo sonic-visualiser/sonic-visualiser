@@ -39,6 +39,113 @@
 
 #include <iostream>
 
+/*
+    Some notes about the SV XML format.  We're very lazy with our XML:
+    there's no schema or DTD, and we depend heavily on elements being
+    in a particular order.
+ 
+    <sv>
+
+    <data>
+
+      <!-- The data section contains definitions of both models and
+           visual layers.  Layers are considered data in the document;
+           the structure of views that displays the layers is not. -->
+
+      <!-- id numbers are unique within the data type (i.e. no two
+           models can have the same id, but a model can have the same
+           id as a layer, etc).  SV generates its id numbers just for
+           the purpose of cross-referencing within the current file;
+           they don't necessarily have any meaning once the file has
+           been loaded. -->
+
+      <model id="0" name="..." type="..." ... />
+      <model id="1" name="..." type="..." ... />
+
+      <!-- Models that have data associated with them store it
+           in a neighbouring dataset element.  The dataset must follow
+           the model and precede any derivation or layer elements that
+           refer to the model. -->
+
+      <model id="2" name="..." type="..." dataset="0" ... />
+
+      <dataset id="0" type="..."> 
+        <point frame="..." value="..." ... />
+      </dataset>
+
+      <!-- Where one model is derived from another via a transform,
+           it has an associated derivation element.  This must follow
+           both the source and target model elements.  The source and
+           model attributes give the source model id and target model
+           id respectively.  A model can have both dataset and
+           derivation elements; if it does, dataset must appear first. 
+           If the model's data are not stored, but instead the model
+           is to be regenerated completely from the transform when 
+           the session is reloaded, then the model should have _only_
+           a derivation element, and no model element should appear
+           for it at all. -->
+
+      <derivation source="0" model="2" transform="..." ...>
+        <plugin id="..." ... />
+      </derivation>
+
+      <!-- The playparameters element lists playback settings for
+           a model. -->
+
+      <playparameters mute="false" pan="0" gain="1" model="1" ... />
+
+      <!-- Layer elements.  The models must have already been defined.
+           The same model may appear in more than one layer (of more
+           than one type). -->
+
+      <layer id="1" type="..." name="..." model="0" ... />
+      <layer id="2" type="..." name="..." model="1" ... />
+
+    </data>
+
+
+    <display>
+
+      <!-- The display element contains visual structure for the
+           layers.  It's simpler than the data section. -->
+
+      <!-- Overall preferred window size for this session. -->
+
+      <window width="..." height="..."/>
+
+      <!-- List of view elements to stack up.  Each one contains
+           a list of layers in stacking order, back to front. -->
+
+      <view type="pane" ...>
+        <layer id="1"/>
+        <layer id="2"/>
+      </view>
+
+      <!-- The layer elements just refer to layers defined in the
+           data section, so they don't have to have any attributes
+           other than the id.  For sort-of-historical reasons SV
+           actually does repeat the other attributes here, but
+           it doesn't need to. -->
+
+      <view type="pane" ...>
+        <layer id="2"/>
+      <view>
+
+    </display>
+
+
+    <!-- List of selected regions by audio frame extents. -->
+
+    <selections>
+      <selection start="..." end="..."/>
+    </selections>
+
+
+    </sv>
+ 
+ */
+
+
 SVFileReader::SVFileReader(Document *document,
 			   SVFileReaderPaneCallback &callback) :
     m_document(document),
@@ -46,6 +153,7 @@ SVFileReader::SVFileReader(Document *document,
     m_currentPane(0),
     m_currentDataset(0),
     m_currentDerivedModel(0),
+    m_currentDerivedModelId(-1),
     m_currentPlayParameters(0),
     m_datasetSeparator(" "),
     m_inRow(false),
@@ -258,18 +366,35 @@ SVFileReader::endElement(const QString &, const QString &,
 	m_inData = false;
 
     } else if (name == "derivation") {
-        
-        if (m_currentDerivedModel) {
+
+        if (!m_currentDerivedModel) {
+            if (m_currentDerivedModel < 0) {
+                std::cerr << "WARNING: SV-XML: Bad derivation output model id "
+                          << m_currentDerivedModelId << std::endl;
+            } else if (m_models[m_currentDerivedModelId]) {
+                std::cerr << "WARNING: SV-XML: Derivation has existing model "
+                          << m_currentDerivedModelId
+                          << " as target, not regenerating" << std::endl;
+            } else {
+                m_currentDerivedModel = m_models[m_currentDerivedModelId] =
+                    m_document->addDerivedModel(m_currentTransform,
+                                                m_currentTransformSource,
+                                                m_currentTransformContext,
+                                                m_currentTransformConfiguration);
+            }
+        } else {
             m_document->addDerivedModel(m_currentTransform,
-                                        m_document->getMainModel(), //!!!
+                                        m_currentTransformSource,
                                         m_currentTransformContext,
                                         m_currentDerivedModel,
                                         m_currentTransformConfiguration);
-            m_addedModels.insert(m_currentDerivedModel);
-            m_currentDerivedModel = 0;
-            m_currentTransform = "";
-            m_currentTransformConfiguration = "";
         }
+
+        m_addedModels.insert(m_currentDerivedModel);
+        m_currentDerivedModel = 0;
+        m_currentDerivedModelId = -1;
+        m_currentTransform = "";
+        m_currentTransformConfiguration = "";
 
     } else if (name == "row") {
 	m_inRow = false;
@@ -366,7 +491,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 
     QString type = attributes.value("type").trimmed();
     bool mainModel = (attributes.value("mainModel").trimmed() == "true");
-    
+
     if (type == "wavefile") {
 	
 	QString file = attributes.value("file");
@@ -412,11 +537,10 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 	
 	READ_MANDATORY(int, dimensions, toInt);
 		    
-	// Currently the only dense model we support here
-	// is the dense 3d model.  Dense time-value models
-	// are always file-backed waveform data, at this
-	// point, and they come in as the wavefile model
-	// type above.
+	// Currently the only dense model we support here is the dense
+	// 3d model.  Dense time-value models are always file-backed
+	// waveform data, at this point, and they come in as wavefile
+	// models.
 	
 	if (dimensions == 3) {
 	    
@@ -886,39 +1010,48 @@ SVFileReader::readDerivation(const QXmlAttributes &attributes)
 	std::cerr << "WARNING: SV-XML: No model id specified for derivation" << std::endl;
 	return false;
     }
-    
+
     QString transform = attributes.value("transform");
-    
+
     if (m_models.find(modelId) != m_models.end()) {
-
         m_currentDerivedModel = m_models[modelId];
-        m_currentTransform = transform;
-        m_currentTransformConfiguration = "";
-
-        m_currentTransformContext = PluginTransform::ExecutionContext();
-
-        bool ok = false;
-        int channel = attributes.value("channel").trimmed().toInt(&ok);
-        if (ok) m_currentTransformContext.channel = channel;
-
-        int domain = attributes.value("domain").trimmed().toInt(&ok);
-        if (ok) m_currentTransformContext.domain = Vamp::Plugin::InputDomain(domain);
-
-        int stepSize = attributes.value("stepSize").trimmed().toInt(&ok);
-        if (ok) m_currentTransformContext.stepSize = stepSize;
-
-        int blockSize = attributes.value("blockSize").trimmed().toInt(&ok);
-        if (ok) m_currentTransformContext.blockSize = blockSize;
-
-        int windowType = attributes.value("windowType").trimmed().toInt(&ok);
-        if (ok) m_currentTransformContext.windowType = WindowType(windowType);
-
     } else {
-	std::cerr << "WARNING: SV-XML: Unknown derived model " << modelId
-		  << " for transform \"" << transform.toLocal8Bit().data() << "\""
-		  << std::endl;
-        return false;
+        // we'll regenerate the model when the derivation element ends
+        m_currentDerivedModel = 0;
     }
+    
+    m_currentDerivedModelId = modelId;
+    
+    int sourceId = 0;
+    bool sourceOk = false;
+    sourceId = attributes.value("source").trimmed().toInt(&sourceOk);
+
+    if (sourceOk && m_models[sourceId]) {
+        m_currentTransformSource = m_models[sourceId];
+    } else {
+        m_currentTransformSource = m_document->getMainModel();
+    }
+
+    m_currentTransform = transform;
+    m_currentTransformConfiguration = "";
+
+    m_currentTransformContext = PluginTransform::ExecutionContext();
+
+    bool ok = false;
+    int channel = attributes.value("channel").trimmed().toInt(&ok);
+    if (ok) m_currentTransformContext.channel = channel;
+
+    int domain = attributes.value("domain").trimmed().toInt(&ok);
+    if (ok) m_currentTransformContext.domain = Vamp::Plugin::InputDomain(domain);
+
+    int stepSize = attributes.value("stepSize").trimmed().toInt(&ok);
+    if (ok) m_currentTransformContext.stepSize = stepSize;
+
+    int blockSize = attributes.value("blockSize").trimmed().toInt(&ok);
+    if (ok) m_currentTransformContext.blockSize = blockSize;
+
+    int windowType = attributes.value("windowType").trimmed().toInt(&ok);
+    if (ok) m_currentTransformContext.windowType = WindowType(windowType);
 
     return true;
 }
@@ -981,7 +1114,7 @@ SVFileReader::readPlayParameters(const QXmlAttributes &attributes)
 bool
 SVFileReader::readPlugin(const QXmlAttributes &attributes)
 {
-    if (!m_currentDerivedModel && !m_currentPlayParameters) {
+    if (m_currentDerivedModelId < 0 && !m_currentPlayParameters) {
         std::cerr << "WARNING: SV-XML: Plugin found outside derivation or play parameters" << std::endl;
         return false;
     }
@@ -990,7 +1123,8 @@ SVFileReader::readPlugin(const QXmlAttributes &attributes)
     
     for (int i = 0; i < attributes.length(); ++i) {
         configurationXml += QString(" %1=\"%2\"")
-            .arg(attributes.qName(i)).arg(attributes.value(i));
+            .arg(attributes.qName(i))
+            .arg(XmlExportable::encodeEntities(attributes.value(i)));
     }
 
     configurationXml += "/>";

@@ -80,6 +80,7 @@
 #include <QDateTime>
 #include <QProcess>
 #include <QCheckBox>
+#include <QRegExp>
 
 #include <iostream>
 #include <cstdio>
@@ -688,7 +689,8 @@ MainWindow::setupMenus()
 
             QString maker = *j;
             if (maker == "") maker = tr("Unknown");
-            
+            maker.replace(QRegExp(tr(" [\\(<].*$")), "");
+
             makerMenus[*i][maker] = new SubdividingMenu(maker, 30, 40);
             byMakerMenu->addMenu(makerMenus[*i][maker]);
             pendingMenus.insert(makerMenus[*i][maker]);
@@ -707,6 +709,7 @@ MainWindow::setupMenus()
 
         QString maker = transforms[i].maker;
         if (maker == "") maker = tr("Unknown");
+        maker.replace(QRegExp(tr(" [\\(<].*$")), "");
 
         QString pluginName = description.section(": ", 0, 0);
         QString output = description.section(": ", 1);
