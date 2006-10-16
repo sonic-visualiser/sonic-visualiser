@@ -391,6 +391,7 @@ AudioJACKTarget::xrun()
 {
     std::cerr << "AudioJACKTarget: xrun!" << std::endl;
     if (m_source) m_source->audioProcessingOverload();
+    return 0;
 }
 
 #ifdef INCLUDE_MOCFILES
