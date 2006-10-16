@@ -32,7 +32,6 @@
 //#define DEBUG_AUDIO_PLAY_SOURCE 1
 //#define DEBUG_AUDIO_PLAY_SOURCE_PLAYING 1
 
-//const size_t AudioCallbackPlaySource::m_ringBufferSize = 102400;
 const size_t AudioCallbackPlaySource::m_ringBufferSize = 131071;
 
 AudioCallbackPlaySource::AudioCallbackPlaySource(ViewManager *manager) :
@@ -794,18 +793,13 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 
     int warned = 0;
 
-    
-
-    //!!!
     // We want output blocks of e.g. 1024 (probably fixed, certainly
     // bounded).  We can provide input blocks of any size (unbounded)
     // at the timestretcher's request.  The input block for a given
     // output is approx output / ratio, but we can't predict it
     // exactly, for an adaptive timestretcher.  The stretcher will
-    // need some additional buffer space.
-
-
-
+    // need some additional buffer space.  See the time stretcher code
+    // and comments.
 
     while ((available = ts->getAvailableOutputSamples()) < count) {
 
