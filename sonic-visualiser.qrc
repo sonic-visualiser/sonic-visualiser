@@ -1,6 +1,7 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
     <file>icons/waveform.png</file>
+    <file>icons/spectrum.png</file>
     <file>icons/spectrogram.png</file>
     <file>icons/timeruler.png</file>
     <file>icons/pane.png</file>
