@@ -251,14 +251,16 @@ FeatureExtractionPluginTransform::run()
 
     if (frequencyDomain) {
         for (size_t ch = 0; ch < channelCount; ++ch) {
-            fftModels.push_back(new FFTModel
+            FFTModel *model = new FFTModel
                                   (getInput(),
                                    channelCount == 1 ? m_context.channel : ch,
                                    m_context.windowType,
                                    m_context.blockSize,
                                    m_context.stepSize,
                                    m_context.blockSize,
-                                   false));
+                                   false);
+            model->resume();
+            fftModels.push_back(model);
         }
     }
 
@@ -292,15 +294,6 @@ FeatureExtractionPluginTransform::run()
                     fftModels[ch]->getValuesAt
                         (column, i, buffers[ch][i*2], buffers[ch][i*2+1]);
                 }
-/*!!!
-                float sum = 0.0;
-                for (size_t i = 0; i < m_context.blockSize/2; ++i) {
-                    sum += buffers[ch][i*2];
-                }
-                if (fabs(sum) < 0.0001) {
-                    std::cerr << "WARNING: small sum for column " << column << " (sum is " << sum << ")" << std::endl;
-                }
-*/
             } else {
                 getFrames(ch, channelCount, 
                           blockFrame, m_context.blockSize, buffers[ch]);
@@ -477,14 +470,12 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 
 	SparseOneDimensionalModel *model = getOutput<SparseOneDimensionalModel>();
 	if (!model) return;
-        std::cerr << "setting on SparseOneDimensionalModel" << std::endl;
 	model->setCompletion(completion);
 
     } else if (binCount == 1) {
 
 	SparseTimeValueModel *model = getOutput<SparseTimeValueModel>();
 	if (!model) return;
-        std::cerr << "setting on SparseTimeValueModel" << std::endl;
 	model->setCompletion(completion);
 
     } else if (m_descriptor->sampleType ==
@@ -492,7 +483,6 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 
 	NoteModel *model = getOutput<NoteModel>();
 	if (!model) return;
-        std::cerr << "setting on NoteModel" << std::endl;
 	model->setCompletion(completion);
 
     } else {
@@ -500,7 +490,6 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 	EditableDenseThreeDimensionalModel *model =
             getOutput<EditableDenseThreeDimensionalModel>();
 	if (!model) return;
-        std::cerr << "setting on EditableDenseThreeDimensionalModel" << std::endl;
 	model->setCompletion(completion);
     }
 }
