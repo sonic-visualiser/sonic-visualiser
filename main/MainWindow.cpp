@@ -2112,8 +2112,8 @@ MainWindow::createDocument()
 
     connect(m_document, SIGNAL(modelGenerationFailed(QString)),
             this, SLOT(modelGenerationFailed(QString)));
-    connect(m_document, SIGNAL(modelRegenerationFailed(QString)),
-            this, SLOT(modelRegenerationFailed(QString)));
+    connect(m_document, SIGNAL(modelRegenerationFailed(QString, QString)),
+            this, SLOT(modelRegenerationFailed(QString, QString)));
 }
 
 void
