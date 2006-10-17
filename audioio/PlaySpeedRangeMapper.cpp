@@ -28,9 +28,14 @@ int
 PlaySpeedRangeMapper::getPositionForValue(float value) const
 {
     // value is percent
-
     float factor = getFactorForValue(value);
+    int position = getPositionForFactor(factor);
+    return position;
+}
 
+int
+PlaySpeedRangeMapper::getPositionForFactor(float factor) const
+{
     bool slow = (factor > 1.0);
 
     if (!slow) factor = 1.0 / factor;
@@ -55,6 +60,13 @@ float
 PlaySpeedRangeMapper::getValueForPosition(int position) const
 {
     float factor = getFactorForPosition(position);
+    float pc = getValueForFactor(factor);
+    return pc;
+}
+
+float
+PlaySpeedRangeMapper::getValueForFactor(float factor) const
+{
     float pc;
     if (factor < 1.0) pc = ((1.0 / factor) - 1.0) * 100.0;
     else pc = (1.0 - factor) * 100.0;
