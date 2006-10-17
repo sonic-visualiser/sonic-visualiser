@@ -480,6 +480,7 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
     bool frequency = false;
     bool effect = false;
+    bool generator = false;
 
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
 
@@ -513,6 +514,10 @@ TransformFactory::getConfigurationForTransform(TransformName name,
             desc->audioOutputPortCount > 0 &&
             !desc->isSynth) {
             effect = true;
+        }
+
+        if (desc->audioInputPortCount == 0) {
+            generator = true;
         }
 
         if (output != "A") {
@@ -568,12 +573,14 @@ TransformFactory::getConfigurationForTransform(TransformName name,
 
         PluginParameterDialog *dialog = new PluginParameterDialog(plugin);
 
-        if (candidateModelNames.size() > 1) {
+        if (candidateModelNames.size() > 1 && !generator) {
             dialog->setCandidateInputModels(candidateModelNames);
         }
 
-        dialog->setChannelArrangement(sourceChannels, targetChannels,
-                                      defaultChannel);
+        if (targetChannels > 0) {
+            dialog->setChannelArrangement(sourceChannels, targetChannels,
+                                          defaultChannel);
+        }
         
         dialog->setOutputLabel(outputLabel);
         
