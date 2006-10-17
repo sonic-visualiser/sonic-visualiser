@@ -41,6 +41,7 @@
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
+#include "audioio/PlaySpeedRangeMapper.h"
 #include "data/fileio/AudioFileReaderFactory.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/WavFileWriter.h"
@@ -177,7 +178,9 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setToolTip(tr("Playback speed: +0%"));
+    m_playSpeed->setObjectName(tr("Playback Speed"));
     m_playSpeed->setDefaultValue(100);
+    m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper(0, 200));
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
 
@@ -3079,34 +3082,18 @@ MainWindow::renameCurrentLayer()
 }
 
 void
-MainWindow::playSpeedChanged(int speed)
+MainWindow::playSpeedChanged(int position)
 {
-    bool slow = false;
-    bool something = false;
-    float factor;
+    PlaySpeedRangeMapper mapper(0, 200);
+    float factor = mapper.getFactorForPosition(position);
+    float percent = mapper.getValueForPosition(position);
 
-    if (speed < 100) {
-        slow = true;
-        speed = 100 - speed;
-    } else {
-        speed = speed - 100;
-    }
+//    std::cerr << "speed = " << position << " factor = " << factor << std::endl;
 
-    // speed is 0 -> 100
+    bool slow = (position < 100);
+    bool something = (position != 100);
 
-    if (speed == 0) {
-        factor = 1.0;
-    } else {
-        factor = speed;
-        factor = 1.0 + (factor * factor) / 1000.f;
-        something = true;
-    }
-
-    int pc = lrintf((factor - 1.0) * 100);
-
-    if (!slow) factor = 1.0 / factor;
-
-    std::cerr << "speed = " << speed << " factor = " << factor << std::endl;
+    int pc = lrintf(percent);
 
     m_playSpeed->setToolTip(tr("Playback speed: %1%2%")
                             .arg(!slow ? "+" : "-")
