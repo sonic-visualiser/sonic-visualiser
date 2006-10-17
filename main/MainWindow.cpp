@@ -177,10 +177,11 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_playSpeed->setFixedHeight(24);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
-    m_playSpeed->setToolTip(tr("Playback speed: +0%"));
-    m_playSpeed->setObjectName(tr("Playback Speed"));
+//!!!    m_playSpeed->setToolTip(tr("Playback speed: +0%"));
+    m_playSpeed->setObjectName(tr("Playback Speedup"));
     m_playSpeed->setDefaultValue(100);
     m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper(0, 200));
+    m_playSpeed->setShowToolTip(true);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
 
@@ -3085,20 +3086,25 @@ void
 MainWindow::playSpeedChanged(int position)
 {
     PlaySpeedRangeMapper mapper(0, 200);
-    float factor = mapper.getFactorForPosition(position);
-    float percent = mapper.getValueForPosition(position);
 
-//    std::cerr << "speed = " << position << " factor = " << factor << std::endl;
+    float percent = m_playSpeed->mappedValue();
 
-    bool slow = (position < 100);
+    float factor = mapper.getFactorForValue(percent);
+
+//    float factor = mapper.getFactorForPosition(position);
+//    float percent = mapper.getValueForPosition(position);
+
+    std::cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << std::endl;
+
+//!!!    bool slow = (position < 100);
     bool something = (position != 100);
-
+/*!!!
     int pc = lrintf(percent);
 
     m_playSpeed->setToolTip(tr("Playback speed: %1%2%")
-                            .arg(!slow ? "+" : "-")
+                            .arg(!slow ? "+" : "")
 			    .arg(pc));
-
+*/
     m_playSharpen->setEnabled(something);
     m_playMono->setEnabled(something);
     bool sharpen = (something && m_playSharpen->isChecked());

@@ -26,6 +26,9 @@ public:
     virtual int getPositionForValue(float value) const;
     virtual float getValueForPosition(int position) const;
 
+    int getPositionForFactor(float factor) const;
+    float getValueForFactor(float factor) const;
+
     float getFactorForPosition(int position) const;
     float getFactorForValue(float value) const;
 
