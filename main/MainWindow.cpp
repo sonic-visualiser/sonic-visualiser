@@ -568,14 +568,14 @@ MainWindow::setupMenus()
 	menu->addAction(action);
 
 /*!!! This one doesn't work properly yet
-
+ */
 	menu->addSeparator();
 
 	action = new QAction(tr("Show &Layer Hierarchy"), this);
 	action->setShortcut(tr("Alt+L"));
 	connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
 	menu->addAction(action);
-*/
+/* */
     }
 
     if (m_paneMenu) {
