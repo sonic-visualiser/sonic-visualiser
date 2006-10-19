@@ -31,7 +31,7 @@
 #include "layer/TimeValueLayer.h"
 #include "layer/Colour3DPlotLayer.h"
 #include "widgets/Fader.h"
-#include "view/Panner.h"
+#include "view/Overview.h"
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
@@ -99,7 +99,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_document(0),
     m_paneStack(0),
     m_viewManager(0),
-    m_panner(0),
+    m_overview(0),
     m_timeRulerLayer(0),
     m_audioOutput(withAudioOutput),
     m_playSource(0),
@@ -148,9 +148,9 @@ MainWindow::MainWindow(bool withAudioOutput) :
     connect(m_paneStack, SIGNAL(rightButtonMenuRequested(Pane *, QPoint)),
             this, SLOT(rightButtonMenuRequested(Pane *, QPoint)));
 
-    m_panner = new Panner(frame);
-    m_panner->setViewManager(m_viewManager);
-    m_panner->setFixedHeight(40);
+    m_overview = new Overview(frame);
+    m_overview->setViewManager(m_viewManager);
+    m_overview->setFixedHeight(40);
 
     m_panLayer = new WaveformLayer;
     m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
@@ -158,7 +158,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
 //    m_panLayer->setAutoNormalize(true);
     m_panLayer->setBaseColour(Qt::darkGreen);
     m_panLayer->setAggressiveCacheing(true);
-    m_panner->addLayer(m_panLayer);
+    m_overview->addLayer(m_panLayer);
 
     m_playSource = new AudioCallbackPlaySource(m_viewManager);
 
@@ -212,7 +212,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     settings.endGroup();
 
     layout->addWidget(m_paneStack, 0, 0, 1, 5);
-    layout->addWidget(m_panner, 1, 0);
+    layout->addWidget(m_overview, 1, 0);
     layout->addWidget(m_fader, 1, 1);
     layout->addWidget(m_playSpeed, 1, 2);
     layout->addWidget(m_playSharpen, 1, 3);
@@ -2081,7 +2081,7 @@ MainWindow::newSession()
     Layer *waveform = m_document->createMainModelLayer(LayerFactory::Waveform);
     m_document->addLayerToView(pane, waveform);
 
-    m_panner->registerView(pane);
+    m_overview->registerView(pane);
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -2130,7 +2130,7 @@ MainWindow::closeSession()
 		(pane, pane->getLayer(pane->getLayerCount() - 1));
 	}
 
-	m_panner->unregisterView(pane);
+	m_overview->unregisterView(pane);
 	m_paneStack->deletePane(pane);
     }
 
@@ -2144,7 +2144,7 @@ MainWindow::closeSession()
 		(pane, pane->getLayer(pane->getLayerCount() - 1));
 	}
 
-	m_panner->unregisterView(pane);
+	m_overview->unregisterView(pane);
 	m_paneStack->deletePane(pane);
     }
 
@@ -2839,7 +2839,7 @@ MainWindow::AddPaneCommand::execute()
     }
 
     m_mw->m_paneStack->setCurrentPane(m_pane);
-    m_mw->m_panner->registerView(m_pane);
+    m_mw->m_overview->registerView(m_pane);
     m_added = true;
 }
 
@@ -2848,7 +2848,7 @@ MainWindow::AddPaneCommand::unexecute()
 {
     m_mw->m_paneStack->hidePane(m_pane);
     m_mw->m_paneStack->setCurrentPane(m_prevCurrentPane);
-    m_mw->m_panner->unregisterView(m_pane); 
+    m_mw->m_overview->unregisterView(m_pane); 
     m_added = false;
 }
 
@@ -2877,7 +2877,7 @@ MainWindow::RemovePaneCommand::execute()
 {
     m_prevCurrentPane = m_mw->m_paneStack->getCurrentPane();
     m_mw->m_paneStack->hidePane(m_pane);
-    m_mw->m_panner->unregisterView(m_pane);
+    m_mw->m_overview->unregisterView(m_pane);
     m_added = false;
 }
 
@@ -2886,7 +2886,7 @@ MainWindow::RemovePaneCommand::unexecute()
 {
     m_mw->m_paneStack->showPane(m_pane);
     m_mw->m_paneStack->setCurrentPane(m_prevCurrentPane);
-    m_mw->m_panner->registerView(m_pane);
+    m_mw->m_overview->registerView(m_pane);
     m_added = true;
 }
 

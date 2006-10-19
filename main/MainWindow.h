@@ -35,7 +35,7 @@ class PaneStack;
 class Pane;
 class View;
 class Fader;
-class Panner;
+class Overview;
 class Layer;
 class WaveformLayer;
 class WaveFileModel;
@@ -207,7 +207,7 @@ protected:
     QLabel                  *m_descriptionLabel;
     PaneStack               *m_paneStack;
     ViewManager             *m_viewManager;
-    Panner                  *m_panner;
+    Overview                *m_overview;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
     QPushButton             *m_playSharpen;
