@@ -243,9 +243,11 @@ protected:
     struct PaneConfiguration {
 	PaneConfiguration(LayerFactory::LayerType _layer
 			                       = LayerFactory::TimeRuler,
+                          Model *_source = 0,
 			  int _channel = -1) :
-	    layer(_layer), channel(_channel) { }
+	    layer(_layer), sourceModel(_source), channel(_channel) { }
 	LayerFactory::LayerType layer;
+        Model *sourceModel;
 	int channel;
     };
 
@@ -268,8 +270,15 @@ protected:
     ToolActionMap m_toolActions;
 
     void setupMenus();
+    void setupFileMenu();
+    void setupEditMenu();
+    void setupViewMenu();
+    void setupPaneAndLayerMenus();
+    void setupTransformsMenu();
+    void setupHelpMenu();
     void setupExistingLayersMenu();
     void setupToolbars();
+
     Pane *addPaneToStack();
 
     class PaneCallback : public SVFileReaderPaneCallback

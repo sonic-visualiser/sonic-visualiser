@@ -177,7 +177,6 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_playSpeed->setFixedHeight(24);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
-//!!!    m_playSpeed->setToolTip(tr("Playback speed: +0%"));
     m_playSpeed->setObjectName(tr("Playback Speedup"));
     m_playSpeed->setDefaultValue(100);
     m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper(0, 200));
@@ -250,10 +249,6 @@ MainWindow::~MainWindow()
 void
 MainWindow::setupMenus()
 {
-    QAction *action = 0;
-    QMenu *menu = 0;
-    QToolBar *toolbar = 0;
-
     if (!m_mainMenusCreated) {
         m_rightButtonMenu = new QMenu();
     }
@@ -273,311 +268,341 @@ MainWindow::setupMenus()
     }
 
     if (!m_mainMenusCreated) {
-
         CommandHistory::getInstance()->registerMenu(m_rightButtonMenu);
         m_rightButtonMenu->addSeparator();
+    }
 
-	menu = menuBar()->addMenu(tr("&File"));
-        toolbar = addToolBar(tr("File Toolbar"));
+    setupFileMenu();
+    setupEditMenu();
+    setupViewMenu();
+    setupPaneAndLayerMenus();
+    setupTransformsMenu();
+    setupHelpMenu();
 
-        QIcon icon(":icons/filenew.png");
-        icon.addFile(":icons/filenew-22.png");
-	action = new QAction(icon, tr("&New Session"), this);
-	action->setShortcut(tr("Ctrl+N"));
-	action->setStatusTip(tr("Clear the current Sonic Visualiser session and start a new one"));
-	connect(action, SIGNAL(triggered()), this, SLOT(newSession()));
-	menu->addAction(action);
-        toolbar->addAction(action);
+    m_mainMenusCreated = true;
+}
+
+void
+MainWindow::setupFileMenu()
+{
+    if (m_mainMenusCreated) return;
+
+    QMenu *menu = menuBar()->addMenu(tr("&File"));
+    QToolBar *toolbar = addToolBar(tr("File Toolbar"));
+
+    QIcon icon(":icons/filenew.png");
+    icon.addFile(":icons/filenew-22.png");
+    QAction *action = new QAction(icon, tr("&New Session"), this);
+    action->setShortcut(tr("Ctrl+N"));
+    action->setStatusTip(tr("Clear the current Sonic Visualiser session and start a new one"));
+    connect(action, SIGNAL(triggered()), this, SLOT(newSession()));
+    menu->addAction(action);
+    toolbar->addAction(action);
 	
-        icon = QIcon(":icons/fileopen.png");
-        icon.addFile(":icons/fileopen-22.png");
+    icon = QIcon(":icons/fileopen.png");
+    icon.addFile(":icons/fileopen-22.png");
 
-	action = new QAction(icon, tr("&Open Session..."), this);
-	action->setShortcut(tr("Ctrl+O"));
-	action->setStatusTip(tr("Open a previously saved Sonic Visualiser session file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(openSession()));
-	menu->addAction(action);
+    action = new QAction(icon, tr("&Open Session..."), this);
+    action->setShortcut(tr("Ctrl+O"));
+    action->setStatusTip(tr("Open a previously saved Sonic Visualiser session file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(openSession()));
+    menu->addAction(action);
 
-	action = new QAction(icon, tr("&Open..."), this);
-	action->setStatusTip(tr("Open a session file, audio file, or layer"));
-	connect(action, SIGNAL(triggered()), this, SLOT(openSomething()));
-        toolbar->addAction(action);
+    action = new QAction(icon, tr("&Open..."), this);
+    action->setStatusTip(tr("Open a session file, audio file, or layer"));
+    connect(action, SIGNAL(triggered()), this, SLOT(openSomething()));
+    toolbar->addAction(action);
 
-        icon = QIcon(":icons/filesave.png");
-        icon.addFile(":icons/filesave-22.png");
-	action = new QAction(icon, tr("&Save Session"), this);
-	action->setShortcut(tr("Ctrl+S"));
-	action->setStatusTip(tr("Save the current session into a Sonic Visualiser session file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(saveSession()));
-	connect(this, SIGNAL(canSave(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
-        toolbar->addAction(action);
+    icon = QIcon(":icons/filesave.png");
+    icon.addFile(":icons/filesave-22.png");
+    action = new QAction(icon, tr("&Save Session"), this);
+    action->setShortcut(tr("Ctrl+S"));
+    action->setStatusTip(tr("Save the current session into a Sonic Visualiser session file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(saveSession()));
+    connect(this, SIGNAL(canSave(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    toolbar->addAction(action);
 	
-        icon = QIcon(":icons/filesaveas.png");
-        icon.addFile(":icons/filesaveas-22.png");
-	action = new QAction(icon, tr("Save Session &As..."), this);
-	action->setStatusTip(tr("Save the current session into a new Sonic Visualiser session file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAs()));
-	menu->addAction(action);
-        toolbar->addAction(action);
+    icon = QIcon(":icons/filesaveas.png");
+    icon.addFile(":icons/filesaveas-22.png");
+    action = new QAction(icon, tr("Save Session &As..."), this);
+    action->setStatusTip(tr("Save the current session into a new Sonic Visualiser session file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAs()));
+    menu->addAction(action);
+    toolbar->addAction(action);
 
-	menu->addSeparator();
+    menu->addSeparator();
 
-	action = new QAction(tr("&Import Audio File..."), this);
-	action->setShortcut(tr("Ctrl+I"));
-	action->setStatusTip(tr("Import an existing audio file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
-	menu->addAction(action);
+    action = new QAction(tr("&Import Audio File..."), this);
+    action->setShortcut(tr("Ctrl+I"));
+    action->setStatusTip(tr("Import an existing audio file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
+    menu->addAction(action);
 
-	action = new QAction(tr("Import Secondary Audio File..."), this);
-	action->setShortcut(tr("Ctrl+Shift+I"));
-	action->setStatusTip(tr("Import an extra audio file as a separate layer"));
-	connect(action, SIGNAL(triggered()), this, SLOT(importMoreAudio()));
-	connect(this, SIGNAL(canImportMoreAudio(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Import Secondary Audio File..."), this);
+    action->setShortcut(tr("Ctrl+Shift+I"));
+    action->setStatusTip(tr("Import an extra audio file as a separate layer"));
+    connect(action, SIGNAL(triggered()), this, SLOT(importMoreAudio()));
+    connect(this, SIGNAL(canImportMoreAudio(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-	action = new QAction(tr("&Export Audio File..."), this);
-	action->setStatusTip(tr("Export selection as an audio file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(exportAudio()));
-	connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("&Export Audio File..."), this);
+    action->setStatusTip(tr("Export selection as an audio file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportAudio()));
+    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-	menu->addSeparator();
+    menu->addSeparator();
 
-	action = new QAction(tr("Import Annotation &Layer..."), this);
-	action->setShortcut(tr("Ctrl+L"));
-	action->setStatusTip(tr("Import layer data from an existing file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(importLayer()));
-	connect(this, SIGNAL(canImportLayer(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Import Annotation &Layer..."), this);
+    action->setShortcut(tr("Ctrl+L"));
+    action->setStatusTip(tr("Import layer data from an existing file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(importLayer()));
+    connect(this, SIGNAL(canImportLayer(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-	action = new QAction(tr("Export Annotation Layer..."), this);
-	action->setStatusTip(tr("Export layer data to a file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(exportLayer()));
-	connect(this, SIGNAL(canExportLayer(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Export Annotation Layer..."), this);
+    action->setStatusTip(tr("Export layer data to a file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportLayer()));
+    connect(this, SIGNAL(canExportLayer(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-	menu->addSeparator();
-        m_recentFilesMenu = menu->addMenu(tr("&Recent Files"));
-        setupRecentFilesMenu();
-        connect(&m_recentFiles, SIGNAL(recentChanged()),
-                this, SLOT(setupRecentFilesMenu()));
+    menu->addSeparator();
+    m_recentFilesMenu = menu->addMenu(tr("&Recent Files"));
+    setupRecentFilesMenu();
+    connect(&m_recentFiles, SIGNAL(recentChanged()),
+            this, SLOT(setupRecentFilesMenu()));
 
-	menu->addSeparator();
-	action = new QAction(tr("&Preferences..."), this);
-	action->setStatusTip(tr("Adjust the application preferences"));
-	connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
-	menu->addAction(action);
+    menu->addSeparator();
+    action = new QAction(tr("&Preferences..."), this);
+    action->setStatusTip(tr("Adjust the application preferences"));
+    connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
+    menu->addAction(action);
 	
-	/*!!!
-	menu->addSeparator();
+    /*!!!
+      menu->addSeparator();
 	
-	action = new QAction(tr("Play / Pause"), this);
-	action->setShortcut(tr("Space"));
-	action->setStatusTip(tr("Start or stop playback from the current position"));
-	connect(action, SIGNAL(triggered()), this, SLOT(play()));
-	menu->addAction(action);
-	*/
+      action = new QAction(tr("Play / Pause"), this);
+      action->setShortcut(tr("Space"));
+      action->setStatusTip(tr("Start or stop playback from the current position"));
+      connect(action, SIGNAL(triggered()), this, SLOT(play()));
+      menu->addAction(action);
+    */
 
-	menu->addSeparator();
-	action = new QAction(QIcon(":/icons/exit.png"),
-			     tr("&Quit"), this);
-	action->setShortcut(tr("Ctrl+Q"));
-	connect(action, SIGNAL(triggered()), this, SLOT(close()));
-	menu->addAction(action);
+    menu->addSeparator();
+    action = new QAction(QIcon(":/icons/exit.png"),
+                         tr("&Quit"), this);
+    action->setShortcut(tr("Ctrl+Q"));
+    connect(action, SIGNAL(triggered()), this, SLOT(close()));
+    menu->addAction(action);
+}
 
-	menu = menuBar()->addMenu(tr("&Edit"));
-	CommandHistory::getInstance()->registerMenu(menu);
+void
+MainWindow::setupEditMenu()
+{
+    if (m_mainMenusCreated) return;
 
-	menu->addSeparator();
+    QMenu *menu = menuBar()->addMenu(tr("&Edit"));
+    CommandHistory::getInstance()->registerMenu(menu);
 
-	action = new QAction(QIcon(":/icons/editcut.png"),
-			     tr("Cu&t"), this);
-	action->setShortcut(tr("Ctrl+X"));
-	connect(action, SIGNAL(triggered()), this, SLOT(cut()));
-	connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
-        m_rightButtonMenu->addAction(action);
+    menu->addSeparator();
 
-	action = new QAction(QIcon(":/icons/editcopy.png"),
-			     tr("&Copy"), this);
-	action->setShortcut(tr("Ctrl+C"));
-	connect(action, SIGNAL(triggered()), this, SLOT(copy()));
-	connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
-        m_rightButtonMenu->addAction(action);
+    QAction *action = new QAction(QIcon(":/icons/editcut.png"),
+                                  tr("Cu&t"), this);
+    action->setShortcut(tr("Ctrl+X"));
+    connect(action, SIGNAL(triggered()), this, SLOT(cut()));
+    connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
 
-	action = new QAction(QIcon(":/icons/editpaste.png"),
-			     tr("&Paste"), this);
-	action->setShortcut(tr("Ctrl+V"));
-	connect(action, SIGNAL(triggered()), this, SLOT(paste()));
-	connect(this, SIGNAL(canPaste(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
-        m_rightButtonMenu->addAction(action);
+    action = new QAction(QIcon(":/icons/editcopy.png"),
+                         tr("&Copy"), this);
+    action->setShortcut(tr("Ctrl+C"));
+    connect(action, SIGNAL(triggered()), this, SLOT(copy()));
+    connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
 
-	action = new QAction(tr("&Delete Selected Items"), this);
-	action->setShortcut(tr("Del"));
-	connect(action, SIGNAL(triggered()), this, SLOT(deleteSelected()));
-	connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
-        m_rightButtonMenu->addAction(action);
+    action = new QAction(QIcon(":/icons/editpaste.png"),
+                         tr("&Paste"), this);
+    action->setShortcut(tr("Ctrl+V"));
+    connect(action, SIGNAL(triggered()), this, SLOT(paste()));
+    connect(this, SIGNAL(canPaste(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
 
-	menu->addSeparator();
-        m_rightButtonMenu->addSeparator();
+    action = new QAction(tr("&Delete Selected Items"), this);
+    action->setShortcut(tr("Del"));
+    connect(action, SIGNAL(triggered()), this, SLOT(deleteSelected()));
+    connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
+
+    menu->addSeparator();
+    m_rightButtonMenu->addSeparator();
 	
-	action = new QAction(tr("Select &All"), this);
-	action->setShortcut(tr("Ctrl+A"));
-	connect(action, SIGNAL(triggered()), this, SLOT(selectAll()));
-	connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
-        m_rightButtonMenu->addAction(action);
+    action = new QAction(tr("Select &All"), this);
+    action->setShortcut(tr("Ctrl+A"));
+    connect(action, SIGNAL(triggered()), this, SLOT(selectAll()));
+    connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
 	
-	action = new QAction(tr("Select &Visible Range"), this);
-	action->setShortcut(tr("Ctrl+Shift+A"));
-	connect(action, SIGNAL(triggered()), this, SLOT(selectVisible()));
-	connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Select &Visible Range"), this);
+    action->setShortcut(tr("Ctrl+Shift+A"));
+    connect(action, SIGNAL(triggered()), this, SLOT(selectVisible()));
+    connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 	
-	action = new QAction(tr("Select to &Start"), this);
-	action->setShortcut(tr("Shift+Left"));
-	connect(action, SIGNAL(triggered()), this, SLOT(selectToStart()));
-	connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Select to &Start"), this);
+    action->setShortcut(tr("Shift+Left"));
+    connect(action, SIGNAL(triggered()), this, SLOT(selectToStart()));
+    connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 	
-	action = new QAction(tr("Select to &End"), this);
-	action->setShortcut(tr("Shift+Right"));
-	connect(action, SIGNAL(triggered()), this, SLOT(selectToEnd()));
-	connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Select to &End"), this);
+    action->setShortcut(tr("Shift+Right"));
+    connect(action, SIGNAL(triggered()), this, SLOT(selectToEnd()));
+    connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-	action = new QAction(tr("C&lear Selection"), this);
-	action->setShortcut(tr("Esc"));
-	connect(action, SIGNAL(triggered()), this, SLOT(clearSelection()));
-	connect(this, SIGNAL(canClearSelection(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
-        m_rightButtonMenu->addAction(action);
+    action = new QAction(tr("C&lear Selection"), this);
+    action->setShortcut(tr("Esc"));
+    connect(action, SIGNAL(triggered()), this, SLOT(clearSelection()));
+    connect(this, SIGNAL(canClearSelection(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
 
-	menu->addSeparator();
+    menu->addSeparator();
 
-	action = new QAction(tr("&Insert Instant at Playback Position"), this);
-	action->setShortcut(tr("Enter"));
-	connect(action, SIGNAL(triggered()), this, SLOT(insertInstant()));
-	connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("&Insert Instant at Playback Position"), this);
+    action->setShortcut(tr("Enter"));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertInstant()));
+    connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-        // Laptop shortcut (no keypad Enter key)
-        connect(new QShortcut(tr(";"), this), SIGNAL(activated()),
-                this, SLOT(insertInstant()));
+    // Laptop shortcut (no keypad Enter key)
+    connect(new QShortcut(tr(";"), this), SIGNAL(activated()),
+            this, SLOT(insertInstant()));
+}
 
-	menu = menuBar()->addMenu(tr("&View"));
+void
+MainWindow::setupViewMenu()
+{
+    if (m_mainMenusCreated) return;
 
-        QActionGroup *overlayGroup = new QActionGroup(this);
+    QMenu *menu = menuBar()->addMenu(tr("&View"));
+
+    QActionGroup *overlayGroup = new QActionGroup(this);
         
-        action = new QAction(tr("&No Text Overlays"), this);
-	action->setShortcut(tr("0"));
-	action->setStatusTip(tr("Show no texts for frame times, layer names etc"));
-	connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
-        action->setCheckable(true);
-        action->setChecked(false);
-        overlayGroup->addAction(action);
-	menu->addAction(action);
+    QAction *action = new QAction(tr("&No Text Overlays"), this);
+    action->setShortcut(tr("0"));
+    action->setStatusTip(tr("Show no texts for frame times, layer names etc"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
+    action->setCheckable(true);
+    action->setChecked(false);
+    overlayGroup->addAction(action);
+    menu->addAction(action);
         
-        action = new QAction(tr("Basic &Text Overlays"), this);
-	action->setShortcut(tr("9"));
-	action->setStatusTip(tr("Show texts for frame times etc, but not layer names etc"));
-	connect(action, SIGNAL(triggered()), this, SLOT(showBasicOverlays()));
-        action->setCheckable(true);
-        action->setChecked(true);
-        overlayGroup->addAction(action);
-	menu->addAction(action);
+    action = new QAction(tr("Basic &Text Overlays"), this);
+    action->setShortcut(tr("9"));
+    action->setStatusTip(tr("Show texts for frame times etc, but not layer names etc"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showBasicOverlays()));
+    action->setCheckable(true);
+    action->setChecked(true);
+    overlayGroup->addAction(action);
+    menu->addAction(action);
         
-        action = new QAction(tr("&All Text Overlays"), this);
-	action->setShortcut(tr("8"));
-	action->setStatusTip(tr("Show texts for frame times, layer names etc"));
-	connect(action, SIGNAL(triggered()), this, SLOT(showAllTextOverlays()));
-        action->setCheckable(true);
-        action->setChecked(false);
-        overlayGroup->addAction(action);
-	menu->addAction(action);
+    action = new QAction(tr("&All Text Overlays"), this);
+    action->setShortcut(tr("8"));
+    action->setStatusTip(tr("Show texts for frame times, layer names etc"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showAllTextOverlays()));
+    action->setCheckable(true);
+    action->setChecked(false);
+    overlayGroup->addAction(action);
+    menu->addAction(action);
 
-	menu->addSeparator();
+    menu->addSeparator();
 	
-	action = new QAction(tr("Scroll &Left"), this);
-	action->setShortcut(tr("Left"));
-	action->setStatusTip(tr("Scroll the current pane to the left"));
-	connect(action, SIGNAL(triggered()), this, SLOT(scrollLeft()));
-	connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Scroll &Left"), this);
+    action->setShortcut(tr("Left"));
+    action->setStatusTip(tr("Scroll the current pane to the left"));
+    connect(action, SIGNAL(triggered()), this, SLOT(scrollLeft()));
+    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 	
-	action = new QAction(tr("Scroll &Right"), this);
-	action->setShortcut(tr("Right"));
-	action->setStatusTip(tr("Scroll the current pane to the right"));
-	connect(action, SIGNAL(triggered()), this, SLOT(scrollRight()));
-	connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Scroll &Right"), this);
+    action->setShortcut(tr("Right"));
+    action->setStatusTip(tr("Scroll the current pane to the right"));
+    connect(action, SIGNAL(triggered()), this, SLOT(scrollRight()));
+    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 	
-	action = new QAction(tr("Jump Left"), this);
-	action->setShortcut(tr("Ctrl+Left"));
-	action->setStatusTip(tr("Scroll the current pane a big step to the left"));
-	connect(action, SIGNAL(triggered()), this, SLOT(jumpLeft()));
-	connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Jump Left"), this);
+    action->setShortcut(tr("Ctrl+Left"));
+    action->setStatusTip(tr("Scroll the current pane a big step to the left"));
+    connect(action, SIGNAL(triggered()), this, SLOT(jumpLeft()));
+    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 	
-	action = new QAction(tr("Jump Right"), this);
-	action->setShortcut(tr("Ctrl+Right"));
-	action->setStatusTip(tr("Scroll the current pane a big step to the right"));
-	connect(action, SIGNAL(triggered()), this, SLOT(jumpRight()));
-	connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Jump Right"), this);
+    action->setShortcut(tr("Ctrl+Right"));
+    action->setStatusTip(tr("Scroll the current pane a big step to the right"));
+    connect(action, SIGNAL(triggered()), this, SLOT(jumpRight()));
+    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-	menu->addSeparator();
+    menu->addSeparator();
 
-	action = new QAction(QIcon(":/icons/zoom-in.png"),
-			     tr("Zoom &In"), this);
-	action->setShortcut(tr("Up"));
-	action->setStatusTip(tr("Increase the zoom level"));
-	connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
-	connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(QIcon(":/icons/zoom-in.png"),
+                         tr("Zoom &In"), this);
+    action->setShortcut(tr("Up"));
+    action->setStatusTip(tr("Increase the zoom level"));
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
+    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 	
-	action = new QAction(QIcon(":/icons/zoom-out.png"),
-			     tr("Zoom &Out"), this);
-	action->setShortcut(tr("Down"));
-	action->setStatusTip(tr("Decrease the zoom level"));
-	connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
-	connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(QIcon(":/icons/zoom-out.png"),
+                         tr("Zoom &Out"), this);
+    action->setShortcut(tr("Down"));
+    action->setStatusTip(tr("Decrease the zoom level"));
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
+    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 	
-	action = new QAction(tr("Restore &Default Zoom"), this);
-	connect(action, SIGNAL(triggered()), this, SLOT(zoomDefault()));
-	connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Restore &Default Zoom"), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomDefault()));
+    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 
-        action = new QAction(tr("Zoom to &Fit"), this);
-	action->setStatusTip(tr("Zoom to show the whole file"));
-	connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
-	connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-	menu->addAction(action);
+    action = new QAction(tr("Zoom to &Fit"), this);
+    action->setStatusTip(tr("Zoom to show the whole file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
+    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
         
-        action = new QAction(tr("Show &Zoom Wheels"), this);
-	action->setShortcut(tr("Z"));
-	action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
-	connect(action, SIGNAL(triggered()), this, SLOT(toggleZoomWheels()));
-        action->setCheckable(true);
-        action->setChecked(m_viewManager->getZoomWheelsEnabled());
-	menu->addAction(action);
+    action = new QAction(tr("Show &Zoom Wheels"), this);
+    action->setShortcut(tr("Z"));
+    action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleZoomWheels()));
+    action->setCheckable(true);
+    action->setChecked(m_viewManager->getZoomWheelsEnabled());
+    menu->addAction(action);
 
 /*!!! This one doesn't work properly yet
  */
-	menu->addSeparator();
+    menu->addSeparator();
 
-	action = new QAction(tr("Show &Layer Hierarchy"), this);
-	action->setShortcut(tr("Alt+L"));
-	connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
-	menu->addAction(action);
+    action = new QAction(tr("Show &Layer Hierarchy"), this);
+    action->setShortcut(tr("Alt+L"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
+    menu->addAction(action);
 /* */
-    }
+}
 
+void
+MainWindow::setupPaneAndLayerMenus()
+{
     if (m_paneMenu) {
 	m_paneActions.clear();
 	m_paneMenu->clear();
@@ -592,6 +617,300 @@ MainWindow::setupMenus()
 	m_layerMenu = menuBar()->addMenu(tr("&Layer"));
     }
 
+    QMenu *menu = m_paneMenu;
+
+    QAction *action = new QAction(QIcon(":/icons/pane.png"), tr("Add &New Pane"), this);
+    action->setShortcut(tr("Alt+N"));
+    action->setStatusTip(tr("Add a new pane containing only a time ruler"));
+    connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
+    connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
+    m_paneActions[action] = PaneConfiguration(LayerFactory::TimeRuler);
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    menu = m_layerMenu;
+
+//    menu->addSeparator();
+
+    LayerFactory::LayerTypeSet emptyLayerTypes =
+	LayerFactory::getInstance()->getValidEmptyLayerTypes();
+
+    for (LayerFactory::LayerTypeSet::iterator i = emptyLayerTypes.begin();
+	 i != emptyLayerTypes.end(); ++i) {
+	
+	QIcon icon;
+	QString mainText, tipText, channelText;
+	LayerFactory::LayerType type = *i;
+	QString name = LayerFactory::getInstance()->getLayerPresentationName(type);
+	
+	icon = QIcon(QString(":/icons/%1.png")
+		     .arg(LayerFactory::getInstance()->getLayerIconName(type)));
+
+	mainText = tr("Add New %1 Layer").arg(name);
+	tipText = tr("Add a new empty layer of type %1").arg(name);
+
+	action = new QAction(icon, mainText, this);
+	action->setStatusTip(tipText);
+
+	if (type == LayerFactory::Text) {
+	    action->setShortcut(tr("Alt+T"));
+	}
+
+	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+	m_layerActions[action] = type;
+	menu->addAction(action);
+        m_rightButtonLayerMenu->addAction(action);
+    }
+    
+    m_rightButtonLayerMenu->addSeparator();
+    menu->addSeparator();
+
+    LayerFactory::LayerType backgroundTypes[] = {
+	LayerFactory::Waveform,
+	LayerFactory::Spectrogram,
+	LayerFactory::MelodicRangeSpectrogram,
+	LayerFactory::PeakFrequencySpectrogram,
+        LayerFactory::Spectrum
+    };
+
+    std::vector<Model *> models;
+    if (m_document) models = m_document->getTransformInputModels(); //!!! not well named for this!
+    bool plural = (models.size() > 1);
+    if (models.empty()) {
+        if (m_document) {
+            models.push_back(m_document->getMainModel()); // probably 0
+        } else {
+            models.push_back(0);
+        }
+    }
+
+    for (unsigned int i = 0;
+	 i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
+
+	for (int menuType = 0; menuType <= 1; ++menuType) { // pane, layer
+
+	    if (menuType == 0) menu = m_paneMenu;
+	    else menu = m_layerMenu;
+
+	    QMenu *submenu = 0;
+
+            QIcon icon;
+            QString mainText, shortcutText, tipText, channelText;
+            LayerFactory::LayerType type = backgroundTypes[i];
+            bool mono = true;
+            
+            switch (type) {
+                    
+            case LayerFactory::Waveform:
+                icon = QIcon(":/icons/waveform.png");
+                mainText = tr("Add &Waveform");
+                if (menuType == 0) {
+                    shortcutText = tr("Alt+W");
+                    tipText = tr("Add a new pane showing a waveform view");
+                } else {
+                    tipText = tr("Add a new layer showing a waveform view");
+                }
+                mono = false;
+                break;
+		
+            case LayerFactory::Spectrogram:
+                mainText = tr("Add &Spectrogram");
+                if (menuType == 0) {
+                    shortcutText = tr("Alt+S");
+                    tipText = tr("Add a new pane showing a dB spectrogram");
+                } else {
+                    tipText = tr("Add a new layer showing a dB spectrogram");
+                }
+                break;
+		
+            case LayerFactory::MelodicRangeSpectrogram:
+                mainText = tr("Add &Melodic Range Spectrogram");
+                if (menuType == 0) {
+                    shortcutText = tr("Alt+M");
+                    tipText = tr("Add a new pane showing a spectrogram set up for a pitch overview");
+                } else {
+                    tipText = tr("Add a new layer showing a spectrogram set up for a pitch overview");
+                }
+                break;
+		
+            case LayerFactory::PeakFrequencySpectrogram:
+                mainText = tr("Add &Peak Frequency Spectrogram");
+                if (menuType == 0) {
+                    shortcutText = tr("Alt+P");
+                    tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
+                } else {
+                    tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
+                }
+                break;
+                
+            case LayerFactory::Spectrum:
+                mainText = tr("Add Spectr&um");
+                if (menuType == 0) {
+                    shortcutText = tr("Alt+U");
+                    tipText = tr("Add a new pane showing a frequency spectrum");
+                } else {
+                    tipText = tr("Add a new layer showing a frequency spectrum");
+                }
+                break;
+                
+            default: break;
+            }
+
+            std::vector<Model *> candidateModels;
+            if (menuType == 0) {
+                candidateModels = models;
+            } else {
+                candidateModels.push_back(0);
+            }
+            
+            for (std::vector<Model *>::iterator mi =
+                     candidateModels.begin();
+                 mi != candidateModels.end(); ++mi) {
+                
+                Model *model = *mi;
+
+                int channels = 0;
+                if (model) {
+                    DenseTimeValueModel *dtvm =
+                        dynamic_cast<DenseTimeValueModel *>(model);
+                    if (dtvm) channels = dtvm->getChannelCount();
+                }
+                if (channels < 1 && getMainModel()) {
+                    channels = getMainModel()->getChannelCount();
+                }
+                if (channels < 1) channels = 1;
+
+                for (int c = 0; c <= channels; ++c) {
+
+                    if (c == 1 && channels == 1) continue;
+                    bool isDefault = (c == 0);
+                    bool isOnly = (isDefault && (channels == 1));
+
+                    if (menuType == 1) {
+                        if (isDefault) isOnly = true;
+                        else continue;
+                    }
+
+                    if (isOnly && (!plural || menuType == 1)) {
+
+                        action = new QAction(icon, mainText, this);
+                        action->setShortcut(shortcutText);
+                        action->setStatusTip(tipText);
+                        if (menuType == 0) {
+                            connect(action, SIGNAL(triggered()),
+                                    this, SLOT(addPane()));
+                            connect(this, SIGNAL(canAddPane(bool)),
+                                    action, SLOT(setEnabled(bool)));
+                            m_paneActions[action] = PaneConfiguration(type);
+                        } else {
+                            connect(action, SIGNAL(triggered()),
+                                    this, SLOT(addLayer()));
+                            connect(this, SIGNAL(canAddLayer(bool)),
+                                    action, SLOT(setEnabled(bool)));
+                            m_layerActions[action] = type;
+                        }
+                        menu->addAction(action);
+                        
+                    } else {
+                        
+                        if (!submenu) {
+                            submenu = menu->addMenu(mainText);
+                        }
+
+                        QString actionText;
+                        if (c == 0) {
+                            if (mono) {
+                                actionText = tr("&All Channels Mixed");
+                            } else {
+                                actionText = tr("&All Channels");
+                            }
+                        } else {
+                            actionText = tr("Channel &%1").arg(c);
+                        }
+
+                        if (model) {
+                            actionText = tr("%1: %2")
+                                .arg(model->objectName())
+                                .arg(actionText);
+                        }
+		 
+                        action = new QAction(icon, actionText, this);
+                        if (isDefault) action->setShortcut(shortcutText);
+                        action->setStatusTip(tipText);
+
+                        if (menuType == 0) {
+                            connect(action, SIGNAL(triggered()),
+                                    this, SLOT(addPane()));
+                            connect(this, SIGNAL(canAddPane(bool)),
+                                    action, SLOT(setEnabled(bool)));
+                            m_paneActions[action] =
+                                PaneConfiguration(type, model, c - 1);
+                        } else {
+                            connect(action, SIGNAL(triggered()),
+                                    this, SLOT(addLayer()));
+                            connect(this, SIGNAL(canAddLayer(bool)),
+                                    action, SLOT(setEnabled(bool)));
+                            m_layerActions[action] = type;
+                        }
+
+                        submenu->addAction(action);
+                    }
+		}
+	    }
+	}
+    }
+
+    menu = m_paneMenu;
+
+    menu->addSeparator();
+
+    action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Pane"), this);
+    action->setShortcut(tr("Alt+D"));
+    action->setStatusTip(tr("Delete the currently selected pane"));
+    connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentPane()));
+    connect(this, SIGNAL(canDeleteCurrentPane(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu = m_layerMenu;
+
+    action = new QAction(QIcon(":/icons/timeruler.png"), tr("Add &Time Ruler"), this);
+    action->setStatusTip(tr("Add a new layer showing a time ruler"));
+    connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_layerActions[action] = LayerFactory::TimeRuler;
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    m_existingLayersMenu = menu->addMenu(tr("Add &Existing Layer"));
+    m_rightButtonLayerMenu->addMenu(m_existingLayersMenu);
+    setupExistingLayersMenu();
+
+    m_rightButtonLayerMenu->addSeparator();
+    menu->addSeparator();
+
+    action = new QAction(tr("&Rename Layer..."), this);
+    action->setShortcut(tr("Alt+R"));
+    action->setStatusTip(tr("Rename the currently active layer"));
+    connect(action, SIGNAL(triggered()), this, SLOT(renameCurrentLayer()));
+    connect(this, SIGNAL(canRenameLayer(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonLayerMenu->addAction(action);
+
+    action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Layer"), this);
+    action->setShortcut(tr("Alt+Shift+D"));
+    action->setStatusTip(tr("Delete the currently active layer"));
+    connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentLayer()));
+    connect(this, SIGNAL(canDeleteCurrentLayer(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+    m_rightButtonLayerMenu->addAction(action);
+}
+
+void
+MainWindow::setupTransformsMenu()
+{
     if (m_transformsMenu) {
         m_transformActions.clear();
         m_transformActionsReverse.clear();
@@ -718,7 +1037,7 @@ MainWindow::setupMenus()
         QString pluginName = description.section(": ", 0, 0);
         QString output = description.section(": ", 1);
 
-	action = new QAction(tr("%1...").arg(description), this);
+	QAction *action = new QAction(tr("%1...").arg(description), this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
 	m_transformActions[action] = transforms[i].name;
         m_transformActionsReverse[transforms[i].name] = action;
@@ -777,272 +1096,29 @@ MainWindow::setupMenus()
     }
 
     setupRecentTransformsMenu();
+}
 
-    menu = m_paneMenu;
+void
+MainWindow::setupHelpMenu()
+{
+    if (m_mainMenusCreated) return;
 
-    action = new QAction(QIcon(":/icons/pane.png"), tr("Add &New Pane"), this);
-    action->setShortcut(tr("Alt+N"));
-    action->setStatusTip(tr("Add a new pane containing only a time ruler"));
-    connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
-    connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
-    m_paneActions[action] = PaneConfiguration(LayerFactory::TimeRuler);
-    menu->addAction(action);
-
-    menu->addSeparator();
-
-    menu = m_layerMenu;
-
-//    menu->addSeparator();
-
-    LayerFactory::LayerTypeSet emptyLayerTypes =
-	LayerFactory::getInstance()->getValidEmptyLayerTypes();
-
-    for (LayerFactory::LayerTypeSet::iterator i = emptyLayerTypes.begin();
-	 i != emptyLayerTypes.end(); ++i) {
-	
-	QIcon icon;
-	QString mainText, tipText, channelText;
-	LayerFactory::LayerType type = *i;
-	QString name = LayerFactory::getInstance()->getLayerPresentationName(type);
-	
-	icon = QIcon(QString(":/icons/%1.png")
-		     .arg(LayerFactory::getInstance()->getLayerIconName(type)));
-
-	mainText = tr("Add New %1 Layer").arg(name);
-	tipText = tr("Add a new empty layer of type %1").arg(name);
-
-	action = new QAction(icon, mainText, this);
-	action->setStatusTip(tipText);
-
-	if (type == LayerFactory::Text) {
-	    action->setShortcut(tr("Alt+T"));
-	}
-
-	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_layerActions[action] = type;
-	menu->addAction(action);
-        m_rightButtonLayerMenu->addAction(action);
-    }
+    QMenu *menu = menuBar()->addMenu(tr("&Help"));
     
-    m_rightButtonLayerMenu->addSeparator();
-    menu->addSeparator();
-
-    int channels = 1;
-    if (getMainModel()) channels = getMainModel()->getChannelCount();
-
-    if (channels < 1) channels = 1;
-
-    LayerFactory::LayerType backgroundTypes[] = {
-	LayerFactory::Waveform,
-	LayerFactory::Spectrogram,
-	LayerFactory::MelodicRangeSpectrogram,
-	LayerFactory::PeakFrequencySpectrogram,
-        LayerFactory::Spectrum
-    };
-
-    for (unsigned int i = 0;
-	 i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
-
-	for (int menuType = 0; menuType <= 1; ++menuType) { // pane, layer
-
-	    if (menuType == 0) menu = m_paneMenu;
-	    else menu = m_layerMenu;
-
-	    QMenu *submenu = 0;
-
-	    for (int c = 0; c <= channels; ++c) {
-
-		if (c == 1 && channels == 1) continue;
-		bool isDefault = (c == 0);
-		bool isOnly = (isDefault && (channels == 1));
-
-		if (menuType == 1) {
-		    if (isDefault) isOnly = true;
-		    else continue;
-		}
-
-		QIcon icon;
-		QString mainText, shortcutText, tipText, channelText;
-		LayerFactory::LayerType type = backgroundTypes[i];
-		bool mono = true;
-
-		switch (type) {
-
-		case LayerFactory::Waveform:
-		    icon = QIcon(":/icons/waveform.png");
-		    mainText = tr("Add &Waveform");
-		    if (menuType == 0) {
-			shortcutText = tr("Alt+W");
-			tipText = tr("Add a new pane showing a waveform view");
-		    } else {
-			tipText = tr("Add a new layer showing a waveform view");
-		    }
-		    mono = false;
-		    break;
-		    
-		case LayerFactory::Spectrogram:
-		    mainText = tr("Add &Spectrogram");
-		    if (menuType == 0) {
-			shortcutText = tr("Alt+S");
-			tipText = tr("Add a new pane showing a dB spectrogram");
-		    } else {
-			tipText = tr("Add a new layer showing a dB spectrogram");
-		    }
-		    break;
-		
-		case LayerFactory::MelodicRangeSpectrogram:
-		    mainText = tr("Add &Melodic Range Spectrogram");
-		    if (menuType == 0) {
-			shortcutText = tr("Alt+M");
-			tipText = tr("Add a new pane showing a spectrogram set up for a pitch overview");
-		    } else {
-			tipText = tr("Add a new layer showing a spectrogram set up for a pitch overview");
-		    }
-		    break;
-		
-		case LayerFactory::PeakFrequencySpectrogram:
-		    mainText = tr("Add &Peak Frequency Spectrogram");
-		    if (menuType == 0) {
-			shortcutText = tr("Alt+P");
-			tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
-		    } else {
-			tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
-		    }
-		    break;
-
-                case LayerFactory::Spectrum:
-                    mainText = tr("Add Spectr&um");
-		    if (menuType == 0) {
-			shortcutText = tr("Alt+U");
-			tipText = tr("Add a new pane showing a frequency spectrum");
-		    } else {
-			tipText = tr("Add a new layer showing a frequency spectrum");
-		    }
-                    break;
-
-		default: break;
-		}
-
-		if (isOnly) {
-
-		    action = new QAction(icon, mainText, this);
-		    action->setShortcut(shortcutText);
-		    action->setStatusTip(tipText);
-		    if (menuType == 0) {
-			connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
-			connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
-			m_paneActions[action] = PaneConfiguration(type);
-		    } else {
-			connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-			connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-			m_layerActions[action] = type;
-		    }
-		    menu->addAction(action);
-
-		} else {
-
-		    QString actionText;
-		    if (c == 0) 
-			if (mono) actionText = tr("&All Channels Mixed");
-			else actionText = tr("&All Channels");
-		    else actionText = tr("Channel &%1").arg(c);
-
-		    if (!submenu) {
-			submenu = menu->addMenu(mainText);
-		    }
-		 
-		    action = new QAction(icon, actionText, this);
-		    if (isDefault) action->setShortcut(shortcutText);
-		    action->setStatusTip(tipText);
-		    if (menuType == 0) {
-			connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
-			connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
-			m_paneActions[action] = PaneConfiguration(type, c - 1);
-		    } else {
-			connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-			connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-			m_layerActions[action] = type;
-		    }
-		    submenu->addAction(action);
-		}
-	    }
-	}
-    }
-
-    menu = m_paneMenu;
-
-    menu->addSeparator();
-
-    action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Pane"), this);
-    action->setShortcut(tr("Alt+D"));
-    action->setStatusTip(tr("Delete the currently selected pane"));
-    connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentPane()));
-    connect(this, SIGNAL(canDeleteCurrentPane(bool)), action, SLOT(setEnabled(bool)));
+    QAction *action = new QAction(tr("&Help Reference"), this); 
+    action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
+    connect(action, SIGNAL(triggered()), this, SLOT(help()));
     menu->addAction(action);
-
-    menu = m_layerMenu;
-
-    action = new QAction(QIcon(":/icons/timeruler.png"), tr("Add &Time Ruler"), this);
-    action->setStatusTip(tr("Add a new layer showing a time ruler"));
-    connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-    m_layerActions[action] = LayerFactory::TimeRuler;
+    
+    action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
+    action->setStatusTip(tr("Open the Sonic Visualiser website")); 
+    connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
-
-    menu->addSeparator();
-
-    m_existingLayersMenu = menu->addMenu(tr("Add &Existing Layer"));
-    m_rightButtonLayerMenu->addMenu(m_existingLayersMenu);
-    setupExistingLayersMenu();
-
-    m_rightButtonLayerMenu->addSeparator();
-    menu->addSeparator();
-
-    action = new QAction(tr("&Rename Layer..."), this);
-    action->setShortcut(tr("Alt+R"));
-    action->setStatusTip(tr("Rename the currently active layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(renameCurrentLayer()));
-    connect(this, SIGNAL(canRenameLayer(bool)), action, SLOT(setEnabled(bool)));
+    
+    action = new QAction(tr("&About Sonic Visualiser"), this); 
+    action->setStatusTip(tr("Show information about Sonic Visualiser")); 
+    connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
-    m_rightButtonLayerMenu->addAction(action);
-
-    action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Layer"), this);
-    action->setShortcut(tr("Alt+Shift+D"));
-    action->setStatusTip(tr("Delete the currently active layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentLayer()));
-    connect(this, SIGNAL(canDeleteCurrentLayer(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
-    m_rightButtonLayerMenu->addAction(action);
-
-    if (!m_mainMenusCreated) {
-	
-	menu = menuBar()->addMenu(tr("&Help"));
-
-	action = new QAction(tr("&Help Reference"), this); 
-	action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
-	connect(action, SIGNAL(triggered()), this, SLOT(help()));
-	menu->addAction(action);
-
-	action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
-	action->setStatusTip(tr("Open the Sonic Visualiser website")); 
-	connect(action, SIGNAL(triggered()), this, SLOT(website()));
-	menu->addAction(action);
-
-	action = new QAction(tr("&About Sonic Visualiser"), this); 
-	action->setStatusTip(tr("Show information about Sonic Visualiser")); 
-	connect(action, SIGNAL(triggered()), this, SLOT(about()));
-	menu->addAction(action);
-/*
-	action = new QAction(tr("About &Qt"), this);
-	action->setStatusTip(tr("Show information about Qt"));
-	connect(action, SIGNAL(triggered()),
-		QApplication::getInstance(), SLOT(aboutQt()));
-	menu->addAction(action);
-*/
-    }
-
-    m_mainMenusCreated = true;
 }
 
 void
@@ -2796,7 +2872,32 @@ MainWindow::addPane()
     }
 
     Layer *newLayer = m_document->createLayer(i->second.layer);
-    m_document->setModel(newLayer, m_document->getMainModel());
+
+    Model *suggestedModel = i->second.sourceModel;
+    Model *model = 0;
+
+    if (suggestedModel) {
+
+        // check its validity
+        std::vector<Model *> inputModels = m_document->getTransformInputModels();
+        for (size_t j = 0; j < inputModels.size(); ++j) {
+            if (inputModels[j] == suggestedModel) {
+                model = suggestedModel;
+                break;
+            }
+        }
+
+        if (!model) {
+            std::cerr << "WARNING: Model " << (void *)suggestedModel
+                      << " appears in pane action map, but is not reported "
+                      << "by document as a valid transform source" << std::endl;
+        }
+    }
+
+    if (!model) model = m_document->getMainModel();
+
+    m_document->setModel(newLayer, model);
+
     m_document->setChannel(newLayer, i->second.channel);
     m_document->addLayerToView(pane, newLayer);
 
@@ -2974,31 +3075,8 @@ MainWindow::addLayer()
 
     PluginTransform::ExecutionContext context(channel);
 
-    std::vector<Model *> candidateInputModels;
-    candidateInputModels.push_back(m_document->getMainModel());
-
-    //!!! rationalise this (via document method for example)
-    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
-        Pane *ip = m_paneStack->getPane(i);
-        if (!ip) continue;
-        for (int j = 0; j < ip->getLayerCount(); ++j) {
-            Layer *jl = ip->getLayer(j);
-            if (jl) {
-                Model *model = jl->getModel();
-                DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>
-                    (model);
-                if (dtvm) {
-                    int k;
-                    for (k = 0; k < candidateInputModels.size(); ++k) {
-                        if (candidateInputModels[k] == dtvm) break;
-                    }
-                    if (k == candidateInputModels.size()) {
-                        candidateInputModels.push_back(dtvm);
-                    }
-                }
-            }
-        }
-    }
+    std::vector<Model *> candidateInputModels =
+        m_document->getTransformInputModels();
 
     Model *inputModel = factory->getConfigurationForTransform(transform,
                                                               candidateInputModels,
@@ -3236,6 +3314,9 @@ MainWindow::modelAdded(Model *model)
 {
 //    std::cerr << "MainWindow::modelAdded(" << model << ")" << std::endl;
     m_playSource->addModel(model);
+    if (dynamic_cast<DenseTimeValueModel *>(model)) {
+        setupPaneAndLayerMenus();
+    }
 }
 
 void
