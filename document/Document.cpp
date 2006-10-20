@@ -18,6 +18,7 @@
 #include "data/model/WaveFileModel.h"
 #include "data/model/WritableWaveFileModel.h"
 #include "data/model/DenseThreeDimensionalModel.h"
+#include "data/model/DenseTimeValueModel.h"
 #include "layer/Layer.h"
 #include "base/CommandHistory.h"
 #include "base/Command.h"
@@ -608,6 +609,31 @@ Document::getUniqueLayerName(QString candidate)
 
         if (!duplicate) return adjusted;
     }
+}
+
+std::vector<Model *>
+Document::getTransformInputModels()
+{
+    std::vector<Model *> models;
+
+    if (!m_mainModel) return models;
+
+    models.push_back(m_mainModel);
+
+    //!!! This will pick up all models, including those that aren't visible...
+
+    for (ModelMap::iterator i = m_models.begin(); i != m_models.end(); ++i) {
+
+        Model *model = i->first;
+        if (!model || model == m_mainModel) continue;
+        DenseTimeValueModel *dtvm = dynamic_cast<DenseTimeValueModel *>(model);
+        
+        if (dtvm) {
+            models.push_back(dtvm);
+        }
+    }
+
+    return models;
 }
 
 Document::AddLayerCommand::AddLayerCommand(Document *d,

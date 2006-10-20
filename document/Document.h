@@ -129,6 +129,8 @@ public:
      */
     WaveFileModel *getMainModel() { return m_mainModel; }
 
+    std::vector<Model *> getTransformInputModels();
+
     /**
      * Add a derived model associated with the given transform,
      * running the transform and returning the resulting model.
