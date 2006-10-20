@@ -679,11 +679,7 @@ MainWindow::setupPaneAndLayerMenus()
     if (m_document) models = m_document->getTransformInputModels(); //!!! not well named for this!
     bool plural = (models.size() > 1);
     if (models.empty()) {
-        if (m_document) {
-            models.push_back(m_document->getMainModel()); // probably 0
-        } else {
-            models.push_back(0);
-        }
+        models.push_back(getMainModel()); // probably 0
     }
 
     for (unsigned int i = 0;
@@ -716,6 +712,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
 		
             case LayerFactory::Spectrogram:
+                icon = QIcon(":/icons/spectrogram.png");
                 mainText = tr("Add &Spectrogram");
                 if (menuType == 0) {
                     shortcutText = tr("Alt+S");
@@ -726,6 +723,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
 		
             case LayerFactory::MelodicRangeSpectrogram:
+                icon = QIcon(":/icons/spectrogram.png");
                 mainText = tr("Add &Melodic Range Spectrogram");
                 if (menuType == 0) {
                     shortcutText = tr("Alt+M");
@@ -736,6 +734,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
 		
             case LayerFactory::PeakFrequencySpectrogram:
+                icon = QIcon(":/icons/spectrogram.png");
                 mainText = tr("Add &Peak Frequency Spectrogram");
                 if (menuType == 0) {
                     shortcutText = tr("Alt+P");
@@ -746,6 +745,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
                 
             case LayerFactory::Spectrum:
+                icon = QIcon(":/icons/spectrum.png");
                 mainText = tr("Add Spectr&um");
                 if (menuType == 0) {
                     shortcutText = tr("Alt+U");
@@ -795,7 +795,12 @@ MainWindow::setupPaneAndLayerMenus()
 
                     if (isOnly && (!plural || menuType == 1)) {
 
-                        action = new QAction(icon, mainText, this);
+                        if (type != LayerFactory::Waveform) {
+                            action = new QAction(mainText, this);
+                        } else {
+                            action = new QAction(icon, mainText, this);
+                        }                            
+
                         action->setShortcut(shortcutText);
                         action->setStatusTip(tipText);
                         if (menuType == 0) {
@@ -817,6 +822,8 @@ MainWindow::setupPaneAndLayerMenus()
                         
                         if (!submenu) {
                             submenu = menu->addMenu(mainText);
+                        } else if (isDefault) {
+                            submenu->addSeparator();
                         }
 
                         QString actionText;
@@ -835,9 +842,16 @@ MainWindow::setupPaneAndLayerMenus()
                                 .arg(model->objectName())
                                 .arg(actionText);
                         }
-		 
-                        action = new QAction(icon, actionText, this);
-                        if (isDefault) action->setShortcut(shortcutText);
+
+                        if (isDefault) {
+                            action = new QAction(icon, actionText, this);
+                            if (!model || model == getMainModel()) {
+                                action->setShortcut(shortcutText);
+                            }
+                        } else {
+                            action = new QAction(actionText, this);
+                        }
+
                         action->setStatusTip(tipText);
 
                         if (menuType == 0) {
