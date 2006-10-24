@@ -18,6 +18,8 @@
 #include <iostream>
 
 
+#include <math.h>
+
 PlaySpeedRangeMapper::PlaySpeedRangeMapper(int minpos, int maxpos) :
     m_minpos(minpos),
     m_maxpos(maxpos)
