@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-SV_UNIT_PACKAGES = vamp vamp-sdk fftw3f samplerate jack portaudio mad oggz fishsound lrdf raptor sndfile
+SV_UNIT_PACKAGES = vamp vamp-sdk fftw3f samplerate jack portaudio mad oggz fishsound lrdf raptor sndfile liblo
 load(../sv.prf)
 
 CONFIG += sv qt thread warn_on stl rtti exceptions
@@ -9,8 +9,8 @@ QT += xml
 
 TARGET = sonic-visualiser
 
-DEPENDPATH += . .. audioio document i18n main transform
-INCLUDEPATH += . .. audioio document transform main
+DEPENDPATH += . .. audioio document i18n main osc transform
+INCLUDEPATH += . .. audioio document transform osc main
 LIBPATH = ../view ../layer ../data ../widgets ../plugin ../base ../system $$LIBPATH
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
@@ -42,6 +42,8 @@ HEADERS += audioio/AudioCallbackPlaySource.h \
            document/SVFileReader.h \
            main/MainWindow.h \
            main/PreferencesDialog.h \
+           osc/OSCMessage.h \
+           osc/OSCQueue.h \
            transform/FeatureExtractionPluginTransform.h \
            transform/PluginTransform.h \
            transform/RealTimePluginTransform.h \
@@ -61,6 +63,8 @@ SOURCES += audioio/AudioCallbackPlaySource.cpp \
            main/main.cpp \
            main/MainWindow.cpp \
            main/PreferencesDialog.cpp \
+           osc/OSCMessage.cpp \
+           osc/OSCQueue.cpp \
            transform/FeatureExtractionPluginTransform.cpp \
            transform/PluginTransform.cpp \
            transform/RealTimePluginTransform.cpp \

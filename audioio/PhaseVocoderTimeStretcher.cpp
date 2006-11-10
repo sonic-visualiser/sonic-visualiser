@@ -161,6 +161,10 @@ PhaseVocoderTimeStretcher::calculateParameters()
             if (m_wlen < 2048) m_wlen = 2048;
         }
         m_n1 = lrintf(m_n2 / m_ratio);
+        if (m_n1 == 0) {
+            m_n1 = 1;
+            m_n2 = m_ratio;
+        }
     }
 
     m_transientThreshold = lrintf(m_wlen / 4.5);
@@ -223,6 +227,9 @@ PhaseVocoderTimeStretcher::setRatio(float ratio)
 
     size_t formerWlen = m_wlen;
     m_ratio = ratio;
+
+    std::cerr << "PhaseVocoderTimeStretcher::setRatio: new ratio " << ratio
+              << std::endl;
 
     calculateParameters();
 
