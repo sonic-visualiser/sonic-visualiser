@@ -48,6 +48,8 @@ class QLabel;
 class QCheckBox;
 class PreferencesDialog;
 class QPushButton;
+class OSCQueue;
+class OSCMessage;
 
 
 class MainWindow : public QMainWindow
@@ -195,6 +197,9 @@ protected slots:
 
     void showLayerTree();
 
+    void pollOSC();
+    void handleOSCMessage(const OSCMessage &);
+
     void website();
     void help();
     void about();
@@ -218,6 +223,8 @@ protected:
     bool                     m_audioOutput;
     AudioCallbackPlaySource *m_playSource;
     AudioCallbackPlayTarget *m_playTarget;
+
+    OSCQueue                *m_oscQueue;
 
     RecentFiles              m_recentFiles;
     RecentFiles              m_recentTransforms;
@@ -280,6 +287,8 @@ protected:
     void setupToolbars();
 
     Pane *addPaneToStack();
+
+    void addPane(const PaneConfiguration &configuration, QString text);
 
     class PaneCallback : public SVFileReaderPaneCallback
     {

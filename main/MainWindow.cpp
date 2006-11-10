@@ -54,6 +54,7 @@
 #include "base/CommandHistory.h"
 #include "base/Profiler.h"
 #include "base/Clipboard.h"
+#include "osc/OSCQueue.h"
 
 // For version information
 #include "vamp/vamp.h"
@@ -104,6 +105,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_audioOutput(withAudioOutput),
     m_playSource(0),
     m_playTarget(0),
+    m_oscQueue(new OSCQueue()),
     m_recentFiles("RecentFiles"),
     m_recentTransforms("RecentTransforms", 20),
     m_mainMenusCreated(false),
@@ -229,6 +231,13 @@ MainWindow::MainWindow(bool withAudioOutput) :
             this,
             SLOT(preferenceChanged(PropertyContainer::PropertyName)));
 
+    if (m_oscQueue->isOK()) {
+        connect(m_oscQueue, SIGNAL(messagesAvailable()), this, SLOT(pollOSC()));
+        QTimer *oscTimer = new QTimer(this);
+        connect(oscTimer, SIGNAL(timeout()), this, SLOT(pollOSC()));
+        oscTimer->start(1000);
+    }
+
     setupMenus();
     setupToolbars();
 
@@ -243,6 +252,7 @@ MainWindow::~MainWindow()
     delete m_playTarget;
     delete m_playSource;
     delete m_viewManager;
+    delete m_oscQueue;
     Profiles::getInstance()->dump();
 }
 
@@ -1268,6 +1278,8 @@ MainWindow::setupToolbars()
     action->setChecked(m_viewManager->getPlaySelectionMode());
     action->setShortcut(tr("s"));
     action->setStatusTip(tr("Constrain playback to the selected area"));
+    connect(m_viewManager, SIGNAL(playSelectionModeChanged(bool)),
+            action, SLOT(setChecked(bool)));
     connect(action, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
     connect(this, SIGNAL(canPlaySelection(bool)), action, SLOT(setEnabled(bool)));
 
@@ -1277,6 +1289,8 @@ MainWindow::setupToolbars()
     action->setChecked(m_viewManager->getPlayLoopMode());
     action->setShortcut(tr("l"));
     action->setStatusTip(tr("Loop playback"));
+    connect(m_viewManager, SIGNAL(playLoopModeChanged(bool)),
+            action, SLOT(setChecked(bool)));
     connect(action, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
     connect(this, SIGNAL(canPlay(bool)), action, SLOT(setEnabled(bool)));
 
@@ -2859,20 +2873,25 @@ MainWindow::addPane()
 	return;
     }
 
-    CommandHistory::getInstance()->startCompoundOperation
-	(action->text(), true);
+    addPane(i->second, action->text());
+}
+
+void
+MainWindow::addPane(const PaneConfiguration &configuration, QString text)
+{
+    CommandHistory::getInstance()->startCompoundOperation(text, true);
 
     AddPaneCommand *command = new AddPaneCommand(this);
     CommandHistory::getInstance()->addCommand(command);
 
     Pane *pane = command->getPane();
 
-    if (i->second.layer == LayerFactory::Spectrum) {
+    if (configuration.layer == LayerFactory::Spectrum) {
         pane->setPlaybackFollow(View::PlaybackScrollContinuous);
     }
 
-    if (i->second.layer != LayerFactory::TimeRuler &&
-        i->second.layer != LayerFactory::Spectrum) {
+    if (configuration.layer != LayerFactory::TimeRuler &&
+        configuration.layer != LayerFactory::Spectrum) {
 
 	if (!m_timeRulerLayer) {
 //	    std::cerr << "no time ruler layer, creating one" << std::endl;
@@ -2885,9 +2904,9 @@ MainWindow::addPane()
 	m_document->addLayerToView(pane, m_timeRulerLayer);
     }
 
-    Layer *newLayer = m_document->createLayer(i->second.layer);
+    Layer *newLayer = m_document->createLayer(configuration.layer);
 
-    Model *suggestedModel = i->second.sourceModel;
+    Model *suggestedModel = configuration.sourceModel;
     Model *model = 0;
 
     if (suggestedModel) {
@@ -2912,7 +2931,7 @@ MainWindow::addPane()
 
     m_document->setModel(newLayer, model);
 
-    m_document->setChannel(newLayer, i->second.channel);
+    m_document->setChannel(newLayer, configuration.channel);
     m_document->addLayerToView(pane, newLayer);
 
     m_paneStack->setCurrentPane(pane);
@@ -3391,6 +3410,367 @@ MainWindow::showLayerTree()
 }
 
 void
+MainWindow::pollOSC()
+{
+    if (m_oscQueue->isEmpty()) return;
+    std::cerr << "MainWindow::pollOSC: have " << m_oscQueue->getMessagesAvailable() << " messages" << std::endl;
+
+    OSCMessage message = m_oscQueue->readMessage();
+
+    if (message.getTarget() != 0) {
+        return; //!!! for now -- this class is target 0, others not handled yet
+    }
+
+    handleOSCMessage(message);
+}
+
+void
+MainWindow::handleOSCMessage(const OSCMessage &message)
+{
+    // This large function should really be abstracted out.
+
+    if (message.getMethod() == "open") {
+
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+            QString path = message.getArg(0).toString();
+            if (!openSomeFile(path, ReplaceMainModel)) {
+                std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                          << path.toStdString() << "\"" << std::endl;
+            }
+            //!!! we really need to spin here and not return until the
+            // file has been completely decoded...
+        }
+
+    } else if (message.getMethod() == "openadditional") {
+
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+            QString path = message.getArg(0).toString();
+            if (!openSomeFile(path, CreateAdditionalModel)) {
+                std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                          << path.toStdString() << "\"" << std::endl;
+            }
+        }
+
+    } else if (message.getMethod() == "recent" ||
+               message.getMethod() == "last") {
+
+        int n = 0;
+        if (message.getMethod() == "recent" &&
+            message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::Int)) {
+            n = message.getArg(0).toInt() - 1;
+        }
+        std::vector<QString> recent = m_recentFiles.getRecent();
+        if (n >= 0 && n < recent.size()) {
+            if (!openSomeFile(recent[n], ReplaceMainModel)) {
+                std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                          << recent[n].toStdString() << "\"" << std::endl;
+            }
+        }
+
+    } else if (message.getMethod() == "save") {
+
+        QString path;
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+            path = message.getArg(0).toString();
+            if (QFileInfo(path).exists()) {
+                std::cerr << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in save" << std::endl;
+            } else {
+                saveSessionFile(path);
+            }
+        }
+
+    } else if (message.getMethod() == "export") {
+
+        QString path;
+        if (getMainModel()) {
+            if (message.getArgCount() == 1 &&
+                message.getArg(0).canConvert(QVariant::String)) {
+                path = message.getArg(0).toString();
+                if (QFileInfo(path).exists()) {
+                    std::cerr << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in export" << std::endl;
+                } else {
+                    WavFileWriter writer(path,
+                                         getMainModel()->getSampleRate(),
+                                         getMainModel()->getChannelCount());
+                    MultiSelection ms = m_viewManager->getSelection();
+                    if (!ms.getSelections().empty()) {
+                        writer.writeModel(getMainModel(), &ms);
+                    } else {
+                        writer.writeModel(getMainModel());
+                    }
+                }
+            }
+        }
+
+    } else if (message.getMethod() == "jump" ||
+               message.getMethod() == "play") {
+
+        if (getMainModel()) {
+
+            unsigned long frame = m_viewManager->getPlaybackFrame();
+            bool selection = false;
+            bool play = (message.getMethod() == "play");
+
+            if (message.getArgCount() == 1) {
+
+                if (message.getArg(0).canConvert(QVariant::String) &&
+                    message.getArg(0).toString() == "selection") {
+
+                    selection = true;
+
+                } else if (message.getArg(0).canConvert(QVariant::String) &&
+                           message.getArg(0).toString() == "end") {
+
+                    frame = getMainModel()->getEndFrame();
+
+                } else if (message.getArg(0).canConvert(QVariant::Double)) {
+
+                    double time = message.getArg(0).toDouble();
+                    if (time < 0.0) time = 0.0;
+
+                    frame = lrint(time * getMainModel()->getSampleRate());
+                }
+            }
+
+            if (frame > getMainModel()->getEndFrame()) {
+                frame = getMainModel()->getEndFrame();
+            }
+
+            if (play) {
+                m_viewManager->setPlaySelectionMode(selection);
+            } 
+
+            if (selection) {
+                MultiSelection::SelectionList sl = m_viewManager->getSelections();
+                if (!sl.empty()) {
+                    frame = sl.begin()->getStartFrame();
+                }
+            }
+
+            m_viewManager->setPlaybackFrame(frame);
+
+            if (play && !m_playSource->isPlaying()) {
+                m_playSource->play(frame);
+            }
+        }
+
+    } else if (message.getMethod() == "stop") {
+            
+        if (m_playSource->isPlaying()) m_playSource->stop();
+
+    } else if (message.getMethod() == "loop") {
+
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+
+            QString str = message.getArg(0).toString();
+            if (str == "on") {
+                m_viewManager->setPlayLoopMode(true);
+            } else if (str == "off") {
+                m_viewManager->setPlayLoopMode(false);
+            }
+        }
+
+    } else if (message.getMethod() == "select" ||
+               message.getMethod() == "addselect") {
+
+        if (getMainModel()) {
+
+            unsigned long f0 = getMainModel()->getStartFrame();
+            unsigned long f1 = getMainModel()->getEndFrame();
+
+            bool done = false;
+
+            if (message.getArgCount() == 2 &&
+                message.getArg(0).canConvert(QVariant::Double) &&
+                message.getArg(1).canConvert(QVariant::Double)) {
+                
+                double t0 = message.getArg(0).toDouble();
+                double t1 = message.getArg(1).toDouble();
+                if (t1 < t0) { double temp = t0; t0 = t1; t1 = temp; }
+                if (t0 < 0.0) t0 = 0.0;
+                if (t1 < 0.0) t1 = 0.0;
+
+                f0 = lrint(t0 * getMainModel()->getSampleRate());
+                f1 = lrint(t1 * getMainModel()->getSampleRate());
+
+            } else if (message.getArgCount() == 1 &&
+                       message.getArg(0).canConvert(QVariant::String)) {
+
+                QString str = message.getArg(0).toString();
+                if (str == "none") {
+                    m_viewManager->clearSelections();
+                    done = true;
+                }
+            }
+
+            if (!done) {
+                if (message.getMethod() == "select") {
+                    m_viewManager->setSelection(Selection(f0, f1));
+                } else {
+                    m_viewManager->addSelection(Selection(f0, f1));
+                }
+            }
+        }
+
+    } else if (message.getMethod() == "add") {
+
+        if (getMainModel()) {
+
+            if (message.getArgCount() >= 1 &&
+                message.getArg(0).canConvert(QVariant::String)) {
+
+                int channel = -1;
+                if (message.getArgCount() == 2 &&
+                    message.getArg(0).canConvert(QVariant::Int)) {
+                    channel = message.getArg(0).toInt();
+                    if (channel < -1 ||
+                        channel > getMainModel()->getChannelCount()) {
+                        std::cerr << "WARNING: MainWindow::handleOSCMessage: channel "
+                                  << channel << " out of range" << std::endl;
+                        channel = -1;
+                    }
+                }
+
+                QString str = message.getArg(0).toString();
+                
+                LayerFactory::LayerType type =
+                    LayerFactory::getInstance()->getLayerTypeForName(str);
+
+                if (type == LayerFactory::UnknownLayer) {
+                    std::cerr << "WARNING: MainWindow::handleOSCMessage: unknown layer "
+                              << "type " << str.toStdString() << std::endl;
+                } else {
+
+                    PaneConfiguration configuration(type,
+                                                    getMainModel(),
+                                                    channel);
+                    
+                    addPane(configuration,
+                            tr("Add %1 Pane")
+                            .arg(LayerFactory::getInstance()->
+                                 getLayerPresentationName(type)));
+                }
+            }
+        }
+
+    } else if (message.getMethod() == "undo") {
+
+        CommandHistory::getInstance()->undo();
+
+    } else if (message.getMethod() == "redo") {
+
+        CommandHistory::getInstance()->redo();
+
+    } else if (message.getMethod() == "set") {
+
+        if (message.getArgCount() >= 2 &&
+            message.getArg(0).canConvert(QVariant::String) &&
+            message.getArg(1).canConvert(QVariant::Double)) {
+
+            QString property = message.getArg(0).toString();
+            float value = (float)message.getArg(1).toDouble();
+
+            if (property == "gain") {
+                if (value < 0.0) value = 0.0;
+                m_fader->setValue(value);
+                if (m_playTarget) m_playTarget->setOutputGain(value);
+            } else if (property == "speedup") {
+                m_playSpeed->setMappedValue(value);
+            } else if (property == "overlays") {
+                if (value < 0.5) {
+                    m_viewManager->setOverlayMode(ViewManager::NoOverlays);
+                } else if (value < 1.5) {
+                    m_viewManager->setOverlayMode(ViewManager::BasicOverlays);
+                } else {
+                    m_viewManager->setOverlayMode(ViewManager::AllOverlays);
+                }                    
+            }
+        }
+
+    } else if (message.getMethod() == "setcurrent") {
+
+        int paneIndex = -1, layerIndex = -1;
+        bool wantLayer = false;
+
+        if (message.getArgCount() >= 1 &&
+            message.getArg(0).canConvert(QVariant::Int)) {
+
+            paneIndex = message.getArg(0).toInt() - 1;
+
+            if (message.getArgCount() >= 2 &&
+                message.getArg(1).canConvert(QVariant::Int)) {
+                wantLayer = true;
+                layerIndex = message.getArg(1).toInt() - 1;
+            }
+        }
+
+        if (paneIndex >= 0 && paneIndex < m_paneStack->getPaneCount()) {
+            Pane *pane = m_paneStack->getPane(paneIndex);
+            if (layerIndex >= 0 && layerIndex < pane->getLayerCount()) {
+                Layer *layer = pane->getLayer(layerIndex);
+                m_paneStack->setCurrentLayer(pane, layer);
+            } else if (wantLayer && layerIndex == -1) {
+                m_paneStack->setCurrentLayer(pane, 0);
+            } else {
+                m_paneStack->setCurrentPane(pane);
+            }
+        }
+
+    } else if (message.getMethod() == "delete") {
+
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+            
+            QString target = message.getArg(0).toString();
+
+            if (target == "pane") {
+
+                deleteCurrentPane();
+
+            } else if (target == "layer") {
+
+                deleteCurrentLayer();
+
+            } else {
+                
+                std::cerr << "WARNING: MainWindow::handleOSCMessage: Unknown delete target " << target.toStdString() << std::endl;
+            }
+        }
+
+    } else if (message.getMethod() == "zoom") {
+
+        if (message.getArgCount() == 1) {
+            if (message.getArg(0).canConvert(QVariant::String) &&
+                message.getArg(0).toString() == "in") {
+                zoomIn();
+            } else if (message.getArg(0).canConvert(QVariant::String) &&
+                       message.getArg(0).toString() == "out") {
+                zoomOut();
+            } else if (message.getArg(0).canConvert(QVariant::String) &&
+                       message.getArg(0).toString() == "default") {
+                zoomDefault();
+            } else if (message.getArg(0).canConvert(QVariant::Double)) {
+                double level = message.getArg(0).toDouble();
+                Pane *currentPane = m_paneStack->getCurrentPane();
+                if (level < 1.0) level = 1.0;
+                if (currentPane) currentPane->setZoomLevel(lrint(level));
+            }
+        }
+
+    } else {
+        std::cerr << "WARNING: MainWindow::handleOSCMessage: Unknown or unsupported "
+                  << "method \"" << message.getMethod().toStdString()
+                  << "\"" << std::endl;
+    }
+            
+}
+
+void
 MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 {
     if (name == "Property Box Layout") {
@@ -3537,6 +3917,12 @@ MainWindow::about()
 #endif
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
+#ifdef HAVE_LIBLO
+    aboutText += tr("<br>With liblo Lite OSC library (v%1) &copy; Steve Harris").arg(LIBLO_VERSION);
+    if (m_oscQueue->isOK()) {
+        aboutText += tr("<p>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
+    }
+#endif
     aboutText += "</p>";
 #endif
 
