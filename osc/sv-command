@@ -1,17 +1,54 @@
 #!/bin/sh
-port=`lsof -c sonic- | grep UDP | sed -e 's/^.*[^0-9]\([0-9][0-9]*\) *$/\1/' | grep -v ' ' | head -1`
+#
+# A very simple command shell for Sonic Visualiser.
+# 
+# This provides a wrapper for the sv-osc-send program, which is a
+# generic OSC sending program (not specific to SV, despite its name).
+# This script attempts to guess the OSC port number for an SV
+# process running on the local host, and then composes a method name
+# and arguments into a complete OSC call.
+# 
+# You can either run this with the method and its arguments on the
+# command line, e.g. "sv-command set layer Frequency-Scale Log", or
+# you can provide a series of method + argument commands on stdin.
+# 
+# Unless you use the -q option, this script will echo the OSC URL
+# and arguments that it is sending for each command.
+#
+# Note that the method and arguments may not contain spaces.
+# 
+# Chris Cannam, Nov 2006
+
+quiet=
+if [ "$1" = "-q" ]; then
+    quiet=true; shift;
+fi
+
+# The yucky bit
+
+port=`lsof -c sonic- | \
+          grep UDP | \
+          sed -e 's/^.*[^0-9]\([0-9][0-9]*\) *$/\1/' | \
+          grep -v ' ' | \
+          head -1 `
+
+host=127.0.0.1
+scheme=osc.udp
+
 if [ -z "$port" ]; then
     echo "Sonic Visualiser OSC port not found"
     exit 1
 fi
+
 if [ -n "$1" ]; then
     command=$1; shift
-    echo "osc.udp://127.0.0.1:$port/$command" "$@"
-    sv-osc-send "osc.udp://127.0.0.1:$port/$command" "$@"
+    [ -z "$quiet" ] && echo "$scheme://$host:$port/$command" "$@"
+    sv-osc-send "$scheme://$host:$port/$command" "$@"
 else
-    while read command arg1 arg2 arg3 arg4 arg5; do
-	echo "osc.udp://127.0.0.1:$port/$command" $arg1 $arg2 $arg3 $arg4 $arg5
-	sv-osc-send "osc.udp://127.0.0.1:$port/$command" $arg1 $arg2 $arg3 $arg4 $arg5
+    while read command a1 a2 a3 a4 a5; do
+        [ -z "$command" ] && continue
+	[ -z "$quiet" ] && echo "$scheme://$host:$port/$command" $a1 $a2 $a3 $a4 $a5
+	sv-osc-send "$scheme://$host:$port/$command" $a1 $a2 $a3 $a4 $a5
     done
 fi
 

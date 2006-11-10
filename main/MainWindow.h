@@ -57,7 +57,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(bool withAudioOutput = true);
+    MainWindow(bool withAudioOutput = true,
+               bool withOSCSupport = true);
     virtual ~MainWindow();
     
     enum AudioFileOpenMode {
@@ -241,6 +242,8 @@ protected:
     QMenu                   *m_rightButtonTransformsMenu;
 
     bool                     m_documentModified;
+    bool                     m_openingAudioFile;
+    bool                     m_abandoning;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
 
