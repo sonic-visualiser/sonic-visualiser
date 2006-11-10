@@ -96,7 +96,7 @@ using std::map;
 using std::set;
 
 
-MainWindow::MainWindow(bool withAudioOutput) :
+MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_document(0),
     m_paneStack(0),
     m_viewManager(0),
@@ -105,7 +105,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_audioOutput(withAudioOutput),
     m_playSource(0),
     m_playTarget(0),
-    m_oscQueue(new OSCQueue()),
+    m_oscQueue(withOSCSupport ? new OSCQueue() : 0),
     m_recentFiles("RecentFiles"),
     m_recentTransforms("RecentTransforms", 20),
     m_mainMenusCreated(false),
@@ -119,6 +119,8 @@ MainWindow::MainWindow(bool withAudioOutput) :
     m_rightButtonLayerMenu(0),
     m_rightButtonTransformsMenu(0),
     m_documentModified(false),
+    m_openingAudioFile(false),
+    m_abandoning(false),
     m_preferencesDialog(0)
 {
     setWindowTitle(tr("Sonic Visualiser"));
@@ -231,7 +233,7 @@ MainWindow::MainWindow(bool withAudioOutput) :
             this,
             SLOT(preferenceChanged(PropertyContainer::PropertyName)));
 
-    if (m_oscQueue->isOK()) {
+    if (m_oscQueue && m_oscQueue->isOK()) {
         connect(m_oscQueue, SIGNAL(messagesAvailable()), this, SLOT(pollOSC()));
         QTimer *oscTimer = new QTimer(this);
         connect(oscTimer, SIGNAL(timeout()), this, SLOT(pollOSC()));
@@ -248,7 +250,9 @@ MainWindow::MainWindow(bool withAudioOutput) :
 
 MainWindow::~MainWindow()
 {
-    closeSession();
+    if (!m_abandoning) {
+        closeSession();
+    }
     delete m_playTarget;
     delete m_playSource;
     delete m_viewManager;
@@ -2042,10 +2046,13 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
 	return false;
     }
 
+    m_openingAudioFile = true;
+
     WaveFileModel *newModel = new WaveFileModel(path);
 
     if (!newModel->isOK()) {
 	delete newModel;
+        m_openingAudioFile = false;
 	return false;
     }
 
@@ -2068,6 +2075,7 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
             
             if (!ok || item.isEmpty()) {
                 delete newModel;
+                m_openingAudioFile = false;
                 return false;
             }
             
@@ -2138,6 +2146,7 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
 
     updateMenuStates();
     m_recentFiles.addFile(path);
+    m_openingAudioFile = false;
 
     return true;
 }
@@ -2453,7 +2462,7 @@ MainWindow::openSessionFile(QString path)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-    if (!checkSaveModified()) {
+    if (!m_abandoning && !checkSaveModified()) {
 	e->ignore();
 	return;
     }
@@ -2935,6 +2944,7 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     m_document->addLayerToView(pane, newLayer);
 
     m_paneStack->setCurrentPane(pane);
+    m_paneStack->setCurrentLayer(pane, newLayer);
 
     CommandHistory::getInstance()->endCompoundOperation();
 
@@ -3129,6 +3139,7 @@ MainWindow::addLayer()
         m_document->addLayerToView(pane, newLayer);
         m_document->setChannel(newLayer, context.channel);
         m_recentTransforms.add(transform);
+        m_paneStack->setCurrentLayer(pane, newLayer);
     }
 
     updateMenuStates();
@@ -3412,8 +3423,10 @@ MainWindow::showLayerTree()
 void
 MainWindow::pollOSC()
 {
-    if (m_oscQueue->isEmpty()) return;
+    if (!m_oscQueue || m_oscQueue->isEmpty()) return;
     std::cerr << "MainWindow::pollOSC: have " << m_oscQueue->getMessagesAvailable() << " messages" << std::endl;
+
+    if (m_openingAudioFile) return;
 
     OSCMessage message = m_oscQueue->readMessage();
 
@@ -3427,6 +3440,9 @@ MainWindow::pollOSC()
 void
 MainWindow::handleOSCMessage(const OSCMessage &message)
 {
+    std::cerr << "MainWindow::handleOSCMessage: thread id = " 
+              << QThread::currentThreadId() << std::endl;
+
     // This large function should really be abstracted out.
 
     if (message.getMethod() == "open") {
@@ -3668,7 +3684,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
     } else if (message.getMethod() == "set") {
 
-        if (message.getArgCount() >= 2 &&
+        if (message.getArgCount() == 2 &&
             message.getArg(0).canConvert(QVariant::String) &&
             message.getArg(1).canConvert(QVariant::Double)) {
 
@@ -3689,6 +3705,28 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 } else {
                     m_viewManager->setOverlayMode(ViewManager::AllOverlays);
                 }                    
+            } else if (property == "zoomwheels") {
+                m_viewManager->setZoomWheelsEnabled(value > 0.5);
+            }
+                
+        } else {
+            PropertyContainer *container = 0;
+            Pane *pane = m_paneStack->getCurrentPane();
+            if (pane &&
+                message.getArgCount() == 3 &&
+                message.getArg(0).canConvert(QVariant::String) &&
+                message.getArg(1).canConvert(QVariant::String) &&
+                message.getArg(2).canConvert(QVariant::String)) {
+                if (message.getArg(0).toString() == "pane") {
+                    container = pane->getPropertyContainer(0);
+                } else if (message.getArg(0).toString() == "layer") {
+                    container = pane->getSelectedLayer();
+                }
+            }
+            if (container) {
+                QString nameString = message.getArg(1).toString();
+                QString valueString = message.getArg(2).toString();
+                container->setPropertyWithCommand(nameString, valueString);
             }
         }
 
@@ -3711,13 +3749,12 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (paneIndex >= 0 && paneIndex < m_paneStack->getPaneCount()) {
             Pane *pane = m_paneStack->getPane(paneIndex);
+            m_paneStack->setCurrentPane(pane);
             if (layerIndex >= 0 && layerIndex < pane->getLayerCount()) {
                 Layer *layer = pane->getLayer(layerIndex);
                 m_paneStack->setCurrentLayer(pane, layer);
             } else if (wantLayer && layerIndex == -1) {
                 m_paneStack->setCurrentLayer(pane, 0);
-            } else {
-                m_paneStack->setCurrentPane(pane);
             }
         }
 
@@ -3759,6 +3796,59 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 Pane *currentPane = m_paneStack->getCurrentPane();
                 if (level < 1.0) level = 1.0;
                 if (currentPane) currentPane->setZoomLevel(lrint(level));
+            }
+        }
+
+    } else if (message.getMethod() == "quit") {
+        
+        m_abandoning = true;
+        close();
+
+    } else if (message.getMethod() == "resize") {
+        
+        if (message.getArgCount() == 2) {
+
+            int width = 0, height = 0;
+
+            if (message.getArg(1).canConvert(QVariant::Int)) {
+
+                height = message.getArg(1).toInt();
+
+                if (message.getArg(0).canConvert(QVariant::String) &&
+                    message.getArg(0).toString() == "pane") {
+
+                    Pane *pane = m_paneStack->getCurrentPane();
+                    if (pane) pane->resize(pane->width(), height);
+
+                } else if (message.getArg(0).canConvert(QVariant::Int)) {
+
+                    width = message.getArg(0).toInt();
+                    resize(width, height);
+                }
+            }
+        }
+
+    } else if (message.getMethod() == "transform") {
+
+        Pane *pane = m_paneStack->getCurrentPane();
+
+        if (getMainModel() &&
+            pane &&
+            message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+
+            TransformName transform = message.getArg(0).toString();
+
+            Layer *newLayer = m_document->createDerivedLayer
+                (transform,
+                 getMainModel(),
+                 PluginTransform::ExecutionContext(),
+                 "");
+
+            if (newLayer) {
+                m_document->addLayerToView(pane, newLayer);
+                m_recentTransforms.add(transform);
+                m_paneStack->setCurrentLayer(pane, newLayer);
             }
         }
 
@@ -3919,7 +4009,7 @@ MainWindow::about()
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
 #ifdef HAVE_LIBLO
     aboutText += tr("<br>With liblo Lite OSC library (v%1) &copy; Steve Harris").arg(LIBLO_VERSION);
-    if (m_oscQueue->isOK()) {
+    if (m_oscQueue && m_oscQueue->isOK()) {
         aboutText += tr("<p>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
     }
 #endif
