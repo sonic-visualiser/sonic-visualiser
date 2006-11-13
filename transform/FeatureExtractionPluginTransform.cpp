@@ -29,6 +29,8 @@
 #include "data/model/FFTModel.h"
 #include "data/model/WaveFileModel.h"
 
+#include <QMessageBox>
+
 #include <fftw3.h>
 
 #include <iostream>
@@ -259,6 +261,15 @@ FeatureExtractionPluginTransform::run()
                                    m_context.stepSize,
                                    m_context.blockSize,
                                    false);
+            if (!model->isOK()) {
+                QMessageBox::critical
+                    (0, tr("FFT cache failed"),
+                     tr("Failed to create the FFT model for this transform.\n"
+                        "There may be insufficient memory or disc space to continue."));
+                delete model;
+                setCompletion(100);
+                return;
+            }
             model->resume();
             fftModels.push_back(model);
         }
