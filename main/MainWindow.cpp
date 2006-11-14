@@ -595,12 +595,22 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
         
+    menu->addSeparator();
+
     action = new QAction(tr("Show &Zoom Wheels"), this);
     action->setShortcut(tr("Z"));
     action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
     connect(action, SIGNAL(triggered()), this, SLOT(toggleZoomWheels()));
     action->setCheckable(true);
     action->setChecked(m_viewManager->getZoomWheelsEnabled());
+    menu->addAction(action);
+        
+    action = new QAction(tr("Show Property Bo&xes"), this);
+    action->setShortcut(tr("X"));
+    action->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
+    connect(action, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
+    action->setCheckable(true);
+    action->setChecked(true);
     menu->addAction(action);
 
 /*!!! This one doesn't work properly yet
@@ -2785,6 +2795,36 @@ MainWindow::toggleZoomWheels()
 }
 
 void
+MainWindow::togglePropertyBoxes()
+{
+    if (m_paneStack->getLayoutStyle() == PaneStack::NoPropertyStacks) {
+        if (Preferences::getInstance()->getPropertyBoxLayout() ==
+            Preferences::VerticallyStacked) {
+            m_paneStack->setLayoutStyle(PaneStack::PropertyStackPerPaneLayout);
+        } else {
+            m_paneStack->setLayoutStyle(PaneStack::SinglePropertyStackLayout);
+        }
+    } else {
+        m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
+    }
+}
+
+void
+MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
+{
+    if (name == "Property Box Layout") {
+        if (m_paneStack->getLayoutStyle() != PaneStack::NoPropertyStacks) {
+            if (Preferences::getInstance()->getPropertyBoxLayout() ==
+                Preferences::VerticallyStacked) {
+                m_paneStack->setLayoutStyle(PaneStack::PropertyStackPerPaneLayout);
+            } else {
+                m_paneStack->setLayoutStyle(PaneStack::SinglePropertyStackLayout);
+            }
+        }
+    }
+}
+
+void
 MainWindow::play()
 {
     if (m_playSource->isPlaying()) {
@@ -3707,6 +3747,10 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 }                    
             } else if (property == "zoomwheels") {
                 m_viewManager->setZoomWheelsEnabled(value > 0.5);
+            } else if (property == "propertyboxes") {
+                bool toggle = ((value < 0.5) !=
+                               (m_paneStack->getLayoutStyle() == PaneStack::NoPropertyStacks));
+                if (toggle) togglePropertyBoxes();
             }
                 
         } else {
@@ -3858,19 +3902,6 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                   << "\"" << std::endl;
     }
             
-}
-
-void
-MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
-{
-    if (name == "Property Box Layout") {
-        if (Preferences::getInstance()->getPropertyBoxLayout() ==
-            Preferences::VerticallyStacked) {
-            m_paneStack->setLayoutStyle(PaneStack::PropertyStackPerPaneLayout);
-        } else {
-            m_paneStack->setLayoutStyle(PaneStack::SinglePropertyStackLayout);
-        }
-    }
 }
 
 void

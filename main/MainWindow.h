@@ -128,6 +128,7 @@ protected slots:
     void showAllTextOverlays();
 
     void toggleZoomWheels();
+    void togglePropertyBoxes();
 
     void play();
     void ffwd();
