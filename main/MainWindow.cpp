@@ -151,6 +151,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 	    this, SLOT(currentLayerChanged(Pane *, Layer *)));
     connect(m_paneStack, SIGNAL(rightButtonMenuRequested(Pane *, QPoint)),
             this, SLOT(rightButtonMenuRequested(Pane *, QPoint)));
+    connect(m_paneStack, SIGNAL(propertyStacksResized()),
+            this, SLOT(propertyStacksResized()));
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
@@ -2986,6 +2988,10 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     m_paneStack->setCurrentPane(pane);
     m_paneStack->setCurrentLayer(pane, newLayer);
 
+    std::cerr << "MainWindow::addPane: global centre frame is "
+              << m_viewManager->getGlobalCentreFrame() << std::endl;
+    pane->setCentreFrame(m_viewManager->getGlobalCentreFrame());
+
     CommandHistory::getInstance()->endCompoundOperation();
 
     updateMenuStates();
@@ -3451,6 +3457,19 @@ MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
 }
 
 void
+MainWindow::propertyStacksResized()
+{
+/*
+    std::cerr << "MainWindow::propertyStacksResized" << std::endl;
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (pane && m_overview) {
+        std::cerr << "Fixed width: "  << pane->width() << std::endl;
+        m_overview->setFixedWidth(pane->width());
+    }
+*/
+}
+
+void
 MainWindow::showLayerTree()
 {
     QTreeView *view = new QTreeView();
@@ -3636,8 +3655,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (getMainModel()) {
 
-            unsigned long f0 = getMainModel()->getStartFrame();
-            unsigned long f1 = getMainModel()->getEndFrame();
+            int f0 = getMainModel()->getStartFrame();
+            int f1 = getMainModel()->getEndFrame();
 
             bool done = false;
 
@@ -3653,6 +3672,17 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
                 f0 = lrint(t0 * getMainModel()->getSampleRate());
                 f1 = lrint(t1 * getMainModel()->getSampleRate());
+                
+                Pane *pane = m_paneStack->getCurrentPane();
+                Layer *layer = 0;
+                if (pane) layer = pane->getSelectedLayer();
+                if (layer) {
+                    size_t resolution;
+                    layer->snapToFeatureFrame(pane, f0, resolution,
+                                              Layer::SnapLeft);
+                    layer->snapToFeatureFrame(pane, f1, resolution,
+                                              Layer::SnapRight);
+                }
 
             } else if (message.getArgCount() == 1 &&
                        message.getArg(0).canConvert(QVariant::String)) {
@@ -3843,6 +3873,40 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             }
         }
 
+    } else if (message.getMethod() == "zoomvertical") {
+
+        Pane *pane = m_paneStack->getCurrentPane();
+        Layer *layer = 0;
+        if (pane && pane->getLayerCount() > 0) {
+            layer = pane->getLayer(pane->getLayerCount() - 1);
+        }
+        int defaultStep = 0;
+        int steps = 0;
+        if (layer) {
+            steps = layer->getVerticalZoomSteps(defaultStep);
+            if (message.getArgCount() == 1 && steps > 0) {
+                if (message.getArg(0).canConvert(QVariant::String) &&
+                    message.getArg(0).toString() == "in") {
+                    int step = layer->getCurrentVerticalZoomStep() + 1;
+                    if (step < steps) layer->setVerticalZoomStep(step);
+                } else if (message.getArg(0).canConvert(QVariant::String) &&
+                           message.getArg(0).toString() == "out") {
+                    int step = layer->getCurrentVerticalZoomStep() - 1;
+                    if (step >= 0) layer->setVerticalZoomStep(step);
+                } else if (message.getArg(0).canConvert(QVariant::String) &&
+                           message.getArg(0).toString() == "default") {
+                    layer->setVerticalZoomStep(defaultStep);
+                }
+            } else if (message.getArgCount() == 2) {
+                if (message.getArg(0).canConvert(QVariant::Double) &&
+                    message.getArg(1).canConvert(QVariant::Double)) {
+                    double min = message.getArg(0).toDouble();
+                    double max = message.getArg(1).toDouble();
+                    layer->setDisplayExtents(min, max);
+                }
+            }
+        }
+
     } else if (message.getMethod() == "quit") {
         
         m_abandoning = true;
@@ -3886,7 +3950,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             Layer *newLayer = m_document->createDerivedLayer
                 (transform,
                  getMainModel(),
-                 PluginTransform::ExecutionContext(),
+                 TransformFactory::getInstance()->getDefaultContextForTransform
+                 (transform, getMainModel()),
                  "");
 
             if (newLayer) {

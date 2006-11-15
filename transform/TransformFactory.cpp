@@ -623,6 +623,27 @@ TransformFactory::getConfigurationForTransform(TransformName name,
     return ok ? inputModel : 0;
 }
 
+PluginTransform::ExecutionContext
+TransformFactory::getDefaultContextForTransform(TransformName name,
+                                                Model *inputModel)
+{
+    PluginTransform::ExecutionContext context(-1);
+
+    QString id = name.section(':', 0, 2);
+
+    if (FeatureExtractionPluginFactory::instanceFor(id)) {
+
+        Vamp::Plugin *vp =
+            FeatureExtractionPluginFactory::instanceFor(id)->instantiatePlugin
+            (id, inputModel ? inputModel->getSampleRate() : 48000);
+
+        if (vp) context = PluginTransform::ExecutionContext(-1, vp);
+
+    }
+
+    return context;
+}
+
 Transform *
 TransformFactory::createTransform(TransformName name, Model *inputModel,
                                   const PluginTransform::ExecutionContext &context,
