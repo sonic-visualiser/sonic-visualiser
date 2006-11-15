@@ -338,6 +338,7 @@ selection_bits()
 chromagram_bits()
 {
     add_melodic_range_spectrogram
+    sleep 10
     sv-command add timeruler
     sv-command transform vamp:qm-vamp-plugins:qm-chromagram:chromagram
     sleep 2
@@ -345,7 +346,7 @@ chromagram_bits()
     sleep 10
     sv-command zoom out
     fade_in
-    sleep 10
+    sleep 15
     fade_out
 }
 
@@ -383,7 +384,7 @@ sleep 20
 pid="`pidof sonic-visualiser`"
 if [ -n "$pid" ]; then
     kill "$pid"
-    sleep 2
+    sleep 5
 else
     reset
 fi
