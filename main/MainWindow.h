@@ -192,6 +192,8 @@ protected slots:
 
     void rightButtonMenuRequested(Pane *, QPoint point);
 
+    void propertyStacksResized();
+
     void preferenceChanged(PropertyContainer::PropertyName);
 
     void setupRecentFilesMenu();

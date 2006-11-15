@@ -90,6 +90,13 @@ public:
                                         AudioCallbackPlaySource *source = 0);
 
     /**
+     * Get the default execution context for the given transform
+     * and input model (if known).
+     */
+    PluginTransform::ExecutionContext getDefaultContextForTransform(TransformName name,
+                                                                    Model *inputModel = 0);
+
+    /**
      * Return the output model resulting from applying the named
      * transform to the given input model.  The transform may still be
      * working in the background when the model is returned; check the
