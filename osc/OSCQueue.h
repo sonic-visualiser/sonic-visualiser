@@ -15,7 +15,7 @@
 /*
    This is a modified version of a source file from the 
    Rosegarden MIDI and audio sequencer and notation editor.
-   This file copyright 2000-2006 Chris Cannam.
+   This file copyright 2000-2006 Chris Cannam and QMUL.
 */
 
 #ifndef _OSC_QUEUE_H_
