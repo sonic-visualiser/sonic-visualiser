@@ -571,9 +571,6 @@ PhaseVocoderTimeStretcher::synthesiseBlock(size_t c,
 
         if (!unchanged) {
 
-            float mag = sqrtf(m_freq[c][i][0] * m_freq[c][i][0] +
-                              m_freq[c][i][1] * m_freq[c][i][1]);
-
             float omega = (2 * M_PI * m_n1 * i) / m_wlen;
 	
             float expectedPhase = m_prevPhase[c][i] + omega;
@@ -584,6 +581,9 @@ PhaseVocoderTimeStretcher::synthesiseBlock(size_t c,
             
             adjustedPhase = m_prevAdjustedPhase[c][i] +
                 lastStep * phaseIncrement;
+            
+            float mag = sqrtf(m_freq[c][i][0] * m_freq[c][i][0] +
+                              m_freq[c][i][1] * m_freq[c][i][1]);
             
             float real = mag * cosf(adjustedPhase);
             float imag = mag * sinf(adjustedPhase);
