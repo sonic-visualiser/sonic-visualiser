@@ -31,8 +31,6 @@
 
 #include <QMessageBox>
 
-#include <fftw3.h>
-
 #include <iostream>
 
 FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputModel,
@@ -244,7 +242,7 @@ FeatureExtractionPluginTransform::run()
 
     float **buffers = new float*[channelCount];
     for (size_t ch = 0; ch < channelCount; ++ch) {
-	buffers[ch] = new float[m_context.blockSize];
+	buffers[ch] = new float[m_context.blockSize + 2];
     }
 
     bool frequencyDomain = (m_plugin->getInputDomain() ==
@@ -301,7 +299,7 @@ FeatureExtractionPluginTransform::run()
         for (size_t ch = 0; ch < channelCount; ++ch) {
             if (frequencyDomain) {
                 int column = (blockFrame - startFrame) / m_context.stepSize;
-                for (size_t i = 0; i < m_context.blockSize/2; ++i) {
+                for (size_t i = 0; i <= m_context.blockSize/2; ++i) {
                     fftModels[ch]->getValuesAt
                         (column, i, buffers[ch][i*2], buffers[ch][i*2+1]);
                 }

@@ -2619,7 +2619,7 @@ MainWindow::saveSessionAs()
 
     if (!saveSessionFile(path)) {
 	QMessageBox::critical(this, tr("Failed to save file"),
-			      tr("Session file \"%1\" could not be saved.").arg(m_sessionFile));
+			      tr("Session file \"%1\" could not be saved.").arg(path));
     } else {
 	setWindowTitle(tr("Sonic Visualiser: %1")
 		       .arg(QFileInfo(path).fileName()));

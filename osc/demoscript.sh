@@ -509,6 +509,7 @@ sv-command loop on
 
 sv-command resize 1000 500
 show_stuff
+sleep 5
 sleep 20
 playback_bits
 
