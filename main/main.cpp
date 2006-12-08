@@ -34,9 +34,6 @@
 #include <iostream>
 #include <signal.h>
 
-//!!! catch trappable signals, cleanup temporary directory etc
-//!!! check for crap left over from previous run
-
 static QMutex cleanupMutex;
 
 static void
