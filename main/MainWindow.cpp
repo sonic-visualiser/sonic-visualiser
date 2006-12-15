@@ -1065,6 +1065,8 @@ MainWindow::setupTransformsMenu()
 	QString description = transforms[i].description;
 	if (description == "") description = transforms[i].name;
 
+//        std::cerr << "Plugin Description: " << description.toStdString() << std::endl;
+
         QString type = transforms[i].type;
 
         QString category = transforms[i].category;
@@ -1098,7 +1100,7 @@ MainWindow::setupTransformsMenu()
                       << description.toStdString() << "\" (maker = \""
                       << maker.toStdString() << "\")" << std::endl;
         } else {
-            makerMenus[type][maker]->addAction(pluginName, action);
+            makerMenus[type][maker]->addAction(action);
         }
 
         action = new QAction(tr("%1...").arg(output == "" ? pluginName : output), this);

@@ -149,17 +149,30 @@ TransformFactory::populateTransforms()
     populateFeatureExtractionPlugins(transforms);
     populateRealTimePlugins(transforms);
 
-    // disambiguate plugins with similar descriptions
+    // disambiguate plugins with similar names
 
     std::map<QString, int> descriptions;
+    std::map<QString, QString> pluginSources;
+    std::map<QString, QString> pluginMakers;
 
     for (TransformDescriptionMap::iterator i = transforms.begin();
          i != transforms.end(); ++i) {
 
         TransformDesc desc = i->second;
 
-	++descriptions[desc.description];
-	++descriptions[QString("%1 [%2]").arg(desc.description).arg(desc.maker)];
+        QString td = desc.description;
+        QString tn = td.section(": ", 0, 0);
+        QString pn = desc.name.section(":", 1, 1);
+
+        if (pluginSources.find(tn) != pluginSources.end()) {
+            if (pluginSources[tn] != pn && pluginMakers[tn] != desc.maker) {
+                ++descriptions[tn];
+            }
+        } else {
+            ++descriptions[tn];
+            pluginSources[tn] = pn;
+            pluginMakers[tn] = desc.maker;
+        }
     }
 
     std::map<QString, int> counts;
@@ -170,18 +183,23 @@ TransformFactory::populateTransforms()
 
         TransformDesc desc = i->second;
 	QString name = desc.name;
-        QString description = desc.description;
         QString maker = desc.maker;
 
-	if (descriptions[description] > 1) {
-	    description = QString("%1 [%2]").arg(description).arg(maker);
-	    if (descriptions[description] > 1) {
-		description = QString("%1 <%2>")
-		    .arg(description).arg(++counts[description]);
-	    }
+        QString td = desc.description;
+        QString tn = td.section(": ", 0, 0);
+        QString to = td.section(": ", 1);
+
+	if (descriptions[tn] > 1) {
+            maker.replace(QRegExp(tr(" [\\(<].*$")), "");
+	    tn = QString("%1 [%2]").arg(tn).arg(maker);
 	}
 
-        desc.description = description;
+        if (to != "") {
+            desc.description = QString("%1: %2").arg(tn).arg(to);
+        } else {
+            desc.description = tn;
+        }
+
 	m_transforms[name] = desc;
     }	    
 }
