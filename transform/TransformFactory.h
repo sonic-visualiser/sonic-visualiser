@@ -54,11 +54,11 @@ public:
             friendlyName(_friendlyName),
             maker(_maker), units(_units), configurable(_configurable) { }
 
-        QString type;
-        QString category;
-	TransformName name;
-	QString description;
-        QString friendlyName;
+        QString type; // e.g. feature extraction plugin
+        QString category; // e.g. time > onsets
+	TransformName name; // e.g. vamp:vamp-aubio:aubioonset
+	QString description; // plugin's desc if 1 output, else "desc: output"
+        QString friendlyName; // short text for layer name
         QString maker;
         QString units;
         bool configurable;
