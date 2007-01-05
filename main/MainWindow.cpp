@@ -2873,7 +2873,7 @@ MainWindow::saveSessionFile(QString path)
 
     QApplication::restoreOverrideCursor();
 
-    if (bzFile.errorString() != "") {
+    if (!bzFile.isOK()) {
 	QMessageBox::critical(this, tr("Failed to write file"),
 			      tr("Failed to write to file \"%1\": %2")
 			      .arg(path).arg(bzFile.errorString()));
