@@ -106,7 +106,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playSource(0),
     m_playTarget(0),
     m_oscQueue(withOSCSupport ? new OSCQueue() : 0),
-    m_recentFiles("RecentFiles"),
+    m_recentFiles("RecentFiles", 20),
     m_recentTransforms("RecentTransforms", 20),
     m_mainMenusCreated(false),
     m_paneMenu(0),
@@ -262,6 +262,284 @@ MainWindow::~MainWindow()
     Profiles::getInstance()->dump();
 }
 
+QString
+MainWindow::getOpenFileName(FileType type)
+{
+    QString settingsKey;
+    QString lastPath;
+    
+    QString title = tr("Select file");
+    QString filter = tr("All files (*.*)");
+
+    bool canImportLayer = (getMainModel() != 0 &&
+                           m_paneStack != 0 &&
+                           m_paneStack->getCurrentPane() != 0);
+
+    switch (type) {
+
+    case SessionFile:
+        settingsKey = "sessionpath";
+        lastPath = m_sessionFile;
+        title = tr("Select a session file");
+        filter = tr("Sonic Visualiser session files (*.sv)\nAll files (*.*)");
+        break;
+
+    case AudioFile:
+        settingsKey = "audiopath";
+        lastPath = m_audioFile;
+        title = "Select an audio file";
+        filter = tr("Audio files (%1)\nAll files (*.*)")
+            .arg(AudioFileReaderFactory::getKnownExtensions());
+        break;
+
+    case LayerFile:
+        settingsKey = "layerpath";
+        lastPath = m_sessionFile;
+        filter = tr("All supported files (%1)\nSonic Visualiser Layer XML files (*.svl)\nComma-separated data files (*.csv)\nSpace-separated .lab files (*.lab)\nMIDI files (*.mid)\nText files (*.txt)\nAll files (*.*)").arg(DataFileReaderFactory::getKnownExtensions());
+        break;
+
+    case AnyFile:
+        settingsKey = "lastpath";
+        lastPath = m_sessionFile;
+        if (canImportLayer) {
+            filter = tr("All supported files (*.sv %1 %2)\nSonic Visualiser session files (*.sv)\nAudio files (%1)\nLayer files (%2)\nAll files (*.*)")
+                .arg(AudioFileReaderFactory::getKnownExtensions())
+                .arg(DataFileReaderFactory::getKnownExtensions());
+        } else {
+            filter = tr("All supported files (*.sv %1)\nSonic Visualiser session files (*.sv)\nAudio files (%1)\nAll files (*.*)")
+                .arg(AudioFileReaderFactory::getKnownExtensions());
+        }
+        break;
+    };
+
+    if (lastPath == "") lastPath = m_audioFile;
+    if (lastPath == "") {
+        char *home = getenv("HOME");
+        if (home) lastPath = home;
+        else lastPath = ".";
+    }
+    lastPath = QFileInfo(lastPath).absoluteDir().canonicalPath();
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    lastPath = settings.value(settingsKey, lastPath).toString();
+
+    QString path = "";
+
+    // Use our own QFileDialog just for symmetry with getSaveFileName below
+
+    QFileDialog dialog(this);
+    dialog.setFilters(filter.split('\n'));
+    dialog.setWindowTitle(title);
+    dialog.setDirectory(lastPath);
+
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    
+    if (dialog.exec()) {
+        QStringList files = dialog.selectedFiles();
+        if (!files.empty()) path = *files.begin();
+        
+        QFileInfo fi(path);
+        
+        if (!fi.exists()) {
+            
+            QMessageBox::critical(this, tr("File does not exist"),
+                                  tr("File \"%1\" does not exist").arg(path));
+            path = "";
+            
+        } else if (!fi.isReadable()) {
+            
+            QMessageBox::critical(this, tr("File is not readable"),
+                                  tr("File \"%1\" can not be read").arg(path));
+            path = "";
+            
+        } else if (fi.isDir()) {
+            
+            QMessageBox::critical(this, tr("Directory selected"),
+                                  tr("File \"%1\" is a directory").arg(path));
+            path = "";
+
+        } else if (!fi.isFile()) {
+            
+            QMessageBox::critical(this, tr("Non-file selected"),
+                                  tr("Path \"%1\" is not a file").arg(path));
+            path = "";
+            
+        } else if (fi.size() == 0) {
+            
+            QMessageBox::critical(this, tr("File is empty"),
+                                  tr("File \"%1\" is empty").arg(path));
+            path = "";
+        }                
+    }
+
+    if (path != "") {
+        settings.setValue(settingsKey,
+                          QFileInfo(path).absoluteDir().canonicalPath());
+    }
+    
+    return path;
+}
+
+QString
+MainWindow::getSaveFileName(FileType type)
+{
+    QString settingsKey;
+    QString lastPath;
+    
+    QString title = tr("Select file");
+    QString filter = tr("All files (*.*)");
+
+    switch (type) {
+
+    case SessionFile:
+        settingsKey = "savesessionpath";
+        lastPath = m_sessionFile;
+        title = tr("Select a session file");
+        filter = tr("Sonic Visualiser session files (*.sv)\nAll files (*.*)");
+        break;
+
+    case AudioFile:
+        settingsKey = "saveaudiopath";
+        lastPath = m_audioFile;
+        title = "Select an audio file";
+        title = tr("Select a file to export to");
+        filter = tr("WAV audio files (*.wav)\nAll files (*.*)");
+        break;
+
+    case LayerFile:
+        settingsKey = "savelayerpath";
+        lastPath = m_sessionFile;
+        title = tr("Select a file to export to");
+        filter = tr("Sonic Visualiser Layer XML files (*.svl)\nComma-separated data files (*.csv)\nText files (*.txt)\nAll files (*.*)");
+        break;
+
+    case AnyFile:
+        std::cerr << "ERROR: Internal error: MainWindow::getSaveFileName: AnyFile cannot be used here" << std::endl;
+        abort();
+    };
+
+    if (lastPath == "") lastPath = m_audioFile;
+    if (lastPath == "") {
+        char *home = getenv("HOME");
+        if (home) lastPath = home;
+        else lastPath = ".";
+    }
+    lastPath = QFileInfo(lastPath).absoluteDir().canonicalPath();
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    lastPath = settings.value(settingsKey, lastPath).toString();
+
+    QString path = "";
+
+    // Use our own QFileDialog instead of static functions, as we may
+    // need to adjust the file extension based on the selected filter
+
+    QFileDialog dialog(this);
+    dialog.setFilters(filter.split('\n'));
+    dialog.setWindowTitle(title);
+    dialog.setDirectory(lastPath);
+
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setConfirmOverwrite(false); // we'll do that
+        
+    if (type == SessionFile) {
+        dialog.setDefaultSuffix("sv");
+    } else if (type == AudioFile) {
+        dialog.setDefaultSuffix("wav");
+    }
+
+    bool good = false;
+
+    while (!good) {
+
+        path = "";
+        
+        if (!dialog.exec()) break;
+        
+        QStringList files = dialog.selectedFiles();
+        if (files.empty()) break;
+        path = *files.begin();
+        
+        QFileInfo fi(path);
+        
+        if (type == LayerFile && fi.suffix() == "") {
+            QString expectedExtension;
+            QString selectedFilter = dialog.selectedFilter();
+            if (selectedFilter.contains(".svl")) {
+                expectedExtension = "svl";
+            } else if (selectedFilter.contains(".txt")) {
+                expectedExtension = "txt";
+            } else if (selectedFilter.contains(".csv")) {
+                expectedExtension = "csv";
+            }
+            if (expectedExtension != "") {
+                path = QString("%1.%2").arg(path).arg(expectedExtension);
+                fi = QFileInfo(path);
+            }
+        }
+        
+        if (fi.isDir()) {
+            QMessageBox::critical(this, tr("Directory selected"),
+                                  tr("File \"%1\" is a directory").arg(path));
+            continue;
+        }
+        
+        if (fi.exists()) {
+            if (QMessageBox::question(this, tr("File exists"),
+                                      tr("The file \"%1\" already exists.\nDo you want to overwrite it?").arg(path),
+                                      QMessageBox::Ok,
+                                      QMessageBox::Cancel) != QMessageBox::Ok) {
+                continue;
+            }
+        }
+        
+        good = true;
+    }
+        
+    if (path != "") {
+        settings.setValue(settingsKey,
+                          QFileInfo(path).absoluteDir().canonicalPath());
+    }
+    
+    return path;
+}
+
+void
+MainWindow::registerLastOpenedFilePath(FileType type, QString path)
+{
+    QString settingsKey;
+
+    switch (type) {
+    case SessionFile:
+        settingsKey = "sessionpath";
+        break;
+
+    case AudioFile:
+        settingsKey = "audiopath";
+        break;
+
+    case LayerFile:
+        settingsKey = "layerpath";
+        break;
+
+    case AnyFile:
+        settingsKey = "lastpath";
+        break;
+    }
+
+    if (path != "") {
+        QSettings settings;
+        settings.beginGroup("MainWindow");
+        path = QFileInfo(path).absoluteDir().canonicalPath();
+        settings.setValue(settingsKey, path);
+        settings.setValue("lastpath", path);
+    }
+}
+    
 void
 MainWindow::setupMenus()
 {
@@ -495,6 +773,12 @@ MainWindow::setupEditMenu()
     action->setShortcut(tr("Enter"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstant()));
     connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    action = new QAction(tr("Insert Instants at Selection &Boundaries"), this);
+    action->setShortcut(tr("Shift+Enter"));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertInstantsAtBoundaries()));
+    connect(this, SIGNAL(canInsertInstantsAtBoundaries(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
     // Laptop shortcut (no keypad Enter key)
@@ -1419,6 +1703,7 @@ MainWindow::updateMenuStates()
     emit canRewind(haveCurrentTimeInstantsLayer || haveCurrentTimeValueLayer);
     emit canPaste(haveCurrentEditableLayer && haveClipboardContents);
     emit canInsertInstant(haveCurrentPane);
+    emit canInsertInstantsAtBoundaries(haveCurrentPane && haveSelection);
     emit canPlaySelection(haveMainModel && havePlayTarget && haveSelection);
     emit canClearSelection(haveSelection);
     emit canEditSelection(haveSelection && haveCurrentEditableLayer);
@@ -1695,7 +1980,27 @@ void
 MainWindow::insertInstant()
 {
     int frame = m_viewManager->getPlaybackFrame();
-            
+    insertInstantAt(frame);
+}
+
+void
+MainWindow::insertInstantsAtBoundaries()
+{
+    MultiSelection::SelectionList selections = m_viewManager->getSelections();
+    for (MultiSelection::SelectionList::iterator i = selections.begin();
+         i != selections.end(); ++i) {
+        size_t start = i->getStartFrame();
+        size_t end = i->getEndFrame();
+        if (start != end) {
+            insertInstantAt(i->getStartFrame());
+            insertInstantAt(i->getEndFrame());
+        }
+    }
+}
+
+void
+MainWindow::insertInstantAt(size_t frame)
+{
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) {
         return;
@@ -1742,16 +2047,7 @@ MainWindow::insertInstant()
 void
 MainWindow::importAudio()
 {
-    QString orig = m_audioFile;
-
-//    std::cerr << "orig = " << orig.toStdString() << std::endl;
-    
-    if (orig == "") orig = ".";
-
-    QString path = QFileDialog::getOpenFileName
-	(this, tr("Select an audio file"), orig,
-	 tr("Audio files (%1)\nAll files (*.*)")
-	 .arg(AudioFileReaderFactory::getKnownExtensions()));
+    QString path = getOpenFileName(AudioFile);
 
     if (path != "") {
 	if (!openAudioFile(path, ReplaceMainModel)) {
@@ -1764,16 +2060,7 @@ MainWindow::importAudio()
 void
 MainWindow::importMoreAudio()
 {
-    QString orig = m_audioFile;
-
-//    std::cerr << "orig = " << orig.toStdString() << std::endl;
-    
-    if (orig == "") orig = ".";
-
-    QString path = QFileDialog::getOpenFileName
-	(this, tr("Select an audio file"), orig,
-	 tr("Audio files (%1)\nAll files (*.*)")
-	 .arg(AudioFileReaderFactory::getKnownExtensions()));
+    QString path = getOpenFileName(AudioFile);
 
     if (path != "") {
 	if (!openAudioFile(path, CreateAdditionalModel)) {
@@ -1788,13 +2075,9 @@ MainWindow::exportAudio()
 {
     if (!getMainModel()) return;
 
-    QString path = QFileDialog::getSaveFileName
-	(this, tr("Select a file to export to"), ".",
-	 tr("WAV audio files (*.wav)\nAll files (*.*)"));
+    QString path = getSaveFileName(AudioFile);
     
     if (path == "") return;
-
-    if (!path.endsWith(".wav")) path = path + ".wav";
 
     bool ok = false;
     QString error;
@@ -1911,9 +2194,7 @@ MainWindow::importLayer()
 	return;
     }
 
-    QString path = QFileDialog::getOpenFileName
-	(this, tr("Select file"), ".",
-	 tr("All supported files (%1)\nSonic Visualiser Layer XML files (*.svl)\nComma-separated data files (*.csv)\nSpace-separated .lab files (*.lab)\nMIDI files (*.mid)\nText files (*.txt)\nAll files (*.*)").arg(DataFileReaderFactory::getKnownExtensions()));
+    QString path = getOpenFileName(LayerFile);
 
     if (path != "") {
 
@@ -1969,6 +2250,7 @@ MainWindow::openLayerFile(QString path)
         }
 
         m_recentFiles.addFile(path);
+        registerLastOpenedFilePath(LayerFile, path); // for file dialog
         return true;
         
     } else {
@@ -2000,9 +2282,7 @@ MainWindow::exportLayer()
     Model *model = layer->getModel();
     if (!model) return;
 
-    QString path = QFileDialog::getSaveFileName
-	(this, tr("Select a file to export to"), ".",
-	 tr("Sonic Visualiser Layer XML files (*.svl)\nComma-separated data files (*.csv)\nText files (*.txt)\nAll files (*.*)"));
+    QString path = getSaveFileName(LayerFile);
 
     if (path == "") return;
 
@@ -2160,6 +2440,7 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
 
     updateMenuStates();
     m_recentFiles.addFile(path);
+    registerLastOpenedFilePath(AudioFile, path); // for file dialog
     m_openingAudioFile = false;
 
     return true;
@@ -2297,19 +2578,9 @@ MainWindow::openSession()
     if (orig == "") orig = ".";
     else orig = QFileInfo(orig).absoluteDir().canonicalPath();
 
-    QString path = QFileDialog::getOpenFileName
-	(this, tr("Select a session file"), orig,
-	 tr("Sonic Visualiser session files (*.sv)\nAll files (*.*)"));
+    QString path = getOpenFileName(SessionFile);
 
     if (path.isEmpty()) return;
-
-    if (!(QFileInfo(path).exists() &&
-	  QFileInfo(path).isFile() &&
-	  QFileInfo(path).isReadable())) {
-	QMessageBox::critical(this, tr("Failed to open file"),
-			      tr("File \"%1\" does not exist or is not a readable file").arg(path));
-	return;
-    }
 
     if (!openSessionFile(path)) {
 	QMessageBox::critical(this, tr("Failed to open file"),
@@ -2328,29 +2599,9 @@ MainWindow::openSomething()
                            m_paneStack != 0 &&
                            m_paneStack->getCurrentPane() != 0);
 
-    QString importSpec;
-
-    if (canImportLayer) {
-        importSpec = tr("All supported files (*.sv %1 %2)\nSonic Visualiser session files (*.sv)\nAudio files (%1)\nLayer files (%2)\nAll files (*.*)")
-            .arg(AudioFileReaderFactory::getKnownExtensions())
-            .arg(DataFileReaderFactory::getKnownExtensions());
-    } else {
-        importSpec = tr("All supported files (*.sv %1)\nSonic Visualiser session files (*.sv)\nAudio files (%1)\nAll files (*.*)")
-            .arg(AudioFileReaderFactory::getKnownExtensions());
-    }
-
-    QString path = QFileDialog::getOpenFileName
-	(this, tr("Select a file to open"), orig, importSpec);
+    QString path = getOpenFileName(AnyFile);
 
     if (path.isEmpty()) return;
-
-    if (!(QFileInfo(path).exists() &&
-	  QFileInfo(path).isFile() &&
-	  QFileInfo(path).isReadable())) {
-	QMessageBox::critical(this, tr("Failed to open file"),
-			      tr("File \"%1\" does not exist or is not a readable file").arg(path));
-	return;
-    }
 
     if (path.endsWith(".sv")) {
 
@@ -2466,6 +2717,7 @@ MainWindow::openSessionFile(QString path)
 	m_documentModified = false;
 	updateMenuStates();
         m_recentFiles.addFile(path);
+        registerLastOpenedFilePath(SessionFile, path); // for file dialog
     } else {
 	setWindowTitle(tr("Sonic Visualiser"));
     }
@@ -2583,41 +2835,9 @@ MainWindow::saveSessionAs()
     if (orig == "") orig = ".";
     else orig = QFileInfo(orig).absoluteDir().canonicalPath();
 
-    QString path;
-    bool good = false;
+    QString path = getSaveFileName(SessionFile);
 
-    while (!good) {
-
-	path = QFileDialog::getSaveFileName
-	    (this, tr("Select a file to save to"), orig,
-	     tr("Sonic Visualiser session files (*.sv)\nAll files (*.*)"), 0,
-	     QFileDialog::DontConfirmOverwrite); // we'll do that
-
-	if (path.isEmpty()) return;
-
-	if (!path.endsWith(".sv")) path = path + ".sv";
-
-	QFileInfo fi(path);
-
-	if (fi.isDir()) {
-	    QMessageBox::critical(this, tr("Directory selected"),
-				  tr("File \"%1\" is a directory").arg(path));
-	    continue;
-	}
-
-	if (fi.exists()) {
-	    if (QMessageBox::question(this, tr("File exists"),
-				      tr("The file \"%1\" already exists.\nDo you want to overwrite it?").arg(path),
-				      QMessageBox::Ok,
-				      QMessageBox::Cancel) == QMessageBox::Ok) {
-		good = true;
-	    } else {
-		continue;
-	    }
-	}
-
-	good = true;
-    }
+    if (path == "") return;
 
     if (!saveSessionFile(path)) {
 	QMessageBox::critical(this, tr("Failed to save file"),
