@@ -90,6 +90,7 @@ signals:
     void canEditSelection(bool);
     void canPaste(bool);
     void canInsertInstant(bool);
+    void canInsertInstantsAtBoundaries(bool);
     void canDeleteCurrentLayer(bool);
     void canZoom(bool);
     void canScroll(bool);
@@ -171,6 +172,8 @@ protected slots:
     void paste();
     void deleteSelected();
     void insertInstant();
+    void insertInstantAt(size_t);
+    void insertInstantsAtBoundaries();
 
     void documentModified();
     void documentRestored();
@@ -349,6 +352,17 @@ protected:
 
     virtual void closeEvent(QCloseEvent *e);
     bool checkSaveModified();
+
+    enum FileType {
+        SessionFile,
+        AudioFile,
+        LayerFile,
+        AnyFile
+    };
+
+    QString getOpenFileName(FileType type);
+    QString getSaveFileName(FileType type);
+    void registerLastOpenedFilePath(FileType type, QString path);
 
     void createPlayTarget();
 
