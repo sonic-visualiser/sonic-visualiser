@@ -2050,7 +2050,7 @@ MainWindow::importAudio()
     QString path = getOpenFileName(AudioFile);
 
     if (path != "") {
-	if (!openAudioFile(path, ReplaceMainModel)) {
+	if (openAudioFile(path, ReplaceMainModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -2063,7 +2063,7 @@ MainWindow::importMoreAudio()
     QString path = getOpenFileName(AudioFile);
 
     if (path != "") {
-	if (!openAudioFile(path, CreateAdditionalModel)) {
+	if (openAudioFile(path, CreateAdditionalModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -2198,7 +2198,7 @@ MainWindow::importLayer()
 
     if (path != "") {
 
-        if (!openLayerFile(path)) {
+        if (openLayerFile(path) == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("File %1 could not be opened.").arg(path));
             return;
@@ -2206,7 +2206,7 @@ MainWindow::importLayer()
     }
 }
 
-bool
+MainWindow::FileOpenStatus
 MainWindow::openLayerFile(QString path)
 {
     Pane *pane = m_paneStack->getCurrentPane();
@@ -2214,13 +2214,13 @@ MainWindow::openLayerFile(QString path)
     if (!pane) {
 	// shouldn't happen, as the menu action should have been disabled
 	std::cerr << "WARNING: MainWindow::openLayerFile: no current pane" << std::endl;
-	return false;
+	return FileOpenFailed;
     }
 
     if (!getMainModel()) {
 	// shouldn't happen, as the menu action should have been disabled
 	std::cerr << "WARNING: MainWindow::openLayerFile: No main model -- hence no default sample rate available" << std::endl;
-	return false;
+	return FileOpenFailed;
     }
 
     if (path.endsWith(".svl") || path.endsWith(".xml")) {
@@ -2232,7 +2232,7 @@ MainWindow::openLayerFile(QString path)
             std::cerr << "ERROR: MainWindow::openLayerFile("
                       << path.toStdString()
                       << "): Failed to open file for reading" << std::endl;
-            return false;
+            return FileOpenFailed;
         }
         
         SVFileReader reader(m_document, callback);
@@ -2246,12 +2246,12 @@ MainWindow::openLayerFile(QString path)
                       << path.toStdString()
                       << "): Failed to read XML file: "
                       << reader.getErrorString().toStdString() << std::endl;
-            return false;
+            return FileOpenFailed;
         }
 
         m_recentFiles.addFile(path);
         registerLastOpenedFilePath(LayerFile, path); // for file dialog
-        return true;
+        return FileOpenSucceeded;
         
     } else {
         
@@ -2262,12 +2262,12 @@ MainWindow::openLayerFile(QString path)
             if (newLayer) {
                 m_document->addLayerToView(pane, newLayer);
                 m_recentFiles.addFile(path);
-                return true;
+                return FileOpenSucceeded;
             }
         }
     }
 
-    return false;
+    return FileOpenFailed;
 }
 
 void
@@ -2331,13 +2331,13 @@ MainWindow::exportLayer()
     }
 }
 
-bool
+MainWindow::FileOpenStatus
 MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
 {
     if (!(QFileInfo(path).exists() &&
 	  QFileInfo(path).isFile() &&
 	  QFileInfo(path).isReadable())) {
-	return false;
+	return FileOpenFailed;
     }
 
     m_openingAudioFile = true;
@@ -2347,7 +2347,7 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
     if (!newModel->isOK()) {
 	delete newModel;
         m_openingAudioFile = false;
-	return false;
+	return FileOpenFailed;
     }
 
     bool setAsMain = true;
@@ -2370,7 +2370,7 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
             if (!ok || item.isEmpty()) {
                 delete newModel;
                 m_openingAudioFile = false;
-                return false;
+                return FileOpenCancelled;
             }
             
             setAsMain = (item == items[0]);
@@ -2443,7 +2443,7 @@ MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
     registerLastOpenedFilePath(AudioFile, path); // for file dialog
     m_openingAudioFile = false;
 
-    return true;
+    return FileOpenSucceeded;
 }
 
 void
@@ -2582,7 +2582,7 @@ MainWindow::openSession()
 
     if (path.isEmpty()) return;
 
-    if (!openSessionFile(path)) {
+    if (openSessionFile(path) == FileOpenFailed) {
 	QMessageBox::critical(this, tr("Failed to open file"),
 			      tr("Session file \"%1\" could not be opened").arg(path));
     }
@@ -2607,16 +2607,16 @@ MainWindow::openSomething()
 
         if (!checkSaveModified()) return;
 
-        if (!openSessionFile(path)) {
+        if (openSessionFile(path) == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("Session file \"%1\" could not be opened").arg(path));
         }
 
     } else {
 
-        if (!openAudioFile(path, AskUser)) {
+        if (openAudioFile(path, AskUser) == FileOpenFailed) {
 
-            if (!canImportLayer || !openLayerFile(path)) {
+            if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
 
                 QMessageBox::critical(this, tr("Failed to open file"),
                                       tr("File \"%1\" could not be opened").arg(path));
@@ -2644,20 +2644,20 @@ MainWindow::openRecentFile()
 
         if (!checkSaveModified()) return ;
 
-        if (!openSessionFile(path)) {
+        if (openSessionFile(path) == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("Session file \"%1\" could not be opened").arg(path));
         }
 
     } else {
 
-        if (!openAudioFile(path, AskUser)) {
+        if (openAudioFile(path, AskUser) == FileOpenFailed) {
 
             bool canImportLayer = (getMainModel() != 0 &&
                                    m_paneStack != 0 &&
                                    m_paneStack->getCurrentPane() != 0);
 
-            if (!canImportLayer || !openLayerFile(path)) {
+            if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
 
                 QMessageBox::critical(this, tr("Failed to open file"),
                                       tr("File \"%1\" could not be opened").arg(path));
@@ -2666,26 +2666,28 @@ MainWindow::openRecentFile()
     }
 }
 
-bool
+MainWindow::FileOpenStatus
 MainWindow::openSomeFile(QString path, AudioFileOpenMode mode)
 {
-    if (openAudioFile(path, mode)) {
-	return true;
-    } else if (openSessionFile(path)) {
-	return true;
+    FileOpenStatus status;
+
+    if ((status = openAudioFile(path, mode)) != FileOpenFailed) {
+        return status;
+    } else if ((status = openSessionFile(path)) != FileOpenFailed) {
+	return status;
     } else {
-	return false;
+	return FileOpenFailed;
     }
 }
 
-bool
+MainWindow::FileOpenStatus
 MainWindow::openSessionFile(QString path)
 {
     BZipFileDevice bzFile(path);
     if (!bzFile.open(QIODevice::ReadOnly)) {
         std::cerr << "Failed to open session file \"" << path.toStdString()
                   << "\": " << bzFile.errorString().toStdString() << std::endl;
-        return false;
+        return FileOpenFailed;
     }
 
     QString error;
@@ -2722,7 +2724,7 @@ MainWindow::openSessionFile(QString path)
 	setWindowTitle(tr("Sonic Visualiser"));
     }
 
-    return ok;
+    return ok ? FileOpenSucceeded : FileOpenFailed;
 }
 
 void
@@ -3731,7 +3733,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (!openSomeFile(path, ReplaceMainModel)) {
+            if (openSomeFile(path, ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << path.toStdString() << "\"" << std::endl;
             }
@@ -3744,7 +3746,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (!openSomeFile(path, CreateAdditionalModel)) {
+            if (openSomeFile(path, CreateAdditionalModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << path.toStdString() << "\"" << std::endl;
             }
@@ -3761,7 +3763,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
         std::vector<QString> recent = m_recentFiles.getRecent();
         if (n >= 0 && n < recent.size()) {
-            if (!openSomeFile(recent[n], ReplaceMainModel)) {
+            if (openSomeFile(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << recent[n].toStdString() << "\"" << std::endl;
             }
