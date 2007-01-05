@@ -791,7 +791,22 @@ SVFileReader::readLayer(const QXmlAttributes &attributes)
     }
 
     if (!m_inData && m_currentPane) {
+
+        QString visible = attributes.value("visible");
+        bool dormant = (visible == "false");
+
+        // We need to do this both before and after adding the layer
+        // to the view -- we need it to be dormant if appropriate
+        // before it's actually added to the view so that any property
+        // box gets the right state when it's added, but the add layer
+        // command sets dormant to false because it assumes it may be
+        // restoring a previously dormant layer, so we need to set it
+        // again afterwards too.  Hm
+        layer->setLayerDormant(m_currentPane, dormant);
+
 	m_document->addLayerToView(m_currentPane, layer);
+
+        layer->setLayerDormant(m_currentPane, dormant);
     }
 
     return true;
