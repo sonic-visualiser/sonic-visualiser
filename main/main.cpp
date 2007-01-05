@@ -150,7 +150,7 @@ main(int argc, char **argv)
 
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
 
-        bool success = false;
+        MainWindow::FileOpenStatus status = MainWindow::FileOpenSucceeded;
 
         if (i == args.begin()) continue;
         if (i->startsWith('-')) continue;
@@ -159,25 +159,25 @@ main(int argc, char **argv)
 
         if (path.endsWith("sv")) {
             if (!haveSession) {
-                success = gui.openSessionFile(path);
-                if (success) {
+                status = gui.openSessionFile(path);
+                if (status == MainWindow::FileOpenSucceeded) {
                     haveSession = true;
                     haveMainModel = true;
                 }
             } else {
                 std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
-                success = true;
+                status = MainWindow::FileOpenSucceeded;
             }
         }
-        if (!success) {
+        if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
-                success = gui.openSomeFile(path, MainWindow::ReplaceMainModel);
-                if (success) haveMainModel = true;
+                status = gui.openSomeFile(path, MainWindow::ReplaceMainModel);
+                if (status == MainWindow::FileOpenSucceeded) haveMainModel = true;
             } else {
-                success = gui.openSomeFile(path, MainWindow::CreateAdditionalModel);
+                status = gui.openSomeFile(path, MainWindow::CreateAdditionalModel);
             }
         }
-        if (!success) {
+        if (status == MainWindow::FileOpenFailed) {
 	    QMessageBox::critical
                 (&gui, QMessageBox::tr("Failed to open file"),
                  QMessageBox::tr("File \"%1\" could not be opened").arg(path));

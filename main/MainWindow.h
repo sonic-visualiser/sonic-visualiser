@@ -67,10 +67,17 @@ public:
         AskUser
     };
 
-    bool openSomeFile(QString path, AudioFileOpenMode = AskUser);
-    bool openAudioFile(QString path, AudioFileOpenMode = AskUser);
-    bool openLayerFile(QString path);
-    bool openSessionFile(QString path);
+    enum FileOpenStatus {
+        FileOpenSucceeded,
+        FileOpenFailed,
+        FileOpenCancelled
+    };
+
+    FileOpenStatus openSomeFile(QString path, AudioFileOpenMode = AskUser);
+    FileOpenStatus openAudioFile(QString path, AudioFileOpenMode = AskUser);
+    FileOpenStatus openLayerFile(QString path);
+    FileOpenStatus openSessionFile(QString path);
+
     bool saveSessionFile(QString path);
     bool commitData(bool mayAskUser); // on session shutdown
 
