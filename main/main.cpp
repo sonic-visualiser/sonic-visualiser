@@ -150,7 +150,7 @@ main(int argc, char **argv)
 
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
 
-        MainWindow::FileOpenStatus status = MainWindow::FileOpenSucceeded;
+        MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 
         if (i == args.begin()) continue;
         if (i->startsWith('-')) continue;

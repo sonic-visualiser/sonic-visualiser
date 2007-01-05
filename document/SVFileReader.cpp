@@ -1086,7 +1086,7 @@ SVFileReader::readPlayParameters(const QXmlAttributes &attributes)
         }
         
         bool muted = (attributes.value("mute").trimmed() == "true");
-        if (ok) parameters->setPlayMuted(muted);
+        parameters->setPlayMuted(muted);
         
         float pan = attributes.value("pan").toFloat(&ok);
         if (ok) parameters->setPlayPan(pan);
