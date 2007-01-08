@@ -47,6 +47,7 @@
 #include "data/fileio/WavFileWriter.h"
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
+#include "data/fileio/RemoteFile.h"
 #include "base/RecentFiles.h"
 #include "transform/TransformFactory.h"
 #include "base/PlayParameterRepository.h"
@@ -2667,14 +2668,48 @@ MainWindow::openRecentFile()
 }
 
 MainWindow::FileOpenStatus
+MainWindow::openURL(QUrl url)
+{
+    if (url.scheme().toLower() == "file") {
+        return openSomeFile(url.toLocalFile());
+    } else if (url.scheme().toLower() != "http" &&
+               url.scheme().toLower() != "ftp") {
+        QMessageBox::critical(this, tr("Unsupported scheme in URL"),
+                              tr("The URL scheme \"%1\" is not supported")
+                              .arg(url.scheme()));
+        return FileOpenFailed;
+    } else {
+        RemoteFile rf(url);
+        rf.wait();
+        if (!rf.isOK()) {
+            //!!! need to clean up any partially downloaded file!
+            QMessageBox::critical(this, tr("File download failed"),
+                                  tr("Failed to download URL \"%1\": %2")
+                                  .arg(url.toString()).arg(rf.getErrorString()));
+            return FileOpenFailed;
+        }
+        //!!! and delete the file if we fail to open it here?
+        return openSomeFile(rf.getLocalFilename());
+    }
+}
+
+MainWindow::FileOpenStatus
 MainWindow::openSomeFile(QString path, AudioFileOpenMode mode)
 {
     FileOpenStatus status;
+
+    bool canImportLayer = (getMainModel() != 0 &&
+                           m_paneStack != 0 &&
+                           m_paneStack->getCurrentPane() != 0);
 
     if ((status = openAudioFile(path, mode)) != FileOpenFailed) {
         return status;
     } else if ((status = openSessionFile(path)) != FileOpenFailed) {
 	return status;
+    } else if (!canImportLayer) {
+        return FileOpenFailed;
+    } else if ((status = openLayerFile(path)) != FileOpenFailed) {
+        return status;
     } else {
 	return FileOpenFailed;
     }
