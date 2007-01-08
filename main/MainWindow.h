@@ -18,6 +18,7 @@
 
 #include <QFrame>
 #include <QString>
+#include <QUrl>
 #include <QMainWindow>
 #include <QPointer>
 
@@ -77,6 +78,7 @@ public:
     FileOpenStatus openAudioFile(QString path, AudioFileOpenMode = AskUser);
     FileOpenStatus openLayerFile(QString path);
     FileOpenStatus openSessionFile(QString path);
+    FileOpenStatus openURL(QUrl url);
 
     bool saveSessionFile(QString path);
     bool commitData(bool mayAskUser); // on session shutdown

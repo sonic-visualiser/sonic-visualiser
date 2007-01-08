@@ -5,7 +5,7 @@ SV_UNIT_PACKAGES = vamp vamp-sdk fftw3f samplerate jack portaudio mad oggz fishs
 load(../sv.prf)
 
 CONFIG += sv qt thread warn_on stl rtti exceptions
-QT += xml
+QT += xml network
 
 TARGET = sonic-visualiser
 

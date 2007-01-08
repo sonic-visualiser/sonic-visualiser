@@ -155,6 +155,11 @@ main(int argc, char **argv)
         if (i == args.begin()) continue;
         if (i->startsWith('-')) continue;
 
+        if (i->startsWith("http:") || i->startsWith("ftp:")) {
+            status = gui.openURL(QUrl(*i));
+            continue;
+        }
+
         QString path = *i;
 
         if (path.endsWith("sv")) {
