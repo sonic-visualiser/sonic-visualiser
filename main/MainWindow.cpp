@@ -2253,7 +2253,7 @@ MainWindow::openLayerFile(QString path, QString location)
             return FileOpenFailed;
         }
         
-        SVFileReader reader(m_document, callback);
+        SVFileReader reader(m_document, callback, location);
         reader.setCurrentPane(pane);
         
         QXmlInputSource inputSource(&file);
@@ -2805,7 +2805,7 @@ MainWindow::openSessionFile(QString path, QString location)
     PaneCallback callback(this);
     m_viewManager->clearSelections();
 
-    SVFileReader reader(m_document, callback);
+    SVFileReader reader(m_document, callback, location);
     QXmlInputSource inputSource(&bzFile);
     reader.parse(inputSource);
     

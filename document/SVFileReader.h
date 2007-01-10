@@ -41,7 +41,8 @@ class SVFileReader : public QXmlDefaultHandler
 {
 public:
     SVFileReader(Document *document,
-		 SVFileReaderPaneCallback &callback);
+		 SVFileReaderPaneCallback &callback,
+                 QString location = ""); // for audio file locate mechanism
     virtual ~SVFileReader();
 
     void parse(const QString &xmlData);
@@ -85,6 +86,7 @@ protected:
 
     Document *m_document;
     SVFileReaderPaneCallback &m_paneCallback;
+    QString m_location;
     Pane *m_currentPane;
     std::map<int, Layer *> m_layers;
     std::map<int, Model *> m_models;
