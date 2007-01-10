@@ -114,6 +114,7 @@ protected slots:
     void importAudio();
     void importMoreAudio();
     void openSomething();
+    void openLocation();
     void openRecentFile();
     void exportAudio();
     void importLayer();
@@ -368,6 +369,13 @@ protected:
         LayerFile,
         AnyFile
     };
+
+    FileOpenStatus openSomeFile(QString path, QString location,
+                                AudioFileOpenMode = AskUser);
+    FileOpenStatus openAudioFile(QString path, QString location,
+                                 AudioFileOpenMode = AskUser);
+    FileOpenStatus openLayerFile(QString path, QString location);
+    FileOpenStatus openSessionFile(QString path, QString location);
 
     QString getOpenFileName(FileType type);
     QString getSaveFileName(FileType type);
