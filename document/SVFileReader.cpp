@@ -21,6 +21,8 @@
 #include "base/PlayParameterRepository.h"
 
 #include "data/fileio/AudioFileReaderFactory.h"
+#include "data/fileio/FileFinder.h"
+#include "data/fileio/RemoteFile.h"
 
 #include "data/model/WaveFileModel.h"
 #include "data/model/EditableDenseThreeDimensionalModel.h"
@@ -147,9 +149,11 @@
 
 
 SVFileReader::SVFileReader(Document *document,
-			   SVFileReaderPaneCallback &callback) :
+			   SVFileReaderPaneCallback &callback,
+                           QString location) :
     m_document(document),
     m_paneCallback(callback),
+    m_location(location),
     m_currentPane(0),
     m_currentDataset(0),
     m_currentDerivedModel(0),
@@ -494,6 +498,36 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 
     if (type == "wavefile") {
 	
+        WaveFileModel *model = 0;
+        FileFinder finder(attributes.value("file"), m_location);
+        QString path = finder.getLocation();
+        QUrl url(path);
+
+        if (RemoteFile::canHandleScheme(url)) {
+
+            RemoteFile rf(url);
+            rf.wait();
+
+            if (rf.isOK()) {
+                model = new WaveFileModel(rf.getLocalFilename());
+                if (!model->isOK()) {
+                    delete model;
+                    model = 0;
+                    //!!! and delete local file?
+                }
+            }
+        } else {
+
+            model = new WaveFileModel(path);
+            if (!model->isOK()) {
+                delete model;
+                model = 0;
+            }
+        }
+
+        if (!model) return false;
+
+/*
 	QString file = attributes.value("file");
 	WaveFileModel *model = new WaveFileModel(file);
 
@@ -522,6 +556,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 		return false;
 	    }
 	}
+*/
 
 	m_models[id] = model;
 	if (mainModel) {
