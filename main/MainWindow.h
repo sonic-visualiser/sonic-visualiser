@@ -29,6 +29,7 @@
 #include "layer/LayerFactory.h"
 #include "transform/Transform.h"
 #include "document/SVFileReader.h"
+#include "data/fileio/FileFinder.h"
 #include <map>
 
 class Document;
@@ -363,13 +364,6 @@ protected:
     virtual void closeEvent(QCloseEvent *e);
     bool checkSaveModified();
 
-    enum FileType {
-        SessionFile,
-        AudioFile,
-        LayerFile,
-        AnyFile
-    };
-
     FileOpenStatus openSomeFile(QString path, QString location,
                                 AudioFileOpenMode = AskUser);
     FileOpenStatus openAudioFile(QString path, QString location,
@@ -377,9 +371,9 @@ protected:
     FileOpenStatus openLayerFile(QString path, QString location);
     FileOpenStatus openSessionFile(QString path, QString location);
 
-    QString getOpenFileName(FileType type);
-    QString getSaveFileName(FileType type);
-    void registerLastOpenedFilePath(FileType type, QString path);
+    QString getOpenFileName(FileFinder::FileType type);
+    QString getSaveFileName(FileFinder::FileType type);
+    void registerLastOpenedFilePath(FileFinder::FileType type, QString path);
 
     void createPlayTarget();
 
