@@ -499,8 +499,10 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
     if (type == "wavefile") {
 	
         WaveFileModel *model = 0;
-        FileFinder finder(attributes.value("file"), m_location);
-        QString path = finder.getLocation();
+        FileFinder *ff = FileFinder::getInstance();
+        QString originalPath = attributes.value("file");
+        QString path = ff->find(FileFinder::AudioFile,
+                                originalPath, m_location);
         QUrl url(path);
 
         if (RemoteFile::canHandleScheme(url)) {
@@ -509,7 +511,8 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
             rf.wait();
 
             if (rf.isOK()) {
-                model = new WaveFileModel(rf.getLocalFilename());
+
+                model = new WaveFileModel(rf.getLocalFilename(), path);
                 if (!model->isOK()) {
                     delete model;
                     model = 0;
@@ -526,37 +529,6 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
         }
 
         if (!model) return false;
-
-/*
-	QString file = attributes.value("file");
-	WaveFileModel *model = new WaveFileModel(file);
-
-	while (!model->isOK()) {
-
-	    delete model;
-	    model = 0;
-
-	    if (QMessageBox::question(0,
-				      QMessageBox::tr("Failed to open file"),
-				      QMessageBox::tr("Audio file \"%1\" could not be opened.\nLocate it?").arg(file),
-				      QMessageBox::Ok,
-				      QMessageBox::Cancel) == QMessageBox::Ok) {
-
-		QString path = QFileDialog::getOpenFileName
-		    (0, QFileDialog::tr("Locate file \"%1\"").arg(QFileInfo(file).fileName()), file,
-		     QFileDialog::tr("Audio files (%1)\nAll files (*.*)")
-		     .arg(AudioFileReaderFactory::getKnownExtensions()));
-
-		if (path != "") {
-		    model = new WaveFileModel(path);
-		} else {
-		    return false;
-		}
-	    } else {
-		return false;
-	    }
-	}
-*/
 
 	m_models[id] = model;
 	if (mainModel) {
@@ -665,7 +637,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
     } else {
 
 	std::cerr << "WARNING: SV-XML: Unexpected model type \""
-		  << type.toLocal8Bit().data() << "\" for model id" << id << std::endl;
+		  << type.toLocal8Bit().data() << "\" for model id " << id << std::endl;
     }
 
     return false;
