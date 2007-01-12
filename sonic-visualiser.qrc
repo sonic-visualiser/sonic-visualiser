@@ -52,6 +52,8 @@
     <file>icons/mono.png</file>
     <file>icons/stereo.png</file>
     <file>icons/sharpen.png</file>
+    <file>icons/svicon16.png</file>
+    <file>icons/svicon32.png</file>
     <file>samples/bass.wav</file>
     <file>samples/beep.wav</file>
     <file>samples/bounce.wav</file>
