@@ -103,7 +103,7 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName("sonic-visualiser");
 
-    QApplication::setWindowIcon(QIcon(":icons/waveform.png"));
+    QApplication::setWindowIcon(QIcon(":icons/svicon16.png"));
 
     QString language = QLocale::system().name();
 
