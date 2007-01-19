@@ -49,6 +49,7 @@
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
 #include "data/fileio/RemoteFile.h"
+#include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
 #include "transform/TransformFactory.h"
 #include "base/PlayParameterRepository.h"
@@ -3641,6 +3642,7 @@ MainWindow::modelAboutToBeDeleted(Model *model)
 {
 //    std::cerr << "MainWindow::modelAboutToBeDeleted(" << model << ")" << std::endl;
     m_playSource->removeModel(model);
+    FFTDataServer::modelAboutToBeDeleted(model);
 }
 
 void
