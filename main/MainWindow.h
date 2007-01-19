@@ -136,11 +136,13 @@ protected slots:
     void jumpRight();
 
     void showNoOverlays();
-    void showBasicOverlays();
-    void showAllTextOverlays();
+    void showMinimalOverlays();
+    void showStandardOverlays();
+    void showAllOverlays();
 
     void toggleZoomWheels();
     void togglePropertyBoxes();
+    void toggleStatusBar();
 
     void play();
     void ffwd();
@@ -217,6 +219,9 @@ protected slots:
 
     void pollOSC();
     void handleOSCMessage(const OSCMessage &);
+
+    void mouseEnteredWidget();
+    void mouseLeftWidget();
 
     void website();
     void help();
