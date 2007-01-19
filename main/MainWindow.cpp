@@ -38,6 +38,7 @@
 #include "widgets/LayerTree.h"
 #include "widgets/ListInputDialog.h"
 #include "widgets/SubdividingMenu.h"
+#include "widgets/NotifyingPushButton.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
@@ -64,7 +65,6 @@
 #include "plugin/api/dssi.h"
 
 #include <QApplication>
-#include <QPushButton>
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QLabel>
@@ -155,10 +155,14 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             this, SLOT(rightButtonMenuRequested(Pane *, QPoint)));
     connect(m_paneStack, SIGNAL(propertyStacksResized()),
             this, SLOT(propertyStacksResized()));
+    connect(m_paneStack, SIGNAL(contextHelpChanged(const QString &)),
+            statusBar(), SLOT(showMessage(const QString &)));
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
     m_overview->setFixedHeight(40);
+    connect(m_overview, SIGNAL(contextHelpChanged(const QString &)),
+            statusBar(), SLOT(showMessage(const QString &)));
 
     m_panLayer = new WaveformLayer;
     m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
@@ -176,6 +180,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             this,           SLOT(audioOverloadPluginDisabled()));
 
     m_fader = new Fader(frame, false);
+    connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_fader, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
@@ -191,8 +197,10 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playSpeed->setShowToolTip(true);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
+    connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    m_playSharpen = new QPushButton(frame);
+    m_playSharpen = new NotifyingPushButton(frame);
     m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
     m_playSharpen->setFixedSize(20, 20);
 //    m_playSharpen->setFlat(true);
@@ -201,8 +209,10 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playSharpen->setChecked(false);
     m_playSharpen->setIcon(QIcon(":icons/sharpen.png"));
     connect(m_playSharpen, SIGNAL(clicked()), this, SLOT(playSharpenToggled()));
+    connect(m_playSharpen, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_playSharpen, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    m_playMono = new QPushButton(frame);
+    m_playMono = new NotifyingPushButton(frame);
     m_playMono->setToolTip(tr("Run time stretcher in mono only"));
     m_playMono->setFixedSize(20, 20);
 //    m_playMono->setFlat(true);
@@ -211,6 +221,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playMono->setChecked(false);
     m_playMono->setIcon(QIcon(":icons/mono.png"));
     connect(m_playMono, SIGNAL(clicked()), this, SLOT(playMonoToggled()));
+    connect(m_playMono, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_playMono, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
     QSettings settings;
     settings.beginGroup("MainWindow");
@@ -247,7 +259,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     setupMenus();
     setupToolbars();
 
-//    statusBar()->addWidget(m_descriptionLabel);
+    statusBar();
 
     newSession();
 }
@@ -364,7 +376,7 @@ MainWindow::setupFileMenu()
     icon.addFile(":icons/filenew-22.png");
     QAction *action = new QAction(icon, tr("&New Session"), this);
     action->setShortcut(tr("Ctrl+N"));
-    action->setStatusTip(tr("Clear the current Sonic Visualiser session and start a new one"));
+    action->setStatusTip(tr("Abandon the current Sonic Visualiser session and start a new one"));
     connect(action, SIGNAL(triggered()), this, SLOT(newSession()));
     menu->addAction(action);
     toolbar->addAction(action);
@@ -472,6 +484,7 @@ MainWindow::setupFileMenu()
     action = new QAction(QIcon(":/icons/exit.png"),
                          tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
+    action->setStatusTip(tr("Exit Sonic Visualiser"));
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     menu->addAction(action);
 }
@@ -489,6 +502,7 @@ MainWindow::setupEditMenu()
     QAction *action = new QAction(QIcon(":/icons/editcut.png"),
                                   tr("Cu&t"), this);
     action->setShortcut(tr("Ctrl+X"));
+    action->setStatusTip(tr("Cut the selection from the current layer to the clipboard"));
     connect(action, SIGNAL(triggered()), this, SLOT(cut()));
     connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -497,6 +511,7 @@ MainWindow::setupEditMenu()
     action = new QAction(QIcon(":/icons/editcopy.png"),
                          tr("&Copy"), this);
     action->setShortcut(tr("Ctrl+C"));
+    action->setStatusTip(tr("Copy the selection from the current layer to the clipboard"));
     connect(action, SIGNAL(triggered()), this, SLOT(copy()));
     connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -505,6 +520,7 @@ MainWindow::setupEditMenu()
     action = new QAction(QIcon(":/icons/editpaste.png"),
                          tr("&Paste"), this);
     action->setShortcut(tr("Ctrl+V"));
+    action->setStatusTip(tr("Paste from the clipboard to the current layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(paste()));
     connect(this, SIGNAL(canPaste(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -512,6 +528,7 @@ MainWindow::setupEditMenu()
 
     action = new QAction(tr("&Delete Selected Items"), this);
     action->setShortcut(tr("Del"));
+    action->setStatusTip(tr("Delete the selection from the current layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(deleteSelected()));
     connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -522,6 +539,7 @@ MainWindow::setupEditMenu()
 	
     action = new QAction(tr("Select &All"), this);
     action->setShortcut(tr("Ctrl+A"));
+    action->setStatusTip(tr("Select the whole duration of the current session"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectAll()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -529,24 +547,28 @@ MainWindow::setupEditMenu()
 	
     action = new QAction(tr("Select &Visible Range"), this);
     action->setShortcut(tr("Ctrl+Shift+A"));
+    action->setStatusTip(tr("Select the time range corresponding to the current window width"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectVisible()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 	
     action = new QAction(tr("Select to &Start"), this);
     action->setShortcut(tr("Shift+Left"));
+    action->setStatusTip(tr("Select from the start of the session to the current playback position"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectToStart()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 	
     action = new QAction(tr("Select to &End"), this);
     action->setShortcut(tr("Shift+Right"));
+    action->setStatusTip(tr("Select from the current playback position to the end of the session"));
     connect(action, SIGNAL(triggered()), this, SLOT(selectToEnd()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
     action = new QAction(tr("C&lear Selection"), this);
     action->setShortcut(tr("Esc"));
+    action->setStatusTip(tr("Clear the selection"));
     connect(action, SIGNAL(triggered()), this, SLOT(clearSelection()));
     connect(this, SIGNAL(canClearSelection(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -556,12 +578,14 @@ MainWindow::setupEditMenu()
 
     action = new QAction(tr("&Insert Instant at Playback Position"), this);
     action->setShortcut(tr("Enter"));
+    action->setStatusTip(tr("Insert a new time instant at the current playback position, in a new layer if necessary"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstant()));
     connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
     action = new QAction(tr("Insert Instants at Selection &Boundaries"), this);
     action->setShortcut(tr("Shift+Enter"));
+    action->setStatusTip(tr("Insert new time instants at the start and end of the current selection, in a new layer if necessary"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstantsAtBoundaries()));
     connect(this, SIGNAL(canInsertInstantsAtBoundaries(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -576,39 +600,9 @@ MainWindow::setupViewMenu()
 {
     if (m_mainMenusCreated) return;
 
+    QAction *action = 0;
+
     QMenu *menu = menuBar()->addMenu(tr("&View"));
-
-    QActionGroup *overlayGroup = new QActionGroup(this);
-        
-    QAction *action = new QAction(tr("&No Text Overlays"), this);
-    action->setShortcut(tr("0"));
-    action->setStatusTip(tr("Show no texts for frame times, layer names etc"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    menu->addAction(action);
-        
-    action = new QAction(tr("Basic &Text Overlays"), this);
-    action->setShortcut(tr("9"));
-    action->setStatusTip(tr("Show texts for frame times etc, but not layer names etc"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showBasicOverlays()));
-    action->setCheckable(true);
-    action->setChecked(true);
-    overlayGroup->addAction(action);
-    menu->addAction(action);
-        
-    action = new QAction(tr("&All Text Overlays"), this);
-    action->setShortcut(tr("8"));
-    action->setStatusTip(tr("Show texts for frame times, layer names etc"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showAllTextOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    menu->addAction(action);
-
-    menu->addSeparator();
-	
     action = new QAction(tr("Scroll &Left"), this);
     action->setShortcut(tr("Left"));
     action->setStatusTip(tr("Scroll the current pane to the left"));
@@ -623,14 +617,14 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 	
-    action = new QAction(tr("Jump Left"), this);
+    action = new QAction(tr("&Jump Left"), this);
     action->setShortcut(tr("Ctrl+Left"));
     action->setStatusTip(tr("Scroll the current pane a big step to the left"));
     connect(action, SIGNAL(triggered()), this, SLOT(jumpLeft()));
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 	
-    action = new QAction(tr("Jump Right"), this);
+    action = new QAction(tr("J&ump Right"), this);
     action->setShortcut(tr("Ctrl+Right"));
     action->setStatusTip(tr("Scroll the current pane a big step to the right"));
     connect(action, SIGNAL(triggered()), this, SLOT(jumpRight()));
@@ -656,6 +650,7 @@ MainWindow::setupViewMenu()
     menu->addAction(action);
 	
     action = new QAction(tr("Restore &Default Zoom"), this);
+    action->setStatusTip(tr("Restore the zoom level to the default"));
     connect(action, SIGNAL(triggered()), this, SLOT(zoomDefault()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -664,6 +659,46 @@ MainWindow::setupViewMenu()
     action->setStatusTip(tr("Zoom to show the whole file"));
     connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    QActionGroup *overlayGroup = new QActionGroup(this);
+        
+    action = new QAction(tr("Show &No Overlays"), this);
+    action->setShortcut(tr("0"));
+    action->setStatusTip(tr("Hide centre indicator, frame times, layer names and scale"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
+    action->setCheckable(true);
+    action->setChecked(false);
+    overlayGroup->addAction(action);
+    menu->addAction(action);
+        
+    action = new QAction(tr("Show &Minimal Overlays"), this);
+    action->setShortcut(tr("9"));
+    action->setStatusTip(tr("Show centre indicator only"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
+    action->setCheckable(true);
+    action->setChecked(false);
+    overlayGroup->addAction(action);
+    menu->addAction(action);
+        
+    action = new QAction(tr("Show &Standard Overlays"), this);
+    action->setShortcut(tr("8"));
+    action->setStatusTip(tr("Show centre indicator, frame times and scale"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showStandardOverlays()));
+    action->setCheckable(true);
+    action->setChecked(true);
+    overlayGroup->addAction(action);
+    menu->addAction(action);
+        
+    action = new QAction(tr("Show &All Overlays"), this);
+    action->setShortcut(tr("7"));
+    action->setStatusTip(tr("Show all texts and scale"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
+    action->setCheckable(true);
+    action->setChecked(false);
+    overlayGroup->addAction(action);
     menu->addAction(action);
         
     menu->addSeparator();
@@ -684,15 +719,32 @@ MainWindow::setupViewMenu()
     action->setChecked(true);
     menu->addAction(action);
 
+    action = new QAction(tr("Show Status &Bar"), this);
+    action->setStatusTip(tr("Show context help information in the status bar at the bottom of the window"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleStatusBar()));
+    action->setCheckable(true);
+    action->setChecked(true);
+    menu->addAction(action);
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    bool sb = settings.value("showstatusbar", true).toBool();
+    if (!sb) {
+        action->setChecked(false);
+        statusBar()->hide();
+    }
+    settings.endGroup();
+
 /*!!! This one doesn't work properly yet
- */
+
     menu->addSeparator();
 
-    action = new QAction(tr("Show &Layer Hierarchy"), this);
+    action = new QAction(tr("Show La&yer Hierarchy"), this);
     action->setShortcut(tr("Alt+L"));
+    action->setStatusTip(tr("Open a window displaying the hierarchy of panes and layers in this session"));
     connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
     menu->addAction(action);
-/* */
+ */
 }
 
 void
@@ -811,9 +863,9 @@ MainWindow::setupPaneAndLayerMenus()
                 mainText = tr("Add &Spectrogram");
                 if (menuType == 0) {
                     shortcutText = tr("Alt+S");
-                    tipText = tr("Add a new pane showing a dB spectrogram");
+                    tipText = tr("Add a new pane showing a spectrogram");
                 } else {
-                    tipText = tr("Add a new layer showing a dB spectrogram");
+                    tipText = tr("Add a new layer showing a spectrogram");
                 }
                 break;
 		
@@ -822,9 +874,9 @@ MainWindow::setupPaneAndLayerMenus()
                 mainText = tr("Add &Melodic Range Spectrogram");
                 if (menuType == 0) {
                     shortcutText = tr("Alt+M");
-                    tipText = tr("Add a new pane showing a spectrogram set up for a pitch overview");
+                    tipText = tr("Add a new pane showing a spectrogram set up for an overview of note pitches");
                 } else {
-                    tipText = tr("Add a new layer showing a spectrogram set up for a pitch overview");
+                    tipText = tr("Add a new layer showing a spectrogram set up for an overview of note pitches");
                 }
                 break;
 		
@@ -977,7 +1029,7 @@ MainWindow::setupPaneAndLayerMenus()
 
     action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Pane"), this);
     action->setShortcut(tr("Alt+D"));
-    action->setStatusTip(tr("Delete the currently selected pane"));
+    action->setStatusTip(tr("Delete the currently active pane"));
     connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentPane()));
     connect(this, SIGNAL(canDeleteCurrentPane(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -1154,6 +1206,16 @@ MainWindow::setupTransformsMenu()
         m_transformActionsReverse[transforms[i].name] = action;
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
+        QString tip;
+        if (output == "") {
+            tip = tr("Transform with \"%1\" plugin (from %3)")
+                .arg(pluginName).arg(maker);
+        } else {
+            tip = tr("Transform with \"%1\" output of \"%2\" plugin (from %3)")
+                .arg(output).arg(pluginName).arg(maker);
+        }
+        action->setStatusTip(tip);
+
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
@@ -1176,6 +1238,7 @@ MainWindow::setupTransformsMenu()
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
         m_transformActions[action] = transforms[i].name;
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+        action->setStatusTip(tip);
 
 //        cerr << "Transform: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
 
@@ -1392,6 +1455,7 @@ MainWindow::setupToolbars()
     action->setCheckable(true);
     action->setChecked(true);
     action->setShortcut(tr("1"));
+    action->setStatusTip(tr("Navigate"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolNavigateSelected()));
     group->addAction(action);
     m_toolActions[ViewManager::NavigateMode] = action;
@@ -1400,6 +1464,7 @@ MainWindow::setupToolbars()
 				tr("Select"));
     action->setCheckable(true);
     action->setShortcut(tr("2"));
+    action->setStatusTip(tr("Select ranges"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolSelectSelected()));
     group->addAction(action);
     m_toolActions[ViewManager::SelectMode] = action;
@@ -1408,6 +1473,7 @@ MainWindow::setupToolbars()
 				tr("Edit"));
     action->setCheckable(true);
     action->setShortcut(tr("3"));
+    action->setStatusTip(tr("Edit items in layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolEditSelected()));
     connect(this, SIGNAL(canEditLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
@@ -1417,6 +1483,7 @@ MainWindow::setupToolbars()
 				tr("Draw"));
     action->setCheckable(true);
     action->setShortcut(tr("4"));
+    action->setStatusTip(tr("Draw new items in layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolDrawSelected()));
     connect(this, SIGNAL(canEditLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
@@ -2294,6 +2361,9 @@ MainWindow::newSession()
 
     Pane *pane = m_paneStack->addPane();
 
+    connect(pane, SIGNAL(contextHelpChanged(const QString &)),
+            statusBar(), SLOT(showMessage(const QString &)));
+
     if (!m_timeRulerLayer) {
 	m_timeRulerLayer = m_document->createMainModelLayer
 	    (LayerFactory::TimeRuler);
@@ -2895,13 +2965,19 @@ MainWindow::showNoOverlays()
 }
 
 void
-MainWindow::showBasicOverlays()
+MainWindow::showMinimalOverlays()
 {
-    m_viewManager->setOverlayMode(ViewManager::BasicOverlays);
+    m_viewManager->setOverlayMode(ViewManager::MinimalOverlays);
 }
 
 void
-MainWindow::showAllTextOverlays()
+MainWindow::showStandardOverlays()
+{
+    m_viewManager->setOverlayMode(ViewManager::StandardOverlays);
+}
+
+void
+MainWindow::showAllOverlays()
 {
     m_viewManager->setOverlayMode(ViewManager::AllOverlays);
 }
@@ -2929,6 +3005,24 @@ MainWindow::togglePropertyBoxes()
     } else {
         m_paneStack->setLayoutStyle(PaneStack::NoPropertyStacks);
     }
+}
+
+void
+MainWindow::toggleStatusBar()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    bool sb = settings.value("showstatusbar", true).toBool();
+
+    if (sb) {
+        statusBar()->hide();
+    } else {
+        statusBar()->show();
+    }
+
+    settings.setValue("showstatusbar", !sb);
+
+    settings.endGroup();
 }
 
 void
@@ -3144,6 +3238,9 @@ MainWindow::AddPaneCommand::execute()
     if (!m_pane) {
 	m_prevCurrentPane = m_mw->m_paneStack->getCurrentPane();
 	m_pane = m_mw->m_paneStack->addPane();
+
+        connect(m_pane, SIGNAL(contextHelpChanged(const QString &)),
+                m_mw->statusBar(), SLOT(showMessage(const QString &)));
     } else {
 	m_mw->m_paneStack->showPane(m_pane);
     }
@@ -3891,7 +3988,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 if (value < 0.5) {
                     m_viewManager->setOverlayMode(ViewManager::NoOverlays);
                 } else if (value < 1.5) {
-                    m_viewManager->setOverlayMode(ViewManager::BasicOverlays);
+                    m_viewManager->setOverlayMode(ViewManager::MinimalOverlays);
+                } else if (value < 2.5) {
+                    m_viewManager->setOverlayMode(ViewManager::StandardOverlays);
                 } else {
                     m_viewManager->setOverlayMode(ViewManager::AllOverlays);
                 }                    
@@ -4112,6 +4211,29 @@ MainWindow::preferences()
 }
 
 void
+MainWindow::mouseEnteredWidget()
+{
+    QWidget *w = dynamic_cast<QWidget *>(sender());
+    if (!w) return;
+
+    if (w == m_fader) {
+        statusBar()->showMessage(tr("Adjust the master playback level"));
+    } else if (w == m_playSpeed) {
+        statusBar()->showMessage(tr("Adjust the master playback speed"));
+    } else if (w == m_playSharpen && w->isEnabled()) {
+        statusBar()->showMessage(tr("Toggle transient sharpening for playback time scaling"));
+    } else if (w == m_playMono && w->isEnabled()) {
+        statusBar()->showMessage(tr("Toggle mono mode for playback time scaling"));
+    }
+}
+
+void
+MainWindow::mouseLeftWidget()
+{
+    statusBar()->showMessage("");
+}
+
+void
 MainWindow::website()
 {
     openHelpUrl(tr("http://www.sonicvisualiser.org/"));
@@ -4187,7 +4309,7 @@ MainWindow::about()
     QString aboutText;
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
-    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>");
+    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for<br>semantic music analysis and annotation.</p>");
     aboutText += tr("<p>%1 : %2 build</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
@@ -4233,8 +4355,8 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p>Sonic Visualiser Copyright &copy; 2005 - 2006 Chris Cannam and<br>"
-        "Centre for Digital Music, Queen Mary, University of London.</p>"
+        "<p>Sonic Visualiser Copyright &copy; 2005 - 2007 Chris Cannam and<br>"
+        "Queen Mary, University of London.</p>"
         "<p>This program is free software; you can redistribute it and/or<br>"
         "modify it under the terms of the GNU General Public License as<br>"
         "published by the Free Software Foundation; either version 2 of the<br>"
