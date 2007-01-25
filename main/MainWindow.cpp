@@ -2734,10 +2734,14 @@ MainWindow::commitData(bool mayAskUser)
         }
         
         // This name doesn't have to be unguessable
-
+#ifndef _WIN32
         QString fname = QString("tmp-%1-%2.sv")
             .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"))
             .arg(QProcess().pid());
+#else
+        QString fname = QString("tmp-%1.sv")
+            .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"));
+#endif
         QString fpath = QDir(svDir).filePath(fname);
         if (saveSessionFile(fpath)) {
             m_recentFiles.addFile(fpath);
@@ -4322,25 +4326,49 @@ MainWindow::about()
     aboutText += tr("<br>With Qt (v%1) &copy; Trolltech AS").arg(QT_VERSION_STR);
 #endif
 #ifdef HAVE_JACK
+#ifdef JACK_VERSION
     aboutText += tr("<br>With JACK audio output (v%1) &copy; Paul Davis and Jack O'Quin").arg(JACK_VERSION);
+#else
+    aboutText += tr("<br>With JACK audio output &copy; Paul Davis and Jack O'Quin");
+#endif
 #endif
 #ifdef HAVE_PORTAUDIO
     aboutText += tr("<br>With PortAudio audio output &copy; Ross Bencina and Phil Burk");
 #endif
 #ifdef HAVE_OGGZ
+#ifdef OGGZ_VERSION
     aboutText += tr("<br>With Ogg file decoder (oggz v%1, fishsound v%2) &copy; CSIRO Australia").arg(OGGZ_VERSION).arg(FISHSOUND_VERSION);
+#else
+    aboutText += tr("<br>With Ogg file decoder &copy; CSIRO Australia");
+#endif
 #endif
 #ifdef HAVE_MAD
+#ifdef MAD_VERSION
     aboutText += tr("<br>With MAD mp3 decoder (v%1) &copy; Underbit Technologies Inc").arg(MAD_VERSION);
+#else
+    aboutText += tr("<br>With MAD mp3 decoder &copy; Underbit Technologies Inc");
+#endif
 #endif
 #ifdef HAVE_SAMPLERATE
+#ifdef SAMPLERATE_VERSION
     aboutText += tr("<br>With libsamplerate (v%1) &copy; Erik de Castro Lopo").arg(SAMPLERATE_VERSION);
+#else
+    aboutText += tr("<br>With libsamplerate &copy; Erik de Castro Lopo");
+#endif
 #endif
 #ifdef HAVE_SNDFILE
+#ifdef SNDFILE_VERSION
     aboutText += tr("<br>With libsndfile (v%1) &copy; Erik de Castro Lopo").arg(SNDFILE_VERSION);
+#else
+    aboutText += tr("<br>With libsndfile &copy; Erik de Castro Lopo");
+#endif
 #endif
 #ifdef HAVE_FFTW3
+#ifdef FFTW3_VERSION
     aboutText += tr("<br>With FFTW3 (v%1) &copy; Matteo Frigo and MIT").arg(FFTW3_VERSION);
+#else
+    aboutText += tr("<br>With FFTW3 &copy; Matteo Frigo and MIT");
+#endif
 #endif
 #ifdef HAVE_VAMP
     aboutText += tr("<br>With Vamp plugin support (API v%1, SDK v%2) &copy; Chris Cannam").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
@@ -4348,7 +4376,11 @@ MainWindow::about()
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
 #ifdef HAVE_LIBLO
+#ifdef LIBLO_VERSION
     aboutText += tr("<br>With liblo Lite OSC library (v%1) &copy; Steve Harris").arg(LIBLO_VERSION);
+#else
+    aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris").arg(LIBLO_VERSION);
+#endif
     if (m_oscQueue && m_oscQueue->isOK()) {
         aboutText += tr("<p>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
     }
