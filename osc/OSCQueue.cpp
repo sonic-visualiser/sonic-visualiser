@@ -160,7 +160,11 @@ OSCQueue::postMessage(OSCMessage message)
         }
         std::cerr << "WARNING: OSCQueue::postMessage: OSC message queue (capacity " << m_buffer.getSize() << " is full!" << std::endl;
         std::cerr << "Waiting for something to be processed" << std::endl;
+#ifdef _WIN32
+        Sleep(1);
+#else
         sleep(1);
+#endif
         count++;
     }
 

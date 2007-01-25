@@ -22,7 +22,7 @@
 #include <cassert>
 #include <cmath>
 
-//#define DEBUG_AUDIO_PORT_AUDIO_TARGET 1
+#define DEBUG_AUDIO_PORT_AUDIO_TARGET 1
 
 AudioPortAudioTarget::AudioPortAudioTarget(AudioCallbackPlaySource *source) :
     AudioCallbackPlayTarget(source),
@@ -97,6 +97,10 @@ AudioPortAudioTarget::AudioPortAudioTarget(AudioCallbackPlaySource *source) :
 	m_source->setTargetSampleRate(m_sampleRate);
 	m_source->setTargetPlayLatency(m_latency);
     }
+
+#ifdef DEBUG_PORT_AUDIO_TARGET
+    std::cerr << "AudioPortAudioTarget: initialised OK" << std::endl;
+#endif
 }
 
 AudioPortAudioTarget::~AudioPortAudioTarget()
