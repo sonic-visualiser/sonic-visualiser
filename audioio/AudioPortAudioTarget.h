@@ -18,6 +18,10 @@
 
 #ifdef HAVE_PORTAUDIO
 
+// This code can be compiled for either PortAudio v18 or v19.
+// PortAudio v19 is the default.  If you want to use v18, define
+// the preprocessor symbol HAVE_PORTAUDIO_v18.
+
 #include <portaudio.h>
 #include <vector>
 
@@ -39,6 +43,8 @@ public slots:
     virtual void sourceModelReplaced();
 
 protected:
+#ifdef HAVE_PORTAUDIO_V18
+
     int process(void *input, void *output, unsigned long frames,
 		PaTimestamp outTime);
 
@@ -46,6 +52,20 @@ protected:
 			     PaTimestamp, void *);
 
     PortAudioStream *m_stream;
+
+#else
+
+    int process(const void *input, void *output, unsigned long frames,
+                const PaStreamCallbackTimeInfo *timeInfo,
+                PaStreamCallbackFlags statusFlags);
+
+    static int processStatic(const void *, void *, unsigned long,
+                             const PaStreamCallbackTimeInfo *,
+                             PaStreamCallbackFlags, void *);
+
+    PaStream *m_stream;
+
+#endif
 
     int m_bufferSize;
     int m_sampleRate;
