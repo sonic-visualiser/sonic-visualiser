@@ -30,6 +30,8 @@
 #include "layer/TimeInstantLayer.h"
 #include "layer/TimeValueLayer.h"
 #include "layer/Colour3DPlotLayer.h"
+#include "layer/SliceLayer.h"
+#include "layer/SliceableLayer.h"
 #include "widgets/Fader.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
@@ -116,6 +118,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_layerMenu(0),
     m_transformsMenu(0),
     m_existingLayersMenu(0),
+    m_sliceMenu(0),
     m_recentFilesMenu(0),
     m_recentTransformsMenu(0),
     m_rightButtonMenu(0),
@@ -1048,7 +1051,11 @@ MainWindow::setupPaneAndLayerMenus()
 
     m_existingLayersMenu = menu->addMenu(tr("Add &Existing Layer"));
     m_rightButtonLayerMenu->addMenu(m_existingLayersMenu);
-    setupExistingLayersMenu();
+
+    m_sliceMenu = menu->addMenu(tr("Add S&lice of Layer"));
+    m_rightButtonLayerMenu->addMenu(m_sliceMenu);
+
+    setupExistingLayersMenus();
 
     m_rightButtonLayerMenu->addSeparator();
     menu->addSeparator();
@@ -1327,7 +1334,7 @@ MainWindow::setupRecentTransformsMenu()
 }
 
 void
-MainWindow::setupExistingLayersMenu()
+MainWindow::setupExistingLayersMenus()
 {
     if (!m_existingLayersMenu) return; // should have been created by setupMenus
 
@@ -1336,8 +1343,14 @@ MainWindow::setupExistingLayersMenu()
     m_existingLayersMenu->clear();
     m_existingLayerActions.clear();
 
+    m_sliceMenu->clear();
+    m_sliceActions.clear();
+
     vector<Layer *> orderedLayers;
     set<Layer *> observedLayers;
+    set<Layer *> sliceableLayers;
+
+    LayerFactory *factory = LayerFactory::getInstance();
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
@@ -1358,6 +1371,10 @@ MainWindow::setupExistingLayersMenu()
 
 	    orderedLayers.push_back(layer);
 	    observedLayers.insert(layer);
+
+            if (factory->isLayerSliceable(layer)) {
+                sliceableLayers.insert(layer);
+            }
 	}
     }
 
@@ -1365,17 +1382,33 @@ MainWindow::setupExistingLayersMenu()
 
     for (int i = 0; i < orderedLayers.size(); ++i) {
 	
-	QString name = orderedLayers[i]->getLayerPresentationName();
+        Layer *layer = orderedLayers[i];
+
+	QString name = layer->getLayerPresentationName();
 	int n = ++observedNames[name];
 	if (n > 1) name = QString("%1 <%2>").arg(name).arg(n);
 
-	QAction *action = new QAction(name, this);
+	QIcon icon = QIcon(QString(":/icons/%1.png")
+                           .arg(factory->getLayerIconName
+                                (factory->getLayerType(layer))));
+
+	QAction *action = new QAction(icon, name, this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_existingLayerActions[action] = orderedLayers[i];
+	m_existingLayerActions[action] = layer;
 
 	m_existingLayersMenu->addAction(action);
+
+        if (sliceableLayers.find(layer) != sliceableLayers.end()) {
+            action = new QAction(icon, name, this);
+            connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+            connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+            m_sliceActions[action] = layer;
+            m_sliceMenu->addAction(action);
+        }
     }
+
+    m_sliceMenu->setEnabled(!m_sliceActions.empty());
 }
 
 void
@@ -3330,6 +3363,25 @@ MainWindow::addLayer()
 	return;
     }
 
+    ei = m_sliceActions.find(action);
+
+    if (ei != m_sliceActions.end()) {
+        Layer *newLayer = m_document->createLayer(LayerFactory::Slice);
+//        document->setModel(newLayer, ei->second->getModel());
+        SliceableLayer *source = dynamic_cast<SliceableLayer *>(ei->second);
+        SliceLayer *dest = dynamic_cast<SliceLayer *>(newLayer);
+        if (source && dest) {
+            dest->setSliceableModel(source->getSliceableModel());
+            connect(source, SIGNAL(sliceableModelReplaced(const Model *, const Model *)),
+                    dest, SLOT(sliceableModelReplaced(const Model *, const Model *)));
+            connect(m_document, SIGNAL(modelAboutToBeDeleted(Model *)),
+                    dest, SLOT(modelAboutToBeDeleted(Model *)));
+        }
+	m_document->addLayerToView(pane, newLayer);
+	m_paneStack->setCurrentLayer(pane, newLayer);
+	return;
+    }
+
     TransformActionMap::iterator i = m_transformActions.find(action);
 
     if (i == m_transformActions.end()) {
@@ -3466,7 +3518,7 @@ MainWindow::renameCurrentLayer()
 		 QLineEdit::Normal, layer->objectName(), &ok);
 	    if (ok) {
 		layer->setObjectName(newName);
-		setupExistingLayersMenu();
+		setupExistingLayersMenus();
 	    }
 	}
     }
@@ -3575,7 +3627,7 @@ void
 MainWindow::layerRemoved(Layer *layer)
 {
 //    std::cerr << "MainWindow::layerRemoved(" << layer << ")" << std::endl;
-    setupExistingLayersMenu();
+    setupExistingLayersMenus();
     updateMenuStates();
 }
 
@@ -3617,7 +3669,7 @@ MainWindow::layerInAView(Layer *layer, bool inAView)
         }
     }
 
-    setupExistingLayersMenu();
+    setupExistingLayersMenus();
     updateMenuStates();
 }
 

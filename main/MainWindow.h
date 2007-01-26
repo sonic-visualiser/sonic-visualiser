@@ -257,6 +257,7 @@ protected:
     QMenu                   *m_layerMenu;
     QMenu                   *m_transformsMenu;
     QMenu                   *m_existingLayersMenu;
+    QMenu                   *m_sliceMenu;
     QMenu                   *m_recentFilesMenu;
     QMenu                   *m_recentTransformsMenu;
     QMenu                   *m_rightButtonMenu;
@@ -297,6 +298,7 @@ protected:
 
     typedef std::map<QAction *, Layer *> ExistingLayerActionMap;
     ExistingLayerActionMap m_existingLayerActions;
+    ExistingLayerActionMap m_sliceActions;
 
     typedef std::map<ViewManager::ToolMode, QAction *> ToolActionMap;
     ToolActionMap m_toolActions;
@@ -308,7 +310,7 @@ protected:
     void setupPaneAndLayerMenus();
     void setupTransformsMenu();
     void setupHelpMenu();
-    void setupExistingLayersMenu();
+    void setupExistingLayersMenus();
     void setupToolbars();
 
     Pane *addPaneToStack();

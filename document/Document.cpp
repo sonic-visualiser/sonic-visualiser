@@ -488,7 +488,8 @@ Document::setModel(Layer *layer, Model *model)
 	model != m_mainModel &&
 	m_models.find(model) == m_models.end()) {
 	std::cerr << "ERROR: Document::setModel: Layer " << layer
-		  << " is using unregistered model " << model
+		  << " (\"" << layer->objectName().toStdString()
+                  << "\") wants to use unregistered model " << model
 		  << ": register the layer's model before setting it!"
 		  << std::endl;
 	return;
