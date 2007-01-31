@@ -337,12 +337,14 @@ MainWindow::setupMenus()
 {
     if (!m_mainMenusCreated) {
         m_rightButtonMenu = new QMenu();
+        m_rightButtonMenu->setTearOffEnabled(true);
     }
 
     if (m_rightButtonLayerMenu) {
         m_rightButtonLayerMenu->clear();
     } else {
         m_rightButtonLayerMenu = m_rightButtonMenu->addMenu(tr("&Layer"));
+        m_rightButtonLayerMenu->setTearOffEnabled(true);
         m_rightButtonMenu->addSeparator();
     }
 
@@ -350,6 +352,7 @@ MainWindow::setupMenus()
         m_rightButtonTransformsMenu->clear();
     } else {
         m_rightButtonTransformsMenu = m_rightButtonMenu->addMenu(tr("&Transform"));
+        m_rightButtonTransformsMenu->setTearOffEnabled(true);
         m_rightButtonMenu->addSeparator();
     }
 
@@ -374,6 +377,7 @@ MainWindow::setupFileMenu()
     if (m_mainMenusCreated) return;
 
     QMenu *menu = menuBar()->addMenu(tr("&File"));
+    menu->setTearOffEnabled(true);
     QToolBar *toolbar = addToolBar(tr("File Toolbar"));
 
     QIcon icon(":icons/filenew.png");
@@ -464,6 +468,7 @@ MainWindow::setupFileMenu()
     menu->addSeparator();
 
     m_recentFilesMenu = menu->addMenu(tr("&Recent Files"));
+    m_recentFilesMenu->setTearOffEnabled(true);
     setupRecentFilesMenu();
     connect(&m_recentFiles, SIGNAL(recentChanged()),
             this, SLOT(setupRecentFilesMenu()));
@@ -499,6 +504,7 @@ MainWindow::setupEditMenu()
     if (m_mainMenusCreated) return;
 
     QMenu *menu = menuBar()->addMenu(tr("&Edit"));
+    menu->setTearOffEnabled(true);
     CommandHistory::getInstance()->registerMenu(menu);
 
     menu->addSeparator();
@@ -607,6 +613,7 @@ MainWindow::setupViewMenu()
     QAction *action = 0;
 
     QMenu *menu = menuBar()->addMenu(tr("&View"));
+    menu->setTearOffEnabled(true);
     action = new QAction(tr("Scroll &Left"), this);
     action->setShortcut(tr("Left"));
     action->setStatusTip(tr("Scroll the current pane to the left"));
@@ -759,6 +766,7 @@ MainWindow::setupPaneAndLayerMenus()
 	m_paneMenu->clear();
     } else {
 	m_paneMenu = menuBar()->addMenu(tr("&Pane"));
+        m_paneMenu->setTearOffEnabled(true);
     }
 
     if (m_layerMenu) {
@@ -766,6 +774,7 @@ MainWindow::setupPaneAndLayerMenus()
 	m_layerMenu->clear();
     } else {
 	m_layerMenu = menuBar()->addMenu(tr("&Layer"));
+        m_layerMenu->setTearOffEnabled(true);
     }
 
     QMenu *menu = m_paneMenu;
@@ -973,6 +982,7 @@ MainWindow::setupPaneAndLayerMenus()
                         
                         if (!submenu) {
                             submenu = menu->addMenu(mainText);
+                            submenu->setTearOffEnabled(true);
                         } else if (isDefault) {
                             submenu->addSeparator();
                         }
@@ -1050,9 +1060,11 @@ MainWindow::setupPaneAndLayerMenus()
     menu->addSeparator();
 
     m_existingLayersMenu = menu->addMenu(tr("Add &Existing Layer"));
+    m_existingLayersMenu->setTearOffEnabled(true);
     m_rightButtonLayerMenu->addMenu(m_existingLayersMenu);
 
     m_sliceMenu = menu->addMenu(tr("Add S&lice of Layer"));
+    m_sliceMenu->setTearOffEnabled(true);
     m_rightButtonLayerMenu->addMenu(m_sliceMenu);
 
     setupExistingLayersMenus();
@@ -1085,8 +1097,9 @@ MainWindow::setupTransformsMenu()
         m_transformActionsReverse.clear();
         m_transformsMenu->clear();
     } else {
-	m_transformsMenu = menuBar()->addMenu(tr("&Transform"));
-    }
+	m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
+        m_transformsMenu->setTearOffEnabled(true);
+   }
 
     TransformFactory::TransformList transforms =
 	TransformFactory::getInstance()->getAllTransforms();
@@ -1103,6 +1116,7 @@ MainWindow::setupTransformsMenu()
     set<SubdividingMenu *> pendingMenus;
 
     m_recentTransformsMenu = m_transformsMenu->addMenu(tr("&Recent Transforms"));
+    m_recentTransformsMenu->setTearOffEnabled(true);
     m_rightButtonTransformsMenu->addMenu(m_recentTransformsMenu);
     connect(&m_recentTransforms, SIGNAL(recentChanged()),
             this, SLOT(setupRecentTransformsMenu()));
@@ -1120,6 +1134,7 @@ MainWindow::setupTransformsMenu()
         QString byCategoryLabel = tr("%1 by Category").arg(*i);
         SubdividingMenu *byCategoryMenu = new SubdividingMenu(byCategoryLabel,
                                                               20, 40);
+        byCategoryMenu->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byCategoryMenu);
         m_rightButtonTransformsMenu->addMenu(byCategoryMenu);
         pendingMenus.insert(byCategoryMenu);
@@ -1150,6 +1165,7 @@ MainWindow::setupTransformsMenu()
 
                 if (categoryMenus[*i].find(key) == categoryMenus[*i].end()) {
                     SubdividingMenu *m = new SubdividingMenu(*k, 20, 40);
+                    m->setTearOffEnabled(true);
                     pendingMenus.insert(m);
                     categoryMenus[*i][key] = m;
                     if (parentKey == "") {
@@ -1163,12 +1179,14 @@ MainWindow::setupTransformsMenu()
 
         QString byPluginNameLabel = tr("%1 by Plugin Name").arg(*i);
         byPluginNameMenus[*i] = new SubdividingMenu(byPluginNameLabel);
+        byPluginNameMenus[*i]->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byPluginNameMenus[*i]);
         m_rightButtonTransformsMenu->addMenu(byPluginNameMenus[*i]);
         pendingMenus.insert(byPluginNameMenus[*i]);
 
         QString byMakerLabel = tr("%1 by Maker").arg(*i);
         SubdividingMenu *byMakerMenu = new SubdividingMenu(byMakerLabel, 20, 40);
+        byMakerMenu->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byMakerMenu);
         m_rightButtonTransformsMenu->addMenu(byMakerMenu);
         pendingMenus.insert(byMakerMenu);
@@ -1184,6 +1202,7 @@ MainWindow::setupTransformsMenu()
             maker.replace(QRegExp(tr(" [\\(<].*$")), "");
 
             makerMenus[*i][maker] = new SubdividingMenu(maker, 30, 40);
+            makerMenus[*i][maker]->setTearOffEnabled(true);
             byMakerMenu->addMenu(makerMenus[*i][maker]);
             pendingMenus.insert(makerMenus[*i][maker]);
         }
@@ -1254,6 +1273,7 @@ MainWindow::setupTransformsMenu()
             pluginNameMenus[type].end()) {
 
             SubdividingMenu *parentMenu = byPluginNameMenus[type];
+            parentMenu->setTearOffEnabled(true);
 
             if (output == "") {
                 parentMenu->addAction(pluginName, action);
@@ -1286,6 +1306,7 @@ MainWindow::setupHelpMenu()
     if (m_mainMenusCreated) return;
 
     QMenu *menu = menuBar()->addMenu(tr("&Help"));
+    menu->setTearOffEnabled(true);
     
     QAction *action = new QAction(tr("&Help Reference"), this); 
     action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
