@@ -253,6 +253,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             this,
             SLOT(preferenceChanged(PropertyContainer::PropertyName)));
 
+//    preferenceChanged("Property Box Layout");
+
     if (m_oscQueue && m_oscQueue->isOK()) {
         connect(m_oscQueue, SIGNAL(messagesAvailable()), this, SLOT(pollOSC()));
         QTimer *oscTimer = new QTimer(this);
