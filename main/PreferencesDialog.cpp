@@ -25,8 +25,6 @@
 #include <QHBoxLayout>
 #include <QString>
 
-#include <fftw3.h>
-
 #include "widgets/WindowTypeSelector.h"
 #include "base/Preferences.h"
 

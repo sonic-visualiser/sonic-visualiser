@@ -62,34 +62,34 @@ PhaseVocoderTimeStretcher::initialise()
     m_prevPhase = new float *[m_channels];
     m_prevAdjustedPhase = new float *[m_channels];
 
-    m_prevTransientMag = (float *)fftwf_malloc(sizeof(float) * (m_wlen / 2 + 1));
+    m_prevTransientMag = (float *)fftf_malloc(sizeof(float) * (m_wlen / 2 + 1));
     m_prevTransientScore = 0;
     m_prevTransient = false;
 
-    m_tempbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+    m_tempbuf = (float *)fftf_malloc(sizeof(float) * m_wlen);
 
     m_time = new float *[m_channels];
-    m_freq = new fftwf_complex *[m_channels];
-    m_plan = new fftwf_plan[m_channels];
-    m_iplan = new fftwf_plan[m_channels];
+    m_freq = new fftf_complex *[m_channels];
+    m_plan = new fftf_plan[m_channels];
+    m_iplan = new fftf_plan[m_channels];
 
     m_inbuf = new RingBuffer<float> *[m_channels];
     m_outbuf = new RingBuffer<float> *[m_channels];
     m_mashbuf = new float *[m_channels];
 
-    m_modulationbuf = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+    m_modulationbuf = (float *)fftf_malloc(sizeof(float) * m_wlen);
         
     for (size_t c = 0; c < m_channels; ++c) {
 
-        m_prevPhase[c] = (float *)fftwf_malloc(sizeof(float) * (m_wlen / 2 + 1));
-        m_prevAdjustedPhase[c] = (float *)fftwf_malloc(sizeof(float) * (m_wlen / 2 + 1));
+        m_prevPhase[c] = (float *)fftf_malloc(sizeof(float) * (m_wlen / 2 + 1));
+        m_prevAdjustedPhase[c] = (float *)fftf_malloc(sizeof(float) * (m_wlen / 2 + 1));
 
-        m_time[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
-        m_freq[c] = (fftwf_complex *)fftwf_malloc(sizeof(fftwf_complex) *
+        m_time[c] = (float *)fftf_malloc(sizeof(float) * m_wlen);
+        m_freq[c] = (fftf_complex *)fftf_malloc(sizeof(fftf_complex) *
                                                   (m_wlen / 2 + 1));
         
-        m_plan[c] = fftwf_plan_dft_r2c_1d(m_wlen, m_time[c], m_freq[c], FFTW_ESTIMATE);
-        m_iplan[c] = fftwf_plan_dft_c2r_1d(m_wlen, m_freq[c], m_time[c], FFTW_ESTIMATE);
+        m_plan[c] = fftf_plan_dft_r2c_1d(m_wlen, m_time[c], m_freq[c], FFTW_ESTIMATE);
+        m_iplan[c] = fftf_plan_dft_c2r_1d(m_wlen, m_freq[c], m_time[c], FFTW_ESTIMATE);
 
         m_outbuf[c] = new RingBuffer<float>
             ((m_maxOutputBlockSize + m_wlen) * 2);
@@ -99,7 +99,7 @@ PhaseVocoderTimeStretcher::initialise()
         std::cerr << "making inbuf size " << m_inbuf[c]->getSize() << " (outbuf size is " << m_outbuf[c]->getSize() << ", ratio " << m_ratio << ")" << std::endl;
 
            
-        m_mashbuf[c] = (float *)fftwf_malloc(sizeof(float) * m_wlen);
+        m_mashbuf[c] = (float *)fftf_malloc(sizeof(float) * m_wlen);
         
         for (size_t i = 0; i < m_wlen; ++i) {
             m_mashbuf[c][i] = 0.0;
@@ -188,23 +188,23 @@ PhaseVocoderTimeStretcher::cleanup()
 
     for (size_t c = 0; c < m_channels; ++c) {
 
-        fftwf_destroy_plan(m_plan[c]);
-        fftwf_destroy_plan(m_iplan[c]);
+        fftf_destroy_plan(m_plan[c]);
+        fftf_destroy_plan(m_iplan[c]);
 
-        fftwf_free(m_time[c]);
-        fftwf_free(m_freq[c]);
+        fftf_free(m_time[c]);
+        fftf_free(m_freq[c]);
 
-        fftwf_free(m_mashbuf[c]);
-        fftwf_free(m_prevPhase[c]);
-        fftwf_free(m_prevAdjustedPhase[c]);
+        fftf_free(m_mashbuf[c]);
+        fftf_free(m_prevPhase[c]);
+        fftf_free(m_prevAdjustedPhase[c]);
 
         delete m_inbuf[c];
         delete m_outbuf[c];
     }
 
-    fftwf_free(m_tempbuf);
-    fftwf_free(m_modulationbuf);
-    fftwf_free(m_prevTransientMag);
+    fftf_free(m_tempbuf);
+    fftf_free(m_modulationbuf);
+    fftf_free(m_prevTransientMag);
 
     delete[] m_prevPhase;
     delete[] m_prevAdjustedPhase;
@@ -509,7 +509,7 @@ PhaseVocoderTimeStretcher::analyseBlock(size_t c, float *buf)
 	m_time[c][i] = buf[i];
     }
 
-    fftwf_execute(m_plan[c]); // m_time -> m_freq
+    fftf_execute(m_plan[c]); // m_time -> m_freq
 }
 
 bool
@@ -595,7 +595,7 @@ PhaseVocoderTimeStretcher::synthesiseBlock(size_t c,
         m_prevAdjustedPhase[c][i] = adjustedPhase;
     }
 
-    fftwf_execute(m_iplan[c]); // m_freq -> m_time, inverse fft
+    fftf_execute(m_iplan[c]); // m_freq -> m_time, inverse fft
 
     for (size_t i = 0; i < m_wlen/2; ++i) {
         float temp = m_time[c][i];
