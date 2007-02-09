@@ -19,7 +19,7 @@
 #include "base/Window.h"
 #include "base/RingBuffer.h"
 
-#include <fftw3.h>
+#include "data/fft/FFTapi.h"
 
 #include <QMutex>
 
@@ -172,9 +172,9 @@ protected:
 
     float *m_tempbuf;
     float **m_time;
-    fftwf_complex **m_freq;
-    fftwf_plan *m_plan;
-    fftwf_plan *m_iplan;
+    fftf_complex **m_freq;
+    fftf_plan *m_plan;
+    fftf_plan *m_iplan;
     
     RingBuffer<float> **m_inbuf;
     RingBuffer<float> **m_outbuf;
