@@ -54,12 +54,12 @@ AudioTargetFactory::createCallbackTarget(AudioCallbackPlaySource *source)
 #endif
 
 #ifdef HAVE_PORTAUDIO
-    target = new AudioPortAudioTarget(source);
-    if (target->isOK()) return target;
-    else {
-	std::cerr << "WARNING: AudioTargetFactory::createCallbackTarget: Failed to open PortAudio target" << std::endl;
-	delete target;
-    }
+//    target = new AudioPortAudioTarget(source);
+//    if (target->isOK()) return target;
+//    else {
+//	std::cerr << "WARNING: AudioTargetFactory::createCallbackTarget: Failed to open PortAudio target" << std::endl;
+//	delete target;
+//    }
 #endif
 
     std::cerr << "WARNING: AudioTargetFactory::createCallbackTarget: No suitable targets available" << std::endl;
