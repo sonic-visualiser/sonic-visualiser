@@ -2570,12 +2570,21 @@ MainWindow::openSomething()
 void
 MainWindow::openLocation()
 {
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    QString lastLocation = settings.value("lastremote", "").toString();
+
     bool ok = false;
     QString text = QInputDialog::getText
         (this, tr("Open Location"),
          tr("Please enter the URL of the location to open:"),
-         QLineEdit::Normal, "", &ok);
-    if (!ok || text.isEmpty()) return;
+         QLineEdit::Normal, lastLocation, &ok);
+
+    if (!ok) return;
+
+    settings.setValue("lastremote", text);
+
+    if (text.isEmpty()) return;
 
     if (openURL(QUrl(text)) == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open location"),
@@ -2606,7 +2615,7 @@ MainWindow::openRecentFile()
 
     if (path.endsWith("sv")) {
 
-        if (!checkSaveModified()) return ;
+        if (!checkSaveModified()) return;
 
         if (openSessionFile(path) == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open file"),
@@ -2702,6 +2711,8 @@ MainWindow::openSessionFile(QString path, QString location)
                   << "\": " << bzFile.errorString().toStdString() << std::endl;
         return FileOpenFailed;
     }
+
+    if (!checkSaveModified()) return FileOpenCancelled;
 
     QString error;
     closeSession();
