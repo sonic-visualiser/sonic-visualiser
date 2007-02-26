@@ -287,10 +287,10 @@ protected:
     typedef std::map<QAction *, PaneConfiguration> PaneActionMap;
     PaneActionMap m_paneActions;
 
-    typedef std::map<QAction *, TransformName> TransformActionMap;
+    typedef std::map<QAction *, TransformId> TransformActionMap;
     TransformActionMap m_transformActions;
 
-    typedef std::map<TransformName, QAction *> TransformActionReverseMap;
+    typedef std::map<TransformId, QAction *> TransformActionReverseMap;
     TransformActionReverseMap m_transformActionsReverse;
 
     typedef std::map<QAction *, LayerFactory::LayerType> LayerActionMap;

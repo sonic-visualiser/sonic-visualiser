@@ -1219,10 +1219,10 @@ MainWindow::setupTransformsMenu()
 
     for (unsigned int i = 0; i < transforms.size(); ++i) {
 	
-	QString description = transforms[i].description;
-	if (description == "") description = transforms[i].name;
+	QString name = transforms[i].name;
+	if (name == "") name = transforms[i].identifier;
 
-//        std::cerr << "Plugin Description: " << description.toStdString() << std::endl;
+//        std::cerr << "Plugin Name: " << name.toStdString() << std::endl;
 
         QString type = transforms[i].type;
 
@@ -1233,13 +1233,13 @@ MainWindow::setupTransformsMenu()
         if (maker == "") maker = tr("Unknown");
         maker.replace(QRegExp(tr(" [\\(<].*$")), "");
 
-        QString pluginName = description.section(": ", 0, 0);
-        QString output = description.section(": ", 1);
+        QString pluginName = name.section(": ", 0, 0);
+        QString output = name.section(": ", 1);
 
-	QAction *action = new QAction(tr("%1...").arg(description), this);
+	QAction *action = new QAction(tr("%1...").arg(name), this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	m_transformActions[action] = transforms[i].name;
-        m_transformActionsReverse[transforms[i].name] = action;
+	m_transformActions[action] = transforms[i].identifier;
+        m_transformActionsReverse[transforms[i].identifier] = action;
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
         QString tip;
@@ -1255,7 +1255,7 @@ MainWindow::setupTransformsMenu()
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
-                      << description.toStdString() << "\" (category = \""
+                      << name.toStdString() << "\" (category = \""
                       << category.toStdString() << "\")" << std::endl;
         } else {
             categoryMenus[type][category]->addAction(action);
@@ -1264,7 +1264,7 @@ MainWindow::setupTransformsMenu()
         if (makerMenus[type].find(maker) == makerMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No maker menu for transform \""
-                      << description.toStdString() << "\" (maker = \""
+                      << name.toStdString() << "\" (maker = \""
                       << maker.toStdString() << "\")" << std::endl;
         } else {
             makerMenus[type][maker]->addAction(action);
@@ -1272,7 +1272,7 @@ MainWindow::setupTransformsMenu()
 
         action = new QAction(tr("%1...").arg(output == "" ? pluginName : output), this);
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-        m_transformActions[action] = transforms[i].name;
+        m_transformActions[action] = transforms[i].identifier;
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
         action->setStatusTip(tip);
 
@@ -3458,7 +3458,7 @@ MainWindow::addLayer()
 	return;
     }
 
-    TransformName transform = i->second;
+    TransformId transform = i->second;
     TransformFactory *factory = TransformFactory::getInstance();
 
     QString configurationXml;
@@ -4263,7 +4263,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
 
-            TransformName transform = message.getArg(0).toString();
+            TransformId transform = message.getArg(0).toString();
 
             Layer *newLayer = m_document->createDerivedLayer
                 (transform,
