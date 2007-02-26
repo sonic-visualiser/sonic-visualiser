@@ -20,7 +20,7 @@
 
 #include "data/model/Model.h"
 
-typedef QString TransformName;
+typedef QString TransformId;
 
 /**
  * A Transform turns one data model into another.

@@ -105,14 +105,14 @@ public:
      * by a transform layer _must_ be registered with the document
      * using addDerivedModel below.
      */
-    Layer *createDerivedLayer(LayerFactory::LayerType, TransformName);
+    Layer *createDerivedLayer(LayerFactory::LayerType, TransformId);
 
     /**
      * Create and return a suitable layer for the given transform,
      * running the transform and associating the resulting model with
      * the new layer.
      */
-    Layer *createDerivedLayer(TransformName,
+    Layer *createDerivedLayer(TransformId,
                               Model *inputModel, 
                               const PluginTransform::ExecutionContext &context,
                               QString configurationXml);
@@ -135,7 +135,7 @@ public:
      * Add a derived model associated with the given transform,
      * running the transform and returning the resulting model.
      */
-    Model *addDerivedModel(TransformName transform,
+    Model *addDerivedModel(TransformId transform,
                            Model *inputModel,
                            const PluginTransform::ExecutionContext &context,
                            QString configurationXml);
@@ -145,7 +145,7 @@ public:
      * is necessary to register any derived model that was not created
      * by the document using createDerivedModel or createDerivedLayer.
      */
-    void addDerivedModel(TransformName,
+    void addDerivedModel(TransformId,
                          Model *inputModel,
                          const PluginTransform::ExecutionContext &context,
                          Model *outputModelToAdd,
@@ -236,7 +236,7 @@ protected:
 	// transform involved but the (target) model has been modified
 	// since being generated from it.
 	const Model *source;
-	TransformName transform;
+	TransformId transform;
         PluginTransform::ExecutionContext context;
         QString configurationXml;
 

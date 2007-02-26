@@ -151,7 +151,7 @@ TransformFactory::populateTransforms()
 
     // disambiguate plugins with similar names
 
-    std::map<QString, int> descriptions;
+    std::map<QString, int> names;
     std::map<QString, QString> pluginSources;
     std::map<QString, QString> pluginMakers;
 
@@ -160,16 +160,16 @@ TransformFactory::populateTransforms()
 
         TransformDesc desc = i->second;
 
-        QString td = desc.description;
+        QString td = desc.name;
         QString tn = td.section(": ", 0, 0);
-        QString pn = desc.name.section(":", 1, 1);
+        QString pn = desc.identifier.section(":", 1, 1);
 
         if (pluginSources.find(tn) != pluginSources.end()) {
             if (pluginSources[tn] != pn && pluginMakers[tn] != desc.maker) {
-                ++descriptions[tn];
+                ++names[tn];
             }
         } else {
-            ++descriptions[tn];
+            ++names[tn];
             pluginSources[tn] = pn;
             pluginMakers[tn] = desc.maker;
         }
@@ -182,25 +182,25 @@ TransformFactory::populateTransforms()
          i != transforms.end(); ++i) {
 
         TransformDesc desc = i->second;
-	QString name = desc.name;
+	QString identifier = desc.identifier;
         QString maker = desc.maker;
 
-        QString td = desc.description;
+        QString td = desc.name;
         QString tn = td.section(": ", 0, 0);
         QString to = td.section(": ", 1);
 
-	if (descriptions[tn] > 1) {
+	if (names[tn] > 1) {
             maker.replace(QRegExp(tr(" [\\(<].*$")), "");
 	    tn = QString("%1 [%2]").arg(tn).arg(maker);
 	}
 
         if (to != "") {
-            desc.description = QString("%1: %2").arg(tn).arg(to);
+            desc.name = QString("%1: %2").arg(tn).arg(to);
         } else {
-            desc.description = tn;
+            desc.name = tn;
         }
 
-	m_transforms[name] = desc;
+	m_transforms[identifier] = desc;
     }	    
 }
 
@@ -230,7 +230,7 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
 	    continue;
 	}
 		
-	QString pluginDescription = plugin->getDescription().c_str();
+	QString pluginName = plugin->getName().c_str();
         QString category = factory->getPluginCategory(pluginId);
 
 	Vamp::Plugin::OutputList outputs =
@@ -238,31 +238,33 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
 
 	for (size_t j = 0; j < outputs.size(); ++j) {
 
-	    QString transformName = QString("%1:%2")
-		    .arg(pluginId).arg(outputs[j].name.c_str());
+	    QString transformId = QString("%1:%2")
+		    .arg(pluginId).arg(outputs[j].identifier.c_str());
 
-	    QString userDescription;
+	    QString userName;
             QString friendlyName;
             QString units = outputs[j].unit.c_str();
 
 	    if (outputs.size() == 1) {
-		userDescription = pluginDescription;
-                friendlyName = pluginDescription;
+		userName = pluginName;
+                friendlyName = pluginName;
 	    } else {
-		userDescription = QString("%1: %2")
-		    .arg(pluginDescription)
-		    .arg(outputs[j].description.c_str());
-                friendlyName = outputs[j].description.c_str();
+		userName = QString("%1: %2")
+		    .arg(pluginName)
+		    .arg(outputs[j].name.c_str());
+                friendlyName = outputs[j].name.c_str();
 	    }
 
             bool configurable = (!plugin->getPrograms().empty() ||
                                  !plugin->getParameterDescriptors().empty());
 
-	    transforms[transformName] = 
+            std::cerr << "Adding feature extraction plugin transform: id = " << transformId.toStdString() << std::endl;
+
+	    transforms[transformId] = 
                 TransformDesc(tr("Analysis"),
                               category,
-                              transformName,
-                              userDescription,
+                              transformId,
+                              userName,
                               friendlyName,
                               plugin->getMaker().c_str(),
                               units,
@@ -304,7 +306,7 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
 //        std::cout << "TransformFactory::populateRealTimePlugins: plugin " << pluginId.toStdString() << " has " << descriptor->controlOutputPortCount << " control output ports, " << descriptor->audioOutputPortCount << " audio outputs, " << descriptor->audioInputPortCount << " audio inputs" << std::endl;
 	
-	QString pluginDescription = descriptor->name.c_str();
+	QString pluginName = descriptor->name.c_str();
         QString category = factory->getPluginCategory(pluginId);
         bool configurable = (descriptor->parameterCount > 0);
 
@@ -312,8 +314,8 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
             for (size_t j = 0; j < descriptor->controlOutputPortCount; ++j) {
 
-                QString transformName = QString("%1:%2").arg(pluginId).arg(j);
-                QString userDescription;
+                QString transformId = QString("%1:%2").arg(pluginId).arg(j);
+                QString userName;
                 QString units;
 
                 if (j < descriptor->controlOutputPortNames.size() &&
@@ -321,8 +323,8 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
                     QString portName = descriptor->controlOutputPortNames[j].c_str();
 
-                    userDescription = tr("%1: %2")
-                        .arg(pluginDescription)
+                    userName = tr("%1: %2")
+                        .arg(pluginName)
                         .arg(portName);
 
                     if (unitRE.indexIn(portName) >= 0) {
@@ -331,22 +333,22 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
                 } else if (descriptor->controlOutputPortCount > 1) {
 
-                    userDescription = tr("%1: Output %2")
-                        .arg(pluginDescription)
+                    userName = tr("%1: Output %2")
+                        .arg(pluginName)
                         .arg(j + 1);
 
                 } else {
 
-                    userDescription = pluginDescription;
+                    userName = pluginName;
                 }
 
 
-                transforms[transformName] = 
+                transforms[transformId] = 
                     TransformDesc(tr("Effects Data"),
                                   category,
-                                  transformName,
-                                  userDescription,
-                                  userDescription,
+                                  transformId,
+                                  userName,
+                                  userName,
                                   descriptor->maker.c_str(),
                                   units,
                                   configurable);
@@ -357,18 +359,18 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
             if (descriptor->audioOutputPortCount > 0) {
 
-                QString transformName = QString("%1:A").arg(pluginId);
+                QString transformId = QString("%1:A").arg(pluginId);
                 QString type = tr("Effects");
                 if (descriptor->audioInputPortCount == 0) {
                     type = tr("Generators");
                 }
 
-                transforms[transformName] =
+                transforms[transformId] =
                     TransformDesc(type,
                                   category,
-                                  transformName,
-                                  pluginDescription,
-                                  pluginDescription,
+                                  transformId,
+                                  pluginName,
+                                  pluginName,
                                   descriptor->maker.c_str(),
                                   "",
                                   configurable);
@@ -378,42 +380,42 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 }
 
 QString
-TransformFactory::getTransformDescription(TransformName name)
+TransformFactory::getTransformName(TransformId identifier)
 {
-    if (m_transforms.find(name) != m_transforms.end()) {
-	return m_transforms[name].description;
+    if (m_transforms.find(identifier) != m_transforms.end()) {
+	return m_transforms[identifier].name;
     } else return "";
 }
 
 QString
-TransformFactory::getTransformFriendlyName(TransformName name)
+TransformFactory::getTransformFriendlyName(TransformId identifier)
 {
-    if (m_transforms.find(name) != m_transforms.end()) {
-	return m_transforms[name].friendlyName;
+    if (m_transforms.find(identifier) != m_transforms.end()) {
+	return m_transforms[identifier].friendlyName;
     } else return "";
 }
 
 QString
-TransformFactory::getTransformUnits(TransformName name)
+TransformFactory::getTransformUnits(TransformId identifier)
 {
-    if (m_transforms.find(name) != m_transforms.end()) {
-	return m_transforms[name].units;
+    if (m_transforms.find(identifier) != m_transforms.end()) {
+	return m_transforms[identifier].units;
     } else return "";
 }
 
 bool
-TransformFactory::isTransformConfigurable(TransformName name)
+TransformFactory::isTransformConfigurable(TransformId identifier)
 {
-    if (m_transforms.find(name) != m_transforms.end()) {
-	return m_transforms[name].configurable;
+    if (m_transforms.find(identifier) != m_transforms.end()) {
+	return m_transforms[identifier].configurable;
     } else return false;
 }
 
 bool
-TransformFactory::getTransformChannelRange(TransformName name,
+TransformFactory::getTransformChannelRange(TransformId identifier,
                                            int &min, int &max)
 {
-    QString id = name.section(':', 0, 2);
+    QString id = identifier.section(':', 0, 2);
 
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
 
@@ -445,7 +447,7 @@ TransformFactory::getTransformChannelRange(TransformName name,
 }
 
 bool
-TransformFactory::getChannelRange(TransformName name, Vamp::PluginBase *plugin,
+TransformFactory::getChannelRange(TransformId identifier, Vamp::PluginBase *plugin,
                                   int &minChannels, int &maxChannels)
 {
     Vamp::Plugin *vp = 0;
@@ -455,12 +457,12 @@ TransformFactory::getChannelRange(TransformName name, Vamp::PluginBase *plugin,
         maxChannels = vp->getMaxChannelCount();
         return true;
     } else {
-        return getTransformChannelRange(name, minChannels, maxChannels);
+        return getTransformChannelRange(identifier, minChannels, maxChannels);
     }
 }
 
 Model *
-TransformFactory::getConfigurationForTransform(TransformName name,
+TransformFactory::getConfigurationForTransform(TransformId identifier,
                                                const std::vector<Model *> &candidateInputModels,
                                                PluginTransform::ExecutionContext &context,
                                                QString &configurationXml,
@@ -485,12 +487,12 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         candidateModelNames.push_back(modelName);
     }
 
-    QString id = name.section(':', 0, 2);
-    QString output = name.section(':', 3);
+    QString id = identifier.section(':', 0, 2);
+    QString output = identifier.section(':', 3);
     QString outputLabel = "";
     
     bool ok = false;
-    configurationXml = m_lastConfigurations[name];
+    configurationXml = m_lastConfigurations[identifier];
 
 //    std::cerr << "last configuration: " << configurationXml.toStdString() << std::endl;
 
@@ -515,8 +517,8 @@ TransformFactory::getConfigurationForTransform(TransformName name,
                 vp->getOutputDescriptors();
             if (od.size() > 1) {
                 for (size_t i = 0; i < od.size(); ++i) {
-                    if (od[i].name == output.toStdString()) {
-                        outputLabel = od[i].description.c_str();
+                    if (od[i].identifier == output.toStdString()) {
+                        outputLabel = od[i].name.c_str();
                         break;
                     }
                 }
@@ -579,7 +581,7 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         }
 
         int minChannels = 1, maxChannels = sourceChannels;
-        getChannelRange(name, plugin, minChannels, maxChannels);
+        getChannelRange(identifier, plugin, minChannels, maxChannels);
 
         int targetChannels = sourceChannels;
         if (!effect) {
@@ -636,18 +638,18 @@ TransformFactory::getConfigurationForTransform(TransformName name,
         }
     }
 
-    if (ok) m_lastConfigurations[name] = configurationXml;
+    if (ok) m_lastConfigurations[identifier] = configurationXml;
 
     return ok ? inputModel : 0;
 }
 
 PluginTransform::ExecutionContext
-TransformFactory::getDefaultContextForTransform(TransformName name,
+TransformFactory::getDefaultContextForTransform(TransformId identifier,
                                                 Model *inputModel)
 {
     PluginTransform::ExecutionContext context(-1);
 
-    QString id = name.section(':', 0, 2);
+    QString id = identifier.section(':', 0, 2);
 
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
 
@@ -663,14 +665,14 @@ TransformFactory::getDefaultContextForTransform(TransformName name,
 }
 
 Transform *
-TransformFactory::createTransform(TransformName name, Model *inputModel,
+TransformFactory::createTransform(TransformId identifier, Model *inputModel,
                                   const PluginTransform::ExecutionContext &context,
                                   QString configurationXml, bool start)
 {
     Transform *transform = 0;
 
-    QString id = name.section(':', 0, 2);
-    QString output = name.section(':', 3);
+    QString id = identifier.section(':', 0, 2);
+    QString output = identifier.section(':', 3);
 
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
         transform = new FeatureExtractionPluginTransform(inputModel,
@@ -683,26 +685,26 @@ TransformFactory::createTransform(TransformName name, Model *inputModel,
                                                 id,
                                                 context,
                                                 configurationXml,
-                                                getTransformUnits(name),
+                                                getTransformUnits(identifier),
                                                 output == "A" ? -1 :
                                                 output.toInt());
     } else {
         std::cerr << "TransformFactory::createTransform: Unknown transform \""
-                  << name.toStdString() << "\"" << std::endl;
+                  << identifier.toStdString() << "\"" << std::endl;
         return transform;
     }
 
     if (start && transform) transform->start();
-    transform->setObjectName(name);
+    transform->setObjectName(identifier);
     return transform;
 }
 
 Model *
-TransformFactory::transform(TransformName name, Model *inputModel,
+TransformFactory::transform(TransformId identifier, Model *inputModel,
                             const PluginTransform::ExecutionContext &context,
                             QString configurationXml)
 {
-    Transform *t = createTransform(name, inputModel, context,
+    Transform *t = createTransform(identifier, inputModel, context,
                                    configurationXml, false);
 
     if (!t) return 0;
@@ -714,7 +716,7 @@ TransformFactory::transform(TransformName name, Model *inputModel,
 
     if (model) {
         QString imn = inputModel->objectName();
-        QString trn = getTransformFriendlyName(name);
+        QString trn = getTransformFriendlyName(identifier);
         if (imn != "") {
             if (trn != "") {
                 model->setObjectName(tr("%1: %2").arg(imn).arg(trn));

@@ -90,7 +90,7 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
                               m_context.stepSize,
                               m_context.blockSize)) {
         std::cerr << "FeatureExtractionPluginTransform: Plugin "
-                  << m_plugin->getName() << " failed to initialise!" << std::endl;
+                  << m_plugin->getIdentifier() << " failed to initialise!" << std::endl;
         return;
     }
 
@@ -103,7 +103,7 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
     }
     
     for (size_t i = 0; i < outputs.size(); ++i) {
-	if (outputName == "" || outputs[i].name == outputName.toStdString()) {
+	if (outputName == "" || outputs[i].identifier == outputName.toStdString()) {
 	    m_outputFeatureNo = i;
 	    m_descriptor = new Vamp::Plugin::OutputDescriptor
 		(outputs[i]);

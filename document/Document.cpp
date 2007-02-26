@@ -149,7 +149,7 @@ Document::createEmptyLayer(LayerFactory::LayerType type)
 
 Layer *
 Document::createDerivedLayer(LayerFactory::LayerType type,
-			     TransformName transform)
+			     TransformId transform)
 {
     Layer *newLayer = createLayer(type);
     if (!newLayer) return 0;
@@ -162,7 +162,7 @@ Document::createDerivedLayer(LayerFactory::LayerType type,
 }
 
 Layer *
-Document::createDerivedLayer(TransformName transform,
+Document::createDerivedLayer(TransformId transform,
                              Model *inputModel, 
                              const PluginTransform::ExecutionContext &context,
                              QString configurationXml)
@@ -261,7 +261,7 @@ Document::setMainModel(WaveFileModel *model)
 	    // This model was derived from the previous main
 	    // model: regenerate it.
 	    
-	    TransformName transform = m_models[model].transform;
+	    TransformId transform = m_models[model].transform;
             PluginTransform::ExecutionContext context = m_models[model].context;
 	    
 	    Model *replacementModel =
@@ -309,7 +309,7 @@ Document::setMainModel(WaveFileModel *model)
 }
 
 void
-Document::addDerivedModel(TransformName transform,
+Document::addDerivedModel(TransformId transform,
                           Model *inputModel,
                           const PluginTransform::ExecutionContext &context,
                           Model *outputModelToAdd,
@@ -356,7 +356,7 @@ Document::addImportedModel(Model *model)
 }
 
 Model *
-Document::addDerivedModel(TransformName transform,
+Document::addDerivedModel(TransformId transform,
                           Model *inputModel,
                           const PluginTransform::ExecutionContext &context,
                           QString configurationXml)
