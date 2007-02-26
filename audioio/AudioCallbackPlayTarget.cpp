@@ -38,9 +38,3 @@ AudioCallbackPlayTarget::setOutputGain(float gain)
     m_outputGain = gain;
 }
 
-#ifdef INCLUDE_MOCFILES
-#ifdef INCLUDE_MOCFILES
-#include "AudioCallbackPlayTarget.moc.cpp"
-#endif
-#endif
-

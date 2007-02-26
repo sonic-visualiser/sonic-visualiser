@@ -242,9 +242,5 @@ AudioPortAudioTarget::process(const void *inputBuffer, void *outputBuffer,
     return 0;
 }
 
-#ifdef INCLUDE_MOCFILES
-#include "AudioPortAudioTarget.moc.cpp"
-#endif
-
 #endif /* HAVE_PORTAUDIO */
 

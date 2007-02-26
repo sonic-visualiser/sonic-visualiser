@@ -4493,7 +4493,3 @@ MainWindow::about()
     QMessageBox::about(this, tr("About Sonic Visualiser"), aboutText);
 }
 
-
-#ifdef INCLUDE_MOCFILES
-#include "MainWindow.moc.cpp"
-#endif
