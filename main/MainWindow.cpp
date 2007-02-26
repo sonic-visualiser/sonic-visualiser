@@ -339,7 +339,14 @@ MainWindow::setupMenus()
 {
     if (!m_mainMenusCreated) {
         m_rightButtonMenu = new QMenu();
-        m_rightButtonMenu->setTearOffEnabled(true);
+
+        // No -- we don't want tear-off enabled on the right-button
+        // menu.  If it is enabled, then simply right-clicking and
+        // releasing will pop up the menu, activate the tear-off, and
+        // leave the torn-off menu window in front of the main window.
+        // That isn't desirable.  I'm not sure it ever would be, in a
+        // context menu -- perhaps technically a Qt bug?
+//        m_rightButtonMenu->setTearOffEnabled(true);
     }
 
     if (m_rightButtonLayerMenu) {
