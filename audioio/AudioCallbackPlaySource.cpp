@@ -1407,9 +1407,3 @@ AudioCallbackPlaySource::AudioCallbackPlaySourceFillThread::run()
     s.m_mutex.unlock();
 }
 
-
-
-#ifdef INCLUDE_MOCFILES
-#include "AudioCallbackPlaySource.moc.cpp"
-#endif
-

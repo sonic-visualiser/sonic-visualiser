@@ -394,9 +394,5 @@ AudioJACKTarget::xrun()
     return 0;
 }
 
-#ifdef INCLUDE_MOCFILES
-#include "AudioJACKTarget.moc.cpp"
-#endif
-
 #endif /* HAVE_JACK */
 
