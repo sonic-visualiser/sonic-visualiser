@@ -202,7 +202,7 @@ AudioPortAudioTarget::process(const void *inputBuffer, void *outputBuffer,
 	}
     }
 	
-    m_source->getSourceSamples(nframes, tmpbuf);
+    size_t received = m_source->getSourceSamples(nframes, tmpbuf);
 
     float peakLeft = 0.0, peakRight = 0.0;
 
@@ -214,17 +214,25 @@ AudioPortAudioTarget::process(const void *inputBuffer, void *outputBuffer,
 
 	    // PortAudio samples are interleaved
 	    for (size_t i = 0; i < nframes; ++i) {
-		output[i * 2 + ch] = tmpbuf[ch][i] * m_outputGain;
-		float sample = fabsf(output[i * 2 + ch]);
-		if (sample > peak) peak = sample;
+                if (i < received) {
+                    output[i * 2 + ch] = tmpbuf[ch][i] * m_outputGain;
+                    float sample = fabsf(output[i * 2 + ch]);
+                    if (sample > peak) peak = sample;
+                } else {
+                    output[i * 2 + ch] = 0;
+                }
 	    }
 
 	} else if (ch == 1 && sourceChannels == 1) {
 
 	    for (size_t i = 0; i < nframes; ++i) {
-		output[i * 2 + ch] = tmpbuf[0][i] * m_outputGain;
-		float sample = fabsf(output[i * 2 + ch]);
-		if (sample > peak) peak = sample;
+                if (i < received) {
+                    output[i * 2 + ch] = tmpbuf[0][i] * m_outputGain;
+                    float sample = fabsf(output[i * 2 + ch]);
+                    if (sample > peak) peak = sample;
+                } else {
+                    output[i * 2 + ch] = 0;
+                }
 	    }
 
 	} else {

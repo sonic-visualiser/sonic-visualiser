@@ -126,7 +126,7 @@ AudioCallbackPlaySource::addModel(Model *model)
 	m_sourceChannelCount = modelChannels;
     }
 
-//    std::cerr << "Adding model with " << modelChannels << " channels " << std::endl;
+//    std::cout << "Adding model with " << modelChannels << " channels " << std::endl;
 
     if (m_sourceSampleRate == 0) {
 
@@ -195,7 +195,7 @@ AudioCallbackPlaySource::addModel(Model *model)
     }
 
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-    std::cerr << "AudioCallbackPlaySource::addModel: emitting modelReplaced" << std::endl;
+    std::cout << "AudioCallbackPlaySource::addModel: emitting modelReplaced" << std::endl;
 #endif
 
     if (buffersChanged || srChanged) {
@@ -225,9 +225,9 @@ AudioCallbackPlaySource::removeModel(Model *model)
     size_t lastEnd = 0;
     for (std::set<Model *>::const_iterator i = m_models.begin();
 	 i != m_models.end(); ++i) {
-//	std::cerr << "AudioCallbackPlaySource::removeModel(" << model << "): checking end frame on model " << *i << std::endl;
+//	std::cout << "AudioCallbackPlaySource::removeModel(" << model << "): checking end frame on model " << *i << std::endl;
 	if ((*i)->getEndFrame() > lastEnd) lastEnd = (*i)->getEndFrame();
-//	std::cerr << "(done, lastEnd now " << lastEnd << ")" << std::endl;
+//	std::cout << "(done, lastEnd now " << lastEnd << ")" << std::endl;
     }
     m_lastModelEndFrame = lastEnd;
 
@@ -293,7 +293,7 @@ AudioCallbackPlaySource::clearRingBuffers(bool haveLock, size_t count)
 	m_writeBuffers->push_back(new RingBuffer<float>(m_ringBufferSize));
     }
 
-//    std::cerr << "AudioCallbackPlaySource::clearRingBuffers: Created "
+//    std::cout << "AudioCallbackPlaySource::clearRingBuffers: Created "
 //	      << count << " write buffers" << std::endl;
 
     if (!haveLock) {
@@ -413,7 +413,7 @@ AudioCallbackPlaySource::audioProcessingOverload()
 void
 AudioCallbackPlaySource::setTargetBlockSize(size_t size)
 {
-//    std::cerr << "AudioCallbackPlaySource::setTargetBlockSize() -> " << size << std::endl;
+//    std::cout << "AudioCallbackPlaySource::setTargetBlockSize() -> " << size << std::endl;
     assert(size < m_ringBufferSize);
     m_blockSize = size;
 }
@@ -421,7 +421,7 @@ AudioCallbackPlaySource::setTargetBlockSize(size_t size)
 size_t
 AudioCallbackPlaySource::getTargetBlockSize() const
 {
-//    std::cerr << "AudioCallbackPlaySource::getTargetBlockSize() -> " << m_blockSize << std::endl;
+//    std::cout << "AudioCallbackPlaySource::getTargetBlockSize() -> " << m_blockSize << std::endl;
     return m_blockSize;
 }
 
@@ -509,28 +509,28 @@ AudioCallbackPlaySource::getCurrentPlayingFrame()
 
     size_t f = bufferedFrame;
 
-//    std::cerr << "getCurrentPlayingFrame: f=" << f << ", latency=" << latency << ", rangeEnd=" << rangeEnd << std::endl;
+//    std::cout << "getCurrentPlayingFrame: f=" << f << ", latency=" << latency << ", rangeEnd=" << rangeEnd << std::endl;
 
     if (i == selections.end()) {
 	--i;
 	if (i->getEndFrame() + latency < f) {
-//    std::cerr << "framePlaying = " << framePlaying << ", rangeEnd = " << rangeEnd << std::endl;
+//    std::cout << "framePlaying = " << framePlaying << ", rangeEnd = " << rangeEnd << std::endl;
 
 	    if (!looping && (framePlaying > rangeEnd)) {
-//		std::cerr << "STOPPING" << std::endl;
+//		std::cout << "STOPPING" << std::endl;
 		stop();
 		return rangeEnd;
 	    } else {
 		return framePlaying;
 	    }
 	} else {
-//	    std::cerr << "latency <- " << latency << "-(" << f << "-" << i->getEndFrame() << ")" << std::endl;
+//	    std::cout << "latency <- " << latency << "-(" << f << "-" << i->getEndFrame() << ")" << std::endl;
 	    latency -= (f - i->getEndFrame());
 	    f = i->getEndFrame();
 	}
     }
 
-//    std::cerr << "i=(" << i->getStartFrame() << "," << i->getEndFrame() << ") f=" << f << ", latency=" << latency << std::endl;
+//    std::cout << "i=(" << i->getStartFrame() << "," << i->getEndFrame() << ") f=" << f << ", latency=" << latency << std::endl;
 
     while (latency > 0) {
 	size_t offset = f - i->getStartFrame();
@@ -745,6 +745,35 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 	return 0;
     }
 
+    // Ensure that all buffers have at least the amount of data we
+    // need -- else reduce the size of our requests correspondingly
+
+    for (size_t ch = 0; ch < getTargetChannelCount(); ++ch) {
+
+        RingBuffer<float> *rb = getReadRingBuffer(ch);
+        
+        if (!rb) {
+            std::cerr << "WARNING: AudioCallbackPlaySource::getSourceSamples: "
+                      << "No ring buffer available for channel " << ch
+                      << ", returning no data here" << std::endl;
+            count = 0;
+            break;
+        }
+
+        size_t rs = rb->getReadSpace();
+        if (rs < count) {
+#ifdef DEBUG_AUDIO_PLAY_SOURCE
+            std::cerr << "WARNING: AudioCallbackPlaySource::getSourceSamples: "
+                      << "Ring buffer for channel " << ch << " has only "
+                      << rs << " (of " << count << ") samples available, "
+                      << "reducing request size" << std::endl;
+#endif
+            count = rs;
+        }
+    }
+
+    if (count == 0) return 0;
+
     PhaseVocoderTimeStretcher *ts = m_timeStretcher;
 
     if (!ts || ts->getRatio() == 1) {
@@ -765,7 +794,7 @@ AudioCallbackPlaySource::getSourceSamples(size_t count, float **buffer)
 		got = rb->read(buffer[ch], request);
 	    
 #ifdef DEBUG_AUDIO_PLAY_SOURCE_PLAYING
-		std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " samples on channel " << ch << ", signalling for more (possibly)" << std::endl;
+		std::cout << "AudioCallbackPlaySource::getSamples: got " << got << " (of " << count << ") samples on channel " << ch << ", signalling for more (possibly)" << std::endl;
 #endif
 	    }
 
@@ -1042,7 +1071,7 @@ AudioCallbackPlaySource::fillBuffers()
 
         if (m_timeStretcher && m_timeStretcher->getRatio() < 0.4) {
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-            std::cerr << "Using crappy converter" << std::endl;
+            std::cout << "Using crappy converter" << std::endl;
 #endif
             src_process(m_crapConverter, &data);
         } else {
@@ -1060,7 +1089,7 @@ AudioCallbackPlaySource::fillBuffers()
 	    got = data.input_frames_used;
 	    toCopy = data.output_frames_gen;
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-	    std::cerr << "Resampled " << got << " frames to " << toCopy << " frames" << std::endl;
+	    std::cout << "Resampled " << got << " frames to " << toCopy << " frames" << std::endl;
 #endif
 	}
 	
@@ -1101,14 +1130,19 @@ AudioCallbackPlaySource::fillBuffers()
 	for (size_t c = 0; c < channels; ++c) {
 
 	    RingBuffer<float> *wb = getWriteRingBuffer(c);
-	    if (wb) wb->write(bufferPtrs[c], got);
-
+	    if (wb) {
+                size_t actual = wb->write(bufferPtrs[c], got);
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-	    if (wb)
-		std::cerr << "Wrote " << got << " frames for ch " << c << ", now "
+		std::cout << "Wrote " << actual << " samples for ch " << c << ", now "
 			  << wb->getReadSpace() << " to read" 
 			  << std::endl;
 #endif
+                if (actual < got) {
+                    std::cerr << "WARNING: Buffer overrun in channel " << c
+                              << ": wrote " << actual << " of " << got
+                              << " samples" << std::endl;
+                }
+            }
 	}
 
 	m_writeBufferFill = f;
@@ -1138,7 +1172,7 @@ AudioCallbackPlaySource::mixModels(size_t &frame, size_t count, float **buffers)
     size_t channels = getTargetChannelCount();
 
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-    std::cerr << "Selection playback: start " << frame << ", size " << count <<", channels " << channels << std::endl;
+    std::cout << "Selection playback: start " << frame << ", size " << count <<", channels " << channels << std::endl;
 #endif
 
     if (chunkBufferPtrCount < channels) {
@@ -1209,11 +1243,11 @@ AudioCallbackPlaySource::mixModels(size_t &frame, size_t count, float **buffers)
 	    nextChunkStart = chunkStart + chunkSize;
 	}
 	
-//	std::cerr << "chunkStart " << chunkStart << ", chunkSize " << chunkSize << ", nextChunkStart " << nextChunkStart << ", frame " << frame << ", count " << count << ", processed " << processed << std::endl;
+//	std::cout << "chunkStart " << chunkStart << ", chunkSize " << chunkSize << ", nextChunkStart " << nextChunkStart << ", frame " << frame << ", count " << count << ", processed " << processed << std::endl;
 
 	if (!chunkSize) {
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-	    std::cerr << "Ending selection playback at " << nextChunkStart << std::endl;
+	    std::cout << "Ending selection playback at " << nextChunkStart << std::endl;
 #endif
 	    // We need to maintain full buffers so that the other
 	    // thread can tell where it's got to in the playback -- so
@@ -1223,7 +1257,7 @@ AudioCallbackPlaySource::mixModels(size_t &frame, size_t count, float **buffers)
 	}
 
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-	std::cerr << "Selection playback: chunk at " << chunkStart << " -> " << nextChunkStart << " (size " << chunkSize << ")" << std::endl;
+	std::cout << "Selection playback: chunk at " << chunkStart << " -> " << nextChunkStart << " (size " << chunkSize << ")" << std::endl;
 #endif
 
 	size_t got = 0;
@@ -1265,7 +1299,7 @@ AudioCallbackPlaySource::mixModels(size_t &frame, size_t count, float **buffers)
     }
 
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-    std::cerr << "Returning selection playback " << processed << " frames to " << nextChunkStart << std::endl;
+    std::cout << "Returning selection playback " << processed << " frames to " << nextChunkStart << std::endl;
 #endif
 
     frame = nextChunkStart;
@@ -1298,12 +1332,12 @@ AudioCallbackPlaySource::unifyRingBuffers()
     if (rb) {
 	size_t rs = rb->getReadSpace();
 	//!!! incorrect when in non-contiguous selection, see comments elsewhere
-//	std::cerr << "rs = " << rs << std::endl;
+//	std::cout << "rs = " << rs << std::endl;
 	if (rs < rf) rf -= rs;
 	else rf = 0;
     }
     
-    //std::cerr << "m_readBufferFill = " << m_readBufferFill << ", rf = " << rf << ", m_writeBufferFill = " << m_writeBufferFill << std::endl;
+    //std::cout << "m_readBufferFill = " << m_readBufferFill << ", rf = " << rf << ", m_writeBufferFill = " << m_writeBufferFill << std::endl;
 
     size_t wf = m_writeBufferFill;
     size_t skip = 0;
@@ -1313,17 +1347,17 @@ AudioCallbackPlaySource::unifyRingBuffers()
 	    if (c == 0) {
 		
 		size_t wrs = wb->getReadSpace();
-//		std::cerr << "wrs = " << wrs << std::endl;
+//		std::cout << "wrs = " << wrs << std::endl;
 
 		if (wrs < wf) wf -= wrs;
 		else wf = 0;
-//		std::cerr << "wf = " << wf << std::endl;
+//		std::cout << "wf = " << wf << std::endl;
 		
 		if (wf < rf) skip = rf - wf;
 		if (skip == 0) break;
 	    }
 
-//	    std::cerr << "skipping " << skip << std::endl;
+//	    std::cout << "skipping " << skip << std::endl;
 	    wb->skip(skip);
 	}
     }
@@ -1331,7 +1365,7 @@ AudioCallbackPlaySource::unifyRingBuffers()
     m_bufferScavenger.claim(m_readBuffers);
     m_readBuffers = m_writeBuffers;
     m_readBufferFill = m_writeBufferFill;
-//    std::cerr << "unified" << std::endl;
+//    std::cout << "unified" << std::endl;
 }
 
 void
@@ -1340,7 +1374,7 @@ AudioCallbackPlaySource::AudioCallbackPlaySourceFillThread::run()
     AudioCallbackPlaySource &s(m_source);
     
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-    std::cerr << "AudioCallbackPlaySourceFillThread starting" << std::endl;
+    std::cout << "AudioCallbackPlaySourceFillThread starting" << std::endl;
 #endif
 
     s.m_mutex.lock();
@@ -1372,8 +1406,9 @@ AudioCallbackPlaySource::AudioCallbackPlaySourceFillThread::run()
 	    }
 	    
 	    if (s.m_playing) ms /= 10;
-	    
+
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
+            if (!s.m_playing) std::cout << std::endl;
 	    std::cout << "AudioCallbackPlaySourceFillThread: waiting for " << ms << "ms..." << std::endl;
 #endif
 	    

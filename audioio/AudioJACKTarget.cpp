@@ -352,14 +352,16 @@ AudioJACKTarget::process(jack_nframes_t nframes)
 	buffers[ch] = (float *)jack_port_get_buffer(m_outputs[ch], nframes);
     }
 
+    size_t received = 0;
+
     if (m_source) {
-	m_source->getSourceSamples(nframes, buffers);
-    } else {
-	for (size_t ch = 0; ch < m_outputs.size(); ++ch) {
-	    for (size_t i = 0; i < nframes; ++i) {
-		buffers[ch][i] = 0.0;
-	    }
-	}
+	received = m_source->getSourceSamples(nframes, buffers);
+    }
+
+    for (size_t ch = 0; ch < m_outputs.size(); ++ch) {
+        for (size_t i = received; i < nframes; ++i) {
+            buffers[ch][i] = 0.0;
+        }
     }
 
     float peakLeft = 0.0, peakRight = 0.0;
