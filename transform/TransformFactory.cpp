@@ -244,6 +244,27 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
 	    QString userName;
             QString friendlyName;
             QString units = outputs[j].unit.c_str();
+            QString description = plugin->getDescription().c_str();
+            QString maker = plugin->getMaker().c_str();
+            if (maker == "") maker = tr("<unknown maker>");
+
+            if (description == "") {
+                if (outputs.size() == 1) {
+                    description = tr("Extract features using \"%1\" plugin (from %2)")
+                        .arg(pluginName).arg(maker);
+                } else {
+                    description = tr("Extract features using \"%1\" output of \"%2\" plugin (from %3)")
+                        .arg(outputs[j].name.c_str()).arg(pluginName).arg(maker);
+                }
+            } else {
+                if (outputs.size() == 1) {
+                    description = tr("%1 using \"%2\" plugin (from %3)")
+                        .arg(description).arg(pluginName).arg(maker);
+                } else {
+                    description = tr("%1 using \"%2\" output of \"%3\" plugin (from %4)")
+                        .arg(description).arg(outputs[j].name.c_str()).arg(pluginName).arg(maker);
+                }
+            }                    
 
 	    if (outputs.size() == 1) {
 		userName = pluginName;
@@ -266,7 +287,8 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
                               transformId,
                               userName,
                               friendlyName,
-                              plugin->getMaker().c_str(),
+                              description,
+                              maker,
                               units,
                               configurable);
 	}
@@ -309,6 +331,8 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 	QString pluginName = descriptor->name.c_str();
         QString category = factory->getPluginCategory(pluginId);
         bool configurable = (descriptor->parameterCount > 0);
+        QString maker = descriptor->maker.c_str();
+        if (maker == "") maker = tr("<unknown maker>");
 
         if (descriptor->audioInputPortCount > 0) {
 
@@ -317,11 +341,12 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
                 QString transformId = QString("%1:%2").arg(pluginId).arg(j);
                 QString userName;
                 QString units;
+                QString portName;
 
                 if (j < descriptor->controlOutputPortNames.size() &&
                     descriptor->controlOutputPortNames[j] != "") {
 
-                    QString portName = descriptor->controlOutputPortNames[j].c_str();
+                    portName = descriptor->controlOutputPortNames[j].c_str();
 
                     userName = tr("%1: %2")
                         .arg(pluginName)
@@ -342,6 +367,19 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
                     userName = pluginName;
                 }
 
+                QString description;
+
+                if (portName != "") {
+                    description = tr("Extract \"%1\" data output from \"%2\" effect plugin (from %3)")
+                        .arg(portName)
+                        .arg(pluginName)
+                        .arg(maker);
+                } else {
+                    description = tr("Extract data output %1 from \"%2\" effect plugin (from %3)")
+                        .arg(j + 1)
+                        .arg(pluginName)
+                        .arg(maker);
+                }
 
                 transforms[transformId] = 
                     TransformDesc(tr("Effects Data"),
@@ -349,7 +387,8 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
                                   transformId,
                                   userName,
                                   userName,
-                                  descriptor->maker.c_str(),
+                                  description,
+                                  maker,
                                   units,
                                   configurable);
             }
@@ -361,8 +400,16 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
 
                 QString transformId = QString("%1:A").arg(pluginId);
                 QString type = tr("Effects");
+
+                QString description = tr("Transform audio signal with \"%1\" effect plugin (from %2)")
+                    .arg(pluginName)
+                    .arg(maker);
+
                 if (descriptor->audioInputPortCount == 0) {
                     type = tr("Generators");
+                    QString description = tr("Generate audio signal using \"%1\" plugin (from %2)")
+                        .arg(pluginName)
+                        .arg(maker);
                 }
 
                 transforms[transformId] =
@@ -371,7 +418,8 @@ TransformFactory::populateRealTimePlugins(TransformDescriptionMap &transforms)
                                   transformId,
                                   pluginName,
                                   pluginName,
-                                  descriptor->maker.c_str(),
+                                  description,
+                                  maker,
                                   "",
                                   configurable);
             }
@@ -490,6 +538,7 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
     QString id = identifier.section(':', 0, 2);
     QString output = identifier.section(':', 3);
     QString outputLabel = "";
+    QString outputDescription = "";
     
     bool ok = false;
     configurationXml = m_lastConfigurations[identifier];
@@ -519,6 +568,7 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
                 for (size_t i = 0; i < od.size(); ++i) {
                     if (od[i].identifier == output.toStdString()) {
                         outputLabel = od[i].name.c_str();
+                        outputDescription = od[i].description.c_str();
                         break;
                     }
                 }
@@ -602,7 +652,7 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
                                           defaultChannel);
         }
         
-        dialog->setOutputLabel(outputLabel);
+        dialog->setOutputLabel(outputLabel, outputDescription);
         
         dialog->setShowProcessingOptions(true, frequency);
 

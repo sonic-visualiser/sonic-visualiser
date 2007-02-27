@@ -1242,15 +1242,7 @@ MainWindow::setupTransformsMenu()
         m_transformActionsReverse[transforms[i].identifier] = action;
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
-        QString tip;
-        if (output == "") {
-            tip = tr("Transform with \"%1\" plugin (from %3)")
-                .arg(pluginName).arg(maker);
-        } else {
-            tip = tr("Transform with \"%1\" output of \"%2\" plugin (from %3)")
-                .arg(output).arg(pluginName).arg(maker);
-        }
-        action->setStatusTip(tip);
+        action->setStatusTip(transforms[i].description);
 
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
@@ -1274,7 +1266,7 @@ MainWindow::setupTransformsMenu()
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
         m_transformActions[action] = transforms[i].identifier;
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-        action->setStatusTip(tip);
+        action->setStatusTip(transforms[i].description);
 
 //        cerr << "Transform: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
 
