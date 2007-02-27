@@ -47,11 +47,11 @@ public:
         TransformDesc() { }
 	TransformDesc(QString _type, QString _category,
                       TransformId _identifier, QString _name,
-                      QString _friendlyName, QString _maker,
-                      QString _units, bool _configurable) :
+                      QString _friendlyName, QString _description,
+                      QString _maker, QString _units, bool _configurable) :
 	    type(_type), category(_category),
             identifier(_identifier), name(_name),
-            friendlyName(_friendlyName),
+            friendlyName(_friendlyName), description(_description),
             maker(_maker), units(_units), configurable(_configurable) { }
 
         QString type; // e.g. feature extraction plugin
@@ -59,6 +59,7 @@ public:
 	TransformId identifier; // e.g. vamp:vamp-aubio:aubioonset
 	QString name; // plugin's name if 1 output, else "name: output"
         QString friendlyName; // short text for layer name
+        QString description; // sentence describing transform
         QString maker;
         QString units;
         bool configurable;
