@@ -4403,7 +4403,7 @@ MainWindow::about()
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
     aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for<br>semantic music analysis and annotation.</p>");
-    aboutText += tr("<p>%1 : %2 build</p>")
+    aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
