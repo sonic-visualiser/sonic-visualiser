@@ -3223,7 +3223,7 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     Pane *pane = command->getPane();
 
     if (configuration.layer == LayerFactory::Spectrum) {
-        pane->setPlaybackFollow(View::PlaybackScrollContinuous);
+        pane->setPlaybackFollow(PlaybackScrollContinuous);
     }
 
     if (configuration.layer != LayerFactory::TimeRuler &&
