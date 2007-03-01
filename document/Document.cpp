@@ -321,7 +321,7 @@ Document::addDerivedModel(TransformId transform,
 	return;
     }
 
-    std::cerr << "Document::addDerivedModel: source is " << inputModel << " \"" << inputModel->objectName().toStdString() << std::endl;
+    std::cerr << "Document::addDerivedModel: source is " << inputModel << " \"" << inputModel->objectName().toStdString() << "\"" << std::endl;
 
     ModelRecord rec;
     rec.source = inputModel;
