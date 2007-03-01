@@ -34,6 +34,9 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
                                                  QString units,
                                                  int output) :
     PluginTransform(inputModel, context),
+    m_pluginId(pluginId),
+    m_configurationXml(configurationXml),
+    m_units(units),
     m_plugin(0),
     m_outputNo(output)
 {
@@ -120,7 +123,7 @@ RealTimePluginTransform::run()
 
     while (!input->isReady()) {
         if (dynamic_cast<WaveFileModel *>(input)) break; // no need to wait
-        std::cerr << "FeatureExtractionPluginTransform::run: Waiting for input model to be ready..." << std::endl;
+        std::cerr << "RealTimePluginTransform::run: Waiting for input model to be ready..." << std::endl;
         sleep(1);
     }
 
@@ -136,7 +139,7 @@ RealTimePluginTransform::run()
 
     size_t blockSize = m_plugin->getBufferSize();
 
-    float **buffers = m_plugin->getAudioInputBuffers();
+    float **inbufs = m_plugin->getAudioInputBuffers();
 
     size_t startFrame = m_input->getStartFrame();
     size_t   endFrame = m_input->getEndFrame();
@@ -157,30 +160,48 @@ RealTimePluginTransform::run()
 	size_t got = 0;
 
 	if (channelCount == 1) {
-            if (buffers && buffers[0]) {
+            if (inbufs && inbufs[0]) {
                 got = input->getValues
-                    (m_context.channel, blockFrame, blockFrame + blockSize, buffers[0]);
+                    (m_context.channel, blockFrame, blockFrame + blockSize, inbufs[0]);
                 while (got < blockSize) {
-                    buffers[0][got++] = 0.0;
+                    inbufs[0][got++] = 0.0;
+                }          
+            }
+            for (size_t ch = 1; ch < m_plugin->getAudioInputCount(); ++ch) {
+                for (size_t i = 0; i < blockSize; ++i) {
+                    inbufs[ch][i] = inbufs[0][i];
                 }
-                if (m_context.channel == -1 && channelCount > 1) {
-                    // use mean instead of sum, as plugin input
-                    for (size_t i = 0; i < got; ++i) {
-                        buffers[0][i] /= channelCount;
-                    }
-                }                
             }
 	} else {
 	    for (size_t ch = 0; ch < channelCount; ++ch) {
-                if (buffers && buffers[ch]) {
+                if (inbufs && inbufs[ch]) {
                     got = input->getValues
-                        (ch, blockFrame, blockFrame + blockSize, buffers[ch]);
+                        (ch, blockFrame, blockFrame + blockSize, inbufs[ch]);
                     while (got < blockSize) {
-                        buffers[ch][got++] = 0.0;
+                        inbufs[ch][got++] = 0.0;
                     }
                 }
 	    }
+            for (size_t ch = channelCount; ch < m_plugin->getAudioInputCount(); ++ch) {
+                for (size_t i = 0; i < blockSize; ++i) {
+                    inbufs[ch][i] = inbufs[ch % channelCount][i];
+                }
+            }
 	}
+
+/*
+        std::cerr << "Input for plugin: " << m_plugin->getAudioInputCount() << " channels "<< std::endl;
+
+        for (size_t ch = 0; ch < m_plugin->getAudioInputCount(); ++ch) {
+            std::cerr << "Input channel " << ch << std::endl;
+            for (size_t i = 0; i < 100; ++i) {
+                std::cerr << inbufs[ch][i] << " ";
+                if (isnan(inbufs[ch][i])) {
+                    std::cerr << "\n\nWARNING: NaN in audio input" << std::endl;
+                }
+            }
+        }
+*/
 
         m_plugin->run(Vamp::RealTime::frame2RealTime(blockFrame, sampleRate));
 
@@ -197,18 +218,18 @@ RealTimePluginTransform::run()
 
         } else if (wwfm) {
 
-            float **buffers = m_plugin->getAudioOutputBuffers();
+            float **outbufs = m_plugin->getAudioOutputBuffers();
 
-            if (buffers) {
+            if (outbufs) {
 
                 if (blockFrame >= latency) {
-                    wwfm->addSamples(buffers, blockSize);
+                    wwfm->addSamples(outbufs, blockSize);
                 } else if (blockFrame + blockSize >= latency) {
                     size_t offset = latency - blockFrame;
                     size_t count = blockSize - offset;
                     float **tmp = new float *[channelCount];
                     for (size_t c = 0; c < channelCount; ++c) {
-                        tmp[c] = buffers[c] + offset;
+                        tmp[c] = outbufs[c] + offset;
                     }
                     wwfm->addSamples(tmp, count);
                     delete[] tmp;

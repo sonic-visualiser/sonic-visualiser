@@ -35,6 +35,10 @@ public:
 protected:
     virtual void run();
 
+    QString m_pluginId;
+    QString m_configurationXml;
+    QString m_units;
+
     RealTimePluginInstance *m_plugin;
     int m_outputNo;
 
