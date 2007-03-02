@@ -49,10 +49,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     // refer to it
     m_applyButton = new QPushButton(tr("Apply"));
 
-    int min, max, i;
+    int min, max, deflt, i;
 
     m_windowType = WindowType(prefs->getPropertyRangeAndValue
-                              ("Window Type", &min, &max));
+                              ("Window Type", &min, &max, &deflt));
     m_windowTypeSelector = new WindowTypeSelector(m_windowType);
 
     connect(m_windowTypeSelector, SIGNAL(windowTypeChanged(WindowType)),
@@ -67,7 +67,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
             this, SLOT(smoothSpectrogramChanged(int)));
 
     QComboBox *propertyLayout = new QComboBox;
-    int pl = prefs->getPropertyRangeAndValue("Property Box Layout", &min, &max);
+    int pl = prefs->getPropertyRangeAndValue("Property Box Layout", &min, &max,
+                                             &deflt);
     m_propertyLayout = pl;
 
     for (i = min; i <= max; ++i) {
@@ -94,7 +95,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
     QComboBox *resampleQuality = new QComboBox;
 
-    int rsq = prefs->getPropertyRangeAndValue("Resample Quality", &min, &max);
+    int rsq = prefs->getPropertyRangeAndValue("Resample Quality", &min, &max,
+                                              &deflt);
     m_resampleQuality = rsq;
 
     for (i = min; i <= max; ++i) {
