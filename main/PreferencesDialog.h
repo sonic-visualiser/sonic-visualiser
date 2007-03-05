@@ -33,7 +33,7 @@ public:
 
 protected slots:
     void windowTypeChanged(WindowType type);
-    void smoothSpectrogramChanged(int state);
+    void spectrogramSmoothingChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
     void resampleQualityChanged(int quality);
@@ -47,7 +47,7 @@ protected:
     QPushButton *m_applyButton;
     
     WindowType m_windowType;
-    bool  m_smoothSpectrogram;
+    int   m_spectrogramSmoothing;
     int   m_propertyLayout;
     float m_tuningFrequency;
     int   m_resampleQuality;
