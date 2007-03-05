@@ -58,17 +58,24 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     connect(m_windowTypeSelector, SIGNAL(windowTypeChanged(WindowType)),
             this, SLOT(windowTypeChanged(WindowType)));
 
-    QCheckBox *smoothing = new QCheckBox;
-    m_smoothSpectrogram = prefs->getSmoothSpectrogram();
-    smoothing->setCheckState(m_smoothSpectrogram ?
-                             Qt::Checked : Qt::Unchecked);
+    QComboBox *smoothing = new QComboBox;
+    
+    int sm = prefs->getPropertyRangeAndValue("Spectrogram Smoothing", &min, &max,
+                                             &deflt);
+    m_spectrogramSmoothing = sm;
 
-    connect(smoothing, SIGNAL(stateChanged(int)),
-            this, SLOT(smoothSpectrogramChanged(int)));
+    for (i = min; i <= max; ++i) {
+        smoothing->addItem(prefs->getPropertyValueLabel("Spectrogram Smoothing", i));
+    }
+
+    smoothing->setCurrentIndex(sm);
+
+    connect(smoothing, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(spectrogramSmoothingChanged(int)));
 
     QComboBox *propertyLayout = new QComboBox;
     int pl = prefs->getPropertyRangeAndValue("Property Box Layout", &min, &max,
-                                             &deflt);
+                                         &deflt);
     m_propertyLayout = pl;
 
     for (i = min; i <= max; ++i) {
@@ -126,9 +133,9 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(prefs->getPropertyLabel
-                                  ("Smooth Spectrogram")),
-                       row, 0, 1, 2);
-    subgrid->addWidget(smoothing, row++, 2);
+                                  ("Spectrogram Smoothing")),
+                       row, 0);
+    subgrid->addWidget(smoothing, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Window Type"))),
@@ -166,9 +173,9 @@ PreferencesDialog::windowTypeChanged(WindowType type)
 }
 
 void
-PreferencesDialog::smoothSpectrogramChanged(int state)
+PreferencesDialog::spectrogramSmoothingChanged(int smoothing)
 {
-    m_smoothSpectrogram = (state == Qt::Checked);
+    m_spectrogramSmoothing = smoothing;
     m_applyButton->setEnabled(true);
 }
 
@@ -205,7 +212,8 @@ PreferencesDialog::applyClicked()
 {
     Preferences *prefs = Preferences::getInstance();
     prefs->setWindowType(WindowType(m_windowType));
-    prefs->setSmoothSpectrogram(m_smoothSpectrogram);
+    prefs->setSpectrogramSmoothing(Preferences::SpectrogramSmoothing
+                                   (m_spectrogramSmoothing));
     prefs->setPropertyBoxLayout(Preferences::PropertyBoxLayout
                                 (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
