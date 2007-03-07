@@ -26,6 +26,7 @@
 #include "base/PlayParameterRepository.h"
 #include "base/PlayParameters.h"
 #include "transform/TransformFactory.h"
+#include <QApplication>
 #include <iostream>
 
 //!!! still need to handle command history, documentRestored/documentModified
@@ -643,7 +644,7 @@ Document::AddLayerCommand::AddLayerCommand(Document *d,
     m_d(d),
     m_view(view),
     m_layer(layer),
-    m_name(qApp->translate("Add %1 Layer").arg(layer->objectName())),
+    m_name(qApp->translate("AddLayerCommand", "Add %1 Layer").arg(layer->objectName())),
     m_added(false)
 {
 }
@@ -691,7 +692,7 @@ Document::RemoveLayerCommand::RemoveLayerCommand(Document *d,
     m_d(d),
     m_view(view),
     m_layer(layer),
-    m_name(qApp->translate("Delete %1 Layer").arg(layer->objectName())),
+    m_name(qApp->translate("RemoveLayerCommand", "Delete %1 Layer").arg(layer->objectName())),
     m_added(true)
 {
 }

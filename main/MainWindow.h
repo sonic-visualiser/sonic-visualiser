@@ -227,6 +227,7 @@ protected slots:
     void mouseEnteredWidget();
     void mouseLeftWidget();
     void contextHelpChanged(const QString &);
+    void inProgressSelectionChanged();
 
     void website();
     void help();
