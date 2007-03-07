@@ -22,6 +22,8 @@ class DenseTimeValueModel;
 
 class FeatureExtractionPluginTransform : public PluginTransform
 {
+    Q_OBJECT
+
 public:
     FeatureExtractionPluginTransform(Model *inputModel,
 				     QString plugin,

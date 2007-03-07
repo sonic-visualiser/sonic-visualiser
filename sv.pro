@@ -71,4 +71,5 @@ SOURCES += audioio/AudioCallbackPlaySource.cpp \
            transform/Transform.cpp \
            transform/TransformFactory.cpp
 RESOURCES += sonic-visualiser.qrc
-TRANSLATIONS += i18n/sonic-visualiser_ru.ts
+
+

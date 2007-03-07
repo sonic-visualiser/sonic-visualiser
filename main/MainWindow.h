@@ -165,6 +165,10 @@ protected slots:
     void sampleRateMismatch(size_t, size_t, bool);
     void audioOverloadPluginDisabled();
 
+    void playbackFrameChanged(unsigned long);
+    void globalCentreFrameChanged(unsigned long);
+    void viewCentreFrameChanged(View *, unsigned long);
+    void viewZoomLevelChanged(View *, unsigned long, bool);
     void outputLevelsChanged(float, float);
 
     void currentPaneChanged(Pane *);
@@ -222,6 +226,7 @@ protected slots:
 
     void mouseEnteredWidget();
     void mouseLeftWidget();
+    void contextHelpChanged(const QString &);
 
     void website();
     void help();
@@ -268,9 +273,13 @@ protected:
     bool                     m_openingAudioFile;
     bool                     m_abandoning;
 
+    int                      m_lastPlayStatusSec;
+    mutable QString          m_myStatusMessage;
+
     QPointer<PreferencesDialog> m_preferencesDialog;
 
     WaveFileModel *getMainModel();
+    const WaveFileModel *getMainModel() const;
     void createDocument();
 
     struct PaneConfiguration {
@@ -385,6 +394,8 @@ protected:
     void createPlayTarget();
 
     void openHelpUrl(QString url);
+
+    void updateVisibleRangeDisplay(Pane *p) const;
 
     void toXml(QTextStream &stream);
 };

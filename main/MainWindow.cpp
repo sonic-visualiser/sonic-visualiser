@@ -160,13 +160,13 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_paneStack, SIGNAL(propertyStacksResized()),
             this, SLOT(propertyStacksResized()));
     connect(m_paneStack, SIGNAL(contextHelpChanged(const QString &)),
-            statusBar(), SLOT(showMessage(const QString &)));
+            this, SLOT(contextHelpChanged(const QString &)));
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
     m_overview->setFixedHeight(40);
     connect(m_overview, SIGNAL(contextHelpChanged(const QString &)),
-            statusBar(), SLOT(showMessage(const QString &)));
+            this, SLOT(contextHelpChanged(const QString &)));
 
     m_panLayer = new WaveformLayer;
     m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
@@ -247,6 +247,18 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     connect(m_viewManager, SIGNAL(outputLevelsChanged(float, float)),
 	    this, SLOT(outputLevelsChanged(float, float)));
+
+    connect(m_viewManager, SIGNAL(playbackFrameChanged(unsigned long)),
+            this, SLOT(playbackFrameChanged(unsigned long)));
+
+    connect(m_viewManager, SIGNAL(globalCentreFrameChanged(unsigned long)),
+            this, SLOT(globalCentreFrameChanged(unsigned long)));
+
+    connect(m_viewManager, SIGNAL(viewCentreFrameChanged(View *, unsigned long)),
+            this, SLOT(viewCentreFrameChanged(View *, unsigned long)));
+
+    connect(m_viewManager, SIGNAL(viewZoomLevelChanged(View *, unsigned long, bool)),
+            this, SLOT(viewZoomLevelChanged(View *, unsigned long, bool)));
 
     connect(Preferences::getInstance(),
             SIGNAL(propertyChanged(PropertyContainer::PropertyName)),
@@ -1699,15 +1711,17 @@ MainWindow::playSelectionToggled()
 }
 
 void
-MainWindow::currentPaneChanged(Pane *)
+MainWindow::currentPaneChanged(Pane *p)
 {
     updateMenuStates();
+    updateVisibleRangeDisplay(p);
 }
 
 void
-MainWindow::currentLayerChanged(Pane *, Layer *)
+MainWindow::currentLayerChanged(Pane *p, Layer *)
 {
     updateMenuStates();
+    updateVisibleRangeDisplay(p);
 }
 
 void
@@ -2407,6 +2421,13 @@ MainWindow::getMainModel()
     return m_document->getMainModel();
 }
 
+const WaveFileModel *
+MainWindow::getMainModel() const
+{
+    if (!m_document) return 0;
+    return m_document->getMainModel();
+}
+
 void
 MainWindow::newSession()
 {
@@ -2418,7 +2439,7 @@ MainWindow::newSession()
     Pane *pane = m_paneStack->addPane();
 
     connect(pane, SIGNAL(contextHelpChanged(const QString &)),
-            statusBar(), SLOT(showMessage(const QString &)));
+            this, SLOT(contextHelpChanged(const QString &)));
 
     if (!m_timeRulerLayer) {
 	m_timeRulerLayer = m_document->createMainModelLayer
@@ -3115,8 +3136,9 @@ void
 MainWindow::play()
 {
     if (m_playSource->isPlaying()) {
-	m_playSource->stop();
+        stop();
     } else {
+        playbackFrameChanged(m_viewManager->getPlaybackFrame());
 	m_playSource->play(m_viewManager->getPlaybackFrame());
     }
 }
@@ -3187,6 +3209,13 @@ void
 MainWindow::stop()
 {
     m_playSource->stop();
+
+    if (m_paneStack && m_paneStack->getCurrentPane()) {
+        updateVisibleRangeDisplay(m_paneStack->getCurrentPane());
+    } else {
+        m_myStatusMessage = "";
+        statusBar()->showMessage("");
+    }
 }
 
 void
@@ -3313,7 +3342,7 @@ MainWindow::AddPaneCommand::execute()
 	m_pane = m_mw->m_paneStack->addPane();
 
         connect(m_pane, SIGNAL(contextHelpChanged(const QString &)),
-                m_mw->statusBar(), SLOT(showMessage(const QString &)));
+                m_mw, SLOT(contextHelpChanged(const QString &)));
     } else {
 	m_mw->m_paneStack->showPane(m_pane);
     }
@@ -3610,6 +3639,94 @@ MainWindow::playMonoToggled()
 
     playSpeedChanged(m_playSpeed->value());
 }    
+
+void
+MainWindow::playbackFrameChanged(unsigned long frame)
+{
+    if (!(m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
+
+    RealTime now = RealTime::frame2RealTime
+        (frame, getMainModel()->getSampleRate());
+
+    if (now.sec == m_lastPlayStatusSec) return;
+
+    RealTime then = RealTime::frame2RealTime
+        (m_playSource->getPlayEndFrame(), getMainModel()->getSampleRate());
+
+    QString nowStr;
+    QString thenStr;
+    QString remainingStr;
+
+    if (then.sec > 10) {
+        nowStr = now.toSecText().c_str();
+        thenStr = then.toSecText().c_str();
+        remainingStr = (then - now).toSecText().c_str();
+        m_lastPlayStatusSec = now.sec;
+    } else {
+        nowStr = now.toText(true).c_str();
+        thenStr = then.toText(true).c_str();
+        remainingStr = (then - now).toText(true).c_str();
+    }        
+
+    m_myStatusMessage = tr("Playing: %1 of %2 (%3 remaining)")
+        .arg(nowStr).arg(thenStr).arg(remainingStr);
+
+    statusBar()->showMessage(m_myStatusMessage);
+}
+
+void
+MainWindow::globalCentreFrameChanged(unsigned long frame)
+{
+    if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
+    Pane *p = 0;
+    if (!m_paneStack || !(p = m_paneStack->getCurrentPane())) return;
+    if (!p->getFollowGlobalPan()) return;
+    updateVisibleRangeDisplay(p);
+}
+
+void
+MainWindow::viewCentreFrameChanged(View *v, unsigned long frame)
+{
+    if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
+    Pane *p = 0;
+    if (!m_paneStack || !(p = m_paneStack->getCurrentPane())) return;
+    if (v == p) updateVisibleRangeDisplay(p);
+}
+
+void
+MainWindow::viewZoomLevelChanged(View *v, unsigned long zoom, bool locked)
+{
+    if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
+    Pane *p = 0;
+    if (!m_paneStack || !(p = m_paneStack->getCurrentPane())) return;
+    if (v == p) updateVisibleRangeDisplay(p);
+}
+
+void
+MainWindow::updateVisibleRangeDisplay(Pane *p) const
+{
+    if (!getMainModel() || !p) {
+        return;
+    }
+
+    RealTime start = RealTime::frame2RealTime
+        (p->getFirstVisibleFrame(), getMainModel()->getSampleRate());
+
+    RealTime end = RealTime::frame2RealTime
+        (p->getLastVisibleFrame(), getMainModel()->getSampleRate());
+
+    RealTime duration = end - start;
+
+    QString startStr, endStr, durationStr;
+    startStr = start.toText(true).c_str();
+    endStr = end.toText(true).c_str();
+    durationStr = duration.toText(true).c_str();
+
+    m_myStatusMessage = tr("Visible: %1 to %2 (duration %3)")
+        .arg(startStr).arg(endStr).arg(durationStr);
+
+    statusBar()->showMessage(m_myStatusMessage);
+}
 
 void
 MainWindow::outputLevelsChanged(float left, float right)
@@ -4310,20 +4427,30 @@ MainWindow::mouseEnteredWidget()
     if (!w) return;
 
     if (w == m_fader) {
-        statusBar()->showMessage(tr("Adjust the master playback level"));
+        contextHelpChanged(tr("Adjust the master playback level"));
     } else if (w == m_playSpeed) {
-        statusBar()->showMessage(tr("Adjust the master playback speed"));
+        contextHelpChanged(tr("Adjust the master playback speed"));
     } else if (w == m_playSharpen && w->isEnabled()) {
-        statusBar()->showMessage(tr("Toggle transient sharpening for playback time scaling"));
+        contextHelpChanged(tr("Toggle transient sharpening for playback time scaling"));
     } else if (w == m_playMono && w->isEnabled()) {
-        statusBar()->showMessage(tr("Toggle mono mode for playback time scaling"));
+        contextHelpChanged(tr("Toggle mono mode for playback time scaling"));
     }
 }
 
 void
 MainWindow::mouseLeftWidget()
 {
-    statusBar()->showMessage("");
+    contextHelpChanged("");
+}
+
+void
+MainWindow::contextHelpChanged(const QString &s)
+{
+    if (s == "" && m_myStatusMessage != "") {
+        statusBar()->showMessage(m_myStatusMessage);
+        return;
+    }
+    statusBar()->showMessage(s);
 }
 
 void

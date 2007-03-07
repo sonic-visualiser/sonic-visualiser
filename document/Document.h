@@ -129,6 +129,11 @@ public:
      */
     WaveFileModel *getMainModel() { return m_mainModel; }
 
+    /**
+     * Get the main model (the source for playback sample rate, etc).
+     */
+    const WaveFileModel *getMainModel() const { return m_mainModel; }
+
     std::vector<Model *> getTransformInputModels();
 
     /**

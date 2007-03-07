@@ -643,7 +643,7 @@ Document::AddLayerCommand::AddLayerCommand(Document *d,
     m_d(d),
     m_view(view),
     m_layer(layer),
-    m_name(d->tr("Add %1 Layer").arg(layer->objectName())),
+    m_name(qApp->translate("Add %1 Layer").arg(layer->objectName())),
     m_added(false)
 {
 }
@@ -691,7 +691,7 @@ Document::RemoveLayerCommand::RemoveLayerCommand(Document *d,
     m_d(d),
     m_view(view),
     m_layer(layer),
-    m_name(d->tr("Delete %1 Layer").arg(layer->objectName())),
+    m_name(qApp->translate("Delete %1 Layer").arg(layer->objectName())),
     m_added(true)
 {
 }
