@@ -97,6 +97,11 @@ public:
     virtual size_t getCurrentPlayingFrame();
 
     /**
+     * Return the frame at which playback is expected to end (if not looping).
+     */
+    virtual size_t getPlayEndFrame() { return m_lastModelEndFrame; }
+
+    /**
      * Set the block size of the target audio device.  This should
      * be called by the target class.
      */
