@@ -147,6 +147,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_viewManager = new ViewManager();
     connect(m_viewManager, SIGNAL(selectionChanged()),
 	    this, SLOT(updateMenuStates()));
+    connect(m_viewManager, SIGNAL(inProgressSelectionChanged()),
+	    this, SLOT(inProgressSelectionChanged()));
 
     m_descriptionLabel = new QLabel;
 
@@ -1571,12 +1573,17 @@ MainWindow::setupToolbars()
 void
 MainWindow::updateMenuStates()
 {
+    Pane *currentPane = 0;
+    Layer *currentLayer = 0;
+
+    if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+    if (currentPane) currentLayer = currentPane->getSelectedLayer();
+
     bool haveCurrentPane =
-	(m_paneStack &&
-	 (m_paneStack->getCurrentPane() != 0));
+        (currentPane != 0);
     bool haveCurrentLayer =
-	(haveCurrentPane &&
-	 (m_paneStack->getCurrentPane()->getSelectedLayer()));
+        (haveCurrentPane &&
+         (currentLayer != 0));
     bool haveMainModel =
 	(getMainModel() != 0);
     bool havePlayTarget =
@@ -1586,20 +1593,16 @@ MainWindow::updateMenuStates()
 	 !m_viewManager->getSelections().empty());
     bool haveCurrentEditableLayer =
 	(haveCurrentLayer &&
-	 m_paneStack->getCurrentPane()->getSelectedLayer()->
-	 isLayerEditable());
+	 currentLayer->isLayerEditable());
     bool haveCurrentTimeInstantsLayer = 
 	(haveCurrentLayer &&
-	 dynamic_cast<TimeInstantLayer *>
-	 (m_paneStack->getCurrentPane()->getSelectedLayer()));
+	 dynamic_cast<TimeInstantLayer *>(currentLayer));
     bool haveCurrentTimeValueLayer = 
 	(haveCurrentLayer &&
-	 dynamic_cast<TimeValueLayer *>
-	 (m_paneStack->getCurrentPane()->getSelectedLayer()));
+	 dynamic_cast<TimeValueLayer *>(currentLayer));
     bool haveCurrentColour3DPlot =
         (haveCurrentLayer &&
-         dynamic_cast<Colour3DPlotLayer *>
-         (m_paneStack->getCurrentPane()->getSelectedLayer()));
+         dynamic_cast<Colour3DPlotLayer *>(currentLayer));
     bool haveClipboardContents =
         (m_viewManager &&
          !m_viewManager->getClipboard().empty());
@@ -3709,11 +3712,31 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
         return;
     }
 
+    bool haveSelection = false;
+    size_t startFrame = 0, endFrame = 0;
+
+    if (m_viewManager && m_viewManager->haveInProgressSelection()) {
+
+        bool exclusive = false;
+        Selection s = m_viewManager->getInProgressSelection(exclusive);
+
+        if (!s.isEmpty()) {
+            haveSelection = true;
+            startFrame = s.getStartFrame();
+            endFrame = s.getEndFrame();
+        }
+    }
+
+    if (!haveSelection) {
+        startFrame = p->getFirstVisibleFrame();
+        endFrame = p->getLastVisibleFrame();
+    }
+
     RealTime start = RealTime::frame2RealTime
-        (p->getFirstVisibleFrame(), getMainModel()->getSampleRate());
+        (startFrame, getMainModel()->getSampleRate());
 
     RealTime end = RealTime::frame2RealTime
-        (p->getLastVisibleFrame(), getMainModel()->getSampleRate());
+        (endFrame, getMainModel()->getSampleRate());
 
     RealTime duration = end - start;
 
@@ -3722,8 +3745,13 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
     endStr = end.toText(true).c_str();
     durationStr = duration.toText(true).c_str();
 
-    m_myStatusMessage = tr("Visible: %1 to %2 (duration %3)")
-        .arg(startStr).arg(endStr).arg(durationStr);
+    if (haveSelection) {
+        m_myStatusMessage = tr("Selection: %1 to %2 (duration %3)")
+            .arg(startStr).arg(endStr).arg(durationStr);
+    } else {
+        m_myStatusMessage = tr("Visible: %1 to %2 (duration %3)")
+            .arg(startStr).arg(endStr).arg(durationStr);
+    }
 
     statusBar()->showMessage(m_myStatusMessage);
 }
@@ -4441,6 +4469,14 @@ void
 MainWindow::mouseLeftWidget()
 {
     contextHelpChanged("");
+}
+
+void
+MainWindow::inProgressSelectionChanged()
+{
+    Pane *currentPane = 0;
+    if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+    if (currentPane) updateVisibleRangeDisplay(currentPane);
 }
 
 void
