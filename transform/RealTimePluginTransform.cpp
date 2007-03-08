@@ -151,7 +151,7 @@ RealTimePluginTransform::run()
 
     int i = 0;
 
-    while (blockFrame < endFrame) {
+    while (blockFrame < endFrame && !m_abandoned) {
 
 	size_t completion =
 	    (((blockFrame - startFrame) / blockSize) * 99) /
@@ -245,6 +245,8 @@ RealTimePluginTransform::run()
         
 	blockFrame += blockSize;
     }
+
+    if (m_abandoned) return;
     
     if (stvm) stvm->setCompletion(100);
     if (wwfm) wwfm->setCompletion(100);

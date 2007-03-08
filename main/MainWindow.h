@@ -110,6 +110,9 @@ signals:
     void canPlaySelection(bool);
     void canSave(bool);
 
+public slots:
+    void preferenceChanged(PropertyContainer::PropertyName);
+
 protected slots:
     void openSession();
     void importAudio();
@@ -213,8 +216,6 @@ protected slots:
     void rightButtonMenuRequested(Pane *, QPoint point);
 
     void propertyStacksResized();
-
-    void preferenceChanged(PropertyContainer::PropertyName);
 
     void setupRecentFilesMenu();
     void setupRecentTransformsMenu();

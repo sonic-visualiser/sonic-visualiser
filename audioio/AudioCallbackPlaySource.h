@@ -175,7 +175,7 @@ public:
      * safely be called from a realtime thread.  Returns 0 if there is
      * no source yet available.
      */
-    size_t getSourceSampleRate() const;
+    virtual size_t getSourceSampleRate() const;
 
     /**
      * Get "count" samples (at the target sample rate) of the mixed

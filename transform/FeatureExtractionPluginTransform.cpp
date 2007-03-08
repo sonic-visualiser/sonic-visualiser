@@ -279,7 +279,7 @@ FeatureExtractionPluginTransform::run()
 
     long prevCompletion = 0;
 
-    while (1) {
+    while (!m_abandoned) {
 
         if (frequencyDomain) {
             if (blockFrame - int(m_context.blockSize)/2 > endFrame) break;
@@ -325,6 +325,8 @@ FeatureExtractionPluginTransform::run()
 
 	blockFrame += m_context.stepSize;
     }
+
+    if (m_abandoned) return;
 
     Vamp::Plugin::FeatureSet features = m_plugin->getRemainingFeatures();
 

@@ -20,6 +20,7 @@
 #include "PluginTransform.h"
 
 #include <map>
+#include <set>
 
 namespace Vamp { class PluginBase; }
 
@@ -142,21 +143,16 @@ public:
      */
     bool getTransformChannelRange(TransformId identifier,
                                   int &minChannels, int &maxChannels);
-
-    //!!! Need some way to indicate that the input model has changed /
-    //been deleted so as not to blow up backgrounded transform!  -- Or
-    //indeed, if the output model has been deleted -- could equally
-    //well happen!
-
-    //!!! Need transform category!
 	
 protected slots:
     void transformFinished();
 
+    void modelAboutToBeDeleted(Model *);
+
 protected:
     Transform *createTransform(TransformId identifier, Model *inputModel,
                                const PluginTransform::ExecutionContext &context,
-                               QString configurationXml, bool start);
+                               QString configurationXml);
 
     struct TransformIdent
     {
@@ -169,6 +165,9 @@ protected:
 
     typedef std::map<TransformId, TransformDesc> TransformDescriptionMap;
     TransformDescriptionMap m_transforms;
+
+    typedef std::set<Transform *> TransformSet;
+    TransformSet m_runningTransforms;
 
     void populateTransforms();
     void populateFeatureExtractionPlugins(TransformDescriptionMap &);

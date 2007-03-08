@@ -40,6 +40,11 @@ class Transform : public Thread
 public:
     virtual ~Transform();
 
+    // Just a hint to the processing thread that it should give up.
+    // Caller should still wait() and/or delete the transform before
+    // assuming its input and output models are no longer required.
+    void abandon() { m_abandoned = true; }
+
     Model *getInputModel()  { return m_input; }
     Model *getOutputModel() { return m_output; }
     Model *detachOutputModel() { m_detached = true; return m_output; }
@@ -50,7 +55,7 @@ protected:
     Model *m_input; // I don't own this
     Model *m_output; // I own this, unless...
     bool m_detached; // ... this is true.
-    bool m_deleting;
+    bool m_abandoned;
 };
 
 #endif

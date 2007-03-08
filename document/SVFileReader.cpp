@@ -673,7 +673,6 @@ SVFileReader::readView(const QXmlAttributes &attributes)
     READ_MANDATORY(size_t, zoom, toUInt);
     READ_MANDATORY(int, followPan, toInt);
     READ_MANDATORY(int, followZoom, toInt);
-    READ_MANDATORY(int, light, toInt);
     QString tracking = attributes.value("tracking");
 
     // Specify the follow modes before we set the actual values
@@ -686,7 +685,6 @@ SVFileReader::readView(const QXmlAttributes &attributes)
     // Then set these values
     view->setCentreFrame(centre);
     view->setZoomLevel(zoom);
-    view->setLightBackground(light);
 
     // And pane properties
     READ_MANDATORY(int, centreLineVisible, toInt);
