@@ -34,6 +34,9 @@
 Document::Document() :
     m_mainModel(0)
 {
+    connect(this, SIGNAL(modelAboutToBeDeleted(Model *)),
+            TransformFactory::getInstance(),
+            SLOT(modelAboutToBeDeleted(Model *)));
 }
 
 Document::~Document()

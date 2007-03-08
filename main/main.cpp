@@ -145,6 +145,11 @@ main(int argc, char **argv)
     
     gui.show();
 
+    // The MainWindow class seems to have trouble dealing with this if
+    // it tries to adapt to this preference before the constructor is
+    // complete.  As a lazy hack, apply it explicitly from here
+    gui.preferenceChanged("Property Box Layout");
+
     bool haveSession = false;
     bool haveMainModel = false;
 

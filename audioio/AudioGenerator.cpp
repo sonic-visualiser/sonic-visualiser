@@ -368,7 +368,12 @@ AudioGenerator::mixModel(Model *model, size_t startFrame, size_t frameCount,
     if (!parameters) return frameCount;
 
     bool playing = !parameters->isPlayMuted();
-    if (!playing) return frameCount;
+    if (!playing) {
+#ifdef DEBUG_AUDIO_GENERATOR
+        std::cout << "AudioGenerator::mixModel(" << model << "): muted" << std::endl;
+#endif
+        return frameCount;
+    }
 
     float gain = parameters->getPlayGain();
     float pan = parameters->getPlayPan();

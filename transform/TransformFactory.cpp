@@ -717,7 +717,7 @@ TransformFactory::getDefaultContextForTransform(TransformId identifier,
 Transform *
 TransformFactory::createTransform(TransformId identifier, Model *inputModel,
                                   const PluginTransform::ExecutionContext &context,
-                                  QString configurationXml, bool start)
+                                  QString configurationXml)
 {
     Transform *transform = 0;
 
@@ -744,8 +744,7 @@ TransformFactory::createTransform(TransformId identifier, Model *inputModel,
         return transform;
     }
 
-    if (start && transform) transform->start();
-    transform->setObjectName(identifier);
+    if (transform) transform->setObjectName(identifier);
     return transform;
 }
 
@@ -755,11 +754,13 @@ TransformFactory::transform(TransformId identifier, Model *inputModel,
                             QString configurationXml)
 {
     Transform *t = createTransform(identifier, inputModel, context,
-                                   configurationXml, false);
+                                   configurationXml);
 
     if (!t) return 0;
 
     connect(t, SIGNAL(finished()), this, SLOT(transformFinished()));
+
+    m_runningTransforms.insert(t);
 
     t->start();
     Model *model = t->detachOutputModel();
@@ -787,12 +788,51 @@ TransformFactory::transformFinished()
     QObject *s = sender();
     Transform *transform = dynamic_cast<Transform *>(s);
     
+    std::cerr << "TransformFactory::transformFinished(" << transform << ")" << std::endl;
+
     if (!transform) {
 	std::cerr << "WARNING: TransformFactory::transformFinished: sender is not a transform" << std::endl;
 	return;
     }
 
+    if (m_runningTransforms.find(transform) == m_runningTransforms.end()) {
+        std::cerr << "WARNING: TransformFactory::transformFinished(" 
+                  << transform
+                  << "): I have no record of this transform running!"
+                  << std::endl;
+    }
+
+    m_runningTransforms.erase(transform);
+
     transform->wait(); // unnecessary but reassuring
     delete transform;
+}
+
+void
+TransformFactory::modelAboutToBeDeleted(Model *m)
+{
+    TransformSet affected;
+
+    for (TransformSet::iterator i = m_runningTransforms.begin();
+         i != m_runningTransforms.end(); ++i) {
+
+        Transform *t = *i;
+
+        if (t->getInputModel() == m || t->getOutputModel() == m) {
+            affected.insert(t);
+        }
+    }
+
+    for (TransformSet::iterator i = affected.begin();
+         i != affected.end(); ++i) {
+
+        Transform *t = *i;
+
+        t->abandon();
+
+        t->wait(); // this should eventually call back on
+                   // transformFinished, which will remove from
+                   // m_runningTransforms and delete.
+    }
 }
 

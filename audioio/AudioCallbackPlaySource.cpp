@@ -126,7 +126,9 @@ AudioCallbackPlaySource::addModel(Model *model)
 	m_sourceChannelCount = modelChannels;
     }
 
-//    std::cout << "Adding model with " << modelChannels << " channels " << std::endl;
+#ifdef DEBUG_AUDIO_PLAY_SOURCE
+    std::cout << "Adding model with " << modelChannels << " channels " << std::endl;
+#endif
 
     if (m_sourceSampleRate == 0) {
 
@@ -144,7 +146,10 @@ AudioCallbackPlaySource::addModel(Model *model)
 
             for (std::set<Model *>::const_iterator i = m_models.begin();
                  i != m_models.end(); ++i) {
-                if (*i != dtvm && dynamic_cast<DenseTimeValueModel *>(*i)) {
+                DenseTimeValueModel *dtvm2 =
+                    dynamic_cast<DenseTimeValueModel *>(*i);
+                if (dtvm2 && dtvm2 != dtvm &&
+                    dtvm2->getSampleRate() != model->getSampleRate()) {
                     std::cerr << "AudioCallbackPlaySource::addModel: Conflicting dense time-value model " << *i << " found" << std::endl;
                     conflicting = true;
                     break;
@@ -195,7 +200,7 @@ AudioCallbackPlaySource::addModel(Model *model)
     }
 
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
-    std::cout << "AudioCallbackPlaySource::addModel: emitting modelReplaced" << std::endl;
+    std::cout << "AudioCallbackPlaySource::addModel: now have " << m_models.size() << " model(s) -- emitting modelReplaced" << std::endl;
 #endif
 
     if (buffersChanged || srChanged) {
@@ -209,6 +214,10 @@ void
 AudioCallbackPlaySource::removeModel(Model *model)
 {
     m_mutex.lock();
+
+#ifdef DEBUG_AUDIO_PLAY_SOURCE
+    std::cout << "AudioCallbackPlaySource::removeModel(" << model << ")" << std::endl;
+#endif
 
     m_models.erase(model);
 
@@ -242,6 +251,10 @@ void
 AudioCallbackPlaySource::clearModels()
 {
     m_mutex.lock();
+
+#ifdef DEBUG_AUDIO_PLAY_SOURCE
+    std::cout << "AudioCallbackPlaySource::clearModels()" << std::endl;
+#endif
 
     m_models.clear();
 

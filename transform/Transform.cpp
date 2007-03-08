@@ -19,13 +19,13 @@ Transform::Transform(Model *m) :
     m_input(m),
     m_output(0),
     m_detached(false),
-    m_deleting(false)
+    m_abandoned(false)
 {
 }
 
 Transform::~Transform()
 {
-    m_deleting = true;
+    m_abandoned = true;
     wait();
     if (!m_detached) delete m_output;
 }

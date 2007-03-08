@@ -286,6 +286,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
 MainWindow::~MainWindow()
 {
+    std::cerr << "MainWindow::~MainWindow()" << std::endl;
+
     if (!m_abandoning) {
         closeSession();
     }
@@ -2334,13 +2336,12 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
     if (setAsMain) {
 
         Model *prevMain = getMainModel();
-        if (prevMain) m_playSource->removeModel(prevMain);
+        if (prevMain) {
+            m_playSource->removeModel(prevMain);
+            PlayParameterRepository::getInstance()->removeModel(prevMain);
+        }
 
-	PlayParameterRepository::getInstance()->clear();
-
-	// The clear() call will have removed the parameters for the
-	// main model.  Re-add them with the new one.
-	PlayParameterRepository::getInstance()->addModel(newModel);
+        PlayParameterRepository::getInstance()->addModel(newModel);
 
 	m_document->setMainModel(newModel);
 	setupMenus();
@@ -2787,7 +2788,10 @@ MainWindow::openSessionFile(QString path, QString location)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
+    std::cerr << "MainWindow::closeEvent" << std::endl;
+
     if (!m_abandoning && !checkSaveModified()) {
+        std::cerr << "Ignoring close event" << std::endl;
 	e->ignore();
 	return;
     }
@@ -3771,18 +3775,9 @@ MainWindow::sampleRateMismatch(size_t requested, size_t actual,
         //!!! more helpful message needed
         QMessageBox::information
             (this, tr("Sample rate mismatch"),
-             tr("The sample rate of this audio file (%1 Hz) does not match\nthe current playback rate (%2 Hz).\n\nThe file will play at the wrong speed.")
+             tr("The sample rate of this audio file (%1 Hz) does not match\nthe current playback rate (%2 Hz).\n\nThe file will play at the wrong speed and pitch.")
              .arg(requested).arg(actual));
     }        
-
-/*!!! Let's not do this for now, and see how we go -- now that we're putting
-      sample rate information in the status bar
-
-    QMessageBox::information
-	(this, tr("Sample rate mismatch"),
-	 tr("The sample rate of this audio file (%1 Hz) does not match\nthat of the output audio device (%2 Hz).\n\nThe file will be resampled automatically during playback.")
-	 .arg(requested).arg(actual));
-*/
 
     updateDescriptionLabel();
 }
