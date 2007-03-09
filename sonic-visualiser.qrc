@@ -69,5 +69,6 @@
     <file>samples/strike.wav</file>
     <file>samples/tap.wav</file>
     <file>i18n/sonic-visualiser_ru.qm</file>
+    <file>i18n/tips_en.xml</file>
 </qresource>
 </RCC>
