@@ -1,0 +1,87 @@
+<tips caption="Tip of the Day">
+<tip>
+<html>
+
+<p><b>Welcome to Sonic Visualiser!</b></p>
+
+<p>Sonic Visualiser is pretty complex, but you can use it for simple
+things very easily.  Try importing an audio file and using the Pane
+menu to add some different views of it.</p>
+
+<p>Check out the links on the Help menu for tutorials and other
+documentation!</p>
+
+</html>
+</tip>
+<tip>
+<html>
+
+<p>Sonic Visualiser's window is organised into <i>panes</i> and
+<i>layers</i>.  To begin with, you have one pane.  Import an audio
+file to see it displayed in a <i>waveform layer</i> on that pane.</p>
+
+</html>
+</tip>
+<tip>
+<html>
+
+<p>Each pane can contain any number of layers, which appear stacked
+from "front" to "back" on the same timeline.  A layer can contain a
+view of audio, or of points (time instants) or data plots (time-values).</p>
+
+</html>
+</tip>
+<tip>
+<html>
+
+<p>There's a <i>layer property box</i> shown to the right of each
+layer, with one tab for each of the layers on that pane.  Click on a
+layer's tab to bring that layer to the front.  You can then adjust its
+colour and other display properties in the property box.</p>
+
+<p>The first tab is always for the pane itself, which has a few
+adjustable properties of its own.</p>
+
+</html>
+</tip>
+<tip>
+<html>
+
+<p>If you have more than one pane, only one of them will be "current",
+marked with a black bar at the left side.  Just click on another pane
+to make it current.  Most editing operations affect the layer that's
+at the front of the current pane.</p>
+
+</html>
+</tip>
+<tip>
+<html>
+
+<p>You can use different zoom levels for different panes by un-checking
+the Global Zoom control for one of them.  By default, all panes will
+zoom and scroll together.</p>
+
+</html>
+</tip>
+<tip>
+<html>
+
+<p>You can speed up and slow down playback using the Playback Speedup
+control in the bottom-right of the window.</p>
+
+</html>
+</tip>
+<tip>
+<html>
+
+<p>The Transforms menu lists things you can do to extract features from
+or process your audio.  The available outputs of any Vamp
+feature-extraction plugins or LADSPA audio effects plugins you have
+will show up here.</p>
+
+</html>
+</tip>
+
+</tips>
+
+
