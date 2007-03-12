@@ -311,6 +311,8 @@ MainWindow::getOpenFileName(FileFinder::FileType type)
         return ff->getOpenFileName(type, m_sessionFile);
     case FileFinder::SessionOrAudioFile:
         return ff->getOpenFileName(type, m_sessionFile);
+    case FileFinder::ImageFile:
+        return ff->getOpenFileName(type, m_sessionFile);
     case FileFinder::AnyFile:
         if (getMainModel() != 0 &&
             m_paneStack != 0 &&
@@ -336,6 +338,8 @@ MainWindow::getSaveFileName(FileFinder::FileType type)
     case FileFinder::LayerFile:
         return ff->getSaveFileName(type, m_sessionFile);
     case FileFinder::SessionOrAudioFile:
+        return ff->getSaveFileName(type, m_sessionFile);
+    case FileFinder::ImageFile:
         return ff->getSaveFileName(type, m_sessionFile);
     case FileFinder::AnyFile:
         return ff->getSaveFileName(type, m_sessionFile);
@@ -480,6 +484,14 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Export layer data to a file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportLayer()));
     connect(this, SIGNAL(canExportLayer(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Export Image File..."), this);
+    action->setStatusTip(tr("Export a single pane to an image file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportImage()));
+    connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
     menu->addSeparator();
@@ -1619,6 +1631,7 @@ MainWindow::updateMenuStates()
     emit canExportAudio(haveMainModel);
     emit canExportLayer(haveMainModel &&
                         (haveCurrentEditableLayer || haveCurrentColour3DPlot));
+    emit canExportImage(haveMainModel && haveCurrentPane);
     emit canDeleteCurrentLayer(haveCurrentLayer);
     emit canRenameLayer(haveCurrentLayer);
     emit canEditLayer(haveCurrentEditableLayer);
@@ -2276,6 +2289,29 @@ MainWindow::exportLayer()
     } else {
         m_recentFiles.addFile(path);
     }
+}
+
+void
+MainWindow::exportImage()
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (!pane) return;
+    
+    QString path = getSaveFileName(FileFinder::ImageFile);
+
+    if (path == "") return;
+
+    if (QFileInfo(path).suffix() == "") path += ".png";
+
+    QImage *image = pane->toNewImage();
+    if (!image) return;
+
+    if (!image->save(path, "PNG")) {
+        QMessageBox::critical(this, tr("Failed to save image file"),
+                              tr("Failed to save image file %1").arg(path));
+    }
+    
+    delete image;
 }
 
 MainWindow::FileOpenStatus
