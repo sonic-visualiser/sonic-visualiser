@@ -93,6 +93,7 @@ signals:
     void canImportLayer(bool);
     void canExportAudio(bool);
     void canExportLayer(bool);
+    void canExportImage(bool);
     void canRenameLayer(bool);
     void canEditLayer(bool);
     void canSelect(bool);
@@ -123,6 +124,7 @@ protected slots:
     void exportAudio();
     void importLayer();
     void exportLayer();
+    void exportImage();
     void saveSession();
     void saveSessionAs();
     void newSession();
