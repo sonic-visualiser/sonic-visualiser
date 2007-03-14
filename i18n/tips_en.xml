@@ -1,13 +1,16 @@
+
+<!-- Note: this tip file is not actually used, the tip of the day
+dialog has been disabled for the moment because I wasn't liking it
+enough to take the trouble to finish the tips text... -->
+
 <tips caption="Tip of the Day">
 <tip>
 <html>
-<p><b>Welcome to Sonic Visualiser!</b></p>
-<p>Sonic Visualiser is pretty complex, but you can use it for simple
-things very easily.</p>
-<p>Try importing an audio file and using the Pane
-menu to add some different views of it.</p>
-<p>Check out the links on the Help menu for tutorials and other
-documentation!</p>
+<p><b>Welcome to Sonic Visualiser!</b></p> <p>Sonic Visualiser is a
+complex application, but it's easy enough to get started with.</p>
+<p>Try importing an audio file and using the Pane menu to add some
+different views of it.</p> <p>Check out the links on the Help menu for
+tutorials and other documentation!</p>
 </html>
 </tip>
 <tip>
