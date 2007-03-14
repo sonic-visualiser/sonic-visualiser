@@ -2303,7 +2303,60 @@ MainWindow::exportImage()
 
     if (QFileInfo(path).suffix() == "") path += ".png";
 
-    QImage *image = pane->toNewImage();
+    bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
+
+    QSize total, visible, selected;
+    total = pane->getImageSize();
+    visible = pane->getImageSize(pane->getFirstVisibleFrame(),
+                                 pane->getLastVisibleFrame());
+
+    size_t sf0 = 0, sf1 = 0;
+ 
+    if (haveSelection) {
+        MultiSelection::SelectionList selections = m_viewManager->getSelections();
+        sf0 = selections.begin()->getStartFrame();
+        MultiSelection::SelectionList::iterator e = selections.end();
+        --e;
+        sf1 = e->getEndFrame();
+        selected = pane->getImageSize(sf0, sf1);
+    }
+
+    QStringList items;
+    items << tr("Export the entire pane (%1x%2 pixels")
+        .arg(total.width()).arg(total.height());
+    items << tr("Export the visible area only (%1x%2 pixels)")
+        .arg(visible.width()).arg(visible.height());
+    if (haveSelection) {
+        items << tr("Export the selection extent (%1x%2 pixels)")
+            .arg(selected.width()).arg(selected.height());
+    }
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int deflt = settings.value("lastimageexportregion", 0).toInt();
+    if (deflt == 2 && !haveSelection) deflt = 1;
+
+    bool ok = false;
+    QString item = ListInputDialog::getItem
+        (this, tr("Select region to export"),
+         tr("Which region of the current pane do you want to export as an image?"),
+         items, deflt, &ok);
+	    
+    if (!ok || item.isEmpty()) return;
+
+    settings.setValue("lastimageexportregion", deflt);
+
+    QImage *image = 0;
+
+    if (item == items[0]) {
+        image = pane->toNewImage();
+    } else if (item == items[1]) {
+        image = pane->toNewImage(pane->getFirstVisibleFrame(),
+                                 pane->getLastVisibleFrame());
+    } else if (haveSelection) {
+        image = pane->toNewImage(sf0, sf1);
+    }
+
     if (!image) return;
 
     if (!image->save(path, "PNG")) {

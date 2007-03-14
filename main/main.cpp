@@ -194,12 +194,12 @@ main(int argc, char **argv)
                  QMessageBox::tr("File \"%1\" could not be opened").arg(path));
         }
     }            
-
+/*
     TipDialog tipDialog;
     if (tipDialog.isOK()) {
         tipDialog.exec();
     }
-
+*/
     int rv = application.exec();
     std::cerr << "application.exec() returned " << rv << std::endl;
 
