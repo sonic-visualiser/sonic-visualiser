@@ -2322,25 +2322,39 @@ MainWindow::exportImage()
     }
 
     QStringList items;
-    items << tr("Export the entire pane (%1x%2 pixels")
+    items << tr("Export the whole pane (%1x%2 pixels")
         .arg(total.width()).arg(total.height());
     items << tr("Export the visible area only (%1x%2 pixels)")
         .arg(visible.width()).arg(visible.height());
     if (haveSelection) {
         items << tr("Export the selection extent (%1x%2 pixels)")
             .arg(selected.width()).arg(selected.height());
+    } else {
+        items << tr("Export the selection extent");
     }
 
     QSettings settings;
     settings.beginGroup("MainWindow");
     int deflt = settings.value("lastimageexportregion", 0).toInt();
     if (deflt == 2 && !haveSelection) deflt = 1;
+    if (deflt == 0 && total.width() > 32767) deflt = 1;
 
-    bool ok = false;
-    QString item = ListInputDialog::getItem
+    ListInputDialog *lid = new ListInputDialog
         (this, tr("Select region to export"),
          tr("Which region of the current pane do you want to export as an image?"),
-         items, deflt, &ok);
+         items, deflt);
+
+    if (!haveSelection) {
+        lid->setItemAvailability(2, false);
+    }
+    if (total.width() > 32767) { // appears to be the limit of a QImage
+        lid->setItemAvailability(0, false);
+        lid->setFootnote(tr("Note: the whole pane is too wide to be exported as a single image."));
+    }
+
+    bool ok = lid->exec();
+    QString item = lid->getCurrentString();
+    delete lid;
 	    
     if (!ok || item.isEmpty()) return;
 
