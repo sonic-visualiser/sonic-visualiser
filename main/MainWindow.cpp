@@ -2322,7 +2322,7 @@ MainWindow::exportImage()
     }
 
     QStringList items;
-    items << tr("Export the whole pane (%1x%2 pixels")
+    items << tr("Export the whole pane (%1x%2 pixels)")
         .arg(total.width()).arg(total.height());
     items << tr("Export the visible area only (%1x%2 pixels)")
         .arg(visible.width()).arg(visible.height());
