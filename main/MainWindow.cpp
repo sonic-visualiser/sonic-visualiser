@@ -4596,7 +4596,7 @@ MainWindow::website()
 void
 MainWindow::help()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/en/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.0/en/"));
 }
 
 void
