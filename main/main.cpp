@@ -35,6 +35,124 @@
 #include <iostream>
 #include <signal.h>
 
+/*! \mainpage Sonic Visualiser
+
+\section interesting Summary of interesting classes
+
+ - Data models: Model and subclasses, e.g. WaveFileModel
+
+ - Graphical layers: Layer and subclasses, displayed on View and its
+ subclass widgets.
+
+ - Main window class, document class, and file parser: MainWindow,
+ Document, SVFileReader
+
+ - Turning one model (e.g. audio) into another (e.g. more audio, or a
+ curve extracted from it): Transform and subclasses
+
+ - Creating the plugins used by transforms: RealTimePluginFactory,
+ FeatureExtractionPluginFactory
+
+ - File reading and writing code: AudioFileReader and subclasses,
+ WavFileWriter, DataFileReader, SVFileReader
+
+ - FFT calculation and cacheing: FFTModel, FFTDataServer
+
+ - Widgets that show groups of editable properties: PropertyBox for
+ layer properties (contained in a PropertyStack), PluginParameterBox
+ for plugins (contained in a PluginParameterDialog)
+
+ - Audio playback: AudioCallbackPlaySource and subclasses,
+ AudioCallbackPlayTarget and subclasses, AudioGenerator
+
+\section model Data sources: the Model hierarchy
+
+   A Model is something containing, or knowing how to obtain, data.
+
+   For example, WaveFileModel is a model that knows how to get data
+   from an audio file; SparseTimeValueModel is a model containing
+   editable "curve" data.
+
+   Models typically subclass one of a number of abstract subclasses of
+   Model.  For example, WaveFileModel subclasses DenseTimeValueModel,
+   which describes an interface for models that have a value at each
+   time point for a given sampling resolution.  (Note that
+   WaveFileModel does not actually read the files itself: it uses
+   AudioFileReader classes for that.  It just makes data from the
+   files available in a Model.)  SparseTimeValueModel uses the
+   SparseModel template class, which provides most of the
+   implementation for models that contain a series of points of some
+   sort -- also used by NoteModel, TextModel, and
+   SparseOneDimensionalModel.
+
+   Everything that goes on the screen originates from a model, via a
+   layer (see below).  The models are contained in a Document object.
+   There is no containment hierarchy or ordering of models in the
+   document.  One model is the main model, which defines the sample
+   rate for playback.
+
+   A model may also be marked as a "derived" model, which means it was
+   generated from another model using some transform (feature
+   extraction or effect plugin, etc) -- the idea being that they can
+   be re-generated using the same transform if a new source model is
+   loaded.
+
+\section layer Things that can display data: the Layer hierarchy
+
+   A Layer is something that knows how to draw parts of a model onto a
+   timeline.
+
+   For example, WaveformLayer is a layer which draws waveforms, based
+   on WaveFileModel; TimeValueLayer draws curves, based on
+   SparseTimeValueModel; SpectrogramLayer draws spectrograms, based on
+   WaveFileModel (via FFTModel).
+
+   The most basic functions of a layer are: to draw itself onto a
+   Pane, against a timeline on the x axis; and to permit user
+   interaction.  If you were thinking of adding the capability to
+   display a new sort of something, then you would want to add a new
+   layer type.  (You may also need a new model type, depending on
+   whether any existing model can capture the data you need.)
+   Depending on the sort of data in question, there are various
+   existing layers that might be appropriate to start from -- for
+   example, a layer that displays images that the user has imported
+   and associated with particular times might have something in common
+   with the existing TextLayer which displays pieces of text that are
+   associated with particular times.
+
+   Although layers are visual objects, they are contained in the
+   Document in Sonic Visualiser rather than being managed together
+   with display widgets.  The Sonic Visualiser file format has
+   separate data and layout sections, and the layers are defined in
+   the data section and then referred to in the layout section which
+   determines which layers may go on which panes (see Pane below).
+
+   Once a layer class is defined, some basic data about it needs to be
+   set up in the LayerFactory class, and then it will appear in the
+   menus and so on on the main window.
+
+\section view Widgets that are used to show layers: The View hierarchy
+
+   A View is a widget that displays a stack of layers.  The most
+   important subclass is Pane, the widget that is used to show most of
+   the data in the main window of Sonic Visualiser.
+
+   All a pane really does is contain a set of layers and get them to
+   render themselves (one on top of the other, with the topmost layer
+   being the one that is currently interacted with), cache the
+   results, negotiate user interaction with them, and so on.  This is
+   generally fiddly, if not especially interesting.  Panes are
+   strictly layout objects and are not stored in the Document class;
+   instead the MainWindow contains a PaneStack widget (the widget that
+   takes up most of Sonic Visualiser's main window) which contains a
+   set of panes stacked vertically.
+
+   Another View subclass is Overview, which is the widget that
+   contains that green waveform showing the entire file at the bottom
+   of the window.
+
+*/
+
 static QMutex cleanupMutex;
 
 static void

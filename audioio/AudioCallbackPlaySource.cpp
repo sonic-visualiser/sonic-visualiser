@@ -195,7 +195,7 @@ AudioCallbackPlaySource::addModel(Model *model)
     m_audioGenerator->setTargetChannelCount(getTargetChannelCount());
 
     if (!m_fillThread) {
-	m_fillThread = new AudioCallbackPlaySourceFillThread(*this);
+	m_fillThread = new FillThread(*this);
 	m_fillThread->start();
     }
 
@@ -1382,7 +1382,7 @@ AudioCallbackPlaySource::unifyRingBuffers()
 }
 
 void
-AudioCallbackPlaySource::AudioCallbackPlaySourceFillThread::run()
+AudioCallbackPlaySource::FillThread::run()
 {
     AudioCallbackPlaySource &s(m_source);
     

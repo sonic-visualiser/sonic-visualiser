@@ -305,10 +305,10 @@ protected:
     // Called from getSourceSamples.
     void applyAuditioningEffect(size_t count, float **buffers);
 
-    class AudioCallbackPlaySourceFillThread : public Thread
+    class FillThread : public Thread
     {
     public:
-	AudioCallbackPlaySourceFillThread(AudioCallbackPlaySource &source) :
+	FillThread(AudioCallbackPlaySource &source) :
             Thread(Thread::NonRTThread),
 	    m_source(source) { }
 
@@ -320,7 +320,7 @@ protected:
 
     QMutex m_mutex;
     QWaitCondition m_condition;
-    AudioCallbackPlaySourceFillThread *m_fillThread;
+    FillThread *m_fillThread;
     SRC_STATE *m_converter;
     SRC_STATE *m_crapConverter; // for use when playing very fast
     int m_resampleQuality;
