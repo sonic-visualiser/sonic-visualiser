@@ -4711,7 +4711,7 @@ MainWindow::about()
     aboutText += tr("<br>With libsndfile &copy; Erik de Castro Lopo");
 #endif
 #endif
-#ifdef HAVE_FFTW3
+#ifdef HAVE_FFTW3F
 #ifdef FFTW3_VERSION
     aboutText += tr("<br>With FFTW3 (v%1) &copy; Matteo Frigo and MIT").arg(FFTW3_VERSION);
 #else
