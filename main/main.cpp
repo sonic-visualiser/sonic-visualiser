@@ -51,7 +51,9 @@
  curve extracted from it): Transform and subclasses
 
  - Creating the plugins used by transforms: RealTimePluginFactory,
- FeatureExtractionPluginFactory
+ FeatureExtractionPluginFactory.  See also the API documentation for
+ Vamp feature extraction plugins at
+ http://www.vamp-plugins.org/code-doc/.
 
  - File reading and writing code: AudioFileReader and subclasses,
  WavFileWriter, DataFileReader, SVFileReader
