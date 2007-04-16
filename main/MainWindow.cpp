@@ -3420,9 +3420,9 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     m_paneStack->setCurrentPane(pane);
     m_paneStack->setCurrentLayer(pane, newLayer);
 
-    std::cerr << "MainWindow::addPane: global centre frame is "
-              << m_viewManager->getGlobalCentreFrame() << std::endl;
-    pane->setCentreFrame(m_viewManager->getGlobalCentreFrame());
+//    std::cerr << "MainWindow::addPane: global centre frame is "
+//              << m_viewManager->getGlobalCentreFrame() << std::endl;
+//    pane->setCentreFrame(m_viewManager->getGlobalCentreFrame());
 
     CommandHistory::getInstance()->endCompoundOperation();
 
