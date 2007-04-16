@@ -167,6 +167,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
     m_overview->setFixedHeight(40);
+    m_overview->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     connect(m_overview, SIGNAL(contextHelpChanged(const QString &)),
             this, SLOT(contextHelpChanged(const QString &)));
 
@@ -236,12 +237,17 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playMono->setChecked(settings.value("playmono", false).toBool());
     settings.endGroup();
 
+    layout->setSpacing(4);
     layout->addWidget(m_paneStack, 0, 0, 1, 5);
     layout->addWidget(m_overview, 1, 0);
     layout->addWidget(m_fader, 1, 1);
     layout->addWidget(m_playSpeed, 1, 2);
     layout->addWidget(m_playSharpen, 1, 3);
     layout->addWidget(m_playMono, 1, 4);
+
+    m_paneStack->setPropertyStackMinWidth
+        (m_fader->width() + m_playSpeed->width() + m_playSharpen->width() +
+         m_playMono->width() + layout->spacing() * 4);
 
     layout->setColumnStretch(0, 10);
 
