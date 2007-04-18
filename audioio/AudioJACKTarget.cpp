@@ -199,7 +199,7 @@ AudioJACKTarget::AudioJACKTarget(AudioCallbackPlaySource *source) :
     m_bufferSize(0),
     m_sampleRate(0)
 {
-    char name[20];
+    char name[100];
     strcpy(name, "Sonic Visualiser");
     m_client = jack_client_new(name);
 
