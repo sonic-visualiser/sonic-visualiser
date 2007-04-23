@@ -4674,6 +4674,14 @@ MainWindow::about()
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
+#ifndef BUILD_STATIC
+    aboutText += tr("<br>Using Qt v%1 &copy; Trolltech AS").arg(QT_VERSION_STR);
+#else
+#ifdef QT_SHARED
+    aboutText += tr("<br>Using Qt v%1 &copy; Trolltech AS").arg(QT_VERSION_STR);
+#endif
+#endif
+
 #ifdef BUILD_STATIC
     aboutText += tr("<p>Statically linked");
 #ifndef QT_SHARED
