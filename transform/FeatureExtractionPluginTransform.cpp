@@ -123,6 +123,7 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 
     int binCount = 1;
     float minValue = 0.0, maxValue = 0.0;
+    bool haveExtents = false;
     
     if (m_descriptor->hasFixedBinCount) {
 	binCount = m_descriptor->binCount;
@@ -134,6 +135,7 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
     if (binCount > 0 && m_descriptor->hasKnownExtents) {
 	minValue = m_descriptor->minValue;
 	maxValue = m_descriptor->maxValue;
+        haveExtents = true;
     }
 
     size_t modelRate = m_input->getSampleRate();
@@ -163,8 +165,14 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 
     } else if (binCount == 1) {
 
-        SparseTimeValueModel *model = new SparseTimeValueModel
-            (modelRate, modelResolution, minValue, maxValue, false);
+        SparseTimeValueModel *model;
+        if (haveExtents) {
+            model = new SparseTimeValueModel
+                (modelRate, modelResolution, minValue, maxValue, false);
+        } else {
+            model = new SparseTimeValueModel
+                (modelRate, modelResolution, false);
+        }
         model->setScaleUnits(outputs[m_outputFeatureNo].unit.c_str());
 
         m_output = model;
@@ -180,15 +188,22 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
         // yet store velocity.)
         //!!! todo: ask the user!
 	
-        NoteModel *model = new NoteModel
-            (modelRate, modelResolution, minValue, maxValue, false);
+        NoteModel *model;
+        if (haveExtents) {
+            model = new NoteModel
+                (modelRate, modelResolution, minValue, maxValue, false);
+        } else {
+            model = new NoteModel
+                (modelRate, modelResolution, false);
+        }            
         model->setScaleUnits(outputs[m_outputFeatureNo].unit.c_str());
 
         m_output = model;
 
     } else {
-	
-	m_output = new EditableDenseThreeDimensionalModel
+
+        EditableDenseThreeDimensionalModel *model =
+            new EditableDenseThreeDimensionalModel
             (modelRate, modelResolution, binCount, false);
 
 	if (!m_descriptor->binNames.empty()) {
@@ -196,9 +211,10 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 	    for (size_t i = 0; i < m_descriptor->binNames.size(); ++i) {
 		names.push_back(m_descriptor->binNames[i].c_str());
 	    }
-	    (dynamic_cast<EditableDenseThreeDimensionalModel *>(m_output))
-		->setBinNames(names);
+	    model->setBinNames(names);
 	}
+        
+        m_output = model;
     }
 }
 
