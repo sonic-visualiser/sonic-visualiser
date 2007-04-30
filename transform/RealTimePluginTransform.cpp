@@ -42,7 +42,7 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
 {
     if (!m_context.blockSize) m_context.blockSize = 1024;
 
-    std::cerr << "RealTimePluginTransform::RealTimePluginTransform: plugin " << pluginId.toStdString() << ", output " << output << std::endl;
+//    std::cerr << "RealTimePluginTransform::RealTimePluginTransform: plugin " << pluginId.toStdString() << ", output " << output << std::endl;
 
     RealTimePluginFactory *factory =
 	RealTimePluginFactory::instanceFor(pluginId);
