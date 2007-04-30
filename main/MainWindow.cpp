@@ -292,7 +292,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
 MainWindow::~MainWindow()
 {
-    std::cerr << "MainWindow::~MainWindow()" << std::endl;
+//    std::cerr << "MainWindow::~MainWindow()" << std::endl;
 
     if (!m_abandoning) {
         closeSession();
@@ -1418,7 +1418,7 @@ MainWindow::setupExistingLayersMenus()
 	    Layer *layer = pane->getLayer(j);
 	    if (!layer) continue;
 	    if (observedLayers.find(layer) != observedLayers.end()) {
-		std::cerr << "found duplicate layer " << layer << std::endl;
+//		std::cerr << "found duplicate layer " << layer << std::endl;
 		continue;
 	    }
 
@@ -1436,7 +1436,7 @@ MainWindow::setupExistingLayersMenus()
 
     map<QString, int> observedNames;
 
-    for (int i = 0; i < orderedLayers.size(); ++i) {
+    for (size_t i = 0; i < orderedLayers.size(); ++i) {
 	
         Layer *layer = orderedLayers[i];
 
@@ -2897,16 +2897,16 @@ MainWindow::openSessionFile(QString path, QString location)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-    std::cerr << "MainWindow::closeEvent" << std::endl;
+//    std::cerr << "MainWindow::closeEvent" << std::endl;
 
     if (m_openingAudioFile) {
-        std::cerr << "Busy - ignoring close event" << std::endl;
+//        std::cerr << "Busy - ignoring close event" << std::endl;
 	e->ignore();
 	return;
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-        std::cerr << "Ignoring close event" << std::endl;
+//        std::cerr << "Ignoring close event" << std::endl;
 	e->ignore();
 	return;
     }
@@ -3797,7 +3797,7 @@ MainWindow::playbackFrameChanged(unsigned long frame)
 }
 
 void
-MainWindow::globalCentreFrameChanged(unsigned long frame)
+MainWindow::globalCentreFrameChanged(unsigned long )
 {
     if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
     Pane *p = 0;
@@ -3807,7 +3807,7 @@ MainWindow::globalCentreFrameChanged(unsigned long frame)
 }
 
 void
-MainWindow::viewCentreFrameChanged(View *v, unsigned long frame)
+MainWindow::viewCentreFrameChanged(View *v, unsigned long )
 {
     if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
     Pane *p = 0;
@@ -3816,7 +3816,7 @@ MainWindow::viewCentreFrameChanged(View *v, unsigned long frame)
 }
 
 void
-MainWindow::viewZoomLevelChanged(View *v, unsigned long zoom, bool locked)
+MainWindow::viewZoomLevelChanged(View *v, unsigned long , bool )
 {
     if ((m_playSource && m_playSource->isPlaying()) || !getMainModel()) return;
     Pane *p = 0;
@@ -3906,7 +3906,7 @@ MainWindow::audioOverloadPluginDisabled()
 }
 
 void
-MainWindow::layerAdded(Layer *layer)
+MainWindow::layerAdded(Layer *)
 {
 //    std::cerr << "MainWindow::layerAdded(" << layer << ")" << std::endl;
 //    setupExistingLayersMenu();
@@ -3914,7 +3914,7 @@ MainWindow::layerAdded(Layer *layer)
 }
 
 void
-MainWindow::layerRemoved(Layer *layer)
+MainWindow::layerRemoved(Layer *)
 {
 //    std::cerr << "MainWindow::layerRemoved(" << layer << ")" << std::endl;
     setupExistingLayersMenus();
@@ -4103,7 +4103,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             n = message.getArg(0).toInt() - 1;
         }
         std::vector<QString> recent = m_recentFiles.getRecent();
-        if (n >= 0 && n < recent.size()) {
+        if (n >= 0 && n < int(recent.size())) {
             if (openSomeFile(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << recent[n].toStdString() << "\"" << std::endl;
@@ -4280,7 +4280,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     message.getArg(0).canConvert(QVariant::Int)) {
                     channel = message.getArg(0).toInt();
                     if (channel < -1 ||
-                        channel > getMainModel()->getChannelCount()) {
+                        channel > int(getMainModel()->getChannelCount())) {
                         std::cerr << "WARNING: MainWindow::handleOSCMessage: channel "
                                   << channel << " out of range" << std::endl;
                         channel = -1;

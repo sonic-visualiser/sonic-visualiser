@@ -279,7 +279,7 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
             bool configurable = (!plugin->getPrograms().empty() ||
                                  !plugin->getParameterDescriptors().empty());
 
-            std::cerr << "Adding feature extraction plugin transform: id = " << transformId.toStdString() << std::endl;
+//            std::cerr << "Feature extraction plugin transform: " << transformId.toStdString() << std::endl;
 
 	    transforms[transformId] = 
                 TransformDesc(tr("Analysis"),
@@ -592,7 +592,7 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
 
         if (output != "A") {
             int outputNo = output.toInt();
-            if (outputNo >= 0 && outputNo < desc->controlOutputPortCount) {
+            if (outputNo >= 0 && outputNo < int(desc->controlOutputPortCount)) {
                 outputLabel = desc->controlOutputPortNames[outputNo].c_str();
             }
         }

@@ -797,8 +797,8 @@ SVFileReader::addPointToDataset(const QXmlAttributes &attributes)
     if (nm) {
 	float value = 0.0;
 	value = attributes.value("value").trimmed().toFloat(&ok);
-	float duration = 0.0;
-	duration = attributes.value("duration").trimmed().toFloat(&ok);
+	size_t duration = 0;
+	duration = attributes.value("duration").trimmed().toUInt(&ok);
 	QString label = attributes.value("label");
 	nm->addPoint(NoteModel::Point(frame, value, duration, label));
 	return ok;
@@ -1062,5 +1062,9 @@ SVFileReader::readSelection(const QXmlAttributes &attributes)
     m_paneCallback.addSelection(start, end);
 
     return true;
+}
+
+SVFileReaderPaneCallback::~SVFileReaderPaneCallback()
+{
 }
 

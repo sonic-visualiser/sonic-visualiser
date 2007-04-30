@@ -32,6 +32,7 @@ class PlayParameters;
 class SVFileReaderPaneCallback
 {
 public:
+    virtual ~SVFileReaderPaneCallback();
     virtual Pane *addPane() = 0;
     virtual void setWindowSize(int width, int height) = 0;
     virtual void addSelection(int start, int end) = 0;

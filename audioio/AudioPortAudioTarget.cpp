@@ -159,7 +159,7 @@ AudioPortAudioTarget::process(void *inputBuffer, void *outputBuffer,
 			      PaTimestamp)
 #else
 int
-AudioPortAudioTarget::process(const void *inputBuffer, void *outputBuffer,
+AudioPortAudioTarget::process(const void *, void *outputBuffer,
                               unsigned long nframes,
                               const PaStreamCallbackTimeInfo *,
                               PaStreamCallbackFlags)
@@ -184,7 +184,7 @@ AudioPortAudioTarget::process(const void *inputBuffer, void *outputBuffer,
     // Because we offer pan, we always want at least 2 channels
     if (sourceChannels < 2) sourceChannels = 2;
 
-    if (!tmpbuf || tmpbufch != sourceChannels || tmpbufsz < m_bufferSize) {
+    if (!tmpbuf || tmpbufch != sourceChannels || int(tmpbufsz) < m_bufferSize) {
 
 	if (tmpbuf) {
 	    for (size_t i = 0; i < tmpbufch; ++i) {

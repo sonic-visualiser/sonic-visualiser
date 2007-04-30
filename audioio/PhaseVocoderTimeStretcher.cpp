@@ -163,7 +163,7 @@ PhaseVocoderTimeStretcher::calculateParameters()
         m_n1 = lrintf(m_n2 / m_ratio);
         if (m_n1 == 0) {
             m_n1 = 1;
-            m_n2 = m_ratio;
+            m_n2 = lrintf(m_ratio);
         }
     }
 
@@ -378,7 +378,6 @@ PhaseVocoderTimeStretcher::putInput(float **input, size_t samples)
             if (m_totalCount > 50 && m_transientCount < m_totalCount) {
 
                 int fixed = lrintf(m_transientCount * m_n1);
-                int squashy = m_n2sum - fixed;
 
                 int idealTotal = lrintf(m_totalCount * m_n1 * m_ratio);
                 int idealSquashy = idealTotal - fixed;
@@ -542,7 +541,7 @@ PhaseVocoderTimeStretcher::isTransient()
 //        count > m_prevTransientScore * 1.2) {
     if (count > m_prevTransientScore &&
         count > m_transientThreshold &&
-        count - m_prevTransientScore > m_wlen / 20) {
+        count - m_prevTransientScore > int(m_wlen) / 20) {
         isTransient = true;
 
 

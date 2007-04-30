@@ -240,12 +240,12 @@ Document::setMainModel(WaveFileModel *model)
 	Layer *layer = *i;
 	Model *model = layer->getModel();
 
-        std::cerr << "Document::setMainModel: inspecting model "
-                  << (model ? model->objectName().toStdString() : "(null)") << " in layer "
-                  << layer->objectName().toStdString() << std::endl;
+//        std::cerr << "Document::setMainModel: inspecting model "
+//                  << (model ? model->objectName().toStdString() : "(null)") << " in layer "
+//                  << layer->objectName().toStdString() << std::endl;
 
 	if (model == oldMainModel) {
-            std::cerr << "... it uses the old main model, replacing" << std::endl;
+//            std::cerr << "... it uses the old main model, replacing" << std::endl;
 	    LayerFactory::getInstance()->setModel(layer, m_mainModel);
 	    continue;
 	}
@@ -260,7 +260,7 @@ Document::setMainModel(WaveFileModel *model)
 	    
 	if (m_models[model].source == oldMainModel) {
 
-            std::cerr << "... it uses a model derived from the old main model, regenerating" << std::endl;
+//            std::cerr << "... it uses a model derived from the old main model, regenerating" << std::endl;
 
 	    // This model was derived from the previous main
 	    // model: regenerate it.
@@ -533,10 +533,10 @@ Document::addLayerToView(View *view, Layer *layer)
 {
     Model *model = layer->getModel();
     if (!model) {
-	std::cerr << "Document::addLayerToView: Layer (\""
-                  << layer->objectName().toStdString()
-                  << "\") with no model being added to view: "
-                  << "normally you want to set the model first" << std::endl;
+//	std::cerr << "Document::addLayerToView: Layer (\""
+//                  << layer->objectName().toStdString()
+//                  << "\") with no model being added to view: "
+//                  << "normally you want to set the model first" << std::endl;
     } else {
 	if (model != m_mainModel &&
 	    m_models.find(model) == m_models.end()) {
