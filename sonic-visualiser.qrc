@@ -30,6 +30,7 @@
     <file>icons/zoom.png</file>
     <file>icons/zoom-in.png</file>
     <file>icons/zoom-out.png</file>
+    <file>icons/zoom-fit.png</file>
     <file>icons/undo.png</file>
     <file>icons/redo.png</file>
     <file>icons/new.png</file>
@@ -37,6 +38,8 @@
     <file>icons/speaker.png</file>
     <file>icons/annotation.png</file>
     <file>icons/fileopen.png</file>
+    <file>icons/fileopensession.png</file>
+    <file>icons/fileopenaudio.png</file>
     <file>icons/fileopen-22.png</file>
     <file>icons/fileclose.png</file>
     <file>icons/filenew.png</file>
@@ -52,6 +55,7 @@
     <file>icons/mono.png</file>
     <file>icons/stereo.png</file>
     <file>icons/sharpen.png</file>
+    <file>icons/help.png</file>
     <file>icons/svicon16.png</file>
     <file>icons/svicon32.png</file>
     <file>samples/bass.wav</file>
