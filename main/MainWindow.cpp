@@ -2899,6 +2899,12 @@ MainWindow::closeEvent(QCloseEvent *e)
 {
     std::cerr << "MainWindow::closeEvent" << std::endl;
 
+    if (m_openingAudioFile) {
+        std::cerr << "Busy - ignoring close event" << std::endl;
+	e->ignore();
+	return;
+    }
+
     if (!m_abandoning && !checkSaveModified()) {
         std::cerr << "Ignoring close event" << std::endl;
 	e->ignore();
