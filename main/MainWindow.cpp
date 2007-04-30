@@ -3628,7 +3628,7 @@ MainWindow::addLayer()
                                                               m_playSource);
     if (!inputModel) return;
 
-    std::cerr << "Input model is " << inputModel << " \"" << inputModel->objectName().toStdString() << std::endl;
+//    std::cerr << "MainWindow::addLayer: Input model is " << inputModel << " \"" << inputModel->objectName().toStdString() << "\"" << std::endl;
 
     Layer *newLayer = m_document->createDerivedLayer(transform,
                                                      inputModel,
