@@ -423,15 +423,16 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(newSession()));
     menu->addAction(action);
     toolbar->addAction(action);
-	
-    icon = QIcon(":icons/fileopen.png");
-    icon.addFile(":icons/fileopen-22.png");
 
+    icon = QIcon(":icons/fileopensession.png");
     action = new QAction(icon, tr("&Open Session..."), this);
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a previously saved Sonic Visualiser session file"));
     connect(action, SIGNAL(triggered()), this, SLOT(openSession()));
     menu->addAction(action);
+
+    icon = QIcon(":icons/fileopen.png");
+    icon.addFile(":icons/fileopen-22.png");
 
     action = new QAction(icon, tr("&Open..."), this);
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
@@ -458,7 +459,8 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    action = new QAction(tr("&Import Audio File..."), this);
+    icon = QIcon(":icons/fileopenaudio.png");
+    action = new QAction(icon, tr("&Import Audio File..."), this);
     action->setShortcut(tr("Ctrl+I"));
     action->setStatusTip(tr("Import an existing audio file"));
     connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
@@ -709,7 +711,8 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    action = new QAction(tr("Zoom to &Fit"), this);
+    action = new QAction(QIcon(":/icons/zoom-fit.png"),
+                         tr("Zoom to &Fit"), this);
     action->setStatusTip(tr("Zoom to show the whole file"));
     connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
@@ -998,7 +1001,7 @@ MainWindow::setupPaneAndLayerMenus()
 
                     if (isOnly && (!plural || menuType == 1)) {
 
-                        if (type != LayerFactory::Waveform) {
+                        if (menuType == 1 && type != LayerFactory::Waveform) {
                             action = new QAction(mainText, this);
                         } else {
                             action = new QAction(icon, mainText, this);
@@ -1343,7 +1346,8 @@ MainWindow::setupHelpMenu()
     QMenu *menu = menuBar()->addMenu(tr("&Help"));
     menu->setTearOffEnabled(true);
     
-    QAction *action = new QAction(tr("&Help Reference"), this); 
+    QAction *action = new QAction(QIcon(":icons/help.png"),
+                                  tr("&Help Reference"), this); 
     action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
     connect(action, SIGNAL(triggered()), this, SLOT(help()));
     menu->addAction(action);
