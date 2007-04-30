@@ -400,7 +400,7 @@ AudioCallbackPlaySource::playSelectionModeChanged()
 }
 
 void
-AudioCallbackPlaySource::playParametersChanged(PlayParameters *params)
+AudioCallbackPlaySource::playParametersChanged(PlayParameters *)
 {
     clearRingBuffers();
 }
@@ -509,8 +509,8 @@ AudioCallbackPlaySource::getCurrentPlayingFrame()
     MultiSelection::SelectionList selections = m_viewManager->getSelections();
     MultiSelection::SelectionList::const_iterator i;
 
-    i = selections.begin();
-    size_t rangeStart = i->getStartFrame();
+//    i = selections.begin();
+//    size_t rangeStart = i->getStartFrame();
 
     i = selections.end();
     --i;

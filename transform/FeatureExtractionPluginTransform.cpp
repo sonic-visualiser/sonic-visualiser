@@ -432,7 +432,7 @@ FeatureExtractionPluginTransform::addFeature(size_t blockFrame,
 	if (feature.hasTimestamp) {
 	    //!!! warning: sampleRate may be non-integral
 	    frame = Vamp::RealTime::realTime2Frame(feature.timestamp,
-                                                   m_descriptor->sampleRate);
+                                                   lrintf(m_descriptor->sampleRate));
 	} else {
 	    frame = m_output->getEndFrame();
 	}
@@ -468,7 +468,9 @@ FeatureExtractionPluginTransform::addFeature(size_t blockFrame,
         NoteModel *model = getOutput<NoteModel>();
         if (!model) return;
 
-        model->addPoint(NoteModel::Point(frame, pitch, duration, feature.label.c_str()));
+        model->addPoint(NoteModel::Point(frame, pitch,
+                                         lrintf(duration),
+                                         feature.label.c_str()));
 	
     } else {
 	

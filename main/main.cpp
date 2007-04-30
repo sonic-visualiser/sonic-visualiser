@@ -320,7 +320,7 @@ main(int argc, char **argv)
     }
 */
     int rv = application.exec();
-    std::cerr << "application.exec() returned " << rv << std::endl;
+//    std::cerr << "application.exec() returned " << rv << std::endl;
 
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();

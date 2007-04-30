@@ -71,7 +71,8 @@ RealTimePluginTransform::RealTimePluginTransform(Model *inputModel,
         PluginXml(m_plugin).setParametersFromXml(configurationXml);
     }
 
-    if (m_outputNo >= 0 && m_outputNo >= m_plugin->getControlOutputCount()) {
+    if (m_outputNo >= 0 &&
+        m_outputNo >= int(m_plugin->getControlOutputCount())) {
         std::cerr << "RealTimePluginTransform: Plugin has fewer than desired " << m_outputNo << " control outputs" << std::endl;
         return;
     }
@@ -131,10 +132,10 @@ RealTimePluginTransform::run()
     WritableWaveFileModel *wwfm = dynamic_cast<WritableWaveFileModel *>(m_output);
     if (!stvm && !wwfm) return;
 
-    if (stvm && (m_outputNo >= m_plugin->getControlOutputCount())) return;
+    if (stvm && (m_outputNo >= int(m_plugin->getControlOutputCount()))) return;
 
     size_t sampleRate = input->getSampleRate();
-    int channelCount = input->getChannelCount();
+    size_t channelCount = input->getChannelCount();
     if (!wwfm && m_context.channel != -1) channelCount = 1;
 
     size_t blockSize = m_plugin->getBufferSize();
@@ -148,8 +149,6 @@ RealTimePluginTransform::run()
     size_t prevCompletion = 0;
 
     size_t latency = m_plugin->getLatency();
-
-    int i = 0;
 
     while (blockFrame < endFrame && !m_abandoned) {
 
