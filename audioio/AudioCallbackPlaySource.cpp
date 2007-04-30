@@ -22,6 +22,7 @@
 #include "base/PlayParameterRepository.h"
 #include "base/Preferences.h"
 #include "data/model/DenseTimeValueModel.h"
+#include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "plugin/RealTimePluginInstance.h"
 #include "PhaseVocoderTimeStretcher.h"
@@ -146,11 +147,16 @@ AudioCallbackPlaySource::addModel(Model *model)
 
             for (std::set<Model *>::const_iterator i = m_models.begin();
                  i != m_models.end(); ++i) {
-                DenseTimeValueModel *dtvm2 =
-                    dynamic_cast<DenseTimeValueModel *>(*i);
-                if (dtvm2 && dtvm2 != dtvm &&
-                    dtvm2->getSampleRate() != model->getSampleRate()) {
-                    std::cerr << "AudioCallbackPlaySource::addModel: Conflicting dense time-value model " << *i << " found" << std::endl;
+                // Only wave file models can be considered conflicting --
+                // writable wave file models are derived and we shouldn't
+                // take their rates into account.  Also, don't give any
+                // particular weight to a file that's already playing at
+                // the wrong rate anyway
+                WaveFileModel *wfm = dynamic_cast<WaveFileModel *>(*i);
+                if (wfm && wfm != dtvm &&
+                    wfm->getSampleRate() != model->getSampleRate() &&
+                    wfm->getSampleRate() == m_sourceSampleRate) {
+                    std::cerr << "AudioCallbackPlaySource::addModel: Conflicting wave file model " << *i << " found" << std::endl;
                     conflicting = true;
                     break;
                 }
@@ -165,7 +171,8 @@ AudioCallbackPlaySource::addModel(Model *model)
                           << "), playback will be wrong"
                           << std::endl;
                 
-                emit sampleRateMismatch(model->getSampleRate(), m_sourceSampleRate,
+                emit sampleRateMismatch(model->getSampleRate(),
+                                        m_sourceSampleRate,
                                         false);
             } else {
                 m_sourceSampleRate = model->getSampleRate();
