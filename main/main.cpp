@@ -223,7 +223,13 @@ main(int argc, char **argv)
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName("sonic-visualiser");
-    QApplication::setWindowIcon(QIcon(":icons/svicon16.png"));
+
+    QIcon icon;
+    int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
+    for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+        icon.addFile(QString(":icons/sv-%1x%2.png").arg(sizes[i]).arg(sizes[i]));
+    }
+    QApplication::setWindowIcon(icon);
 
     QString language = QLocale::system().name();
 
