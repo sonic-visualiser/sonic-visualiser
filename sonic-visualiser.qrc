@@ -56,8 +56,13 @@
     <file>icons/stereo.png</file>
     <file>icons/sharpen.png</file>
     <file>icons/help.png</file>
-    <file>icons/svicon16.png</file>
-    <file>icons/svicon32.png</file>
+    <file>icons/sv-16x16.png</file>
+    <file>icons/sv-22x22.png</file>
+    <file>icons/sv-24x24.png</file>
+    <file>icons/sv-32x32.png</file>
+    <file>icons/sv-48x48.png</file>
+    <file>icons/sv-64x64.png</file>
+    <file>icons/sv-128x128.png</file>
     <file>samples/bass.wav</file>
     <file>samples/beep.wav</file>
     <file>samples/bounce.wav</file>
