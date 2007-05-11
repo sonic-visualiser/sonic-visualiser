@@ -13,7 +13,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "version.h"
+#include "../version.h"
 
 #include "MainWindow.h"
 #include "document/Document.h"
@@ -167,7 +167,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
     m_overview->setFixedHeight(40);
+#ifndef _WIN32
+    // For some reason, the contents of the overview never appear if we
+    // make this setting on Windows.  I have no inclination at the moment
+    // to track down the reason why.
     m_overview->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+#endif
     connect(m_overview, SIGNAL(contextHelpChanged(const QString &)),
             this, SLOT(contextHelpChanged(const QString &)));
 
