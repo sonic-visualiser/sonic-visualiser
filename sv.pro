@@ -9,6 +9,8 @@ QT += xml network
 
 TARGET = sonic-visualiser
 
+ICON = icons/sv-macicon.icns
+
 DEPENDPATH += . .. audioio document i18n main osc transform
 INCLUDEPATH += . .. audioio document transform osc main
 LIBPATH = ../view ../layer ../data ../widgets ../plugin ../base ../system $$LIBPATH

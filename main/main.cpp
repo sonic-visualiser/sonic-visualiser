@@ -278,6 +278,7 @@ main(int argc, char **argv)
 
     bool haveSession = false;
     bool haveMainModel = false;
+    bool havePriorCommandLineModel = false;
 
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
 
@@ -308,9 +309,18 @@ main(int argc, char **argv)
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
                 status = gui.openSomeFile(path, MainWindow::ReplaceMainModel);
-                if (status == MainWindow::FileOpenSucceeded) haveMainModel = true;
+                if (status == MainWindow::FileOpenSucceeded) {
+                    haveMainModel = true;
+                }
             } else {
-                status = gui.openSomeFile(path, MainWindow::CreateAdditionalModel);
+                if (haveSession && !havePriorCommandLineModel) {
+                    status = gui.openSomeFile(path, MainWindow::AskUser);
+                    if (status == MainWindow::FileOpenSucceeded) {
+                        havePriorCommandLineModel = true;
+                    }
+                } else {
+                    status = gui.openSomeFile(path, MainWindow::CreateAdditionalModel);
+                }
             }
         }
         if (status == MainWindow::FileOpenFailed) {
