@@ -3294,6 +3294,16 @@ MainWindow::ffwd()
     if (!layer->snapToFeatureFrame(pane, frame, resolution, Layer::SnapRight)) {
         frame = getMainModel()->getEndFrame();
     }
+
+    if (m_viewManager->getPlaySelectionMode()) {
+        MultiSelection::SelectionList sl = m_viewManager->getSelections();
+        if (!sl.empty()) {
+            MultiSelection::SelectionList::iterator i = sl.end();
+            --i;
+            size_t selectionEndFrame = i->getEndFrame();
+            if (frame > selectionEndFrame) frame = selectionEndFrame;
+        }
+    }
     
     m_viewManager->setPlaybackFrame(frame);
 }
@@ -3302,7 +3312,20 @@ void
 MainWindow::ffwdEnd()
 {
     if (!getMainModel()) return;
-    m_viewManager->setPlaybackFrame(getMainModel()->getEndFrame());
+
+    size_t frame = getMainModel()->getEndFrame();
+
+    if (m_viewManager->getPlaySelectionMode()) {
+        MultiSelection::SelectionList sl = m_viewManager->getSelections();
+        if (!sl.empty()) {
+            MultiSelection::SelectionList::iterator i = sl.end();
+            --i;
+            size_t selectionEndFrame = i->getEndFrame();
+            if (frame > selectionEndFrame) frame = selectionEndFrame;
+        }
+    }
+
+    m_viewManager->setPlaybackFrame(frame);
 }
 
 void
@@ -3325,7 +3348,15 @@ MainWindow::rewind()
     if (!layer->snapToFeatureFrame(pane, frame, resolution, Layer::SnapLeft)) {
         frame = getMainModel()->getEndFrame();
     }
-    
+
+    if (m_viewManager->getPlaySelectionMode()) {
+        MultiSelection::SelectionList sl = m_viewManager->getSelections();
+        if (!sl.empty()) {
+            size_t selectionStartFrame = sl.begin()->getStartFrame();
+            if (frame < selectionStartFrame) frame = selectionStartFrame;
+        }
+    }
+
     m_viewManager->setPlaybackFrame(frame);
 }
 
@@ -3333,7 +3364,18 @@ void
 MainWindow::rewindStart()
 {
     if (!getMainModel()) return;
-    m_viewManager->setPlaybackFrame(getMainModel()->getStartFrame());
+
+    size_t frame = getMainModel()->getStartFrame();
+
+    if (m_viewManager->getPlaySelectionMode()) {
+        MultiSelection::SelectionList sl = m_viewManager->getSelections();
+        if (!sl.empty()) {
+            size_t selectionStartFrame = sl.begin()->getStartFrame();
+            if (frame < selectionStartFrame) frame = selectionStartFrame;
+        }
+    }
+
+    m_viewManager->setPlaybackFrame(frame);
 }
 
 void
