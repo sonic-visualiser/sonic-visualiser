@@ -214,7 +214,17 @@ AudioCallbackPlaySource::addModel(Model *model)
 	emit modelReplaced();
     }
 
+    connect(model, SIGNAL(modelChanged(size_t, size_t)),
+            this, SLOT(modelChanged(size_t, size_t)));
+
     m_condition.wakeAll();
+}
+
+void
+AudioCallbackPlaySource::modelChanged(size_t startFrame, size_t endFrame)
+{
+    std::cerr << "AudioCallbackPlaySource::modelChanged(" << startFrame << "," << endFrame << ")" << std::endl;
+    if (endFrame > m_lastModelEndFrame) m_lastModelEndFrame = endFrame;
 }
 
 void
@@ -225,6 +235,9 @@ AudioCallbackPlaySource::removeModel(Model *model)
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
     std::cout << "AudioCallbackPlaySource::removeModel(" << model << ")" << std::endl;
 #endif
+
+    disconnect(model, SIGNAL(modelChanged(size_t, size_t)),
+               this, SLOT(modelChanged(size_t, size_t)));
 
     m_models.erase(model);
 

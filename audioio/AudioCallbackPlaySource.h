@@ -233,6 +233,7 @@ protected slots:
     void playSelectionModeChanged();
     void playParametersChanged(PlayParameters *);
     void preferenceChanged(PropertyContainer::PropertyName);
+    void modelChanged(size_t startFrame, size_t endFrame);
 
 protected:
     ViewManager                     *m_viewManager;
