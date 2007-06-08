@@ -309,8 +309,8 @@ FeatureExtractionPluginTransform::run()
             if (blockFrame >= endFrame) break;
         }
 
-	std::cerr << "FeatureExtractionPluginTransform::run: blockFrame "
-		  << blockFrame << std::endl;
+//	std::cerr << "FeatureExtractionPluginTransform::run: blockFrame "
+//		  << blockFrame << std::endl;
 
 	long completion =
 	    (((blockFrame - startFrame) / m_context.stepSize) * 99) /
