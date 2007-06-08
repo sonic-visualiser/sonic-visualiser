@@ -223,7 +223,7 @@ AudioCallbackPlaySource::addModel(Model *model)
 void
 AudioCallbackPlaySource::modelChanged(size_t startFrame, size_t endFrame)
 {
-    std::cerr << "AudioCallbackPlaySource::modelChanged(" << startFrame << "," << endFrame << ")" << std::endl;
+//    std::cerr << "AudioCallbackPlaySource::modelChanged(" << startFrame << "," << endFrame << ")" << std::endl;
     if (endFrame > m_lastModelEndFrame) m_lastModelEndFrame = endFrame;
 }
 
