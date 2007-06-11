@@ -3300,7 +3300,7 @@ MainWindow::ffwd()
         if (!sl.empty()) {
             MultiSelection::SelectionList::iterator i = sl.end();
             --i;
-            size_t selectionEndFrame = i->getEndFrame();
+            int selectionEndFrame = i->getEndFrame();
             if (frame > selectionEndFrame) frame = selectionEndFrame;
         }
     }
@@ -3352,7 +3352,7 @@ MainWindow::rewind()
     if (m_viewManager->getPlaySelectionMode()) {
         MultiSelection::SelectionList sl = m_viewManager->getSelections();
         if (!sl.empty()) {
-            size_t selectionStartFrame = sl.begin()->getStartFrame();
+            int selectionStartFrame = sl.begin()->getStartFrame();
             if (frame < selectionStartFrame) frame = selectionStartFrame;
         }
     }
