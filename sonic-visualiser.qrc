@@ -25,6 +25,11 @@
     <file>icons/text.png</file>
     <file>icons/draw.png</file>
     <file>icons/draw-curve.png</file>
+    <file>icons/measure.png</file>
+    <file>icons/measure1cursor.xbm</file>
+    <file>icons/measure1mask.xbm</file>
+    <file>icons/measure2cursor.xbm</file>
+    <file>icons/measure2mask.xbm</file>
     <file>icons/move.png</file>
     <file>icons/navigate.png</file>
     <file>icons/zoom.png</file>

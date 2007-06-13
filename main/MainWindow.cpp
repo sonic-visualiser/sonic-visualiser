@@ -1588,6 +1588,15 @@ MainWindow::setupToolbars()
     group->addAction(action);
     m_toolActions[ViewManager::DrawMode] = action;
 
+    action = toolbar->addAction(QIcon(":/icons/measure.png"),
+				tr("Measure"));
+    action->setCheckable(true);
+    action->setShortcut(tr("5"));
+    action->setStatusTip(tr("Make measurements in layer"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toolMeasureSelected()));
+    group->addAction(action);
+    m_toolActions[ViewManager::MeasureMode] = action;
+
 //    action = toolbar->addAction(QIcon(":/icons/text.png"),
 //				tr("Text"));
 //    action->setCheckable(true);
@@ -1779,6 +1788,12 @@ void
 MainWindow::toolDrawSelected()
 {
     m_viewManager->setToolMode(ViewManager::DrawMode);
+}
+
+void
+MainWindow::toolMeasureSelected()
+{
+    m_viewManager->setToolMode(ViewManager::MeasureMode);
 }
 
 //void

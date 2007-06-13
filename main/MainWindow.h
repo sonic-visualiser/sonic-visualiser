@@ -183,6 +183,7 @@ protected slots:
     void toolSelectSelected();
     void toolEditSelected();
     void toolDrawSelected();
+    void toolMeasureSelected();
 
     void selectAll();
     void selectToStart();
