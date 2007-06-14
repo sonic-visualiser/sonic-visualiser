@@ -133,6 +133,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     UnitDatabase::getInstance()->registerUnit("Hz");
     UnitDatabase::getInstance()->registerUnit("dB");
+    UnitDatabase::getInstance()->registerUnit("s");
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
 	    this, SLOT(documentModified()));
