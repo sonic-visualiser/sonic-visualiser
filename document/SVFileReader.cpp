@@ -54,6 +54,8 @@ SVFileReader::SVFileReader(Document *document,
     m_currentPlayParameters(0),
     m_datasetSeparator(" "),
     m_inRow(false),
+    m_inLayer(false),
+    m_inView(false),
     m_rowNumber(0),
     m_ok(false)
 {
@@ -204,6 +206,14 @@ SVFileReader::startElement(const QString &, const QString &,
     } else if (name == "selection") {
 
 	ok = readSelection(attributes);
+
+    } else if (name == "measurement") {
+
+        ok = readMeasurement(attributes);
+
+    } else {
+        std::cerr << "WARNING: SV-XML: Unexpected element \""
+                  << name.toLocal8Bit().data() << "\"" << std::endl;
     }
 
     if (!ok) {
@@ -295,6 +305,8 @@ SVFileReader::endElement(const QString &, const QString &,
 
     } else if (name == "row") {
 	m_inRow = false;
+    } else if (name == "layer") {
+        m_inLayer = false;
     } else if (name == "view") {
 	m_inView = false;
     } else if (name == "selections") {
@@ -707,6 +719,9 @@ SVFileReader::readLayer(const QXmlAttributes &attributes)
         layer->setLayerDormant(m_currentPane, dormant);
     }
 
+    m_currentLayer = layer;
+    m_inLayer = true;
+
     return true;
 }
 
@@ -1061,6 +1076,21 @@ SVFileReader::readSelection(const QXmlAttributes &attributes)
 
     m_paneCallback.addSelection(start, end);
 
+    return true;
+}
+
+bool
+SVFileReader::readMeasurement(const QXmlAttributes &attributes)
+{
+    std::cerr << "SVFileReader::readMeasurement: inLayer "
+              << m_inLayer << ", layer " << m_currentLayer << std::endl;
+
+    if (!m_inLayer) {
+        std::cerr << "WARNING: SV-XML: Measurement found outside layer" << std::endl;
+        return false;
+    }
+
+    m_currentLayer->addMeasurementRect(attributes);
     return true;
 }
 

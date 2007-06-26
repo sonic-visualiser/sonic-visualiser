@@ -196,6 +196,7 @@ protected:
     bool readPlayParameters(const QXmlAttributes &);
     bool readPlugin(const QXmlAttributes &);
     bool readSelection(const QXmlAttributes &);
+    bool readMeasurement(const QXmlAttributes &);
     void addUnaddedModels();
 
     Document *m_document;
@@ -206,6 +207,7 @@ protected:
     std::map<int, Model *> m_models;
     std::set<Model *> m_addedModels;
     std::map<int, int> m_awaitingDatasets; // map dataset id -> model id
+    Layer *m_currentLayer;
     Model *m_currentDataset;
     Model *m_currentDerivedModel;
     int m_currentDerivedModelId;
@@ -216,6 +218,7 @@ protected:
     QString m_currentTransformConfiguration;
     QString m_datasetSeparator;
     bool m_inRow;
+    bool m_inLayer;
     bool m_inView;
     bool m_inData;
     bool m_inSelections;
