@@ -109,6 +109,9 @@ signals:
     void canFfwd(bool);
     void canRewind(bool);
     void canPlaySelection(bool);
+    void canSpeedUpPlayback(bool);
+    void canSlowDownPlayback(bool);
+    void canChangePlaybackSpeed(bool);
     void canSave(bool);
 
 public slots:
@@ -167,6 +170,9 @@ protected slots:
     void playSpeedChanged(int);
     void playSharpenToggled();
     void playMonoToggled();
+    void speedUpPlayback();
+    void slowDownPlayback();
+    void restoreNormalPlayback();
     void sampleRateMismatch(size_t, size_t, bool);
     void audioOverloadPluginDisabled();
 
@@ -266,6 +272,7 @@ protected:
     QMenu                   *m_paneMenu;
     QMenu                   *m_layerMenu;
     QMenu                   *m_transformsMenu;
+    QMenu                   *m_playbackMenu;
     QMenu                   *m_existingLayersMenu;
     QMenu                   *m_sliceMenu;
     QMenu                   *m_recentFilesMenu;
@@ -273,6 +280,10 @@ protected:
     QMenu                   *m_rightButtonMenu;
     QMenu                   *m_rightButtonLayerMenu;
     QMenu                   *m_rightButtonTransformsMenu;
+    QMenu                   *m_rightButtonPlaybackMenu;
+
+    QAction                 *m_ffwdAction;
+    QAction                 *m_rwdAction;
 
     bool                     m_documentModified;
     bool                     m_openingAudioFile;
@@ -330,6 +341,8 @@ protected:
     Pane *addPaneToStack();
 
     void addPane(const PaneConfiguration &configuration, QString text);
+
+    Layer *getSnapLayer() const;
 
     class PaneCallback : public SVFileReaderPaneCallback
     {
