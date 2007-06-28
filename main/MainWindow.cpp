@@ -117,6 +117,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_paneMenu(0),
     m_layerMenu(0),
     m_transformsMenu(0),
+    m_playbackMenu(0),
     m_existingLayersMenu(0),
     m_sliceMenu(0),
     m_recentFilesMenu(0),
@@ -124,6 +125,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_rightButtonMenu(0),
     m_rightButtonLayerMenu(0),
     m_rightButtonTransformsMenu(0),
+    m_rightButtonPlaybackMenu(0),
+    m_ffwdAction(0),
+    m_rwdAction(0),
     m_documentModified(false),
     m_openingAudioFile(false),
     m_abandoning(false),
@@ -290,6 +294,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     setupMenus();
     setupToolbars();
+    setupHelpMenu();
 
     statusBar();
 
@@ -407,7 +412,6 @@ MainWindow::setupMenus()
     setupViewMenu();
     setupPaneAndLayerMenus();
     setupTransformsMenu();
-    setupHelpMenu();
 
     m_mainMenusCreated = true;
 }
@@ -530,16 +534,6 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
     menu->addAction(action);
 	
-    /*!!!
-      menu->addSeparator();
-	
-      action = new QAction(tr("Play / Pause"), this);
-      action->setShortcut(tr("Space"));
-      action->setStatusTip(tr("Start or stop playback from the current position"));
-      connect(action, SIGNAL(triggered()), this, SLOT(play()));
-      menu->addAction(action);
-    */
-
     menu->addSeparator();
     action = new QAction(QIcon(":/icons/exit.png"),
                          tr("&Quit"), this);
@@ -719,6 +713,7 @@ MainWindow::setupViewMenu()
 
     action = new QAction(QIcon(":/icons/zoom-fit.png"),
                          tr("Zoom to &Fit"), this);
+    action->setShortcut(tr("F"));
     action->setStatusTip(tr("Zoom to show the whole file"));
     connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
@@ -798,16 +793,13 @@ MainWindow::setupViewMenu()
     }
     settings.endGroup();
 
-/*!!! This one doesn't work properly yet
-
     menu->addSeparator();
 
     action = new QAction(tr("Show La&yer Hierarchy"), this);
-    action->setShortcut(tr("Alt+L"));
+    action->setShortcut(tr("H"));
     action->setStatusTip(tr("Open a window displaying the hierarchy of panes and layers in this session"));
     connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
     menu->addAction(action);
- */
 }
 
 void
@@ -832,7 +824,7 @@ MainWindow::setupPaneAndLayerMenus()
     QMenu *menu = m_paneMenu;
 
     QAction *action = new QAction(QIcon(":/icons/pane.png"), tr("Add &New Pane"), this);
-    action->setShortcut(tr("Alt+N"));
+    action->setShortcut(tr("N"));
     action->setStatusTip(tr("Add a new pane containing only a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
     connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
@@ -866,7 +858,7 @@ MainWindow::setupPaneAndLayerMenus()
 	action->setStatusTip(tipText);
 
 	if (type == LayerFactory::Text) {
-	    action->setShortcut(tr("Alt+T"));
+	    action->setShortcut(tr("T"));
 	}
 
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
@@ -915,7 +907,7 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = QIcon(":/icons/waveform.png");
                 mainText = tr("Add &Waveform");
                 if (menuType == 0) {
-                    shortcutText = tr("Alt+W");
+                    shortcutText = tr("W");
                     tipText = tr("Add a new pane showing a waveform view");
                 } else {
                     tipText = tr("Add a new layer showing a waveform view");
@@ -927,7 +919,7 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = QIcon(":/icons/spectrogram.png");
                 mainText = tr("Add &Spectrogram");
                 if (menuType == 0) {
-                    shortcutText = tr("Alt+S");
+                    shortcutText = tr("G");
                     tipText = tr("Add a new pane showing a spectrogram");
                 } else {
                     tipText = tr("Add a new layer showing a spectrogram");
@@ -938,7 +930,7 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = QIcon(":/icons/spectrogram.png");
                 mainText = tr("Add &Melodic Range Spectrogram");
                 if (menuType == 0) {
-                    shortcutText = tr("Alt+M");
+                    shortcutText = tr("M");
                     tipText = tr("Add a new pane showing a spectrogram set up for an overview of note pitches");
                 } else {
                     tipText = tr("Add a new layer showing a spectrogram set up for an overview of note pitches");
@@ -947,9 +939,9 @@ MainWindow::setupPaneAndLayerMenus()
 		
             case LayerFactory::PeakFrequencySpectrogram:
                 icon = QIcon(":/icons/spectrogram.png");
-                mainText = tr("Add &Peak Frequency Spectrogram");
+                mainText = tr("Add Pea&k Frequency Spectrogram");
                 if (menuType == 0) {
-                    shortcutText = tr("Alt+P");
+                    shortcutText = tr("K");
                     tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
                 } else {
                     tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
@@ -960,7 +952,7 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = QIcon(":/icons/spectrum.png");
                 mainText = tr("Add Spectr&um");
                 if (menuType == 0) {
-                    shortcutText = tr("Alt+U");
+                    shortcutText = tr("U");
                     tipText = tr("Add a new pane showing a frequency spectrum");
                 } else {
                     tipText = tr("Add a new layer showing a frequency spectrum");
@@ -1094,7 +1086,7 @@ MainWindow::setupPaneAndLayerMenus()
     menu->addSeparator();
 
     action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Pane"), this);
-    action->setShortcut(tr("Alt+D"));
+    action->setShortcut(tr("Ctrl+Shift+D"));
     action->setStatusTip(tr("Delete the currently active pane"));
     connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentPane()));
     connect(this, SIGNAL(canDeleteCurrentPane(bool)), action, SLOT(setEnabled(bool)));
@@ -1125,7 +1117,7 @@ MainWindow::setupPaneAndLayerMenus()
     menu->addSeparator();
 
     action = new QAction(tr("&Rename Layer..."), this);
-    action->setShortcut(tr("Alt+R"));
+    action->setShortcut(tr("R"));
     action->setStatusTip(tr("Rename the currently active layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(renameCurrentLayer()));
     connect(this, SIGNAL(canRenameLayer(bool)), action, SLOT(setEnabled(bool)));
@@ -1133,7 +1125,7 @@ MainWindow::setupPaneAndLayerMenus()
     m_rightButtonLayerMenu->addAction(action);
 
     action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Layer"), this);
-    action->setShortcut(tr("Alt+Shift+D"));
+    action->setShortcut(tr("Ctrl+D"));
     action->setStatusTip(tr("Delete the currently active layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentLayer()));
     connect(this, SIGNAL(canDeleteCurrentLayer(bool)), action, SLOT(setEnabled(bool)));
@@ -1347,8 +1339,6 @@ MainWindow::setupTransformsMenu()
 void
 MainWindow::setupHelpMenu()
 {
-    if (m_mainMenusCreated) return;
-
     QMenu *menu = menuBar()->addMenu(tr("&Help"));
     menu->setTearOffEnabled(true);
     
@@ -1377,6 +1367,7 @@ MainWindow::setupRecentFilesMenu()
     for (size_t i = 0; i < files.size(); ++i) {
 	QAction *action = new QAction(files[i], this);
 	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        if (i == 0) action->setShortcut(tr("Ctrl+R"));
 	m_recentFilesMenu->addAction(action);
     }
 }
@@ -1395,6 +1386,7 @@ MainWindow::setupRecentTransformsMenu()
                       << "\" in recent transforms list" << std::endl;
             continue;
         }
+        if (i == 0) ti->second->setShortcut(tr("Ctrl+T"));
 	m_recentTransformsMenu->addAction(ti->second);
     }
 }
@@ -1480,69 +1472,113 @@ MainWindow::setupExistingLayersMenus()
 void
 MainWindow::setupToolbars()
 {
-    QToolBar *toolbar = addToolBar(tr("Transport Toolbar"));
+    QMenu *menu = m_playbackMenu = menuBar()->addMenu(tr("Play&back"));
+    menu->setTearOffEnabled(true);
+    m_rightButtonMenu->addSeparator();
+    m_rightButtonPlaybackMenu = m_rightButtonMenu->addMenu(tr("Playback"));
 
-    QAction *action = toolbar->addAction(QIcon(":/icons/rewind-start.png"),
-					 tr("Rewind to Start"));
-    action->setShortcut(tr("Home"));
-    action->setStatusTip(tr("Rewind to the start"));
-    connect(action, SIGNAL(triggered()), this, SLOT(rewindStart()));
-    connect(this, SIGNAL(canPlay(bool)), action, SLOT(setEnabled(bool)));
+    QToolBar *toolbar = addToolBar(tr("Playback Toolbar"));
 
-    action = toolbar->addAction(QIcon(":/icons/rewind.png"),
-				tr("Rewind"));
-    action->setShortcut(tr("PageUp"));
-    action->setStatusTip(tr("Rewind to the previous time instant in the current layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(rewind()));
-    connect(this, SIGNAL(canRewind(bool)), action, SLOT(setEnabled(bool)));
+    QAction *rwdStartAction = toolbar->addAction(QIcon(":/icons/rewind-start.png"),
+                                                 tr("Rewind to Start"));
+    rwdStartAction->setShortcut(tr("Home"));
+    rwdStartAction->setStatusTip(tr("Rewind to the start"));
+    connect(rwdStartAction, SIGNAL(triggered()), this, SLOT(rewindStart()));
+    connect(this, SIGNAL(canPlay(bool)), rwdStartAction, SLOT(setEnabled(bool)));
 
-    action = toolbar->addAction(QIcon(":/icons/playpause.png"),
-				tr("Play / Pause"));
-    action->setCheckable(true);
-    action->setShortcut(tr("Space"));
-    action->setStatusTip(tr("Start or stop playback from the current position"));
-    connect(action, SIGNAL(triggered()), this, SLOT(play()));
+    QAction *m_rwdAction = toolbar->addAction(QIcon(":/icons/rewind.png"),
+                                              tr("Rewind"));
+    m_rwdAction->setShortcut(tr("PgUp"));
+    connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
+    connect(this, SIGNAL(canRewind(bool)), m_rwdAction, SLOT(setEnabled(bool)));
+
+    QAction *playAction = toolbar->addAction(QIcon(":/icons/playpause.png"),
+                                             tr("Play / Pause"));
+    playAction->setCheckable(true);
+    playAction->setShortcut(tr("Space"));
+    playAction->setStatusTip(tr("Start or stop playback from the current position"));
+    connect(playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
-	    action, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(canPlay(bool)), action, SLOT(setEnabled(bool)));
+	    playAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canPlay(bool)), playAction, SLOT(setEnabled(bool)));
 
-    action = toolbar->addAction(QIcon(":/icons/ffwd.png"),
-				tr("Fast Forward"));
-    action->setShortcut(tr("PageDown"));
-    action->setStatusTip(tr("Fast forward to the next time instant in the current layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(ffwd()));
-    connect(this, SIGNAL(canFfwd(bool)), action, SLOT(setEnabled(bool)));
+    m_ffwdAction = toolbar->addAction(QIcon(":/icons/ffwd.png"),
+                                              tr("Fast Forward"));
+    m_ffwdAction->setShortcut(tr("PgDown"));
+    connect(m_ffwdAction, SIGNAL(triggered()), this, SLOT(ffwd()));
+    connect(this, SIGNAL(canFfwd(bool)), m_ffwdAction, SLOT(setEnabled(bool)));
 
-    action = toolbar->addAction(QIcon(":/icons/ffwd-end.png"),
-				tr("Fast Forward to End"));
-    action->setShortcut(tr("End"));
-    action->setStatusTip(tr("Fast-forward to the end"));
-    connect(action, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
-    connect(this, SIGNAL(canPlay(bool)), action, SLOT(setEnabled(bool)));
+    QAction *ffwdEndAction = toolbar->addAction(QIcon(":/icons/ffwd-end.png"),
+                                                tr("Fast Forward to End"));
+    ffwdEndAction->setShortcut(tr("End"));
+    ffwdEndAction->setStatusTip(tr("Fast-forward to the end"));
+    connect(ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
+    connect(this, SIGNAL(canPlay(bool)), ffwdEndAction, SLOT(setEnabled(bool)));
 
     toolbar = addToolBar(tr("Play Mode Toolbar"));
 
-    action = toolbar->addAction(QIcon(":/icons/playselection.png"),
-				tr("Constrain Playback to Selection"));
-    action->setCheckable(true);
-    action->setChecked(m_viewManager->getPlaySelectionMode());
-    action->setShortcut(tr("s"));
-    action->setStatusTip(tr("Constrain playback to the selected area"));
+    QAction *psAction = toolbar->addAction(QIcon(":/icons/playselection.png"),
+                                           tr("Constrain Playback to Selection"));
+    psAction->setCheckable(true);
+    psAction->setChecked(m_viewManager->getPlaySelectionMode());
+    psAction->setShortcut(tr("s"));
+    psAction->setStatusTip(tr("Constrain playback to the selected area"));
     connect(m_viewManager, SIGNAL(playSelectionModeChanged(bool)),
-            action, SLOT(setChecked(bool)));
-    connect(action, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
-    connect(this, SIGNAL(canPlaySelection(bool)), action, SLOT(setEnabled(bool)));
+            psAction, SLOT(setChecked(bool)));
+    connect(psAction, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
+    connect(this, SIGNAL(canPlaySelection(bool)), psAction, SLOT(setEnabled(bool)));
 
-    action = toolbar->addAction(QIcon(":/icons/playloop.png"),
-				tr("Loop Playback"));
-    action->setCheckable(true);
-    action->setChecked(m_viewManager->getPlayLoopMode());
-    action->setShortcut(tr("l"));
-    action->setStatusTip(tr("Loop playback"));
+    QAction *plAction = toolbar->addAction(QIcon(":/icons/playloop.png"),
+                                           tr("Loop Playback"));
+    plAction->setCheckable(true);
+    plAction->setChecked(m_viewManager->getPlayLoopMode());
+    plAction->setShortcut(tr("l"));
+    plAction->setStatusTip(tr("Loop playback"));
     connect(m_viewManager, SIGNAL(playLoopModeChanged(bool)),
-            action, SLOT(setChecked(bool)));
-    connect(action, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
-    connect(this, SIGNAL(canPlay(bool)), action, SLOT(setEnabled(bool)));
+            plAction, SLOT(setChecked(bool)));
+    connect(plAction, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
+    connect(this, SIGNAL(canPlay(bool)), plAction, SLOT(setEnabled(bool)));
+
+    menu->addAction(playAction);
+    menu->addAction(psAction);
+    menu->addAction(plAction);
+    menu->addSeparator();
+    menu->addAction(m_rwdAction);
+    menu->addAction(m_ffwdAction);
+    menu->addSeparator();
+    menu->addAction(rwdStartAction);
+    menu->addAction(ffwdEndAction);
+    menu->addSeparator();
+
+    m_rightButtonPlaybackMenu->addAction(playAction);
+    m_rightButtonPlaybackMenu->addAction(psAction);
+    m_rightButtonPlaybackMenu->addAction(plAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+    m_rightButtonPlaybackMenu->addAction(m_rwdAction);
+    m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+    m_rightButtonPlaybackMenu->addAction(rwdStartAction);
+    m_rightButtonPlaybackMenu->addAction(ffwdEndAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+
+    QAction *fastAction = menu->addAction(tr("Speed Up"));
+    fastAction->setShortcut(tr("Ctrl+PgUp"));
+    connect(fastAction, SIGNAL(triggered()), this, SLOT(speedUpPlayback()));
+    connect(this, SIGNAL(canSpeedUpPlayback(bool)), fastAction, SLOT(setEnabled(bool)));
+    
+    QAction *slowAction = menu->addAction(tr("Slow Down"));
+    slowAction->setShortcut(tr("Ctrl+PgDown"));
+    connect(slowAction, SIGNAL(triggered()), this, SLOT(slowDownPlayback()));
+    connect(this, SIGNAL(canSlowDownPlayback(bool)), slowAction, SLOT(setEnabled(bool)));
+
+    QAction *normalAction = menu->addAction(tr("Restore Normal Speed"));
+    normalAction->setShortcut(tr("Ctrl+Home"));
+    connect(normalAction, SIGNAL(triggered()), this, SLOT(restoreNormalPlayback()));
+    connect(this, SIGNAL(canChangePlaybackSpeed(bool)), normalAction, SLOT(setEnabled(bool)));
+
+    m_rightButtonPlaybackMenu->addAction(fastAction);
+    m_rightButtonPlaybackMenu->addAction(slowAction);
+    m_rightButtonPlaybackMenu->addAction(normalAction);
 
     toolbar = addToolBar(tr("Edit Toolbar"));
     CommandHistory::getInstance()->registerToolbar(toolbar);
@@ -1550,8 +1586,8 @@ MainWindow::setupToolbars()
     toolbar = addToolBar(tr("Tools Toolbar"));
     QActionGroup *group = new QActionGroup(this);
 
-    action = toolbar->addAction(QIcon(":/icons/navigate.png"),
-				tr("Navigate"));
+    QAction *action = toolbar->addAction(QIcon(":/icons/navigate.png"),
+                                         tr("Navigate"));
     action->setCheckable(true);
     action->setChecked(true);
     action->setShortcut(tr("1"));
@@ -1661,9 +1697,9 @@ MainWindow::updateMenuStates()
     emit canRenameLayer(haveCurrentLayer);
     emit canEditLayer(haveCurrentEditableLayer);
     emit canSelect(haveMainModel && haveCurrentPane);
-    emit canPlay(/*!!! haveMainModel && */ havePlayTarget);
-    emit canFfwd(haveCurrentTimeInstantsLayer || haveCurrentTimeValueLayer);
-    emit canRewind(haveCurrentTimeInstantsLayer || haveCurrentTimeValueLayer);
+    emit canPlay(havePlayTarget);
+    emit canFfwd(true);
+    emit canRewind(true);
     emit canPaste(haveCurrentEditableLayer && haveClipboardContents);
     emit canInsertInstant(haveCurrentPane);
     emit canInsertInstantsAtBoundaries(haveCurrentPane && haveSelection);
@@ -1671,6 +1707,30 @@ MainWindow::updateMenuStates()
     emit canClearSelection(haveSelection);
     emit canEditSelection(haveSelection && haveCurrentEditableLayer);
     emit canSave(m_sessionFile != "" && m_documentModified);
+
+    emit canChangePlaybackSpeed(true);
+    int v = m_playSpeed->value();
+    emit canSpeedUpPlayback(v < m_playSpeed->maximum());
+    emit canSlowDownPlayback(v > m_playSpeed->minimum());
+
+    if (m_ffwdAction && m_rwdAction) {
+        if (haveCurrentTimeInstantsLayer) {
+            m_ffwdAction->setText(tr("Fast Forward to Next Instant"));
+            m_ffwdAction->setStatusTip(tr("Fast forward to the next time instant in the current layer"));
+            m_rwdAction->setText(tr("Rewind to Previous Instant"));
+            m_rwdAction->setStatusTip(tr("Rewind to the previous time instant in the current layer"));
+        } else if (haveCurrentTimeValueLayer) {
+            m_ffwdAction->setText(tr("Fast Forward to Next Point"));
+            m_ffwdAction->setStatusTip(tr("Fast forward to the next point in the current layer"));
+            m_rwdAction->setText(tr("Rewind to Previous Point"));
+            m_rwdAction->setStatusTip(tr("Rewind to the previous point in the current layer"));
+        } else {
+            m_ffwdAction->setText(tr("Fast Forward"));
+            m_ffwdAction->setStatusTip(tr("Fast forward"));
+            m_rwdAction->setText(tr("Rewind"));
+            m_rwdAction->setStatusTip(tr("Rewind"));
+        }
+    }
 }
 
 void
@@ -3298,27 +3358,30 @@ MainWindow::ffwd()
     int frame = m_viewManager->getPlaybackFrame();
     ++frame;
 
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (!pane) return;
+    Layer *layer = getSnapLayer();
+    size_t sr = getMainModel()->getSampleRate();
 
-    Layer *layer = pane->getSelectedLayer();
+    if (!layer) {
 
-    if (!dynamic_cast<TimeInstantLayer *>(layer) &&
-        !dynamic_cast<TimeValueLayer *>(layer)) return;
+        frame = RealTime::realTime2Frame
+            (RealTime::frame2RealTime(frame, sr) + RealTime(2, 0), sr);
+        if (frame > int(getMainModel()->getEndFrame())) {
+            frame = getMainModel()->getEndFrame();
+        }
 
-    size_t resolution = 0;
-    if (!layer->snapToFeatureFrame(pane, frame, resolution, Layer::SnapRight)) {
-        frame = getMainModel()->getEndFrame();
+    } else {
+
+        size_t resolution = 0;
+        if (!layer->snapToFeatureFrame(m_paneStack->getCurrentPane(),
+                                       frame, resolution, Layer::SnapRight)) {
+            frame = getMainModel()->getEndFrame();
+        }
     }
+        
+    if (frame < 0) frame = 0;
 
     if (m_viewManager->getPlaySelectionMode()) {
-        MultiSelection::SelectionList sl = m_viewManager->getSelections();
-        if (!sl.empty()) {
-            MultiSelection::SelectionList::iterator i = sl.end();
-            --i;
-            int selectionEndFrame = i->getEndFrame();
-            if (frame > selectionEndFrame) frame = selectionEndFrame;
-        }
+        frame = m_viewManager->constrainFrameToSelection(size_t(frame));
     }
     
     m_viewManager->setPlaybackFrame(frame);
@@ -3332,13 +3395,7 @@ MainWindow::ffwdEnd()
     size_t frame = getMainModel()->getEndFrame();
 
     if (m_viewManager->getPlaySelectionMode()) {
-        MultiSelection::SelectionList sl = m_viewManager->getSelections();
-        if (!sl.empty()) {
-            MultiSelection::SelectionList::iterator i = sl.end();
-            --i;
-            size_t selectionEndFrame = i->getEndFrame();
-            if (frame > selectionEndFrame) frame = selectionEndFrame;
-        }
+        frame = m_viewManager->constrainFrameToSelection(frame);
     }
 
     m_viewManager->setPlaybackFrame(frame);
@@ -3352,25 +3409,30 @@ MainWindow::rewind()
     int frame = m_viewManager->getPlaybackFrame();
     if (frame > 0) --frame;
 
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (!pane) return;
+    Layer *layer = getSnapLayer();
+    size_t sr = getMainModel()->getSampleRate();
 
-    Layer *layer = pane->getSelectedLayer();
+    if (!layer) {
+        
+        frame = RealTime::realTime2Frame
+            (RealTime::frame2RealTime(frame, sr) - RealTime(2, 0), sr);
+        if (frame < int(getMainModel()->getStartFrame())) {
+            frame = getMainModel()->getStartFrame();
+        }
 
-    if (!dynamic_cast<TimeInstantLayer *>(layer) &&
-        !dynamic_cast<TimeValueLayer *>(layer)) return;
+    } else {
 
-    size_t resolution = 0;
-    if (!layer->snapToFeatureFrame(pane, frame, resolution, Layer::SnapLeft)) {
-        frame = getMainModel()->getEndFrame();
+        size_t resolution = 0;
+        if (!layer->snapToFeatureFrame(m_paneStack->getCurrentPane(),
+                                       frame, resolution, Layer::SnapLeft)) {
+            frame = getMainModel()->getStartFrame();
+        }
     }
 
+    if (frame < 0) frame = 0;
+
     if (m_viewManager->getPlaySelectionMode()) {
-        MultiSelection::SelectionList sl = m_viewManager->getSelections();
-        if (!sl.empty()) {
-            int selectionStartFrame = sl.begin()->getStartFrame();
-            if (frame < selectionStartFrame) frame = selectionStartFrame;
-        }
+        frame = m_viewManager->constrainFrameToSelection(size_t(frame));
     }
 
     m_viewManager->setPlaybackFrame(frame);
@@ -3384,14 +3446,36 @@ MainWindow::rewindStart()
     size_t frame = getMainModel()->getStartFrame();
 
     if (m_viewManager->getPlaySelectionMode()) {
-        MultiSelection::SelectionList sl = m_viewManager->getSelections();
-        if (!sl.empty()) {
-            size_t selectionStartFrame = sl.begin()->getStartFrame();
-            if (frame < selectionStartFrame) frame = selectionStartFrame;
-        }
+        frame = m_viewManager->constrainFrameToSelection(frame);
     }
 
     m_viewManager->setPlaybackFrame(frame);
+}
+
+Layer *
+MainWindow::getSnapLayer() const
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (!pane) return 0;
+
+    Layer *layer = pane->getSelectedLayer();
+
+    if (!dynamic_cast<TimeInstantLayer *>(layer) &&
+        !dynamic_cast<TimeValueLayer *>(layer) &&
+        !dynamic_cast<TimeRulerLayer *>(layer)) {
+
+        layer = 0;
+
+        for (int i = pane->getLayerCount(); i > 0; --i) {
+            Layer *l = pane->getLayer(i-1);
+            if (dynamic_cast<TimeRulerLayer *>(l)) {
+                layer = l;
+                break;
+            }
+        }
+    }
+
+    return layer;
 }
 
 void
@@ -3783,28 +3867,29 @@ MainWindow::playSpeedChanged(int position)
     PlaySpeedRangeMapper mapper(0, 200);
 
     float percent = m_playSpeed->mappedValue();
-
     float factor = mapper.getFactorForValue(percent);
-
-//    float factor = mapper.getFactorForPosition(position);
-//    float percent = mapper.getValueForPosition(position);
 
     std::cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << std::endl;
 
-//!!!    bool slow = (position < 100);
     bool something = (position != 100);
-/*!!!
+
     int pc = lrintf(percent);
 
-    m_playSpeed->setToolTip(tr("Playback speed: %1%2%")
-                            .arg(!slow ? "+" : "")
-			    .arg(pc));
-*/
+    if (!something) {
+        contextHelpChanged(tr("Playback speed: Normal"));
+    } else {
+        contextHelpChanged(tr("Playback speed: %1%2%")
+                           .arg(position > 100 ? "+" : "")
+                           .arg(pc));
+    }
+
     m_playSharpen->setEnabled(something);
     m_playMono->setEnabled(something);
     bool sharpen = (something && m_playSharpen->isChecked());
     bool mono = (something && m_playMono->isChecked());
     m_playSource->setTimeStretch(factor, sharpen, mono);
+
+    updateMenuStates();
 }
 
 void
@@ -3828,6 +3913,30 @@ MainWindow::playMonoToggled()
 
     playSpeedChanged(m_playSpeed->value());
 }    
+
+void
+MainWindow::speedUpPlayback()
+{
+    int value = m_playSpeed->value();
+    value = value + m_playSpeed->pageStep();
+    if (value > m_playSpeed->maximum()) value = m_playSpeed->maximum();
+    m_playSpeed->setValue(value);
+}
+
+void
+MainWindow::slowDownPlayback()
+{
+    int value = m_playSpeed->value();
+    value = value - m_playSpeed->pageStep();
+    if (value < m_playSpeed->minimum()) value = m_playSpeed->minimum();
+    m_playSpeed->setValue(value);
+}
+
+void
+MainWindow::restoreNormalPlayback()
+{
+    m_playSpeed->setValue(m_playSpeed->defaultValue());
+}
 
 void
 MainWindow::playbackFrameChanged(unsigned long frame)
@@ -4106,8 +4215,9 @@ MainWindow::showLayerTree()
 {
     QTreeView *view = new QTreeView();
     LayerTreeModel *tree = new LayerTreeModel(m_paneStack);
-    view->expand(tree->index(0, 0, QModelIndex()));
     view->setModel(tree);
+//    view->expand(tree->index(0, 0, QModelIndex()));
+    view->expandAll();
     view->show();
 }
 

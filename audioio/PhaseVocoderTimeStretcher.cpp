@@ -545,7 +545,7 @@ PhaseVocoderTimeStretcher::isTransient()
         isTransient = true;
 
 
-        std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientScore << ", diff = " << count - m_prevTransientScore << ", ratio = " << (m_totalCount > 0 ? (float (m_n2sum) / float(m_totalCount * m_n1)) : 1.f) << ", ideal = " << m_ratio << ")" << std::endl;
+//        std::cerr << "isTransient (count = " << count << ", prev = " << m_prevTransientScore << ", diff = " << count - m_prevTransientScore << ", ratio = " << (m_totalCount > 0 ? (float (m_n2sum) / float(m_totalCount * m_n1)) : 1.f) << ", ideal = " << m_ratio << ")" << std::endl;
 //    } else {
 //        std::cerr << " !transient (count = " << count << ", prev = " << m_prevTransientScore << ", diff = " << count - m_prevTransientScore << ")" << std::endl;
     }
