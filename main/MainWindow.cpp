@@ -3411,6 +3411,18 @@ MainWindow::rewind()
 
     Layer *layer = getSnapLayer();
     size_t sr = getMainModel()->getSampleRate();
+    
+    // when rewinding during playback, we want to allow a period
+    // following a rewind target point at which the rewind will go to
+    // the prior point instead of the immediately neighbouring one
+    if (m_playSource && m_playSource->isPlaying()) {
+        RealTime ct = RealTime::frame2RealTime(frame, sr);
+        ct = ct - RealTime::fromSeconds(0.25);
+        if (ct < RealTime::zeroTime) ct = RealTime::zeroTime;
+//        std::cerr << "rewind: frame " << frame << " -> ";
+        frame = RealTime::realTime2Frame(ct, sr);
+//        std::cerr << frame << std::endl;
+    }
 
     if (!layer) {
         
