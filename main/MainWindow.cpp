@@ -88,6 +88,7 @@
 #include <QProcess>
 #include <QCheckBox>
 #include <QRegExp>
+#include <QScrollArea>
 
 #include <iostream>
 #include <cstdio>
@@ -157,7 +158,14 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_descriptionLabel = new QLabel;
 
-    m_paneStack = new PaneStack(frame, m_viewManager);
+    QScrollArea *scroll = new QScrollArea(frame);
+    scroll->setWidgetResizable(true);
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    QFrame *subframe = new QFrame;
+    scroll->setWidget(subframe);
+
+    m_paneStack = new PaneStack(subframe, m_viewManager);
     connect(m_paneStack, SIGNAL(currentPaneChanged(Pane *)),
 	    this, SLOT(currentPaneChanged(Pane *)));
     connect(m_paneStack, SIGNAL(currentLayerChanged(Pane *, Layer *)),
@@ -3216,6 +3224,11 @@ MainWindow::zoomToFit()
     size_t start = model->getStartFrame();
     size_t end = model->getEndFrame();
     size_t pixels = currentPane->width();
+    std::cerr << "pixels " << pixels << " -> ";
+    size_t sw = currentPane->getVerticalScaleWidth();
+    if (pixels > sw * 2) pixels -= sw * 2;
+    else pixels = 1;
+    std::cerr << pixels << " (sw = " << sw << ")";
     size_t zoomLevel = (end - start) / pixels;
 
     currentPane->setZoomLevel(zoomLevel);
