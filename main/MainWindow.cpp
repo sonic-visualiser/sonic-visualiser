@@ -161,11 +161,16 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     QScrollArea *scroll = new QScrollArea(frame);
     scroll->setWidgetResizable(true);
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scroll->setFrameShape(QFrame::NoFrame);
 
-    QFrame *subframe = new QFrame;
-    scroll->setWidget(subframe);
+//    QFrame *subframe = new QFrame;
+//    scroll->setWidget(subframe);
 
-    m_paneStack = new PaneStack(subframe, m_viewManager);
+//    QGridLayout *sublayout = new QGridLayout;
+//    subframe->setLayout(sublayout);
+
+//    m_paneStack = new PaneStack(subframe, m_viewManager);
+    m_paneStack = new PaneStack(scroll, m_viewManager);
     connect(m_paneStack, SIGNAL(currentPaneChanged(Pane *)),
 	    this, SLOT(currentPaneChanged(Pane *)));
     connect(m_paneStack, SIGNAL(currentLayerChanged(Pane *, Layer *)),
@@ -176,6 +181,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             this, SLOT(propertyStacksResized()));
     connect(m_paneStack, SIGNAL(contextHelpChanged(const QString &)),
             this, SLOT(contextHelpChanged(const QString &)));
+
+//    sublayout->addWidget(m_paneStack, 0, 0);
+    scroll->setWidget(m_paneStack);
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
@@ -256,7 +264,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     settings.endGroup();
 
     layout->setSpacing(4);
-    layout->addWidget(m_paneStack, 0, 0, 1, 5);
+    layout->addWidget(scroll, 0, 0, 1, 5);
     layout->addWidget(m_overview, 1, 0);
     layout->addWidget(m_fader, 1, 1);
     layout->addWidget(m_playSpeed, 1, 2);
@@ -3224,15 +3232,16 @@ MainWindow::zoomToFit()
     size_t start = model->getStartFrame();
     size_t end = model->getEndFrame();
     size_t pixels = currentPane->width();
-    std::cerr << "pixels " << pixels << " -> ";
+
     size_t sw = currentPane->getVerticalScaleWidth();
     if (pixels > sw * 2) pixels -= sw * 2;
     else pixels = 1;
-    std::cerr << pixels << " (sw = " << sw << ")";
+    if (pixels > 4) pixels -= 4;
+
     size_t zoomLevel = (end - start) / pixels;
 
     currentPane->setZoomLevel(zoomLevel);
-    currentPane->setStartFrame(start);
+    currentPane->setCentreFrame((start + end) / 2);
 }
 
 void
