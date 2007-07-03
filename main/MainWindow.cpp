@@ -4250,8 +4250,8 @@ MainWindow::showLayerTree()
     QTreeView *view = new QTreeView();
     LayerTreeModel *tree = new LayerTreeModel(m_paneStack);
     view->setModel(tree);
-//    view->expand(tree->index(0, 0, QModelIndex()));
     view->expandAll();
+    view->resize(500, 300); //!!!
     view->show();
 }
 
