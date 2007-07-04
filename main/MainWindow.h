@@ -52,6 +52,7 @@ class PreferencesDialog;
 class QPushButton;
 class OSCQueue;
 class OSCMessage;
+class KeyReference;
 
 
 class MainWindow : public QMainWindow
@@ -242,6 +243,7 @@ protected slots:
     void website();
     void help();
     void about();
+    void keyReference();
 
 protected:
     QString                  m_sessionFile;
@@ -293,6 +295,8 @@ protected:
     mutable QString          m_myStatusMessage;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
+
+    KeyReference            *m_keyReference;
 
     WaveFileModel *getMainModel();
     const WaveFileModel *getMainModel() const;
