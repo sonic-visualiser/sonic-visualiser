@@ -933,7 +933,7 @@ MainWindow::setupPaneAndLayerMenus()
 		
             case LayerFactory::Spectrogram:
                 icon = QIcon(":/icons/spectrogram.png");
-                mainText = tr("Add &Spectrogram");
+                mainText = tr("Add Spectro&gram");
                 if (menuType == 0) {
                     shortcutText = tr("G");
                     tipText = tr("Add a new pane showing a spectrogram");
