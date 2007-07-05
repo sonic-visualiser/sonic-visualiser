@@ -31,6 +31,9 @@ public:
     PreferencesDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
     virtual ~PreferencesDialog();
 
+public slots:
+    void applicationClosing(bool quickly);
+
 protected slots:
     void windowTypeChanged(WindowType type);
     void spectrogramSmoothingChanged(int state);

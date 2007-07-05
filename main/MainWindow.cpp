@@ -331,6 +331,7 @@ MainWindow::~MainWindow()
     delete m_viewManager;
     delete m_oscQueue;
     delete m_keyReference;
+    delete m_preferencesDialog;
     Profiles::getInstance()->dump();
 }
 
@@ -691,7 +692,7 @@ MainWindow::setupEditMenu()
 
     action = new QAction(tr("Insert Instants at Selection &Boundaries"), this);
     action->setShortcut(tr("Shift+Enter"));
-    action->setStatusTip(tr("Insert new time instants at the start and end of the current selection, in a new layer if necessary"));
+    action->setStatusTip(tr("Insert new time instants at the start and end of the current selected regions, in a new layer if necessary"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstantsAtBoundaries()));
     connect(this, SIGNAL(canInsertInstantsAtBoundaries(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
@@ -1127,7 +1128,6 @@ MainWindow::setupPaneAndLayerMenus()
                             action = new QAction(icon, actionText, this);
                             if (!model || model == getMainModel()) {
                                 action->setShortcut(shortcutText); 
-                                m_keyReference->registerShortcut(action);
                             }
                         } else {
                             action = new QAction(actionText, this);
@@ -1193,14 +1193,13 @@ MainWindow::setupPaneAndLayerMenus()
     m_rightButtonLayerMenu->addSeparator();
     menu->addSeparator();
 
-    action = new QAction(tr("&Rename Layer..."), this);
-    action->setShortcut(tr("R"));
-    action->setStatusTip(tr("Rename the currently active layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(renameCurrentLayer()));
-    connect(this, SIGNAL(canRenameLayer(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-    m_rightButtonLayerMenu->addAction(action);
+    QAction *raction = new QAction(tr("&Rename Layer..."), this);
+    raction->setShortcut(tr("R"));
+    raction->setStatusTip(tr("Rename the currently active layer"));
+    connect(raction, SIGNAL(triggered()), this, SLOT(renameCurrentLayer()));
+    connect(this, SIGNAL(canRenameLayer(bool)), raction, SLOT(setEnabled(bool)));
+    menu->addAction(raction);
+    m_rightButtonLayerMenu->addAction(raction);
 
     action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Layer"), this);
     action->setShortcut(tr("Ctrl+D"));
@@ -1210,6 +1209,8 @@ MainWindow::setupPaneAndLayerMenus()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     m_rightButtonLayerMenu->addAction(action);
+
+    m_keyReference->registerShortcut(raction); // rename after delete, so delete layer goes next to delete pane
 }
 
 void
@@ -1436,7 +1437,7 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
 
-    action = new QAction(tr("&Key Reference"), this);
+    action = new QAction(tr("&Key and Mouse Reference"), this);
     action->setShortcut(tr("F2"));
     action->setStatusTip(tr("Open a window showing the keystrokes you can use in Sonic Visualiser"));
     connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
@@ -1460,7 +1461,9 @@ MainWindow::setupRecentFilesMenu()
         if (i == 0) {
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
-                (action, tr("Re-open the most recently opened file"));
+                (tr("Re-open"),
+                 action->shortcut(),
+                 tr("Re-open the current or most recently opened file"));
         }
 	m_recentFilesMenu->addAction(action);
     }
@@ -1483,9 +1486,9 @@ MainWindow::setupRecentTransformsMenu()
         if (i == 0) {
             ti->second->setShortcut(tr("Ctrl+T"));
             m_keyReference->registerShortcut
-                (tr("Re-run the most recently run transform"),
+                (tr("Repeat Transform"),
                  ti->second->shortcut(),
-                 "");
+                 tr("Re-select the most recently run transform"));
         }
 	m_recentTransformsMenu->addAction(ti->second);
     }
@@ -1591,6 +1594,7 @@ MainWindow::setupToolbars()
     QAction *m_rwdAction = toolbar->addAction(QIcon(":/icons/rewind.png"),
                                               tr("Rewind"));
     m_rwdAction->setShortcut(tr("PgUp"));
+    m_rwdAction->setStatusTip(tr("Rewind to the previous time instant or time ruler notch"));
     connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
     connect(this, SIGNAL(canRewind(bool)), m_rwdAction, SLOT(setEnabled(bool)));
 
@@ -1607,6 +1611,7 @@ MainWindow::setupToolbars()
     m_ffwdAction = toolbar->addAction(QIcon(":/icons/ffwd.png"),
                                               tr("Fast Forward"));
     m_ffwdAction->setShortcut(tr("PgDown"));
+    m_ffwdAction->setStatusTip(tr("Fast-forward to the next time instant or time ruler notch"));
     connect(m_ffwdAction, SIGNAL(triggered()), this, SLOT(ffwd()));
     connect(this, SIGNAL(canFfwd(bool)), m_ffwdAction, SLOT(setEnabled(bool)));
 
@@ -1624,7 +1629,7 @@ MainWindow::setupToolbars()
     psAction->setCheckable(true);
     psAction->setChecked(m_viewManager->getPlaySelectionMode());
     psAction->setShortcut(tr("s"));
-    psAction->setStatusTip(tr("Constrain playback to the selected area"));
+    psAction->setStatusTip(tr("Constrain playback to the selected regions"));
     connect(m_viewManager, SIGNAL(playSelectionModeChanged(bool)),
             psAction, SLOT(setChecked(bool)));
     connect(psAction, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
@@ -1673,16 +1678,19 @@ MainWindow::setupToolbars()
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
     fastAction->setShortcut(tr("Ctrl+PgUp"));
+    fastAction->setStatusTip(tr("Time-stretch playback to speed it up without changing pitch"));
     connect(fastAction, SIGNAL(triggered()), this, SLOT(speedUpPlayback()));
     connect(this, SIGNAL(canSpeedUpPlayback(bool)), fastAction, SLOT(setEnabled(bool)));
     
     QAction *slowAction = menu->addAction(tr("Slow Down"));
     slowAction->setShortcut(tr("Ctrl+PgDown"));
+    slowAction->setStatusTip(tr("Time-stretch playback to slow it down without changing pitch"));
     connect(slowAction, SIGNAL(triggered()), this, SLOT(slowDownPlayback()));
     connect(this, SIGNAL(canSlowDownPlayback(bool)), slowAction, SLOT(setEnabled(bool)));
 
     QAction *normalAction = menu->addAction(tr("Restore Normal Speed"));
     normalAction->setShortcut(tr("Ctrl+Home"));
+    normalAction->setStatusTip(tr("Restore non-time-stretched playback"));
     connect(normalAction, SIGNAL(triggered()), this, SLOT(restoreNormalPlayback()));
     connect(this, SIGNAL(canChangePlaybackSpeed(bool)), normalAction, SLOT(setEnabled(bool)));
 
@@ -1764,6 +1772,8 @@ MainWindow::setupToolbars()
 //    m_toolActions[ViewManager::TextMode] = action;
 
     toolNavigateSelected();
+
+    Pane::registerShortcuts(*m_keyReference);
 }
 
 void
@@ -3123,6 +3133,15 @@ MainWindow::closeEvent(QCloseEvent *e)
     settings.setValue("position", pos());
     settings.endGroup();
 
+    delete m_keyReference;
+    m_keyReference = 0;
+
+    closeSession();
+    if (m_preferencesDialog &&
+        m_preferencesDialog->isVisible()) {
+        m_preferencesDialog->applicationClosing(false);
+    }
+
     e->accept();
     return;
 }
@@ -3131,8 +3150,19 @@ bool
 MainWindow::commitData(bool mayAskUser)
 {
     if (mayAskUser) {
-        return checkSaveModified();
+        bool rv = checkSaveModified();
+        if (rv) {
+            if (m_preferencesDialog &&
+                m_preferencesDialog->isVisible()) {
+                m_preferencesDialog->applicationClosing(false);
+            }
+        }
+        return rv;
     } else {
+        if (m_preferencesDialog &&
+            m_preferencesDialog->isVisible()) {
+            m_preferencesDialog->applicationClosing(true);
+        }
         if (!m_documentModified) return true;
 
         // If we can't check with the user first, then we can't save

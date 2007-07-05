@@ -24,6 +24,8 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QString>
+#include <QDialogButtonBox>
+#include <QMessageBox>
 
 #include "widgets/WindowTypeSelector.h"
 #include "base/Preferences.h"
@@ -31,7 +33,7 @@
 PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     QDialog(parent, flags)
 {
-    setWindowTitle(tr("Application Preferences"));
+    setWindowTitle(tr("Sonic Visualiser: Application Preferences"));
 
     Preferences *prefs = Preferences::getInstance();
 
@@ -39,7 +41,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     setLayout(grid);
     
     QGroupBox *groupBox = new QGroupBox;
-    groupBox->setTitle(tr("Sonic Visualiser Application Preferences"));
+    groupBox->setTitle(tr("Application Preferences"));
     grid->addWidget(groupBox, 0, 0);
     
     QGridLayout *subgrid = new QGridLayout;
@@ -144,15 +146,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     subgrid->setRowStretch(row, 10);
     row++;
     
-    QHBoxLayout *hbox = new QHBoxLayout;
-    grid->addLayout(hbox, 1, 0);
+    QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
+    grid->addWidget(bb, 1, 0);
     
     QPushButton *ok = new QPushButton(tr("OK"));
     QPushButton *cancel = new QPushButton(tr("Cancel"));
-    hbox->addStretch(10);
-    hbox->addWidget(ok);
-    hbox->addWidget(m_applyButton);
-    hbox->addWidget(cancel);
+    bb->addButton(ok, QDialogButtonBox::AcceptRole);
+    bb->addButton(m_applyButton, QDialogButtonBox::ApplyRole);
+    bb->addButton(cancel, QDialogButtonBox::RejectRole);
     connect(ok, SIGNAL(clicked()), this, SLOT(okClicked()));
     connect(m_applyButton, SIGNAL(clicked()), this, SLOT(applyClicked()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(cancelClicked()));
@@ -225,5 +226,31 @@ void
 PreferencesDialog::cancelClicked()
 {
     reject();
+}
+
+void
+PreferencesDialog::applicationClosing(bool quickly)
+{
+    if (quickly) {
+        reject();
+        return;
+    }
+
+    if (m_applyButton->isEnabled()) {
+        int rv = QMessageBox::warning
+            (this, tr("Preferences Changed"),
+             tr("Some preferences have been changed but not applied.\n"
+                "Apply them before closing?"),
+             QMessageBox::Apply | QMessageBox::Discard,
+             QMessageBox::Discard);
+        if (rv == QMessageBox::Apply) {
+            applyClicked();
+            accept();
+        } else {
+            reject();
+        }
+    } else {
+        accept();
+    }
 }
 
