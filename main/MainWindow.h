@@ -100,6 +100,7 @@ signals:
     void canSelect(bool);
     void canClearSelection(bool);
     void canEditSelection(bool);
+    void canDeleteSelection(bool);
     void canPaste(bool);
     void canInsertInstant(bool);
     void canInsertInstantsAtBoundaries(bool);
@@ -284,6 +285,7 @@ protected:
     QMenu                   *m_rightButtonTransformsMenu;
     QMenu                   *m_rightButtonPlaybackMenu;
 
+    QAction                 *m_deleteSelectedAction;
     QAction                 *m_ffwdAction;
     QAction                 *m_rwdAction;
 

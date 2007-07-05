@@ -616,14 +616,14 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
-    action = new QAction(tr("&Delete Selected Items"), this);
-    action->setShortcut(tr("Del"));
-    action->setStatusTip(tr("Delete the selection from the current layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(deleteSelected()));
-    connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-    m_rightButtonMenu->addAction(action);
+    m_deleteSelectedAction = new QAction(tr("&Delete Selected Items"), this);
+    m_deleteSelectedAction->setShortcut(tr("Del"));
+    m_deleteSelectedAction->setStatusTip(tr("Delete items in current selection from the current layer"));
+    connect(m_deleteSelectedAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
+    connect(this, SIGNAL(canDeleteSelection(bool)), m_deleteSelectedAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_deleteSelectedAction);
+    menu->addAction(m_deleteSelectedAction);
+    m_rightButtonMenu->addAction(m_deleteSelectedAction);
 
     menu->addSeparator();
     m_rightButtonMenu->addSeparator();
@@ -1431,17 +1431,17 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(help()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-    
-    action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
-    action->setStatusTip(tr("Open the Sonic Visualiser website")); 
-    connect(action, SIGNAL(triggered()), this, SLOT(website()));
-    menu->addAction(action);
 
     action = new QAction(tr("&Key and Mouse Reference"), this);
     action->setShortcut(tr("F2"));
     action->setStatusTip(tr("Open a window showing the keystrokes you can use in Sonic Visualiser"));
     connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
     m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+    
+    action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
+    action->setStatusTip(tr("Open the Sonic Visualiser website")); 
+    connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
     action = new QAction(tr("&About Sonic Visualiser"), this); 
@@ -1839,6 +1839,17 @@ MainWindow::updateMenuStates()
     emit canEditSelection(haveSelection && haveCurrentEditableLayer);
     emit canSave(m_sessionFile != "" && m_documentModified);
 
+    if (m_viewManager && 
+        (m_viewManager->getToolMode() == ViewManager::MeasureMode)) {
+        emit canDeleteSelection(haveCurrentLayer);
+        m_deleteSelectedAction->setText(tr("&Delete Current Measurement"));
+        m_deleteSelectedAction->setStatusTip(tr("Delete the measurement currently under the mouse pointer"));
+    } else {
+        emit canDeleteSelection(haveSelection && haveCurrentEditableLayer);
+        m_deleteSelectedAction->setText(tr("&Delete Selected Items"));
+        m_deleteSelectedAction->setStatusTip(tr("Delete items in current selection from the current layer"));
+    }
+
     emit canChangePlaybackSpeed(true);
     int v = m_playSpeed->value();
     emit canSpeedUpPlayback(v < m_playSpeed->maximum());
@@ -2126,14 +2137,23 @@ MainWindow::deleteSelected()
 {
     if (m_paneStack->getCurrentPane() &&
 	m_paneStack->getCurrentPane()->getSelectedLayer()) {
+        
+        Layer *layer = m_paneStack->getCurrentPane()->getSelectedLayer();
 
-	MultiSelection::SelectionList selections =
-	    m_viewManager->getSelections();
+        if (m_viewManager && 
+            (m_viewManager->getToolMode() == ViewManager::MeasureMode)) {
 
-	for (MultiSelection::SelectionList::iterator i = selections.begin();
-	     i != selections.end(); ++i) {
+            layer->deleteCurrentMeasureRect();
 
-	    m_paneStack->getCurrentPane()->getSelectedLayer()->deleteSelection(*i);
+        } else {
+
+            MultiSelection::SelectionList selections =
+                m_viewManager->getSelections();
+            
+            for (MultiSelection::SelectionList::iterator i = selections.begin();
+                 i != selections.end(); ++i) {
+                layer->deleteSelection(*i);
+            }
 	}
     }
 }
@@ -3136,9 +3156,9 @@ MainWindow::closeEvent(QCloseEvent *e)
     delete m_keyReference;
     m_keyReference = 0;
 
-    closeSession();
     if (m_preferencesDialog &&
         m_preferencesDialog->isVisible()) {
+        closeSession(); // otherwise we'll have to wait for prefs changes
         m_preferencesDialog->applicationClosing(false);
     }
 
