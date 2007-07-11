@@ -60,6 +60,8 @@
 #include "base/CommandHistory.h"
 #include "base/Profiler.h"
 #include "base/Clipboard.h"
+#include "base/UnitDatabase.h"
+#include "base/ColourDatabase.h"
 #include "osc/OSCQueue.h"
 
 // For version information
@@ -138,9 +140,18 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 {
     setWindowTitle(tr("Sonic Visualiser"));
 
-    UnitDatabase::getInstance()->registerUnit("Hz");
-    UnitDatabase::getInstance()->registerUnit("dB");
-    UnitDatabase::getInstance()->registerUnit("s");
+    UnitDatabase *udb = UnitDatabase::getInstance();
+    udb->registerUnit("Hz");
+    udb->registerUnit("dB");
+    udb->registerUnit("s");
+
+    ColourDatabase *cdb = ColourDatabase::getInstance();
+    cdb->addColour(Qt::black, tr("Black"));
+    cdb->addColour(Qt::darkRed, tr("Red"));
+    cdb->addColour(Qt::darkBlue, tr("Blue"));
+    cdb->addColour(Qt::darkGreen, tr("Green"));
+    cdb->addColour(QColor(200, 50, 255), tr("Purple"));
+    cdb->addColour(QColor(255, 150, 50), tr("Orange"));
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
 	    this, SLOT(documentModified()));
@@ -2757,7 +2768,7 @@ MainWindow::createPlayTarget()
 	QMessageBox::warning
 	    (this, tr("Couldn't open audio device"),
 	     tr("Could not open an audio device for playback.\nAudio playback will not be available during this session.\n"),
-	     QMessageBox::Ok, 0);
+	     QMessageBox::Ok);
     }
     connect(m_fader, SIGNAL(valueChanged(float)),
 	    m_playTarget, SLOT(setOutputGain(float)));
@@ -3230,9 +3241,8 @@ MainWindow::checkSaveModified()
 	QMessageBox::warning(this,
 			     tr("Session modified"),
 			     tr("The current session has been modified.\nDo you want to save it?"),
-			     QMessageBox::Yes,
-			     QMessageBox::No,
-			     QMessageBox::Cancel);
+			     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                             QMessageBox::Yes);
 
     if (button == QMessageBox::Yes) {
 	saveSession();
@@ -4364,7 +4374,7 @@ MainWindow::modelGenerationFailed(QString transformName)
          tr("Failed to generate layer"),
          tr("Failed to generate a derived layer.\n\nThe layer transform \"%1\" failed.\n\nThis probably means that a plugin failed to initialise, perhaps because it\nrejected the processing block size that was requested.")
          .arg(transformName),
-         QMessageBox::Ok, 0);
+         QMessageBox::Ok);
 }
 
 void
@@ -4375,7 +4385,7 @@ MainWindow::modelRegenerationFailed(QString layerName, QString transformName)
          tr("Failed to regenerate layer"),
          tr("Failed to regenerate derived layer \"%1\".\n\nThe layer transform \"%2\" failed to run.\n\nThis probably means the layer used a plugin that is not currently available.")
          .arg(layerName).arg(transformName),
-         QMessageBox::Ok, 0);
+         QMessageBox::Ok);
 }
 
 void
