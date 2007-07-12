@@ -396,6 +396,8 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 
     QString name = attributes.value("name");
 
+    std::cerr << "SVFileReader::readModel: model name \"" << name.toStdString() << "\"" << std::endl;
+
     READ_MANDATORY(int, sampleRate, toInt);
 
     QString type = attributes.value("type").trimmed();
@@ -435,6 +437,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 
         if (!model) return false;
 
+        model->setObjectName(name);
 	m_models[id] = model;
 	if (mainModel) {
 	    m_document->setMainModel(model);
@@ -472,6 +475,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 	    int dataset = attributes.value("dataset").trimmed().toInt(&ok);
 	    if (ok) m_awaitingDatasets[dataset] = id;
 
+            model->setObjectName(name);
 	    m_models[id] = model;
 	    return true;
 
@@ -490,6 +494,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 
 	    SparseOneDimensionalModel *model = new SparseOneDimensionalModel
 		(sampleRate, resolution);
+            model->setObjectName(name);
 	    m_models[id] = model;
 
 	    int dataset = attributes.value("dataset").trimmed().toInt(&ok);
@@ -501,8 +506,12 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 	    
 	    READ_MANDATORY(int, resolution, toInt);
 
+            bool haveMinMax = true;
 	    float minimum = attributes.value("minimum").trimmed().toFloat(&ok);
+            if (!ok) haveMinMax = false;
 	    float maximum = attributes.value("maximum").trimmed().toFloat(&ok);
+            if (!ok) haveMinMax = false;
+
 	    float valueQuantization =
 		attributes.value("valueQuantization").trimmed().toFloat(&ok);
 
@@ -514,18 +523,33 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 		if (attributes.value("subtype") == "text") {
 		    TextModel *model = new TextModel
 			(sampleRate, resolution, notifyOnAdd);
+                    model->setObjectName(name);
 		    m_models[id] = model;
 		} else {
-		    SparseTimeValueModel *model = new SparseTimeValueModel
-			(sampleRate, resolution, minimum, maximum, notifyOnAdd);
+		    SparseTimeValueModel *model;
+                    if (haveMinMax) {
+                        model = new SparseTimeValueModel
+                            (sampleRate, resolution, minimum, maximum, notifyOnAdd);
+                    } else {
+                        model = new SparseTimeValueModel
+                            (sampleRate, resolution, notifyOnAdd);
+                    }
                     model->setScaleUnits(units);
+                    model->setObjectName(name);
 		    m_models[id] = model;
 		}
 	    } else {
-		NoteModel *model = new NoteModel
-		    (sampleRate, resolution, minimum, maximum, notifyOnAdd);
+		NoteModel *model;
+                if (haveMinMax) {
+                    model = new NoteModel
+                        (sampleRate, resolution, minimum, maximum, notifyOnAdd);
+                } else {
+                    model = new NoteModel
+                        (sampleRate, resolution, notifyOnAdd);
+                }
 		model->setValueQuantization(valueQuantization);
                 model->setScaleUnits(units);
+                model->setObjectName(name);
 		m_models[id] = model;
 	    }
 
