@@ -299,6 +299,7 @@ main(int argc, char **argv)
         if (i->startsWith('-')) continue;
 
         if (i->startsWith("http:") || i->startsWith("ftp:")) {
+            std::cerr << "opening URL: \"" << i->toStdString() << "\"..." << std::endl;
             status = gui.openURL(QUrl(*i));
             continue;
         }
