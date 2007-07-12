@@ -152,6 +152,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     cdb->addColour(Qt::darkGreen, tr("Green"));
     cdb->addColour(QColor(200, 50, 255), tr("Purple"));
     cdb->addColour(QColor(255, 150, 50), tr("Orange"));
+    cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
+    cdb->setUseDarkBackground(cdb->addColour(QColor(30, 150, 255), tr("Bright Blue")), true);
+    cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
+    cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
+    cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
 	    this, SLOT(documentModified()));
