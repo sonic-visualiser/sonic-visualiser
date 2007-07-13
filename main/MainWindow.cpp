@@ -1779,6 +1779,7 @@ MainWindow::setupToolbars()
     action->setShortcut(tr("5"));
     action->setStatusTip(tr("Make measurements in layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolMeasureSelected()));
+    connect(this, SIGNAL(canMeasureLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::MeasureMode] = action;
@@ -1847,6 +1848,7 @@ MainWindow::updateMenuStates()
     emit canDeleteCurrentLayer(haveCurrentLayer);
     emit canRenameLayer(haveCurrentLayer);
     emit canEditLayer(haveCurrentEditableLayer);
+    emit canMeasureLayer(haveCurrentLayer);
     emit canSelect(haveMainModel && haveCurrentPane);
     emit canPlay(havePlayTarget);
     emit canFfwd(true);

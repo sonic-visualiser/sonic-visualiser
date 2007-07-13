@@ -97,6 +97,7 @@ signals:
     void canExportImage(bool);
     void canRenameLayer(bool);
     void canEditLayer(bool);
+    void canMeasureLayer(bool);
     void canSelect(bool);
     void canClearSelection(bool);
     void canEditSelection(bool);
