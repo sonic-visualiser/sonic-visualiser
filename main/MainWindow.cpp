@@ -37,6 +37,7 @@
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
+#include "widgets/IconLoader.h"
 #include "widgets/LayerTree.h"
 #include "widgets/ListInputDialog.h"
 #include "widgets/SubdividingMenu.h"
@@ -182,13 +183,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scroll->setFrameShape(QFrame::NoFrame);
 
-//    QFrame *subframe = new QFrame;
-//    scroll->setWidget(subframe);
-
-//    QGridLayout *sublayout = new QGridLayout;
-//    subframe->setLayout(sublayout);
-
-//    m_paneStack = new PaneStack(subframe, m_viewManager);
     m_paneStack = new PaneStack(scroll, m_viewManager);
     connect(m_paneStack, SIGNAL(currentPaneChanged(Pane *)),
 	    this, SLOT(currentPaneChanged(Pane *)));
@@ -201,7 +195,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_paneStack, SIGNAL(contextHelpChanged(const QString &)),
             this, SLOT(contextHelpChanged(const QString &)));
 
-//    sublayout->addWidget(m_paneStack, 0, 0);
     scroll->setWidget(m_paneStack);
 
     m_overview = new Overview(frame);
@@ -218,8 +211,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_panLayer = new WaveformLayer;
     m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
-//    m_panLayer->setScale(WaveformLayer::MeterScale);
-//    m_panLayer->setAutoNormalize(true);
     m_panLayer->setBaseColour(Qt::darkGreen);
     m_panLayer->setAggressiveCacheing(true);
     m_overview->addLayer(m_panLayer);
@@ -252,14 +243,15 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
+    IconLoader il;
+
     m_playSharpen = new NotifyingPushButton(frame);
     m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
     m_playSharpen->setFixedSize(20, 20);
-//    m_playSharpen->setFlat(true);
     m_playSharpen->setEnabled(false);
     m_playSharpen->setCheckable(true);
     m_playSharpen->setChecked(false);
-    m_playSharpen->setIcon(QIcon(":icons/sharpen.png"));
+    m_playSharpen->setIcon(il.load("sharpen"));
     connect(m_playSharpen, SIGNAL(clicked()), this, SLOT(playSharpenToggled()));
     connect(m_playSharpen, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSharpen, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
@@ -267,11 +259,10 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playMono = new NotifyingPushButton(frame);
     m_playMono->setToolTip(tr("Run time stretcher in mono only"));
     m_playMono->setFixedSize(20, 20);
-//    m_playMono->setFlat(true);
     m_playMono->setEnabled(false);
     m_playMono->setCheckable(true);
     m_playMono->setChecked(false);
-    m_playMono->setIcon(QIcon(":icons/mono.png"));
+    m_playMono->setIcon(il.load("mono"));
     connect(m_playMono, SIGNAL(clicked()), this, SLOT(playMonoToggled()));
     connect(m_playMono, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playMono, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
@@ -464,8 +455,10 @@ MainWindow::setupFileMenu()
 
     m_keyReference->setCategory(tr("File and Session Management"));
 
-    QIcon icon(":icons/filenew.png");
-    icon.addFile(":icons/filenew-22.png");
+    IconLoader il;
+
+    QIcon icon = il.load("filenew");
+    icon.addPixmap(il.loadPixmap("filenew-22"));
     QAction *action = new QAction(icon, tr("&New Session"), this);
     action->setShortcut(tr("Ctrl+N"));
     action->setStatusTip(tr("Abandon the current Sonic Visualiser session and start a new one"));
@@ -474,7 +467,7 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
     toolbar->addAction(action);
 
-    icon = QIcon(":icons/fileopensession.png");
+    icon = il.load("fileopensession");
     action = new QAction(icon, tr("&Open Session..."), this);
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a previously saved Sonic Visualiser session file"));
@@ -482,16 +475,16 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    icon = QIcon(":icons/fileopen.png");
-    icon.addFile(":icons/fileopen-22.png");
+    icon = il.load("fileopen");
+    icon.addPixmap(il.loadPixmap("fileopen-22"));
 
     action = new QAction(icon, tr("&Open..."), this);
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(openSomething()));
     toolbar->addAction(action);
 
-    icon = QIcon(":icons/filesave.png");
-    icon.addFile(":icons/filesave-22.png");
+    icon = il.load("filesave");
+    icon.addPixmap(il.loadPixmap("filesave-22"));
     action = new QAction(icon, tr("&Save Session"), this);
     action->setShortcut(tr("Ctrl+S"));
     action->setStatusTip(tr("Save the current session into a Sonic Visualiser session file"));
@@ -501,8 +494,8 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
     toolbar->addAction(action);
 	
-    icon = QIcon(":icons/filesaveas.png");
-    icon.addFile(":icons/filesaveas-22.png");
+    icon = il.load("filesaveas");
+    icon.addPixmap(il.loadPixmap("filesaveas-22"));
     action = new QAction(icon, tr("Save Session &As..."), this);
     action->setStatusTip(tr("Save the current session into a new Sonic Visualiser session file"));
     connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAs()));
@@ -511,7 +504,7 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    icon = QIcon(":icons/fileopenaudio.png");
+    icon = il.load("fileopenaudio");
     action = new QAction(icon, tr("&Import Audio File..."), this);
     action->setShortcut(tr("Ctrl+I"));
     action->setStatusTip(tr("Import an existing audio file"));
@@ -581,7 +574,7 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 	
     menu->addSeparator();
-    action = new QAction(QIcon(":/icons/exit.png"),
+    action = new QAction(il.load("exit"),
                          tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
     action->setStatusTip(tr("Exit Sonic Visualiser"));
@@ -603,7 +596,9 @@ MainWindow::setupEditMenu()
 
     menu->addSeparator();
 
-    QAction *action = new QAction(QIcon(":/icons/editcut.png"),
+    IconLoader il;
+
+    QAction *action = new QAction(il.load("editcut"),
                                   tr("Cu&t"), this);
     action->setShortcut(tr("Ctrl+X"));
     action->setStatusTip(tr("Cut the selection from the current layer to the clipboard"));
@@ -613,7 +608,7 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
-    action = new QAction(QIcon(":/icons/editcopy.png"),
+    action = new QAction(il.load("editcopy"),
                          tr("&Copy"), this);
     action->setShortcut(tr("Ctrl+C"));
     action->setStatusTip(tr("Copy the selection from the current layer to the clipboard"));
@@ -623,7 +618,7 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
-    action = new QAction(QIcon(":/icons/editpaste.png"),
+    action = new QAction(il.load("editpaste"),
                          tr("&Paste"), this);
     action->setShortcut(tr("Ctrl+V"));
     action->setStatusTip(tr("Paste from the clipboard to the current layer"));
@@ -721,6 +716,8 @@ MainWindow::setupViewMenu()
 {
     if (m_mainMenusCreated) return;
 
+    IconLoader il;
+
     QAction *action = 0;
 
     m_keyReference->setCategory(tr("Panning and Navigation"));
@@ -763,7 +760,7 @@ MainWindow::setupViewMenu()
 
     m_keyReference->setCategory(tr("Zoom"));
 
-    action = new QAction(QIcon(":/icons/zoom-in.png"),
+    action = new QAction(il.load("zoom-in"),
                          tr("Zoom &In"), this);
     action->setShortcut(tr("Up"));
     action->setStatusTip(tr("Increase the zoom level"));
@@ -772,7 +769,7 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 	
-    action = new QAction(QIcon(":/icons/zoom-out.png"),
+    action = new QAction(il.load("zoom-out"),
                          tr("Zoom &Out"), this);
     action->setShortcut(tr("Down"));
     action->setStatusTip(tr("Decrease the zoom level"));
@@ -787,7 +784,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    action = new QAction(QIcon(":/icons/zoom-fit.png"),
+    action = new QAction(il.load("zoom-fit"),
                          tr("Zoom to &Fit"), this);
     action->setShortcut(tr("F"));
     action->setStatusTip(tr("Zoom to show the whole file"));
@@ -909,9 +906,11 @@ MainWindow::setupPaneAndLayerMenus()
 
     QMenu *menu = m_paneMenu;
 
+    IconLoader il;
+
     m_keyReference->setCategory(tr("Managing Panes and Layers"));
 
-    QAction *action = new QAction(QIcon(":/icons/pane.png"), tr("Add &New Pane"), this);
+    QAction *action = new QAction(il.load("pane"), tr("Add &New Pane"), this);
     action->setShortcut(tr("N"));
     action->setStatusTip(tr("Add a new pane containing only a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
@@ -937,8 +936,7 @@ MainWindow::setupPaneAndLayerMenus()
 	LayerFactory::LayerType type = *i;
 	QString name = LayerFactory::getInstance()->getLayerPresentationName(type);
 	
-	icon = QIcon(QString(":/icons/%1.png")
-		     .arg(LayerFactory::getInstance()->getLayerIconName(type)));
+	icon = il.load(LayerFactory::getInstance()->getLayerIconName(type));
 
 	mainText = tr("Add New %1 Layer").arg(name);
 	tipText = tr("Add a new empty layer of type %1").arg(name);
@@ -994,7 +992,7 @@ MainWindow::setupPaneAndLayerMenus()
             switch (type) {
                     
             case LayerFactory::Waveform:
-                icon = QIcon(":/icons/waveform.png");
+                icon = il.load("waveform");
                 mainText = tr("Add &Waveform");
                 if (menuType == 0) {
                     shortcutText = tr("W");
@@ -1006,7 +1004,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
 		
             case LayerFactory::Spectrogram:
-                icon = QIcon(":/icons/spectrogram.png");
+                icon = il.load("spectrogram");
                 mainText = tr("Add Spectro&gram");
                 if (menuType == 0) {
                     shortcutText = tr("G");
@@ -1017,7 +1015,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
 		
             case LayerFactory::MelodicRangeSpectrogram:
-                icon = QIcon(":/icons/spectrogram.png");
+                icon = il.load("spectrogram");
                 mainText = tr("Add &Melodic Range Spectrogram");
                 if (menuType == 0) {
                     shortcutText = tr("M");
@@ -1028,7 +1026,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
 		
             case LayerFactory::PeakFrequencySpectrogram:
-                icon = QIcon(":/icons/spectrogram.png");
+                icon = il.load("spectrogram");
                 mainText = tr("Add Pea&k Frequency Spectrogram");
                 if (menuType == 0) {
                     shortcutText = tr("K");
@@ -1039,7 +1037,7 @@ MainWindow::setupPaneAndLayerMenus()
                 break;
                 
             case LayerFactory::Spectrum:
-                icon = QIcon(":/icons/spectrum.png");
+                icon = il.load("spectrum");
                 mainText = tr("Add Spectr&um");
                 if (menuType == 0) {
                     shortcutText = tr("U");
@@ -1178,7 +1176,7 @@ MainWindow::setupPaneAndLayerMenus()
 
     menu->addSeparator();
 
-    action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Pane"), this);
+    action = new QAction(il.load("editdelete"), tr("&Delete Pane"), this);
     action->setShortcut(tr("Ctrl+Shift+D"));
     action->setStatusTip(tr("Delete the currently active pane"));
     connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentPane()));
@@ -1188,7 +1186,7 @@ MainWindow::setupPaneAndLayerMenus()
 
     menu = m_layerMenu;
 
-    action = new QAction(QIcon(":/icons/timeruler.png"), tr("Add &Time Ruler"), this);
+    action = new QAction(il.load("timeruler"), tr("Add &Time Ruler"), this);
     action->setStatusTip(tr("Add a new layer showing a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
     connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
@@ -1218,7 +1216,7 @@ MainWindow::setupPaneAndLayerMenus()
     menu->addAction(raction);
     m_rightButtonLayerMenu->addAction(raction);
 
-    action = new QAction(QIcon(":/icons/editdelete.png"), tr("&Delete Layer"), this);
+    action = new QAction(il.load("editdelete"), tr("&Delete Layer"), this);
     action->setShortcut(tr("Ctrl+D"));
     action->setStatusTip(tr("Delete the currently active layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(deleteCurrentLayer()));
@@ -1441,7 +1439,9 @@ MainWindow::setupHelpMenu()
     
     m_keyReference->setCategory(tr("Help"));
 
-    QAction *action = new QAction(QIcon(":icons/help.png"),
+    IconLoader il;
+
+    QAction *action = new QAction(il.load("help"),
                                   tr("&Help Reference"), this); 
     action->setShortcut(tr("F1"));
     action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
@@ -1524,6 +1524,8 @@ MainWindow::setupExistingLayersMenus()
     m_sliceMenu->clear();
     m_sliceActions.clear();
 
+    IconLoader il;
+
     vector<Layer *> orderedLayers;
     set<Layer *> observedLayers;
     set<Layer *> sliceableLayers;
@@ -1566,9 +1568,8 @@ MainWindow::setupExistingLayersMenus()
 	int n = ++observedNames[name];
 	if (n > 1) name = QString("%1 <%2>").arg(name).arg(n);
 
-	QIcon icon = QIcon(QString(":/icons/%1.png")
-                           .arg(factory->getLayerIconName
-                                (factory->getLayerType(layer))));
+	QIcon icon = il.load(factory->getLayerIconName
+                             (factory->getLayerType(layer)));
 
 	QAction *action = new QAction(icon, name, this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
@@ -1594,6 +1595,8 @@ MainWindow::setupToolbars()
 {
     m_keyReference->setCategory(tr("Playback and Transport Controls"));
 
+    IconLoader il;
+
     QMenu *menu = m_playbackMenu = menuBar()->addMenu(tr("Play&back"));
     menu->setTearOffEnabled(true);
     m_rightButtonMenu->addSeparator();
@@ -1601,21 +1604,21 @@ MainWindow::setupToolbars()
 
     QToolBar *toolbar = addToolBar(tr("Playback Toolbar"));
 
-    QAction *rwdStartAction = toolbar->addAction(QIcon(":/icons/rewind-start.png"),
+    QAction *rwdStartAction = toolbar->addAction(il.load("rewind-start"),
                                                  tr("Rewind to Start"));
     rwdStartAction->setShortcut(tr("Home"));
     rwdStartAction->setStatusTip(tr("Rewind to the start"));
     connect(rwdStartAction, SIGNAL(triggered()), this, SLOT(rewindStart()));
     connect(this, SIGNAL(canPlay(bool)), rwdStartAction, SLOT(setEnabled(bool)));
 
-    QAction *m_rwdAction = toolbar->addAction(QIcon(":/icons/rewind.png"),
+    QAction *m_rwdAction = toolbar->addAction(il.load("rewind"),
                                               tr("Rewind"));
     m_rwdAction->setShortcut(tr("PgUp"));
     m_rwdAction->setStatusTip(tr("Rewind to the previous time instant or time ruler notch"));
     connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
     connect(this, SIGNAL(canRewind(bool)), m_rwdAction, SLOT(setEnabled(bool)));
 
-    QAction *playAction = toolbar->addAction(QIcon(":/icons/playpause.png"),
+    QAction *playAction = toolbar->addAction(il.load("playpause"),
                                              tr("Play / Pause"));
     playAction->setCheckable(true);
     playAction->setShortcut(tr("Space"));
@@ -1625,14 +1628,14 @@ MainWindow::setupToolbars()
 	    playAction, SLOT(setChecked(bool)));
     connect(this, SIGNAL(canPlay(bool)), playAction, SLOT(setEnabled(bool)));
 
-    m_ffwdAction = toolbar->addAction(QIcon(":/icons/ffwd.png"),
+    m_ffwdAction = toolbar->addAction(il.load("ffwd"),
                                               tr("Fast Forward"));
     m_ffwdAction->setShortcut(tr("PgDown"));
     m_ffwdAction->setStatusTip(tr("Fast-forward to the next time instant or time ruler notch"));
     connect(m_ffwdAction, SIGNAL(triggered()), this, SLOT(ffwd()));
     connect(this, SIGNAL(canFfwd(bool)), m_ffwdAction, SLOT(setEnabled(bool)));
 
-    QAction *ffwdEndAction = toolbar->addAction(QIcon(":/icons/ffwd-end.png"),
+    QAction *ffwdEndAction = toolbar->addAction(il.load("ffwd-end"),
                                                 tr("Fast Forward to End"));
     ffwdEndAction->setShortcut(tr("End"));
     ffwdEndAction->setStatusTip(tr("Fast-forward to the end"));
@@ -1641,7 +1644,7 @@ MainWindow::setupToolbars()
 
     toolbar = addToolBar(tr("Play Mode Toolbar"));
 
-    QAction *psAction = toolbar->addAction(QIcon(":/icons/playselection.png"),
+    QAction *psAction = toolbar->addAction(il.load("playselection"),
                                            tr("Constrain Playback to Selection"));
     psAction->setCheckable(true);
     psAction->setChecked(m_viewManager->getPlaySelectionMode());
@@ -1652,7 +1655,7 @@ MainWindow::setupToolbars()
     connect(psAction, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
     connect(this, SIGNAL(canPlaySelection(bool)), psAction, SLOT(setEnabled(bool)));
 
-    QAction *plAction = toolbar->addAction(QIcon(":/icons/playloop.png"),
+    QAction *plAction = toolbar->addAction(il.load("playloop"),
                                            tr("Loop Playback"));
     plAction->setCheckable(true);
     plAction->setChecked(m_viewManager->getPlayLoopMode());
@@ -1727,7 +1730,7 @@ MainWindow::setupToolbars()
     toolbar = addToolBar(tr("Tools Toolbar"));
     QActionGroup *group = new QActionGroup(this);
 
-    QAction *action = toolbar->addAction(QIcon(":/icons/navigate.png"),
+    QAction *action = toolbar->addAction(il.load("navigate"),
                                          tr("Navigate"));
     action->setCheckable(true);
     action->setChecked(true);
@@ -1738,7 +1741,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::NavigateMode] = action;
 
-    action = toolbar->addAction(QIcon(":/icons/select.png"),
+    action = toolbar->addAction(il.load("select"),
 				tr("Select"));
     action->setCheckable(true);
     action->setShortcut(tr("2"));
@@ -1748,7 +1751,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::SelectMode] = action;
 
-    action = toolbar->addAction(QIcon(":/icons/move.png"),
+    action = toolbar->addAction(il.load("move"),
 				tr("Edit"));
     action->setCheckable(true);
     action->setShortcut(tr("3"));
@@ -1759,7 +1762,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::EditMode] = action;
 
-    action = toolbar->addAction(QIcon(":/icons/draw.png"),
+    action = toolbar->addAction(il.load("draw"),
 				tr("Draw"));
     action->setCheckable(true);
     action->setShortcut(tr("4"));
@@ -1770,7 +1773,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::DrawMode] = action;
 
-    action = toolbar->addAction(QIcon(":/icons/measure.png"),
+    action = toolbar->addAction(il.load("measure"),
 				tr("Measure"));
     action->setCheckable(true);
     action->setShortcut(tr("5"));
@@ -1780,7 +1783,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::MeasureMode] = action;
 
-//    action = toolbar->addAction(QIcon(":/icons/text.png"),
+//    action = toolbar->addAction(il.load("text"),
 //				tr("Text"));
 //    action->setCheckable(true);
 //    action->setShortcut(tr("5"));
