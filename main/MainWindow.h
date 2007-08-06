@@ -154,6 +154,7 @@ protected slots:
     void toggleZoomWheels();
     void togglePropertyBoxes();
     void toggleStatusBar();
+    void toggleDarkBackground();
 
     void play();
     void ffwd();

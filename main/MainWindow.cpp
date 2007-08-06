@@ -841,6 +841,19 @@ MainWindow::setupViewMenu()
         
     menu->addSeparator();
 
+    /* Doesn't quite work well enough
+
+    action = new QAction(tr("Use Dar&k Background"), this);
+    action->setStatusTip(tr("Switch between light and dark background colour schemes"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleDarkBackground()));
+    action->setCheckable(true);
+    action->setChecked(m_viewManager->getGlobalDarkBackground());
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    */
+
     action = new QAction(tr("Show &Zoom Wheels"), this);
     action->setShortcut(tr("Z"));
     action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
@@ -3520,6 +3533,14 @@ MainWindow::toggleStatusBar()
     settings.setValue("showstatusbar", !sb);
 
     settings.endGroup();
+}
+
+void
+MainWindow::toggleDarkBackground()
+{
+    if (!m_viewManager) return;
+    m_viewManager->setGlobalDarkBackground
+        (!m_viewManager->getGlobalDarkBackground());
 }
 
 void
