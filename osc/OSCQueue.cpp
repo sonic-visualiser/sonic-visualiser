@@ -61,7 +61,10 @@ OSCQueue::oscMessageHandler(const char *path, const char *types, lo_arg **argv,
 
         switch (type) {
         case 'i': message.addArg(arg->i); break;
-        case 'h': message.addArg(arg->h); break;
+            // This conversion fails to compile in 64-bit environments
+            // at present, and we don't use the h type anyway so we
+            // can safely omit it
+//        case 'h': message.addArg(arg->h); break;
         case 'f': message.addArg(arg->f); break;
         case 'd': message.addArg(arg->d); break;
         case 'c': message.addArg(arg->c); break;
