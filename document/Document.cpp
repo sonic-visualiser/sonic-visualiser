@@ -515,6 +515,11 @@ Document::setModel(Layer *layer, Model *model)
 	m_models[model].refcount ++;
     }
 
+    if (model && previousModel) {
+        PlayParameterRepository::getInstance()->copyParameters
+            (previousModel, model);
+    }
+
     LayerFactory::getInstance()->setModel(layer, model);
 
     if (previousModel) {
