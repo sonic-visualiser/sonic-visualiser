@@ -211,9 +211,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_panLayer = new WaveformLayer;
     m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
-    m_panLayer->setBaseColour(Qt::darkGreen);
     m_panLayer->setAggressiveCacheing(true);
     m_overview->addLayer(m_panLayer);
+    m_panLayer->setBaseColour(ColourDatabase::getInstance()->getColourIndex(Qt::darkGreen));
 
     m_playSource = new AudioCallbackPlaySource(m_viewManager);
 
@@ -841,8 +841,6 @@ MainWindow::setupViewMenu()
         
     menu->addSeparator();
 
-    /* Doesn't quite work well enough
-
     action = new QAction(tr("Use Dar&k Background"), this);
     action->setStatusTip(tr("Switch between light and dark background colour schemes"));
     connect(action, SIGNAL(triggered()), this, SLOT(toggleDarkBackground()));
@@ -851,8 +849,6 @@ MainWindow::setupViewMenu()
     menu->addAction(action);
 
     menu->addSeparator();
-
-    */
 
     action = new QAction(tr("Show &Zoom Wheels"), this);
     action->setShortcut(tr("Z"));
