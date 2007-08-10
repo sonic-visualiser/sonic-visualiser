@@ -199,6 +199,10 @@ protected:
     bool readMeasurement(const QXmlAttributes &);
     void addUnaddedModels();
 
+    bool haveModel(int id) {
+        return (m_models.find(id) != m_models.end()) && m_models[id];
+    }
+
     Document *m_document;
     SVFileReaderPaneCallback &m_paneCallback;
     QString m_location;
