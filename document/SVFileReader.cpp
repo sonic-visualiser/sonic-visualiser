@@ -253,7 +253,8 @@ SVFileReader::endElement(const QString &, const QString &,
 
 	    for (std::map<int, int>::iterator i = m_awaitingDatasets.begin();
 		 i != m_awaitingDatasets.end(); ++i) {
-		if (m_models[i->second] == m_currentDataset) {
+		if (haveModel(i->second) &&
+                    m_models[i->second] == m_currentDataset) {
 		    m_awaitingDatasets.erase(i);
 		    foundInAwaiting = true;
 		    break;
@@ -278,7 +279,7 @@ SVFileReader::endElement(const QString &, const QString &,
             if (m_currentDerivedModel < 0) {
                 std::cerr << "WARNING: SV-XML: Bad derivation output model id "
                           << m_currentDerivedModelId << std::endl;
-            } else if (m_models[m_currentDerivedModelId]) {
+            } else if (haveModel(m_currentDerivedModelId)) {
                 std::cerr << "WARNING: SV-XML: Derivation has existing model "
                           << m_currentDerivedModelId
                           << " as target, not regenerating" << std::endl;
@@ -388,7 +389,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 
     READ_MANDATORY(int, id, toInt);
 
-    if (m_models.find(id) != m_models.end()) {
+    if (haveModel(id)) {
 	std::cerr << "WARNING: SV-XML: Ignoring duplicate model id " << id
 		  << std::endl;
 	return false;
@@ -712,7 +713,7 @@ SVFileReader::readLayer(const QXmlAttributes &attributes)
 	modelId = attributes.value("model").trimmed().toInt(&modelOk);
 
 	if (modelOk) {
-	    if (m_models.find(modelId) != m_models.end()) {
+	    if (haveModel(modelId)) {
 		Model *model = m_models[modelId];
 		m_document->setModel(layer, model);
 	    } else {
@@ -765,7 +766,7 @@ SVFileReader::readDatasetStart(const QXmlAttributes &attributes)
     int modelId = m_awaitingDatasets[id];
     
     Model *model = 0;
-    if (m_models.find(modelId) != m_models.end()) {
+    if (haveModel(modelId)) {
 	model = m_models[modelId];
     } else {
 	std::cerr << "WARNING: SV-XML: Internal error: Unknown model " << modelId
@@ -965,7 +966,7 @@ SVFileReader::readDerivation(const QXmlAttributes &attributes)
 
     QString transform = attributes.value("transform");
 
-    if (m_models.find(modelId) != m_models.end()) {
+    if (haveModel(modelId)) {
         m_currentDerivedModel = m_models[modelId];
     } else {
         // we'll regenerate the model when the derivation element ends
@@ -978,7 +979,7 @@ SVFileReader::readDerivation(const QXmlAttributes &attributes)
     bool sourceOk = false;
     sourceId = attributes.value("source").trimmed().toInt(&sourceOk);
 
-    if (sourceOk && m_models[sourceId]) {
+    if (sourceOk && haveModel(sourceId)) {
         m_currentTransformSource = m_models[sourceId];
     } else {
         m_currentTransformSource = m_document->getMainModel();
@@ -1022,7 +1023,7 @@ SVFileReader::readPlayParameters(const QXmlAttributes &attributes)
 	return false;
     }
 
-    if (m_models.find(modelId) != m_models.end()) {
+    if (haveModel(modelId)) {
 
         bool ok = false;
 
