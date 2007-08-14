@@ -668,6 +668,8 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
             } else {
                 std::cerr << "Failed to find selected input \"" << selectedInput.toStdString() << "\" in model map" << std::endl;
             }
+        } else {
+            std::cerr << "Selected input empty: \"" << selectedInput.toStdString() << "\"" << std::endl;
         }
 
         configurationXml = PluginXml(plugin).toXmlString();

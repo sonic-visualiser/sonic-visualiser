@@ -213,7 +213,14 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_panLayer->setChannelMode(WaveformLayer::MergeChannels);
     m_panLayer->setAggressiveCacheing(true);
     m_overview->addLayer(m_panLayer);
-    m_panLayer->setBaseColour(ColourDatabase::getInstance()->getColourIndex(Qt::darkGreen));
+
+    if (m_viewManager->getGlobalDarkBackground()) {
+        m_panLayer->setBaseColour
+            (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
+    } else {
+        m_panLayer->setBaseColour
+            (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
+    }        
 
     m_playSource = new AudioCallbackPlaySource(m_viewManager);
 
@@ -3535,8 +3542,17 @@ void
 MainWindow::toggleDarkBackground()
 {
     if (!m_viewManager) return;
+
     m_viewManager->setGlobalDarkBackground
         (!m_viewManager->getGlobalDarkBackground());
+
+    if (m_viewManager->getGlobalDarkBackground()) {
+        m_panLayer->setBaseColour
+            (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
+    } else {
+        m_panLayer->setBaseColour
+            (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
+    }        
 }
 
 void

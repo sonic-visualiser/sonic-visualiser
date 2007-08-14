@@ -812,10 +812,13 @@ SVFileReader::addPointToDataset(const QXmlAttributes &attributes)
 
     READ_MANDATORY(int, frame, toInt);
 
+//    std::cerr << "SVFileReader::addPointToDataset: frame = " << frame << std::endl;
+
     SparseOneDimensionalModel *sodm = dynamic_cast<SparseOneDimensionalModel *>
 	(m_currentDataset);
 
     if (sodm) {
+//        std::cerr << "Current dataset is a sparse one dimensional model" << std::endl;
 	QString label = attributes.value("label");
 	sodm->addPoint(SparseOneDimensionalModel::Point(frame, label));
 	return true;
@@ -825,6 +828,7 @@ SVFileReader::addPointToDataset(const QXmlAttributes &attributes)
 	(m_currentDataset);
 
     if (stvm) {
+//        std::cerr << "Current dataset is a sparse time-value model" << std::endl;
 	float value = 0.0;
 	value = attributes.value("value").trimmed().toFloat(&ok);
 	QString label = attributes.value("label");
@@ -835,6 +839,7 @@ SVFileReader::addPointToDataset(const QXmlAttributes &attributes)
     NoteModel *nm = dynamic_cast<NoteModel *>(m_currentDataset);
 
     if (nm) {
+//        std::cerr << "Current dataset is a note model" << std::endl;
 	float value = 0.0;
 	value = attributes.value("value").trimmed().toFloat(&ok);
 	size_t duration = 0;
@@ -847,9 +852,11 @@ SVFileReader::addPointToDataset(const QXmlAttributes &attributes)
     TextModel *tm = dynamic_cast<TextModel *>(m_currentDataset);
 
     if (tm) {
+//        std::cerr << "Current dataset is a text model" << std::endl;
 	float height = 0.0;
 	height = attributes.value("height").trimmed().toFloat(&ok);
 	QString label = attributes.value("label");
+//        std::cerr << "SVFileReader::addPointToDataset: TextModel: frame = " << frame << ", height = " << height << ", label = " << label.toStdString() << ", ok = " << ok << std::endl;
 	tm->addPoint(TextModel::Point(frame, height, label));
 	return ok;
     }
