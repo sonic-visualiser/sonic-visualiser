@@ -310,7 +310,8 @@ FeatureExtractionPluginTransform::run()
         }
 
 //	std::cerr << "FeatureExtractionPluginTransform::run: blockFrame "
-//		  << blockFrame << std::endl;
+//		  << blockFrame << ", endFrame " << endFrame << ", blockSize "
+//                  << m_context.blockSize << std::endl;
 
 	long completion =
 	    (((blockFrame - startFrame) / m_context.stepSize) * 99) /
