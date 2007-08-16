@@ -49,6 +49,7 @@ class AudioDial;
 class QLabel;
 class QCheckBox;
 class PreferencesDialog;
+class QTreeView;
 class QPushButton;
 class OSCQueue;
 class OSCMessage;
@@ -299,6 +300,7 @@ protected:
     mutable QString          m_myStatusMessage;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
+    QPointer<QTreeView>      m_layerTreeView;
 
     KeyReference            *m_keyReference;
 

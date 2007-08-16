@@ -88,8 +88,8 @@ PhaseVocoderTimeStretcher::initialise()
         m_freq[c] = (fftf_complex *)fftf_malloc(sizeof(fftf_complex) *
                                                   (m_wlen / 2 + 1));
         
-        m_plan[c] = fftf_plan_dft_r2c_1d(m_wlen, m_time[c], m_freq[c], FFTW_ESTIMATE);
-        m_iplan[c] = fftf_plan_dft_c2r_1d(m_wlen, m_freq[c], m_time[c], FFTW_ESTIMATE);
+        m_plan[c] = fftf_plan_dft_r2c_1d(m_wlen, m_time[c], m_freq[c], FFTW_MEASURE);
+        m_iplan[c] = fftf_plan_dft_c2r_1d(m_wlen, m_freq[c], m_time[c], FFTW_MEASURE);
 
         m_outbuf[c] = new RingBuffer<float>
             ((m_maxOutputBlockSize + m_wlen) * 2);

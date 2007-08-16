@@ -137,6 +137,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_openingAudioFile(false),
     m_abandoning(false),
     m_preferencesDialog(0),
+    m_layerTreeView(0),
     m_keyReference(new KeyReference())
 {
     setWindowTitle(tr("Sonic Visualiser"));
@@ -347,6 +348,7 @@ MainWindow::~MainWindow()
     delete m_oscQueue;
     delete m_keyReference;
     delete m_preferencesDialog;
+    delete m_layerTreeView;
     Profiles::getInstance()->dump();
 }
 
@@ -3200,6 +3202,11 @@ MainWindow::closeEvent(QCloseEvent *e)
         m_preferencesDialog->applicationClosing(false);
     }
 
+    if (m_layerTreeView &&
+        m_layerTreeView->isVisible()) {
+        delete m_layerTreeView;
+    }
+
     e->accept();
     return;
 }
@@ -4456,12 +4463,20 @@ MainWindow::propertyStacksResized()
 void
 MainWindow::showLayerTree()
 {
-    QTreeView *view = new QTreeView();
+    if (!m_layerTreeView.isNull()) {
+        m_layerTreeView->show();
+        m_layerTreeView->raise();
+        return;
+    }
+
+    //!!! should use an actual dialog class
+        
+    m_layerTreeView = new QTreeView();
     LayerTreeModel *tree = new LayerTreeModel(m_paneStack);
-    view->setModel(tree);
-    view->expandAll();
-    view->resize(500, 300); //!!!
-    view->show();
+    m_layerTreeView->resize(500, 300); //!!!
+    m_layerTreeView->setModel(tree);
+    m_layerTreeView->expandAll();
+    m_layerTreeView->show();
 }
 
 void
