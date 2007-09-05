@@ -150,7 +150,7 @@ RealTimePluginTransform::run()
 
     size_t latency = m_plugin->getLatency();
 
-    while (blockFrame < endFrame && !m_abandoned) {
+    while (blockFrame < endFrame + latency && !m_abandoned) {
 
 	size_t completion =
 	    (((blockFrame - startFrame) / blockSize) * 99) /
@@ -222,7 +222,9 @@ RealTimePluginTransform::run()
             if (outbufs) {
 
                 if (blockFrame >= latency) {
-                    wwfm->addSamples(outbufs, blockSize);
+                    size_t writeSize = std::min(blockSize,
+                                                endFrame + latency - blockFrame);
+                    wwfm->addSamples(outbufs, writeSize);
                 } else if (blockFrame + blockSize >= latency) {
                     size_t offset = latency - blockFrame;
                     size_t count = blockSize - offset;
