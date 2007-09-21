@@ -459,6 +459,7 @@ FeatureExtractionPluginTransform::addFeature(size_t blockFrame,
 	SparseTimeValueModel *model = getOutput<SparseTimeValueModel>();
 	if (!model) return;
 	model->addPoint(SparseTimeValueModel::Point(frame, value, feature.label.c_str()));
+//        std::cerr << "SparseTimeValueModel::addPoint(" << frame << ", " << value << "), " << feature.label.c_str() << std::endl;
 
     } else if (m_descriptor->sampleType == 
 	       Vamp::Plugin::OutputDescriptor::VariableSampleRate) {
