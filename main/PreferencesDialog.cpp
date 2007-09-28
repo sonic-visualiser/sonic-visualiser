@@ -26,12 +26,18 @@
 #include <QString>
 #include <QDialogButtonBox>
 #include <QMessageBox>
+#include <QTabWidget>
+#include <QLineEdit>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "widgets/WindowTypeSelector.h"
+#include "widgets/IconLoader.h"
 #include "base/Preferences.h"
 
 PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
-    QDialog(parent, flags)
+    QDialog(parent, flags),
+    m_changesOnRestart(false)
 {
     setWindowTitle(tr("Sonic Visualiser: Application Preferences"));
 
@@ -39,17 +45,19 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
     QGridLayout *grid = new QGridLayout;
     setLayout(grid);
+
+    QTabWidget *tab = new QTabWidget;
+    grid->addWidget(tab, 0, 0);
     
-    QGroupBox *groupBox = new QGroupBox;
-    groupBox->setTitle(tr("Application Preferences"));
-    grid->addWidget(groupBox, 0, 0);
-    
-    QGridLayout *subgrid = new QGridLayout;
-    groupBox->setLayout(subgrid);
+    tab->setTabPosition(QTabWidget::North);
 
     // Create this first, as slots that get called from the ctor will
     // refer to it
     m_applyButton = new QPushButton(tr("Apply"));
+
+    // Create all the preference widgets first, then create the
+    // individual tab widgets and place the preferences in their
+    // appropriate places in one go afterwards
 
     int min, max, deflt, i;
 
@@ -117,6 +125,44 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     connect(resampleQuality, SIGNAL(currentIndexChanged(int)),
             this, SLOT(resampleQualityChanged(int)));
 
+    QCheckBox *resampleOnLoad = new QCheckBox;
+    m_resampleOnLoad = prefs->getResampleOnLoad();
+    resampleOnLoad->setCheckState(m_resampleOnLoad ? Qt::Checked :
+                                  Qt::Unchecked);
+    connect(resampleOnLoad, SIGNAL(stateChanged(int)),
+            this, SLOT(resampleOnLoadChanged(int)));
+
+    m_tempDirRootEdit = new QLineEdit;
+    QString dir = prefs->getTemporaryDirectoryRoot();
+    m_tempDirRoot = dir;
+    dir.replace("$HOME", tr("<home directory>"));
+    m_tempDirRootEdit->setText(dir);
+    m_tempDirRootEdit->setReadOnly(true);
+    QPushButton *tempDirButton = new QPushButton;
+    tempDirButton->setIcon(IconLoader().load("fileopen"));
+    connect(tempDirButton, SIGNAL(clicked()),
+            this, SLOT(tempDirButtonClicked()));
+    tempDirButton->setFixedSize(QSize(24, 24));
+
+    QComboBox *bgMode = new QComboBox;
+    int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
+                                             &deflt);
+    m_backgroundMode = bg;
+    for (i = min; i <= max; ++i) {
+        bgMode->addItem(prefs->getPropertyValueLabel("Background Mode", i));
+    }
+    bgMode->setCurrentIndex(bg);
+
+    connect(bgMode, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(backgroundModeChanged(int)));
+
+    // General tab
+
+    QFrame *frame = new QFrame;
+    
+    QGridLayout *subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+
     int row = 0;
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
@@ -125,14 +171,42 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Tuning Frequency"))),
+                                                ("Background Mode"))),
                        row, 0);
-    subgrid->addWidget(frequency, row++, 1, 1, 2);
+    subgrid->addWidget(bgMode, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Resample On Load"))),
+                       row, 0);
+    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Resample Quality"))),
                        row, 0);
     subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Temporary Directory Root"))),
+                       row, 0);
+    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
+    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
+    row++;
+
+    subgrid->setRowStretch(row, 10);
+    
+    tab->addTab(frame, tr("&General"));
+
+    // Analysis tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Tuning Frequency"))),
+                       row, 0);
+    subgrid->addWidget(frequency, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(prefs->getPropertyLabel
                                   ("Spectrogram Smoothing")),
@@ -146,6 +220,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     subgrid->setRowStretch(row, 10);
     row++;
     
+    subgrid->setRowStretch(row, 10);
+    
+    tab->addTab(frame, tr("&Analysis"));
+
     QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
     grid->addWidget(bb, 1, 0);
     
@@ -202,6 +280,41 @@ PreferencesDialog::resampleQualityChanged(int q)
 }
 
 void
+PreferencesDialog::resampleOnLoadChanged(int state)
+{
+    m_resampleOnLoad = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
+PreferencesDialog::tempDirRootChanged(QString r)
+{
+    m_tempDirRoot = r;
+    m_applyButton->setEnabled(true);
+}
+
+void
+PreferencesDialog::tempDirButtonClicked()
+{
+    QString dir = QFileDialog::getExistingDirectory
+        (this, tr("Select a directory to create cache subdirectory in"),
+         m_tempDirRoot);
+    if (dir == "") return;
+    m_tempDirRootEdit->setText(dir);
+    tempDirRootChanged(dir);
+    m_changesOnRestart = true;
+}
+
+void
+PreferencesDialog::backgroundModeChanged(int mode)
+{
+    m_backgroundMode = mode;
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -219,7 +332,17 @@ PreferencesDialog::applyClicked()
                                 (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setResampleQuality(m_resampleQuality);
+    prefs->setResampleOnLoad(m_resampleOnLoad);
+    prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
+    prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
+
     m_applyButton->setEnabled(false);
+
+    if (m_changesOnRestart) {
+        QMessageBox::information(this, tr("Preferences"),
+                                 tr("One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.\nPlease exit and restart the application now if you want these changes to take effect immediately."));
+        m_changesOnRestart = false;
+    }
 }    
 
 void

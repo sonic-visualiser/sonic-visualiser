@@ -47,8 +47,8 @@
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
 #include "audioio/PlaySpeedRangeMapper.h"
-#include "data/fileio/AudioFileReaderFactory.h"
 #include "data/fileio/DataFileReaderFactory.h"
+#include "data/fileio/PlaylistFileReader.h"
 #include "data/fileio/WavFileWriter.h"
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
@@ -64,6 +64,9 @@
 #include "base/UnitDatabase.h"
 #include "base/ColourDatabase.h"
 #include "osc/OSCQueue.h"
+
+//!!!
+#include "data/model/AggregateWaveModel.h"
 
 // For version information
 #include "vamp/vamp.h"
@@ -176,6 +179,14 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 	    this, SLOT(updateMenuStates()));
     connect(m_viewManager, SIGNAL(inProgressSelectionChanged()),
 	    this, SLOT(inProgressSelectionChanged()));
+
+    Preferences::BackgroundMode mode =
+        Preferences::getInstance()->getBackgroundMode();
+    m_initialDarkBackground = m_viewManager->getGlobalDarkBackground();
+    if (mode != Preferences::BackgroundFromTheme) {
+        m_viewManager->setGlobalDarkBackground
+            (mode == Preferences::DarkBackground);
+    }
 
     m_descriptionLabel = new QLabel;
 
@@ -848,15 +859,6 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
         
-    menu->addSeparator();
-
-    action = new QAction(tr("Use Dar&k Background"), this);
-    action->setStatusTip(tr("Switch between light and dark background colour schemes"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleDarkBackground()));
-    action->setCheckable(true);
-    action->setChecked(m_viewManager->getGlobalDarkBackground());
-    menu->addAction(action);
-
     menu->addSeparator();
 
     action = new QAction(tr("Show &Zoom Wheels"), this);
@@ -1684,9 +1686,21 @@ MainWindow::setupToolbars()
     connect(plAction, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
     connect(this, SIGNAL(canPlay(bool)), plAction, SLOT(setEnabled(bool)));
 
+    QAction *soAction = toolbar->addAction(il.load("solo"),
+                                           tr("Solo Current Pane"));
+    soAction->setCheckable(true);
+    soAction->setChecked(m_viewManager->getPlaySoloMode());
+    soAction->setShortcut(tr("o"));
+    soAction->setStatusTip(tr("Solo the current pane during playback"));
+    connect(m_viewManager, SIGNAL(playSoloModeChanged(bool)),
+            soAction, SLOT(setChecked(bool)));
+    connect(soAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
+    connect(this, SIGNAL(canPlay(bool)), soAction, SLOT(setEnabled(bool)));
+
     m_keyReference->registerShortcut(playAction);
     m_keyReference->registerShortcut(psAction);
     m_keyReference->registerShortcut(plAction);
+    m_keyReference->registerShortcut(soAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(rwdStartAction);
@@ -1695,6 +1709,7 @@ MainWindow::setupToolbars()
     menu->addAction(playAction);
     menu->addAction(psAction);
     menu->addAction(plAction);
+    menu->addAction(soAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -1706,6 +1721,7 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(playAction);
     m_rightButtonPlaybackMenu->addAction(psAction);
     m_rightButtonPlaybackMenu->addAction(plAction);
+    m_rightButtonPlaybackMenu->addAction(soAction);
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
@@ -1996,10 +2012,72 @@ MainWindow::playSelectionToggled()
 }
 
 void
+MainWindow::playSoloToggled()
+{
+    QAction *action = dynamic_cast<QAction *>(sender());
+    
+    if (action) {
+	m_viewManager->setPlaySoloMode(action->isChecked());
+    } else {
+	m_viewManager->setPlaySoloMode(!m_viewManager->getPlaySoloMode());
+    }
+
+    if (!m_viewManager->getPlaySoloMode()) {
+        m_viewManager->setPlaybackModel(0);
+        if (m_playSource) {
+            m_playSource->clearSoloModelSet();
+        }
+    }
+}
+
+void
 MainWindow::currentPaneChanged(Pane *p)
 {
     updateMenuStates();
     updateVisibleRangeDisplay(p);
+
+    if (!p) return;
+
+    if (!(m_viewManager &&
+          m_playSource &&
+          m_viewManager->getPlaySoloMode())) {
+        if (m_viewManager) m_viewManager->setPlaybackModel(0);
+        return;
+    }
+
+    Model *prevPlaybackModel = m_viewManager->getPlaybackModel();
+
+    std::set<Model *> soloModels;
+
+    for (int i = 0; i < p->getLayerCount(); ++i) {
+        Layer *layer = p->getLayer(i);
+        if (dynamic_cast<TimeRulerLayer *>(layer)) {
+            continue;
+        }
+        if (layer && layer->getModel()) {
+            Model *model = layer->getModel();
+            if (dynamic_cast<RangeSummarisableTimeValueModel *>(model)) {
+                m_viewManager->setPlaybackModel(model);
+            }
+            soloModels.insert(model);
+        }
+    }
+    
+    RangeSummarisableTimeValueModel *a = 
+        dynamic_cast<RangeSummarisableTimeValueModel *>(prevPlaybackModel);
+    RangeSummarisableTimeValueModel *b = 
+        dynamic_cast<RangeSummarisableTimeValueModel *>(m_viewManager->
+                                                        getPlaybackModel());
+
+    m_playSource->setSoloModelSet(soloModels);
+
+    if (a && b && (a != b)) {
+        int frame = m_playSource->getCurrentPlayingFrame();
+        //!!! I don't really believe that these functions are the right way around
+        int rframe = a->alignFromReference(frame);
+        int bframe = b->alignToReference(rframe);
+        if (m_playSource->isPlaying()) m_playSource->play(bframe);
+    }
 }
 
 void
@@ -2680,7 +2758,13 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 
     m_openingAudioFile = true;
 
-    WaveFileModel *newModel = new WaveFileModel(path, location);
+    size_t rate = 0;
+
+    if (Preferences::getInstance()->getResampleOnLoad()) {
+        rate = m_playSource->getSourceSampleRate();
+    }
+
+    WaveFileModel *newModel = new WaveFileModel(path, location, rate);
 
     if (!newModel->isOK()) {
 	delete newModel;
@@ -2784,7 +2868,55 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
     }
     m_openingAudioFile = false;
 
+    currentPaneChanged(m_paneStack->getCurrentPane());
+
     return FileOpenSucceeded;
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openPlaylistFile(QString path, AudioFileOpenMode mode)
+{
+    return openPlaylistFile(path, path, mode);
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openPlaylistFile(QString path, QString location, AudioFileOpenMode mode)
+{
+    if (!(QFileInfo(path).exists() &&
+	  QFileInfo(path).isFile() &&
+	  QFileInfo(path).isReadable())) {
+	return FileOpenFailed;
+    }
+    
+    std::set<QString> extensions;
+    PlaylistFileReader::getSupportedExtensions(extensions);
+    QString extension = QFileInfo(path).suffix();
+    if (extensions.find(extension) == extensions.end()) return FileOpenFailed;
+
+    PlaylistFileReader reader(path);
+    if (!reader.isOK()) return FileOpenFailed;
+
+    PlaylistFileReader::Playlist playlist = reader.load();
+
+    bool someSuccess = false;
+
+    for (PlaylistFileReader::Playlist::const_iterator i = playlist.begin();
+         i != playlist.end(); ++i) {
+
+        FileOpenStatus status = openURL(*i, mode);
+
+        if (status == FileOpenCancelled) {
+            return FileOpenCancelled;
+        }
+
+        if (status == FileOpenSucceeded) {
+            someSuccess = true;
+            mode = CreateAdditionalModel;
+        }
+    }
+
+    if (someSuccess) return FileOpenSucceeded;
+    else return FileOpenFailed;
 }
 
 void
@@ -2965,12 +3097,15 @@ MainWindow::openSomething()
 
     } else {
 
-        if (openAudioFile(path, AskUser) == FileOpenFailed) {
+        if (openPlaylistFile(path, AskUser) == FileOpenFailed) {
 
-            if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
+            if (openAudioFile(path, AskUser) == FileOpenFailed) {
 
-                QMessageBox::critical(this, tr("Failed to open file"),
-                                      tr("File \"%1\" could not be opened").arg(path));
+                if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
+
+                    QMessageBox::critical(this, tr("Failed to open file"),
+                                          tr("File \"%1\" could not be opened").arg(path));
+                }
             }
         }
     }
@@ -3033,31 +3168,38 @@ MainWindow::openRecentFile()
 
     } else {
 
-        if (openAudioFile(path, AskUser) == FileOpenFailed) {
+        if (openPlaylistFile(path, AskUser) == FileOpenFailed) {
 
-            bool canImportLayer = (getMainModel() != 0 &&
-                                   m_paneStack != 0 &&
-                                   m_paneStack->getCurrentPane() != 0);
+            if (openAudioFile(path, AskUser) == FileOpenFailed) {
 
-            if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
-
-                QMessageBox::critical(this, tr("Failed to open file"),
-                                      tr("File \"%1\" could not be opened").arg(path));
+                bool canImportLayer = (getMainModel() != 0 &&
+                                       m_paneStack != 0 &&
+                                       m_paneStack->getCurrentPane() != 0);
+                
+                if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
+                    
+                    QMessageBox::critical(this, tr("Failed to open file"),
+                                          tr("File \"%1\" could not be opened").arg(path));
+                }
             }
         }
     }
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openURL(QUrl url)
+MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
 {
     if (url.scheme().toLower() == "file") {
-        return openSomeFile(url.toLocalFile());
+
+        return openSomeFile(url.toLocalFile(), mode);
+
     } else if (!RemoteFile::canHandleScheme(url)) {
+
         QMessageBox::critical(this, tr("Unsupported scheme in URL"),
                               tr("The URL scheme \"%1\" is not supported")
                               .arg(url.scheme()));
         return FileOpenFailed;
+
     } else {
         RemoteFile rf(url);
         rf.wait();
@@ -3068,7 +3210,51 @@ MainWindow::openURL(QUrl url)
             return FileOpenFailed;
         }
         FileOpenStatus status;
-        if ((status = openSomeFile(rf.getLocalFilename(), url.toString())) !=
+        if ((status = openSomeFile(rf.getLocalFilename(), url.toString(),
+                                   mode)) !=
+            FileOpenSucceeded) {
+            rf.deleteLocalFile();
+        }
+        return status;
+    }
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openURL(QString ustr, AudioFileOpenMode mode)
+{
+    // This function is used when we don't know whether the string is
+    // an encoded or human-readable url
+
+    QUrl url(ustr);
+
+    if (url.scheme().toLower() == "file") {
+
+        return openSomeFile(url.toLocalFile(), mode);
+
+    } else if (!RemoteFile::canHandleScheme(url)) {
+
+        QMessageBox::critical(this, tr("Unsupported scheme in URL"),
+                              tr("The URL scheme \"%1\" is not supported")
+                              .arg(url.scheme()));
+        return FileOpenFailed;
+
+    } else {
+        RemoteFile rf(url);
+        rf.wait();
+        if (!rf.isOK()) {
+            // rf was created on the assumption that ustr was
+            // human-readable.  Let's try again, this time assuming it
+            // was already encoded.
+            std::cerr << "MainWindow::openURL: Failed to retrieve URL \""
+                      << ustr.toStdString() << "\" as human-readable URL; "
+                      << "trying again treating it as encoded URL"
+                      << std::endl;
+            url.setEncodedUrl(ustr.toAscii());
+            return openURL(url, mode);
+        }
+
+        FileOpenStatus status;
+        if ((status = openSomeFile(rf.getLocalFilename(), ustr, mode)) !=
             FileOpenSucceeded) {
             rf.deleteLocalFile();
         }
@@ -3092,7 +3278,9 @@ MainWindow::openSomeFile(QString path, QString location,
                            m_paneStack != 0 &&
                            m_paneStack->getCurrentPane() != 0);
 
-    if ((status = openAudioFile(path, location, mode)) != FileOpenFailed) {
+    if ((status = openPlaylistFile(path, location, mode)) != FileOpenFailed) {
+        return status;
+    } else if ((status = openAudioFile(path, location, mode)) != FileOpenFailed) {
         return status;
     } else if ((status = openSessionFile(path, location)) != FileOpenFailed) {
 	return status;
@@ -3546,23 +3734,6 @@ MainWindow::toggleStatusBar()
 }
 
 void
-MainWindow::toggleDarkBackground()
-{
-    if (!m_viewManager) return;
-
-    m_viewManager->setGlobalDarkBackground
-        (!m_viewManager->getGlobalDarkBackground());
-
-    if (m_viewManager->getGlobalDarkBackground()) {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-    } else {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-    }        
-}
-
-void
 MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 {
     if (name == "Property Box Layout") {
@@ -3574,7 +3745,24 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
                 m_paneStack->setLayoutStyle(PaneStack::SinglePropertyStackLayout);
             }
         }
-    }
+    } else if (name == "Background Mode" && m_viewManager) {
+        Preferences::BackgroundMode mode =
+            Preferences::getInstance()->getBackgroundMode();
+        if (mode == Preferences::BackgroundFromTheme) {
+            m_viewManager->setGlobalDarkBackground(m_initialDarkBackground);
+        } else if (mode == Preferences::DarkBackground) {
+            m_viewManager->setGlobalDarkBackground(true);
+        } else {
+            m_viewManager->setGlobalDarkBackground(false);
+        }
+        if (m_viewManager->getGlobalDarkBackground()) {
+            m_panLayer->setBaseColour
+                (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
+        } else {
+            m_panLayer->setBaseColour
+                (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
+        }      
+    }            
 }
 
 void
@@ -4413,6 +4601,9 @@ void
 MainWindow::modelAboutToBeDeleted(Model *model)
 {
 //    std::cerr << "MainWindow::modelAboutToBeDeleted(" << model << ")" << std::endl;
+    if (model == m_viewManager->getPlaybackModel()) {
+        m_viewManager->setPlaybackModel(0);
+    }
     m_playSource->removeModel(model);
     FFTDataServer::modelAboutToBeDeleted(model);
 }
@@ -4647,6 +4838,19 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 m_viewManager->setPlayLoopMode(true);
             } else if (str == "off") {
                 m_viewManager->setPlayLoopMode(false);
+            }
+        }
+
+    } else if (message.getMethod() == "solo") {
+
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+
+            QString str = message.getArg(0).toString();
+            if (str == "on") {
+                m_viewManager->setPlaySoloMode(true);
+            } else if (str == "off") {
+                m_viewManager->setPlaySoloMode(false);
             }
         }
 

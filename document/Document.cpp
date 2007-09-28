@@ -334,6 +334,8 @@ Document::addDerivedModel(TransformId transform,
     rec.configurationXml = configurationXml;
     rec.refcount = 0;
 
+    outputModelToAdd->setSourceModel(inputModel);
+
     m_models[outputModelToAdd] = rec;
 
     emit modelAdded(outputModelToAdd);

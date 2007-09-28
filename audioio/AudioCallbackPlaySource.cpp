@@ -697,6 +697,20 @@ AudioCallbackPlaySource::setAuditioningPlugin(RealTimePluginInstance *plugin)
     if (formerPlugin) m_pluginScavenger.claim(formerPlugin);
 }
 
+void
+AudioCallbackPlaySource::setSoloModelSet(std::set<Model *> s)
+{
+    m_audioGenerator->setSoloModelSet(s);
+    clearRingBuffers();
+}
+
+void
+AudioCallbackPlaySource::clearSoloModelSet()
+{
+    m_audioGenerator->clearSoloModelSet();
+    clearRingBuffers();
+}
+
 size_t
 AudioCallbackPlaySource::getTargetSampleRate() const
 {
@@ -1108,9 +1122,9 @@ AudioCallbackPlaySource::fillBuffers()
 #ifdef DEBUG_AUDIO_PLAY_SOURCE
             std::cout << "Using crappy converter" << std::endl;
 #endif
-            src_process(m_crapConverter, &data);
+            err = src_process(m_crapConverter, &data);
         } else {
-            src_process(m_converter, &data);
+            err = src_process(m_converter, &data);
         }
 
 	size_t toCopy = size_t(got * ratio + 0.1);

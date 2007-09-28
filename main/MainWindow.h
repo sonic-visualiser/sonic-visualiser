@@ -79,9 +79,11 @@ public:
 
     FileOpenStatus openSomeFile(QString path, AudioFileOpenMode = AskUser);
     FileOpenStatus openAudioFile(QString path, AudioFileOpenMode = AskUser);
+    FileOpenStatus openPlaylistFile(QString path, AudioFileOpenMode = AskUser);
     FileOpenStatus openLayerFile(QString path);
     FileOpenStatus openSessionFile(QString path);
-    FileOpenStatus openURL(QUrl url);
+    FileOpenStatus openURL(QUrl url, AudioFileOpenMode = AskUser);
+    FileOpenStatus openURL(QString url, AudioFileOpenMode = AskUser);
 
     bool saveSessionFile(QString path);
     bool commitData(bool mayAskUser); // on session shutdown
@@ -155,7 +157,6 @@ protected slots:
     void toggleZoomWheels();
     void togglePropertyBoxes();
     void toggleStatusBar();
-    void toggleDarkBackground();
 
     void play();
     void ffwd();
@@ -172,6 +173,7 @@ protected slots:
 
     void playLoopToggled();
     void playSelectionToggled();
+    void playSoloToggled();
     void playSpeedChanged(int);
     void playSharpenToggled();
     void playMonoToggled();
@@ -302,6 +304,8 @@ protected:
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<QTreeView>      m_layerTreeView;
 
+    bool                     m_initialDarkBackground;
+
     KeyReference            *m_keyReference;
 
     WaveFileModel *getMainModel();
@@ -412,6 +416,8 @@ protected:
                                 AudioFileOpenMode = AskUser);
     FileOpenStatus openAudioFile(QString path, QString location,
                                  AudioFileOpenMode = AskUser);
+    FileOpenStatus openPlaylistFile(QString path, QString location,
+                                    AudioFileOpenMode = AskUser);
     FileOpenStatus openLayerFile(QString path, QString location);
     FileOpenStatus openSessionFile(QString path, QString location);
 

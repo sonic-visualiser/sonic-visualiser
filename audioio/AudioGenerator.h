@@ -90,6 +90,17 @@ public:
     virtual size_t mixModel(Model *model, size_t startFrame, size_t frameCount,
 			    float **buffer, size_t fadeIn = 0, size_t fadeOut = 0);
 
+    /**
+     * Specify that only the given set of models should be played.
+     */
+    virtual void setSoloModelSet(std::set<Model *>s);
+
+    /**
+     * Specify that all models should be played as normal (if not
+     * muted).
+     */
+    virtual void clearSoloModelSet();
+
 protected slots:
     void playPluginIdChanged(const Model *, QString);
     void playPluginConfigurationChanged(const Model *, QString);
@@ -97,6 +108,9 @@ protected slots:
 protected:
     size_t       m_sourceSampleRate;
     size_t       m_targetChannelCount;
+
+    bool m_soloing;
+    std::set<Model *> m_soloModelSet;
 
     struct NoteOff {
 
