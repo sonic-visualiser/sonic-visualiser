@@ -16,6 +16,7 @@
 #include "PluginTransform.h"
 
 #include "vamp-sdk/PluginHostAdapter.h"
+#include "vamp-sdk/hostext/PluginWrapper.h"
 
 PluginTransform::PluginTransform(Model *inputModel,
 				 const ExecutionContext &context) :
@@ -69,7 +70,15 @@ PluginTransform::ExecutionContext::makeConsistentWithPlugin(const Vamp::PluginBa
 {
     const Vamp::Plugin *vp = dynamic_cast<const Vamp::Plugin *>(_plugin);
     if (!vp) {
+//        std::cerr << "makeConsistentWithPlugin: not a Vamp::Plugin" << std::endl;
         vp = dynamic_cast<const Vamp::PluginHostAdapter *>(_plugin); //!!! why?
+}
+    if (!vp) {
+//        std::cerr << "makeConsistentWithPlugin: not a Vamp::PluginHostAdapter" << std::endl;
+        vp = dynamic_cast<const Vamp::HostExt::PluginWrapper *>(_plugin); //!!! no, I mean really why?
+    }
+    if (!vp) {
+//        std::cerr << "makeConsistentWithPlugin: not a Vamp::HostExt::PluginWrapper" << std::endl;
     }
 
     if (!vp) {
