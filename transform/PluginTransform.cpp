@@ -30,7 +30,10 @@ PluginTransform::ExecutionContext::ExecutionContext(int _c, size_t _bs) :
     domain(Vamp::Plugin::TimeDomain),
     stepSize(_bs ? _bs : 1024),
     blockSize(_bs ? _bs : 1024),
-    windowType(HanningWindow)
+    windowType(HanningWindow),
+    startFrame(0),
+    duration(0),
+    sampleRate(0)
 {
 }
 
@@ -40,7 +43,10 @@ PluginTransform::ExecutionContext::ExecutionContext(int _c, size_t _ss,
     domain(Vamp::Plugin::FrequencyDomain),
     stepSize(_ss ? _ss : (_bs ? _bs / 2 : 512)),
     blockSize(_bs ? _bs : 1024),
-    windowType(_wt)
+    windowType(_wt),
+    startFrame(0),
+    duration(0),
+    sampleRate(0)
 {
 }
 
@@ -50,7 +56,10 @@ PluginTransform::ExecutionContext::ExecutionContext(int _c,
     domain(Vamp::Plugin::TimeDomain),
     stepSize(0),
     blockSize(0),
-    windowType(HanningWindow)
+    windowType(HanningWindow),
+    startFrame(0),
+    duration(0),
+    sampleRate(0)
 {
     makeConsistentWithPlugin(_plugin);
 }
@@ -62,7 +71,10 @@ PluginTransform::ExecutionContext::operator==(const ExecutionContext &c)
             c.domain == domain &&
             c.stepSize == stepSize &&
             c.blockSize == blockSize &&
-            c.windowType == windowType);
+            c.windowType == windowType &&
+            c.startFrame == startFrame &&
+            c.duration == duration &&
+            c.sampleRate == sampleRate);
 }
 
 void

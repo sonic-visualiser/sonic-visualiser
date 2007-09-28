@@ -48,6 +48,9 @@ public:
         size_t stepSize;
         size_t blockSize;
         WindowType windowType;
+        size_t startFrame;
+        size_t duration;    // 0 -> whole thing
+        float sampleRate;   // 0 -> model's rate
     };
 
 protected:

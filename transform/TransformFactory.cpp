@@ -292,6 +292,8 @@ TransformFactory::populateFeatureExtractionPlugins(TransformDescriptionMap &tran
                               units,
                               configurable);
 	}
+
+        delete plugin;
     }
 }
 
@@ -553,6 +555,8 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
 
     if (FeatureExtractionPluginFactory::instanceFor(id)) {
 
+        std::cerr << "getConfigurationForTransform: instantiating Vamp plugin" << std::endl;
+
         Vamp::Plugin *vp =
             FeatureExtractionPluginFactory::instanceFor(id)->instantiatePlugin
             (id, inputModel->getSampleRate());
@@ -709,8 +713,10 @@ TransformFactory::getDefaultContextForTransform(TransformId identifier,
             FeatureExtractionPluginFactory::instanceFor(id)->instantiatePlugin
             (id, inputModel ? inputModel->getSampleRate() : 48000);
 
-        if (vp) context = PluginTransform::ExecutionContext(-1, vp);
-
+        if (vp) {
+            context = PluginTransform::ExecutionContext(-1, vp);
+            delete vp;
+        }
     }
 
     return context;
@@ -779,6 +785,8 @@ TransformFactory::transform(TransformId identifier, Model *inputModel,
         } else if (trn != "") {
             model->setObjectName(trn);
         }
+    } else {
+        t->wait();
     }
 
     return model;

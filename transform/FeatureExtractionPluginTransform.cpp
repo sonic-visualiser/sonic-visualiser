@@ -220,6 +220,7 @@ FeatureExtractionPluginTransform::FeatureExtractionPluginTransform(Model *inputM
 
 FeatureExtractionPluginTransform::~FeatureExtractionPluginTransform()
 {
+    std::cerr << "FeatureExtractionPluginTransform::~FeatureExtractionPluginTransform()" << std::endl;
     delete m_plugin;
     delete m_descriptor;
 }
@@ -241,6 +242,8 @@ FeatureExtractionPluginTransform::run()
     DenseTimeValueModel *input = getInput();
     if (!input) return;
 
+    if (!m_output) return;
+
     while (!input->isReady()) {
 /*
         if (dynamic_cast<WaveFileModel *>(input)) {
@@ -252,8 +255,6 @@ FeatureExtractionPluginTransform::run()
         std::cerr << "FeatureExtractionPluginTransform::run: Waiting for input model to be ready..." << std::endl;
         sleep(1);
     }
-
-    if (!m_output) return;
 
     size_t sampleRate = m_input->getSampleRate();
 
@@ -297,16 +298,35 @@ FeatureExtractionPluginTransform::run()
 
     long startFrame = m_input->getStartFrame();
     long   endFrame = m_input->getEndFrame();
-    long blockFrame = startFrame;
+
+    long contextStart = m_context.startFrame;
+    long contextDuration = m_context.duration;
+
+    if (contextStart == 0 || contextStart < startFrame) {
+        contextStart = startFrame;
+    }
+
+    if (contextDuration == 0) {
+        contextDuration = endFrame - contextStart;
+    }
+    if (contextStart + contextDuration > endFrame) {
+        contextDuration = endFrame - contextStart;
+    }
+
+    long blockFrame = contextStart;
 
     long prevCompletion = 0;
+
+    setCompletion(0);
 
     while (!m_abandoned) {
 
         if (frequencyDomain) {
-            if (blockFrame - int(m_context.blockSize)/2 > endFrame) break;
+            if (blockFrame - int(m_context.blockSize)/2 >
+                contextStart + contextDuration) break;
         } else {
-            if (blockFrame >= endFrame) break;
+            if (blockFrame >= 
+                contextStart + contextDuration) break;
         }
 
 //	std::cerr << "FeatureExtractionPluginTransform::run: blockFrame "
@@ -314,8 +334,8 @@ FeatureExtractionPluginTransform::run()
 //                  << m_context.blockSize << std::endl;
 
 	long completion =
-	    (((blockFrame - startFrame) / m_context.stepSize) * 99) /
-	    (   (endFrame - startFrame) / m_context.stepSize);
+	    (((blockFrame - contextStart) / m_context.stepSize) * 99) /
+	    (contextDuration / m_context.stepSize);
 
 	// channelCount is either m_input->channelCount or 1
 
@@ -341,7 +361,7 @@ FeatureExtractionPluginTransform::run()
 	    addFeature(blockFrame, feature);
 	}
 
-	if (blockFrame == startFrame || completion > prevCompletion) {
+	if (blockFrame == contextStart || completion > prevCompletion) {
 	    setCompletion(completion);
 	    prevCompletion = completion;
 	}
@@ -500,8 +520,8 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 	binCount = m_descriptor->binCount;
     }
 
-//    std::cerr << "FeatureExtractionPluginTransform::setCompletion("
-//              << completion << ")" << std::endl;
+    std::cerr << "FeatureExtractionPluginTransform::setCompletion("
+              << completion << ")" << std::endl;
 
     if (binCount == 0) {
 
