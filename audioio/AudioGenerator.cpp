@@ -47,7 +47,8 @@ AudioGenerator::m_sampleDir = "";
 
 AudioGenerator::AudioGenerator() :
     m_sourceSampleRate(0),
-    m_targetChannelCount(1)
+    m_targetChannelCount(1),
+    m_soloing(false)
 {
     connect(PlayParameterRepository::getInstance(),
             SIGNAL(playPluginIdChanged(const Model *, QString)),
@@ -352,6 +353,26 @@ AudioGenerator::getBlockSize() const
     return m_pluginBlockSize;
 }
 
+void
+AudioGenerator::setSoloModelSet(std::set<Model *> s)
+{
+    QMutexLocker locker(&m_mutex);
+
+    std::cerr << "setting solo set" << std::endl;
+
+    m_soloModelSet = s;
+    m_soloing = true;
+}
+
+void
+AudioGenerator::clearSoloModelSet()
+{
+    QMutexLocker locker(&m_mutex);
+
+    m_soloModelSet.clear();
+    m_soloing = false;
+}
+
 size_t
 AudioGenerator::mixModel(Model *model, size_t startFrame, size_t frameCount,
 			 float **buffer, size_t fadeIn, size_t fadeOut)
@@ -373,6 +394,15 @@ AudioGenerator::mixModel(Model *model, size_t startFrame, size_t frameCount,
         std::cout << "AudioGenerator::mixModel(" << model << "): muted" << std::endl;
 #endif
         return frameCount;
+    }
+
+    if (m_soloing) {
+        if (m_soloModelSet.find(model) == m_soloModelSet.end()) {
+#ifdef DEBUG_AUDIO_GENERATOR
+            std::cout << "AudioGenerator::mixModel(" << model << "): not one of the solo'd models" << std::endl;
+#endif
+            return frameCount;
+        }
     }
 
     float gain = parameters->getPlayGain();

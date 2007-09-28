@@ -215,6 +215,17 @@ public:
      */
     void setAuditioningPlugin(RealTimePluginInstance *plugin);
 
+    /**
+     * Specify that only the given set of models should be played.
+     */
+    void setSoloModelSet(std::set<Model *>s);
+
+    /**
+     * Specify that all models should be played as normal (if not
+     * muted).
+     */
+    void clearSoloModelSet();
+
 signals:
     void modelReplaced();
 

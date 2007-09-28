@@ -22,6 +22,7 @@
 
 class WindowTypeSelector;
 class QPushButton;
+class QLineEdit;
 
 class PreferencesDialog : public QDialog
 {
@@ -40,6 +41,11 @@ protected slots:
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
     void resampleQualityChanged(int quality);
+    void resampleOnLoadChanged(int state);
+    void tempDirRootChanged(QString root);
+    void backgroundModeChanged(int mode);
+
+    void tempDirButtonClicked();
 
     void okClicked();
     void applyClicked();
@@ -48,12 +54,19 @@ protected slots:
 protected:
     WindowTypeSelector *m_windowTypeSelector;
     QPushButton *m_applyButton;
+
+    QLineEdit *m_tempDirRootEdit;
     
     WindowType m_windowType;
-    int   m_spectrogramSmoothing;
-    int   m_propertyLayout;
+    int m_spectrogramSmoothing;
+    int m_propertyLayout;
     float m_tuningFrequency;
-    int   m_resampleQuality;
+    int m_resampleQuality;
+    bool m_resampleOnLoad;
+    QString m_tempDirRoot;
+    int m_backgroundMode;
+
+    bool m_changesOnRestart;
 };
 
 #endif

@@ -221,9 +221,8 @@ protected:
 
     /*
      * Every model that is in use by a layer in the document must be
-     * found in either m_mainModel, m_derivedModels or
-     * m_importedModels.  We own and control the lifespan of all of
-     * these models.
+     * found in either m_mainModel or m_models.  We own and control
+     * the lifespan of all of these models.
      */
 
     /**
