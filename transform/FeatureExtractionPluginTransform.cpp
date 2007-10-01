@@ -405,9 +405,9 @@ FeatureExtractionPluginTransform::getFrames(int channel, int channelCount,
         startFrame = 0;
     }
 
-    long got = getInput()->getValues
+    long got = getInput()->getData
         ((channelCount == 1 ? m_context.channel : channel),
-         startFrame, startFrame + size, buffer + offset);
+         startFrame, size, buffer + offset);
 
     while (got < size) {
         buffer[offset + got] = 0.0;

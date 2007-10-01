@@ -358,8 +358,6 @@ AudioGenerator::setSoloModelSet(std::set<Model *> s)
 {
     QMutexLocker locker(&m_mutex);
 
-    std::cerr << "setting solo set" << std::endl;
-
     m_soloModelSet = s;
     m_soloing = true;
 }
@@ -467,15 +465,17 @@ AudioGenerator::mixDenseTimeValueModel(DenseTimeValueModel *dtvm,
 
 	if (prevChannel != sourceChannel) {
 	    if (startFrame >= fadeIn/2) {
-		got = dtvm->getValues
+		got = dtvm->getData
 		    (sourceChannel,
-		     startFrame - fadeIn/2, startFrame + frames + fadeOut/2,
+		     startFrame - fadeIn/2,
+                     frames + fadeOut/2 + fadeIn/2,
 		     channelBuffer);
 	    } else {
 		size_t missing = fadeIn/2 - startFrame;
-		got = dtvm->getValues
+		got = dtvm->getData
 		    (sourceChannel,
-		     0, startFrame + frames + fadeOut/2,
+		     startFrame,
+                     frames + fadeOut/2,
 		     channelBuffer + missing);
 	    }	    
 	}

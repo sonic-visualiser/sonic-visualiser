@@ -138,51 +138,69 @@ RealTimePluginTransform::run()
     size_t channelCount = input->getChannelCount();
     if (!wwfm && m_context.channel != -1) channelCount = 1;
 
-    size_t blockSize = m_plugin->getBufferSize();
+    long blockSize = m_plugin->getBufferSize();
 
     float **inbufs = m_plugin->getAudioInputBuffers();
 
-    size_t startFrame = m_input->getStartFrame();
-    size_t   endFrame = m_input->getEndFrame();
-    size_t blockFrame = startFrame;
+    long startFrame = m_input->getStartFrame();
+    long   endFrame = m_input->getEndFrame();
+    
+    long contextStart = m_context.startFrame;
+    long contextDuration = m_context.duration;
 
-    size_t prevCompletion = 0;
+    if (contextStart == 0 || contextStart < startFrame) {
+        contextStart = startFrame;
+    }
 
-    size_t latency = m_plugin->getLatency();
+    if (contextDuration == 0) {
+        contextDuration = endFrame - contextStart;
+    }
+    if (contextStart + contextDuration > endFrame) {
+        contextDuration = endFrame - contextStart;
+    }
 
-    while (blockFrame < endFrame + latency && !m_abandoned) {
+    wwfm->setStartFrame(contextStart);
 
-	size_t completion =
-	    (((blockFrame - startFrame) / blockSize) * 99) /
-	    (   (endFrame - startFrame) / blockSize);
+    long blockFrame = contextStart;
 
-	size_t got = 0;
+    long prevCompletion = 0;
+
+    long latency = m_plugin->getLatency();
+
+    while (blockFrame < contextStart + contextDuration + latency &&
+           !m_abandoned) {
+
+	long completion =
+	    (((blockFrame - contextStart) / blockSize) * 99) /
+	    ((contextDuration) / blockSize);
+
+	long got = 0;
 
 	if (channelCount == 1) {
             if (inbufs && inbufs[0]) {
-                got = input->getValues
-                    (m_context.channel, blockFrame, blockFrame + blockSize, inbufs[0]);
+                got = input->getData
+                    (m_context.channel, blockFrame, blockSize, inbufs[0]);
                 while (got < blockSize) {
                     inbufs[0][got++] = 0.0;
                 }          
             }
             for (size_t ch = 1; ch < m_plugin->getAudioInputCount(); ++ch) {
-                for (size_t i = 0; i < blockSize; ++i) {
+                for (long i = 0; i < blockSize; ++i) {
                     inbufs[ch][i] = inbufs[0][i];
                 }
             }
 	} else {
 	    for (size_t ch = 0; ch < channelCount; ++ch) {
                 if (inbufs && inbufs[ch]) {
-                    got = input->getValues
-                        (ch, blockFrame, blockFrame + blockSize, inbufs[ch]);
+                    got = input->getData
+                        (ch, blockFrame, blockSize, inbufs[ch]);
                     while (got < blockSize) {
                         inbufs[ch][got++] = 0.0;
                     }
                 }
 	    }
             for (size_t ch = channelCount; ch < m_plugin->getAudioInputCount(); ++ch) {
-                for (size_t i = 0; i < blockSize; ++i) {
+                for (long i = 0; i < blockSize; ++i) {
                     inbufs[ch][i] = inbufs[ch % channelCount][i];
                 }
             }
@@ -208,7 +226,7 @@ RealTimePluginTransform::run()
 
             float value = m_plugin->getControlOutputValue(m_outputNo);
 
-            size_t pointFrame = blockFrame;
+            long pointFrame = blockFrame;
             if (pointFrame > latency) pointFrame -= latency;
             else pointFrame = 0;
 
@@ -222,12 +240,13 @@ RealTimePluginTransform::run()
             if (outbufs) {
 
                 if (blockFrame >= latency) {
-                    size_t writeSize = std::min(blockSize,
-                                                endFrame + latency - blockFrame);
+                    long writeSize = std::min
+                        (blockSize,
+                         contextStart + contextDuration + latency - blockFrame);
                     wwfm->addSamples(outbufs, writeSize);
                 } else if (blockFrame + blockSize >= latency) {
-                    size_t offset = latency - blockFrame;
-                    size_t count = blockSize - offset;
+                    long offset = latency - blockFrame;
+                    long count = blockSize - offset;
                     float **tmp = new float *[channelCount];
                     for (size_t c = 0; c < channelCount; ++c) {
                         tmp[c] = outbufs[c] + offset;
@@ -238,7 +257,7 @@ RealTimePluginTransform::run()
             }
         }
 
-	if (blockFrame == startFrame || completion > prevCompletion) {
+	if (blockFrame == contextStart || completion > prevCompletion) {
 	    if (stvm) stvm->setCompletion(completion);
 	    if (wwfm) wwfm->setCompletion(completion);
 	    prevCompletion = completion;
