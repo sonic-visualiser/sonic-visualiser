@@ -1013,6 +1013,24 @@ SVFileReader::readDerivation(const QXmlAttributes &attributes)
     int windowType = attributes.value("windowType").trimmed().toInt(&ok);
     if (ok) m_currentTransformContext.windowType = WindowType(windowType);
 
+    QString startFrameStr = attributes.value("startFrame");
+    QString durationStr = attributes.value("duration");
+
+    size_t startFrame = 0;
+    size_t duration = 0;
+
+    if (startFrameStr != "") {
+        startFrame = startFrameStr.trimmed().toInt(&ok);
+        if (!ok) startFrame = 0;
+    }
+    if (durationStr != "") {
+        duration = durationStr.trimmed().toInt(&ok);
+        if (!ok) duration = 0;
+    }
+
+    m_currentTransformContext.startFrame = startFrame;
+    m_currentTransformContext.duration = duration;
+
     return true;
 }
 

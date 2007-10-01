@@ -516,7 +516,9 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
                                                const std::vector<Model *> &candidateInputModels,
                                                PluginTransform::ExecutionContext &context,
                                                QString &configurationXml,
-                                               AudioCallbackPlaySource *source)
+                                               AudioCallbackPlaySource *source,
+                                               size_t startFrame,
+                                               size_t duration)
 {
     if (candidateInputModels.empty()) return 0;
 
@@ -651,6 +653,10 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
             dialog->setCandidateInputModels(candidateModelNames);
         }
 
+        if (startFrame != 0 || duration != 0) {
+            dialog->setShowSelectionOnlyOption(true);
+        }
+
         if (targetChannels > 0) {
             dialog->setChannelArrangement(sourceChannels, targetChannels,
                                           defaultChannel);
@@ -678,6 +684,13 @@ TransformFactory::getConfigurationForTransform(TransformId identifier,
 
         configurationXml = PluginXml(plugin).toXmlString();
         context.channel = dialog->getChannel();
+        
+        if (startFrame != 0 || duration != 0) {
+            if (dialog->getSelectionOnly()) {
+                context.startFrame = startFrame;
+                context.duration = duration;
+            }
+        }
 
         dialog->getProcessingParameters(context.stepSize,
                                         context.blockSize,

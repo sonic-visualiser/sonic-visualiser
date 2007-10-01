@@ -89,7 +89,9 @@ public:
                                         const std::vector<Model *> &candidateInputModels,
                                         PluginTransform::ExecutionContext &context,
                                         QString &configurationXml,
-                                        AudioCallbackPlaySource *source = 0);
+                                        AudioCallbackPlaySource *source = 0,
+                                        size_t startFrame = 0,
+                                        size_t duration = 0);
 
     /**
      * Get the default execution context for the given transform

@@ -813,17 +813,24 @@ Document::toXml(QTextStream &out, QString indent, QString extraAttributes) const
         }
 
 	if (haveDerivation) {
-	    
-            //!!! stream the rest of the execution context in both directions (i.e. not just channel)
 
+            QString extentsAttributes;
+            if (rec.context.startFrame != 0 ||
+                rec.context.duration != 0) {
+                extentsAttributes = QString("startFrame=\"%1\" duration=\"%2\" ")
+                    .arg(rec.context.startFrame)
+                    .arg(rec.context.duration);
+            }
+	    
 	    out << indent;
-	    out << QString("  <derivation source=\"%1\" model=\"%2\" channel=\"%3\" domain=\"%4\" stepSize=\"%5\" blockSize=\"%6\" windowType=\"%7\" transform=\"%8\"")
+	    out << QString("  <derivation source=\"%1\" model=\"%2\" channel=\"%3\" domain=\"%4\" stepSize=\"%5\" blockSize=\"%6\" %7windowType=\"%8\" transform=\"%9\"")
 		.arg(XmlExportable::getObjectExportId(rec.source))
 		.arg(XmlExportable::getObjectExportId(i->first))
                 .arg(rec.context.channel)
                 .arg(rec.context.domain)
                 .arg(rec.context.stepSize)
                 .arg(rec.context.blockSize)
+                .arg(extentsAttributes)
                 .arg(int(rec.context.windowType))
 		.arg(XmlExportable::encodeEntities(rec.transform));
 

@@ -2022,7 +2022,9 @@ MainWindow::playSoloToggled()
 	m_viewManager->setPlaySoloMode(!m_viewManager->getPlaySoloMode());
     }
 
-    if (!m_viewManager->getPlaySoloMode()) {
+    if (m_viewManager->getPlaySoloMode()) {
+        currentPaneChanged(m_paneStack->getCurrentPane());
+    } else {
         m_viewManager->setPlaybackModel(0);
         if (m_playSource) {
             m_playSource->clearSoloModelSet();
@@ -4216,11 +4218,19 @@ MainWindow::addLayer()
     std::vector<Model *> candidateInputModels =
         m_document->getTransformInputModels();
 
+    size_t startFrame = 0, duration = 0;
+    size_t endFrame = 0;
+    m_viewManager->getSelection().getExtents(startFrame, endFrame);
+    if (endFrame > startFrame) duration = endFrame - startFrame;
+    else startFrame = 0;
+
     Model *inputModel = factory->getConfigurationForTransform(transform,
                                                               candidateInputModels,
                                                               context,
                                                               configurationXml,
-                                                              m_playSource);
+                                                              m_playSource,
+                                                              startFrame,
+                                                              duration);
     if (!inputModel) return;
 
 //    std::cerr << "MainWindow::addLayer: Input model is " << inputModel << " \"" << inputModel->objectName().toStdString() << "\"" << std::endl;
