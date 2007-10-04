@@ -520,8 +520,8 @@ FeatureExtractionPluginTransform::setCompletion(int completion)
 	binCount = m_descriptor->binCount;
     }
 
-    std::cerr << "FeatureExtractionPluginTransform::setCompletion("
-              << completion << ")" << std::endl;
+//    std::cerr << "FeatureExtractionPluginTransform::setCompletion("
+//              << completion << ")" << std::endl;
 
     if (binCount == 0) {
 

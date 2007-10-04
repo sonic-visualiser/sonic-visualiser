@@ -536,7 +536,7 @@ AudioGenerator::mixSparseOneDimensionalModel(SparseOneDimensionalModel *sodm,
     onEv.type = SND_SEQ_EVENT_NOTEON;
     onEv.data.note.channel = 0;
     onEv.data.note.note = 64;
-    onEv.data.note.velocity = 127;
+    onEv.data.note.velocity = 100;
 
     snd_seq_event_t offEv;
     offEv.type = SND_SEQ_EVENT_NOTEOFF;
@@ -680,7 +680,7 @@ AudioGenerator::mixNoteModel(NoteModel *nm,
     onEv.type = SND_SEQ_EVENT_NOTEON;
     onEv.data.note.channel = 0;
     onEv.data.note.note = 64;
-    onEv.data.note.velocity = 127;
+    onEv.data.note.velocity = 100;
 
     snd_seq_event_t offEv;
     offEv.type = SND_SEQ_EVENT_NOTEOFF;
