@@ -30,6 +30,7 @@
 #include "data/model/SparseTimeValueModel.h"
 #include "data/model/NoteModel.h"
 #include "data/model/TextModel.h"
+#include "data/model/ImageModel.h"
 
 #include "view/Pane.h"
 
@@ -493,10 +494,21 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
 	    
 	    READ_MANDATORY(int, resolution, toInt);
 
-	    SparseOneDimensionalModel *model = new SparseOneDimensionalModel
-		(sampleRate, resolution);
-            model->setObjectName(name);
-	    m_models[id] = model;
+            if (attributes.value("subtype") == "image") {
+
+                bool notifyOnAdd = (attributes.value("notifyOnAdd") == "true");
+                ImageModel *model = new ImageModel(sampleRate, resolution,
+                                                   notifyOnAdd);
+                model->setObjectName(name);
+                m_models[id] = model;
+
+            } else {
+
+                SparseOneDimensionalModel *model = new SparseOneDimensionalModel
+                    (sampleRate, resolution);
+                model->setObjectName(name);
+                m_models[id] = model;
+            }
 
 	    int dataset = attributes.value("dataset").trimmed().toInt(&ok);
 	    if (ok) m_awaitingDatasets[dataset] = id;
@@ -779,6 +791,7 @@ SVFileReader::readDatasetStart(const QXmlAttributes &attributes)
     switch (dimensions) {
     case 1:
 	if (dynamic_cast<SparseOneDimensionalModel *>(model)) good = true;
+        else if (dynamic_cast<ImageModel *>(model)) good = true;
 	break;
 
     case 2:
@@ -796,7 +809,7 @@ SVFileReader::readDatasetStart(const QXmlAttributes &attributes)
     }
 
     if (!good) {
-	std::cerr << "WARNING: SV-XML: Model id " << modelId << " has wrong number of dimensions for " << dimensions << "-D dataset " << id << std::endl;
+	std::cerr << "WARNING: SV-XML: Model id " << modelId << " has wrong number of dimensions or inappropriate type for " << dimensions << "-D dataset " << id << std::endl;
 	m_currentDataset = 0;
 	return false;
     }
@@ -858,6 +871,17 @@ SVFileReader::addPointToDataset(const QXmlAttributes &attributes)
 	QString label = attributes.value("label");
 //        std::cerr << "SVFileReader::addPointToDataset: TextModel: frame = " << frame << ", height = " << height << ", label = " << label.toStdString() << ", ok = " << ok << std::endl;
 	tm->addPoint(TextModel::Point(frame, height, label));
+	return ok;
+    }
+
+    ImageModel *im = dynamic_cast<ImageModel *>(m_currentDataset);
+
+    if (im) {
+//        std::cerr << "Current dataset is an image model" << std::endl;
+	QString image = attributes.value("image");
+	QString label = attributes.value("label");
+//        std::cerr << "SVFileReader::addPointToDataset: ImageModel: frame = " << frame << ", image = " << image.toStdString() << ", label = " << label.toStdString() << ", ok = " << ok << std::endl;
+	im->addPoint(ImageModel::Point(frame, image, label));
 	return ok;
     }
 
