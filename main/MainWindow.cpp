@@ -23,6 +23,7 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
+#include "data/model/NoteModel.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "layer/WaveformLayer.h"
@@ -51,6 +52,7 @@
 #include "data/fileio/PlaylistFileReader.h"
 #include "data/fileio/WavFileWriter.h"
 #include "data/fileio/CSVFileWriter.h"
+#include "data/fileio/MIDIFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
 #include "data/fileio/RemoteFile.h"
 #include "data/fft/FFTDataServer.h"
@@ -374,6 +376,8 @@ MainWindow::getOpenFileName(FileFinder::FileType type)
         return ff->getOpenFileName(type, m_audioFile);
     case FileFinder::LayerFile:
         return ff->getOpenFileName(type, m_sessionFile);
+    case FileFinder::LayerFileNoMidi:
+        return ff->getOpenFileName(type, m_sessionFile);
     case FileFinder::SessionOrAudioFile:
         return ff->getOpenFileName(type, m_sessionFile);
     case FileFinder::ImageFile:
@@ -401,6 +405,8 @@ MainWindow::getSaveFileName(FileFinder::FileType type)
     case FileFinder::AudioFile:
         return ff->getSaveFileName(type, m_audioFile);
     case FileFinder::LayerFile:
+        return ff->getSaveFileName(type, m_sessionFile);
+    case FileFinder::LayerFileNoMidi:
         return ff->getSaveFileName(type, m_sessionFile);
     case FileFinder::SessionOrAudioFile:
         return ff->getSaveFileName(type, m_sessionFile);
@@ -2604,15 +2610,21 @@ MainWindow::exportLayer()
     Model *model = layer->getModel();
     if (!model) return;
 
-    QString path = getSaveFileName(FileFinder::LayerFile);
+    FileFinder::FileType type = FileFinder::LayerFileNoMidi;
+
+    if (dynamic_cast<NoteModel *>(model)) type = FileFinder::LayerFile;
+
+    QString path = getSaveFileName(type);
 
     if (path == "") return;
 
     if (QFileInfo(path).suffix() == "") path += ".svl";
 
+    QString suffix = QFileInfo(path).suffix().toLower();
+
     QString error;
 
-    if (path.endsWith(".xml") || path.endsWith(".svl")) {
+    if (suffix == "xml" || suffix == "svl") {
 
         QFile file(path);
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -2635,10 +2647,24 @@ MainWindow::exportLayer()
                 << "</sv>\n";
         }
 
+    } else if (suffix == "mid" || suffix == "midi") {
+
+        NoteModel *nm = dynamic_cast<NoteModel *>(model);
+
+        if (!nm) {
+            error = tr("Can't export non-note layers to MIDI");
+        } else {
+            MIDIFileWriter writer(path, nm);
+            writer.write();
+            if (!writer.isOK()) {
+                error = writer.getError();
+            }
+        }
+
     } else {
 
         CSVFileWriter writer(path, model,
-                             (path.endsWith(".csv") ? "," : "\t"));
+                             ((suffix == "csv") ? "," : "\t"));
         writer.write();
 
         if (!writer.isOK()) {
