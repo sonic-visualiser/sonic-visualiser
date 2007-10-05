@@ -256,6 +256,8 @@ main(int argc, char **argv)
     svTranslator.load(svTrName, ":i18n");
     application.installTranslator(&svTranslator);
 
+    StoreStartupLocale();
+
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<size_t>("size_t");
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
