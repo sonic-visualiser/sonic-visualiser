@@ -54,6 +54,7 @@ class QPushButton;
 class OSCQueue;
 class OSCMessage;
 class KeyReference;
+class Labeller;
 
 
 class MainWindow : public QMainWindow
@@ -108,6 +109,7 @@ signals:
     void canPaste(bool);
     void canInsertInstant(bool);
     void canInsertInstantsAtBoundaries(bool);
+    void canRenumberInstants(bool);
     void canDeleteCurrentLayer(bool);
     void canZoom(bool);
     void canScroll(bool);
@@ -210,6 +212,9 @@ protected slots:
     void insertInstant();
     void insertInstantAt(size_t);
     void insertInstantsAtBoundaries();
+    void setInstantsNumbering();
+    void setInstantsCounterCycle();
+    void renumberInstants();
 
     void documentModified();
     void documentRestored();
@@ -298,6 +303,8 @@ protected:
     bool                     m_openingAudioFile;
     bool                     m_abandoning;
 
+    Labeller                *m_labeller;
+
     int                      m_lastPlayStatusSec;
     mutable QString          m_myStatusMessage;
 
@@ -341,6 +348,9 @@ protected:
 
     typedef std::map<ViewManager::ToolMode, QAction *> ToolActionMap;
     ToolActionMap m_toolActions;
+
+    typedef std::map<QAction *, int> NumberingActionMap;
+    NumberingActionMap m_numberingActions;
 
     void setupMenus();
     void setupFileMenu();

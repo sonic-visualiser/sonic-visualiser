@@ -24,6 +24,7 @@
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
 #include "data/model/NoteModel.h"
+#include "data/model/Labeller.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "layer/WaveformLayer.h"
@@ -141,6 +142,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_documentModified(false),
     m_openingAudioFile(false),
     m_abandoning(false),
+    m_labeller(0),
     m_preferencesDialog(0),
     m_layerTreeView(0),
     m_keyReference(new KeyReference())
@@ -338,6 +340,16 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
         connect(oscTimer, SIGNAL(timeout()), this, SLOT(pollOSC()));
         oscTimer->start(1000);
     }
+
+    Labeller::ValueType labellerType = Labeller::ValueFromTwoLevelCounter;
+    settings.beginGroup("MainWindow");
+    labellerType = (Labeller::ValueType)
+        settings.value("labellertype", (int)labellerType).toInt();
+    int cycle = settings.value("labellercycle", 4).toInt();
+    settings.endGroup();
+
+    m_labeller = new Labeller(labellerType);
+    m_labeller->setCounterCycleSize(cycle);
 
     setupMenus();
     setupToolbars();
@@ -734,6 +746,41 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstantsAtBoundaries()));
     connect(this, SIGNAL(canInsertInstantsAtBoundaries(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    QMenu *numberingMenu = menu->addMenu(tr("Set Instant Numbering"));
+    QActionGroup *numberingGroup = new QActionGroup(this);
+
+    Labeller::TypeNameMap types = m_labeller->getTypeNames();
+    for (Labeller::TypeNameMap::iterator i = types.begin(); i != types.end(); ++i) {
+        if (i->first == Labeller::ValueFromLabel) continue;
+        action = new QAction(i->second, this);
+        connect(action, SIGNAL(triggered()), this, SLOT(setInstantsNumbering()));
+        action->setCheckable(true);
+        action->setChecked(m_labeller->getType() == i->first);
+        numberingGroup->addAction(action);
+        numberingMenu->addAction(action);
+        m_numberingActions[action] = (int)i->first;
+    }
+
+    QMenu *cycleMenu = menu->addMenu(tr("Set Instant Counter Cycle"));
+    QActionGroup *cycleGroup = new QActionGroup(this);
+
+    int cycles[] = { 2, 3, 4, 5, 6, 7, 8, 10, 12, 16 };
+    for (int i = 0; i < sizeof(cycles)/sizeof(cycles[0]); ++i) {
+        action = new QAction(QString("%1").arg(cycles[i]), this);
+        connect(action, SIGNAL(triggered()), this, SLOT(setInstantsCounterCycle()));
+        action->setCheckable(true);
+        action->setChecked(cycles[i] == m_labeller->getCounterCycleSize());
+        cycleGroup->addAction(action);
+        cycleMenu->addAction(action);
+    }
+
+    action = new QAction(tr("Re-Number Selected Instants"), this);
+    action->setStatusTip(tr("Re-number the selected instants using the current labelling scheme"));
+    connect(action, SIGNAL(triggered()), this, SLOT(renumberInstants()));
+    connect(this, SIGNAL(canRenumberInstants(bool)), action, SLOT(setEnabled(bool)));
+//    m_keyReference->registerShortcut(action);
     menu->addAction(action);
 }
 
@@ -1896,6 +1943,7 @@ MainWindow::updateMenuStates()
     emit canPaste(haveCurrentEditableLayer && haveClipboardContents);
     emit canInsertInstant(haveCurrentPane);
     emit canInsertInstantsAtBoundaries(haveCurrentPane && haveSelection);
+    emit canRenumberInstants(haveCurrentTimeInstantsLayer && haveSelection);
     emit canPlaySelection(haveMainModel && havePlayTarget && haveSelection);
     emit canClearSelection(haveSelection);
     emit canEditSelection(haveSelection && haveCurrentEditableLayer);
@@ -2342,14 +2390,112 @@ MainWindow::insertInstantAt(size_t frame)
             (model);
 
         if (sodm) {
-            SparseOneDimensionalModel::Point point
-                (frame, QString("%1").arg(sodm->getPointCount() + 1));
-            CommandHistory::getInstance()->addCommand
-                (new SparseOneDimensionalModel::AddPointCommand(sodm, point,
-                                                                tr("Add Points")),
-                 true, true); // bundled
+            SparseOneDimensionalModel::Point point(frame, "");
+
+            SparseOneDimensionalModel::Point prevPoint(0);
+            bool havePrevPoint = false;
+
+            SparseOneDimensionalModel::EditCommand *command =
+                new SparseOneDimensionalModel::EditCommand(sodm, tr("Add Point"));
+
+            if (m_labeller->actingOnPrevPoint()) {
+
+                SparseOneDimensionalModel::PointList prevPoints =
+                    sodm->getPreviousPoints(frame);
+
+                if (!prevPoints.empty()) {
+                    prevPoint = *prevPoints.begin();
+                    havePrevPoint = true;
+                }
+            }
+
+            if (m_labeller) {
+
+                m_labeller->setSampleRate(sodm->getSampleRate());
+
+                if (havePrevPoint) {
+                    command->deletePoint(prevPoint);
+                }
+
+                m_labeller->label<SparseOneDimensionalModel::Point>
+                    (point, havePrevPoint ? &prevPoint : 0);
+
+                if (havePrevPoint) {
+                    command->addPoint(prevPoint);
+                }
+            }
+            
+            command->addPoint(point);
+
+            command->setName(tr("Add Point at %1 s")
+                             .arg(RealTime::frame2RealTime
+                                  (frame,
+                                   sodm->getSampleRate())
+                                  .toText(false).c_str()));
+
+            command->finish();
         }
     }
+}
+
+void
+MainWindow::setInstantsNumbering()
+{
+    QAction *a = dynamic_cast<QAction *>(sender());
+    if (!a) return;
+
+    int type = m_numberingActions[a];
+    
+    if (m_labeller) m_labeller->setType(Labeller::ValueType(type));
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("labellertype", type);
+    settings.endGroup();
+}
+
+void
+MainWindow::setInstantsCounterCycle()
+{
+    QAction *a = dynamic_cast<QAction *>(sender());
+    if (!a) return;
+    
+    int cycle = a->text().toInt();
+    if (cycle == 0) return;
+
+    if (m_labeller) m_labeller->setCounterCycleSize(cycle);
+    
+    
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("labellercycle", cycle);
+    settings.endGroup();
+}
+
+void
+MainWindow::renumberInstants()
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (!pane) return;
+
+    Layer *layer = dynamic_cast<TimeInstantLayer *>(pane->getSelectedLayer());
+    if (!layer) return;
+
+    MultiSelection ms(m_viewManager->getSelection());
+    
+    Model *model = layer->getModel();
+    SparseOneDimensionalModel *sodm = dynamic_cast<SparseOneDimensionalModel *>
+        (model);
+    if (!sodm) return;
+
+    if (!m_labeller) return;
+
+    Labeller labeller(*m_labeller);
+    labeller.setSampleRate(sodm->getSampleRate());
+
+    // This uses a command
+
+    labeller.labelAll<SparseOneDimensionalModel::Point>(*sodm, &ms);
 }
 
 void
