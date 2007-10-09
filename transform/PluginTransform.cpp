@@ -108,8 +108,10 @@ PluginTransform::ExecutionContext::makeConsistentWithPlugin(const Vamp::PluginBa
         if (!blockSize) blockSize = 1024;
         if (!stepSize) {
             if (domain == Vamp::Plugin::FrequencyDomain) {
+//                std::cerr << "frequency domain, step = " << blockSize/2 << std::endl;
                 stepSize = blockSize/2;
             } else {
+//                std::cerr << "time domain, step = " << blockSize/2 << std::endl;
                 stepSize = blockSize;
             }
         }
