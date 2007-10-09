@@ -748,12 +748,15 @@ MainWindow::setupEditMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    QMenu *numberingMenu = menu->addMenu(tr("Set Instant Numbering"));
+    QMenu *numberingMenu = menu->addMenu(tr("Number New Instants with"));
     QActionGroup *numberingGroup = new QActionGroup(this);
 
     Labeller::TypeNameMap types = m_labeller->getTypeNames();
     for (Labeller::TypeNameMap::iterator i = types.begin(); i != types.end(); ++i) {
-        if (i->first == Labeller::ValueFromLabel) continue;
+
+        if (i->first == Labeller::ValueFromLabel ||
+            i->first == Labeller::ValueFromExistingNeighbour) continue;
+
         action = new QAction(i->second, this);
         connect(action, SIGNAL(triggered()), this, SLOT(setInstantsNumbering()));
         action->setCheckable(true);
@@ -761,19 +764,27 @@ MainWindow::setupEditMenu()
         numberingGroup->addAction(action);
         numberingMenu->addAction(action);
         m_numberingActions[action] = (int)i->first;
-    }
 
-    QMenu *cycleMenu = menu->addMenu(tr("Set Instant Counter Cycle"));
-    QActionGroup *cycleGroup = new QActionGroup(this);
+        if (i->first == Labeller::ValueFromTwoLevelCounter) {
+            QMenu *cycleMenu = numberingMenu->addMenu(tr("Cycle size"));
+            QActionGroup *cycleGroup = new QActionGroup(this);
 
-    int cycles[] = { 2, 3, 4, 5, 6, 7, 8, 10, 12, 16 };
-    for (int i = 0; i < sizeof(cycles)/sizeof(cycles[0]); ++i) {
-        action = new QAction(QString("%1").arg(cycles[i]), this);
-        connect(action, SIGNAL(triggered()), this, SLOT(setInstantsCounterCycle()));
-        action->setCheckable(true);
-        action->setChecked(cycles[i] == m_labeller->getCounterCycleSize());
-        cycleGroup->addAction(action);
-        cycleMenu->addAction(action);
+            int cycles[] = { 2, 3, 4, 5, 6, 7, 8, 10, 12, 16 };
+            for (int i = 0; i < sizeof(cycles)/sizeof(cycles[0]); ++i) {
+                action = new QAction(QString("%1").arg(cycles[i]), this);
+                connect(action, SIGNAL(triggered()), this, SLOT(setInstantsCounterCycle()));
+                action->setCheckable(true);
+                action->setChecked(cycles[i] == m_labeller->getCounterCycleSize());
+                cycleGroup->addAction(action);
+                cycleMenu->addAction(action);
+            }
+        }
+
+        if (i->first == Labeller::ValueNone ||
+            i->first == Labeller::ValueFromTwoLevelCounter ||
+            i->first == Labeller::ValueFromRealTime) {
+            numberingMenu->addSeparator();
+        }
     }
 
     action = new QAction(tr("Re-Number Selected Instants"), this);
