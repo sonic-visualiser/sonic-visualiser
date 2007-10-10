@@ -214,6 +214,7 @@ protected slots:
     void insertInstantsAtBoundaries();
     void setInstantsNumbering();
     void setInstantsCounterCycle();
+    void resetInstantsCounters();
     void renumberInstants();
 
     void documentModified();
