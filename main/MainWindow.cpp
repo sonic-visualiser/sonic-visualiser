@@ -34,6 +34,7 @@
 #include "layer/Colour3DPlotLayer.h"
 #include "layer/SliceLayer.h"
 #include "layer/SliceableLayer.h"
+#include "layer/ImageLayer.h"
 #include "widgets/Fader.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
@@ -211,6 +212,10 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             this, SLOT(propertyStacksResized()));
     connect(m_paneStack, SIGNAL(contextHelpChanged(const QString &)),
             this, SLOT(contextHelpChanged(const QString &)));
+    connect(m_paneStack, SIGNAL(dropAccepted(Pane *, QStringList)),
+            this, SLOT(paneDropAccepted(Pane *, QStringList)));
+    connect(m_paneStack, SIGNAL(dropAccepted(Pane *, QString)),
+            this, SLOT(paneDropAccepted(Pane *, QString)));
 
     scroll->setWidget(m_paneStack);
 
@@ -2529,7 +2534,7 @@ MainWindow::importAudio()
     if (path != "") {
 	if (openAudioFile(path, ReplaceMainModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("Audio file \"%1\" could not be opened").arg(path));
+				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
 	}
     }
 }
@@ -2542,7 +2547,7 @@ MainWindow::importMoreAudio()
     if (path != "") {
 	if (openAudioFile(path, CreateAdditionalModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("Audio file \"%1\" could not be opened").arg(path));
+				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
 	}
     }
 }
@@ -2675,10 +2680,15 @@ MainWindow::importLayer()
 
     if (path != "") {
 
-        if (openLayerFile(path) == FileOpenFailed) {
+        FileOpenStatus status = openLayerFile(path);
+        
+        if (status == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open file"),
-                                  tr("File %1 could not be opened.").arg(path));
+                                  tr("<b>File open failed</b><p>Layer file %1 could not be opened.").arg(path));
             return;
+        } else if (status == FileOpenWrongMode) {
+            QMessageBox::critical(this, tr("Failed to open file"),
+                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
         }
     }
 }
@@ -2697,13 +2707,13 @@ MainWindow::openLayerFile(QString path, QString location)
     if (!pane) {
 	// shouldn't happen, as the menu action should have been disabled
 	std::cerr << "WARNING: MainWindow::openLayerFile: no current pane" << std::endl;
-	return FileOpenFailed;
+	return FileOpenWrongMode;
     }
 
     if (!getMainModel()) {
 	// shouldn't happen, as the menu action should have been disabled
 	std::cerr << "WARNING: MainWindow::openLayerFile: No main model -- hence no default sample rate available" << std::endl;
-	return FileOpenFailed;
+	return FileOpenWrongMode;
     }
 
     bool realFile = (location == path);
@@ -2744,27 +2754,91 @@ MainWindow::openLayerFile(QString path, QString location)
         
     } else {
         
-        Model *model = DataFileReaderFactory::load(path, getMainModel()->getSampleRate());
+        try {
+
+            Model *model = DataFileReaderFactory::load
+                (path, getMainModel()->getSampleRate());
         
-        if (model) {
+            if (model) {
 
-            Layer *newLayer = m_document->createImportedLayer(model);
+                Layer *newLayer = m_document->createImportedLayer(model);
 
-            if (newLayer) {
+                if (newLayer) {
 
-                m_document->addLayerToView(pane, newLayer);
-                m_recentFiles.addFile(location);
-
-                if (realFile) {
-                    registerLastOpenedFilePath(FileFinder::LayerFile, path); // for file dialog
+                    m_document->addLayerToView(pane, newLayer);
+                    m_recentFiles.addFile(location);
+                    
+                    if (realFile) {
+                        registerLastOpenedFilePath(FileFinder::LayerFile, path); // for file dialog
+                    }
+                    
+                    return FileOpenSucceeded;
                 }
-
-                return FileOpenSucceeded;
+            }
+        } catch (DataFileReaderFactory::Exception e) {
+            if (e == DataFileReaderFactory::ImportCancelled) {
+                return FileOpenCancelled;
             }
         }
     }
 
     return FileOpenFailed;
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openImageFile(QString path)
+{
+    return openImageFile(path, path);
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openImageFile(QString path, QString location)
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    
+    if (!pane) {
+	// shouldn't happen, as the menu action should have been disabled
+	std::cerr << "WARNING: MainWindow::openImageFile: no current pane" << std::endl;
+	return FileOpenWrongMode;
+    }
+
+    if (!m_document->getMainModel()) {
+        return FileOpenWrongMode;
+    }
+
+    bool newLayer = false;
+
+    ImageLayer *il = dynamic_cast<ImageLayer *>(pane->getSelectedLayer());
+    if (!il) {
+        for (int i = pane->getLayerCount()-1; i >= 0; --i) {
+            il = dynamic_cast<ImageLayer *>(pane->getLayer(i));
+            if (il) break;
+        }
+    }
+    if (!il) {
+        il = dynamic_cast<ImageLayer *>
+            (m_document->createEmptyLayer(LayerFactory::Image));
+        if (!il) return FileOpenFailed;
+        newLayer = true;
+    }
+
+    // We don't put the image file in Recent Files
+
+    std::cerr << "openImageFile: trying location \"" << location.toStdString() << "\" in image layer" << std::endl;
+
+    if (!il->addImage(m_viewManager->getGlobalCentreFrame(), location)) {
+        if (newLayer) {
+            m_document->setModel(il, 0); // releasing its model
+            delete il;
+        }
+        return FileOpenFailed;
+    } else {
+        if (newLayer) {
+            m_document->addLayerToView(pane, il);
+        }
+        m_paneStack->setCurrentLayer(pane, il);
+        return FileOpenSucceeded;
+    }
 }
 
 void
@@ -3125,7 +3199,7 @@ MainWindow::createPlayTarget()
     if (!m_playTarget) {
 	QMessageBox::warning
 	    (this, tr("Couldn't open audio device"),
-	     tr("Could not open an audio device for playback.\nAudio playback will not be available during this session.\n"),
+	     tr("<b>No audio available</b><p>Could not open an audio device for playback.<p>Audio playback will not be available during this session."),
 	     QMessageBox::Ok);
     }
     connect(m_fader, SIGNAL(valueChanged(float)),
@@ -3264,7 +3338,7 @@ MainWindow::openSession()
 
     if (openSessionFile(path) == FileOpenFailed) {
 	QMessageBox::critical(this, tr("Failed to open file"),
-			      tr("Session file \"%1\" could not be opened").arg(path));
+			      tr("<b>File open failed</b><p>Session file \"%1\" could not be opened").arg(path));
     }
 }
 
@@ -3275,36 +3349,18 @@ MainWindow::openSomething()
     if (orig == "") orig = ".";
     else orig = QFileInfo(orig).absoluteDir().canonicalPath();
 
-    bool canImportLayer = (getMainModel() != 0 &&
-                           m_paneStack != 0 &&
-                           m_paneStack->getCurrentPane() != 0);
-
     QString path = getOpenFileName(FileFinder::AnyFile);
 
     if (path.isEmpty()) return;
 
-    if (path.endsWith(".sv")) {
+    FileOpenStatus status = openSomeFile(path, AskUser);
 
-        if (!checkSaveModified()) return;
-
-        if (openSessionFile(path) == FileOpenFailed) {
-            QMessageBox::critical(this, tr("Failed to open file"),
-                                  tr("Session file \"%1\" could not be opened").arg(path));
-        }
-
-    } else {
-
-        if (openPlaylistFile(path, AskUser) == FileOpenFailed) {
-
-            if (openAudioFile(path, AskUser) == FileOpenFailed) {
-
-                if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
-
-                    QMessageBox::critical(this, tr("Failed to open file"),
-                                          tr("File \"%1\" could not be opened").arg(path));
-                }
-            }
-        }
+    if (status == FileOpenFailed) {
+        QMessageBox::critical(this, tr("Failed to open file"),
+                              tr("<b>File open failed</b><p>File \"%1\" could not be opened").arg(path));
+    } else if (status == FileOpenWrongMode) {
+        QMessageBox::critical(this, tr("Failed to open file"),
+                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
 }
 
@@ -3327,9 +3383,14 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
-    if (openURL(QUrl(text)) == FileOpenFailed) {
+    FileOpenStatus status = openURL(QUrl(text));
+
+    if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open location"),
-                              tr("URL \"%1\" could not be opened").arg(text));
+                              tr("<b>Open failed</b><p>URL \"%1\" could not be opened").arg(text));
+    } else if (status == FileOpenWrongMode) {
+        QMessageBox::critical(this, tr("Failed to open location"),
+                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
 }
 
@@ -3348,52 +3409,28 @@ MainWindow::openRecentFile()
     QString path = action->text();
     if (path == "") return;
 
-    QUrl url(path);
-    if (RemoteFile::canHandleScheme(url)) {
-        openURL(url);
-        return;
-    }
+    FileOpenStatus status = openURL(path);
 
-    if (path.endsWith("sv")) {
-
-        if (!checkSaveModified()) return;
-
-        if (openSessionFile(path) == FileOpenFailed) {
-            QMessageBox::critical(this, tr("Failed to open file"),
-                                  tr("Session file \"%1\" could not be opened").arg(path));
-        }
-
-    } else {
-
-        if (openPlaylistFile(path, AskUser) == FileOpenFailed) {
-
-            if (openAudioFile(path, AskUser) == FileOpenFailed) {
-
-                bool canImportLayer = (getMainModel() != 0 &&
-                                       m_paneStack != 0 &&
-                                       m_paneStack->getCurrentPane() != 0);
-                
-                if (!canImportLayer || (openLayerFile(path) == FileOpenFailed)) {
-                    
-                    QMessageBox::critical(this, tr("Failed to open file"),
-                                          tr("File \"%1\" could not be opened").arg(path));
-                }
-            }
-        }
+    if (status == FileOpenFailed) {
+        QMessageBox::critical(this, tr("Failed to open location"),
+                              tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
+    } else if (status == FileOpenWrongMode) {
+        QMessageBox::critical(this, tr("Failed to open location"),
+                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
 }
 
 MainWindow::FileOpenStatus
 MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
 {
-    if (url.scheme().toLower() == "file") {
+    if (url.scheme().toLower() == "file" || url.scheme() == "") {
 
         return openSomeFile(url.toLocalFile(), mode);
 
     } else if (!RemoteFile::canHandleScheme(url)) {
 
         QMessageBox::critical(this, tr("Unsupported scheme in URL"),
-                              tr("The URL scheme \"%1\" is not supported")
+                              tr("<b>Download failed</b><p>The URL scheme \"%1\" is not supported")
                               .arg(url.scheme()));
         return FileOpenFailed;
 
@@ -3402,7 +3439,7 @@ MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
         rf.wait();
         if (!rf.isOK()) {
             QMessageBox::critical(this, tr("File download failed"),
-                                  tr("Failed to download URL \"%1\": %2")
+                                  tr("<b>Download failed</b><p>Failed to download URL \"%1\": %2")
                                   .arg(url.toString()).arg(rf.getErrorString()));
             return FileOpenFailed;
         }
@@ -3424,14 +3461,19 @@ MainWindow::openURL(QString ustr, AudioFileOpenMode mode)
 
     QUrl url(ustr);
 
-    if (url.scheme().toLower() == "file") {
+    if (url.scheme().toLower() == "file" || url.scheme() == "") {
 
-        return openSomeFile(url.toLocalFile(), mode);
+        FileOpenStatus status = openSomeFile(url.toLocalFile(), mode);
+        if (status == FileOpenFailed) {
+            url.setEncodedUrl(ustr.toAscii());
+            status = openSomeFile(url.toLocalFile(), mode);
+        }
+        return status;
 
     } else if (!RemoteFile::canHandleScheme(url)) {
 
         QMessageBox::critical(this, tr("Unsupported scheme in URL"),
-                              tr("The URL scheme \"%1\" is not supported")
+                              tr("<b>Download failed</b><p>The URL scheme \"%1\" is not supported")
                               .arg(url.scheme()));
         return FileOpenFailed;
 
@@ -3479,10 +3521,13 @@ MainWindow::openSomeFile(QString path, QString location,
         return status;
     } else if ((status = openAudioFile(path, location, mode)) != FileOpenFailed) {
         return status;
-    } else if ((status = openSessionFile(path, location)) != FileOpenFailed) {
+    } else if (QFileInfo(path).suffix().toLower() == "sv" &&
+               (status = openSessionFile(path, location)) != FileOpenFailed) {
 	return status;
     } else if (!canImportLayer) {
-        return FileOpenFailed;
+        return FileOpenWrongMode;
+    } else if ((status = openImageFile(path, location)) != FileOpenFailed) {
+        return status;
     } else if ((status = openLayerFile(path, location)) != FileOpenFailed) {
         return status;
     } else {
@@ -3553,6 +3598,46 @@ MainWindow::openSessionFile(QString path, QString location)
     }
 
     return ok ? FileOpenSucceeded : FileOpenFailed;
+}
+
+void
+MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
+{
+    if (pane) m_paneStack->setCurrentPane(pane);
+
+    for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
+
+        FileOpenStatus status =
+            openURL(*i, (m_document->getMainModel() ?
+                         CreateAdditionalModel : ReplaceMainModel));
+
+        if (status == FileOpenFailed) {
+            QMessageBox::critical(this, tr("Failed to open dropped URL"),
+                                  tr("<b>Open failed</b><p>Dropped URL \"%1\" could not be opened").arg(*i));
+        } else if (status == FileOpenWrongMode) {
+            QMessageBox::critical(this, tr("Failed to open dropped URL"),
+                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+        }
+    }
+}
+
+void
+MainWindow::paneDropAccepted(Pane *pane, QString text)
+{
+    if (pane) m_paneStack->setCurrentPane(pane);
+
+    QUrl testUrl(text);
+    if (testUrl.scheme() == "file" || 
+        testUrl.scheme() == "http" || 
+        testUrl.scheme() == "ftp") {
+        QStringList list;
+        list.push_back(text);
+        paneDropAccepted(pane, list);
+        return;
+    }
+
+    //!!! open as text -- but by importing as if a CSV, or just adding
+    //to a text layer?
 }
 
 void
@@ -3659,7 +3744,7 @@ MainWindow::checkSaveModified()
     int button = 
 	QMessageBox::warning(this,
 			     tr("Session modified"),
-			     tr("The current session has been modified.\nDo you want to save it?"),
+			     tr("<b>Session modified</b><p>The current session has been modified.<br>Do you want to save it?<br>"),
 			     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                              QMessageBox::Yes);
 
@@ -3685,7 +3770,7 @@ MainWindow::saveSession()
     if (m_sessionFile != "") {
 	if (!saveSessionFile(m_sessionFile)) {
 	    QMessageBox::critical(this, tr("Failed to save file"),
-				  tr("Session file \"%1\" could not be saved.").arg(m_sessionFile));
+				  tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(m_sessionFile));
 	} else {
 	    CommandHistory::getInstance()->documentSaved();
 	    documentRestored();
@@ -3708,7 +3793,7 @@ MainWindow::saveSessionAs()
 
     if (!saveSessionFile(path)) {
 	QMessageBox::critical(this, tr("Failed to save file"),
-			      tr("Session file \"%1\" could not be saved.").arg(path));
+			      tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
     } else {
 	setWindowTitle(tr("Sonic Visualiser: %1")
 		       .arg(QFileInfo(path).fileName()));
@@ -3740,7 +3825,7 @@ MainWindow::saveSessionFile(QString path)
 
     if (!bzFile.isOK()) {
 	QMessageBox::critical(this, tr("Failed to write file"),
-			      tr("Failed to write to file \"%1\": %2")
+			      tr("<b>Save failed</b><p>Failed to write to file \"%1\": %2")
 			      .arg(path).arg(bzFile.errorString()));
         bzFile.close();
 	return false;
@@ -4706,10 +4791,9 @@ MainWindow::sampleRateMismatch(size_t requested, size_t actual,
                                bool willResample)
 {
     if (!willResample) {
-        //!!! more helpful message needed
         QMessageBox::information
             (this, tr("Sample rate mismatch"),
-             tr("The sample rate of this audio file (%1 Hz) does not match\nthe current playback rate (%2 Hz).\n\nThe file will play at the wrong speed and pitch.")
+             tr("<b>Wrong sample rate</b><p>The sample rate of this audio file (%1 Hz) does not match\nthe current playback rate (%2 Hz).<p>The file will play at the wrong speed and pitch.<p>Change the <i>Resample mismatching files on import</i> option under <i>File</i> -> <i>Preferences</i> if you want to alter this behaviour.")
              .arg(requested).arg(actual));
     }        
 
@@ -4721,7 +4805,7 @@ MainWindow::audioOverloadPluginDisabled()
 {
     QMessageBox::information
         (this, tr("Audio processing overload"),
-         tr("Audio effects plugin auditioning has been disabled\ndue to a processing overload."));
+         tr("<b>Overloaded</b><p>Audio effects plugin auditioning has been disabled due to a processing overload."));
 }
 
 void
@@ -4819,7 +4903,7 @@ MainWindow::modelGenerationFailed(QString transformName)
     QMessageBox::warning
         (this,
          tr("Failed to generate layer"),
-         tr("Failed to generate a derived layer.\n\nThe layer transform \"%1\" failed.\n\nThis probably means that a plugin failed to initialise, perhaps because it\nrejected the processing block size that was requested.")
+         tr("<b>Layer generation failed</b><p>Failed to generate a derived layer.<p>The layer transform \"%1\" failed.<p>This may mean that a plugin failed to initialise, perhaps because it rejected the processing block size that was requested.")
          .arg(transformName),
          QMessageBox::Ok);
 }
@@ -4830,7 +4914,7 @@ MainWindow::modelRegenerationFailed(QString layerName, QString transformName)
     QMessageBox::warning
         (this,
          tr("Failed to regenerate layer"),
-         tr("Failed to regenerate derived layer \"%1\".\n\nThe layer transform \"%2\" failed to run.\n\nThis probably means the layer used a plugin that is not currently available.")
+         tr("<b>Layer generation failed</b><p>Failed to regenerate derived layer \"%1\".<p>The layer transform \"%2\" failed to run.<p>This may mean that the layer used a plugin that is not currently available.")
          .arg(layerName).arg(transformName),
          QMessageBox::Ok);
 }
