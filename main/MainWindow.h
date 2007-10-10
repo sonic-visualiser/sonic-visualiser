@@ -75,13 +75,15 @@ public:
     enum FileOpenStatus {
         FileOpenSucceeded,
         FileOpenFailed,
-        FileOpenCancelled
+        FileOpenCancelled,
+        FileOpenWrongMode // attempted to open layer when no main model present
     };
 
     FileOpenStatus openSomeFile(QString path, AudioFileOpenMode = AskUser);
     FileOpenStatus openAudioFile(QString path, AudioFileOpenMode = AskUser);
     FileOpenStatus openPlaylistFile(QString path, AudioFileOpenMode = AskUser);
     FileOpenStatus openLayerFile(QString path);
+    FileOpenStatus openImageFile(QString path);
     FileOpenStatus openSessionFile(QString path);
     FileOpenStatus openURL(QUrl url, AudioFileOpenMode = AskUser);
     FileOpenStatus openURL(QString url, AudioFileOpenMode = AskUser);
@@ -238,6 +240,9 @@ protected slots:
     void rightButtonMenuRequested(Pane *, QPoint point);
 
     void propertyStacksResized();
+
+    void paneDropAccepted(Pane *, QStringList);
+    void paneDropAccepted(Pane *, QString);
 
     void setupRecentFilesMenu();
     void setupRecentTransformsMenu();
@@ -430,6 +435,7 @@ protected:
     FileOpenStatus openPlaylistFile(QString path, QString location,
                                     AudioFileOpenMode = AskUser);
     FileOpenStatus openLayerFile(QString path, QString location);
+    FileOpenStatus openImageFile(QString path, QString location);
     FileOpenStatus openSessionFile(QString path, QString location);
 
     QString getOpenFileName(FileFinder::FileType type);
