@@ -45,6 +45,7 @@
 #include "widgets/SubdividingMenu.h"
 #include "widgets/NotifyingPushButton.h"
 #include "widgets/KeyReference.h"
+#include "widgets/LabelCounterInputDialog.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
@@ -766,6 +767,7 @@ MainWindow::setupEditMenu()
         m_numberingActions[action] = (int)i->first;
 
         if (i->first == Labeller::ValueFromTwoLevelCounter) {
+
             QMenu *cycleMenu = numberingMenu->addMenu(tr("Cycle size"));
             QActionGroup *cycleGroup = new QActionGroup(this);
 
@@ -778,6 +780,10 @@ MainWindow::setupEditMenu()
                 cycleGroup->addAction(action);
                 cycleMenu->addAction(action);
             }
+            
+            action = new QAction(tr("Reset Counters..."), this);
+            connect(action, SIGNAL(triggered()), this, SLOT(resetInstantsCounters()));
+            numberingMenu->addAction(action);
         }
 
         if (i->first == Labeller::ValueNone ||
@@ -2476,11 +2482,17 @@ MainWindow::setInstantsCounterCycle()
 
     if (m_labeller) m_labeller->setCounterCycleSize(cycle);
     
-    
     QSettings settings;
     settings.beginGroup("MainWindow");
     settings.setValue("labellercycle", cycle);
     settings.endGroup();
+}
+
+void
+MainWindow::resetInstantsCounters()
+{
+    LabelCounterInputDialog dialog(m_labeller, this);
+    dialog.exec();
 }
 
 void
