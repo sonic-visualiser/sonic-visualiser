@@ -69,6 +69,7 @@ public:
     enum AudioFileOpenMode {
         ReplaceMainModel,
         CreateAdditionalModel,
+        ReplaceCurrentPane,
         AskUser
     };
 

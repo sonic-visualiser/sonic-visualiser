@@ -2125,19 +2125,12 @@ MainWindow::currentPaneChanged(Pane *p)
 
     Model *prevPlaybackModel = m_viewManager->getPlaybackModel();
 
-    std::set<Model *> soloModels;
-
-    for (int i = 0; i < p->getLayerCount(); ++i) {
-        Layer *layer = p->getLayer(i);
-        if (dynamic_cast<TimeRulerLayer *>(layer)) {
-            continue;
-        }
-        if (layer && layer->getModel()) {
-            Model *model = layer->getModel();
-            if (dynamic_cast<RangeSummarisableTimeValueModel *>(model)) {
-                m_viewManager->setPlaybackModel(model);
-            }
-            soloModels.insert(model);
+    View::ModelSet soloModels = p->getModels();
+    
+    for (View::ModelSet::iterator mi = soloModels.begin();
+         mi != soloModels.end(); ++mi) {
+        if (dynamic_cast<RangeSummarisableTimeValueModel *>(*mi)) {
+            m_viewManager->setPlaybackModel(*mi);
         }
     }
     
@@ -3043,15 +3036,18 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 	return FileOpenFailed;
     }
 
-    bool setAsMain = true;
-    static bool prevSetAsMain = true;
-
     bool realFile = (location == path);
 
-    if (mode == CreateAdditionalModel) setAsMain = false;
-    else if (mode == AskUser) {
-        if (m_document->getMainModel()) {
+    std::cerr << "mode = " << mode << std::endl;
 
+    if (mode == AskUser) {
+        if (getMainModel()) {
+
+            std::cerr << "ask user, have main model" << std::endl;
+
+            static bool prevSetAsMain = true;
+            bool setAsMain = true;
+            
             QStringList items;
             items << tr("Replace the existing main waveform")
                   << tr("Load this file into a new waveform pane");
@@ -3070,17 +3066,55 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
             
             setAsMain = (item == items[0]);
             prevSetAsMain = setAsMain;
+
+            if (setAsMain) mode = ReplaceMainModel;
+            else mode = CreateAdditionalModel;
+
+        } else {
+            mode = ReplaceMainModel;
         }
     }
 
-    if (setAsMain) {
+    if (mode == ReplaceCurrentPane) {
+
+        std::cerr << "replace current pane" << std::endl;
+
+        Pane *pane = m_paneStack->getCurrentPane();
+        if (pane) {
+            std::cerr << "have pane" << std::endl;
+
+            if (getMainModel()) {
+                std::cerr << "have main model" << std::endl;
+
+                View::ModelSet models(pane->getModels());
+                if (models.find(getMainModel()) != models.end()) {
+                    std::cerr << "main model is in pane, setting to ReplaceMainModel" << std::endl;
+                    mode = ReplaceMainModel;
+                }
+            } else {
+                std::cerr << "no main model, setting to ReplaceMainModel" << std::endl;
+                mode = ReplaceMainModel;
+            }
+        } else {
+            std::cerr << "no pane, setting to CreateAdditionalModel" << std::endl;
+            mode = CreateAdditionalModel;
+        }
+    }
+
+    if (mode == CreateAdditionalModel && !getMainModel()) {
+        std::cerr << "mode is CreateAdditionalModel and no main model, setting to ReplaceMainModel" << std::endl;
+        mode = ReplaceMainModel;
+    }
+
+    std::cerr << "mode now " << mode << std::endl;
+
+    if (mode == ReplaceMainModel) {
 
         Model *prevMain = getMainModel();
         if (prevMain) {
             m_playSource->removeModel(prevMain);
             PlayParameterRepository::getInstance()->removeModel(prevMain);
         }
-
         PlayParameterRepository::getInstance()->addModel(newModel);
 
 	m_document->setMainModel(newModel);
@@ -3104,7 +3138,7 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 
         if (realFile) m_audioFile = path;
 
-    } else { // !setAsMain
+    } else if (mode == CreateAdditionalModel) {
 
 	CommandHistory::getInstance()->startCompoundOperation
 	    (tr("Import \"%1\"").arg(QFileInfo(location).fileName()), true);
@@ -3122,6 +3156,42 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 	}
 
 	m_document->addLayerToView(pane, m_timeRulerLayer);
+
+	Layer *newLayer = m_document->createImportedLayer(newModel);
+
+	if (newLayer) {
+	    m_document->addLayerToView(pane, newLayer);
+	}
+	
+	CommandHistory::getInstance()->endCompoundOperation();
+
+    } else if (mode == ReplaceCurrentPane) {
+
+        // We know there is a current pane, otherwise we would have
+        // reset the mode to CreateAdditionalModel above; and we know
+        // the current pane does not contain the main model, otherwise
+        // we would have reset it to ReplaceMainModel.  But we don't
+        // know whether the pane contains a waveform model at all.
+        
+        Pane *pane = m_paneStack->getCurrentPane();
+        Layer *replace = 0;
+
+        for (int i = 0; i < pane->getLayerCount(); ++i) {
+            Layer *layer = pane->getLayer(i);
+            if (dynamic_cast<WaveformLayer *>(layer)) {
+                replace = layer;
+                break;
+            }
+        }
+
+	CommandHistory::getInstance()->startCompoundOperation
+	    (tr("Import \"%1\"").arg(QFileInfo(location).fileName()), true);
+
+	m_document->addImportedModel(newModel);
+
+        if (replace) {
+            m_document->removeLayerFromView(pane, replace);
+        }
 
 	Layer *newLayer = m_document->createImportedLayer(newModel);
 
@@ -3607,9 +3677,7 @@ MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
 
     for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
 
-        FileOpenStatus status =
-            openURL(*i, (m_document->getMainModel() ?
-                         CreateAdditionalModel : ReplaceMainModel));
+        FileOpenStatus status = openURL(*i, ReplaceCurrentPane);
 
         if (status == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
