@@ -3077,36 +3077,36 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 
     if (mode == ReplaceCurrentPane) {
 
-        std::cerr << "replace current pane" << std::endl;
+//        std::cerr << "replace current pane" << std::endl;
 
         Pane *pane = m_paneStack->getCurrentPane();
         if (pane) {
-            std::cerr << "have pane" << std::endl;
+//            std::cerr << "have pane" << std::endl;
 
             if (getMainModel()) {
-                std::cerr << "have main model" << std::endl;
+//                std::cerr << "have main model" << std::endl;
 
                 View::ModelSet models(pane->getModels());
                 if (models.find(getMainModel()) != models.end()) {
-                    std::cerr << "main model is in pane, setting to ReplaceMainModel" << std::endl;
+//                    std::cerr << "main model is in pane, setting to ReplaceMainModel" << std::endl;
                     mode = ReplaceMainModel;
                 }
             } else {
-                std::cerr << "no main model, setting to ReplaceMainModel" << std::endl;
+//                std::cerr << "no main model, setting to ReplaceMainModel" << std::endl;
                 mode = ReplaceMainModel;
             }
         } else {
-            std::cerr << "no pane, setting to CreateAdditionalModel" << std::endl;
+//            std::cerr << "no pane, setting to CreateAdditionalModel" << std::endl;
             mode = CreateAdditionalModel;
         }
     }
 
     if (mode == CreateAdditionalModel && !getMainModel()) {
-        std::cerr << "mode is CreateAdditionalModel and no main model, setting to ReplaceMainModel" << std::endl;
+//        std::cerr << "mode is CreateAdditionalModel and no main model, setting to ReplaceMainModel" << std::endl;
         mode = ReplaceMainModel;
     }
 
-    std::cerr << "mode now " << mode << std::endl;
+//    std::cerr << "mode now " << mode << std::endl;
 
     if (mode == ReplaceMainModel) {
 
