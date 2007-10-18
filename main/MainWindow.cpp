@@ -57,7 +57,7 @@
 #include "data/fileio/CSVFileWriter.h"
 #include "data/fileio/MIDIFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
-#include "data/fileio/RemoteFile.h"
+#include "data/fileio/FileSource.h"
 #include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
 #include "transform/TransformFactory.h"
@@ -2860,11 +2860,11 @@ MainWindow::exportImage()
 MainWindow::FileOpenStatus
 MainWindow::open(QString fileOrUrl, AudioFileOpenMode mode)
 {
-    return open(RemoteFile(fileOrUrl), mode);
+    return open(FileSource(fileOrUrl), mode);
 }
 
 MainWindow::FileOpenStatus
-MainWindow::open(RemoteFile source, AudioFileOpenMode mode)
+MainWindow::open(FileSource source, AudioFileOpenMode mode)
 {
     FileOpenStatus status;
 
@@ -2893,7 +2893,7 @@ MainWindow::open(RemoteFile source, AudioFileOpenMode mode)
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openAudio(RemoteFile source, AudioFileOpenMode mode)
+MainWindow::openAudio(FileSource source, AudioFileOpenMode mode)
 {
     std::cerr << "MainWindow::openAudio(" << source.getLocation().toStdString() << ")" << std::endl;
 
@@ -3081,7 +3081,7 @@ MainWindow::openAudio(RemoteFile source, AudioFileOpenMode mode)
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openPlaylist(RemoteFile source, AudioFileOpenMode mode)
+MainWindow::openPlaylist(FileSource source, AudioFileOpenMode mode)
 {
     std::set<QString> extensions;
     PlaylistFileReader::getSupportedExtensions(extensions);
@@ -3118,7 +3118,7 @@ MainWindow::openPlaylist(RemoteFile source, AudioFileOpenMode mode)
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openLayer(RemoteFile source)
+MainWindow::openLayer(FileSource source)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     
@@ -3208,7 +3208,7 @@ MainWindow::openLayer(RemoteFile source)
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openImage(RemoteFile source)
+MainWindow::openImage(FileSource source)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     
@@ -3259,7 +3259,7 @@ MainWindow::openImage(RemoteFile source)
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openSession(RemoteFile source)
+MainWindow::openSession(FileSource source)
 {
     if (!source.isAvailable()) return FileOpenFailed;
     if (source.getExtension() != "sv") return FileOpenFailed;
