@@ -30,7 +30,7 @@
 #include "transform/Transform.h"
 #include "document/SVFileReader.h"
 #include "data/fileio/FileFinder.h"
-#include "data/fileio/RemoteFile.h"
+#include "data/fileio/FileSource.h"
 #include <map>
 
 class Document;
@@ -82,13 +82,13 @@ public:
     };
 
     FileOpenStatus open(QString fileOrUrl, AudioFileOpenMode = AskUser);
-    FileOpenStatus open(RemoteFile source, AudioFileOpenMode = AskUser);
+    FileOpenStatus open(FileSource source, AudioFileOpenMode = AskUser);
 
-    FileOpenStatus openAudio(RemoteFile source, AudioFileOpenMode = AskUser);
-    FileOpenStatus openPlaylist(RemoteFile source, AudioFileOpenMode = AskUser);
-    FileOpenStatus openLayer(RemoteFile source);
-    FileOpenStatus openImage(RemoteFile source);
-    FileOpenStatus openSession(RemoteFile source);
+    FileOpenStatus openAudio(FileSource source, AudioFileOpenMode = AskUser);
+    FileOpenStatus openPlaylist(FileSource source, AudioFileOpenMode = AskUser);
+    FileOpenStatus openLayer(FileSource source);
+    FileOpenStatus openImage(FileSource source);
+    FileOpenStatus openSession(FileSource source);
 
     bool saveSessionFile(QString path);
     bool commitData(bool mayAskUser); // on session shutdown

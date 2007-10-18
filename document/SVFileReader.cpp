@@ -22,7 +22,7 @@
 
 #include "data/fileio/AudioFileReaderFactory.h"
 #include "data/fileio/FileFinder.h"
-#include "data/fileio/RemoteFile.h"
+#include "data/fileio/FileSource.h"
 
 #include "data/model/WaveFileModel.h"
 #include "data/model/EditableDenseThreeDimensionalModel.h"
@@ -413,7 +413,7 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
         QString path = ff->find(FileFinder::AudioFile,
                                 originalPath, m_location);
 
-        RemoteFile file(path);
+        FileSource file(path);
         file.waitForStatus();
 
         if (!file.isOK()) {
