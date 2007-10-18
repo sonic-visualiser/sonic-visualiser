@@ -27,6 +27,7 @@
 #include "base/PlayParameters.h"
 #include "transform/TransformFactory.h"
 #include <QApplication>
+#include <QTextStream>
 #include <iostream>
 
 //!!! still need to handle command history, documentRestored/documentModified
@@ -862,16 +863,4 @@ Document::toXml(QTextStream &out, QString indent, QString extraAttributes) const
     out << indent + "</data>\n";
 }
 
-QString
-Document::toXmlString(QString indent, QString extraAttributes) const
-{
-    QString s;
-
-    {
-        QTextStream out(&s);
-        toXml(out, indent, extraAttributes);
-    }
-
-    return s;
-}
 

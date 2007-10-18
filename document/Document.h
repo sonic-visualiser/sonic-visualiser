@@ -190,8 +190,6 @@ public:
     void removeLayerFromView(View *, Layer *);
 
     void toXml(QTextStream &, QString indent, QString extraAttributes) const;
-    QString toXmlString(QString indent, QString extraAttributes) const;
-
 signals:
     void layerAdded(Layer *);
     void layerRemoved(Layer *);
