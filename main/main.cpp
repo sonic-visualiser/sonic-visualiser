@@ -300,17 +300,11 @@ main(int argc, char **argv)
         if (i == args.begin()) continue;
         if (i->startsWith('-')) continue;
 
-        if (i->startsWith("http:") || i->startsWith("ftp:")) {
-            std::cerr << "opening URL: \"" << i->toStdString() << "\"..." << std::endl;
-            status = gui.openURL(*i);
-            continue;
-        }
-
         QString path = *i;
 
         if (path.endsWith("sv")) {
             if (!haveSession) {
-                status = gui.openSessionFile(path);
+                status = gui.openSession(path);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveSession = true;
                     haveMainModel = true;
@@ -322,25 +316,25 @@ main(int argc, char **argv)
         }
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
-                status = gui.openSomeFile(path, MainWindow::ReplaceMainModel);
+                status = gui.open(path, MainWindow::ReplaceMainModel);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveMainModel = true;
                 }
             } else {
                 if (haveSession && !havePriorCommandLineModel) {
-                    status = gui.openSomeFile(path, MainWindow::AskUser);
+                    status = gui.open(path, MainWindow::AskUser);
                     if (status == MainWindow::FileOpenSucceeded) {
                         havePriorCommandLineModel = true;
                     }
                 } else {
-                    status = gui.openSomeFile(path, MainWindow::CreateAdditionalModel);
+                    status = gui.open(path, MainWindow::CreateAdditionalModel);
                 }
             }
         }
         if (status == MainWindow::FileOpenFailed) {
 	    QMessageBox::critical
                 (&gui, QMessageBox::tr("Failed to open file"),
-                 QMessageBox::tr("File \"%1\" could not be opened").arg(path));
+                 QMessageBox::tr("File or URL \"%1\" could not be opened").arg(path));
         }
     }
     

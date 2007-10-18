@@ -412,25 +412,18 @@ SVFileReader::readModel(const QXmlAttributes &attributes)
         QString originalPath = attributes.value("file");
         QString path = ff->find(FileFinder::AudioFile,
                                 originalPath, m_location);
-        QUrl url(path);
 
-        if (RemoteFile::canHandleScheme(url)) {
+        RemoteFile file(path);
+        file.waitForStatus();
 
-            RemoteFile rf(url);
-            rf.wait();
-
-            if (rf.isOK()) {
-
-                model = new WaveFileModel(rf.getLocalFilename(), path);
-                if (!model->isOK()) {
-                    delete model;
-                    model = 0;
-                    //!!! and delete local file?
-                }
-            }
+        if (!file.isOK()) {
+            std::cerr << "SVFileReader::readModel: Failed to retrieve file \"" << path.toStdString() << "\" for wave file model: " << file.getErrorString().toStdString() << std::endl;
+        } else if (!file.isAvailable()) {
+            std::cerr << "SVFileReader::readModel: Failed to retrieve file \"" << path.toStdString() << "\" for wave file model: Source unavailable" << std::endl;
         } else {
 
-            model = new WaveFileModel(path);
+            file.waitForData();
+            model = new WaveFileModel(file);
             if (!model->isOK()) {
                 delete model;
                 model = 0;
