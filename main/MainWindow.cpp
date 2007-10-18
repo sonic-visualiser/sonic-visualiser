@@ -2525,7 +2525,7 @@ MainWindow::importAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudioFile(path, ReplaceMainModel) == FileOpenFailed) {
+	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -2538,7 +2538,7 @@ MainWindow::importMoreAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudioFile(path, CreateAdditionalModel) == FileOpenFailed) {
+	if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -2673,7 +2673,7 @@ MainWindow::importLayer()
 
     if (path != "") {
 
-        FileOpenStatus status = openLayerFile(path);
+        FileOpenStatus status = openLayer(path);
         
         if (status == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open file"),
@@ -2683,154 +2683,6 @@ MainWindow::importLayer()
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
         }
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openLayerFile(QString path)
-{
-    return openLayerFile(path, path);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openLayerFile(QString path, QString location)
-{
-    Pane *pane = m_paneStack->getCurrentPane();
-    
-    if (!pane) {
-	// shouldn't happen, as the menu action should have been disabled
-	std::cerr << "WARNING: MainWindow::openLayerFile: no current pane" << std::endl;
-	return FileOpenWrongMode;
-    }
-
-    if (!getMainModel()) {
-	// shouldn't happen, as the menu action should have been disabled
-	std::cerr << "WARNING: MainWindow::openLayerFile: No main model -- hence no default sample rate available" << std::endl;
-	return FileOpenWrongMode;
-    }
-
-    bool realFile = (location == path);
-
-    if (path.endsWith(".svl") || path.endsWith(".xml")) {
-
-        PaneCallback callback(this);
-        QFile file(path);
-        
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            std::cerr << "ERROR: MainWindow::openLayerFile("
-                      << location.toStdString()
-                      << "): Failed to open file for reading" << std::endl;
-            return FileOpenFailed;
-        }
-        
-        SVFileReader reader(m_document, callback, location);
-        reader.setCurrentPane(pane);
-        
-        QXmlInputSource inputSource(&file);
-        reader.parse(inputSource);
-        
-        if (!reader.isOK()) {
-            std::cerr << "ERROR: MainWindow::openLayerFile("
-                      << location.toStdString()
-                      << "): Failed to read XML file: "
-                      << reader.getErrorString().toStdString() << std::endl;
-            return FileOpenFailed;
-        }
-
-        m_recentFiles.addFile(location);
-
-        if (realFile) {
-            registerLastOpenedFilePath(FileFinder::LayerFile, path); // for file dialog
-        }
-
-        return FileOpenSucceeded;
-        
-    } else {
-        
-        try {
-
-            Model *model = DataFileReaderFactory::load
-                (path, getMainModel()->getSampleRate());
-        
-            if (model) {
-
-                Layer *newLayer = m_document->createImportedLayer(model);
-
-                if (newLayer) {
-
-                    m_document->addLayerToView(pane, newLayer);
-                    m_recentFiles.addFile(location);
-                    
-                    if (realFile) {
-                        registerLastOpenedFilePath(FileFinder::LayerFile, path); // for file dialog
-                    }
-                    
-                    return FileOpenSucceeded;
-                }
-            }
-        } catch (DataFileReaderFactory::Exception e) {
-            if (e == DataFileReaderFactory::ImportCancelled) {
-                return FileOpenCancelled;
-            }
-        }
-    }
-
-    return FileOpenFailed;
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openImageFile(QString path)
-{
-    return openImageFile(path, path);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openImageFile(QString path, QString location)
-{
-    Pane *pane = m_paneStack->getCurrentPane();
-    
-    if (!pane) {
-	// shouldn't happen, as the menu action should have been disabled
-	std::cerr << "WARNING: MainWindow::openImageFile: no current pane" << std::endl;
-	return FileOpenWrongMode;
-    }
-
-    if (!m_document->getMainModel()) {
-        return FileOpenWrongMode;
-    }
-
-    bool newLayer = false;
-
-    ImageLayer *il = dynamic_cast<ImageLayer *>(pane->getSelectedLayer());
-    if (!il) {
-        for (int i = pane->getLayerCount()-1; i >= 0; --i) {
-            il = dynamic_cast<ImageLayer *>(pane->getLayer(i));
-            if (il) break;
-        }
-    }
-    if (!il) {
-        il = dynamic_cast<ImageLayer *>
-            (m_document->createEmptyLayer(LayerFactory::Image));
-        if (!il) return FileOpenFailed;
-        newLayer = true;
-    }
-
-    // We don't put the image file in Recent Files
-
-    std::cerr << "openImageFile: trying location \"" << location.toStdString() << "\" in image layer" << std::endl;
-
-    if (!il->addImage(m_viewManager->getGlobalCentreFrame(), location)) {
-        if (newLayer) {
-            m_document->setModel(il, 0); // releasing its model
-            delete il;
-        }
-        return FileOpenFailed;
-    } else {
-        if (newLayer) {
-            m_document->addLayerToView(pane, il);
-        }
-        m_paneStack->setCurrentLayer(pane, il);
-        return FileOpenSucceeded;
     }
 }
 
@@ -3006,19 +2858,47 @@ MainWindow::exportImage()
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openAudioFile(QString path, AudioFileOpenMode mode)
+MainWindow::open(QString fileOrUrl, AudioFileOpenMode mode)
 {
-    return openAudioFile(path, path, mode);
+    return open(RemoteFile(fileOrUrl), mode);
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode)
+MainWindow::open(RemoteFile source, AudioFileOpenMode mode)
 {
-    if (!(QFileInfo(path).exists() &&
-	  QFileInfo(path).isFile() &&
-	  QFileInfo(path).isReadable())) {
+    FileOpenStatus status;
+
+    if (!source.isAvailable()) return FileOpenFailed;
+    source.waitForData();
+
+    bool canImportLayer = (getMainModel() != 0 &&
+                           m_paneStack != 0 &&
+                           m_paneStack->getCurrentPane() != 0);
+
+    if ((status = openAudio(source, mode)) != FileOpenFailed) {
+        return status;
+    } else if ((status = openSession(source)) != FileOpenFailed) {
+	return status;
+    } else if ((status = openPlaylist(source, mode)) != FileOpenFailed) {
+        return status;
+    } else if (!canImportLayer) {
+        return FileOpenWrongMode;
+    } else if ((status = openImage(source)) != FileOpenFailed) {
+        return status;
+    } else if ((status = openLayer(source)) != FileOpenFailed) {
+        return status;
+    } else {
 	return FileOpenFailed;
     }
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openAudio(RemoteFile source, AudioFileOpenMode mode)
+{
+    std::cerr << "MainWindow::openAudio(" << source.getLocation().toStdString() << ")" << std::endl;
+
+    if (!source.isAvailable()) return FileOpenFailed;
+    source.waitForData();
 
     m_openingAudioFile = true;
 
@@ -3028,7 +2908,7 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
         rate = m_playSource->getSourceSampleRate();
     }
 
-    WaveFileModel *newModel = new WaveFileModel(path, location, rate);
+    WaveFileModel *newModel = new WaveFileModel(source, rate);
 
     if (!newModel->isOK()) {
 	delete newModel;
@@ -3036,14 +2916,10 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 	return FileOpenFailed;
     }
 
-    bool realFile = (location == path);
-
     std::cerr << "mode = " << mode << std::endl;
 
     if (mode == AskUser) {
         if (getMainModel()) {
-
-            std::cerr << "ask user, have main model" << std::endl;
 
             static bool prevSetAsMain = true;
             bool setAsMain = true;
@@ -3077,36 +2953,24 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 
     if (mode == ReplaceCurrentPane) {
 
-//        std::cerr << "replace current pane" << std::endl;
-
         Pane *pane = m_paneStack->getCurrentPane();
         if (pane) {
-//            std::cerr << "have pane" << std::endl;
-
             if (getMainModel()) {
-//                std::cerr << "have main model" << std::endl;
-
                 View::ModelSet models(pane->getModels());
                 if (models.find(getMainModel()) != models.end()) {
-//                    std::cerr << "main model is in pane, setting to ReplaceMainModel" << std::endl;
                     mode = ReplaceMainModel;
                 }
             } else {
-//                std::cerr << "no main model, setting to ReplaceMainModel" << std::endl;
                 mode = ReplaceMainModel;
             }
         } else {
-//            std::cerr << "no pane, setting to CreateAdditionalModel" << std::endl;
             mode = CreateAdditionalModel;
         }
     }
 
     if (mode == CreateAdditionalModel && !getMainModel()) {
-//        std::cerr << "mode is CreateAdditionalModel and no main model, setting to ReplaceMainModel" << std::endl;
         mode = ReplaceMainModel;
     }
-
-//    std::cerr << "mode now " << mode << std::endl;
 
     if (mode == ReplaceMainModel) {
 
@@ -3122,26 +2986,26 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 
 	if (m_sessionFile == "") {
 	    setWindowTitle(tr("Sonic Visualiser: %1")
-			   .arg(QFileInfo(location).fileName()));
+                           .arg(source.getLocation()));
 	    CommandHistory::getInstance()->clear();
 	    CommandHistory::getInstance()->documentSaved();
 	    m_documentModified = false;
 	} else {
 	    setWindowTitle(tr("Sonic Visualiser: %1 [%2]")
 			   .arg(QFileInfo(m_sessionFile).fileName())
-			   .arg(QFileInfo(location).fileName()));
+			   .arg(source.getLocation()));
 	    if (m_documentModified) {
 		m_documentModified = false;
 		documentModified(); // so as to restore "(modified)" window title
 	    }
 	}
 
-        if (realFile) m_audioFile = path;
+        if (!source.isRemote()) m_audioFile = source.getLocalFilename();
 
     } else if (mode == CreateAdditionalModel) {
 
 	CommandHistory::getInstance()->startCompoundOperation
-	    (tr("Import \"%1\"").arg(QFileInfo(location).fileName()), true);
+	    (tr("Import \"%1\"").arg(source.getLocation()), true);
 
 	m_document->addImportedModel(newModel);
 
@@ -3185,7 +3049,7 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
         }
 
 	CommandHistory::getInstance()->startCompoundOperation
-	    (tr("Import \"%1\"").arg(QFileInfo(location).fileName()), true);
+	    (tr("Import \"%1\"").arg(source.getLocation()), true);
 
 	m_document->addImportedModel(newModel);
 
@@ -3203,9 +3067,11 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
     }
 
     updateMenuStates();
-    m_recentFiles.addFile(location);
-    if (realFile) {
-        registerLastOpenedFilePath(FileFinder::AudioFile, path); // for file dialog
+    m_recentFiles.addFile(source.getLocation());
+    if (!source.isRemote()) {
+        // for file dialog
+        registerLastOpenedFilePath(FileFinder::AudioFile,
+                                   source.getLocalFilename());
     }
     m_openingAudioFile = false;
 
@@ -3215,26 +3081,17 @@ MainWindow::openAudioFile(QString path, QString location, AudioFileOpenMode mode
 }
 
 MainWindow::FileOpenStatus
-MainWindow::openPlaylistFile(QString path, AudioFileOpenMode mode)
+MainWindow::openPlaylist(RemoteFile source, AudioFileOpenMode mode)
 {
-    return openPlaylistFile(path, path, mode);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openPlaylistFile(QString path, QString location, AudioFileOpenMode mode)
-{
-    if (!(QFileInfo(path).exists() &&
-	  QFileInfo(path).isFile() &&
-	  QFileInfo(path).isReadable())) {
-	return FileOpenFailed;
-    }
-    
     std::set<QString> extensions;
     PlaylistFileReader::getSupportedExtensions(extensions);
-    QString extension = QFileInfo(path).suffix();
+    QString extension = source.getExtension();
     if (extensions.find(extension) == extensions.end()) return FileOpenFailed;
 
-    PlaylistFileReader reader(path);
+    if (!source.isAvailable()) return FileOpenFailed;
+    source.waitForData();
+
+    PlaylistFileReader reader(source.getLocalFilename());
     if (!reader.isOK()) return FileOpenFailed;
 
     PlaylistFileReader::Playlist playlist = reader.load();
@@ -3244,7 +3101,7 @@ MainWindow::openPlaylistFile(QString path, QString location, AudioFileOpenMode m
     for (PlaylistFileReader::Playlist::const_iterator i = playlist.begin();
          i != playlist.end(); ++i) {
 
-        FileOpenStatus status = openURL(*i, mode);
+        FileOpenStatus status = openAudio(*i, mode);
 
         if (status == FileOpenCancelled) {
             return FileOpenCancelled;
@@ -3258,6 +3115,206 @@ MainWindow::openPlaylistFile(QString path, QString location, AudioFileOpenMode m
 
     if (someSuccess) return FileOpenSucceeded;
     else return FileOpenFailed;
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openLayer(RemoteFile source)
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    
+    if (!pane) {
+	// shouldn't happen, as the menu action should have been disabled
+	std::cerr << "WARNING: MainWindow::openLayer: no current pane" << std::endl;
+	return FileOpenWrongMode;
+    }
+
+    if (!getMainModel()) {
+	// shouldn't happen, as the menu action should have been disabled
+	std::cerr << "WARNING: MainWindow::openLayer: No main model -- hence no default sample rate available" << std::endl;
+	return FileOpenWrongMode;
+    }
+
+    if (!source.isAvailable()) return FileOpenFailed;
+    source.waitForData();
+
+    QString path = source.getLocalFilename();
+
+    if (source.getExtension() == "svl" || source.getExtension() == "xml") {
+
+        PaneCallback callback(this);
+        QFile file(path);
+        
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            std::cerr << "ERROR: MainWindow::openLayer("
+                      << source.getLocation().toStdString()
+                      << "): Failed to open file for reading" << std::endl;
+            return FileOpenFailed;
+        }
+        
+        SVFileReader reader(m_document, callback, source.getLocation());
+        reader.setCurrentPane(pane);
+        
+        QXmlInputSource inputSource(&file);
+        reader.parse(inputSource);
+        
+        if (!reader.isOK()) {
+            std::cerr << "ERROR: MainWindow::openLayer("
+                      << source.getLocation().toStdString()
+                      << "): Failed to read XML file: "
+                      << reader.getErrorString().toStdString() << std::endl;
+            return FileOpenFailed;
+        }
+
+        m_recentFiles.addFile(source.getLocation());
+
+        if (!source.isRemote()) {
+            registerLastOpenedFilePath(FileFinder::LayerFile, path); // for file dialog
+        }
+
+    } else {
+        
+        try {
+
+            Model *model = DataFileReaderFactory::load
+                (path, getMainModel()->getSampleRate());
+        
+            if (model) {
+
+                Layer *newLayer = m_document->createImportedLayer(model);
+
+                if (newLayer) {
+
+                    m_document->addLayerToView(pane, newLayer);
+                    m_recentFiles.addFile(source.getLocation());
+                    
+                    if (!source.isRemote()) {
+                        registerLastOpenedFilePath
+                            (FileFinder::LayerFile,
+                             path); // for file dialog
+                    }
+                    
+                    return FileOpenSucceeded;
+                }
+            }
+        } catch (DataFileReaderFactory::Exception e) {
+            if (e == DataFileReaderFactory::ImportCancelled) {
+                return FileOpenCancelled;
+            }
+        }
+    }
+    
+    source.setLeaveLocalFile(true);
+    return FileOpenFailed;
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openImage(RemoteFile source)
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    
+    if (!pane) {
+	// shouldn't happen, as the menu action should have been disabled
+	std::cerr << "WARNING: MainWindow::openImage: no current pane" << std::endl;
+	return FileOpenWrongMode;
+    }
+
+    if (!m_document->getMainModel()) {
+        return FileOpenWrongMode;
+    }
+
+    bool newLayer = false;
+
+    ImageLayer *il = dynamic_cast<ImageLayer *>(pane->getSelectedLayer());
+    if (!il) {
+        for (int i = pane->getLayerCount()-1; i >= 0; --i) {
+            il = dynamic_cast<ImageLayer *>(pane->getLayer(i));
+            if (il) break;
+        }
+    }
+    if (!il) {
+        il = dynamic_cast<ImageLayer *>
+            (m_document->createEmptyLayer(LayerFactory::Image));
+        if (!il) return FileOpenFailed;
+        newLayer = true;
+    }
+
+    // We don't put the image file in Recent Files
+
+    std::cerr << "openImage: trying location \"" << source.getLocation().toStdString() << "\" in image layer" << std::endl;
+
+    if (!il->addImage(m_viewManager->getGlobalCentreFrame(), source.getLocation())) {
+        if (newLayer) {
+            m_document->setModel(il, 0); // releasing its model
+            delete il;
+        }
+        return FileOpenFailed;
+    } else {
+        if (newLayer) {
+            m_document->addLayerToView(pane, il);
+        }
+        m_paneStack->setCurrentLayer(pane, il);
+    }
+
+    return FileOpenSucceeded;
+}
+
+MainWindow::FileOpenStatus
+MainWindow::openSession(RemoteFile source)
+{
+    if (!source.isAvailable()) return FileOpenFailed;
+    if (source.getExtension() != "sv") return FileOpenFailed;
+    source.waitForData();
+
+    BZipFileDevice bzFile(source.getLocalFilename());
+    if (!bzFile.open(QIODevice::ReadOnly)) return FileOpenFailed;
+
+    if (!checkSaveModified()) return FileOpenCancelled;
+
+    QString error;
+    closeSession();
+    createDocument();
+
+    PaneCallback callback(this);
+    m_viewManager->clearSelections();
+
+    SVFileReader reader(m_document, callback, source.getLocation());
+    QXmlInputSource inputSource(&bzFile);
+    reader.parse(inputSource);
+    
+    if (!reader.isOK()) {
+        error = tr("SV XML file read error:\n%1").arg(reader.getErrorString());
+    }
+    
+    bzFile.close();
+
+    bool ok = (error == "");
+
+    if (ok) {
+
+	setWindowTitle(tr("Sonic Visualiser: %1")
+		       .arg(source.getLocation()));
+
+	if (!source.isRemote()) m_sessionFile = source.getLocalFilename();
+
+	setupMenus();
+	CommandHistory::getInstance()->clear();
+	CommandHistory::getInstance()->documentSaved();
+	m_documentModified = false;
+	updateMenuStates();
+
+        m_recentFiles.addFile(source.getLocation());
+
+        if (!source.isRemote()) {
+            // for file dialog
+            registerLastOpenedFilePath(FileFinder::SessionFile,
+                                        source.getLocalFilename());
+        }
+
+    } else {
+	setWindowTitle(tr("Sonic Visualiser"));
+    }
+
+    return ok ? FileOpenSucceeded : FileOpenFailed;
 }
 
 void
@@ -3406,7 +3463,7 @@ MainWindow::openSession()
 
     if (path.isEmpty()) return;
 
-    if (openSessionFile(path) == FileOpenFailed) {
+    if (openSession(path) == FileOpenFailed) {
 	QMessageBox::critical(this, tr("Failed to open file"),
 			      tr("<b>File open failed</b><p>Session file \"%1\" could not be opened").arg(path));
     }
@@ -3423,7 +3480,7 @@ MainWindow::openSomething()
 
     if (path.isEmpty()) return;
 
-    FileOpenStatus status = openSomeFile(path, AskUser);
+    FileOpenStatus status = open(path, AskUser);
 
     if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open file"),
@@ -3453,7 +3510,7 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
-    FileOpenStatus status = openURL(QUrl(text));
+    FileOpenStatus status = open(text);
 
     if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open location"),
@@ -3479,7 +3536,7 @@ MainWindow::openRecentFile()
     QString path = action->text();
     if (path == "") return;
 
-    FileOpenStatus status = openURL(path);
+    FileOpenStatus status = open(path);
 
     if (status == FileOpenFailed) {
         QMessageBox::critical(this, tr("Failed to open location"),
@@ -3490,186 +3547,6 @@ MainWindow::openRecentFile()
     }
 }
 
-MainWindow::FileOpenStatus
-MainWindow::openURL(QUrl url, AudioFileOpenMode mode)
-{
-    if (url.scheme().toLower() == "file" || url.scheme() == "") {
-
-        return openSomeFile(url.toLocalFile(), mode);
-
-    } else if (!RemoteFile::canHandleScheme(url)) {
-
-        QMessageBox::critical(this, tr("Unsupported scheme in URL"),
-                              tr("<b>Download failed</b><p>The URL scheme \"%1\" is not supported")
-                              .arg(url.scheme()));
-        return FileOpenFailed;
-
-    } else {
-        RemoteFile rf(url);
-        rf.wait();
-        if (!rf.isOK()) {
-            QMessageBox::critical(this, tr("File download failed"),
-                                  tr("<b>Download failed</b><p>Failed to download URL \"%1\": %2")
-                                  .arg(url.toString()).arg(rf.getErrorString()));
-            return FileOpenFailed;
-        }
-        FileOpenStatus status;
-        if ((status = openSomeFile(rf.getLocalFilename(), url.toString(),
-                                   mode)) !=
-            FileOpenSucceeded) {
-            rf.deleteLocalFile();
-        }
-        return status;
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openURL(QString ustr, AudioFileOpenMode mode)
-{
-    // This function is used when we don't know whether the string is
-    // an encoded or human-readable url
-
-    QUrl url(ustr);
-
-    if (url.scheme().toLower() == "file" || url.scheme() == "") {
-
-        FileOpenStatus status = openSomeFile(url.toLocalFile(), mode);
-        if (status == FileOpenFailed) {
-            url.setEncodedUrl(ustr.toAscii());
-            status = openSomeFile(url.toLocalFile(), mode);
-        }
-        return status;
-
-    } else if (!RemoteFile::canHandleScheme(url)) {
-
-        QMessageBox::critical(this, tr("Unsupported scheme in URL"),
-                              tr("<b>Download failed</b><p>The URL scheme \"%1\" is not supported")
-                              .arg(url.scheme()));
-        return FileOpenFailed;
-
-    } else {
-        RemoteFile rf(url);
-        rf.wait();
-        if (!rf.isOK()) {
-            // rf was created on the assumption that ustr was
-            // human-readable.  Let's try again, this time assuming it
-            // was already encoded.
-            std::cerr << "MainWindow::openURL: Failed to retrieve URL \""
-                      << ustr.toStdString() << "\" as human-readable URL; "
-                      << "trying again treating it as encoded URL"
-                      << std::endl;
-            url.setEncodedUrl(ustr.toAscii());
-            return openURL(url, mode);
-        }
-
-        FileOpenStatus status;
-        if ((status = openSomeFile(rf.getLocalFilename(), ustr, mode)) !=
-            FileOpenSucceeded) {
-            rf.deleteLocalFile();
-        }
-        return status;
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSomeFile(QString path, AudioFileOpenMode mode)
-{
-    return openSomeFile(path, path, mode);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSomeFile(QString path, QString location,
-                         AudioFileOpenMode mode)
-{
-    FileOpenStatus status;
-
-    bool canImportLayer = (getMainModel() != 0 &&
-                           m_paneStack != 0 &&
-                           m_paneStack->getCurrentPane() != 0);
-
-    if ((status = openPlaylistFile(path, location, mode)) != FileOpenFailed) {
-        return status;
-    } else if ((status = openAudioFile(path, location, mode)) != FileOpenFailed) {
-        return status;
-    } else if (QFileInfo(path).suffix().toLower() == "sv" &&
-               (status = openSessionFile(path, location)) != FileOpenFailed) {
-	return status;
-    } else if (!canImportLayer) {
-        return FileOpenWrongMode;
-    } else if ((status = openImageFile(path, location)) != FileOpenFailed) {
-        return status;
-    } else if ((status = openLayerFile(path, location)) != FileOpenFailed) {
-        return status;
-    } else {
-	return FileOpenFailed;
-    }
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSessionFile(QString path)
-{
-    return openSessionFile(path, path);
-}
-
-MainWindow::FileOpenStatus
-MainWindow::openSessionFile(QString path, QString location)
-{
-    BZipFileDevice bzFile(path);
-    if (!bzFile.open(QIODevice::ReadOnly)) {
-        std::cerr << "Failed to open session file \"" << location.toStdString()
-                  << "\": " << bzFile.errorString().toStdString() << std::endl;
-        return FileOpenFailed;
-    }
-
-    if (!checkSaveModified()) return FileOpenCancelled;
-
-    QString error;
-    closeSession();
-    createDocument();
-
-    PaneCallback callback(this);
-    m_viewManager->clearSelections();
-
-    SVFileReader reader(m_document, callback, location);
-    QXmlInputSource inputSource(&bzFile);
-    reader.parse(inputSource);
-    
-    if (!reader.isOK()) {
-        error = tr("SV XML file read error:\n%1").arg(reader.getErrorString());
-    }
-    
-    bzFile.close();
-
-    bool ok = (error == "");
-
-    bool realFile = (location == path);
-    
-    if (ok) {
-
-	setWindowTitle(tr("Sonic Visualiser: %1")
-		       .arg(QFileInfo(location).fileName()));
-
-	if (realFile) m_sessionFile = path;
-
-	setupMenus();
-	CommandHistory::getInstance()->clear();
-	CommandHistory::getInstance()->documentSaved();
-	m_documentModified = false;
-	updateMenuStates();
-
-        m_recentFiles.addFile(location);
-
-        if (realFile) {
-            registerLastOpenedFilePath(FileFinder::SessionFile, path); // for file dialog
-        }
-
-    } else {
-	setWindowTitle(tr("Sonic Visualiser"));
-    }
-
-    return ok ? FileOpenSucceeded : FileOpenFailed;
-}
-
 void
 MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
 {
@@ -3677,7 +3554,7 @@ MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
 
     for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
 
-        FileOpenStatus status = openURL(*i, ReplaceCurrentPane);
+        FileOpenStatus status = open(*i, ReplaceCurrentPane);
 
         if (status == FileOpenFailed) {
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
@@ -5057,7 +4934,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (openSomeFile(path, ReplaceMainModel) != FileOpenSucceeded) {
+            if (open(path, ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << path.toStdString() << "\"" << std::endl;
             }
@@ -5070,7 +4947,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (openSomeFile(path, CreateAdditionalModel) != FileOpenSucceeded) {
+            if (open(path, CreateAdditionalModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << path.toStdString() << "\"" << std::endl;
             }
@@ -5087,7 +4964,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
         std::vector<QString> recent = m_recentFiles.getRecent();
         if (n >= 0 && n < int(recent.size())) {
-            if (openSomeFile(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
+            if (open(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
                           << recent[n].toStdString() << "\"" << std::endl;
             }

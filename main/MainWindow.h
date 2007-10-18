@@ -30,6 +30,7 @@
 #include "transform/Transform.h"
 #include "document/SVFileReader.h"
 #include "data/fileio/FileFinder.h"
+#include "data/fileio/RemoteFile.h"
 #include <map>
 
 class Document;
@@ -80,14 +81,14 @@ public:
         FileOpenWrongMode // attempted to open layer when no main model present
     };
 
-    FileOpenStatus openSomeFile(QString path, AudioFileOpenMode = AskUser);
-    FileOpenStatus openAudioFile(QString path, AudioFileOpenMode = AskUser);
-    FileOpenStatus openPlaylistFile(QString path, AudioFileOpenMode = AskUser);
-    FileOpenStatus openLayerFile(QString path);
-    FileOpenStatus openImageFile(QString path);
-    FileOpenStatus openSessionFile(QString path);
-    FileOpenStatus openURL(QUrl url, AudioFileOpenMode = AskUser);
-    FileOpenStatus openURL(QString url, AudioFileOpenMode = AskUser);
+    FileOpenStatus open(QString fileOrUrl, AudioFileOpenMode = AskUser);
+    FileOpenStatus open(RemoteFile source, AudioFileOpenMode = AskUser);
+
+    FileOpenStatus openAudio(RemoteFile source, AudioFileOpenMode = AskUser);
+    FileOpenStatus openPlaylist(RemoteFile source, AudioFileOpenMode = AskUser);
+    FileOpenStatus openLayer(RemoteFile source);
+    FileOpenStatus openImage(RemoteFile source);
+    FileOpenStatus openSession(RemoteFile source);
 
     bool saveSessionFile(QString path);
     bool commitData(bool mayAskUser); // on session shutdown
@@ -428,16 +429,6 @@ protected:
 
     virtual void closeEvent(QCloseEvent *e);
     bool checkSaveModified();
-
-    FileOpenStatus openSomeFile(QString path, QString location,
-                                AudioFileOpenMode = AskUser);
-    FileOpenStatus openAudioFile(QString path, QString location,
-                                 AudioFileOpenMode = AskUser);
-    FileOpenStatus openPlaylistFile(QString path, QString location,
-                                    AudioFileOpenMode = AskUser);
-    FileOpenStatus openLayerFile(QString path, QString location);
-    FileOpenStatus openImageFile(QString path, QString location);
-    FileOpenStatus openSessionFile(QString path, QString location);
 
     QString getOpenFileName(FileFinder::FileType type);
     QString getSaveFileName(FileFinder::FileType type);
