@@ -3180,6 +3180,8 @@ MainWindow::openLayer(FileSource source)
         
             if (model) {
 
+                std::cerr << "MainWindow::openLayer: Have model" << std::endl;
+
                 Layer *newLayer = m_document->createImportedLayer(model);
 
                 if (newLayer) {
