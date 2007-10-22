@@ -4,7 +4,7 @@
     Sonic Visualiser
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
-    This file copyright 2006 Chris Cannam and QMUL.
+    This file copyright 2006-2007 Chris Cannam and QMUL.
     
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -19,8 +19,9 @@
 #include <QFrame>
 #include <QString>
 #include <QUrl>
-#include <QMainWindow>
 #include <QPointer>
+
+#include "MainWindowBase.h"
 
 #include "base/Command.h"
 #include "view/ViewManager.h"
@@ -58,7 +59,7 @@ class KeyReference;
 class Labeller;
 
 
-class MainWindow : public QMainWindow
+class MainWindow : public MainWindowBase
 {
     Q_OBJECT
 
@@ -66,228 +67,102 @@ public:
     MainWindow(bool withAudioOutput = true,
                bool withOSCSupport = true);
     virtual ~MainWindow();
-    
-    enum AudioFileOpenMode {
-        ReplaceMainModel,
-        CreateAdditionalModel,
-        ReplaceCurrentPane,
-        AskUser
-    };
-
-    enum FileOpenStatus {
-        FileOpenSucceeded,
-        FileOpenFailed,
-        FileOpenCancelled,
-        FileOpenWrongMode // attempted to open layer when no main model present
-    };
-
-    FileOpenStatus open(QString fileOrUrl, AudioFileOpenMode = AskUser);
-    FileOpenStatus open(FileSource source, AudioFileOpenMode = AskUser);
-
-    FileOpenStatus openAudio(FileSource source, AudioFileOpenMode = AskUser);
-    FileOpenStatus openPlaylist(FileSource source, AudioFileOpenMode = AskUser);
-    FileOpenStatus openLayer(FileSource source);
-    FileOpenStatus openImage(FileSource source);
-    FileOpenStatus openSession(FileSource source);
-
-    bool saveSessionFile(QString path);
-    bool commitData(bool mayAskUser); // on session shutdown
 
 signals:
-    // Used to toggle the availability of menu actions
-    void canAddPane(bool);
-    void canDeleteCurrentPane(bool);
-    void canAddLayer(bool);
-    void canImportMoreAudio(bool);
-    void canImportLayer(bool);
-    void canExportAudio(bool);
-    void canExportLayer(bool);
-    void canExportImage(bool);
-    void canRenameLayer(bool);
-    void canEditLayer(bool);
-    void canMeasureLayer(bool);
-    void canSelect(bool);
-    void canClearSelection(bool);
-    void canEditSelection(bool);
-    void canDeleteSelection(bool);
-    void canPaste(bool);
-    void canInsertInstant(bool);
-    void canInsertInstantsAtBoundaries(bool);
-    void canRenumberInstants(bool);
-    void canDeleteCurrentLayer(bool);
-    void canZoom(bool);
-    void canScroll(bool);
-    void canPlay(bool);
-    void canFfwd(bool);
-    void canRewind(bool);
-    void canPlaySelection(bool);
-    void canSpeedUpPlayback(bool);
-    void canSlowDownPlayback(bool);
-    void canChangePlaybackSpeed(bool);
-    void canSave(bool);
 
 public slots:
-    void preferenceChanged(PropertyContainer::PropertyName);
+    virtual void preferenceChanged(PropertyContainer::PropertyName);
+    virtual bool commitData(bool mayAskUser);
 
 protected slots:
-    void openSession();
-    void importAudio();
-    void importMoreAudio();
-    void openSomething();
-    void openLocation();
-    void openRecentFile();
-    void exportAudio();
-    void importLayer();
-    void exportLayer();
-    void exportImage();
-    void saveSession();
-    void saveSessionAs();
-    void newSession();
-    void closeSession();
-    void preferences();
+    virtual void openSession();
+    virtual void importAudio();
+    virtual void importMoreAudio();
+    virtual void openSomething();
+    virtual void openLocation();
+    virtual void openRecentFile();
+    virtual void exportAudio();
+    virtual void importLayer();
+    virtual void exportLayer();
+    virtual void exportImage();
+    virtual void saveSession();
+    virtual void saveSessionAs();
+    virtual void newSession();
+    virtual void closeSession();
+    virtual void preferences();
 
-    void zoomIn();
-    void zoomOut();
-    void zoomToFit();
-    void zoomDefault();
-    void scrollLeft();
-    void scrollRight();
-    void jumpLeft();
-    void jumpRight();
+    virtual void sampleRateMismatch(size_t, size_t, bool);
+    virtual void audioOverloadPluginDisabled();
 
-    void showNoOverlays();
-    void showMinimalOverlays();
-    void showStandardOverlays();
-    void showAllOverlays();
+    virtual void toolNavigateSelected();
+    virtual void toolSelectSelected();
+    virtual void toolEditSelected();
+    virtual void toolDrawSelected();
+    virtual void toolMeasureSelected();
 
-    void toggleZoomWheels();
-    void togglePropertyBoxes();
-    void toggleStatusBar();
+    virtual void documentModified();
+    virtual void documentRestored();
 
-    void play();
-    void ffwd();
-    void ffwdEnd();
-    void rewind();
-    void rewindStart();
-    void stop();
+    virtual void updateMenuStates();
+    virtual void updateDescriptionLabel();
 
-    void addPane();
-    void addLayer();
-    void deleteCurrentPane();
-    void renameCurrentLayer();
-    void deleteCurrentLayer();
+    virtual void setInstantsNumbering();
+    virtual void setInstantsCounterCycle();
+    virtual void resetInstantsCounters();
 
-    void playLoopToggled();
-    void playSelectionToggled();
-    void playSoloToggled();
-    void playSpeedChanged(int);
-    void playSharpenToggled();
-    void playMonoToggled();
-    void speedUpPlayback();
-    void slowDownPlayback();
-    void restoreNormalPlayback();
-    void sampleRateMismatch(size_t, size_t, bool);
-    void audioOverloadPluginDisabled();
+    virtual void modelGenerationFailed(QString);
+    virtual void modelRegenerationFailed(QString, QString);
 
-    void playbackFrameChanged(unsigned long);
-    void globalCentreFrameChanged(unsigned long);
-    void viewCentreFrameChanged(View *, unsigned long);
-    void viewZoomLevelChanged(View *, unsigned long, bool);
-    void outputLevelsChanged(float, float);
+    virtual void rightButtonMenuRequested(Pane *, QPoint point);
 
-    void currentPaneChanged(Pane *);
-    void currentLayerChanged(Pane *, Layer *);
+    virtual void addPane();
+    virtual void addLayer();
+    virtual void renameCurrentLayer();
 
-    void toolNavigateSelected();
-    void toolSelectSelected();
-    void toolEditSelected();
-    void toolDrawSelected();
-    void toolMeasureSelected();
+    virtual void paneAdded(Pane *);
+    virtual void paneHidden(Pane *);
+    virtual void paneAboutToBeDeleted(Pane *);
+    virtual void paneDropAccepted(Pane *, QStringList);
+    virtual void paneDropAccepted(Pane *, QString);
 
-    void selectAll();
-    void selectToStart();
-    void selectToEnd();
-    void selectVisible();
-    void clearSelection();
-    void cut();
-    void copy();
-    void paste();
-    void deleteSelected();
-    void insertInstant();
-    void insertInstantAt(size_t);
-    void insertInstantsAtBoundaries();
-    void setInstantsNumbering();
-    void setInstantsCounterCycle();
-    void resetInstantsCounters();
-    void renumberInstants();
+    virtual void setupRecentFilesMenu();
+    virtual void setupRecentTransformsMenu();
 
-    void documentModified();
-    void documentRestored();
+    virtual void playSpeedChanged(int);
+    virtual void playSharpenToggled();
+    virtual void playMonoToggled();
 
-    void updateMenuStates();
-    void updateDescriptionLabel();
+    virtual void speedUpPlayback();
+    virtual void slowDownPlayback();
+    virtual void restoreNormalPlayback();
 
-    void layerAdded(Layer *);
-    void layerRemoved(Layer *);
-    void layerAboutToBeDeleted(Layer *);
-    void layerInAView(Layer *, bool);
+    virtual void outputLevelsChanged(float, float);
 
-    void mainModelChanged(WaveFileModel *);
-    void modelAdded(Model *);
-    void modelAboutToBeDeleted(Model *);
+    virtual void layerRemoved(Layer *);
+    virtual void layerInAView(Layer *, bool);
 
-    void modelGenerationFailed(QString);
-    void modelRegenerationFailed(QString, QString);
+    virtual void mainModelChanged(WaveFileModel *);
+    virtual void modelAdded(Model *);
 
-    void rightButtonMenuRequested(Pane *, QPoint point);
+    virtual void showLayerTree();
 
-    void propertyStacksResized();
+    virtual void mouseEnteredWidget();
+    virtual void mouseLeftWidget();
 
-    void paneDropAccepted(Pane *, QStringList);
-    void paneDropAccepted(Pane *, QString);
+    virtual void handleOSCMessage(const OSCMessage &);
 
-    void setupRecentFilesMenu();
-    void setupRecentTransformsMenu();
-
-    void showLayerTree();
-
-    void pollOSC();
-    void handleOSCMessage(const OSCMessage &);
-
-    void mouseEnteredWidget();
-    void mouseLeftWidget();
-    void contextHelpChanged(const QString &);
-    void inProgressSelectionChanged();
-
-    void website();
-    void help();
-    void about();
-    void keyReference();
+    virtual void website();
+    virtual void help();
+    virtual void about();
+    virtual void keyReference();
 
 protected:
-    QString                  m_sessionFile;
-    QString                  m_audioFile;
-    Document                *m_document;
-
-    QLabel                  *m_descriptionLabel;
-    PaneStack               *m_paneStack;
-    ViewManager             *m_viewManager;
     Overview                *m_overview;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
     QPushButton             *m_playSharpen;
     QPushButton             *m_playMono;
     WaveformLayer           *m_panLayer;
-    Layer                   *m_timeRulerLayer;
-
-    bool                     m_audioOutput;
-    AudioCallbackPlaySource *m_playSource;
-    AudioCallbackPlayTarget *m_playTarget;
-
-    OSCQueue                *m_oscQueue;
-
-    RecentFiles              m_recentFiles;
-    RecentFiles              m_recentTransforms;
 
     bool                     m_mainMenusCreated;
     QMenu                   *m_paneMenu;
@@ -307,25 +182,10 @@ protected:
     QAction                 *m_ffwdAction;
     QAction                 *m_rwdAction;
 
-    bool                     m_documentModified;
-    bool                     m_openingAudioFile;
-    bool                     m_abandoning;
-
-    Labeller                *m_labeller;
-
-    int                      m_lastPlayStatusSec;
-    mutable QString          m_myStatusMessage;
-
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<QTreeView>      m_layerTreeView;
 
-    bool                     m_initialDarkBackground;
-
     KeyReference            *m_keyReference;
-
-    WaveFileModel *getMainModel();
-    const WaveFileModel *getMainModel() const;
-    void createDocument();
 
     struct PaneConfiguration {
 	PaneConfiguration(LayerFactory::LayerType _layer
@@ -360,87 +220,22 @@ protected:
     typedef std::map<QAction *, int> NumberingActionMap;
     NumberingActionMap m_numberingActions;
 
-    void setupMenus();
-    void setupFileMenu();
-    void setupEditMenu();
-    void setupViewMenu();
-    void setupPaneAndLayerMenus();
-    void setupTransformsMenu();
-    void setupHelpMenu();
-    void setupExistingLayersMenus();
-    void setupToolbars();
+    virtual void setupMenus();
+    virtual void setupFileMenu();
+    virtual void setupEditMenu();
+    virtual void setupViewMenu();
+    virtual void setupPaneAndLayerMenus();
+    virtual void setupTransformsMenu();
+    virtual void setupHelpMenu();
+    virtual void setupExistingLayersMenus();
+    virtual void setupToolbars();
 
-    Pane *addPaneToStack();
-
-    void addPane(const PaneConfiguration &configuration, QString text);
-
-    Layer *getSnapLayer() const;
-
-    class PaneCallback : public SVFileReaderPaneCallback
-    {
-    public:
-	PaneCallback(MainWindow *mw) : m_mw(mw) { }
-	virtual Pane *addPane() { return m_mw->addPaneToStack(); }
-	virtual void setWindowSize(int width, int height) {
-	    m_mw->resize(width, height);
-	}
-	virtual void addSelection(int start, int end) {
-	    m_mw->m_viewManager->addSelection(Selection(start, end));
-	}
-    protected:
-	MainWindow *m_mw;
-    };
-
-    class AddPaneCommand : public Command
-    {
-    public:
-	AddPaneCommand(MainWindow *mw);
-	virtual ~AddPaneCommand();
-	
-	virtual void execute();
-	virtual void unexecute();
-	virtual QString getName() const;
-
-	Pane *getPane() { return m_pane; }
-
-    protected:
-	MainWindow *m_mw;
-	Pane *m_pane; // Main window owns this, but I determine its lifespan
-	Pane *m_prevCurrentPane; // I don't own this
-	bool m_added;
-    };
-
-    class RemovePaneCommand : public Command
-    {
-    public:
-	RemovePaneCommand(MainWindow *mw, Pane *pane);
-	virtual ~RemovePaneCommand();
-	
-	virtual void execute();
-	virtual void unexecute();
-	virtual QString getName() const;
-
-    protected:
-	MainWindow *m_mw;
-	Pane *m_pane; // Main window owns this, but I determine its lifespan
-	Pane *m_prevCurrentPane; // I don't own this
-	bool m_added;
-    };
+    virtual void addPane(const PaneConfiguration &configuration, QString text);
 
     virtual void closeEvent(QCloseEvent *e);
-    bool checkSaveModified();
-
-    QString getOpenFileName(FileFinder::FileType type);
-    QString getSaveFileName(FileFinder::FileType type);
-    void registerLastOpenedFilePath(FileFinder::FileType type, QString path);
-
-    void createPlayTarget();
-
-    void openHelpUrl(QString url);
-
-    void updateVisibleRangeDisplay(Pane *p) const;
-
-    void toXml(QTextStream &stream);
+    virtual bool checkSaveModified();
+    
+    virtual void updateVisibleRangeDisplay(Pane *p) const;
 };
 
 

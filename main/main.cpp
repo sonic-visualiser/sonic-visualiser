@@ -304,7 +304,7 @@ main(int argc, char **argv)
 
         if (path.endsWith("sv")) {
             if (!haveSession) {
-                status = gui.openSession(path);
+                status = gui.openSessionFile(path);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveSession = true;
                     haveMainModel = true;

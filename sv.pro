@@ -43,6 +43,7 @@ HEADERS += audioio/AudioCallbackPlaySource.h \
            document/Document.h \
            document/SVFileReader.h \
            main/MainWindow.h \
+           main/MainWindowBase.h \
            main/PreferencesDialog.h \
            osc/OSCMessage.h \
            osc/OSCQueue.h \
@@ -64,6 +65,7 @@ SOURCES += audioio/AudioCallbackPlaySource.cpp \
            document/SVFileReader.cpp \
            main/main.cpp \
            main/MainWindow.cpp \
+           main/MainWindowBase.cpp \
            main/PreferencesDialog.cpp \
            osc/OSCMessage.cpp \
            osc/OSCQueue.cpp \
