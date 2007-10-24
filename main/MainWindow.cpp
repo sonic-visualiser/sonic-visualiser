@@ -60,7 +60,7 @@
 #include "data/fileio/FileSource.h"
 #include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
-#include "transform/TransformFactory.h"
+#include "plugin/transform/TransformFactory.h"
 #include "base/PlayParameterRepository.h"
 #include "base/XmlExportable.h"
 #include "base/CommandHistory.h"
@@ -68,7 +68,7 @@
 #include "base/Clipboard.h"
 #include "base/UnitDatabase.h"
 #include "base/ColourDatabase.h"
-#include "osc/OSCQueue.h"
+#include "data/osc/OSCQueue.h"
 
 // For version information
 #include "vamp/vamp.h"

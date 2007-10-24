@@ -11,69 +11,33 @@ TARGET = sonic-visualiser
 
 ICON = icons/sv-macicon.icns
 
-DEPENDPATH += . .. audioio document i18n main osc transform
-INCLUDEPATH += . .. audioio document transform osc main
-LIBPATH = ../view ../layer ../data ../widgets ../plugin ../base ../system $$LIBPATH
+DEPENDPATH += . .. i18n main transform
+INCLUDEPATH += . .. transform main
+LIBPATH = ../view ../layer ../data ../widgets ../plugin ../base ../system ../document ../audioio $$LIBPATH
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvdocument -lsvaudioio -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../view/libsvview.a \
                   ../layer/libsvlayer.a \
                   ../data/libsvdata.a \
+                  ../document/libsvdocument.a \
                   ../widgets/libsvwidgets.a \
                   ../plugin/libsvplugin.a \
                   ../base/libsvbase.a \
+                  ../audioio/libsvaudioio.a \
                   ../system/libsvsystem.a
 
 OBJECTS_DIR = tmp_obj
 MOC_DIR = tmp_moc
 
 # Input
-HEADERS += audioio/AudioCallbackPlaySource.h \
-           audioio/AudioCallbackPlayTarget.h \
-           audioio/AudioCoreAudioTarget.h \
-           audioio/AudioGenerator.h \
-           audioio/AudioJACKTarget.h \
-           audioio/AudioPortAudioTarget.h \
-           audioio/AudioTargetFactory.h \
-           audioio/PhaseVocoderTimeStretcher.h \
-           audioio/PlaySpeedRangeMapper.h \
-           document/Document.h \
-           document/SVFileReader.h \
-           main/MainWindow.h \
-           main/MainWindowBase.h \
-           main/PreferencesDialog.h \
-           osc/OSCMessage.h \
-           osc/OSCQueue.h \
-           transform/FeatureExtractionPluginTransform.h \
-           transform/PluginTransform.h \
-           transform/RealTimePluginTransform.h \
-           transform/Transform.h \
-           transform/TransformFactory.h
-SOURCES += audioio/AudioCallbackPlaySource.cpp \
-           audioio/AudioCallbackPlayTarget.cpp \
-           audioio/AudioCoreAudioTarget.cpp \
-           audioio/AudioGenerator.cpp \
-           audioio/AudioJACKTarget.cpp \
-           audioio/AudioPortAudioTarget.cpp \
-           audioio/AudioTargetFactory.cpp \
-           audioio/PhaseVocoderTimeStretcher.cpp \
-           audioio/PlaySpeedRangeMapper.cpp \
-           document/Document.cpp \
-           document/SVFileReader.cpp \
-           main/main.cpp \
+HEADERS += main/MainWindow.h \
+           main/PreferencesDialog.h
+SOURCES += main/main.cpp \
            main/MainWindow.cpp \
-           main/MainWindowBase.cpp \
-           main/PreferencesDialog.cpp \
-           osc/OSCMessage.cpp \
-           osc/OSCQueue.cpp \
-           transform/FeatureExtractionPluginTransform.cpp \
-           transform/PluginTransform.cpp \
-           transform/RealTimePluginTransform.cpp \
-           transform/Transform.cpp \
-           transform/TransformFactory.cpp
+           main/PreferencesDialog.cpp
 RESOURCES += sonic-visualiser.qrc
 
 
