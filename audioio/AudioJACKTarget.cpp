@@ -233,10 +233,12 @@ AudioJACKTarget::AudioJACKTarget(AudioCallbackPlaySource *source) :
 
 AudioJACKTarget::~AudioJACKTarget()
 {
+    std::cerr << "AudioJACKTarget::~AudioJACKTarget()" << std::endl;
     if (m_client) {
 	jack_deactivate(m_client);
 	jack_client_close(m_client);
     }
+    std::cerr << "AudioJACKTarget::~AudioJACKTarget() done" << std::endl;
 }
 
 bool
