@@ -13,16 +13,16 @@ ICON = icons/sv-macicon.icns
 
 DEPENDPATH += . .. i18n main transform
 INCLUDEPATH += . .. transform main
-LIBPATH = ../view ../layer ../data ../widgets ../plugin ../base ../system ../document ../audioio $$LIBPATH
+LIBPATH = ../view ../layer ../data ../widgets ../plugin ../base ../system ../framework ../audioio $$LIBPATH
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvdocument -lsvaudioio -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvdata -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../view/libsvview.a \
                   ../layer/libsvlayer.a \
                   ../data/libsvdata.a \
-                  ../document/libsvdocument.a \
+                  ../framework/libsvframework.a \
                   ../widgets/libsvwidgets.a \
                   ../plugin/libsvplugin.a \
                   ../base/libsvbase.a \

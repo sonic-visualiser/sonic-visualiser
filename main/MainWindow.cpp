@@ -16,7 +16,7 @@
 #include "../version.h"
 
 #include "MainWindow.h"
-#include "document/Document.h"
+#include "framework/Document.h"
 #include "PreferencesDialog.h"
 
 #include "view/Pane.h"

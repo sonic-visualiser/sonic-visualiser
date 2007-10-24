@@ -21,14 +21,14 @@
 #include <QUrl>
 #include <QPointer>
 
-#include "document/MainWindowBase.h"
+#include "framework/MainWindowBase.h"
 #include "base/Command.h"
 #include "view/ViewManager.h"
 #include "base/PropertyContainer.h"
 #include "base/RecentFiles.h"
 #include "layer/LayerFactory.h"
 #include "plugin/transform/Transform.h"
-#include "document/SVFileReader.h"
+#include "framework/SVFileReader.h"
 #include "data/fileio/FileFinder.h"
 #include "data/fileio/FileSource.h"
 #include <map>
