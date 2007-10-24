@@ -30,6 +30,11 @@
 #include <QTextStream>
 #include <iostream>
 
+// For alignment:
+#include "data/model/AggregateWaveModel.h"
+#include "data/model/SparseTimeValueModel.h"
+#include "data/model/AlignmentModel.h"
+
 //!!! still need to handle command history, documentRestored/documentModified
 
 Document::Document() :
@@ -60,13 +65,15 @@ Document::~Document()
 		  << "should have been garbage collected when deleting layers"
 		  << std::endl;
 	while (!m_models.empty()) {
-	    if (m_models.begin()->first == m_mainModel) {
+            Model *model = m_models.begin()->first;
+	    if (model == m_mainModel) {
 		// just in case!
 		std::cerr << "Document::~Document: WARNING: Main model is also"
 			  << " in models list!" << std::endl;
-	    } else {
-		emit modelAboutToBeDeleted(m_models.begin()->first);
-		delete m_models.begin()->first;
+	    } else if (model) {
+		emit modelAboutToBeDeleted(model);
+                model->aboutToDelete();
+		delete model;
 	    }
 	    m_models.erase(m_models.begin());
 	}
@@ -74,7 +81,11 @@ Document::~Document()
 
 //    std::cerr << "Document::~Document: About to get rid of main model"
 //	      << std::endl;
-    emit modelAboutToBeDeleted(m_mainModel);
+    if (m_mainModel) {
+        emit modelAboutToBeDeleted(m_mainModel);
+        m_mainModel->aboutToDelete();
+    }
+
     emit mainModelChanged(0);
     delete m_mainModel;
 
@@ -439,6 +450,7 @@ Document::releaseModel(Model *model) // Will _not_ release main model!
 	}
 
 	emit modelAboutToBeDeleted(model);
+        model->aboutToDelete();
 	m_models.erase(model);
 	delete model;
     }
@@ -647,6 +659,77 @@ Document::getTransformInputModels()
     }
 
     return models;
+}
+
+void
+Document::alignModel(Model *model)
+{
+    if (!m_mainModel || model == m_mainModel) return;
+
+    RangeSummarisableTimeValueModel *rm = 
+        dynamic_cast<RangeSummarisableTimeValueModel *>(model);
+    if (!rm) return;
+    
+    // This involves creating three new models:
+
+    // 1. an AggregateWaveModel to provide the mixdowns of the main
+    // model and the new model in its two channels, as input to the
+    // MATCH plugin
+
+    // 2. a SparseTimeValueModel, which is the model automatically
+    // created by FeatureExtractionPluginTransform when running the
+    // MATCH plugin (thus containing the alignment path)
+
+    // 3. an AlignmentModel, which stores the path model and carries
+    // out alignment lookups on it.
+
+    // The first two of these are provided as arguments to the
+    // constructor for the third, which takes responsibility for
+    // deleting them.  The AlignmentModel, meanwhile, is passed to the
+    // new model we are aligning, which also takes responsibility for
+    // it.  We should not have to delete any of these new models here.
+
+    AggregateWaveModel::ChannelSpecList components;
+
+    components.push_back(AggregateWaveModel::ModelChannelSpec
+                         (m_mainModel, -1));
+
+    components.push_back(AggregateWaveModel::ModelChannelSpec
+                         (rm, -1));
+
+    Model *aggregate = new AggregateWaveModel(components);
+
+    TransformId id = "vamp:match-vamp-plugin:match:path";
+    
+    TransformFactory *factory = TransformFactory::getInstance();
+
+    Model *transformOutput = factory->transform
+        (id, aggregate,
+         factory->getDefaultContextForTransform(id, aggregate),
+         "<plugin param-serialise=\"1\"/>");
+
+    SparseTimeValueModel *path = dynamic_cast<SparseTimeValueModel *>
+        (transformOutput);
+
+    if (!path) {
+        std::cerr << "Document::alignModel: ERROR: Failed to create alignment path (no MATCH plugin?)" << std::endl;
+        delete transformOutput;
+        delete aggregate;
+        return;
+    }
+
+    AlignmentModel *alignmentModel = new AlignmentModel
+        (m_mainModel, model, aggregate, path);
+
+    rm->setAlignment(alignmentModel);
+}
+
+void
+Document::alignModels()
+{
+    for (ModelMap::iterator i = m_models.begin(); i != m_models.end(); ++i) {
+        alignModel(i->first);
+    }
 }
 
 Document::AddLayerCommand::AddLayerCommand(Document *d,
