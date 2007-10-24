@@ -217,6 +217,17 @@ protected:
      */
     void deleteLayer(Layer *, bool force = false);
 
+    /**
+     * If model is suitable for alignment, align it against the main
+     * model and store the alignment in the model.
+     */
+    void alignModel(Model *);
+
+    /**
+     * Realign all models if the main model has changed.  Is this wise?
+     */
+    void alignModels();
+
     /*
      * Every model that is in use by a layer in the document must be
      * found in either m_mainModel or m_models.  We own and control
