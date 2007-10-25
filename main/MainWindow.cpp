@@ -159,7 +159,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     QGridLayout *layout = new QGridLayout;
 
-    m_descriptionLabel = new QLabel;
+    m_descriptionLabel = new QLabel; //!!! hang on, this is declared in base class -- should be declared and initialised by same class
 
     QScrollArea *scroll = new QScrollArea(frame);
     scroll->setWidgetResizable(true);
@@ -2763,6 +2763,7 @@ MainWindow::addLayer()
         SliceableLayer *source = dynamic_cast<SliceableLayer *>(ei->second);
         SliceLayer *dest = dynamic_cast<SliceLayer *>(newLayer);
         if (source && dest) {
+            //!!!???
             dest->setSliceableModel(source->getSliceableModel());
             connect(source, SIGNAL(sliceableModelReplaced(const Model *, const Model *)),
                     dest, SLOT(sliceableModelReplaced(const Model *, const Model *)));
