@@ -68,6 +68,7 @@ public:
     virtual ~MainWindow();
 
 signals:
+    virtual void canAlign(bool);
 
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
@@ -130,6 +131,7 @@ protected slots:
     virtual void playSpeedChanged(int);
     virtual void playSharpenToggled();
     virtual void playMonoToggled();
+    virtual void alignToggled();
 
     virtual void speedUpPlayback();
     virtual void slowDownPlayback();

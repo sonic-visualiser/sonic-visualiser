@@ -1606,10 +1606,21 @@ MainWindow::setupToolbars()
     connect(soAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
     connect(this, SIGNAL(canPlay(bool)), soAction, SLOT(setEnabled(bool)));
 
+    QAction *alAction = toolbar->addAction(il.load("align"),
+                                           tr("Align File Timelines"));
+    alAction->setCheckable(true);
+    alAction->setChecked(m_viewManager->getAlignMode());
+//!!!    alAction->setStatusTip(tr("Align audio files as   //!!!??? what?
+    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
+            alAction, SLOT(setChecked(bool)));
+    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+    connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
+
     m_keyReference->registerShortcut(playAction);
     m_keyReference->registerShortcut(psAction);
     m_keyReference->registerShortcut(plAction);
     m_keyReference->registerShortcut(soAction);
+    m_keyReference->registerShortcut(alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(rwdStartAction);
@@ -1619,6 +1630,7 @@ MainWindow::setupToolbars()
     menu->addAction(psAction);
     menu->addAction(plAction);
     menu->addAction(soAction);
+    menu->addAction(alAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -1631,6 +1643,7 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(psAction);
     m_rightButtonPlaybackMenu->addAction(plAction);
     m_rightButtonPlaybackMenu->addAction(soAction);
+    m_rightButtonPlaybackMenu->addAction(alAction);
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
@@ -1756,6 +1769,8 @@ MainWindow::updateMenuStates()
     bool haveCurrentLayer =
         (haveCurrentPane &&
          (currentLayer != 0));
+    bool havePlayTarget =
+	(m_playTarget != 0);
     bool haveSelection = 
 	(m_viewManager &&
 	 !m_viewManager->getSelections().empty());
@@ -1768,6 +1783,8 @@ MainWindow::updateMenuStates()
     bool haveCurrentTimeValueLayer = 
 	(haveCurrentLayer &&
 	 dynamic_cast<TimeValueLayer *>(currentLayer));
+
+    emit canAlign(havePlayTarget); //!!! only if Match plugin present
 
     emit canChangePlaybackSpeed(true);
     int v = m_playSpeed->value();
@@ -2884,6 +2901,35 @@ MainWindow::renameCurrentLayer()
 	    }
 	}
     }
+}
+
+void
+MainWindow::alignToggled()
+{
+    QAction *action = dynamic_cast<QAction *>(sender());
+    
+    if (action) {
+	m_viewManager->setAlignMode(action->isChecked());
+    } else {
+	m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
+    }
+
+    if (m_viewManager->getAlignMode()) {
+        m_document->alignModels();
+        m_document->setAutoAlignment(true);
+    } else {
+        m_document->setAutoAlignment(false);
+    }
+
+    for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+
+	Pane *pane = m_paneStack->getPane(i);
+	if (!pane) continue;
+
+        pane->update();
+    }
+
+    //!!! and need solo enabled
 }
 
 void
