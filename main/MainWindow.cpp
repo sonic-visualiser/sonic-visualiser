@@ -127,6 +127,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_rightButtonLayerMenu(0),
     m_rightButtonTransformsMenu(0),
     m_rightButtonPlaybackMenu(0),
+    m_soloAction(0),
+    m_soloModified(false),
+    m_prevSolo(false),
     m_ffwdAction(0),
     m_rwdAction(0),
     m_preferencesDialog(0),
@@ -1595,16 +1598,17 @@ MainWindow::setupToolbars()
     connect(plAction, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
     connect(this, SIGNAL(canPlay(bool)), plAction, SLOT(setEnabled(bool)));
 
-    QAction *soAction = toolbar->addAction(il.load("solo"),
+    m_soloAction = toolbar->addAction(il.load("solo"),
                                            tr("Solo Current Pane"));
-    soAction->setCheckable(true);
-    soAction->setChecked(m_viewManager->getPlaySoloMode());
-    soAction->setShortcut(tr("o"));
-    soAction->setStatusTip(tr("Solo the current pane during playback"));
+    m_soloAction->setCheckable(true);
+    m_soloAction->setChecked(m_viewManager->getPlaySoloMode());
+    m_prevSolo = m_viewManager->getPlaySoloMode();
+    m_soloAction->setShortcut(tr("o"));
+    m_soloAction->setStatusTip(tr("Solo the current pane during playback"));
     connect(m_viewManager, SIGNAL(playSoloModeChanged(bool)),
-            soAction, SLOT(setChecked(bool)));
-    connect(soAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
-    connect(this, SIGNAL(canPlay(bool)), soAction, SLOT(setEnabled(bool)));
+            m_soloAction, SLOT(setChecked(bool)));
+    connect(m_soloAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
+    connect(this, SIGNAL(canChangeSolo(bool)), m_soloAction, SLOT(setEnabled(bool)));
 
     QAction *alAction = toolbar->addAction(il.load("align"),
                                            tr("Align File Timelines"));
@@ -1619,7 +1623,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(playAction);
     m_keyReference->registerShortcut(psAction);
     m_keyReference->registerShortcut(plAction);
-    m_keyReference->registerShortcut(soAction);
+    m_keyReference->registerShortcut(m_soloAction);
     m_keyReference->registerShortcut(alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
@@ -1629,7 +1633,7 @@ MainWindow::setupToolbars()
     menu->addAction(playAction);
     menu->addAction(psAction);
     menu->addAction(plAction);
-    menu->addAction(soAction);
+    menu->addAction(m_soloAction);
     menu->addAction(alAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
@@ -1642,7 +1646,7 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(playAction);
     m_rightButtonPlaybackMenu->addAction(psAction);
     m_rightButtonPlaybackMenu->addAction(plAction);
-    m_rightButtonPlaybackMenu->addAction(soAction);
+    m_rightButtonPlaybackMenu->addAction(m_soloAction);
     m_rightButtonPlaybackMenu->addAction(alAction);
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdAction);
@@ -1783,8 +1787,9 @@ MainWindow::updateMenuStates()
     bool haveCurrentTimeValueLayer = 
 	(haveCurrentLayer &&
 	 dynamic_cast<TimeValueLayer *>(currentLayer));
-
-    emit canAlign(havePlayTarget); //!!! only if Match plugin present
+    
+    emit canChangeSolo(havePlayTarget);
+    emit canAlign(havePlayTarget && m_document && m_document->canAlign());
 
     emit canChangePlaybackSpeed(true);
     int v = m_playSpeed->value();
@@ -2573,7 +2578,7 @@ MainWindow::checkSaveModified()
     int button = 
 	QMessageBox::warning(this,
 			     tr("Session modified"),
-			     tr("<b>Session modified</b><p>The current session has been modified.<br>Do you want to save it?<br>"),
+			     tr("<b>Session modified</b><p>The current session has been modified.<br>Do you want to save it?"),
 			     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                              QMessageBox::Yes);
 
@@ -2904,10 +2909,19 @@ MainWindow::renameCurrentLayer()
 }
 
 void
+MainWindow::playSoloToggled()
+{
+    MainWindowBase::playSoloToggled();
+    m_soloModified = true;
+}
+
+void
 MainWindow::alignToggled()
 {
     QAction *action = dynamic_cast<QAction *>(sender());
     
+    if (!m_viewManager) return;
+
     if (action) {
 	m_viewManager->setAlignMode(action->isChecked());
     } else {
@@ -2915,9 +2929,19 @@ MainWindow::alignToggled()
     }
 
     if (m_viewManager->getAlignMode()) {
+        m_prevSolo = m_soloAction->isChecked();
+        m_soloAction->setChecked(true);
+        m_viewManager->setPlaySoloMode(true);
+        m_soloModified = false;
+        emit canChangeSolo(false);
         m_document->alignModels();
         m_document->setAutoAlignment(true);
     } else {
+        if (!m_soloModified) {
+            m_soloAction->setChecked(m_prevSolo);
+            m_viewManager->setPlaySoloMode(m_prevSolo);
+        }
+        emit canChangeSolo(true);
         m_document->setAutoAlignment(false);
     }
 
@@ -2928,8 +2952,6 @@ MainWindow::alignToggled()
 
         pane->update();
     }
-
-    //!!! and need solo enabled
 }
 
 void
