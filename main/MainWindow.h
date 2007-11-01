@@ -68,6 +68,7 @@ public:
     virtual ~MainWindow();
 
 signals:
+    virtual void canChangeSolo(bool);
     virtual void canAlign(bool);
 
 public slots:
@@ -131,6 +132,7 @@ protected slots:
     virtual void playSpeedChanged(int);
     virtual void playSharpenToggled();
     virtual void playMonoToggled();
+    virtual void playSoloToggled();
     virtual void alignToggled();
 
     virtual void speedUpPlayback();
@@ -180,8 +182,12 @@ protected:
     QMenu                   *m_rightButtonPlaybackMenu;
 
     QAction                 *m_deleteSelectedAction;
+    QAction                 *m_soloAction;
     QAction                 *m_ffwdAction;
     QAction                 *m_rwdAction;
+
+    bool                     m_soloModified;
+    bool                     m_prevSolo;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<QTreeView>      m_layerTreeView;
