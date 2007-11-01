@@ -1610,21 +1610,24 @@ MainWindow::setupToolbars()
     connect(m_soloAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
     connect(this, SIGNAL(canChangeSolo(bool)), m_soloAction, SLOT(setEnabled(bool)));
 
-    QAction *alAction = toolbar->addAction(il.load("align"),
-                                           tr("Align File Timelines"));
-    alAction->setCheckable(true);
-    alAction->setChecked(m_viewManager->getAlignMode());
-//!!!    alAction->setStatusTip(tr("Align audio files as   //!!!??? what?
-    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
-            alAction, SLOT(setChecked(bool)));
-    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
-    connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
+    QAction *alAction = 0;
+    if (Document::canAlign()) {
+        alAction = toolbar->addAction(il.load("align"),
+                                      tr("Align File Timelines"));
+        alAction->setCheckable(true);
+        alAction->setChecked(m_viewManager->getAlignMode());
+        alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+        connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
+                alAction, SLOT(setChecked(bool)));
+        connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+        connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
+    }
 
     m_keyReference->registerShortcut(playAction);
     m_keyReference->registerShortcut(psAction);
     m_keyReference->registerShortcut(plAction);
     m_keyReference->registerShortcut(m_soloAction);
-    m_keyReference->registerShortcut(alAction);
+    if (alAction) m_keyReference->registerShortcut(alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(rwdStartAction);
@@ -1634,7 +1637,7 @@ MainWindow::setupToolbars()
     menu->addAction(psAction);
     menu->addAction(plAction);
     menu->addAction(m_soloAction);
-    menu->addAction(alAction);
+    if (alAction) menu->addAction(alAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -1647,7 +1650,7 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(psAction);
     m_rightButtonPlaybackMenu->addAction(plAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
-    m_rightButtonPlaybackMenu->addAction(alAction);
+    if (alAction) m_rightButtonPlaybackMenu->addAction(alAction);
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
@@ -2930,16 +2933,20 @@ MainWindow::alignToggled()
 
     if (m_viewManager->getAlignMode()) {
         m_prevSolo = m_soloAction->isChecked();
-        m_soloAction->setChecked(true);
-        m_viewManager->setPlaySoloMode(true);
+        if (!m_soloAction->isChecked()) {
+            m_soloAction->setChecked(true);
+            MainWindowBase::playSoloToggled();
+        }
         m_soloModified = false;
         emit canChangeSolo(false);
         m_document->alignModels();
         m_document->setAutoAlignment(true);
     } else {
         if (!m_soloModified) {
-            m_soloAction->setChecked(m_prevSolo);
-            m_viewManager->setPlaySoloMode(m_prevSolo);
+            if (m_soloAction->isChecked() != m_prevSolo) {
+                m_soloAction->setChecked(m_prevSolo);
+                MainWindowBase::playSoloToggled();
+            }
         }
         emit canChangeSolo(true);
         m_document->setAutoAlignment(false);
