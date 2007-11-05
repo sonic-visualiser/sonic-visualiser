@@ -60,7 +60,7 @@
 #include "data/fileio/FileSource.h"
 #include "data/fft/FFTDataServer.h"
 #include "base/RecentFiles.h"
-#include "plugin/transform/TransformFactory.h"
+#include "plugin/transform/TransformerFactory.h"
 #include "base/PlayParameterRepository.h"
 #include "base/XmlExportable.h"
 #include "base/CommandHistory.h"
@@ -122,10 +122,10 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_existingLayersMenu(0),
     m_sliceMenu(0),
     m_recentFilesMenu(0),
-    m_recentTransformsMenu(0),
+    m_recentTransformersMenu(0),
     m_rightButtonMenu(0),
     m_rightButtonLayerMenu(0),
-    m_rightButtonTransformsMenu(0),
+    m_rightButtonTransformersMenu(0),
     m_rightButtonPlaybackMenu(0),
     m_soloAction(0),
     m_soloModified(false),
@@ -303,11 +303,11 @@ MainWindow::setupMenus()
         m_rightButtonMenu->addSeparator();
     }
 
-    if (m_rightButtonTransformsMenu) {
-        m_rightButtonTransformsMenu->clear();
+    if (m_rightButtonTransformersMenu) {
+        m_rightButtonTransformersMenu->clear();
     } else {
-        m_rightButtonTransformsMenu = m_rightButtonMenu->addMenu(tr("&Transform"));
-        m_rightButtonTransformsMenu->setTearOffEnabled(true);
+        m_rightButtonTransformersMenu = m_rightButtonMenu->addMenu(tr("&Transformer"));
+        m_rightButtonTransformersMenu->setTearOffEnabled(true);
         m_rightButtonMenu->addSeparator();
     }
 
@@ -320,7 +320,7 @@ MainWindow::setupMenus()
     setupEditMenu();
     setupViewMenu();
     setupPaneAndLayerMenus();
-    setupTransformsMenu();
+    setupTransformersMenu();
 
     m_mainMenusCreated = true;
 }
@@ -900,7 +900,7 @@ MainWindow::setupPaneAndLayerMenus()
     };
 
     std::vector<Model *> models;
-    if (m_document) models = m_document->getTransformInputModels(); //!!! not well named for this!
+    if (m_document) models = m_document->getTransformerInputModels(); //!!! not well named for this!
     bool plural = (models.size() > 1);
     if (models.empty()) {
         models.push_back(getMainModel()); // probably 0
@@ -1161,7 +1161,7 @@ MainWindow::setupPaneAndLayerMenus()
 }
 
 void
-MainWindow::setupTransformsMenu()
+MainWindow::setupTransformersMenu()
 {
     if (m_transformsMenu) {
         m_transformActions.clear();
@@ -1172,11 +1172,11 @@ MainWindow::setupTransformsMenu()
         m_transformsMenu->setTearOffEnabled(true);
    }
 
-    TransformFactory::TransformList transforms =
-	TransformFactory::getInstance()->getAllTransforms();
+    TransformerFactory::TransformerList transforms =
+	TransformerFactory::getInstance()->getAllTransformers();
 
     vector<QString> types =
-        TransformFactory::getInstance()->getAllTransformTypes();
+        TransformerFactory::getInstance()->getAllTransformerTypes();
 
     map<QString, map<QString, SubdividingMenu *> > categoryMenus;
     map<QString, map<QString, SubdividingMenu *> > makerMenus;
@@ -1186,20 +1186,20 @@ MainWindow::setupTransformsMenu()
 
     set<SubdividingMenu *> pendingMenus;
 
-    m_recentTransformsMenu = m_transformsMenu->addMenu(tr("&Recent Transforms"));
-    m_recentTransformsMenu->setTearOffEnabled(true);
-    m_rightButtonTransformsMenu->addMenu(m_recentTransformsMenu);
-    connect(&m_recentTransforms, SIGNAL(recentChanged()),
-            this, SLOT(setupRecentTransformsMenu()));
+    m_recentTransformersMenu = m_transformsMenu->addMenu(tr("&Recent Transforms"));
+    m_recentTransformersMenu->setTearOffEnabled(true);
+    m_rightButtonTransformersMenu->addMenu(m_recentTransformersMenu);
+    connect(&m_recentTransformers, SIGNAL(recentChanged()),
+            this, SLOT(setupRecentTransformersMenu()));
 
     m_transformsMenu->addSeparator();
-    m_rightButtonTransformsMenu->addSeparator();
+    m_rightButtonTransformersMenu->addSeparator();
     
     for (vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
 
         if (i != types.begin()) {
             m_transformsMenu->addSeparator();
-            m_rightButtonTransformsMenu->addSeparator();
+            m_rightButtonTransformersMenu->addSeparator();
         }
 
         QString byCategoryLabel = tr("%1 by Category").arg(*i);
@@ -1207,11 +1207,11 @@ MainWindow::setupTransformsMenu()
                                                               20, 40);
         byCategoryMenu->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byCategoryMenu);
-        m_rightButtonTransformsMenu->addMenu(byCategoryMenu);
+        m_rightButtonTransformersMenu->addMenu(byCategoryMenu);
         pendingMenus.insert(byCategoryMenu);
 
         vector<QString> categories = 
-            TransformFactory::getInstance()->getTransformCategories(*i);
+            TransformerFactory::getInstance()->getTransformerCategories(*i);
 
         for (vector<QString>::iterator j = categories.begin();
              j != categories.end(); ++j) {
@@ -1252,18 +1252,18 @@ MainWindow::setupTransformsMenu()
         byPluginNameMenus[*i] = new SubdividingMenu(byPluginNameLabel);
         byPluginNameMenus[*i]->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byPluginNameMenus[*i]);
-        m_rightButtonTransformsMenu->addMenu(byPluginNameMenus[*i]);
+        m_rightButtonTransformersMenu->addMenu(byPluginNameMenus[*i]);
         pendingMenus.insert(byPluginNameMenus[*i]);
 
         QString byMakerLabel = tr("%1 by Maker").arg(*i);
         SubdividingMenu *byMakerMenu = new SubdividingMenu(byMakerLabel, 20, 40);
         byMakerMenu->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byMakerMenu);
-        m_rightButtonTransformsMenu->addMenu(byMakerMenu);
+        m_rightButtonTransformersMenu->addMenu(byMakerMenu);
         pendingMenus.insert(byMakerMenu);
 
         vector<QString> makers = 
-            TransformFactory::getInstance()->getTransformMakers(*i);
+            TransformerFactory::getInstance()->getTransformerMakers(*i);
 
         for (vector<QString>::iterator j = makers.begin();
              j != makers.end(); ++j) {
@@ -1330,7 +1330,7 @@ MainWindow::setupTransformsMenu()
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
         action->setStatusTip(transforms[i].description);
 
-//        cerr << "Transform: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
+//        cerr << "Transformer: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
 
         if (pluginNameMenus[type].find(pluginName) ==
             pluginNameMenus[type].end()) {
@@ -1360,7 +1360,7 @@ MainWindow::setupTransformsMenu()
         (*i)->entriesAdded();
     }
 
-    setupRecentTransformsMenu();
+    setupRecentTransformersMenu();
 }
 
 void
@@ -1419,15 +1419,15 @@ MainWindow::setupRecentFilesMenu()
 }
 
 void
-MainWindow::setupRecentTransformsMenu()
+MainWindow::setupRecentTransformersMenu()
 {
-    m_recentTransformsMenu->clear();
-    vector<QString> transforms = m_recentTransforms.getRecent();
+    m_recentTransformersMenu->clear();
+    vector<QString> transforms = m_recentTransformers.getRecent();
     for (size_t i = 0; i < transforms.size(); ++i) {
-        TransformActionReverseMap::iterator ti =
+        TransformerActionReverseMap::iterator ti =
             m_transformActionsReverse.find(transforms[i]);
         if (ti == m_transformActionsReverse.end()) {
-            std::cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
+            std::cerr << "WARNING: MainWindow::setupRecentTransformersMenu: "
                       << "Unknown transform \"" << transforms[i].toStdString()
                       << "\" in recent transforms list" << std::endl;
             continue;
@@ -1435,11 +1435,11 @@ MainWindow::setupRecentTransformsMenu()
         if (i == 0) {
             ti->second->setShortcut(tr("Ctrl+T"));
             m_keyReference->registerShortcut
-                (tr("Repeat Transform"),
+                (tr("Repeat Transformer"),
                  ti->second->shortcut(),
                  tr("Re-select the most recently run transform"));
         }
-	m_recentTransformsMenu->addAction(ti->second);
+	m_recentTransformersMenu->addAction(ti->second);
     }
 }
 
@@ -2718,7 +2718,7 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     if (suggestedModel) {
 
         // check its validity
-        std::vector<Model *> inputModels = m_document->getTransformInputModels();
+        std::vector<Model *> inputModels = m_document->getTransformerInputModels();
         for (size_t j = 0; j < inputModels.size(); ++j) {
             if (inputModels[j] == suggestedModel) {
                 model = suggestedModel;
@@ -2800,7 +2800,7 @@ MainWindow::addLayer()
 	return;
     }
 
-    TransformActionMap::iterator i = m_transformActions.find(action);
+    TransformerActionMap::iterator i = m_transformActions.find(action);
 
     if (i == m_transformActions.end()) {
 
@@ -2835,8 +2835,8 @@ MainWindow::addLayer()
 	return;
     }
 
-    TransformId transform = i->second;
-    TransformFactory *factory = TransformFactory::getInstance();
+    TransformerId transform = i->second;
+    TransformerFactory *factory = TransformerFactory::getInstance();
 
     QString configurationXml;
 
@@ -2854,10 +2854,10 @@ MainWindow::addLayer()
     // supposed to be configurable, because we need to let the user
     // change the execution context (block size etc).
 
-    PluginTransform::ExecutionContext context(channel);
+    PluginTransformer::ExecutionContext context(channel);
 
     std::vector<Model *> candidateInputModels =
-        m_document->getTransformInputModels();
+        m_document->getTransformerInputModels();
 
     size_t startFrame = 0, duration = 0;
     size_t endFrame = 0;
@@ -2865,7 +2865,7 @@ MainWindow::addLayer()
     if (endFrame > startFrame) duration = endFrame - startFrame;
     else startFrame = 0;
 
-    Model *inputModel = factory->getConfigurationForTransform(transform,
+    Model *inputModel = factory->getConfigurationForTransformer(transform,
                                                               candidateInputModels,
                                                               context,
                                                               configurationXml,
@@ -2884,7 +2884,7 @@ MainWindow::addLayer()
     if (newLayer) {
         m_document->addLayerToView(pane, newLayer);
         m_document->setChannel(newLayer, context.channel);
-        m_recentTransforms.add(transform);
+        m_recentTransformers.add(transform);
         m_paneStack->setCurrentLayer(pane, newLayer);
     }
 
@@ -3707,18 +3707,18 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
 
-            TransformId transform = message.getArg(0).toString();
+            TransformerId transform = message.getArg(0).toString();
 
             Layer *newLayer = m_document->createDerivedLayer
                 (transform,
                  getMainModel(),
-                 TransformFactory::getInstance()->getDefaultContextForTransform
+                 TransformerFactory::getInstance()->getDefaultContextForTransformer
                  (transform, getMainModel()),
                  "");
 
             if (newLayer) {
                 m_document->addLayerToView(pane, newLayer);
-                m_recentTransforms.add(transform);
+                m_recentTransformers.add(transform);
                 m_paneStack->setCurrentLayer(pane, newLayer);
             }
         }
