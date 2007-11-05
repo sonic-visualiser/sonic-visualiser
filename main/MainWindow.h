@@ -27,7 +27,7 @@
 #include "base/PropertyContainer.h"
 #include "base/RecentFiles.h"
 #include "layer/LayerFactory.h"
-#include "plugin/transform/Transform.h"
+#include "plugin/transform/Transformer.h"
 #include "framework/SVFileReader.h"
 #include "data/fileio/FileFinder.h"
 #include "data/fileio/FileSource.h"
@@ -127,7 +127,7 @@ protected slots:
     virtual void paneDropAccepted(Pane *, QString);
 
     virtual void setupRecentFilesMenu();
-    virtual void setupRecentTransformsMenu();
+    virtual void setupRecentTransformersMenu();
 
     virtual void playSpeedChanged(int);
     virtual void playSharpenToggled();
@@ -175,10 +175,10 @@ protected:
     QMenu                   *m_existingLayersMenu;
     QMenu                   *m_sliceMenu;
     QMenu                   *m_recentFilesMenu;
-    QMenu                   *m_recentTransformsMenu;
+    QMenu                   *m_recentTransformersMenu;
     QMenu                   *m_rightButtonMenu;
     QMenu                   *m_rightButtonLayerMenu;
-    QMenu                   *m_rightButtonTransformsMenu;
+    QMenu                   *m_rightButtonTransformersMenu;
     QMenu                   *m_rightButtonPlaybackMenu;
 
     QAction                 *m_deleteSelectedAction;
@@ -208,11 +208,11 @@ protected:
     typedef std::map<QAction *, PaneConfiguration> PaneActionMap;
     PaneActionMap m_paneActions;
 
-    typedef std::map<QAction *, TransformId> TransformActionMap;
-    TransformActionMap m_transformActions;
+    typedef std::map<QAction *, TransformerId> TransformerActionMap;
+    TransformerActionMap m_transformActions;
 
-    typedef std::map<TransformId, QAction *> TransformActionReverseMap;
-    TransformActionReverseMap m_transformActionsReverse;
+    typedef std::map<TransformerId, QAction *> TransformerActionReverseMap;
+    TransformerActionReverseMap m_transformActionsReverse;
 
     typedef std::map<QAction *, LayerFactory::LayerType> LayerActionMap;
     LayerActionMap m_layerActions;
@@ -232,7 +232,7 @@ protected:
     virtual void setupEditMenu();
     virtual void setupViewMenu();
     virtual void setupPaneAndLayerMenus();
-    virtual void setupTransformsMenu();
+    virtual void setupTransformersMenu();
     virtual void setupHelpMenu();
     virtual void setupExistingLayersMenus();
     virtual void setupToolbars();
