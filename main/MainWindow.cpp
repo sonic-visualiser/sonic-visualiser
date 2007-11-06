@@ -1172,8 +1172,8 @@ MainWindow::setupTransformersMenu()
         m_transformsMenu->setTearOffEnabled(true);
    }
 
-    TransformerFactory::TransformerList transforms =
-	TransformerFactory::getInstance()->getAllTransformers();
+    TransformList transforms =
+	TransformerFactory::getInstance()->getAllTransforms();
 
     vector<QString> types =
         TransformerFactory::getInstance()->getAllTransformerTypes();
