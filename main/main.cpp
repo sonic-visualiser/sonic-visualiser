@@ -36,6 +36,10 @@
 #include <iostream>
 #include <signal.h>
 
+#ifdef HAVE_FFTW3F
+#include <fftw3.h>
+#endif
+
 /*! \mainpage Sonic Visualiser
 
 \section interesting Summary of interesting classes
@@ -338,6 +342,14 @@ main(int argc, char **argv)
         }
     }
     
+#ifdef HAVE_FFTW3F
+    settings.beginGroup("FFTWisdom");
+    QString wisdom = settings.value("wisdom").toString();
+    if (wisdom != "") {
+        fftwf_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+    }
+    settings.endGroup();
+#endif
 
 
 /*
@@ -352,6 +364,16 @@ main(int argc, char **argv)
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
     application.releaseMainWindow();
+
+#ifdef HAVE_FFTW3F
+    char *cwisdom = fftwf_export_wisdom_to_string();
+    if (cwisdom) {
+        settings.beginGroup("FFTWisdom");
+        settings.setValue("wisdom", cwisdom);
+        settings.endGroup();
+        fftwf_free(cwisdom);
+    }
+#endif
 
     return rv;
 }
