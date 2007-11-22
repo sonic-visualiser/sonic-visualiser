@@ -36,6 +36,7 @@ MOC_DIR = tmp_moc
 HEADERS += main/MainWindow.h \
            main/PreferencesDialog.h
 SOURCES += main/main.cpp \
+           main/OSCHandler.cpp \
            main/MainWindow.cpp \
            main/PreferencesDialog.cpp
 RESOURCES += sonic-visualiser.qrc
