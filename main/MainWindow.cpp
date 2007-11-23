@@ -1738,24 +1738,27 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::DrawMode] = action;
 
+    action = toolbar->addAction(il.load("erase"),
+				tr("Erase"));
+    action->setCheckable(true);
+    action->setShortcut(tr("5"));
+    action->setStatusTip(tr("Erase items from layer"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toolEraseSelected()));
+    connect(this, SIGNAL(canEditLayer(bool)), action, SLOT(setEnabled(bool)));
+    group->addAction(action);
+    m_keyReference->registerShortcut(action);
+    m_toolActions[ViewManager::EraseMode] = action;
+
     action = toolbar->addAction(il.load("measure"),
 				tr("Measure"));
     action->setCheckable(true);
-    action->setShortcut(tr("5"));
+    action->setShortcut(tr("6"));
     action->setStatusTip(tr("Make measurements in layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolMeasureSelected()));
     connect(this, SIGNAL(canMeasureLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::MeasureMode] = action;
-
-//    action = toolbar->addAction(il.load("text"),
-//				tr("Text"));
-//    action->setCheckable(true);
-//    action->setShortcut(tr("5"));
-//    connect(action, SIGNAL(triggered()), this, SLOT(toolTextSelected()));
-//    group->addAction(action);
-//    m_toolActions[ViewManager::TextMode] = action;
 
     toolNavigateSelected();
 
@@ -1899,16 +1902,16 @@ MainWindow::toolDrawSelected()
 }
 
 void
+MainWindow::toolEraseSelected()
+{
+    m_viewManager->setToolMode(ViewManager::EraseMode);
+}
+
+void
 MainWindow::toolMeasureSelected()
 {
     m_viewManager->setToolMode(ViewManager::MeasureMode);
 }
-
-//void
-//MainWindow::toolTextSelected()
-//{
-//    m_viewManager->setToolMode(ViewManager::TextMode);
-//}
 
 void
 MainWindow::importAudio()
@@ -2824,15 +2827,19 @@ MainWindow::addLayer()
 	if (emptyTypes.find(type) != emptyTypes.end()) {
 
 	    newLayer = m_document->createEmptyLayer(type);
-	    m_toolActions[ViewManager::DrawMode]->trigger();
+            if (newLayer) {
+                m_toolActions[ViewManager::DrawMode]->trigger();
+            }
 
 	} else {
 
 	    newLayer = m_document->createMainModelLayer(type);
 	}
 
-	m_document->addLayerToView(pane, newLayer);
-	m_paneStack->setCurrentLayer(pane, newLayer);
+        if (newLayer) {
+            m_document->addLayerToView(pane, newLayer);
+            m_paneStack->setCurrentLayer(pane, newLayer);
+        }
 
 	return;
     }
