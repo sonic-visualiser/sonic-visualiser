@@ -99,6 +99,7 @@ protected slots:
     virtual void toolSelectSelected();
     virtual void toolEditSelected();
     virtual void toolDrawSelected();
+    virtual void toolEraseSelected();
     virtual void toolMeasureSelected();
 
     virtual void documentModified();
