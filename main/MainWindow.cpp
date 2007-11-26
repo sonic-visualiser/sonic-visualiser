@@ -230,6 +230,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playSharpen, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSharpen, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
+#ifndef HAVE_RUBBERBAND
     m_playMono = new NotifyingPushButton(frame);
     m_playMono->setToolTip(tr("Run time stretcher in mono only"));
     m_playMono->setFixedSize(20, 20);
@@ -240,11 +241,14 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playMono, SIGNAL(clicked()), this, SLOT(playMonoToggled()));
     connect(m_playMono, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playMono, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+#endif
 
     QSettings settings;
     settings.beginGroup("MainWindow");
     m_playSharpen->setChecked(settings.value("playsharpen", true).toBool());
+#ifndef HAVE_RUBBERBAND
     m_playMono->setChecked(settings.value("playmono", false).toBool());
+#endif
     settings.endGroup();
 
     layout->setSpacing(4);
@@ -253,11 +257,16 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     layout->addWidget(m_fader, 1, 1);
     layout->addWidget(m_playSpeed, 1, 2);
     layout->addWidget(m_playSharpen, 1, 3);
+#ifndef HAVE_RUBBERBAND
     layout->addWidget(m_playMono, 1, 4);
+#endif
 
     m_paneStack->setPropertyStackMinWidth
-        (m_fader->width() + m_playSpeed->width() + m_playSharpen->width() +
-         m_playMono->width() + layout->spacing() * 4);
+        (m_fader->width() + m_playSpeed->width() + m_playSharpen->width()
+#ifndef HAVE_RUBBERBAND
+         + m_playMono->width()
+#endif
+         + layout->spacing() * 4);
 
     layout->setColumnStretch(0, 10);
 
@@ -2995,9 +3004,15 @@ MainWindow::playSpeedChanged(int position)
     }
 
     m_playSharpen->setEnabled(something);
-    m_playMono->setEnabled(something);
     bool sharpen = (something && m_playSharpen->isChecked());
+
+#ifdef HAVE_RUBBERBAND
+    bool mono = false;
+#else
+    m_playMono->setEnabled(something);
     bool mono = (something && m_playMono->isChecked());
+#endif
+
     m_playSource->setTimeStretch(factor, sharpen, mono);
 
     updateMenuStates();
@@ -3014,6 +3029,7 @@ MainWindow::playSharpenToggled()
     playSpeedChanged(m_playSpeed->value());
 }
 
+#ifndef HAVE_RUBBERBAND
 void
 MainWindow::playMonoToggled()
 {
@@ -3024,6 +3040,7 @@ MainWindow::playMonoToggled()
 
     playSpeedChanged(m_playSpeed->value());
 }    
+#endif
 
 void
 MainWindow::speedUpPlayback()
@@ -3288,8 +3305,10 @@ MainWindow::mouseEnteredWidget()
         contextHelpChanged(tr("Adjust the master playback speed"));
     } else if (w == m_playSharpen && w->isEnabled()) {
         contextHelpChanged(tr("Toggle transient sharpening for playback time scaling"));
+#ifndef HAVE_RUBBERBAND
     } else if (w == m_playMono && w->isEnabled()) {
         contextHelpChanged(tr("Toggle mono mode for playback time scaling"));
+#endif
     }
 }
 
