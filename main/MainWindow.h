@@ -31,6 +31,7 @@
 #include "framework/SVFileReader.h"
 #include "data/fileio/FileFinder.h"
 #include "data/fileio/FileSource.h"
+#include "widgets/LayerTreeDialog.h"
 #include <map>
 
 class Document;
@@ -195,7 +196,7 @@ protected:
     bool                     m_prevSolo;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
-    QPointer<QTreeView>      m_layerTreeView;
+    QPointer<LayerTreeDialog>   m_layerTreeDialog;
 
     KeyReference            *m_keyReference;
 

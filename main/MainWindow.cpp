@@ -41,7 +41,7 @@
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
 #include "widgets/IconLoader.h"
-#include "widgets/LayerTree.h"
+#include "widgets/LayerTreeDialog.h"
 #include "widgets/ListInputDialog.h"
 #include "widgets/SubdividingMenu.h"
 #include "widgets/NotifyingPushButton.h"
@@ -133,7 +133,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_ffwdAction(0),
     m_rwdAction(0),
     m_preferencesDialog(0),
-    m_layerTreeView(0),
+    m_layerTreeDialog(0),
     m_keyReference(new KeyReference())
 {
     setWindowTitle(tr("Sonic Visualiser"));
@@ -285,7 +285,7 @@ MainWindow::~MainWindow()
 {
     delete m_keyReference;
     delete m_preferencesDialog;
-    delete m_layerTreeView;
+    delete m_layerTreeDialog;
     Profiles::getInstance()->dump();
 }
 
@@ -818,8 +818,8 @@ MainWindow::setupViewMenu()
 
     menu->addSeparator();
 
-    action = new QAction(tr("Show La&yer Hierarchy"), this);
-    action->setShortcut(tr("H"));
+    action = new QAction(tr("Show La&yer Summary"), this);
+    action->setShortcut(tr("Y"));
     action->setStatusTip(tr("Open a window displaying the hierarchy of panes and layers in this session"));
     connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
     m_keyReference->registerShortcut(action);
@@ -2521,9 +2521,9 @@ MainWindow::closeEvent(QCloseEvent *e)
         m_preferencesDialog->applicationClosing(false);
     }
 
-    if (m_layerTreeView &&
-        m_layerTreeView->isVisible()) {
-        delete m_layerTreeView;
+    if (m_layerTreeDialog &&
+        m_layerTreeDialog->isVisible()) {
+        delete m_layerTreeDialog;
     }
 
     closeSession();
@@ -2877,6 +2877,21 @@ MainWindow::addLayer()
     std::vector<Model *> candidateInputModels =
         m_document->getTransformerInputModels();
 
+    Model *defaultInputModel = 0;
+    for (int j = 0; j < pane->getLayerCount(); ++j) {
+        Layer *layer = pane->getLayer(j);
+        if (!layer) continue;
+        Model *model = layer->getModel();
+        if (!model) continue;
+        for (size_t k = 0; k < candidateInputModels.size(); ++k) {
+            if (candidateInputModels[k] == model) {
+                defaultInputModel = model;
+                break;
+            }
+        }
+        if (defaultInputModel) break;
+    }
+    
     size_t startFrame = 0, duration = 0;
     size_t endFrame = 0;
     m_viewManager->getSelection().getExtents(startFrame, endFrame);
@@ -2886,6 +2901,7 @@ MainWindow::addLayer()
     Model *inputModel = factory->getConfigurationForTransformer
         (transform,
          candidateInputModels,
+         defaultInputModel,
          context,
          configurationXml,
          m_playSource,
@@ -3255,20 +3271,14 @@ MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
 void
 MainWindow::showLayerTree()
 {
-    if (!m_layerTreeView.isNull()) {
-        m_layerTreeView->show();
-        m_layerTreeView->raise();
+    if (!m_layerTreeDialog.isNull()) {
+        m_layerTreeDialog->show();
+        m_layerTreeDialog->raise();
         return;
     }
 
-    //!!! should use an actual dialog class
-        
-    m_layerTreeView = new QTreeView();
-    LayerTreeModel *tree = new LayerTreeModel(m_paneStack);
-    m_layerTreeView->resize(500, 300); //!!!
-    m_layerTreeView->setModel(tree);
-    m_layerTreeView->expandAll();
-    m_layerTreeView->show();
+    m_layerTreeDialog = new LayerTreeDialog(m_paneStack);
+    m_layerTreeDialog->show();
 }
 
 void
