@@ -24,6 +24,7 @@
 #include "data/model/SparseOneDimensionalModel.h"
 #include "data/model/NoteModel.h"
 #include "data/model/Labeller.h"
+#include "data/osc/OSCQueue.h"
 #include "framework/Document.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
