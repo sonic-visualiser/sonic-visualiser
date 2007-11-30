@@ -266,8 +266,8 @@ main(int argc, char **argv)
     qRegisterMetaType<size_t>("size_t");
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow gui(audioOutput, oscSupport);
-    application.setMainWindow(&gui);
+    MainWindow *gui = new MainWindow(audioOutput, oscSupport);
+    application.setMainWindow(gui);
 
     QDesktopWidget *desktop = QApplication::desktop();
     QRect available = desktop->availableGeometry();
@@ -280,18 +280,18 @@ main(int argc, char **argv)
     QSettings settings;
     settings.beginGroup("MainWindow");
     QSize size = settings.value("size", QSize(width, height)).toSize();
-    gui.resize(size);
+    gui->resize(size);
     if (settings.contains("position")) {
-        gui.move(settings.value("position").toPoint());
+        gui->move(settings.value("position").toPoint());
     }
     settings.endGroup();
     
-    gui.show();
+    gui->show();
 
     // The MainWindow class seems to have trouble dealing with this if
     // it tries to adapt to this preference before the constructor is
     // complete.  As a lazy hack, apply it explicitly from here
-    gui.preferenceChanged("Property Box Layout");
+    gui->preferenceChanged("Property Box Layout");
 
     bool haveSession = false;
     bool haveMainModel = false;
@@ -308,7 +308,7 @@ main(int argc, char **argv)
 
         if (path.endsWith("sv")) {
             if (!haveSession) {
-                status = gui.openSessionFile(path);
+                status = gui->openSessionFile(path);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveSession = true;
                     haveMainModel = true;
@@ -320,24 +320,24 @@ main(int argc, char **argv)
         }
         if (status != MainWindow::FileOpenSucceeded) {
             if (!haveMainModel) {
-                status = gui.open(path, MainWindow::ReplaceMainModel);
+                status = gui->open(path, MainWindow::ReplaceMainModel);
                 if (status == MainWindow::FileOpenSucceeded) {
                     haveMainModel = true;
                 }
             } else {
                 if (haveSession && !havePriorCommandLineModel) {
-                    status = gui.open(path, MainWindow::AskUser);
+                    status = gui->open(path, MainWindow::AskUser);
                     if (status == MainWindow::FileOpenSucceeded) {
                         havePriorCommandLineModel = true;
                     }
                 } else {
-                    status = gui.open(path, MainWindow::CreateAdditionalModel);
+                    status = gui->open(path, MainWindow::CreateAdditionalModel);
                 }
             }
         }
         if (status == MainWindow::FileOpenFailed) {
 	    QMessageBox::critical
-                (&gui, QMessageBox::tr("Failed to open file"),
+                (gui, QMessageBox::tr("Failed to open file"),
                  QMessageBox::tr("File or URL \"%1\" could not be opened").arg(path));
         }
     }
@@ -359,10 +359,11 @@ main(int argc, char **argv)
     }
 */
     int rv = application.exec();
-//    std::cerr << "application.exec() returned " << rv << std::endl;
+    std::cerr << "application.exec() returned " << rv << std::endl;
 
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
+
     application.releaseMainWindow();
 
 #ifdef HAVE_FFTW3F
@@ -374,6 +375,8 @@ main(int argc, char **argv)
         fftwf_free(cwisdom);
     }
 #endif
+
+    delete gui;
 
     return rv;
 }
