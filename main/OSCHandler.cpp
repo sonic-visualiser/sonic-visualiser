@@ -1,3 +1,17 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*-  vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Sonic Visualiser
+    An audio file viewer and annotation editor.
+    Centre for Digital Music, Queen Mary, University of London.
+    This file copyright 2006-2007 Chris Cannam and QMUL.
+    
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
 
 #include "MainWindow.h"
 #include "data/osc/OSCQueue.h"
@@ -12,7 +26,7 @@
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "framework/Document.h"
 #include "data/fileio/WavFileWriter.h"
-#include "plugin/transform/ModelTransformerFactory.h"
+#include "plugin/transform/TransformFactory.h"
 #include "widgets/Fader.h"
 #include "widgets/AudioDial.h"
 
@@ -482,18 +496,17 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
 
-            TransformId transform = message.getArg(0).toString();
+            TransformId transformId = message.getArg(0).toString();
 
+	    Transform transform = TransformFactory::getInstance()->
+                getDefaultTransformFor(transformId);
+	    
             Layer *newLayer = m_document->createDerivedLayer
-                (transform,
-                 getMainModel(),
-                 ModelTransformerFactory::getInstance()->getDefaultContextForTransformer
-                 (transform, getMainModel()),
-                 "");
+                (transform, getMainModel());
 
             if (newLayer) {
                 m_document->addLayerToView(pane, newLayer);
-                m_recentTransforms.add(transform);
+                m_recentTransforms.add(transformId);
                 m_paneStack->setCurrentLayer(pane, newLayer);
             }
         }

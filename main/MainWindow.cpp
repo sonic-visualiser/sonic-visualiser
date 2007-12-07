@@ -911,7 +911,7 @@ MainWindow::setupPaneAndLayerMenus()
     };
 
     std::vector<Model *> models;
-    if (m_document) models = m_document->getTransformerInputModels(); //!!! not well named for this!
+    if (m_document) models = m_document->getTransformInputModels();
     bool plural = (models.size() > 1);
     if (models.empty()) {
         models.push_back(getMainModel()); // probably 0
@@ -1184,7 +1184,7 @@ MainWindow::setupTransformsMenu()
    }
 
     TransformList transforms =
-	TransformFactory::getInstance()->getAllTransforms();
+	TransformFactory::getInstance()->getAllTransformDescriptions();
 
     vector<QString> types =
         TransformFactory::getInstance()->getAllTransformTypes();
@@ -2734,7 +2734,7 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     if (suggestedModel) {
 
         // check its validity
-        std::vector<Model *> inputModels = m_document->getTransformerInputModels();
+        std::vector<Model *> inputModels = m_document->getTransformInputModels();
         for (size_t j = 0; j < inputModels.size(); ++j) {
             if (inputModels[j] == suggestedModel) {
                 model = suggestedModel;
@@ -2855,11 +2855,9 @@ MainWindow::addLayer()
 	return;
     }
 
-    TransformId transform = i->second;
-    ModelTransformerFactory *factory = ModelTransformerFactory::getInstance();
-
-    QString configurationXml;
-
+    //!!! want to do something like this, but it's not supported in
+    //ModelTransformerFactory yet
+    /*
     int channel = -1;
     // pick up the default channel from any existing layers on the same pane
     for (int j = 0; j < pane->getLayerCount(); ++j) {
@@ -2869,15 +2867,18 @@ MainWindow::addLayer()
 	    break;
 	}
     }
+    */
 
     // We always ask for configuration, even if the plugin isn't
     // supposed to be configurable, because we need to let the user
     // change the execution context (block size etc).
 
-    PluginTransformer::ExecutionContext context(channel);
+    QString transformId = i->second;
+    Transform transform = TransformFactory::getInstance()->
+        getDefaultTransformFor(transformId);
 
     std::vector<Model *> candidateInputModels =
-        m_document->getTransformerInputModels();
+        m_document->getTransformInputModels();
 
     Model *defaultInputModel = 0;
     for (int j = 0; j < pane->getLayerCount(); ++j) {
@@ -2900,29 +2901,25 @@ MainWindow::addLayer()
     if (endFrame > startFrame) duration = endFrame - startFrame;
     else startFrame = 0;
 
-    Model *inputModel = factory->getConfigurationForTransformer
+    ModelTransformer::Input input = ModelTransformerFactory::getInstance()->
+        getConfigurationForTransform
         (transform,
          candidateInputModels,
          defaultInputModel,
-         context,
-         configurationXml,
          m_playSource,
          startFrame,
          duration);
 
-    if (!inputModel) return;
+    if (!input.getModel()) return;
 
-//    std::cerr << "MainWindow::addLayer: Input model is " << inputModel << " \"" << inputModel->objectName().toStdString() << "\"" << std::endl;
+//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName().toStdString() << "\"" << std::endl;
 
-    Layer *newLayer = m_document->createDerivedLayer(transform,
-                                                     inputModel,
-                                                     context,
-                                                     configurationXml);
+    Layer *newLayer = m_document->createDerivedLayer(transform, input);
 
     if (newLayer) {
         m_document->addLayerToView(pane, newLayer);
-        m_document->setChannel(newLayer, context.channel);
-        m_recentTransforms.add(transform);
+        m_document->setChannel(newLayer, input.getChannel());
+        m_recentTransforms.add(transformId);
         m_paneStack->setCurrentLayer(pane, newLayer);
     }
 
