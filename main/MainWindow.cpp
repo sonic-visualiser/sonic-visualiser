@@ -603,6 +603,7 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
 
     QMenu *numberingMenu = menu->addMenu(tr("Number New Instants with"));
+    numberingMenu->setTearOffEnabled(true);
     QActionGroup *numberingGroup = new QActionGroup(this);
 
     Labeller::TypeNameMap types = m_labeller->getTypeNames();
@@ -1116,6 +1117,23 @@ MainWindow::setupPaneAndLayerMenus()
     }
 
     menu = m_paneMenu;
+    menu->addSeparator();
+
+    action = new QAction(tr("Switch to Previous Pane"), this);
+    action->setShortcut(tr("["));
+    action->setStatusTip(tr("Make the next pane up in the pane stack current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(previousPane()));
+    connect(this, SIGNAL(canSelectPreviousPane(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    action = new QAction(tr("Switch to Next Pane"), this);
+    action->setShortcut(tr("]"));
+    action->setStatusTip(tr("Make the next pane down in the pane stack current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(nextPane()));
+    connect(this, SIGNAL(canSelectNextPane(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
 
     menu->addSeparator();
 
@@ -1148,6 +1166,25 @@ MainWindow::setupPaneAndLayerMenus()
 
     setupExistingLayersMenus();
 
+/*!!! These don't work correctly -- fix or omit
+    menu->addSeparator();
+
+    action = new QAction(tr("Switch to Previous Layer"), this);
+    action->setShortcut(tr("{"));
+    action->setStatusTip(tr("Make the previous layer in the pane current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(previousLayer()));
+    connect(this, SIGNAL(canSelectPreviousLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    action = new QAction(tr("Switch to Next Layer"), this);
+    action->setShortcut(tr("}"));
+    action->setStatusTip(tr("Make the next layer in the pane current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(nextLayer()));
+    connect(this, SIGNAL(canSelectNextLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+*/
     m_rightButtonLayerMenu->addSeparator();
     menu->addSeparator();
 

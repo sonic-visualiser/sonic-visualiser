@@ -30,6 +30,7 @@
 #include <QLineEdit>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSpinBox>
 
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
@@ -156,6 +157,18 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     connect(bgMode, SIGNAL(currentIndexChanged(int)),
             this, SLOT(backgroundModeChanged(int)));
 
+    QSpinBox *fontSize = new QSpinBox;
+    int fs = prefs->getPropertyRangeAndValue("View Font Size", &min, &max,
+                                             &deflt);
+    fontSize->setMinimum(min);
+    fontSize->setMaximum(max);
+    fontSize->setSuffix(" pt");
+    fontSize->setSingleStep(1);
+    fontSize->setValue(fs);
+
+    connect(fontSize, SIGNAL(valueChanged(int)),
+            this, SLOT(viewFontSizeChanged(int)));
+
     // General tab
 
     QFrame *frame = new QFrame;
@@ -174,6 +187,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                                                 ("Background Mode"))),
                        row, 0);
     subgrid->addWidget(bgMode, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("View Font Size"))),
+                       row, 0);
+    subgrid->addWidget(fontSize, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Resample On Load"))),
@@ -315,6 +333,13 @@ PreferencesDialog::backgroundModeChanged(int mode)
 }
 
 void
+PreferencesDialog::viewFontSizeChanged(int sz)
+{
+    m_viewFontSize = sz;
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -335,6 +360,7 @@ PreferencesDialog::applyClicked()
     prefs->setResampleOnLoad(m_resampleOnLoad);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
+    prefs->setViewFontSize(m_viewFontSize);
 
     m_applyButton->setEnabled(false);
 
