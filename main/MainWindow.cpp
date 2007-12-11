@@ -3119,6 +3119,25 @@ MainWindow::restoreNormalPlayback()
 }
 
 void
+MainWindow::currentPaneChanged(Pane *pane)
+{
+    if (!pane || !m_panLayer) return;
+    for (int i = pane->getLayerCount(); i > 0; ) {
+        --i;
+        Layer *layer = pane->getLayer(i);
+        if (LayerFactory::getInstance()->getLayerType(layer) ==
+            LayerFactory::Waveform) {
+            RangeSummarisableTimeValueModel *tvm = 
+                dynamic_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
+            if (tvm) {
+                m_panLayer->setModel(tvm);
+                return;
+            }
+        }
+    }
+}
+
+void
 MainWindow::updateVisibleRangeDisplay(Pane *p) const
 {
     if (!getMainModel() || !p) {
