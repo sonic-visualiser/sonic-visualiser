@@ -44,6 +44,7 @@ protected slots:
     void resampleOnLoadChanged(int state);
     void tempDirRootChanged(QString root);
     void backgroundModeChanged(int mode);
+    void viewFontSizeChanged(int sz);
 
     void tempDirButtonClicked();
 
@@ -65,6 +66,7 @@ protected:
     bool m_resampleOnLoad;
     QString m_tempDirRoot;
     int m_backgroundMode;
+    int m_viewFontSize;
 
     bool m_changesOnRestart;
 };
