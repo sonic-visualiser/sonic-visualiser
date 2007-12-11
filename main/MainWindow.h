@@ -139,6 +139,8 @@ protected slots:
     virtual void playSoloToggled();
     virtual void alignToggled();
 
+    virtual void currentPaneChanged(Pane *);
+
     virtual void speedUpPlayback();
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
