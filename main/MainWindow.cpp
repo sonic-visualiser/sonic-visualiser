@@ -3121,6 +3121,8 @@ MainWindow::restoreNormalPlayback()
 void
 MainWindow::currentPaneChanged(Pane *pane)
 {
+    MainWindowBase::currentPaneChanged(pane);
+
     if (!pane || !m_panLayer) return;
     for (int i = pane->getLayerCount(); i > 0; ) {
         --i;
