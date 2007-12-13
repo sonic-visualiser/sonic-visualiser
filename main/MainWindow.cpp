@@ -625,7 +625,7 @@ MainWindow::setupEditMenu()
             QMenu *cycleMenu = numberingMenu->addMenu(tr("Cycle size"));
             QActionGroup *cycleGroup = new QActionGroup(this);
 
-            int cycles[] = { 2, 3, 4, 5, 6, 7, 8, 10, 12, 16 };
+            int cycles[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 16 };
             for (int i = 0; i < int(sizeof(cycles)/sizeof(cycles[0])); ++i) {
                 action = new QAction(QString("%1").arg(cycles[i]), this);
                 connect(action, SIGNAL(triggered()), this, SLOT(setInstantsCounterCycle()));
