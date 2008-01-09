@@ -1327,6 +1327,20 @@ MainWindow::setupTransformsMenu()
         }
     }
 
+    // Names should only be duplicated here if they have the same
+    // plugin name, output name and maker but are in different library
+    // .so names -- that won't happen often I hope
+    std::map<QString, QString> idNameSonameMap;
+    std::set<QString> seenNames, duplicateNames;
+    for (unsigned int i = 0; i < transforms.size(); ++i) {
+        QString name = transforms[i].name;
+        if (seenNames.find(name) != seenNames.end()) {
+            duplicateNames.insert(name);
+        } else {
+            seenNames.insert(name);
+        }
+    }
+
     for (unsigned int i = 0; i < transforms.size(); ++i) {
 	
 	QString name = transforms[i].name;
@@ -1345,6 +1359,16 @@ MainWindow::setupTransformsMenu()
 
         QString pluginName = name.section(": ", 0, 0);
         QString output = name.section(": ", 1);
+
+        if (duplicateNames.find(pluginName) != duplicateNames.end()) {
+            pluginName = QString("%1 <%2>")
+                .arg(pluginName)
+                .arg(transforms[i].identifier.section(':', 1, 1));
+            if (output == "") name = pluginName;
+            else name = QString("%1: %2")
+                .arg(pluginName)
+                .arg(output);
+        }
 
 	QAction *action = new QAction(tr("%1...").arg(name), this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
