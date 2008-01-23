@@ -77,6 +77,7 @@
     <file>icons/sv-48x48.png</file>
     <file>icons/sv-64x64.png</file>
     <file>icons/sv-128x128.png</file>
+    <file>icons/sv-splash.png</file>
     <file>samples/bass.wav</file>
     <file>samples/beep.wav</file>
     <file>samples/bounce.wav</file>
