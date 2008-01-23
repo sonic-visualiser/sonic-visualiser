@@ -202,28 +202,28 @@ protected:
 
     KeyReference            *m_keyReference;
 
-    struct PaneConfiguration {
-	PaneConfiguration(LayerFactory::LayerType _layer
+    struct LayerConfiguration {
+	LayerConfiguration(LayerFactory::LayerType _layer
 			                       = LayerFactory::TimeRuler,
-                          Model *_source = 0,
-			  int _channel = -1) :
+                           Model *_source = 0,
+                           int _channel = -1) :
 	    layer(_layer), sourceModel(_source), channel(_channel) { }
 	LayerFactory::LayerType layer;
         Model *sourceModel;
 	int channel;
     };
 
-    typedef std::map<QAction *, PaneConfiguration> PaneActionMap;
+    typedef std::map<QAction *, LayerConfiguration> PaneActionMap;
     PaneActionMap m_paneActions;
+
+    typedef std::map<QAction *, LayerConfiguration> LayerActionMap;
+    LayerActionMap m_layerActions;
 
     typedef std::map<QAction *, TransformId> TransformActionMap;
     TransformActionMap m_transformActions;
 
     typedef std::map<TransformId, QAction *> TransformActionReverseMap;
     TransformActionReverseMap m_transformActionsReverse;
-
-    typedef std::map<QAction *, LayerFactory::LayerType> LayerActionMap;
-    LayerActionMap m_layerActions;
 
     typedef std::map<QAction *, Layer *> ExistingLayerActionMap;
     ExistingLayerActionMap m_existingLayerActions;
@@ -245,7 +245,7 @@ protected:
     virtual void setupExistingLayersMenus();
     virtual void setupToolbars();
 
-    virtual void addPane(const PaneConfiguration &configuration, QString text);
+    virtual void addPane(const LayerConfiguration &configuration, QString text);
 
     virtual void closeEvent(QCloseEvent *e);
     virtual bool checkSaveModified();

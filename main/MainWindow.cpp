@@ -859,7 +859,7 @@ MainWindow::setupPaneAndLayerMenus()
     action->setStatusTip(tr("Add a new pane containing only a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
     connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
-    m_paneActions[action] = PaneConfiguration(LayerFactory::TimeRuler);
+    m_paneActions[action] = LayerConfiguration(LayerFactory::TimeRuler);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
@@ -895,7 +895,7 @@ MainWindow::setupPaneAndLayerMenus()
 
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_layerActions[action] = type;
+	m_layerActions[action] = LayerConfiguration(type);
 	menu->addAction(action);
         m_rightButtonLayerMenu->addAction(action);
     }
@@ -1046,13 +1046,13 @@ MainWindow::setupPaneAndLayerMenus()
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_paneActions[action] = PaneConfiguration(type);
+                            m_paneActions[action] = LayerConfiguration(type);
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_layerActions[action] = type;
+                            m_layerActions[action] = LayerConfiguration(type);
                         }
                         if (shortcutText != "") {
                             m_keyReference->registerShortcut(action);
@@ -1102,13 +1102,14 @@ MainWindow::setupPaneAndLayerMenus()
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
                             m_paneActions[action] =
-                                PaneConfiguration(type, model, c - 1);
+                                LayerConfiguration(type, model, c - 1);
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_layerActions[action] = type;
+                            m_layerActions[action] =
+                                LayerConfiguration(type, model, c - 1);
                         }
 
                         submenu->addAction(action);
@@ -1153,7 +1154,7 @@ MainWindow::setupPaneAndLayerMenus()
     action->setStatusTip(tr("Add a new layer showing a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
     connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-    m_layerActions[action] = LayerFactory::TimeRuler;
+    m_layerActions[action] = LayerConfiguration(LayerFactory::TimeRuler);
     menu->addAction(action);
 
     menu->addSeparator();
@@ -2586,11 +2587,6 @@ MainWindow::closeEvent(QCloseEvent *e)
         m_preferencesDialog->applicationClosing(false);
     }
 
-    if (m_layerTreeDialog &&
-        m_layerTreeDialog->isVisible()) {
-        delete m_layerTreeDialog;
-    }
-
     closeSession();
 
     e->accept();
@@ -2760,7 +2756,7 @@ MainWindow::addPane()
 }
 
 void
-MainWindow::addPane(const PaneConfiguration &configuration, QString text)
+MainWindow::addPane(const LayerConfiguration &configuration, QString text)
 {
     CommandHistory::getInstance()->startCompoundOperation(text, true);
 
@@ -2891,7 +2887,7 @@ MainWindow::addLayer()
 	    return;
 	}
 
-	LayerFactory::LayerType type = i->second;
+	LayerFactory::LayerType type = i->second.layer;
 	
 	LayerFactory::LayerTypeSet emptyTypes =
 	    LayerFactory::getInstance()->getValidEmptyLayerTypes();
@@ -2907,7 +2903,19 @@ MainWindow::addLayer()
 
 	} else {
 
-	    newLayer = m_document->createMainModelLayer(type);
+//	    newLayer = m_document->createMainModelLayer(type);
+            newLayer = m_document->createLayer(type);
+            if (m_document->isKnownModel(i->second.sourceModel)) {
+                m_document->setChannel(newLayer, i->second.channel);
+                m_document->setModel(newLayer, i->second.sourceModel);
+            } else {
+                std::cerr << "WARNING: MainWindow::addLayer: unknown model "
+                          << i->second.sourceModel
+                          << " (\""
+                          << i->second.sourceModel->objectName().toStdString()
+                          << "\") in layer action map"
+                          << std::endl;
+            }
 	}
 
         if (newLayer) {
@@ -3361,6 +3369,7 @@ MainWindow::showLayerTree()
     }
 
     m_layerTreeDialog = new LayerTreeDialog(m_paneStack);
+    m_layerTreeDialog->setAttribute(Qt::WA_DeleteOnClose); // see below
     m_layerTreeDialog->show();
 }
 

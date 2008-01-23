@@ -281,9 +281,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                               << "type " << str.toStdString() << std::endl;
                 } else {
 
-                    PaneConfiguration configuration(type,
-                                                    getMainModel(),
-                                                    channel);
+                    LayerConfiguration configuration(type,
+                                                     getMainModel(),
+                                                     channel);
                     
                     addPane(configuration,
                             tr("Add %1 Pane")
