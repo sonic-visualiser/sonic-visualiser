@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="640px"
+   height="480px"
+   id="svg1952"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/studio/code/sonic-visualiser/sv/icons"
+   sodipodi:docname="sv-splash.svg"
+   inkscape:export-filename="/home/studio/code/sonic-visualiser/sv/icons/sv-splash.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs1954" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="320"
+     inkscape:cy="240"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     showgrid="true"
+     inkscape:window-width="1101"
+     inkscape:window-height="969"
+     inkscape:window-x="169"
+     inkscape:window-y="26" />
+  <metadata
+     id="metadata1957">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <rect
+       style="fill:white;fill-opacity:1;stroke:black;stroke-width:5.70384979;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3849"
+       width="578.29614"
+       height="316.29614"
+       x="28.851925"
+       y="57.851925" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#d45500;stroke-width:7.58643961px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 226.71778,185.52035 C 407.22042,185.52035 407.22042,185.52035 407.22042,185.52035"
+       id="path4036" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:10.28721237;stroke-linecap:butt;stroke-linejoin:miter;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:1.39999998;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 228.89103,185.52402 C 255.18599,185.52402 258.59857,185.60302 258.59857,185.60302 C 270.76871,133.56701 271.36497,127.54591 274.66485,178.25451 C 279.70514,266.89367 284.18048,220.02667 290.61951,183.64501 C 302.75722,68.043355 303.99332,111.5005 306.56423,135.80647 C 316.45027,256.01216 316.0237,282.95104 321.30811,243.02856 C 325.23523,213.36022 336.92287,88.29917 339.01862,122.7736 C 353.59512,259.79486 354.02613,251.94928 358.50413,216.49781 C 373.27326,77.656444 368.76189,188.69998 377.97144,186.27485 C 404.04172,186.27485 403.59893,185.60302 403.59893,185.60302 L 407.00661,185.60302"
+       id="path3783"
+       sodipodi:nodetypes="cccccsccccc" />
+    <rect
+       style="fill:none;stroke:#d45500;stroke-width:15.17287922;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3775"
+       width="191.29092"
+       height="187.44695"
+       x="223.48573"
+       y="91.460907" />
+    <text
+       xml:space="preserve"
+       style="font-size:32px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Korataki"
+       x="59"
+       y="330"
+       id="text2049"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2051"
+         x="59"
+         y="330">SONIC VISUALISER</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Korataki"
+       x="84.300003"
+       y="352"
+       id="text2053"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan2055"
+         x="84.300003"
+         y="352">QUEEN MARY, UNIVERSITY OF LONDON</tspan></text>
+  </g>
+</svg>

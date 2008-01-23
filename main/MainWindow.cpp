@@ -921,9 +921,11 @@ MainWindow::setupPaneAndLayerMenus()
     for (unsigned int i = 0;
 	 i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
 
-	for (int menuType = 0; menuType <= 1; ++menuType) { // pane, layer
+        const int paneMenuType = 0, layerMenuType = 1;
 
-	    if (menuType == 0) menu = m_paneMenu;
+	for (int menuType = paneMenuType; menuType <= layerMenuType; ++menuType) {
+
+	    if (menuType == paneMenuType) menu = m_paneMenu;
 	    else menu = m_layerMenu;
 
 	    QMenu *submenu = 0;
@@ -938,7 +940,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::Waveform:
                 icon = il.load("waveform");
                 mainText = tr("Add &Waveform");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("W");
                     tipText = tr("Add a new pane showing a waveform view");
                 } else {
@@ -950,7 +952,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::Spectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Spectro&gram");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("G");
                     tipText = tr("Add a new pane showing a spectrogram");
                 } else {
@@ -961,7 +963,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::MelodicRangeSpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add &Melodic Range Spectrogram");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("M");
                     tipText = tr("Add a new pane showing a spectrogram set up for an overview of note pitches");
                 } else {
@@ -972,7 +974,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::PeakFrequencySpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Pea&k Frequency Spectrogram");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("K");
                     tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
                 } else {
@@ -983,7 +985,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::Spectrum:
                 icon = il.load("spectrum");
                 mainText = tr("Add Spectr&um");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("U");
                     tipText = tr("Add a new pane showing a frequency spectrum");
                 } else {
@@ -995,11 +997,11 @@ MainWindow::setupPaneAndLayerMenus()
             }
 
             std::vector<Model *> candidateModels;
-            if (menuType == 0) {
+//            if (menuType == paneMenuType) {
                 candidateModels = models;
-            } else {
-                candidateModels.push_back(0);
-            }
+//            } else {
+//                candidateModels.push_back(0);
+//            }
             
             for (std::vector<Model *>::iterator mi =
                      candidateModels.begin();
@@ -1024,22 +1026,22 @@ MainWindow::setupPaneAndLayerMenus()
                     bool isDefault = (c == 0);
                     bool isOnly = (isDefault && (channels == 1));
 
-                    if (menuType == 1) {
-                        if (isDefault) isOnly = true;
-                        else continue;
-                    }
+//                    if (menuType == layerMenuType) {
+//                        if (isDefault) isOnly = true;
+//                        else continue;
+//                    }
 
-                    if (isOnly && (!plural || menuType == 1)) {
+                    if (isOnly && (!plural /*|| menuType == layerMenuType*/)) {
 
-                        if (menuType == 1 && type != LayerFactory::Waveform) {
-                            action = new QAction(mainText, this);
-                        } else {
+//                        if (menuType == layerMenuType && type != LayerFactory::Waveform) {
+//                            action = new QAction(mainText, this);
+//                        } else {
                             action = new QAction(icon, mainText, this);
-                        }                            
+//                        }                            
 
                         action->setShortcut(shortcutText);
                         action->setStatusTip(tipText);
-                        if (menuType == 0) {
+                        if (menuType == paneMenuType) {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
@@ -1094,7 +1096,7 @@ MainWindow::setupPaneAndLayerMenus()
 
                         action->setStatusTip(tipText);
 
-                        if (menuType == 0) {
+                        if (menuType == paneMenuType) {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
@@ -3445,7 +3447,7 @@ MainWindow::about()
     QString aboutText;
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
-    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for<br>semantic music analysis and annotation.</p>");
+    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>");
     aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
@@ -3527,11 +3529,11 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p>Sonic Visualiser Copyright &copy; 2005 - 2007 Chris Cannam and<br>"
+        "<p>Sonic Visualiser Copyright &copy; 2005 - 2008 Chris Cannam and "
         "Queen Mary, University of London.</p>"
-        "<p>This program is free software; you can redistribute it and/or<br>"
-        "modify it under the terms of the GNU General Public License as<br>"
-        "published by the Free Software Foundation; either version 2 of the<br>"
+        "<p>This program is free software; you can redistribute it and/or "
+        "modify it under the terms of the GNU General Public License as "
+        "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</p>";
     
