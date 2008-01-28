@@ -160,6 +160,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     QSpinBox *fontSize = new QSpinBox;
     int fs = prefs->getPropertyRangeAndValue("View Font Size", &min, &max,
                                              &deflt);
+    m_viewFontSize = fs;
     fontSize->setMinimum(min);
     fontSize->setMaximum(max);
     fontSize->setSuffix(" pt");
