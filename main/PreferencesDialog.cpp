@@ -145,6 +145,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
             this, SLOT(tempDirButtonClicked()));
     tempDirButton->setFixedSize(QSize(24, 24));
 
+    QCheckBox *showSplash = new QCheckBox;
+    m_showSplash = prefs->getShowSplash();
+    showSplash->setCheckState(m_showSplash ? Qt::Checked : Qt::Unchecked);
+    connect(showSplash, SIGNAL(stateChanged(int)),
+            this, SLOT(showSplashChanged(int)));
+
+#ifndef Q_WS_MAC
+
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
                                              &deflt);
@@ -156,6 +164,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
     connect(bgMode, SIGNAL(currentIndexChanged(int)),
             this, SLOT(backgroundModeChanged(int)));
+#endif
 
     QSpinBox *fontSize = new QSpinBox;
     int fs = prefs->getPropertyRangeAndValue("View Font Size", &min, &max,
@@ -195,6 +204,18 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     subgrid->addWidget(fontSize, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Show Splash Screen"))),
+                       row, 0);
+    subgrid->addWidget(showSplash, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Temporary Directory Root"))),
+                       row, 0);
+    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
+    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
+    row++;
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Resample On Load"))),
                        row, 0);
     subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
@@ -203,13 +224,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                                                 ("Resample Quality"))),
                        row, 0);
     subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Temporary Directory Root"))),
-                       row, 0);
-    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
-    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
-    row++;
 
     subgrid->setRowStretch(row, 10);
     
@@ -307,6 +321,14 @@ PreferencesDialog::resampleOnLoadChanged(int state)
 }
 
 void
+PreferencesDialog::showSplashChanged(int state)
+{
+    m_showSplash = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::tempDirRootChanged(QString r)
 {
     m_tempDirRoot = r;
@@ -359,6 +381,7 @@ PreferencesDialog::applyClicked()
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setResampleQuality(m_resampleQuality);
     prefs->setResampleOnLoad(m_resampleOnLoad);
+    prefs->setShowSplash(m_showSplash);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
     prefs->setViewFontSize(m_viewFontSize);
