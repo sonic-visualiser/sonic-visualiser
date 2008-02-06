@@ -2903,20 +2903,24 @@ MainWindow::addLayer()
 
 	} else {
 
-//	    newLayer = m_document->createMainModelLayer(type);
-            newLayer = m_document->createLayer(type);
-            if (m_document->isKnownModel(i->second.sourceModel)) {
-                m_document->setChannel(newLayer, i->second.channel);
-                m_document->setModel(newLayer, i->second.sourceModel);
+            if (!i->second.sourceModel) {
+                // e.g. time ruler
+                newLayer = m_document->createMainModelLayer(type);
             } else {
-                std::cerr << "WARNING: MainWindow::addLayer: unknown model "
-                          << i->second.sourceModel
-                          << " (\""
-                          << i->second.sourceModel->objectName().toStdString()
-                          << "\") in layer action map"
-                          << std::endl;
+                newLayer = m_document->createLayer(type);
+                if (m_document->isKnownModel(i->second.sourceModel)) {
+                    m_document->setChannel(newLayer, i->second.channel);
+                    m_document->setModel(newLayer, i->second.sourceModel);
+                } else {
+                    std::cerr << "WARNING: MainWindow::addLayer: unknown model "
+                              << i->second.sourceModel
+                              << " (\""
+                              << (i->second.sourceModel ? i->second.sourceModel->objectName().toStdString() : "")
+                              << "\") in layer action map"
+                              << std::endl;
+                }
             }
-	}
+        }
 
         if (newLayer) {
             m_document->addLayerToView(pane, newLayer);
