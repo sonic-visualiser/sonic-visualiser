@@ -234,12 +234,13 @@ main(int argc, char **argv)
     QSplashScreen splash(pixmap);
 
     QSettings settings;
-    settings.beginGroup("MainWindow");
-    
-    if (settings.value("showsplash", true).toBool()) {
+
+    settings.beginGroup("Preferences");
+    if (settings.value("show-splash", true).toBool()) {
         splash.show();
         application.processEvents();
     }
+    settings.endGroup();
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
@@ -289,6 +290,7 @@ main(int argc, char **argv)
     if (height < 450) height = available.height() * 2 / 3;
     if (width > height * 2) width = height * 2;
 
+    settings.beginGroup("MainWindow");
     QSize size = settings.value("size", QSize(width, height)).toSize();
     gui->resize(size);
     if (settings.contains("position")) {
