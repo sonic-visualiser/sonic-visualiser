@@ -133,6 +133,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_prevSolo(false),
     m_ffwdAction(0),
     m_rwdAction(0),
+    m_playControlsSpacer(0),
+    m_playControlsWidth(0),
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_keyReference(new KeyReference())
@@ -252,25 +254,50 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 #endif
     settings.endGroup();
 
+    m_playControlsSpacer = new QFrame;
+
     layout->setSpacing(4);
+#ifndef HAVE_RUBBERBAND
+    layout->addWidget(scroll, 0, 0, 1, 7);
+    layout->addWidget(m_overview, 1, 1);
+    layout->addWidget(m_playControlsSpacer, 1, 2);
+    layout->addWidget(m_fader, 1, 3);
+    layout->addWidget(m_playSpeed, 1, 4);
+    layout->addWidget(m_playSharpen, 1, 5);
+    layout->addWidget(m_playMono, 1, 6);
+#else
     layout->addWidget(scroll, 0, 0, 1, 5);
-    layout->addWidget(m_overview, 1, 0);
-    layout->addWidget(m_fader, 1, 1);
-    layout->addWidget(m_playSpeed, 1, 2);
-#ifndef HAVE_RUBBERBAND
-    layout->addWidget(m_playSharpen, 1, 3);
-    layout->addWidget(m_playMono, 1, 4);
+    layout->addWidget(m_overview, 1, 1);
+    layout->addWidget(m_playControlsSpacer, 1, 2);
+    layout->addWidget(m_playSpeed, 1, 3);
+    layout->addWidget(m_fader, 1, 4);
 #endif
 
-    m_paneStack->setPropertyStackMinWidth
-        (m_fader->width() + m_playSpeed->width()
+    m_playControlsWidth = 
+        m_fader->width() + m_playSpeed->width()
 #ifndef HAVE_RUBBERBAND
-         + m_playSharpen->width()
-         + m_playMono->width()
+        + m_playSharpen->width()
+        + m_playMono->width()
 #endif
-         + layout->spacing() * 4);
+        + layout->spacing() *
+#ifndef HAVE_RUBBERBAND
+        4
+#else
+        2
+#endif
+        ;
 
-    layout->setColumnStretch(0, 10);
+    layout->setColumnMinimumWidth(0, 14);
+    layout->setColumnStretch(0, 0);
+
+    m_paneStack->setPropertyStackMinWidth(m_playControlsWidth
+                                          + 2 + layout->spacing());
+    m_playControlsSpacer->setFixedSize(QSize(2, 2));
+
+    layout->setColumnStretch(1, 10);
+
+    connect(m_paneStack, SIGNAL(propertyStacksResized(int)),
+            this, SLOT(propertyStacksResized(int)));
 
     frame->setLayout(layout);
 
@@ -2733,6 +2760,20 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 }
 
 void
+MainWindow::propertyStacksResized(int width)
+{
+    std::cerr << "MainWindow::propertyStacksResized(" << width << ")" << std::endl;
+
+    if (!m_playControlsSpacer) return;
+
+    int spacerWidth = width - m_playControlsWidth - 4;
+    
+    std::cerr << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << std::endl;
+
+    m_playControlsSpacer->setFixedSize(QSize(spacerWidth, 2));
+}
+
+void
 MainWindow::addPane()
 {
     QObject *s = sender();
@@ -3014,7 +3055,7 @@ MainWindow::renameCurrentLayer()
 		 tr("New name for this layer:"),
 		 QLineEdit::Normal, layer->objectName(), &ok);
 	    if (ok) {
-		layer->setObjectName(newName);
+		layer->setPresentationName(newName);
 		setupExistingLayersMenus();
 	    }
 	}

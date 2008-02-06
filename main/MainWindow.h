@@ -121,6 +121,8 @@ protected slots:
 
     virtual void rightButtonMenuRequested(Pane *, QPoint point);
 
+    virtual void propertyStacksResized(int);
+
     virtual void addPane();
     virtual void addLayer();
     virtual void renameCurrentLayer();
@@ -199,6 +201,9 @@ protected:
 
     bool                     m_soloModified;
     bool                     m_prevSolo;
+
+    QFrame                  *m_playControlsSpacer;
+    int                      m_playControlsWidth;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<LayerTreeDialog>   m_layerTreeDialog;
