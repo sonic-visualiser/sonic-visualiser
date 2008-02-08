@@ -137,10 +137,6 @@ protected slots:
     virtual void setupRecentTransformsMenu();
 
     virtual void playSpeedChanged(int);
-#ifndef HAVE_RUBBERBAND
-    virtual void playSharpenToggled();
-    virtual void playMonoToggled();
-#endif
     virtual void playSoloToggled();
     virtual void alignToggled();
 
@@ -174,10 +170,6 @@ protected:
     Overview                *m_overview;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
-#ifndef HAVE_RUBBERBAND
-    QPushButton             *m_playSharpen;
-    QPushButton             *m_playMono;
-#endif
     WaveformLayer           *m_panLayer;
 
     bool                     m_mainMenusCreated;
