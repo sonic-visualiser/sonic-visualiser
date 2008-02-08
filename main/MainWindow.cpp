@@ -222,70 +222,21 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     IconLoader il;
 
-#ifndef HAVE_RUBBERBAND
-    m_playSharpen = new NotifyingPushButton(frame);
-    m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
-    m_playSharpen->setFixedSize(20, 20);
-    m_playSharpen->setEnabled(false);
-    m_playSharpen->setCheckable(true);
-    m_playSharpen->setChecked(false);
-    m_playSharpen->setIcon(il.load("sharpen"));
-    connect(m_playSharpen, SIGNAL(clicked()), this, SLOT(playSharpenToggled()));
-    connect(m_playSharpen, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_playSharpen, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-
-    m_playMono = new NotifyingPushButton(frame);
-    m_playMono->setToolTip(tr("Run time stretcher in mono only"));
-    m_playMono->setFixedSize(20, 20);
-    m_playMono->setEnabled(false);
-    m_playMono->setCheckable(true);
-    m_playMono->setChecked(false);
-    m_playMono->setIcon(il.load("mono"));
-    connect(m_playMono, SIGNAL(clicked()), this, SLOT(playMonoToggled()));
-    connect(m_playMono, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_playMono, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-#endif
-
     QSettings settings;
     settings.beginGroup("MainWindow");
-#ifndef HAVE_RUBBERBAND
-    m_playSharpen->setChecked(settings.value("playsharpen", true).toBool());
-    m_playMono->setChecked(settings.value("playmono", false).toBool());
-#endif
     settings.endGroup();
 
     m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(4);
-#ifndef HAVE_RUBBERBAND
-    layout->addWidget(scroll, 0, 0, 1, 7);
-    layout->addWidget(m_overview, 1, 1);
-    layout->addWidget(m_playControlsSpacer, 1, 2);
-    layout->addWidget(m_fader, 1, 3);
-    layout->addWidget(m_playSpeed, 1, 4);
-    layout->addWidget(m_playSharpen, 1, 5);
-    layout->addWidget(m_playMono, 1, 6);
-#else
     layout->addWidget(scroll, 0, 0, 1, 5);
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_playControlsSpacer, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
     layout->addWidget(m_fader, 1, 4);
-#endif
 
     m_playControlsWidth = 
-        m_fader->width() + m_playSpeed->width()
-#ifndef HAVE_RUBBERBAND
-        + m_playSharpen->width()
-        + m_playMono->width()
-#endif
-        + layout->spacing() *
-#ifndef HAVE_RUBBERBAND
-        4
-#else
-        2
-#endif
-        ;
+        m_fader->width() + m_playSpeed->width() + layout->spacing() * 2;
 
     layout->setColumnMinimumWidth(0, 14);
     layout->setColumnStretch(0, 0);
@@ -3134,44 +3085,10 @@ MainWindow::playSpeedChanged(int position)
                            .arg(pc));
     }
 
-#ifdef HAVE_RUBBERBAND
-    bool mono = false;
-    bool sharpen = true;
-#else
-    m_playSharpen->setEnabled(something);
-    bool sharpen = (something && m_playSharpen->isChecked());
-    m_playMono->setEnabled(something);
-    bool mono = (something && m_playMono->isChecked());
-#endif
-
-    m_playSource->setTimeStretch(factor, sharpen, mono);
+    m_playSource->setTimeStretch(factor);
 
     updateMenuStates();
 }
-
-#ifndef HAVE_RUBBERBAND
-void
-MainWindow::playSharpenToggled()
-{
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("playsharpen", m_playSharpen->isChecked());
-    settings.endGroup();
-
-    playSpeedChanged(m_playSpeed->value());
-}
-
-void
-MainWindow::playMonoToggled()
-{
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("playmono", m_playMono->isChecked());
-    settings.endGroup();
-
-    playSpeedChanged(m_playSpeed->value());
-}    
-#endif
 
 void
 MainWindow::speedUpPlayback()
@@ -3497,12 +3414,6 @@ MainWindow::mouseEnteredWidget()
         contextHelpChanged(tr("Adjust the master playback level"));
     } else if (w == m_playSpeed) {
         contextHelpChanged(tr("Adjust the master playback speed"));
-#ifndef HAVE_RUBBERBAND
-    } else if (w == m_playSharpen && w->isEnabled()) {
-        contextHelpChanged(tr("Toggle transient sharpening for playback time scaling"));
-    } else if (w == m_playMono && w->isEnabled()) {
-        contextHelpChanged(tr("Toggle mono mode for playback time scaling"));
-#endif
     }
 }
 
