@@ -152,7 +152,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
             this, SLOT(showSplashChanged(int)));
 
 #ifndef Q_WS_MAC
-
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
                                              &deflt);
@@ -193,10 +192,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                        row, 0);
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
 
+#ifndef Q_WS_MAC
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Background Mode"))),
                        row, 0);
     subgrid->addWidget(bgMode, row++, 1, 1, 2);
+#endif
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("View Font Size"))),
