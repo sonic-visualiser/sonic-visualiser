@@ -2952,6 +2952,9 @@ MainWindow::addLayer()
     for (int j = 0; j < pane->getLayerCount(); ++j) {
         Layer *layer = pane->getLayer(j);
         if (!layer) continue;
+        if (LayerFactory::getInstance()->getLayerType(layer) !=
+            LayerFactory::Waveform &&
+            !layer->isLayerOpaque()) continue;
         Model *model = layer->getModel();
         if (!model) continue;
         for (size_t k = 0; k < candidateInputModels.size(); ++k) {
