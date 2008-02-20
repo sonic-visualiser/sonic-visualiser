@@ -54,7 +54,11 @@
  Document, SVFileReader
 
  - Turning one model (e.g. audio) into another (e.g. more audio, or a
- curve extracted from it): Transform and subclasses
+ curve extracted from it): Transform, encapsulating the data that need
+ to be stored to be able to reproduce a given transformation;
+ TransformFactory, for discovering the available types of transform;
+ ModelTransformerFactory, ModelTransformer and subclasses, providing
+ the mechanisms for applying transforms to data models
 
  - Creating the plugins used by transforms: RealTimePluginFactory,
  FeatureExtractionPluginFactory.  See also the API documentation for
