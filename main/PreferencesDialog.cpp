@@ -30,6 +30,7 @@
 #include <QLineEdit>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSpinBox>
 
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
@@ -144,6 +145,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
             this, SLOT(tempDirButtonClicked()));
     tempDirButton->setFixedSize(QSize(24, 24));
 
+    QCheckBox *showSplash = new QCheckBox;
+    m_showSplash = prefs->getShowSplash();
+    showSplash->setCheckState(m_showSplash ? Qt::Checked : Qt::Unchecked);
+    connect(showSplash, SIGNAL(stateChanged(int)),
+            this, SLOT(showSplashChanged(int)));
+
+#ifndef Q_WS_MAC
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
                                              &deflt);
@@ -155,6 +163,20 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
     connect(bgMode, SIGNAL(currentIndexChanged(int)),
             this, SLOT(backgroundModeChanged(int)));
+#endif
+
+    QSpinBox *fontSize = new QSpinBox;
+    int fs = prefs->getPropertyRangeAndValue("View Font Size", &min, &max,
+                                             &deflt);
+    m_viewFontSize = fs;
+    fontSize->setMinimum(min);
+    fontSize->setMaximum(max);
+    fontSize->setSuffix(" pt");
+    fontSize->setSingleStep(1);
+    fontSize->setValue(fs);
+
+    connect(fontSize, SIGNAL(valueChanged(int)),
+            this, SLOT(viewFontSizeChanged(int)));
 
     // General tab
 
@@ -170,10 +192,29 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                        row, 0);
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
 
+#ifndef Q_WS_MAC
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Background Mode"))),
                        row, 0);
     subgrid->addWidget(bgMode, row++, 1, 1, 2);
+#endif
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("View Font Size"))),
+                       row, 0);
+    subgrid->addWidget(fontSize, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Show Splash Screen"))),
+                       row, 0);
+    subgrid->addWidget(showSplash, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Temporary Directory Root"))),
+                       row, 0);
+    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
+    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
+    row++;
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Resample On Load"))),
@@ -184,13 +225,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                                                 ("Resample Quality"))),
                        row, 0);
     subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Temporary Directory Root"))),
-                       row, 0);
-    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
-    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
-    row++;
 
     subgrid->setRowStretch(row, 10);
     
@@ -288,6 +322,14 @@ PreferencesDialog::resampleOnLoadChanged(int state)
 }
 
 void
+PreferencesDialog::showSplashChanged(int state)
+{
+    m_showSplash = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::tempDirRootChanged(QString r)
 {
     m_tempDirRoot = r;
@@ -315,6 +357,13 @@ PreferencesDialog::backgroundModeChanged(int mode)
 }
 
 void
+PreferencesDialog::viewFontSizeChanged(int sz)
+{
+    m_viewFontSize = sz;
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -333,8 +382,10 @@ PreferencesDialog::applyClicked()
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setResampleQuality(m_resampleQuality);
     prefs->setResampleOnLoad(m_resampleOnLoad);
+    prefs->setShowSplash(m_showSplash);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
+    prefs->setViewFontSize(m_viewFontSize);
 
     m_applyButton->setEnabled(false);
 

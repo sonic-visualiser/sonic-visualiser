@@ -28,6 +28,7 @@
     <file>icons/text.png</file>
     <file>icons/draw.png</file>
     <file>icons/draw-curve.png</file>
+    <file>icons/erase.png</file>
     <file>icons/measure.png</file>
     <file>icons/measure1cursor.xbm</file>
     <file>icons/measure1mask.xbm</file>
@@ -66,6 +67,10 @@
     <file>icons/help.png</file>
     <file>icons/emptypage.png</file>
     <file>icons/cross.png</file>
+    <file>icons/normalise.png</file>
+    <file>icons/normalise-columns.png</file>
+    <file>icons/invert-vertical.png</file>
+    <file>icons/show-peaks.png</file>
     <file>icons/sv-16x16.png</file>
     <file>icons/sv-22x22.png</file>
     <file>icons/sv-24x24.png</file>
@@ -73,6 +78,7 @@
     <file>icons/sv-48x48.png</file>
     <file>icons/sv-64x64.png</file>
     <file>icons/sv-128x128.png</file>
+    <file>icons/sv-splash.png</file>
     <file>samples/bass.wav</file>
     <file>samples/beep.wav</file>
     <file>samples/bounce.wav</file>
