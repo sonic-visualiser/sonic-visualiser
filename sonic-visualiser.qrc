@@ -69,6 +69,7 @@
     <file>icons/cross.png</file>
     <file>icons/normalise.png</file>
     <file>icons/normalise-columns.png</file>
+    <file>icons/invert-vertical.png</file>
     <file>icons/show-peaks.png</file>
     <file>icons/sv-16x16.png</file>
     <file>icons/sv-22x22.png</file>
@@ -77,6 +78,7 @@
     <file>icons/sv-48x48.png</file>
     <file>icons/sv-64x64.png</file>
     <file>icons/sv-128x128.png</file>
+    <file>icons/sv-splash.png</file>
     <file>samples/bass.wav</file>
     <file>samples/beep.wav</file>
     <file>samples/bounce.wav</file>

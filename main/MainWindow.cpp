@@ -133,6 +133,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_prevSolo(false),
     m_ffwdAction(0),
     m_rwdAction(0),
+    m_playControlsSpacer(0),
+    m_playControlsWidth(0),
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_keyReference(new KeyReference())
@@ -220,57 +222,33 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     IconLoader il;
 
-#ifndef HAVE_RUBBERBAND
-    m_playSharpen = new NotifyingPushButton(frame);
-    m_playSharpen->setToolTip(tr("Sharpen percussive transients"));
-    m_playSharpen->setFixedSize(20, 20);
-    m_playSharpen->setEnabled(false);
-    m_playSharpen->setCheckable(true);
-    m_playSharpen->setChecked(false);
-    m_playSharpen->setIcon(il.load("sharpen"));
-    connect(m_playSharpen, SIGNAL(clicked()), this, SLOT(playSharpenToggled()));
-    connect(m_playSharpen, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_playSharpen, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-
-    m_playMono = new NotifyingPushButton(frame);
-    m_playMono->setToolTip(tr("Run time stretcher in mono only"));
-    m_playMono->setFixedSize(20, 20);
-    m_playMono->setEnabled(false);
-    m_playMono->setCheckable(true);
-    m_playMono->setChecked(false);
-    m_playMono->setIcon(il.load("mono"));
-    connect(m_playMono, SIGNAL(clicked()), this, SLOT(playMonoToggled()));
-    connect(m_playMono, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_playMono, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-#endif
-
     QSettings settings;
     settings.beginGroup("MainWindow");
-#ifndef HAVE_RUBBERBAND
-    m_playSharpen->setChecked(settings.value("playsharpen", true).toBool());
-    m_playMono->setChecked(settings.value("playmono", false).toBool());
-#endif
     settings.endGroup();
+
+    m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(4);
     layout->addWidget(scroll, 0, 0, 1, 5);
-    layout->addWidget(m_overview, 1, 0);
-    layout->addWidget(m_fader, 1, 1);
-    layout->addWidget(m_playSpeed, 1, 2);
-#ifndef HAVE_RUBBERBAND
-    layout->addWidget(m_playSharpen, 1, 3);
-    layout->addWidget(m_playMono, 1, 4);
-#endif
+    layout->addWidget(m_overview, 1, 1);
+    layout->addWidget(m_playControlsSpacer, 1, 2);
+    layout->addWidget(m_playSpeed, 1, 3);
+    layout->addWidget(m_fader, 1, 4);
 
-    m_paneStack->setPropertyStackMinWidth
-        (m_fader->width() + m_playSpeed->width()
-#ifndef HAVE_RUBBERBAND
-         + m_playSharpen->width()
-         + m_playMono->width()
-#endif
-         + layout->spacing() * 4);
+    m_playControlsWidth = 
+        m_fader->width() + m_playSpeed->width() + layout->spacing() * 2;
 
-    layout->setColumnStretch(0, 10);
+    layout->setColumnMinimumWidth(0, 14);
+    layout->setColumnStretch(0, 0);
+
+    m_paneStack->setPropertyStackMinWidth(m_playControlsWidth
+                                          + 2 + layout->spacing());
+    m_playControlsSpacer->setFixedSize(QSize(2, 2));
+
+    layout->setColumnStretch(1, 10);
+
+    connect(m_paneStack, SIGNAL(propertyStacksResized(int)),
+            this, SLOT(propertyStacksResized(int)));
 
     frame->setLayout(layout);
 
@@ -603,6 +581,7 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
 
     QMenu *numberingMenu = menu->addMenu(tr("Number New Instants with"));
+    numberingMenu->setTearOffEnabled(true);
     QActionGroup *numberingGroup = new QActionGroup(this);
 
     Labeller::TypeNameMap types = m_labeller->getTypeNames();
@@ -624,7 +603,7 @@ MainWindow::setupEditMenu()
             QMenu *cycleMenu = numberingMenu->addMenu(tr("Cycle size"));
             QActionGroup *cycleGroup = new QActionGroup(this);
 
-            int cycles[] = { 2, 3, 4, 5, 6, 7, 8, 10, 12, 16 };
+            int cycles[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 16 };
             for (int i = 0; i < int(sizeof(cycles)/sizeof(cycles[0])); ++i) {
                 action = new QAction(QString("%1").arg(cycles[i]), this);
                 connect(action, SIGNAL(triggered()), this, SLOT(setInstantsCounterCycle()));
@@ -633,10 +612,6 @@ MainWindow::setupEditMenu()
                 cycleGroup->addAction(action);
                 cycleMenu->addAction(action);
             }
-            
-            action = new QAction(tr("Reset Counters..."), this);
-            connect(action, SIGNAL(triggered()), this, SLOT(resetInstantsCounters()));
-            numberingMenu->addAction(action);
         }
 
         if (i->first == Labeller::ValueNone ||
@@ -646,8 +621,13 @@ MainWindow::setupEditMenu()
         }
     }
 
-    action = new QAction(tr("Re-Number Selected Instants"), this);
-    action->setStatusTip(tr("Re-number the selected instants using the current labelling scheme"));
+    action = new QAction(tr("Set Numbering Counters..."), this);
+    action->setStatusTip(tr("Set the counters used for counter-based labelling"));
+    connect(action, SIGNAL(triggered()), this, SLOT(resetInstantsCounters()));
+    menu->addAction(action);
+            
+    action = new QAction(tr("Renumber Selected Instants"), this);
+    action->setStatusTip(tr("Renumber the selected instants using the current labelling scheme"));
     connect(action, SIGNAL(triggered()), this, SLOT(renumberInstants()));
     connect(this, SIGNAL(canRenumberInstants(bool)), action, SLOT(setEnabled(bool)));
 //    m_keyReference->registerShortcut(action);
@@ -858,7 +838,7 @@ MainWindow::setupPaneAndLayerMenus()
     action->setStatusTip(tr("Add a new pane containing only a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
     connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
-    m_paneActions[action] = PaneConfiguration(LayerFactory::TimeRuler);
+    m_paneActions[action] = LayerConfiguration(LayerFactory::TimeRuler);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
@@ -894,7 +874,7 @@ MainWindow::setupPaneAndLayerMenus()
 
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_layerActions[action] = type;
+	m_layerActions[action] = LayerConfiguration(type);
 	menu->addAction(action);
         m_rightButtonLayerMenu->addAction(action);
     }
@@ -911,7 +891,7 @@ MainWindow::setupPaneAndLayerMenus()
     };
 
     std::vector<Model *> models;
-    if (m_document) models = m_document->getTransformerInputModels(); //!!! not well named for this!
+    if (m_document) models = m_document->getTransformInputModels();
     bool plural = (models.size() > 1);
     if (models.empty()) {
         models.push_back(getMainModel()); // probably 0
@@ -920,9 +900,11 @@ MainWindow::setupPaneAndLayerMenus()
     for (unsigned int i = 0;
 	 i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
 
-	for (int menuType = 0; menuType <= 1; ++menuType) { // pane, layer
+        const int paneMenuType = 0, layerMenuType = 1;
 
-	    if (menuType == 0) menu = m_paneMenu;
+	for (int menuType = paneMenuType; menuType <= layerMenuType; ++menuType) {
+
+	    if (menuType == paneMenuType) menu = m_paneMenu;
 	    else menu = m_layerMenu;
 
 	    QMenu *submenu = 0;
@@ -937,7 +919,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::Waveform:
                 icon = il.load("waveform");
                 mainText = tr("Add &Waveform");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("W");
                     tipText = tr("Add a new pane showing a waveform view");
                 } else {
@@ -949,7 +931,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::Spectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Spectro&gram");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("G");
                     tipText = tr("Add a new pane showing a spectrogram");
                 } else {
@@ -960,7 +942,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::MelodicRangeSpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add &Melodic Range Spectrogram");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("M");
                     tipText = tr("Add a new pane showing a spectrogram set up for an overview of note pitches");
                 } else {
@@ -971,7 +953,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::PeakFrequencySpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Pea&k Frequency Spectrogram");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("K");
                     tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
                 } else {
@@ -982,7 +964,7 @@ MainWindow::setupPaneAndLayerMenus()
             case LayerFactory::Spectrum:
                 icon = il.load("spectrum");
                 mainText = tr("Add Spectr&um");
-                if (menuType == 0) {
+                if (menuType == paneMenuType) {
                     shortcutText = tr("U");
                     tipText = tr("Add a new pane showing a frequency spectrum");
                 } else {
@@ -994,11 +976,11 @@ MainWindow::setupPaneAndLayerMenus()
             }
 
             std::vector<Model *> candidateModels;
-            if (menuType == 0) {
+//            if (menuType == paneMenuType) {
                 candidateModels = models;
-            } else {
-                candidateModels.push_back(0);
-            }
+//            } else {
+//                candidateModels.push_back(0);
+//            }
             
             for (std::vector<Model *>::iterator mi =
                      candidateModels.begin();
@@ -1023,33 +1005,33 @@ MainWindow::setupPaneAndLayerMenus()
                     bool isDefault = (c == 0);
                     bool isOnly = (isDefault && (channels == 1));
 
-                    if (menuType == 1) {
-                        if (isDefault) isOnly = true;
-                        else continue;
-                    }
+//                    if (menuType == layerMenuType) {
+//                        if (isDefault) isOnly = true;
+//                        else continue;
+//                    }
 
-                    if (isOnly && (!plural || menuType == 1)) {
+                    if (isOnly && (!plural /*|| menuType == layerMenuType*/)) {
 
-                        if (menuType == 1 && type != LayerFactory::Waveform) {
-                            action = new QAction(mainText, this);
-                        } else {
+//                        if (menuType == layerMenuType && type != LayerFactory::Waveform) {
+//                            action = new QAction(mainText, this);
+//                        } else {
                             action = new QAction(icon, mainText, this);
-                        }                            
+//                        }                            
 
                         action->setShortcut(shortcutText);
                         action->setStatusTip(tipText);
-                        if (menuType == 0) {
+                        if (menuType == paneMenuType) {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_paneActions[action] = PaneConfiguration(type);
+                            m_paneActions[action] = LayerConfiguration(type);
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_layerActions[action] = type;
+                            m_layerActions[action] = LayerConfiguration(type);
                         }
                         if (shortcutText != "") {
                             m_keyReference->registerShortcut(action);
@@ -1093,19 +1075,20 @@ MainWindow::setupPaneAndLayerMenus()
 
                         action->setStatusTip(tipText);
 
-                        if (menuType == 0) {
+                        if (menuType == paneMenuType) {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
                             m_paneActions[action] =
-                                PaneConfiguration(type, model, c - 1);
+                                LayerConfiguration(type, model, c - 1);
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_layerActions[action] = type;
+                            m_layerActions[action] =
+                                LayerConfiguration(type, model, c - 1);
                         }
 
                         submenu->addAction(action);
@@ -1116,6 +1099,23 @@ MainWindow::setupPaneAndLayerMenus()
     }
 
     menu = m_paneMenu;
+    menu->addSeparator();
+
+    action = new QAction(tr("Switch to Previous Pane"), this);
+    action->setShortcut(tr("["));
+    action->setStatusTip(tr("Make the next pane up in the pane stack current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(previousPane()));
+    connect(this, SIGNAL(canSelectPreviousPane(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    action = new QAction(tr("Switch to Next Pane"), this);
+    action->setShortcut(tr("]"));
+    action->setStatusTip(tr("Make the next pane down in the pane stack current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(nextPane()));
+    connect(this, SIGNAL(canSelectNextPane(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
 
     menu->addSeparator();
 
@@ -1133,7 +1133,7 @@ MainWindow::setupPaneAndLayerMenus()
     action->setStatusTip(tr("Add a new layer showing a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
     connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-    m_layerActions[action] = LayerFactory::TimeRuler;
+    m_layerActions[action] = LayerConfiguration(LayerFactory::TimeRuler);
     menu->addAction(action);
 
     menu->addSeparator();
@@ -1148,6 +1148,25 @@ MainWindow::setupPaneAndLayerMenus()
 
     setupExistingLayersMenus();
 
+/*!!! These don't work correctly -- fix or omit
+    menu->addSeparator();
+
+    action = new QAction(tr("Switch to Previous Layer"), this);
+    action->setShortcut(tr("{"));
+    action->setStatusTip(tr("Make the previous layer in the pane current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(previousLayer()));
+    connect(this, SIGNAL(canSelectPreviousLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    action = new QAction(tr("Switch to Next Layer"), this);
+    action->setShortcut(tr("}"));
+    action->setStatusTip(tr("Make the next layer in the pane current"));
+    connect(action, SIGNAL(triggered()), this, SLOT(nextLayer()));
+    connect(this, SIGNAL(canSelectNextLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+*/
     m_rightButtonLayerMenu->addSeparator();
     menu->addSeparator();
 
@@ -1184,7 +1203,7 @@ MainWindow::setupTransformsMenu()
    }
 
     TransformList transforms =
-	TransformFactory::getInstance()->getAllTransforms();
+	TransformFactory::getInstance()->getAllTransformDescriptions();
 
     vector<QString> types =
         TransformFactory::getInstance()->getAllTransformTypes();
@@ -1290,6 +1309,20 @@ MainWindow::setupTransformsMenu()
         }
     }
 
+    // Names should only be duplicated here if they have the same
+    // plugin name, output name and maker but are in different library
+    // .so names -- that won't happen often I hope
+    std::map<QString, QString> idNameSonameMap;
+    std::set<QString> seenNames, duplicateNames;
+    for (unsigned int i = 0; i < transforms.size(); ++i) {
+        QString name = transforms[i].name;
+        if (seenNames.find(name) != seenNames.end()) {
+            duplicateNames.insert(name);
+        } else {
+            seenNames.insert(name);
+        }
+    }
+
     for (unsigned int i = 0; i < transforms.size(); ++i) {
 	
 	QString name = transforms[i].name;
@@ -1308,6 +1341,16 @@ MainWindow::setupTransformsMenu()
 
         QString pluginName = name.section(": ", 0, 0);
         QString output = name.section(": ", 1);
+
+        if (duplicateNames.find(pluginName) != duplicateNames.end()) {
+            pluginName = QString("%1 <%2>")
+                .arg(pluginName)
+                .arg(transforms[i].identifier.section(':', 1, 1));
+            if (output == "") name = pluginName;
+            else name = QString("%1: %2")
+                .arg(pluginName)
+                .arg(output);
+        }
 
 	QAction *action = new QAction(tr("%1...").arg(name), this);
 	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
@@ -2523,11 +2566,6 @@ MainWindow::closeEvent(QCloseEvent *e)
         m_preferencesDialog->applicationClosing(false);
     }
 
-    if (m_layerTreeDialog &&
-        m_layerTreeDialog->isVisible()) {
-        delete m_layerTreeDialog;
-    }
-
     closeSession();
 
     e->accept();
@@ -2674,6 +2712,20 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 }
 
 void
+MainWindow::propertyStacksResized(int width)
+{
+    std::cerr << "MainWindow::propertyStacksResized(" << width << ")" << std::endl;
+
+    if (!m_playControlsSpacer) return;
+
+    int spacerWidth = width - m_playControlsWidth - 4;
+    
+    std::cerr << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << std::endl;
+
+    m_playControlsSpacer->setFixedSize(QSize(spacerWidth, 2));
+}
+
+void
 MainWindow::addPane()
 {
     QObject *s = sender();
@@ -2697,7 +2749,7 @@ MainWindow::addPane()
 }
 
 void
-MainWindow::addPane(const PaneConfiguration &configuration, QString text)
+MainWindow::addPane(const LayerConfiguration &configuration, QString text)
 {
     CommandHistory::getInstance()->startCompoundOperation(text, true);
 
@@ -2734,7 +2786,7 @@ MainWindow::addPane(const PaneConfiguration &configuration, QString text)
     if (suggestedModel) {
 
         // check its validity
-        std::vector<Model *> inputModels = m_document->getTransformerInputModels();
+        std::vector<Model *> inputModels = m_document->getTransformInputModels();
         for (size_t j = 0; j < inputModels.size(); ++j) {
             if (inputModels[j] == suggestedModel) {
                 model = suggestedModel;
@@ -2828,7 +2880,7 @@ MainWindow::addLayer()
 	    return;
 	}
 
-	LayerFactory::LayerType type = i->second;
+	LayerFactory::LayerType type = i->second.layer;
 	
 	LayerFactory::LayerTypeSet emptyTypes =
 	    LayerFactory::getInstance()->getValidEmptyLayerTypes();
@@ -2844,8 +2896,24 @@ MainWindow::addLayer()
 
 	} else {
 
-	    newLayer = m_document->createMainModelLayer(type);
-	}
+            if (!i->second.sourceModel) {
+                // e.g. time ruler
+                newLayer = m_document->createMainModelLayer(type);
+            } else {
+                newLayer = m_document->createLayer(type);
+                if (m_document->isKnownModel(i->second.sourceModel)) {
+                    m_document->setChannel(newLayer, i->second.channel);
+                    m_document->setModel(newLayer, i->second.sourceModel);
+                } else {
+                    std::cerr << "WARNING: MainWindow::addLayer: unknown model "
+                              << i->second.sourceModel
+                              << " (\""
+                              << (i->second.sourceModel ? i->second.sourceModel->objectName().toStdString() : "")
+                              << "\") in layer action map"
+                              << std::endl;
+                }
+            }
+        }
 
         if (newLayer) {
             m_document->addLayerToView(pane, newLayer);
@@ -2855,11 +2923,9 @@ MainWindow::addLayer()
 	return;
     }
 
-    TransformId transform = i->second;
-    ModelTransformerFactory *factory = ModelTransformerFactory::getInstance();
-
-    QString configurationXml;
-
+    //!!! want to do something like this, but it's not supported in
+    //ModelTransformerFactory yet
+    /*
     int channel = -1;
     // pick up the default channel from any existing layers on the same pane
     for (int j = 0; j < pane->getLayerCount(); ++j) {
@@ -2869,20 +2935,26 @@ MainWindow::addLayer()
 	    break;
 	}
     }
+    */
 
     // We always ask for configuration, even if the plugin isn't
     // supposed to be configurable, because we need to let the user
     // change the execution context (block size etc).
 
-    PluginTransformer::ExecutionContext context(channel);
+    QString transformId = i->second;
+    Transform transform = TransformFactory::getInstance()->
+        getDefaultTransformFor(transformId);
 
     std::vector<Model *> candidateInputModels =
-        m_document->getTransformerInputModels();
+        m_document->getTransformInputModels();
 
     Model *defaultInputModel = 0;
     for (int j = 0; j < pane->getLayerCount(); ++j) {
         Layer *layer = pane->getLayer(j);
         if (!layer) continue;
+        if (LayerFactory::getInstance()->getLayerType(layer) !=
+            LayerFactory::Waveform &&
+            !layer->isLayerOpaque()) continue;
         Model *model = layer->getModel();
         if (!model) continue;
         for (size_t k = 0; k < candidateInputModels.size(); ++k) {
@@ -2900,29 +2972,25 @@ MainWindow::addLayer()
     if (endFrame > startFrame) duration = endFrame - startFrame;
     else startFrame = 0;
 
-    Model *inputModel = factory->getConfigurationForTransformer
+    ModelTransformer::Input input = ModelTransformerFactory::getInstance()->
+        getConfigurationForTransform
         (transform,
          candidateInputModels,
          defaultInputModel,
-         context,
-         configurationXml,
          m_playSource,
          startFrame,
          duration);
 
-    if (!inputModel) return;
+    if (!input.getModel()) return;
 
-//    std::cerr << "MainWindow::addLayer: Input model is " << inputModel << " \"" << inputModel->objectName().toStdString() << "\"" << std::endl;
+//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName().toStdString() << "\"" << std::endl;
 
-    Layer *newLayer = m_document->createDerivedLayer(transform,
-                                                     inputModel,
-                                                     context,
-                                                     configurationXml);
+    Layer *newLayer = m_document->createDerivedLayer(transform, input);
 
     if (newLayer) {
         m_document->addLayerToView(pane, newLayer);
-        m_document->setChannel(newLayer, context.channel);
-        m_recentTransforms.add(transform);
+        m_document->setChannel(newLayer, input.getChannel());
+        m_recentTransforms.add(transformId);
         m_paneStack->setCurrentLayer(pane, newLayer);
     }
 
@@ -2942,7 +3010,7 @@ MainWindow::renameCurrentLayer()
 		 tr("New name for this layer:"),
 		 QLineEdit::Normal, layer->objectName(), &ok);
 	    if (ok) {
-		layer->setObjectName(newName);
+		layer->setPresentationName(newName);
 		setupExistingLayersMenus();
 	    }
 	}
@@ -3021,44 +3089,10 @@ MainWindow::playSpeedChanged(int position)
                            .arg(pc));
     }
 
-#ifdef HAVE_RUBBERBAND
-    bool mono = false;
-    bool sharpen = true;
-#else
-    m_playSharpen->setEnabled(something);
-    bool sharpen = (something && m_playSharpen->isChecked());
-    m_playMono->setEnabled(something);
-    bool mono = (something && m_playMono->isChecked());
-#endif
-
-    m_playSource->setTimeStretch(factor, sharpen, mono);
+    m_playSource->setTimeStretch(factor);
 
     updateMenuStates();
 }
-
-#ifndef HAVE_RUBBERBAND
-void
-MainWindow::playSharpenToggled()
-{
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("playsharpen", m_playSharpen->isChecked());
-    settings.endGroup();
-
-    playSpeedChanged(m_playSpeed->value());
-}
-
-void
-MainWindow::playMonoToggled()
-{
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("playmono", m_playMono->isChecked());
-    settings.endGroup();
-
-    playSpeedChanged(m_playSpeed->value());
-}    
-#endif
 
 void
 MainWindow::speedUpPlayback()
@@ -3082,6 +3116,27 @@ void
 MainWindow::restoreNormalPlayback()
 {
     m_playSpeed->setValue(m_playSpeed->defaultValue());
+}
+
+void
+MainWindow::currentPaneChanged(Pane *pane)
+{
+    MainWindowBase::currentPaneChanged(pane);
+
+    if (!pane || !m_panLayer) return;
+    for (int i = pane->getLayerCount(); i > 0; ) {
+        --i;
+        Layer *layer = pane->getLayer(i);
+        if (LayerFactory::getInstance()->getLayerType(layer) ==
+            LayerFactory::Waveform) {
+            RangeSummarisableTimeValueModel *tvm = 
+                dynamic_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
+            if (tvm) {
+                m_panLayer->setModel(tvm);
+                return;
+            }
+        }
+    }
 }
 
 void
@@ -3237,28 +3292,76 @@ void
 MainWindow::resetInstantsCounters()
 {
     LabelCounterInputDialog dialog(m_labeller, this);
+    dialog.setWindowTitle(tr("Reset Counters"));
     dialog.exec();
 }
 
 void
-MainWindow::modelGenerationFailed(QString transformName)
+MainWindow::modelGenerationFailed(QString transformName, QString message)
 {
-    QMessageBox::warning
-        (this,
-         tr("Failed to generate layer"),
-         tr("<b>Layer generation failed</b><p>Failed to generate a derived layer.<p>The layer transform \"%1\" failed.<p>This may mean that a plugin failed to initialise, perhaps because it rejected the processing block size that was requested.")
-         .arg(transformName),
-         QMessageBox::Ok);
+    if (message != "") {
+
+        QMessageBox::warning
+            (this,
+             tr("Failed to generate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to generate derived layer.<p>The layer transform \"%1\" failed:<p>%2")
+             .arg(transformName).arg(message),
+             QMessageBox::Ok);
+    } else {
+        QMessageBox::warning
+            (this,
+             tr("Failed to generate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to generate a derived layer.<p>The layer transform \"%1\" failed.<p>No error information is available.")
+             .arg(transformName),
+             QMessageBox::Ok);
+    }
 }
 
 void
-MainWindow::modelRegenerationFailed(QString layerName, QString transformName)
+MainWindow::modelGenerationWarning(QString transformName, QString message)
+{
+    QMessageBox::warning
+        (this, tr("Warning"), message, QMessageBox::Ok);
+}
+
+void
+MainWindow::modelRegenerationFailed(QString layerName,
+                                    QString transformName, QString message)
+{
+    if (message != "") {
+
+        QMessageBox::warning
+            (this,
+             tr("Failed to regenerate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to regenerate derived layer \"%1\" using new data model as input.<p>The layer transform \"%2\" failed:<p>%3")
+             .arg(layerName).arg(transformName).arg(message),
+             QMessageBox::Ok);
+    } else {
+        QMessageBox::warning
+            (this,
+             tr("Failed to regenerate layer"),
+             tr("<b>Layer generation failed</b><p>Failed to regenerate derived layer \"%1\" using new data model as input.<p>The layer transform \"%2\" failed.<p>No error information is available.")
+             .arg(layerName).arg(transformName),
+             QMessageBox::Ok);
+    }
+}
+
+void
+MainWindow::modelRegenerationWarning(QString layerName,
+                                     QString transformName, QString message)
+{
+    QMessageBox::warning
+        (this, tr("Warning"), tr("<b>Warning when regenerating layer</b><p>When regenerating the derived layer \"%1\" using new data model as input:<p>%2").arg(layerName).arg(message), QMessageBox::Ok);
+}
+
+void
+MainWindow::alignmentFailed(QString transformName, QString message)
 {
     QMessageBox::warning
         (this,
-         tr("Failed to regenerate layer"),
-         tr("<b>Layer generation failed</b><p>Failed to regenerate derived layer \"%1\".<p>The layer transform \"%2\" failed to run.<p>This may mean that the layer used a plugin that is not currently available.")
-         .arg(layerName).arg(transformName),
+         tr("Failed to calculate alignment"),
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment using transform \"%1\":<p>%2")
+         .arg(transformName).arg(message),
          QMessageBox::Ok);
 }
 
@@ -3280,6 +3383,7 @@ MainWindow::showLayerTree()
     }
 
     m_layerTreeDialog = new LayerTreeDialog(m_paneStack);
+    m_layerTreeDialog->setAttribute(Qt::WA_DeleteOnClose); // see below
     m_layerTreeDialog->show();
 }
 
@@ -3315,12 +3419,6 @@ MainWindow::mouseEnteredWidget()
         contextHelpChanged(tr("Adjust the master playback level"));
     } else if (w == m_playSpeed) {
         contextHelpChanged(tr("Adjust the master playback speed"));
-#ifndef HAVE_RUBBERBAND
-    } else if (w == m_playSharpen && w->isEnabled()) {
-        contextHelpChanged(tr("Toggle transient sharpening for playback time scaling"));
-    } else if (w == m_playMono && w->isEnabled()) {
-        contextHelpChanged(tr("Toggle mono mode for playback time scaling"));
-#endif
     }
 }
 
@@ -3339,7 +3437,7 @@ MainWindow::website()
 void
 MainWindow::help()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.0/en/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.2/en/"));
 }
 
 void
@@ -3366,7 +3464,7 @@ MainWindow::about()
     QString aboutText;
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
-    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for<br>semantic music analysis and annotation.</p>");
+    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>");
     aboutText += tr("<p>%1 : %2 configuration</p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
@@ -3448,11 +3546,11 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p>Sonic Visualiser Copyright &copy; 2005 - 2007 Chris Cannam and<br>"
+        "<p>Sonic Visualiser Copyright &copy; 2005 - 2008 Chris Cannam and "
         "Queen Mary, University of London.</p>"
-        "<p>This program is free software; you can redistribute it and/or<br>"
-        "modify it under the terms of the GNU General Public License as<br>"
-        "published by the Free Software Foundation; either version 2 of the<br>"
+        "<p>This program is free software; you can redistribute it and/or "
+        "modify it under the terms of the GNU General Public License as "
+        "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</p>";
     

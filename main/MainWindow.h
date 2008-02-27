@@ -113,10 +113,15 @@ protected slots:
     virtual void setInstantsCounterCycle();
     virtual void resetInstantsCounters();
 
-    virtual void modelGenerationFailed(QString);
-    virtual void modelRegenerationFailed(QString, QString);
+    virtual void modelGenerationFailed(QString, QString);
+    virtual void modelGenerationWarning(QString, QString);
+    virtual void modelRegenerationFailed(QString, QString, QString);
+    virtual void modelRegenerationWarning(QString, QString, QString);
+    virtual void alignmentFailed(QString, QString);
 
     virtual void rightButtonMenuRequested(Pane *, QPoint point);
+
+    virtual void propertyStacksResized(int);
 
     virtual void addPane();
     virtual void addLayer();
@@ -132,12 +137,10 @@ protected slots:
     virtual void setupRecentTransformsMenu();
 
     virtual void playSpeedChanged(int);
-#ifndef HAVE_RUBBERBAND
-    virtual void playSharpenToggled();
-    virtual void playMonoToggled();
-#endif
     virtual void playSoloToggled();
     virtual void alignToggled();
+
+    virtual void currentPaneChanged(Pane *);
 
     virtual void speedUpPlayback();
     virtual void slowDownPlayback();
@@ -167,10 +170,6 @@ protected:
     Overview                *m_overview;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
-#ifndef HAVE_RUBBERBAND
-    QPushButton             *m_playSharpen;
-    QPushButton             *m_playMono;
-#endif
     WaveformLayer           *m_panLayer;
 
     bool                     m_mainMenusCreated;
@@ -195,33 +194,36 @@ protected:
     bool                     m_soloModified;
     bool                     m_prevSolo;
 
+    QFrame                  *m_playControlsSpacer;
+    int                      m_playControlsWidth;
+
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<LayerTreeDialog>   m_layerTreeDialog;
 
     KeyReference            *m_keyReference;
 
-    struct PaneConfiguration {
-	PaneConfiguration(LayerFactory::LayerType _layer
+    struct LayerConfiguration {
+	LayerConfiguration(LayerFactory::LayerType _layer
 			                       = LayerFactory::TimeRuler,
-                          Model *_source = 0,
-			  int _channel = -1) :
+                           Model *_source = 0,
+                           int _channel = -1) :
 	    layer(_layer), sourceModel(_source), channel(_channel) { }
 	LayerFactory::LayerType layer;
         Model *sourceModel;
 	int channel;
     };
 
-    typedef std::map<QAction *, PaneConfiguration> PaneActionMap;
+    typedef std::map<QAction *, LayerConfiguration> PaneActionMap;
     PaneActionMap m_paneActions;
+
+    typedef std::map<QAction *, LayerConfiguration> LayerActionMap;
+    LayerActionMap m_layerActions;
 
     typedef std::map<QAction *, TransformId> TransformActionMap;
     TransformActionMap m_transformActions;
 
     typedef std::map<TransformId, QAction *> TransformActionReverseMap;
     TransformActionReverseMap m_transformActionsReverse;
-
-    typedef std::map<QAction *, LayerFactory::LayerType> LayerActionMap;
-    LayerActionMap m_layerActions;
 
     typedef std::map<QAction *, Layer *> ExistingLayerActionMap;
     ExistingLayerActionMap m_existingLayerActions;
@@ -243,7 +245,7 @@ protected:
     virtual void setupExistingLayersMenus();
     virtual void setupToolbars();
 
-    virtual void addPane(const PaneConfiguration &configuration, QString text);
+    virtual void addPane(const LayerConfiguration &configuration, QString text);
 
     virtual void closeEvent(QCloseEvent *e);
     virtual bool checkSaveModified();

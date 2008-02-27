@@ -32,6 +32,7 @@
 #include <QIcon>
 #include <QSessionManager>
 #include <QDir>
+#include <QSplashScreen>
 
 #include <iostream>
 #include <signal.h>
@@ -53,7 +54,11 @@
  Document, SVFileReader
 
  - Turning one model (e.g. audio) into another (e.g. more audio, or a
- curve extracted from it): Transform and subclasses
+ curve extracted from it): Transform, encapsulating the data that need
+ to be stored to be able to reproduce a given transformation;
+ TransformFactory, for discovering the available types of transform;
+ ModelTransformerFactory, ModelTransformer and subclasses, providing
+ the mechanisms for applying transforms to data models
 
  - Creating the plugins used by transforms: RealTimePluginFactory,
  FeatureExtractionPluginFactory.  See also the API documentation for
@@ -229,6 +234,18 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
 
+    QPixmap pixmap(":/icons/sv-splash.png");
+    QSplashScreen splash(pixmap);
+
+    QSettings settings;
+
+    settings.beginGroup("Preferences");
+    if (settings.value("show-splash", true).toBool()) {
+        splash.show();
+        application.processEvents();
+    }
+    settings.endGroup();
+
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
     for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
@@ -277,7 +294,6 @@ main(int argc, char **argv)
     if (height < 450) height = available.height() * 2 / 3;
     if (width > height * 2) width = height * 2;
 
-    QSettings settings;
     settings.beginGroup("MainWindow");
     QSize size = settings.value("size", QSize(width, height)).toSize();
     gui->resize(size);
@@ -351,6 +367,7 @@ main(int argc, char **argv)
     settings.endGroup();
 #endif
 
+    splash.finish(gui);
 
 /*
     TipDialog tipDialog;

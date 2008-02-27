@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-SV_UNIT_PACKAGES = vamp vamp-hostsdk fftw3f samplerate jack portaudio mad id3tag oggz fishsound lrdf raptor sndfile liblo
+SV_UNIT_PACKAGES = vamp vamp-hostsdk rubberband fftw3 fftw3f samplerate jack portaudio mad id3tag oggz fishsound lrdf raptor sndfile liblo
 load(../sv.prf)
 
 CONFIG += sv qt thread warn_on stl rtti exceptions
