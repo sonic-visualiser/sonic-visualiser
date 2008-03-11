@@ -285,6 +285,7 @@ main(int argc, char **argv)
 
     MainWindow *gui = new MainWindow(audioOutput, oscSupport);
     application.setMainWindow(gui);
+    QObject::connect(gui, SIGNAL(hideSplash()), &splash, SLOT(hide()));
 
     QDesktopWidget *desktop = QApplication::desktop();
     QRect available = desktop->availableGeometry();

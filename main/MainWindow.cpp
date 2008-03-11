@@ -1974,6 +1974,7 @@ MainWindow::importAudio()
 
     if (path != "") {
 	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+            emit hideSplash();
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -1987,6 +1988,7 @@ MainWindow::importMoreAudio()
 
     if (path != "") {
 	if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
+            emit hideSplash();
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
 	}
@@ -2124,10 +2126,12 @@ MainWindow::importLayer()
         FileOpenStatus status = openLayer(path);
         
         if (status == FileOpenFailed) {
+            emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("<b>File open failed</b><p>Layer file %1 could not be opened.").arg(path));
             return;
         } else if (status == FileOpenWrongMode) {
+            emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open file"),
                                   tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
         }
@@ -2395,6 +2399,7 @@ MainWindow::openSession()
     if (path.isEmpty()) return;
 
     if (openSessionFile(path) == FileOpenFailed) {
+        emit hideSplash();
 	QMessageBox::critical(this, tr("Failed to open file"),
 			      tr("<b>File open failed</b><p>Session file \"%1\" could not be opened").arg(path));
     }
@@ -2414,9 +2419,11 @@ MainWindow::openSomething()
     FileOpenStatus status = open(path, AskUser);
 
     if (status == FileOpenFailed) {
+        emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open file"),
                               tr("<b>File open failed</b><p>File \"%1\" could not be opened").arg(path));
     } else if (status == FileOpenWrongMode) {
+        emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open file"),
                               tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
@@ -2444,9 +2451,11 @@ MainWindow::openLocation()
     FileOpenStatus status = open(text);
 
     if (status == FileOpenFailed) {
+        emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Open failed</b><p>URL \"%1\" could not be opened").arg(text));
     } else if (status == FileOpenWrongMode) {
+        emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
@@ -2470,9 +2479,11 @@ MainWindow::openRecentFile()
     FileOpenStatus status = open(path);
 
     if (status == FileOpenFailed) {
+        emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Open failed</b><p>File or URL \"%1\" could not be opened").arg(path));
     } else if (status == FileOpenWrongMode) {
+        emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
     }
@@ -2506,9 +2517,11 @@ MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
         FileOpenStatus status = open(*i, ReplaceCurrentPane);
 
         if (status == FileOpenFailed) {
+            emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
                                   tr("<b>Open failed</b><p>Dropped URL \"%1\" could not be opened").arg(*i));
         } else if (status == FileOpenWrongMode) {
+            emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
                                   tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
         }
@@ -2631,6 +2644,8 @@ MainWindow::checkSaveModified()
     // cancel.
 
     if (!m_documentModified) return true;
+
+    emit hideSplash();
 
     int button = 
 	QMessageBox::warning(this,
@@ -3202,6 +3217,7 @@ MainWindow::sampleRateMismatch(size_t requested, size_t actual,
                                bool willResample)
 {
     if (!willResample) {
+        emit hideSplash();
         QMessageBox::information
             (this, tr("Sample rate mismatch"),
              tr("<b>Wrong sample rate</b><p>The sample rate of this audio file (%1 Hz) does not match\nthe current playback rate (%2 Hz).<p>The file will play at the wrong speed and pitch.<p>Change the <i>Resample mismatching files on import</i> option under <i>File</i> -> <i>Preferences</i> if you want to alter this behaviour.")
@@ -3299,6 +3315,8 @@ MainWindow::resetInstantsCounters()
 void
 MainWindow::modelGenerationFailed(QString transformName, QString message)
 {
+    emit hideSplash();
+
     if (message != "") {
 
         QMessageBox::warning
@@ -3320,6 +3338,8 @@ MainWindow::modelGenerationFailed(QString transformName, QString message)
 void
 MainWindow::modelGenerationWarning(QString transformName, QString message)
 {
+    emit hideSplash();
+
     QMessageBox::warning
         (this, tr("Warning"), message, QMessageBox::Ok);
 }
@@ -3328,6 +3348,8 @@ void
 MainWindow::modelRegenerationFailed(QString layerName,
                                     QString transformName, QString message)
 {
+    emit hideSplash();
+
     if (message != "") {
 
         QMessageBox::warning
@@ -3350,6 +3372,8 @@ void
 MainWindow::modelRegenerationWarning(QString layerName,
                                      QString transformName, QString message)
 {
+    emit hideSplash();
+
     QMessageBox::warning
         (this, tr("Warning"), tr("<b>Warning when regenerating layer</b><p>When regenerating the derived layer \"%1\" using new data model as input:<p>%2").arg(layerName).arg(message), QMessageBox::Ok);
 }
@@ -3357,6 +3381,8 @@ MainWindow::modelRegenerationWarning(QString layerName,
 void
 MainWindow::alignmentFailed(QString transformName, QString message)
 {
+    emit hideSplash();
+
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
