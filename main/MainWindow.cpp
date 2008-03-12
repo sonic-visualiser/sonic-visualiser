@@ -65,11 +65,11 @@
 #include "plugin/transform/ModelTransformerFactory.h"
 #include "base/PlayParameterRepository.h"
 #include "base/XmlExportable.h"
-#include "base/CommandHistory.h"
+#include "widgets/CommandHistory.h"
 #include "base/Profiler.h"
 #include "base/Clipboard.h"
 #include "base/UnitDatabase.h"
-#include "base/ColourDatabase.h"
+#include "layer/ColourDatabase.h"
 
 // For version information
 #include "vamp/vamp.h"
