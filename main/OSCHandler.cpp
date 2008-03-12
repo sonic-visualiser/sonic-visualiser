@@ -21,7 +21,7 @@
 #include "view/Pane.h"
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
-#include "base/CommandHistory.h"
+#include "widgets/CommandHistory.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "framework/Document.h"
@@ -351,7 +351,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             if (container) {
                 QString nameString = message.getArg(1).toString();
                 QString valueString = message.getArg(2).toString();
-                container->setPropertyWithCommand(nameString, valueString);
+                Command *c = container->getSetPropertyCommand
+                    (nameString, valueString);
+                if (c) CommandHistory::getInstance()->addCommand(c, true, true);
             }
         }
 
