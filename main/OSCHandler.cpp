@@ -26,7 +26,7 @@
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "framework/Document.h"
 #include "data/fileio/WavFileWriter.h"
-#include "plugin/transform/TransformFactory.h"
+#include "transform/TransformFactory.h"
 #include "widgets/Fader.h"
 #include "widgets/AudioDial.h"
 
