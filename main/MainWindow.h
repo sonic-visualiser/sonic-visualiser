@@ -29,7 +29,7 @@
 #include "layer/LayerFactory.h"
 #include "transform/Transform.h"
 #include "framework/SVFileReader.h"
-#include "data/fileio/FileFinder.h"
+#include "widgets/FileFinder.h"
 #include "data/fileio/FileSource.h"
 #include "widgets/LayerTreeDialog.h"
 #include <map>
