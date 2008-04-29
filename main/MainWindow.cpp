@@ -2729,13 +2729,13 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 void
 MainWindow::propertyStacksResized(int width)
 {
-    std::cerr << "MainWindow::propertyStacksResized(" << width << ")" << std::endl;
+//    std::cerr << "MainWindow::propertyStacksResized(" << width << ")" << std::endl;
 
     if (!m_playControlsSpacer) return;
 
     int spacerWidth = width - m_playControlsWidth - 4;
     
-    std::cerr << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << std::endl;
+//    std::cerr << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << std::endl;
 
     m_playControlsSpacer->setFixedSize(QSize(spacerWidth, 2));
 }
