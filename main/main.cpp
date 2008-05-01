@@ -33,6 +33,7 @@
 #include <QSessionManager>
 #include <QDir>
 #include <QSplashScreen>
+#include <QTimer>
 
 #include <iostream>
 #include <signal.h>
@@ -242,6 +243,7 @@ main(int argc, char **argv)
     settings.beginGroup("Preferences");
     if (settings.value("show-splash", true).toBool()) {
         splash.show();
+        QTimer::singleShot(5000, &splash, SLOT(hide()));
         application.processEvents();
     }
     settings.endGroup();
