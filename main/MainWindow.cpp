@@ -139,6 +139,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_layerTreeDialog(0),
     m_keyReference(new KeyReference())
 {
+    Profiler profiler("MainWindow::MainWindow");
+
     setWindowTitle(tr("Sonic Visualiser"));
 
     UnitDatabase *udb = UnitDatabase::getInstance();
