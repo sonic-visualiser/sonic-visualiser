@@ -391,7 +391,7 @@ PreferencesDialog::applyClicked()
 
     if (m_changesOnRestart) {
         QMessageBox::information(this, tr("Preferences"),
-                                 tr("One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.\nPlease exit and restart the application now if you want these changes to take effect immediately."));
+                                 tr("<b>Restart required</b><p>One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.</p><p>Please exit and restart the application now if you want these changes to take effect immediately.</p>"));
         m_changesOnRestart = false;
     }
 }    
