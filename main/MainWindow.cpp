@@ -3512,13 +3512,16 @@ MainWindow::about()
 #endif
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION
-    aboutText += tr("<br>With JACK audio output (v%1) &copy; Paul Davis and Jack O'Quin").arg(JACK_VERSION);
+    aboutText += tr("<br>With JACK audio output library (v%1) &copy; Paul Davis and Jack O'Quin").arg(JACK_VERSION);
 #else
-    aboutText += tr("<br>With JACK audio output &copy; Paul Davis and Jack O'Quin");
+    aboutText += tr("<br>With JACK audio output library &copy; Paul Davis and Jack O'Quin");
 #endif
 #endif
 #ifdef HAVE_PORTAUDIO
-    aboutText += tr("<br>With PortAudio audio output &copy; Ross Bencina and Phil Burk");
+    aboutText += tr("<br>With PortAudio audio output library &copy; Ross Bencina and Phil Burk");
+#endif
+#ifdef HAVE_LIBPULSE
+    aboutText += tr("<br>With PulseAudio audio output library &copy; Lennart Poettering and Pierre Ossman");
 #endif
 #ifdef HAVE_OGGZ
 #ifdef OGGZ_VERSION
