@@ -43,6 +43,7 @@
 #include "widgets/AudioDial.h"
 #include "widgets/IconLoader.h"
 #include "widgets/LayerTreeDialog.h"
+#include "widgets/ModelDataTableDialog.h"
 #include "widgets/ListInputDialog.h"
 #include "widgets/SubdividingMenu.h"
 #include "widgets/NotifyingPushButton.h"
@@ -1180,6 +1181,14 @@ MainWindow::setupPaneAndLayerMenus()
     menu->addAction(raction);
     m_rightButtonLayerMenu->addAction(raction);
 
+    QAction *eaction = new QAction(tr("Edit Layer Data"), this);
+    eaction->setShortcut(tr("E"));
+    eaction->setStatusTip(tr("Edit the currently active layer as a data grid"));
+    connect(eaction, SIGNAL(triggered()), this, SLOT(editCurrentLayer()));
+    connect(this, SIGNAL(canEditLayer(bool)), eaction, SLOT(setEnabled(bool)));
+    menu->addAction(eaction);
+    m_rightButtonLayerMenu->addAction(eaction);
+
     action = new QAction(il.load("editdelete"), tr("&Delete Layer"), this);
     action->setShortcut(tr("Ctrl+D"));
     action->setStatusTip(tr("Delete the currently active layer"));
@@ -1190,6 +1199,7 @@ MainWindow::setupPaneAndLayerMenus()
     m_rightButtonLayerMenu->addAction(action);
 
     m_keyReference->registerShortcut(raction); // rename after delete, so delete layer goes next to delete pane
+    m_keyReference->registerShortcut(eaction); // edit also after delete
 }
 
 void
@@ -3031,6 +3041,27 @@ MainWindow::renameCurrentLayer()
 		setupExistingLayersMenus();
 	    }
 	}
+    }
+}
+
+void
+MainWindow::editCurrentLayer()
+{
+    //!!! maintain one per layer only
+    
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (pane) {
+	Layer *layer = pane->getSelectedLayer();
+	if (layer) {
+            Model *model = layer->getModel();
+            if (model) {
+
+                ModelDataTableDialog *dialog = new ModelDataTableDialog(model);
+                dialog->setAttribute(Qt::WA_DeleteOnClose); // see below
+                dialog->show();
+                return;
+            }
+        }
     }
 }
 
