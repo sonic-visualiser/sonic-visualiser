@@ -17,7 +17,7 @@ LIBPATH = ../view ../layer ../data ../widgets ../transform ../plugin ../base ../
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvdata -lsvtransform -lsvwidgets -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvtransform -lsvwidgets -lsvdata -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../view/libsvview.a \
                   ../layer/libsvlayer.a \
