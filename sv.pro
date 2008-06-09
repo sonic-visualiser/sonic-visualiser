@@ -23,6 +23,7 @@ PRE_TARGETDEPS += ../view/libsvview.a \
                   ../layer/libsvlayer.a \
                   ../data/libsvdata.a \
                   ../framework/libsvframework.a \
+                  ../transform/libsvtransform.a \
                   ../widgets/libsvwidgets.a \
                   ../plugin/libsvplugin.a \
                   ../base/libsvbase.a \
