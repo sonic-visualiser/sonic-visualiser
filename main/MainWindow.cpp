@@ -3057,7 +3057,13 @@ MainWindow::editCurrentLayer()
             if (model) {
 
                 ModelDataTableDialog *dialog = new ModelDataTableDialog(model);
-                dialog->setAttribute(Qt::WA_DeleteOnClose); // see below
+                dialog->setAttribute(Qt::WA_DeleteOnClose);
+                connect(m_viewManager,
+                        SIGNAL(globalCentreFrameChanged(unsigned long)),
+                        dialog, SLOT(scrollToFrame(unsigned long)));
+                connect(m_viewManager,
+                        SIGNAL(playbackFrameChanged(unsigned long)),
+                        dialog, SLOT(scrollToFrame(unsigned long)));
                 dialog->show();
                 return;
             }
