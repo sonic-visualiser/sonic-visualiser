@@ -126,7 +126,6 @@ protected slots:
     virtual void addPane();
     virtual void addLayer();
     virtual void renameCurrentLayer();
-    virtual void editCurrentLayer();
 
     virtual void paneAdded(Pane *);
     virtual void paneHidden(Pane *);

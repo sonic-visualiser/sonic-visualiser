@@ -43,7 +43,6 @@
 #include "widgets/AudioDial.h"
 #include "widgets/IconLoader.h"
 #include "widgets/LayerTreeDialog.h"
-#include "widgets/ModelDataTableDialog.h"
 #include "widgets/ListInputDialog.h"
 #include "widgets/SubdividingMenu.h"
 #include "widgets/NotifyingPushButton.h"
@@ -210,8 +209,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(200);
     m_playSpeed->setValue(100);
-    m_playSpeed->setFixedWidth(24);
-    m_playSpeed->setFixedHeight(24);
+    m_playSpeed->setFixedWidth(32);
+    m_playSpeed->setFixedHeight(32);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speedup"));
@@ -3041,33 +3040,6 @@ MainWindow::renameCurrentLayer()
 		setupExistingLayersMenus();
 	    }
 	}
-    }
-}
-
-void
-MainWindow::editCurrentLayer()
-{
-    //!!! maintain one per layer only
-    
-    Pane *pane = m_paneStack->getCurrentPane();
-    if (pane) {
-	Layer *layer = pane->getSelectedLayer();
-	if (layer) {
-            Model *model = layer->getModel();
-            if (model) {
-
-                ModelDataTableDialog *dialog = new ModelDataTableDialog(model);
-                dialog->setAttribute(Qt::WA_DeleteOnClose);
-                connect(m_viewManager,
-                        SIGNAL(globalCentreFrameChanged(unsigned long)),
-                        dialog, SLOT(scrollToFrame(unsigned long)));
-                connect(m_viewManager,
-                        SIGNAL(playbackFrameChanged(unsigned long)),
-                        dialog, SLOT(scrollToFrame(unsigned long)));
-                dialog->show();
-                return;
-            }
-        }
     }
 }
 
