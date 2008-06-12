@@ -1,4 +1,17 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="1.1" language="en">
+<defaultcodec></defaultcodec>
+<context>
+    <name>BundleCommand</name>
+    <message numerus="yes">
+        <location filename="../../base/Command.cpp" line="98"/>
+        <source>%1 (%n change(s))</source>
+        <translation>
+            <numerusform>%1 (%n change)</numerusform>
+            <numerusform>%1 (%n changes)</numerusform>
+        </translation>
+    </message>
+</context>
 <context>
     <name>QColorDialog</name>
     <message>
