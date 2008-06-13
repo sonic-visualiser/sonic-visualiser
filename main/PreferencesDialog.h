@@ -40,6 +40,7 @@ protected slots:
     void spectrogramSmoothingChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
+    void audioDeviceChanged(int device);
     void resampleQualityChanged(int quality);
     void resampleOnLoadChanged(int state);
     void tempDirRootChanged(QString root);
@@ -63,6 +64,7 @@ protected:
     int m_spectrogramSmoothing;
     int m_propertyLayout;
     float m_tuningFrequency;
+    int m_audioDevice;
     int m_resampleQuality;
     bool m_resampleOnLoad;
     QString m_tempDirRoot;

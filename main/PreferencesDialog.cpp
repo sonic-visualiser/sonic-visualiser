@@ -31,13 +31,16 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSpinBox>
+#include <QSettings>
 
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
 #include "base/Preferences.h"
+#include "audioio/AudioTargetFactory.h"
 
 PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     QDialog(parent, flags),
+    m_audioDevice(0),
     m_changesOnRestart(false)
 {
     setWindowTitle(tr("Sonic Visualiser: Application Preferences"));
@@ -110,6 +113,24 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
     connect(frequency, SIGNAL(valueChanged(double)),
             this, SLOT(tuningFrequencyChanged(double)));
+
+    QComboBox *audioDevice = new QComboBox;
+    std::vector<QString> devices =
+        AudioTargetFactory::getInstance()->getCallbackTargetNames();
+    
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    QString targetName = settings.value("audio-target", "").toString();
+    settings.endGroup();
+
+    for (int i = 0; i < devices.size(); ++i) {
+        audioDevice->addItem(AudioTargetFactory::getInstance()
+                             ->getCallbackTargetDescription(devices[i]));
+        if (targetName == devices[i]) audioDevice->setCurrentIndex(i);
+    }
+
+    connect(audioDevice, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(audioDeviceChanged(int)));
 
     QComboBox *resampleQuality = new QComboBox;
 
@@ -188,6 +209,37 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     int row = 0;
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Temporary Directory Root"))),
+                       row, 0);
+    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
+    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
+    row++;
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Resample On Load"))),
+                       row, 0);
+    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("Playback audio device:")), row, 0);
+    subgrid->addWidget(audioDevice, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Resample Quality"))),
+                       row, 0);
+    subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
+
+    subgrid->setRowStretch(row, 10);
+    
+    tab->addTab(frame, tr("&General"));
+
+    // Appearance tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Property Box Layout"))),
                        row, 0);
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
@@ -209,26 +261,9 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                        row, 0);
     subgrid->addWidget(showSplash, row++, 1, 1, 1);
 
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Temporary Directory Root"))),
-                       row, 0);
-    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
-    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
-    row++;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Resample On Load"))),
-                       row, 0);
-    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Resample Quality"))),
-                       row, 0);
-    subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
-
     subgrid->setRowStretch(row, 10);
     
-    tab->addTab(frame, tr("&General"));
+    tab->addTab(frame, tr("&Appearance"));
 
     // Analysis tab
 
@@ -256,7 +291,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     
     subgrid->setRowStretch(row, 10);
     
-    tab->addTab(frame, tr("&Analysis"));
+    tab->addTab(frame, tr("Anal&ysis"));
 
     QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
     grid->addWidget(bb, 1, 0);
@@ -304,6 +339,14 @@ PreferencesDialog::tuningFrequencyChanged(double freq)
 {
     m_tuningFrequency = freq;
     m_applyButton->setEnabled(true);
+}
+
+void
+PreferencesDialog::audioDeviceChanged(int s)
+{
+    m_audioDevice = s;
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
 }
 
 void
@@ -386,6 +429,14 @@ PreferencesDialog::applyClicked()
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
     prefs->setViewFontSize(m_viewFontSize);
+    
+    std::vector<QString> devices =
+        AudioTargetFactory::getInstance()->getCallbackTargetNames();
+
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    settings.setValue("audio-target", devices[m_audioDevice]);
+    settings.endGroup();
 
     m_applyButton->setEnabled(false);
 
