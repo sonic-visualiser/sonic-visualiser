@@ -70,6 +70,7 @@
 #include "base/Clipboard.h"
 #include "base/UnitDatabase.h"
 #include "layer/ColourDatabase.h"
+#include "widgets/ModelDataTableDialog.h"
 
 // For version information
 #include "vamp/vamp.h"
@@ -131,8 +132,13 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_soloAction(0),
     m_soloModified(false),
     m_prevSolo(false),
-    m_ffwdAction(0),
+    m_rwdStartAction(0),
     m_rwdAction(0),
+    m_ffwdAction(0),
+    m_ffwdEndAction(0),
+    m_playAction(0),
+    m_playSelectionAction(0),
+    m_playLoopAction(0),
     m_playControlsSpacer(0),
     m_playControlsWidth(0),
     m_preferencesDialog(0),
@@ -1603,29 +1609,28 @@ MainWindow::setupToolbars()
 
     QToolBar *toolbar = addToolBar(tr("Playback Toolbar"));
 
-    QAction *rwdStartAction = toolbar->addAction(il.load("rewind-start"),
-                                                 tr("Rewind to Start"));
-    rwdStartAction->setShortcut(tr("Home"));
-    rwdStartAction->setStatusTip(tr("Rewind to the start"));
-    connect(rwdStartAction, SIGNAL(triggered()), this, SLOT(rewindStart()));
-    connect(this, SIGNAL(canPlay(bool)), rwdStartAction, SLOT(setEnabled(bool)));
+    m_rwdStartAction = toolbar->addAction(il.load("rewind-start"),
+                                          tr("Rewind to Start"));
+    m_rwdStartAction->setShortcut(tr("Home"));
+    m_rwdStartAction->setStatusTip(tr("Rewind to the start"));
+    connect(m_rwdStartAction, SIGNAL(triggered()), this, SLOT(rewindStart()));
+    connect(this, SIGNAL(canPlay(bool)), m_rwdStartAction, SLOT(setEnabled(bool)));
 
-    QAction *m_rwdAction = toolbar->addAction(il.load("rewind"),
-                                              tr("Rewind"));
+    m_rwdAction = toolbar->addAction(il.load("rewind"), tr("Rewind"));
     m_rwdAction->setShortcut(tr("PgUp"));
     m_rwdAction->setStatusTip(tr("Rewind to the previous time instant or time ruler notch"));
     connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
     connect(this, SIGNAL(canRewind(bool)), m_rwdAction, SLOT(setEnabled(bool)));
 
-    QAction *playAction = toolbar->addAction(il.load("playpause"),
-                                             tr("Play / Pause"));
-    playAction->setCheckable(true);
-    playAction->setShortcut(tr("Space"));
-    playAction->setStatusTip(tr("Start or stop playback from the current position"));
-    connect(playAction, SIGNAL(triggered()), this, SLOT(play()));
+    m_playAction = toolbar->addAction(il.load("playpause"),
+                                      tr("Play / Pause"));
+    m_playAction->setCheckable(true);
+    m_playAction->setShortcut(tr("Space"));
+    m_playAction->setStatusTip(tr("Start or stop playback from the current position"));
+    connect(m_playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
-	    playAction, SLOT(setChecked(bool)));
-    connect(this, SIGNAL(canPlay(bool)), playAction, SLOT(setEnabled(bool)));
+	    m_playAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
 
     m_ffwdAction = toolbar->addAction(il.load("ffwd"),
                                               tr("Fast Forward"));
@@ -1634,36 +1639,36 @@ MainWindow::setupToolbars()
     connect(m_ffwdAction, SIGNAL(triggered()), this, SLOT(ffwd()));
     connect(this, SIGNAL(canFfwd(bool)), m_ffwdAction, SLOT(setEnabled(bool)));
 
-    QAction *ffwdEndAction = toolbar->addAction(il.load("ffwd-end"),
-                                                tr("Fast Forward to End"));
-    ffwdEndAction->setShortcut(tr("End"));
-    ffwdEndAction->setStatusTip(tr("Fast-forward to the end"));
-    connect(ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
-    connect(this, SIGNAL(canPlay(bool)), ffwdEndAction, SLOT(setEnabled(bool)));
+    m_ffwdEndAction = toolbar->addAction(il.load("ffwd-end"),
+                                         tr("Fast Forward to End"));
+    m_ffwdEndAction->setShortcut(tr("End"));
+    m_ffwdEndAction->setStatusTip(tr("Fast-forward to the end"));
+    connect(m_ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
+    connect(this, SIGNAL(canPlay(bool)), m_ffwdEndAction, SLOT(setEnabled(bool)));
 
     toolbar = addToolBar(tr("Play Mode Toolbar"));
 
-    QAction *psAction = toolbar->addAction(il.load("playselection"),
-                                           tr("Constrain Playback to Selection"));
-    psAction->setCheckable(true);
-    psAction->setChecked(m_viewManager->getPlaySelectionMode());
-    psAction->setShortcut(tr("s"));
-    psAction->setStatusTip(tr("Constrain playback to the selected regions"));
+    m_playSelectionAction = toolbar->addAction(il.load("playselection"),
+                                               tr("Constrain Playback to Selection"));
+    m_playSelectionAction->setCheckable(true);
+    m_playSelectionAction->setChecked(m_viewManager->getPlaySelectionMode());
+    m_playSelectionAction->setShortcut(tr("s"));
+    m_playSelectionAction->setStatusTip(tr("Constrain playback to the selected regions"));
     connect(m_viewManager, SIGNAL(playSelectionModeChanged(bool)),
-            psAction, SLOT(setChecked(bool)));
-    connect(psAction, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
-    connect(this, SIGNAL(canPlaySelection(bool)), psAction, SLOT(setEnabled(bool)));
+            m_playSelectionAction, SLOT(setChecked(bool)));
+    connect(m_playSelectionAction, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
+    connect(this, SIGNAL(canPlaySelection(bool)), m_playSelectionAction, SLOT(setEnabled(bool)));
 
-    QAction *plAction = toolbar->addAction(il.load("playloop"),
-                                           tr("Loop Playback"));
-    plAction->setCheckable(true);
-    plAction->setChecked(m_viewManager->getPlayLoopMode());
-    plAction->setShortcut(tr("l"));
-    plAction->setStatusTip(tr("Loop playback"));
+    m_playLoopAction = toolbar->addAction(il.load("playloop"),
+                                          tr("Loop Playback"));
+    m_playLoopAction->setCheckable(true);
+    m_playLoopAction->setChecked(m_viewManager->getPlayLoopMode());
+    m_playLoopAction->setShortcut(tr("l"));
+    m_playLoopAction->setStatusTip(tr("Loop playback"));
     connect(m_viewManager, SIGNAL(playLoopModeChanged(bool)),
-            plAction, SLOT(setChecked(bool)));
-    connect(plAction, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
-    connect(this, SIGNAL(canPlay(bool)), plAction, SLOT(setEnabled(bool)));
+            m_playLoopAction, SLOT(setChecked(bool)));
+    connect(m_playLoopAction, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
+    connect(this, SIGNAL(canPlay(bool)), m_playLoopAction, SLOT(setEnabled(bool)));
 
     m_soloAction = toolbar->addAction(il.load("solo"),
                                            tr("Solo Current Pane"));
@@ -1690,40 +1695,40 @@ MainWindow::setupToolbars()
         connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
     }
 
-    m_keyReference->registerShortcut(playAction);
-    m_keyReference->registerShortcut(psAction);
-    m_keyReference->registerShortcut(plAction);
+    m_keyReference->registerShortcut(m_playAction);
+    m_keyReference->registerShortcut(m_playSelectionAction);
+    m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
     if (alAction) m_keyReference->registerShortcut(alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
-    m_keyReference->registerShortcut(rwdStartAction);
-    m_keyReference->registerShortcut(ffwdEndAction);
+    m_keyReference->registerShortcut(m_rwdStartAction);
+    m_keyReference->registerShortcut(m_ffwdEndAction);
 
-    menu->addAction(playAction);
-    menu->addAction(psAction);
-    menu->addAction(plAction);
+    menu->addAction(m_playAction);
+    menu->addAction(m_playSelectionAction);
+    menu->addAction(m_playLoopAction);
     menu->addAction(m_soloAction);
     if (alAction) menu->addAction(alAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
     menu->addSeparator();
-    menu->addAction(rwdStartAction);
-    menu->addAction(ffwdEndAction);
+    menu->addAction(m_rwdStartAction);
+    menu->addAction(m_ffwdEndAction);
     menu->addSeparator();
 
-    m_rightButtonPlaybackMenu->addAction(playAction);
-    m_rightButtonPlaybackMenu->addAction(psAction);
-    m_rightButtonPlaybackMenu->addAction(plAction);
+    m_rightButtonPlaybackMenu->addAction(m_playAction);
+    m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
+    m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
     if (alAction) m_rightButtonPlaybackMenu->addAction(alAction);
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
     m_rightButtonPlaybackMenu->addSeparator();
-    m_rightButtonPlaybackMenu->addAction(rwdStartAction);
-    m_rightButtonPlaybackMenu->addAction(ffwdEndAction);
+    m_rightButtonPlaybackMenu->addAction(m_rwdStartAction);
+    m_rightButtonPlaybackMenu->addAction(m_ffwdEndAction);
     m_rightButtonPlaybackMenu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
@@ -1814,8 +1819,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::EraseMode] = action;
 
-    action = toolbar->addAction(il.load("measure"),
-				tr("Measure"));
+    action = toolbar->addAction(il.load("measure"), tr("Measure"));
     action->setCheckable(true);
     action->setShortcut(tr("6"));
     action->setStatusTip(tr("Make measurements in layer"));
@@ -1828,6 +1832,20 @@ MainWindow::setupToolbars()
     toolNavigateSelected();
 
     Pane::registerShortcuts(*m_keyReference);
+}
+
+void
+MainWindow::connectLayerEditDialog(ModelDataTableDialog *dialog)
+{
+    MainWindowBase::connectLayerEditDialog(dialog);
+    QToolBar *toolbar = dialog->getPlayToolbar();
+    if (toolbar) {
+        toolbar->addAction(m_rwdStartAction);
+        toolbar->addAction(m_rwdAction);
+        toolbar->addAction(m_playAction);
+        toolbar->addAction(m_ffwdAction);
+        toolbar->addAction(m_ffwdEndAction);
+    }
 }
 
 void
