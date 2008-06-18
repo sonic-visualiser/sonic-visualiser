@@ -188,8 +188,13 @@ protected:
 
     QAction                 *m_deleteSelectedAction;
     QAction                 *m_soloAction;
-    QAction                 *m_ffwdAction;
+    QAction                 *m_rwdStartAction;
     QAction                 *m_rwdAction;
+    QAction                 *m_ffwdAction;
+    QAction                 *m_ffwdEndAction;
+    QAction                 *m_playAction;
+    QAction                 *m_playSelectionAction;
+    QAction                 *m_playLoopAction;
 
     bool                     m_soloModified;
     bool                     m_prevSolo;
@@ -249,8 +254,10 @@ protected:
 
     virtual void closeEvent(QCloseEvent *e);
     virtual bool checkSaveModified();
-    
+
     virtual void updateVisibleRangeDisplay(Pane *p) const;
+    
+    virtual void connectLayerEditDialog(ModelDataTableDialog *);
 };
 
 
