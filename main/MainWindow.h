@@ -95,6 +95,7 @@ protected slots:
 
     virtual void sampleRateMismatch(size_t, size_t, bool);
     virtual void audioOverloadPluginDisabled();
+    virtual void audioTimeStretchMultiChannelDisabled();
 
     virtual void toolNavigateSelected();
     virtual void toolSelectSelected();
