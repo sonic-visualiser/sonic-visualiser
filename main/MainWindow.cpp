@@ -3119,7 +3119,7 @@ MainWindow::playSpeedChanged(int position)
     float percent = m_playSpeed->mappedValue();
     float factor = mapper.getFactorForValue(percent);
 
-    std::cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << std::endl;
+//    std::cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << std::endl;
 
     bool something = (position != 100);
 
@@ -3503,7 +3503,7 @@ MainWindow::website()
 void
 MainWindow::help()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.2/en/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.3/en/"));
 }
 
 void
@@ -3594,6 +3594,13 @@ MainWindow::about()
     aboutText += tr("<br>With FFTW3 (v%1) &copy; Matteo Frigo and MIT").arg(FFTW3_VERSION);
 #else
     aboutText += tr("<br>With FFTW3 &copy; Matteo Frigo and MIT");
+#endif
+#endif
+#ifdef HAVE_RUBBERBAND
+#ifdef RUBBERBAND_VERSION
+    aboutText += tr("<br>With Rubber Band (v%1) &copy; Chris Cannam").arg(RUBBERBAND_VERSION);
+#else
+    aboutText += tr("<br>With Rubber Band &copy; Chris Cannam");
 #endif
 #endif
 #ifdef HAVE_VAMP

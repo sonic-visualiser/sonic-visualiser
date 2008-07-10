@@ -370,6 +370,12 @@ main(int argc, char **argv)
     if (wisdom != "") {
         fftwf_import_wisdom_from_string(wisdom.toLocal8Bit().data());
     }
+#ifdef HAVE_FFTW3
+    wisdom = settings.value("wisdom_d").toString();
+    if (wisdom != "") {
+        fftw_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+    }
+#endif
     settings.endGroup();
 #endif
 
@@ -382,7 +388,6 @@ main(int argc, char **argv)
     }
 */
     int rv = application.exec();
-    std::cerr << "application.exec() returned " << rv << std::endl;
 
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
@@ -390,13 +395,20 @@ main(int argc, char **argv)
     application.releaseMainWindow();
 
 #ifdef HAVE_FFTW3F
+    settings.beginGroup("FFTWisdom");
     char *cwisdom = fftwf_export_wisdom_to_string();
     if (cwisdom) {
-        settings.beginGroup("FFTWisdom");
         settings.setValue("wisdom", cwisdom);
-        settings.endGroup();
         fftwf_free(cwisdom);
     }
+#ifdef HAVE_FFTW3
+    cwisdom = fftw_export_wisdom_to_string();
+    if (cwisdom) {
+        settings.setValue("wisdom_d", cwisdom);
+        fftw_free(cwisdom);
+    }
+#endif
+    settings.endGroup();
 #endif
 
     delete gui;
