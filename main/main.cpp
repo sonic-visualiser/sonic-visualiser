@@ -358,9 +358,15 @@ main(int argc, char **argv)
             }
         }
         if (status == MainWindow::FileOpenFailed) {
+            splash.hide();
 	    QMessageBox::critical
                 (gui, QMessageBox::tr("Failed to open file"),
                  QMessageBox::tr("File or URL \"%1\" could not be opened").arg(path));
+        } else if (status == MainWindow::FileOpenWrongMode) {
+            splash.hide();
+            QMessageBox::critical
+                (gui, QMessageBox::tr("Failed to open file"),
+                 QMessageBox::tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
         }
     }
     
