@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-SV_UNIT_PACKAGES = vamp vamp-hostsdk rubberband fftw3 fftw3f samplerate jack libpulse portaudio-2.0 mad id3tag oggz fishsound lrdf raptor sndfile liblo
+SV_UNIT_PACKAGES = vamp vamp-hostsdk rubberband fftw3 fftw3f samplerate jack libpulse portaudio-2.0 mad id3tag oggz fishsound lrdf sndfile liblo redland
 load(../sv.prf)
 
 CONFIG += sv qt thread warn_on stl rtti exceptions
@@ -13,11 +13,11 @@ ICON = icons/sv-macicon.icns
 
 DEPENDPATH += . .. i18n main transform
 INCLUDEPATH += . .. transform main
-LIBPATH = ../view ../layer ../data ../widgets ../transform ../plugin ../base ../system ../framework ../audioio $$LIBPATH
+LIBPATH = ../view ../layer ../data ../widgets ../transform ../plugin ../base ../system ../framework ../audioio ../rdf $$LIBPATH
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvtransform -lsvwidgets -lsvdata -lsvplugin -lsvbase -lsvsystem $$LIBS
+LIBS = -lsvframework -lsvaudioio -lsvview -lsvlayer -lsvrdf -lsvtransform -lsvwidgets -lsvdata -lsvplugin -lsvbase -lsvsystem $$LIBS
 
 PRE_TARGETDEPS += ../view/libsvview.a \
                   ../layer/libsvlayer.a \
@@ -28,6 +28,7 @@ PRE_TARGETDEPS += ../view/libsvview.a \
                   ../plugin/libsvplugin.a \
                   ../base/libsvbase.a \
                   ../audioio/libsvaudioio.a \
+                  ../rdf/libsvrdf.a \
                   ../system/libsvsystem.a
 
 OBJECTS_DIR = tmp_obj
