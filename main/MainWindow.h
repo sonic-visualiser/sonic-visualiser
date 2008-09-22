@@ -128,6 +128,8 @@ protected slots:
     virtual void addLayer();
     virtual void renameCurrentLayer();
 
+    virtual void findTransform();
+
     virtual void paneAdded(Pane *);
     virtual void paneHidden(Pane *);
     virtual void paneAboutToBeDeleted(Pane *);
