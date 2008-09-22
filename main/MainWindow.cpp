@@ -1217,11 +1217,37 @@ MainWindow::setupTransformsMenu()
     } else {
 	m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
         m_transformsMenu->setTearOffEnabled(true);
-   }
+    }
 
     TransformList transforms =
 	TransformFactory::getInstance()->getAllTransformDescriptions();
-
+/*!!!
+    std::cerr << "Testing transform search..." << std::endl;
+    QStringList terms;
+    terms << "onset";
+    terms << "detector";
+    TransformFactory::SearchResults results = TransformFactory::getInstance()->
+        search(terms);
+    std::cerr << results.size() << " result(s)..." << std::endl;
+    int i = 0;
+    std::set<TransformFactory::Match> sortedResults;
+    for (TransformFactory::SearchResults::const_iterator j =
+             results.begin();
+         j != results.end(); ++j) {
+        sortedResults.insert(j->second);
+    }
+    for (std::set<TransformFactory::Match>::const_iterator j =
+             sortedResults.begin();
+         j != sortedResults.end(); ++j) {
+        std::cerr << i << ": " << j->transform.toStdString()
+                  << ": ";
+        for (int k = 0; k < j->fragments.size(); ++k) {
+            std::cerr << j->fragments[k].toStdString() << " ";
+        }
+        std::cerr << "(" << j->score << ")" << std::endl;
+        ++i;
+    }
+*/
     vector<QString> types =
         TransformFactory::getInstance()->getAllTransformTypes();
 
@@ -1238,6 +1264,13 @@ MainWindow::setupTransformsMenu()
     m_rightButtonTransformsMenu->addMenu(m_recentTransformsMenu);
     connect(&m_recentTransforms, SIGNAL(recentChanged()),
             this, SLOT(setupRecentTransformsMenu()));
+
+    QAction *action = new QAction(tr("Find Transform..."), this);
+    action->setStatusTip(tr("Search for a transform by name or description"));
+    connect(action, SIGNAL(triggered()), this, SLOT(findTransform()));
+    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_transformsMenu->addAction(action);
+    m_rightButtonTransformsMenu->addAction(action);
 
     m_transformsMenu->addSeparator();
     m_rightButtonTransformsMenu->addSeparator();
@@ -1375,7 +1408,7 @@ MainWindow::setupTransformsMenu()
         m_transformActionsReverse[transforms[i].identifier] = action;
 	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
-        action->setStatusTip(transforms[i].description);
+        action->setStatusTip(transforms[i].longDescription);
 
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
@@ -1399,7 +1432,7 @@ MainWindow::setupTransformsMenu()
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
         m_transformActions[action] = transforms[i].identifier;
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-        action->setStatusTip(transforms[i].description);
+        action->setStatusTip(transforms[i].longDescription);
 
 //        cerr << "Transform: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
 
@@ -3059,6 +3092,12 @@ MainWindow::renameCurrentLayer()
 	    }
 	}
     }
+}
+
+void
+MainWindow::findTransform()
+{
+    //!!! implement me!
 }
 
 void
