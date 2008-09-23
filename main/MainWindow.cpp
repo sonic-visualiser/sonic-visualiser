@@ -47,6 +47,7 @@
 #include "widgets/SubdividingMenu.h"
 #include "widgets/NotifyingPushButton.h"
 #include "widgets/KeyReference.h"
+#include "widgets/TransformFinder.h"
 #include "widgets/LabelCounterInputDialog.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
@@ -1241,8 +1242,11 @@ MainWindow::setupTransformsMenu()
          j != sortedResults.end(); ++j) {
         std::cerr << i << ": " << j->transform.toStdString()
                   << ": ";
-        for (int k = 0; k < j->fragments.size(); ++k) {
-            std::cerr << j->fragments[k].toStdString() << " ";
+        for (TransformFactory::Match::FragmentMap::const_iterator k =
+                 j->fragments.begin();
+             k != j->fragments.end(); ++k) {
+            std::cerr << k->first.toStdString() << ": "
+                      << k->second.toStdString() << " ";
         }
         std::cerr << "(" << j->score << ")" << std::endl;
         ++i;
@@ -1264,13 +1268,6 @@ MainWindow::setupTransformsMenu()
     m_rightButtonTransformsMenu->addMenu(m_recentTransformsMenu);
     connect(&m_recentTransforms, SIGNAL(recentChanged()),
             this, SLOT(setupRecentTransformsMenu()));
-
-    QAction *action = new QAction(tr("Find Transform..."), this);
-    action->setStatusTip(tr("Search for a transform by name or description"));
-    connect(action, SIGNAL(triggered()), this, SLOT(findTransform()));
-    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-    m_transformsMenu->addAction(action);
-    m_rightButtonTransformsMenu->addAction(action);
 
     m_transformsMenu->addSeparator();
     m_rightButtonTransformsMenu->addSeparator();
@@ -1463,6 +1460,16 @@ MainWindow::setupTransformsMenu()
          i != pendingMenus.end(); ++i) {
         (*i)->entriesAdded();
     }
+
+    m_transformsMenu->addSeparator();
+    m_rightButtonTransformsMenu->addSeparator();
+
+    QAction *action = new QAction(tr("Find a Transform..."), this);
+    action->setStatusTip(tr("Search for a transform from the installed plugins, by name or description"));
+    connect(action, SIGNAL(triggered()), this, SLOT(findTransform()));
+    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_transformsMenu->addAction(action);
+    m_rightButtonTransformsMenu->addAction(action);
 
     setupRecentTransformsMenu();
 }
@@ -3097,7 +3104,12 @@ MainWindow::renameCurrentLayer()
 void
 MainWindow::findTransform()
 {
-    //!!! implement me!
+    TransformFinder finder(this);
+    if (finder.exec()) {
+        std::cerr << "Yes! transform is " << finder.getTransform().toStdString() << std::endl;
+    } else {
+        std::cerr << "No" << std::endl;
+    }
 }
 
 void
