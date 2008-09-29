@@ -126,6 +126,7 @@ protected slots:
 
     virtual void addPane();
     virtual void addLayer();
+    virtual void addLayer(QString transformId);
     virtual void renameCurrentLayer();
 
     virtual void findTransform();

@@ -1222,36 +1222,7 @@ MainWindow::setupTransformsMenu()
 
     TransformList transforms =
 	TransformFactory::getInstance()->getAllTransformDescriptions();
-/*!!!
-    std::cerr << "Testing transform search..." << std::endl;
-    QStringList terms;
-    terms << "onset";
-    terms << "detector";
-    TransformFactory::SearchResults results = TransformFactory::getInstance()->
-        search(terms);
-    std::cerr << results.size() << " result(s)..." << std::endl;
-    int i = 0;
-    std::set<TransformFactory::Match> sortedResults;
-    for (TransformFactory::SearchResults::const_iterator j =
-             results.begin();
-         j != results.end(); ++j) {
-        sortedResults.insert(j->second);
-    }
-    for (std::set<TransformFactory::Match>::const_iterator j =
-             sortedResults.begin();
-         j != sortedResults.end(); ++j) {
-        std::cerr << i << ": " << j->transform.toStdString()
-                  << ": ";
-        for (TransformFactory::Match::FragmentMap::const_iterator k =
-                 j->fragments.begin();
-             k != j->fragments.end(); ++k) {
-            std::cerr << k->first.toStdString() << ": "
-                      << k->second.toStdString() << " ";
-        }
-        std::cerr << "(" << j->score << ")" << std::endl;
-        ++i;
-    }
-*/
+
     vector<QString> types =
         TransformFactory::getInstance()->getAllTransformTypes();
 
@@ -3026,6 +2997,19 @@ MainWindow::addLayer()
     // change the execution context (block size etc).
 
     QString transformId = i->second;
+
+    addLayer(transformId);
+}
+
+void
+MainWindow::addLayer(QString transformId)
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (!pane) {
+	std::cerr << "WARNING: MainWindow::addLayer: no current pane" << std::endl;
+	return;
+    }
+
     Transform transform = TransformFactory::getInstance()->
         getDefaultTransformFor(transformId);
 
@@ -3104,12 +3088,14 @@ MainWindow::renameCurrentLayer()
 void
 MainWindow::findTransform()
 {
-    TransformFinder finder(this);
-    if (finder.exec()) {
-        std::cerr << "Yes! transform is " << finder.getTransform().toStdString() << std::endl;
-    } else {
-        std::cerr << "No" << std::endl;
+    TransformFinder *finder = new TransformFinder(this);
+    if (!finder->exec()) {
+        delete finder;
+        return;
     }
+    TransformId transform = finder->getTransform();
+    delete finder;
+    addLayer(transform);
 }
 
 void
