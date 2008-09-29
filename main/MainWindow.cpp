@@ -1437,8 +1437,10 @@ MainWindow::setupTransformsMenu()
 
     QAction *action = new QAction(tr("Find a Transform..."), this);
     action->setStatusTip(tr("Search for a transform from the installed plugins, by name or description"));
+    action->setShortcut(tr("Ctrl+M"));
     connect(action, SIGNAL(triggered()), this, SLOT(findTransform()));
     connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
     m_transformsMenu->addAction(action);
     m_rightButtonTransformsMenu->addAction(action);
 
