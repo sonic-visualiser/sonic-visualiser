@@ -73,6 +73,8 @@
 #include "layer/ColourDatabase.h"
 #include "widgets/ModelDataTableDialog.h"
 
+#include "rdf/PluginRDFIndexer.h" //!!!
+
 // For version information
 #include "vamp/vamp.h"
 #include "vamp-sdk/PluginBase.h"
@@ -1222,6 +1224,17 @@ MainWindow::setupTransformsMenu()
 
     TransformList transforms =
 	TransformFactory::getInstance()->getAllTransformDescriptions();
+
+    //!!!
+
+    PluginRDFIndexer::getInstance()->indexURL("http://www.vamp-plugins.org/rdf/plugins/vamp-example-plugins");
+
+//    TransformList uninstalled =
+//        TransformFactory::getInstance()->getUninstalledTransformDescriptions();
+//    for (int i = 0; i < uninstalled.size(); ++i) {
+//        std::cerr << "uninstalled transform: " << uninstalled[i].name.toStdString() << std::endl;
+//    }
+
 
     vector<QString> types =
         TransformFactory::getInstance()->getAllTransformTypes();
