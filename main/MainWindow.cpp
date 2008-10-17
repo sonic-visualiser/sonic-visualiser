@@ -1227,7 +1227,7 @@ MainWindow::setupTransformsMenu()
 
     //!!!
 
-    PluginRDFIndexer::getInstance()->indexURL("http://www.vamp-plugins.org/rdf/plugins/vamp-example-plugins");
+//    PluginRDFIndexer::getInstance()->indexURL("http://www.vamp-plugins.org/rdf/plugins/vamp-example-plugins");
 
 //    TransformList uninstalled =
 //        TransformFactory::getInstance()->getUninstalledTransformDescriptions();
