@@ -248,6 +248,14 @@ main(int argc, char **argv)
     }
     settings.endGroup();
 
+    settings.beginGroup("RDF");
+    if (!settings.contains("rdf-indices")) {
+        QStringList list;
+        list << "http://www.vamp-plugins.org/rdf/plugins/index.txt";
+        settings.setValue("rdf-indices", list);
+    }
+    settings.endGroup();
+
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
     for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
