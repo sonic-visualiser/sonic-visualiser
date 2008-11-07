@@ -76,8 +76,8 @@
 #include "rdf/PluginRDFIndexer.h" //!!!
 
 // For version information
-#include "vamp/vamp.h"
-#include "vamp-sdk/PluginBase.h"
+#include <vamp/vamp.h>
+#include <vamp-hostsdk/PluginBase.h>
 #include "plugin/api/ladspa.h"
 #include "plugin/api/dssi.h"
 
