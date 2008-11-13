@@ -21,7 +21,6 @@
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
 #include "widgets/TipDialog.h"
-#include "rdf/SimpleSPARQLQuery.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -237,14 +236,15 @@ main(int argc, char **argv)
     QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
 
     QPixmap pixmap(":/icons/sv-splash.png");
-    QSplashScreen splash(pixmap);
+    QSplashScreen *splash = 0;
 
     QSettings settings;
 
     settings.beginGroup("Preferences");
     if (settings.value("show-splash", true).toBool()) {
-        splash.show();
-        QTimer::singleShot(5000, &splash, SLOT(hide()));
+        splash = new QSplashScreen(pixmap);
+        splash->show();
+        QTimer::singleShot(5000, splash, SLOT(hide()));
         application.processEvents();
     }
     settings.endGroup();
@@ -256,10 +256,6 @@ main(int argc, char **argv)
         settings.setValue("rdf-indices", list);
     }
     settings.endGroup();
-
-    SimpleSPARQLQuery::setImplementationPreference
-        (SimpleSPARQLQuery::UseDatastore);
-//        (SimpleSPARQLQuery::UseDirectParser);
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
@@ -303,7 +299,9 @@ main(int argc, char **argv)
 
     MainWindow *gui = new MainWindow(audioOutput, oscSupport);
     application.setMainWindow(gui);
-    QObject::connect(gui, SIGNAL(hideSplash()), &splash, SLOT(hide()));
+    if (splash) {
+        QObject::connect(gui, SIGNAL(hideSplash()), splash, SLOT(hide()));
+    }
 
     QDesktopWidget *desktop = QApplication::desktop();
     QRect available = desktop->availableGeometry();
@@ -371,12 +369,12 @@ main(int argc, char **argv)
             }
         }
         if (status == MainWindow::FileOpenFailed) {
-            splash.hide();
+            if (splash) splash->hide();
 	    QMessageBox::critical
                 (gui, QMessageBox::tr("Failed to open file"),
                  QMessageBox::tr("File or URL \"%1\" could not be opened").arg(path));
         } else if (status == MainWindow::FileOpenWrongMode) {
-            splash.hide();
+            if (splash) splash->hide();
             QMessageBox::critical
                 (gui, QMessageBox::tr("Failed to open file"),
                  QMessageBox::tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
@@ -398,7 +396,8 @@ main(int argc, char **argv)
     settings.endGroup();
 #endif
 
-    splash.finish(gui);
+    if (splash) splash->finish(gui);
+    delete splash;
 
 /*
     TipDialog tipDialog;
