@@ -271,7 +271,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     newSession();
     
-    TransformFactory::getInstance()->startPopulationThread();
+//!!!    TransformFactory::getInstance()->startPopulationThread();
 }
 
 MainWindow::~MainWindow()

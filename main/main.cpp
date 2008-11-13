@@ -21,6 +21,7 @@
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
 #include "widgets/TipDialog.h"
+#include "rdf/SimpleSPARQLQuery.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -255,6 +256,10 @@ main(int argc, char **argv)
         settings.setValue("rdf-indices", list);
     }
     settings.endGroup();
+
+    SimpleSPARQLQuery::setImplementationPreference
+        (SimpleSPARQLQuery::UseDatastore);
+//        (SimpleSPARQLQuery::UseDirectParser);
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
