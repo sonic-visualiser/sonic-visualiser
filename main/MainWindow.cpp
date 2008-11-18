@@ -3546,7 +3546,7 @@ MainWindow::website()
 void
 MainWindow::help()
 {
-    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.3/en/"));
+    openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/1.4/en/"));
 }
 
 void
@@ -3557,121 +3557,139 @@ MainWindow::about()
 
 #ifdef BUILD_DEBUG
     debug = true;
-#endif
+#endif // BUILD_DEBUG
 #ifdef SV_VERSION
 #ifdef SVNREV
     version = tr("Release %1 : Revision %2").arg(SV_VERSION).arg(SVNREV);
-#else
+#else // !SVNREV
     version = tr("Release %1").arg(SV_VERSION);
-#endif
-#else
+#endif // SVNREV
+#else // !SV_VERSION
 #ifdef SVNREV
     version = tr("Unreleased : Revision %1").arg(SVNREV);
-#endif
-#endif
+#endif // SVNREV
+#endif // SV_VERSION
 
     QString aboutText;
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
-    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>");
-    aboutText += tr("<p>%1 : %2 configuration</p>")
+    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.<br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
+    aboutText += tr("<p><small>%1 : %2 configuration</small></p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));
 
-#ifndef BUILD_STATIC
-    aboutText += tr("<br>Using Qt v%1 &copy; Trolltech AS").arg(QT_VERSION_STR);
-#else
-#ifdef QT_SHARED
-    aboutText += tr("<br>Using Qt v%1 &copy; Trolltech AS").arg(QT_VERSION_STR);
-#endif
-#endif
+    aboutText += "<small>";
 
-#ifdef BUILD_STATIC
-    aboutText += tr("<p>Statically linked");
-#ifndef QT_SHARED
-    aboutText += tr("<br>With Qt (v%1) &copy; Trolltech AS").arg(QT_VERSION_STR);
-#endif
+    aboutText += tr("With Qt v%1 &copy; Nokia Corporation").arg(QT_VERSION_STR);
+
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION
-    aboutText += tr("<br>With JACK audio output library (v%1) &copy; Paul Davis and Jack O'Quin").arg(JACK_VERSION);
-#else
+    aboutText += tr("<br>With JACK audio output library v%1 &copy; Paul Davis and Jack O'Quin").arg(JACK_VERSION);
+#else // !JACK_VERSION
     aboutText += tr("<br>With JACK audio output library &copy; Paul Davis and Jack O'Quin");
-#endif
-#endif
+#endif // JACK_VERSION
+#endif // HAVE_JACK
 #ifdef HAVE_PORTAUDIO
     aboutText += tr("<br>With PortAudio audio output library &copy; Ross Bencina and Phil Burk");
-#endif
+#endif // HAVE_PORTAUDIO
 #ifdef HAVE_LIBPULSE
+#ifdef LIBPULSE_VERSION
+    aboutText += tr("<br>With PulseAudio audio output library v%1 &copy; Lennart Poettering and Pierre Ossman").arg(LIBPULSE_VERSION);
+#else // !LIBPULSE_VERSION
     aboutText += tr("<br>With PulseAudio audio output library &copy; Lennart Poettering and Pierre Ossman");
-#endif
+#endif // LIBPULSE_VERSION
+#endif // HAVE_LIBPULSE
 #ifdef HAVE_OGGZ
 #ifdef OGGZ_VERSION
     aboutText += tr("<br>With Ogg file decoder (oggz v%1, fishsound v%2) &copy; CSIRO Australia").arg(OGGZ_VERSION).arg(FISHSOUND_VERSION);
-#else
+#else // !OGGZ_VERSION
     aboutText += tr("<br>With Ogg file decoder &copy; CSIRO Australia");
-#endif
-#endif
+#endif // OGGZ_VERSION
+#endif // HAVE_OGGZ
 #ifdef HAVE_MAD
 #ifdef MAD_VERSION
-    aboutText += tr("<br>With MAD mp3 decoder (v%1) &copy; Underbit Technologies Inc").arg(MAD_VERSION);
-#else
+    aboutText += tr("<br>With MAD mp3 decoder v%1 &copy; Underbit Technologies Inc").arg(MAD_VERSION);
+#else // !MAD_VERSION
     aboutText += tr("<br>With MAD mp3 decoder &copy; Underbit Technologies Inc");
-#endif
-#endif
+#endif // MAD_VERSION
+#endif // HAVE_MAD
 #ifdef HAVE_SAMPLERATE
 #ifdef SAMPLERATE_VERSION
-    aboutText += tr("<br>With libsamplerate (v%1) &copy; Erik de Castro Lopo").arg(SAMPLERATE_VERSION);
-#else
+    aboutText += tr("<br>With libsamplerate v%1 &copy; Erik de Castro Lopo").arg(SAMPLERATE_VERSION);
+#else // !SAMPLERATE_VERSION
     aboutText += tr("<br>With libsamplerate &copy; Erik de Castro Lopo");
-#endif
-#endif
+#endif // SAMPLERATE_VERSION
+#endif // HAVE_SAMPLERATE
 #ifdef HAVE_SNDFILE
 #ifdef SNDFILE_VERSION
-    aboutText += tr("<br>With libsndfile (v%1) &copy; Erik de Castro Lopo").arg(SNDFILE_VERSION);
-#else
+    aboutText += tr("<br>With libsndfile v%1 &copy; Erik de Castro Lopo").arg(SNDFILE_VERSION);
+#else // !SNDFILE_VERSION
     aboutText += tr("<br>With libsndfile &copy; Erik de Castro Lopo");
-#endif
-#endif
+#endif // SNDFILE_VERSION
+#endif // HAVE_SNDFILE
 #ifdef HAVE_FFTW3F
 #ifdef FFTW3_VERSION
-    aboutText += tr("<br>With FFTW3 (v%1) &copy; Matteo Frigo and MIT").arg(FFTW3_VERSION);
-#else
+    aboutText += tr("<br>With FFTW3 v%1 &copy; Matteo Frigo and MIT").arg(FFTW3_VERSION);
+#else // !FFTW3_VERSION
     aboutText += tr("<br>With FFTW3 &copy; Matteo Frigo and MIT");
-#endif
-#endif
+#endif // FFTW3_VERSION
+#endif // HAVE_FFTW3F
 #ifdef HAVE_RUBBERBAND
 #ifdef RUBBERBAND_VERSION
-    aboutText += tr("<br>With Rubber Band (v%1) &copy; Chris Cannam").arg(RUBBERBAND_VERSION);
-#else
+    aboutText += tr("<br>With Rubber Band v%1 &copy; Chris Cannam").arg(RUBBERBAND_VERSION);
+#else // !RUBBERBAND_VERSION
     aboutText += tr("<br>With Rubber Band &copy; Chris Cannam");
-#endif
-#endif
+#endif // RUBBERBAND_VERSION
+#endif // HAVE_RUBBERBAND
 #ifdef HAVE_VAMP
     aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
-#endif
+#endif // !HAVE_VAMP
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
+#ifdef RAPTOR_VERSION
+    aboutText += tr("<br>With Raptor RDF parser v%1 &copy; Dave Beckett and the University of Bristol").arg(RAPTOR_VERSION);
+#else // !RAPTOR_VERSION
+    aboutText += tr("<br>With Raptor RDF parser &copy; Dave Beckett and the University of Bristol");
+#endif // RAPTOR_VERSION
+#ifdef RASQAL_VERSION
+    aboutText += tr("<br>With Rasqal RDF query engine v%1 &copy; Dave Beckett and the University of Bristol").arg(RASQAL_VERSION);
+#else // !RASQAL_VERSION
+    aboutText += tr("<br>With Rasqal RDF query engine &copy; Dave Beckett and the University of Bristol");
+#endif // RASQAL_VERSION
+#ifdef HAVE_REDLAND
+#ifdef REDLAND_VERSION
+    aboutText += tr("<br>With Redland RDF datastore v%1 &copy; Dave Beckett and the University of Bristol").arg(REDLAND_VERSION);
+#else // !REDLAND_VERSION
+    aboutText += tr("<br>With Redland RDF datastore &copy; Dave Beckett and the University of Bristol");
+#endif // REDLAND_VERSION
+#endif // HAVE_REDLAND
+
 #ifdef HAVE_LIBLO
 #ifdef LIBLO_VERSION
-    aboutText += tr("<br>With liblo Lite OSC library (v%1) &copy; Steve Harris").arg(LIBLO_VERSION);
-#else
+    aboutText += tr("<br>With liblo Lite OSC library v%1 &copy; Steve Harris").arg(LIBLO_VERSION);
+#else // !LIBLO_VERSION
     aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris").arg(LIBLO_VERSION);
-#endif
+#endif // LIBLO_VERSION
+
     if (m_oscQueue && m_oscQueue->isOK()) {
-        aboutText += tr("<p>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
+        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
     }
-#endif
-    aboutText += "</p>";
+
+    aboutText += "</small></p>";
+#endif // HAVE_LIBLO
+
+#ifndef BUILD_STATIC
+    aboutText.replace(tr("With "), tr("Using "));
 #endif
 
     aboutText += 
-        "<p>Sonic Visualiser Copyright &copy; 2005 - 2008 Chris Cannam and "
-        "Queen Mary, University of London.</p>"
-        "<p>This program is free software; you can redistribute it and/or "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005 - 2008 Chris Cannam and "
+        "Queen Mary, University of London.</small></p>"
+        "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "
         "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
-        "COPYING included with this distribution for more information.</p>";
+        "COPYING included with this distribution for more information.</small></p>";
     
     QMessageBox::about(this, tr("About Sonic Visualiser"), aboutText);
 }
