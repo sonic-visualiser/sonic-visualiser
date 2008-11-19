@@ -1069,7 +1069,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../../widgets/LabelCounterInputDialog.cpp" line="36"/>
         <source>Coarse counter (bars):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Coarse counter (measures):</translation>
     </message>
 </context>
 <context>
@@ -1092,7 +1092,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../../data/model/Labeller.h" line="95"/>
         <source>Cyclical two-level counter (bar/beat)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cyclical two-level counter (measure/beat)</translation>
     </message>
     <message>
         <location filename="../../data/model/Labeller.h" line="97"/>
@@ -2049,7 +2049,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="740"/>
         <source>Hide centre indicator, frame times, layer names and scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hide center indicator, frame times, layer names and scale</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="748"/>
@@ -2064,7 +2064,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="750"/>
         <source>Show centre indicator only</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Show center indicator only</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="758"/>
@@ -2079,7 +2079,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="760"/>
         <source>Show centre indicator, frame times and scale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Show center indicator, frame times and scale</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="768"/>
@@ -4921,39 +4921,6 @@ Usage:
         <location filename="../main/main.cpp" line="236"/>
         <source>Sonic Visualiser</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QColorDialog</name>
-    <message>
-        <location filename="" line="0"/>
-        <source>Color</source>
-        <translation type="obsolete">Colour</translation>
-    </message>
-    <message>
-        <location filename="" line="0"/>
-        <source>&amp;Basic colors</source>
-        <translation type="obsolete">&amp;Basic colours</translation>
-    </message>
-    <message>
-        <location filename="" line="0"/>
-        <source>&amp;Custom colors</source>
-        <translation type="obsolete">&amp;Custom colours</translation>
-    </message>
-    <message>
-        <location filename="" line="0"/>
-        <source>&amp;Define Custom Colors &gt;&gt;</source>
-        <translation type="obsolete">&amp;Define Custom Colours &gt;&gt;</translation>
-    </message>
-    <message>
-        <location filename="" line="0"/>
-        <source>&amp;Add to Custom Colors</source>
-        <translation type="obsolete">&amp;Add to Custom Colours</translation>
-    </message>
-    <message>
-        <location filename="" line="0"/>
-        <source>Select color</source>
-        <translation type="obsolete">Select colour</translation>
     </message>
 </context>
 <context>
