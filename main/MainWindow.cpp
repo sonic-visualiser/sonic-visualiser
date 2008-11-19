@@ -1222,6 +1222,7 @@ MainWindow::setupTransformsMenu()
     } else {
 	m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
         m_transformsMenu->setTearOffEnabled(true);
+        m_transformsMenu->setSeparatorsCollapsible(true);
     }
 
     TransformList transforms =
@@ -1650,7 +1651,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
 
     m_ffwdAction = toolbar->addAction(il.load("ffwd"),
-                                              tr("Fast Forward"));
+                                      tr("Fast Forward"));
     m_ffwdAction->setShortcut(tr("PgDown"));
     m_ffwdAction->setStatusTip(tr("Fast-forward to the next time instant or time ruler notch"));
     connect(m_ffwdAction, SIGNAL(triggered()), this, SLOT(ffwd()));
