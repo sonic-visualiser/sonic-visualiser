@@ -1444,7 +1444,7 @@ MainWindow::setupTransformsMenu()
     action->setStatusTip(tr("Search for a transform from the installed plugins, by name or description"));
     action->setShortcut(tr("Ctrl+M"));
     connect(action, SIGNAL(triggered()), this, SLOT(findTransform()));
-    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+//    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     m_transformsMenu->addAction(action);
     m_rightButtonTransformsMenu->addAction(action);
@@ -3102,7 +3102,10 @@ MainWindow::findTransform()
     }
     TransformId transform = finder->getTransform();
     delete finder;
-    addLayer(transform);
+    
+    if (getMainModel() != 0 && m_paneStack->getCurrentPane() != 0) {
+        addLayer(transform);
+    }
 }
 
 void
