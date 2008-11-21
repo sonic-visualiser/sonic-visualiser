@@ -1225,17 +1225,16 @@ MainWindow::setupTransformsMenu()
         m_transformsMenu->setSeparatorsCollapsible(true);
     }
 
-    TransformList transforms =
-	TransformFactory::getInstance()->getAllTransformDescriptions();
+    TransformFactory *factory = TransformFactory::getInstance();
 
-    vector<QString> types =
-        TransformFactory::getInstance()->getAllTransformTypes();
+    TransformList transforms = factory->getAllTransformDescriptions();
+    vector<TransformDescription::Type> types = factory->getAllTransformTypes();
 
-    map<QString, map<QString, SubdividingMenu *> > categoryMenus;
-    map<QString, map<QString, SubdividingMenu *> > makerMenus;
+    map<TransformDescription::Type, map<QString, SubdividingMenu *> > categoryMenus;
+    map<TransformDescription::Type, map<QString, SubdividingMenu *> > makerMenus;
 
-    map<QString, SubdividingMenu *> byPluginNameMenus;
-    map<QString, map<QString, QMenu *> > pluginNameMenus;
+    map<TransformDescription::Type, SubdividingMenu *> byPluginNameMenus;
+    map<TransformDescription::Type, map<QString, QMenu *> > pluginNameMenus;
 
     set<SubdividingMenu *> pendingMenus;
 
@@ -1248,14 +1247,16 @@ MainWindow::setupTransformsMenu()
     m_transformsMenu->addSeparator();
     m_rightButtonTransformsMenu->addSeparator();
     
-    for (vector<QString>::iterator i = types.begin(); i != types.end(); ++i) {
+    for (vector<TransformDescription::Type>::iterator i = types.begin();
+         i != types.end(); ++i) {
 
         if (i != types.begin()) {
             m_transformsMenu->addSeparator();
             m_rightButtonTransformsMenu->addSeparator();
         }
 
-        QString byCategoryLabel = tr("%1 by Category").arg(*i);
+        QString byCategoryLabel = tr("%1 by Category")
+            .arg(factory->getTransformTypeName(*i));
         SubdividingMenu *byCategoryMenu = new SubdividingMenu(byCategoryLabel,
                                                               20, 40);
         byCategoryMenu->setTearOffEnabled(true);
@@ -1263,8 +1264,7 @@ MainWindow::setupTransformsMenu()
         m_rightButtonTransformsMenu->addMenu(byCategoryMenu);
         pendingMenus.insert(byCategoryMenu);
 
-        vector<QString> categories = 
-            TransformFactory::getInstance()->getTransformCategories(*i);
+        vector<QString> categories = factory->getTransformCategories(*i);
 
         for (vector<QString>::iterator j = categories.begin();
              j != categories.end(); ++j) {
@@ -1301,22 +1301,23 @@ MainWindow::setupTransformsMenu()
             }
         }
 
-        QString byPluginNameLabel = tr("%1 by Plugin Name").arg(*i);
+        QString byPluginNameLabel = tr("%1 by Plugin Name")
+            .arg(factory->getTransformTypeName(*i));
         byPluginNameMenus[*i] = new SubdividingMenu(byPluginNameLabel);
         byPluginNameMenus[*i]->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byPluginNameMenus[*i]);
         m_rightButtonTransformsMenu->addMenu(byPluginNameMenus[*i]);
         pendingMenus.insert(byPluginNameMenus[*i]);
 
-        QString byMakerLabel = tr("%1 by Maker").arg(*i);
+        QString byMakerLabel = tr("%1 by Maker")
+            .arg(factory->getTransformTypeName(*i));
         SubdividingMenu *byMakerMenu = new SubdividingMenu(byMakerLabel, 20, 40);
         byMakerMenu->setTearOffEnabled(true);
         m_transformsMenu->addMenu(byMakerMenu);
         m_rightButtonTransformsMenu->addMenu(byMakerMenu);
         pendingMenus.insert(byMakerMenu);
 
-        vector<QString> makers = 
-            TransformFactory::getInstance()->getTransformMakers(*i);
+        vector<QString> makers = factory->getTransformMakers(*i);
 
         for (vector<QString>::iterator j = makers.begin();
              j != makers.end(); ++j) {
@@ -1353,7 +1354,8 @@ MainWindow::setupTransformsMenu()
 
 //        std::cerr << "Plugin Name: " << name.toStdString() << std::endl;
 
-        QString type = transforms[i].type;
+        TransformDescription::Type type = transforms[i].type;
+        QString typeStr = factory->getTransformTypeName(type);
 
         QString category = transforms[i].category;
         if (category == "") category = tr("Unclassified");
