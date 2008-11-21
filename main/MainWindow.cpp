@@ -73,7 +73,7 @@
 #include "layer/ColourDatabase.h"
 #include "widgets/ModelDataTableDialog.h"
 
-#include "rdf/PluginRDFIndexer.h" //!!!
+#include "rdf/PluginRDFIndexer.h"
 
 // For version information
 #include <vamp/vamp.h>
