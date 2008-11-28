@@ -2719,6 +2719,23 @@ MainWindow::checkSaveModified()
     return false;
 }
 
+bool
+MainWindow::shouldCreateNewSessionForRDFAudio()
+{
+    QMessageBox mb;
+    mb.setWindowTitle("Open as new session?");
+    mb.setText("<b>RDF refers to audio files</b><p>This RDF document refers to one or more audio files.<br>Do you want to load it as a new session, or as a set of additional panes in the existing session?");
+    QPushButton *a = mb.addButton(tr("Create new session"), QMessageBox::AcceptRole);
+    QPushButton *b = mb.addButton(tr("Add to current session"), QMessageBox::RejectRole);
+    mb.setDefaultButton(a);
+    mb.exec();
+    if (mb.clickedButton() == a) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 void
 MainWindow::saveSession()
 {

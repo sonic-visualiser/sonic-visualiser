@@ -260,6 +260,8 @@ protected:
     virtual bool checkSaveModified();
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;
+
+    virtual bool shouldCreateNewSessionForRDFAudio();
     
     virtual void connectLayerEditDialog(ModelDataTableDialog *);
 };
