@@ -72,8 +72,8 @@
 #include "base/UnitDatabase.h"
 #include "layer/ColourDatabase.h"
 #include "widgets/ModelDataTableDialog.h"
-
 #include "rdf/PluginRDFIndexer.h"
+#include "rdf/RDFExporter.h"
 
 // For version information
 #include <vamp/vamp.h>
@@ -1195,7 +1195,7 @@ MainWindow::setupPaneAndLayerMenus()
     eaction->setShortcut(tr("E"));
     eaction->setStatusTip(tr("Edit the currently active layer as a data grid"));
     connect(eaction, SIGNAL(triggered()), this, SLOT(editCurrentLayer()));
-    connect(this, SIGNAL(canEditLayer(bool)), eaction, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(canEditLayerTabular(bool)), eaction, SLOT(setEnabled(bool)));
     menu->addAction(eaction);
     m_rightButtonLayerMenu->addAction(eaction);
 
@@ -2250,6 +2250,14 @@ MainWindow::exportLayer()
             }
         }
 
+    } else if (suffix == "ttl" || suffix == "n3") {
+
+        RDFExporter exporter(path, model);
+        exporter.write();
+        if (!exporter.isOK()) {
+            error = exporter.getError();
+        }
+
     } else {
 
         CSVFileWriter writer(path, model,
@@ -2724,7 +2732,7 @@ MainWindow::shouldCreateNewSessionForRDFAudio()
 {
     QMessageBox mb;
     mb.setWindowTitle("Open as new session?");
-    mb.setText("<b>RDF refers to audio files</b><p>This RDF document refers to one or more audio files.<br>Do you want to load it as a new session, or as a set of additional panes in the existing session?");
+    mb.setText("<b>RDF refers to audio files</b><p>This RDF document refers to one or more audio files.<br>Do you want to start a new session for it?");
     QPushButton *a = mb.addButton(tr("Create new session"), QMessageBox::AcceptRole);
     QPushButton *b = mb.addButton(tr("Add to current session"), QMessageBox::RejectRole);
     mb.setDefaultButton(a);
