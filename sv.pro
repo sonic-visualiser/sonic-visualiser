@@ -8,10 +8,11 @@ load(../sv.prf)
 CONFIG += sv qt thread warn_on stl rtti exceptions
 QT += xml network
 
-TARGET = sonic-visualiser
-macx-g++:TARGET = "Sonic Visualiser"
+TARGET = "Sonic Visualiser"
+linux-g++:TARGET = sonic-visualiser
 
 ICON = icons/sv-macicon.icns
+RC_FILE = icons/sv.rc
 
 DEPENDPATH += . .. i18n main transform
 INCLUDEPATH += . .. transform main
