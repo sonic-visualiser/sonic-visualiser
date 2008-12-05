@@ -2182,7 +2182,7 @@ MainWindow::importLayer()
         } else if (status == FileOpenWrongMode) {
             emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open file"),
-                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+                                  tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(path));
         }
     }
 }
@@ -2482,7 +2482,7 @@ MainWindow::openSomething()
     } else if (status == FileOpenWrongMode) {
         emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open file"),
-                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+                              tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(path));
     }
 }
 
@@ -2514,7 +2514,7 @@ MainWindow::openLocation()
     } else if (status == FileOpenWrongMode) {
         emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open location"),
-                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+                              tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(text));
     }
 }
 
@@ -2542,7 +2542,7 @@ MainWindow::openRecentFile()
     } else if (status == FileOpenWrongMode) {
         emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open location"),
-                              tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+                              tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(path));
     }
 }
 
@@ -2580,7 +2580,7 @@ MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
         } else if (status == FileOpenWrongMode) {
             emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
-                                  tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+                                  tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(*i));
         }
     }
 }
@@ -2728,20 +2728,39 @@ MainWindow::checkSaveModified()
 }
 
 bool
-MainWindow::shouldCreateNewSessionForRDFAudio()
+MainWindow::shouldCreateNewSessionForRDFAudio(bool *cancel)
 {
-    QMessageBox mb;
-    mb.setWindowTitle("Open as new session?");
-    mb.setText("<b>RDF refers to audio files</b><p>This RDF document refers to one or more audio files.<br>Do you want to start a new session for it?");
-    QPushButton *a = mb.addButton(tr("Create new session"), QMessageBox::AcceptRole);
-    QPushButton *b = mb.addButton(tr("Add to current session"), QMessageBox::RejectRole);
-    mb.setDefaultButton(a);
-    mb.exec();
-    if (mb.clickedButton() == a) {
-        return true;
-    } else {
+    //!!! This is very similar to part of MainWindowBase::openAudio --
+    //!!! make them a bit more uniform
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    bool prevNewSession = settings.value("newsessionforrdfaudio", true).toBool();
+    settings.endGroup();
+    bool newSession = true;
+            
+    QStringList items;
+    items << tr("Close the current session and create a new one")
+          << tr("Add this data to the current session");
+
+    bool ok = false;
+    QString item = ListInputDialog::getItem
+        (this, tr("Select target for import"),
+         tr("<b>Select a target for import</b><p>This RDF document refers to one or more audio files.<br>You already have an audio waveform loaded.<br>What would you like to do with the new data?"),
+         items, prevNewSession ? 0 : 1, &ok);
+            
+    if (!ok || item.isEmpty()) {
+        *cancel = true;
         return false;
     }
+            
+    newSession = (item == items[0]);
+    settings.beginGroup("MainWindow");
+    settings.setValue("newsessionforrdfaudio", newSession);
+    settings.endGroup();
+
+    if (newSession) return true;
+    else return false;
 }
 
 void
@@ -3730,4 +3749,5 @@ MainWindow::keyReference()
 {
     m_keyReference->show();
 }
+
 
