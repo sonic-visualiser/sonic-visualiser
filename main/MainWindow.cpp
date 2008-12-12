@@ -2571,16 +2571,26 @@ MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
 
     for (QStringList::iterator i = uriList.begin(); i != uriList.end(); ++i) {
 
-        FileOpenStatus status = open(*i, ReplaceCurrentPane);
+        FileOpenStatus status;
+
+        if (i == uriList.begin()) {
+            status = open(*i, ReplaceCurrentPane);
+        } else {
+            status = open(*i, CreateAdditionalModel);
+        }
 
         if (status == FileOpenFailed) {
             emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
                                   tr("<b>Open failed</b><p>Dropped URL \"%1\" could not be opened").arg(*i));
+            break;
         } else if (status == FileOpenWrongMode) {
             emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open dropped URL"),
                                   tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(*i));
+            break;
+        } else if (status == FileOpenCancelled) {
+            break;
         }
     }
 }
