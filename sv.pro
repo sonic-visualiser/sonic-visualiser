@@ -9,7 +9,7 @@ CONFIG += sv qt thread warn_on stl rtti exceptions
 QT += xml network
 
 TARGET = "Sonic Visualiser"
-linux-g++:TARGET = sonic-visualiser
+linux-g++*:TARGET = sonic-visualiser
 
 ICON = icons/sv-macicon.icns
 RC_FILE = icons/sv.rc
