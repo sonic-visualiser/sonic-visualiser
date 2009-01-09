@@ -182,7 +182,7 @@ signalHandler(int /* signal */)
 class SVApplication : public QApplication
 {
 public:
-    SVApplication(int argc, char **argv) :
+    SVApplication(int &argc, char **argv) :
         QApplication(argc, argv),
         m_mainWindow(0) { }
     virtual ~SVApplication() { }
