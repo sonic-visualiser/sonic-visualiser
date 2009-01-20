@@ -315,7 +315,10 @@ main(int argc, char **argv)
     QSize size = settings.value("size", QSize(width, height)).toSize();
     gui->resize(size);
     if (settings.contains("position")) {
-        gui->move(settings.value("position").toPoint());
+        QRect prevrect(settings.value("position").toPoint(), size);
+        if (!(available & prevrect).isEmpty()) {
+            gui->move(prevrect.topLeft());
+        }
     }
     settings.endGroup();
     
