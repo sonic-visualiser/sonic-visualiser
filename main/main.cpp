@@ -410,6 +410,8 @@ main(int argc, char **argv)
 */
     int rv = application.exec();
 
+    gui->hide();
+
     cleanupMutex.lock();
     TempDirectory::getInstance()->cleanup();
 
