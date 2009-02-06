@@ -38,6 +38,7 @@ public slots:
 protected slots:
     void windowTypeChanged(WindowType type);
     void spectrogramSmoothingChanged(int state);
+    void spectrogramXSmoothingChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
     void audioDeviceChanged(int device);
@@ -62,6 +63,7 @@ protected:
     
     WindowType m_windowType;
     int m_spectrogramSmoothing;
+    int m_spectrogramXSmoothing;
     int m_propertyLayout;
     float m_tuningFrequency;
     int m_audioDevice;
