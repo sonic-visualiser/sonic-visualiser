@@ -3724,6 +3724,8 @@ MainWindow::about()
 #endif // REDLAND_VERSION
 #endif // HAVE_REDLAND
 
+    aboutText += tr("<br>With RtMidi &copy; Gary P. Scavone");
+
 #ifdef HAVE_LIBLO
 #ifdef LIBLO_VERSION
     aboutText += tr("<br>With liblo Lite OSC library v%1 &copy; Steve Harris").arg(LIBLO_VERSION);
@@ -3743,7 +3745,7 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005 - 2008 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2009 Chris Cannam and "
         "Queen Mary, University of London.</small></p>"
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "
