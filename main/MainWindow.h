@@ -106,6 +106,7 @@ protected slots:
 
     virtual void documentModified();
     virtual void documentRestored();
+    virtual void documentReplaced();
 
     virtual void updateMenuStates();
     virtual void updateDescriptionLabel();
