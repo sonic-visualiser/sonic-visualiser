@@ -271,14 +271,16 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     statusBar();
 
-    newSession();
-
     connect(m_viewManager, SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
     connect(m_playSource, SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
     connect(CommandHistory::getInstance(), SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
+    connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
+
+    newSession();
+
     m_activityLog->show();
     
     TransformFactory::getInstance()->startPopulationThread();
@@ -2405,6 +2407,15 @@ MainWindow::newSession()
     CommandHistory::getInstance()->documentSaved();
     documentRestored();
     updateMenuStates();
+}
+
+void
+MainWindow::documentReplaced()
+{
+    if (m_document) {
+        connect(m_document, SIGNAL(activity(QString)),
+                m_activityLog, SLOT(activityHappened(QString)));
+    }
 }
 
 void
