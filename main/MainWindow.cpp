@@ -62,6 +62,7 @@
 #include "data/fileio/BZipFileDevice.h"
 #include "data/fileio/FileSource.h"
 #include "data/fft/FFTDataServer.h"
+#include "data/midi/MIDIInput.h"
 #include "base/RecentFiles.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
@@ -282,6 +283,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     newSession();
 
     m_activityLog->show();
+
+    connect(m_midiInput, SIGNAL(eventsAvailable()),
+            this, SLOT(midiEventsAvailable()));
     
     TransformFactory::getInstance()->startPopulationThread();
 }
@@ -3398,6 +3402,18 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
          tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
     shownOnce = true;
 }
+
+void
+MainWindow::midiEventsAvailable()
+{
+    //!!! for now.  but this won't do -- we are passing a signal/slot
+    //!!! connection across threads here, so timing will not be good
+    //!!! -- we do need to use the original midi event timestamp
+    MIDIEvent ev(m_midiInput->readEvent());
+    if (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON) {
+        insertInstant();
+    }
+}    
 
 void
 MainWindow::layerRemoved(Layer *layer)
