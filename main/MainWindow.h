@@ -165,6 +165,7 @@ protected slots:
     virtual void mouseLeftWidget();
 
     virtual void handleOSCMessage(const OSCMessage &);
+    virtual void midiEventsAvailable();
 
     virtual void website();
     virtual void help();
