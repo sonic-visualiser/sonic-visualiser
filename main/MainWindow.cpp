@@ -49,6 +49,7 @@
 #include "widgets/KeyReference.h"
 #include "widgets/TransformFinder.h"
 #include "widgets/LabelCounterInputDialog.h"
+#include "widgets/ActivityLog.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
@@ -146,6 +147,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playControlsWidth(0),
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
+    m_activityLog(new ActivityLog()),
     m_keyReference(new KeyReference())
 {
     Profiler profiler("MainWindow::MainWindow");
@@ -270,6 +272,14 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     statusBar();
 
     newSession();
+
+    connect(m_viewManager, SIGNAL(activity(QString)),
+            m_activityLog, SLOT(activityHappened(QString)));
+    connect(m_playSource, SIGNAL(activity(QString)),
+            m_activityLog, SLOT(activityHappened(QString)));
+    connect(CommandHistory::getInstance(), SIGNAL(activity(QString)),
+            m_activityLog, SLOT(activityHappened(QString)));
+    m_activityLog->show();
     
     TransformFactory::getInstance()->startPopulationThread();
 }

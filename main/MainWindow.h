@@ -57,7 +57,7 @@ class OSCQueue;
 class OSCMessage;
 class KeyReference;
 class Labeller;
-
+class ActivityLog;
 
 class MainWindow : public MainWindowBase
 {
@@ -209,6 +209,7 @@ protected:
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<LayerTreeDialog>   m_layerTreeDialog;
 
+    ActivityLog             *m_activityLog;
     KeyReference            *m_keyReference;
 
     struct LayerConfiguration {
