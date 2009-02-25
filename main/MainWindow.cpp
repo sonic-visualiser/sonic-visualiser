@@ -280,10 +280,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(CommandHistory::getInstance(), SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
     connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
+    m_activityLog->hide();
 
     newSession();
-
-    m_activityLog->show();
 
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
@@ -835,6 +834,11 @@ MainWindow::setupViewMenu()
     action->setStatusTip(tr("Open a window displaying the hierarchy of panes and layers in this session"));
     connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
     m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    action = new QAction(tr("Show Acti&vity Log"), this);
+    action->setStatusTip(tr("Open a window listing interactions and other events"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showActivityLog()));
     menu->addAction(action);
 }
 
@@ -3604,6 +3608,14 @@ MainWindow::showLayerTree()
     m_layerTreeDialog = new LayerTreeDialog(m_paneStack);
     m_layerTreeDialog->setAttribute(Qt::WA_DeleteOnClose); // see below
     m_layerTreeDialog->show();
+}
+
+void
+MainWindow::showActivityLog()
+{
+    m_activityLog->show();
+    m_activityLog->raise();
+    m_activityLog->scrollToEnd();
 }
 
 void

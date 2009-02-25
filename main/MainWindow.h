@@ -160,6 +160,7 @@ protected slots:
     virtual void modelAdded(Model *);
 
     virtual void showLayerTree();
+    virtual void showActivityLog();
 
     virtual void mouseEnteredWidget();
     virtual void mouseLeftWidget();
