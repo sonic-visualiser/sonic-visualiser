@@ -166,6 +166,7 @@ protected slots:
 
     virtual void handleOSCMessage(const OSCMessage &);
     virtual void midiEventsAvailable();
+    virtual void playStatusChanged(bool);
 
     virtual void website();
     virtual void help();
@@ -204,6 +205,8 @@ protected:
 
     bool                     m_soloModified;
     bool                     m_prevSolo;
+
+    double                   m_lastInsertedMIDITime;
 
     QFrame                  *m_playControlsSpacer;
     int                      m_playControlsWidth;
