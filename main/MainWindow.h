@@ -207,8 +207,6 @@ protected:
     bool                     m_soloModified;
     bool                     m_prevSolo;
 
-    double                   m_lastInsertedMIDITime;
-
     QFrame                  *m_playControlsSpacer;
     int                      m_playControlsWidth;
 

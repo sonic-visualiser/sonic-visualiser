@@ -32,6 +32,7 @@
 #include "layer/TimeRulerLayer.h"
 #include "layer/TimeInstantLayer.h"
 #include "layer/TimeValueLayer.h"
+#include "layer/NoteLayer.h"
 #include "layer/Colour3DPlotLayer.h"
 #include "layer/SliceLayer.h"
 #include "layer/SliceableLayer.h"
@@ -137,7 +138,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_soloAction(0),
     m_soloModified(false),
     m_prevSolo(false),
-    m_lastInsertedMIDITime(0),
     m_rwdStartAction(0),
     m_rwdAction(0),
     m_ffwdAction(0),
@@ -3413,23 +3413,61 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 void
 MainWindow::midiEventsAvailable()
 {
+    Pane *currentPane = 0;
+    NoteLayer *currentNoteLayer = 0;
+
+    if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+    if (currentPane) {
+        currentNoteLayer = dynamic_cast<NoteLayer *>
+            (currentPane->getSelectedLayer());
+    }
+
     // This is called through a serialised signal/slot invocation
     // (across threads).  It could happen quite some time after the
     // event was actually received, which is why event timestamping
     // happens in the MIDI input class and not here.
+
     while (m_midiInput->getEventsAvailable() > 0) {
         MIDIEvent ev(m_midiInput->readEvent());
-        if (ev.getMessageType() != MIDIConstants::MIDI_NOTE_ON) {
-            continue;
+
+        if (currentNoteLayer) {
+
+            if (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON) {
+
+                currentNoteLayer->addNoteOn(ev.getTime(),
+                                            ev.getPitch(),
+                                            ev.getVelocity());
+
+            } else if (ev.getMessageType() == MIDIConstants::MIDI_NOTE_OFF) {
+
+                currentNoteLayer->addNoteOff(ev.getTime(),
+                                             ev.getPitch());
+
+            }
+
+        } else {
+            if (ev.getMessageType() != MIDIConstants::MIDI_NOTE_ON) {
+                continue;
+            }
+            insertInstantAt(ev.getTime());
         }
-        insertInstantAt(ev.getTime());
     }
 }    
 
 void
 MainWindow::playStatusChanged(bool playing)
 {
-    m_lastInsertedMIDITime = -1.0; // <0 means "never during this playback"
+    Pane *currentPane = 0;
+    NoteLayer *currentNoteLayer = 0;
+
+    if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+    if (currentPane) {
+        currentNoteLayer = dynamic_cast<NoteLayer *>(currentPane->getSelectedLayer());
+    }
+
+    if (currentNoteLayer) {
+        currentNoteLayer->abandonNoteOns();
+    }
 }
 
 void
