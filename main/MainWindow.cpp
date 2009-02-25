@@ -119,7 +119,7 @@ using std::set;
 
 
 MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
-    MainWindowBase(withAudioOutput, withOSCSupport),
+    MainWindowBase(withAudioOutput, withOSCSupport, true),
     m_overview(0),
     m_mainMenusCreated(false),
     m_paneMenu(0),
@@ -137,6 +137,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_soloAction(0),
     m_soloModified(false),
     m_prevSolo(false),
+    m_lastInsertedMIDITime(0),
     m_rwdStartAction(0),
     m_rwdAction(0),
     m_ffwdAction(0),
@@ -1666,6 +1667,8 @@ MainWindow::setupToolbars()
     connect(m_playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
 	    m_playAction, SLOT(setChecked(bool)));
+    connect(m_playSource, SIGNAL(playStatusChanged(bool)),
+            this, SLOT(playStatusChanged(bool)));
     connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
 
     m_ffwdAction = toolbar->addAction(il.load("ffwd"),
@@ -3406,14 +3409,24 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 void
 MainWindow::midiEventsAvailable()
 {
-    //!!! for now.  but this won't do -- we are passing a signal/slot
-    //!!! connection across threads here, so timing will not be good
-    //!!! -- we do need to use the original midi event timestamp
-    MIDIEvent ev(m_midiInput->readEvent());
-    if (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON) {
-        insertInstant();
+    // This is called through a serialised signal/slot invocation
+    // (across threads).  It could happen quite some time after the
+    // event was actually received, which is why event timestamping
+    // happens in the MIDI input class and not here.
+    while (m_midiInput->getEventsAvailable() > 0) {
+        MIDIEvent ev(m_midiInput->readEvent());
+        if (ev.getMessageType() != MIDIConstants::MIDI_NOTE_ON) {
+            continue;
+        }
+        insertInstantAt(ev.getTime());
     }
 }    
+
+void
+MainWindow::playStatusChanged(bool playing)
+{
+    m_lastInsertedMIDITime = -1.0; // <0 means "never during this playback"
+}
 
 void
 MainWindow::layerRemoved(Layer *layer)
