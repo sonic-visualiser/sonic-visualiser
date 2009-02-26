@@ -3431,10 +3431,13 @@ MainWindow::midiEventsAvailable()
 {
     Pane *currentPane = 0;
     NoteLayer *currentNoteLayer = 0;
+    TimeValueLayer *currentTimeValueLayer = 0;
 
     if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
     if (currentPane) {
         currentNoteLayer = dynamic_cast<NoteLayer *>
+            (currentPane->getSelectedLayer());
+        currentTimeValueLayer = dynamic_cast<TimeValueLayer *>
             (currentPane->getSelectedLayer());
     }
 
@@ -3447,6 +3450,8 @@ MainWindow::midiEventsAvailable()
 
         MIDIEvent ev(m_midiInput->readEvent());
 
+        size_t frame = currentPane->alignFromReference(ev.getTime());
+
         bool noteOn = (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON &&
                        ev.getVelocity() > 0);
 
@@ -3458,22 +3463,39 @@ MainWindow::midiEventsAvailable()
 
             if (noteOn) {
 
-                currentNoteLayer->addNoteOn(ev.getTime(),
+                currentNoteLayer->addNoteOn(frame,
                                             ev.getPitch(),
                                             ev.getVelocity());
 
             } else if (noteOff) {
 
-                currentNoteLayer->addNoteOff(ev.getTime(),
+                currentNoteLayer->addNoteOff(frame,
                                              ev.getPitch());
 
             }
 
-        } else {
+            continue;
+        }
+
+        if (currentTimeValueLayer) {
 
             if (!noteOn) continue;
-            insertInstantAt(ev.getTime());
+            Model *model = static_cast<Layer *>(currentTimeValueLayer)->getModel();
+            SparseTimeValueModel *tvm =
+                dynamic_cast<SparseTimeValueModel *>(model);
+            if (tvm) {
+                SparseTimeValueModel::Point point(frame, ev.getPitch() % 12, "");
+                SparseTimeValueModel::AddPointCommand *command =
+                    new SparseTimeValueModel::AddPointCommand
+                    (tvm, point, tr("Add Point"));
+                CommandHistory::getInstance()->addCommand(command);
+            }
+            continue;
+
         }
+
+        if (!noteOn) continue;
+        insertInstantAt(ev.getTime());
     }
 }    
 
