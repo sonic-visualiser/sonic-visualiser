@@ -708,6 +708,22 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
+    action = new QAction(tr("Peek Left"), this);
+    action->setShortcut(tr("Alt+Left"));
+    action->setStatusTip(tr("Scroll the current pane to the left without moving the playback cursor or other panes"));
+    connect(action, SIGNAL(triggered()), this, SLOT(peekLeft()));
+    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+	
+    action = new QAction(tr("Peek Right"), this);
+    action->setShortcut(tr("Alt+Right"));
+    action->setStatusTip(tr("Scroll the current pane to the right without moving the playback cursor or other panes"));
+    connect(action, SIGNAL(triggered()), this, SLOT(peekRight()));
+    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
     menu->addSeparator();
 
     m_keyReference->setCategory(tr("Zoom"));
@@ -3428,17 +3444,25 @@ MainWindow::midiEventsAvailable()
     // happens in the MIDI input class and not here.
 
     while (m_midiInput->getEventsAvailable() > 0) {
+
         MIDIEvent ev(m_midiInput->readEvent());
+
+        bool noteOn = (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON &&
+                       ev.getVelocity() > 0);
+
+        bool noteOff = (ev.getMessageType() == MIDIConstants::MIDI_NOTE_OFF ||
+                        (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON &&
+                         ev.getVelocity() == 0));
 
         if (currentNoteLayer) {
 
-            if (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON) {
+            if (noteOn) {
 
                 currentNoteLayer->addNoteOn(ev.getTime(),
                                             ev.getPitch(),
                                             ev.getVelocity());
 
-            } else if (ev.getMessageType() == MIDIConstants::MIDI_NOTE_OFF) {
+            } else if (noteOff) {
 
                 currentNoteLayer->addNoteOff(ev.getTime(),
                                              ev.getPitch());
@@ -3446,9 +3470,8 @@ MainWindow::midiEventsAvailable()
             }
 
         } else {
-            if (ev.getMessageType() != MIDIConstants::MIDI_NOTE_ON) {
-                continue;
-            }
+
+            if (!noteOn) continue;
             insertInstantAt(ev.getTime());
         }
     }
