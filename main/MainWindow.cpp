@@ -279,6 +279,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             m_activityLog, SLOT(activityHappened(QString)));
     connect(CommandHistory::getInstance(), SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
+    connect(this, SIGNAL(activity(QString)),
+            m_activityLog, SLOT(activityHappened(QString)));
     connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
     m_activityLog->hide();
 
@@ -2182,7 +2184,10 @@ MainWindow::exportAudio()
     }
 
     if (ok) {
-        if (!multiple) {
+        if (multiple) {
+            emit activity(tr("Export multiple audio files"));
+        } else {
+            emit activity(tr("Export audio to \"%1\"").arg(path));
             m_recentFiles.addFile(path);
         }
     } else {
@@ -2312,6 +2317,7 @@ MainWindow::exportLayer()
         QMessageBox::critical(this, tr("Failed to write file"), error);
     } else {
         m_recentFiles.addFile(path);
+        emit activity(tr("Export layer to \"%1\"").arg(path));
     }
 }
 
@@ -2744,6 +2750,7 @@ MainWindow::commitData(bool mayAskUser)
         QString fpath = QDir(svDir).filePath(fname);
         if (saveSessionFile(fpath)) {
             m_recentFiles.addFile(fpath);
+            emit activity(tr("Export image to \"%1\"").arg(fpath));
             return true;
         } else {
             return false;
@@ -2858,6 +2865,7 @@ MainWindow::saveSessionAs()
 	CommandHistory::getInstance()->documentSaved();
 	documentRestored();
         m_recentFiles.addFile(path);
+        emit activity(tr("Save session as \"%1\"").arg(path));
     }
 }
 
@@ -3461,6 +3469,8 @@ MainWindow::midiEventsAvailable()
 
         if (currentNoteLayer) {
 
+            if (!m_playSource || !m_playSource->isPlaying()) continue;
+
             if (noteOn) {
 
                 currentNoteLayer->addNoteOn(frame,
@@ -3480,6 +3490,9 @@ MainWindow::midiEventsAvailable()
         if (currentTimeValueLayer) {
 
             if (!noteOn) continue;
+
+            if (!m_playSource || !m_playSource->isPlaying()) continue;
+
             Model *model = static_cast<Layer *>(currentTimeValueLayer)->getModel();
             SparseTimeValueModel *tvm =
                 dynamic_cast<SparseTimeValueModel *>(model);
