@@ -78,6 +78,8 @@
     <file>icons/normalise-columns.png</file>
     <file>icons/invert-vertical.png</file>
     <file>icons/show-peaks.png</file>
+    <file>icons/opaque.png</file>
+    <file>icons/lines.png</file>
     <file>icons/sv-16x16.png</file>
     <file>icons/sv-22x22.png</file>
     <file>icons/sv-24x24.png</file>
