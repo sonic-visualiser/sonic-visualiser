@@ -418,6 +418,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             } else if (message.getArg(0).canConvert(QVariant::String) &&
                        message.getArg(0).toString() == "default") {
                 zoomDefault();
+            } else if (message.getArg(0).canConvert(QVariant::String) &&
+                       message.getArg(0).toString() == "fit") {
+                zoomToFit();
             } else if (message.getArg(0).canConvert(QVariant::Double)) {
                 double level = message.getArg(0).toDouble();
                 Pane *currentPane = m_paneStack->getCurrentPane();
