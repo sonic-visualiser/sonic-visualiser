@@ -169,6 +169,34 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             }
         }
 
+    } else if (message.getMethod() == "ffwd") {
+
+        if (message.getArgCount() == 1) {
+
+            if (message.getArg(0).canConvert(QVariant::String) &&
+                message.getArg(0).toString() == "similar") {
+
+                ffwdSimilar();
+            }
+        } else {
+
+            ffwd();
+        }
+
+    } else if (message.getMethod() == "rewind") {
+
+        if (message.getArgCount() == 1) {
+
+            if (message.getArg(0).canConvert(QVariant::String) &&
+                message.getArg(0).toString() == "similar") {
+
+                rewindSimilar();
+            }
+        } else {
+
+            rewind();
+        }
+
     } else if (message.getMethod() == "stop") {
             
         if (m_playSource->isPlaying()) m_playSource->stop();
