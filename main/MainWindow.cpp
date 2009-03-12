@@ -1940,7 +1940,8 @@ MainWindow::updateMenuStates()
 	(haveCurrentLayer &&
 	 dynamic_cast<TimeValueLayer *>(currentLayer));
     
-    emit canChangeSolo(havePlayTarget);
+    bool alignMode = m_viewManager && m_viewManager->getAlignMode();
+    emit canChangeSolo(havePlayTarget && !alignMode);
     emit canAlign(havePlayTarget && m_document && m_document->canAlign());
 
     emit canChangePlaybackSpeed(true);
