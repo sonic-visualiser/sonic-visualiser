@@ -21,6 +21,7 @@
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
 #include "widgets/TipDialog.h"
+#include "transform/TransformFactory.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -413,6 +414,7 @@ main(int argc, char **argv)
     gui->hide();
 
     cleanupMutex.lock();
+    TransformFactory::deleteInstance();
     TempDirectory::getInstance()->cleanup();
 
     application.releaseMainWindow();
