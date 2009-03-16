@@ -206,6 +206,12 @@ protected:
 int
 main(int argc, char **argv)
 {
+#ifdef Q_WS_X11
+#ifdef QT_VERSION >= 0x040500
+    QApplication::setGraphicsSystem("raster");
+#endif
+#endif
+
     SVApplication application(argc, argv);
 
     QStringList args = application.arguments();
