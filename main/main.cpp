@@ -207,7 +207,8 @@ int
 main(int argc, char **argv)
 {
 #ifdef Q_WS_X11
-#ifdef QT_VERSION >= 0x040500
+#if QT_VERSION >= 0x040500
+    std::cerr << "raster" << std::endl;
     QApplication::setGraphicsSystem("raster");
 #endif
 #endif
