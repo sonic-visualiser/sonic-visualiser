@@ -321,7 +321,7 @@ main(int argc, char **argv)
 
     settings.beginGroup("MainWindow");
     QSize size = settings.value("size", QSize(width, height)).toSize();
-    gui->resize(size);
+    gui->resizeConstrained(size);
     if (settings.contains("position")) {
         QRect prevrect(settings.value("position").toPoint(), size);
         if (!(available & prevrect).isEmpty()) {
