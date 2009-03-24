@@ -2091,8 +2091,64 @@ MainWindow::exportAudio()
 {
     if (!getMainModel()) return;
 
+    RangeSummarisableTimeValueModel *model = getMainModel();
+    std::set<RangeSummarisableTimeValueModel *> otherModels;
+    RangeSummarisableTimeValueModel *current = model;
+    if (m_paneStack) {
+        for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
+            Pane *pane = m_paneStack->getPane(i);
+            if (!pane) continue;
+            for (int j = 0; j < pane->getLayerCount(); ++j) {
+                Layer *layer = pane->getLayer(j);
+                if (!layer) continue;
+                cerr << "layer = " << layer->objectName().toStdString() << endl;
+                Model *m = layer->getModel();
+                RangeSummarisableTimeValueModel *wm = 
+                    dynamic_cast<RangeSummarisableTimeValueModel *>(m);
+                if (wm) {
+                    cerr << "found: " << wm->objectName().toStdString() << endl;
+                    otherModels.insert(wm);
+                    if (pane == m_paneStack->getCurrentPane()) {
+                        current = wm;
+                    }
+                }
+            }
+        }
+    }
+    if (!otherModels.empty()) {
+        std::map<QString, RangeSummarisableTimeValueModel *> m;
+        m[tr("1. %2").arg(model->objectName())] = model;
+        int n = 2;
+        int c = 0;
+        for (std::set<RangeSummarisableTimeValueModel *>::const_iterator i
+                 = otherModels.begin();
+             i != otherModels.end(); ++i) {
+            if (*i == model) continue;
+            m[tr("%1. %2").arg(n).arg((*i)->objectName())] = *i;
+            ++n;
+            if (*i == current) c = n-1;
+        }
+        QStringList items;
+        for (std::map<QString, RangeSummarisableTimeValueModel *>
+                 ::const_iterator i = m.begin();
+             i != m.end(); ++i) {
+            items << i->first;
+        }
+	bool ok = false;
+	QString item = QInputDialog::getItem
+	    (this, tr("Select audio file to export"),
+	     tr("Which audio file do you want to export from?"),
+	     items, c, false, &ok);
+	if (!ok || item.isEmpty()) return;
+        if (m.find(item) == m.end()) {
+            cerr << "WARNING: Model " << item.toStdString()
+                 << " not found in list!" << endl;
+        } else {
+            model = m[item];
+        }
+    }
+
     QString path = getSaveFileName(FileFinder::AudioFile);
-    
     if (path == "") return;
 
     bool ok = false;
@@ -2162,9 +2218,9 @@ MainWindow::exportAudio()
 		}
 
 		WavFileWriter subwriter(subpath,
-                                        getMainModel()->getSampleRate(),
-                                        getMainModel()->getChannelCount());
-                subwriter.writeModel(getMainModel(), &subms);
+                                        model->getSampleRate(),
+                                        model->getChannelCount());
+                subwriter.writeModel(model, &subms);
 		ok = subwriter.isOK();
 
 		if (!ok) {
@@ -2177,9 +2233,9 @@ MainWindow::exportAudio()
 
     if (!multiple) {
         WavFileWriter writer(path,
-                             getMainModel()->getSampleRate(),
-                             getMainModel()->getChannelCount());
-        writer.writeModel(getMainModel(), selectionToWrite);
+                             model->getSampleRate(),
+                             model->getChannelCount());
+        writer.writeModel(model, selectionToWrite);
 	ok = writer.isOK();
 	error = writer.getError();
     }
