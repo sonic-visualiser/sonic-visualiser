@@ -139,8 +139,10 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_soloModified(false),
     m_prevSolo(false),
     m_rwdStartAction(0),
+    m_rwdSimilarAction(0),
     m_rwdAction(0),
     m_ffwdAction(0),
+    m_ffwdSimilarAction(0),
     m_ffwdEndAction(0),
     m_playAction(0),
     m_playSelectionAction(0),
@@ -1681,6 +1683,12 @@ MainWindow::setupToolbars()
     connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
     connect(this, SIGNAL(canRewind(bool)), m_rwdAction, SLOT(setEnabled(bool)));
 
+    m_rwdSimilarAction = new QAction(tr("Rewind to Similar Point"), this);
+    m_rwdSimilarAction->setShortcut(tr("Shift+PgUp"));
+    m_rwdSimilarAction->setStatusTip(tr("Rewind to the previous similarly valued time instant"));
+    connect(m_rwdSimilarAction, SIGNAL(triggered()), this, SLOT(rewindSimilar()));
+    connect(this, SIGNAL(canRewind(bool)), m_rwdSimilarAction, SLOT(setEnabled(bool)));
+
     m_playAction = toolbar->addAction(il.load("playpause"),
                                       tr("Play / Pause"));
     m_playAction->setCheckable(true);
@@ -1699,6 +1707,12 @@ MainWindow::setupToolbars()
     m_ffwdAction->setStatusTip(tr("Fast-forward to the next time instant or time ruler notch"));
     connect(m_ffwdAction, SIGNAL(triggered()), this, SLOT(ffwd()));
     connect(this, SIGNAL(canFfwd(bool)), m_ffwdAction, SLOT(setEnabled(bool)));
+
+    m_ffwdSimilarAction = new QAction(tr("Fast Forward to Similar Point"), this);
+    m_ffwdSimilarAction->setShortcut(tr("Shift+PgDown"));
+    m_ffwdSimilarAction->setStatusTip(tr("Fast-forward to the next similarly valued time instant"));
+    connect(m_ffwdSimilarAction, SIGNAL(triggered()), this, SLOT(ffwdSimilar()));
+    connect(this, SIGNAL(canFfwd(bool)), m_ffwdSimilarAction, SLOT(setEnabled(bool)));
 
     m_ffwdEndAction = toolbar->addAction(il.load("ffwd-end"),
                                          tr("Fast Forward to End"));
@@ -1732,7 +1746,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canPlay(bool)), m_playLoopAction, SLOT(setEnabled(bool)));
 
     m_soloAction = toolbar->addAction(il.load("solo"),
-                                           tr("Solo Current Pane"));
+                                      tr("Solo Current Pane"));
     m_soloAction->setCheckable(true);
     m_soloAction->setChecked(m_viewManager->getPlaySoloMode());
     m_prevSolo = m_viewManager->getPlaySoloMode();
@@ -1763,6 +1777,8 @@ MainWindow::setupToolbars()
     if (alAction) m_keyReference->registerShortcut(alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
+    m_keyReference->registerShortcut(m_rwdSimilarAction);
+    m_keyReference->registerShortcut(m_ffwdSimilarAction);
     m_keyReference->registerShortcut(m_rwdStartAction);
     m_keyReference->registerShortcut(m_ffwdEndAction);
 
@@ -1774,6 +1790,9 @@ MainWindow::setupToolbars()
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
+    menu->addSeparator();
+    menu->addAction(m_rwdSimilarAction);
+    menu->addAction(m_ffwdSimilarAction);
     menu->addSeparator();
     menu->addAction(m_rwdStartAction);
     menu->addAction(m_ffwdEndAction);
