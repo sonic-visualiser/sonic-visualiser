@@ -197,8 +197,10 @@ protected:
     QAction                 *m_deleteSelectedAction;
     QAction                 *m_soloAction;
     QAction                 *m_rwdStartAction;
+    QAction                 *m_rwdSimilarAction;
     QAction                 *m_rwdAction;
     QAction                 *m_ffwdAction;
+    QAction                 *m_ffwdSimilarAction;
     QAction                 *m_ffwdEndAction;
     QAction                 *m_playAction;
     QAction                 *m_playSelectionAction;
