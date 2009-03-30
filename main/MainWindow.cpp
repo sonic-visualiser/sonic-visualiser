@@ -3246,7 +3246,7 @@ MainWindow::addLayer(QString transformId)
 
     if (!input.getModel()) return;
 
-//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName().toStdString() << "\"" << std::endl;
+//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName().toStdString() << "\"" << std::endl << "transform:" << std::endl << transform.toXmlString().toStdString() << std::endl;
 
     Layer *newLayer = m_document->createDerivedLayer(transform, input);
 
