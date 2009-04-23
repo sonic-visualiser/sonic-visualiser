@@ -2153,17 +2153,19 @@ MainWindow::exportAudio()
              i != m.end(); ++i) {
             items << i->first;
         }
-	bool ok = false;
-	QString item = QInputDialog::getItem
-	    (this, tr("Select audio file to export"),
-	     tr("Which audio file do you want to export from?"),
-	     items, c, false, &ok);
-	if (!ok || item.isEmpty()) return;
-        if (m.find(item) == m.end()) {
-            cerr << "WARNING: Model " << item.toStdString()
-                 << " not found in list!" << endl;
-        } else {
-            model = m[item];
+        if (items.size() > 1) {
+            bool ok = false;
+            QString item = QInputDialog::getItem
+                (this, tr("Select audio file to export"),
+                 tr("Which audio file do you want to export from?"),
+                 items, c, false, &ok);
+            if (!ok || item.isEmpty()) return;
+            if (m.find(item) == m.end()) {
+                cerr << "WARNING: Model " << item.toStdString()
+                     << " not found in list!" << endl;
+            } else {
+                model = m[item];
+            }
         }
     }
 
