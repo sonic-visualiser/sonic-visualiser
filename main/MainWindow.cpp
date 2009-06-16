@@ -3966,7 +3966,7 @@ MainWindow::about()
 #ifdef LIBLO_VERSION
     aboutText += tr("<br>With liblo Lite OSC library v%1 &copy; Steve Harris").arg(LIBLO_VERSION);
 #else // !LIBLO_VERSION
-    aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris").arg(LIBLO_VERSION);
+    aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris");
 #endif // LIBLO_VERSION
 
     if (m_oscQueue && m_oscQueue->isOK()) {
