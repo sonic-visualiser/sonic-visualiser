@@ -1,0 +1,7 @@
+[Desktop Entry]
+Command=Sonic Visualiser layer file
+Hidden=false
+MimeType=application/x-sonicvisualiser-layer
+Patterns=*.svl;*.SVL
+Icon=sv-icon
+Type=MimeType

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Command=Sonic Visualiser session file
+Hidden=false
+MimeType=application/x-sonicvisualiser
+Patterns=*.sv;*.SV
+Icon=sv-icon
+Type=MimeType
