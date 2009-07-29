@@ -35,6 +35,9 @@
 #include <QDir>
 #include <QSplashScreen>
 #include <QTimer>
+#include <QPainter>
+
+#include "../version.h"
 
 #include <iostream>
 #include <signal.h>
@@ -208,7 +211,6 @@ main(int argc, char **argv)
 {
 #ifdef Q_WS_X11
 #if QT_VERSION >= 0x040500
-    std::cerr << "raster" << std::endl;
     QApplication::setGraphicsSystem("raster");
 #endif
 #endif
@@ -243,13 +245,21 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
 
-    QPixmap pixmap(":/icons/sv-splash.png");
     QSplashScreen *splash = 0;
 
     QSettings settings;
 
     settings.beginGroup("Preferences");
     if (settings.value("show-splash", true).toBool()) {
+        QPixmap pixmap(":/icons/sv-splash.png");
+        QPainter painter;
+        painter.begin(&pixmap);
+        QString text = QString("v%1").arg(SV_VERSION);
+        painter.drawText
+            (pixmap.width() - painter.fontMetrics().width(text) - 10,
+             10 + painter.fontMetrics().ascent(),
+             text);
+        painter.end();
         splash = new QSplashScreen(pixmap);
         splash->show();
         QTimer::singleShot(5000, splash, SLOT(hide()));
