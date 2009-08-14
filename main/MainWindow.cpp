@@ -296,10 +296,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
 MainWindow::~MainWindow()
 {
+//    std::cerr << "MainWindow::~MainWindow" << std::endl;
     delete m_keyReference;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     Profiles::getInstance()->dump();
+//    std::cerr << "MainWindow::~MainWindow finishing" << std::endl;
 }
 
 void
