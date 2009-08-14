@@ -431,9 +431,9 @@ main(int argc, char **argv)
     gui->hide();
 
     cleanupMutex.lock();
+
     TransformFactory::deleteInstance();
     TempDirectory::getInstance()->cleanup();
-
     application.releaseMainWindow();
 
 #ifdef HAVE_FFTW3F
@@ -441,13 +441,13 @@ main(int argc, char **argv)
     char *cwisdom = fftwf_export_wisdom_to_string();
     if (cwisdom) {
         settings.setValue("wisdom", cwisdom);
-        fftwf_free(cwisdom);
+        free(cwisdom);
     }
 #ifdef HAVE_FFTW3
     cwisdom = fftw_export_wisdom_to_string();
     if (cwisdom) {
         settings.setValue("wisdom_d", cwisdom);
-        fftw_free(cwisdom);
+        free(cwisdom);
     }
 #endif
     settings.endGroup();
