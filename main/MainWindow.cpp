@@ -79,6 +79,7 @@
 #include "rdf/RDFExporter.h"
 
 #include "Surveyer.h"
+#include "framework/VersionTester.h"
 
 // For version information
 #include <vamp/vamp.h>
@@ -294,6 +295,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             this, SLOT(midiEventsAvailable()));
     
     TransformFactory::getInstance()->startPopulationThread();
+
+    Surveyer *surveyer = new Surveyer(this);
+    VersionTester *vt = new VersionTester
+        ("sonicvisualiser.org", "/latest-version.txt", SV_VERSION);
+    connect(vt, SIGNAL(newerVersionAvailable(QString)),
+            this, SLOT(newerVersionAvailable(QString)));
 }
 
 MainWindow::~MainWindow()
@@ -349,8 +356,6 @@ MainWindow::setupMenus()
     setupTransformsMenu();
 
     m_mainMenusCreated = true;
-
-    Surveyer *surveyer = new Surveyer(this);
 }
 
 void
@@ -4007,9 +4012,16 @@ MainWindow::keyReference()
 void
 MainWindow::newerVersionAvailable(QString version)
 {
-    QString title(tr("Newer version available"));
-    QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of Sonic Visualiser.  Version %3 is now available.</p><p>Please consult the <a href=\"http://sonicvisualiser.org/\">Sonic Visualiser website</a> for more information.</p>").arg(SV_VERSION).arg(version));
-    QMessageBox::information(this, title, text);
+    QSettings settings;
+    settings.beginGroup("NewerVersionWarning");
+    QString tag = QString("version-%1-available-show").arg(version);
+    if (settings.value(tag, true).toBool()) {
+        QString title(tr("Newer version available"));
+        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of Sonic Visualiser, but version %3 is now available.</p><p>Please see the <a href=\"http://sonicvisualiser.org/\">Sonic Visualiser website</a> for more information.</p>").arg(SV_VERSION).arg(version));
+        QMessageBox::information(this, title, text);
+        settings.setValue(tag, false);
+    }
+    settings.endGroup();
 }
 
 
