@@ -96,16 +96,21 @@ Surveyer::httpDone(bool error)
 //    if (response != "yes") return;
 
     QString title = "Sonic Visualiser - User Survey";
-    QString text = "<h3>Sonic Visualiser: Take part in our survey!</h3><p>We at Queen Mary, University of London are running a short survey for users of Sonic Visualiser.  We are trying to find out how useful Sonic Visualiser is to people, and what we can do to improve it.</p><p>We do not ask for any personal information, and there's absolutely nothing commercial about it, and it should only take five minutes!</p><p>Would you like to take part?</p>";
+    QString text = "<h3>Sonic Visualiser: Take part in our survey!</h3><p>We at Queen Mary, University of London are running a short survey for users of Sonic Visualiser.  We are trying to find out how useful Sonic Visualiser is to people, and what we can do to improve it.</p><p>We do not ask for any personal information, and it should only take five minutes.</p><p>Would you like to take part?</p>";
 
     QMessageBox mb(dynamic_cast<QWidget *>(parent()));
     mb.setWindowTitle(title);
     mb.setText(text);
 
     QPushButton *yes = mb.addButton(tr("Yes! Take me to the survey"), QMessageBox::ActionRole);
-    mb.addButton(tr("No thanks"), QMessageBox::RejectRole);
+    mb.addButton(tr("No, thanks"), QMessageBox::RejectRole);
 
     mb.exec();
+
+    QSettings settings;
+    settings.beginGroup("Survey");
+    settings.setValue("countdown", -1);
+    settings.endGroup();
 
     if (mb.clickedButton() == yes) {
         QString svarg = SV_VERSION;
@@ -131,7 +136,7 @@ Surveyer::httpDone(bool error)
                 QString plugid = t.getPluginIdentifier();
                 QString type, soname, label;
                 PluginIdentifier::parseIdentifier(plugid, type, soname, label);
-                packages.insert(soname);
+                if (type == "vamp") packages.insert(soname);
             }
             for (std::set<QString>::const_iterator i = packages.begin();
                  i != packages.end(); ++i) {
