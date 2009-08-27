@@ -39,11 +39,13 @@ MOC_DIR = tmp_moc
 
 # Input
 HEADERS += main/MainWindow.h \
-           main/PreferencesDialog.h
+           main/PreferencesDialog.h \
+           main/Surveyer.h
 SOURCES += main/main.cpp \
            main/OSCHandler.cpp \
            main/MainWindow.cpp \
-           main/PreferencesDialog.cpp
+           main/PreferencesDialog.cpp \
+           main/Surveyer.cpp
 RESOURCES += sonic-visualiser.qrc
 
 

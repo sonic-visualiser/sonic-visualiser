@@ -173,6 +173,7 @@ protected slots:
     virtual void help();
     virtual void about();
     virtual void keyReference();
+    virtual void newerVersionAvailable(QString);
 
 protected:
     Overview                *m_overview;

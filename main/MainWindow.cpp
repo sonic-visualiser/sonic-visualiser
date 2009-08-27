@@ -78,6 +78,8 @@
 #include "rdf/PluginRDFIndexer.h"
 #include "rdf/RDFExporter.h"
 
+#include "Surveyer.h"
+
 // For version information
 #include <vamp/vamp.h>
 #include <vamp-hostsdk/PluginBase.h>
@@ -347,6 +349,8 @@ MainWindow::setupMenus()
     setupTransformsMenu();
 
     m_mainMenusCreated = true;
+
+    Surveyer *surveyer = new Surveyer(this);
 }
 
 void
@@ -3998,6 +4002,14 @@ void
 MainWindow::keyReference()
 {
     m_keyReference->show();
+}
+
+void
+MainWindow::newerVersionAvailable(QString version)
+{
+    QString title(tr("Newer version available"));
+    QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of Sonic Visualiser.  Version %3 is now available.</p><p>Please consult the <a href=\"http://sonicvisualiser.org/\">Sonic Visualiser website</a> for more information.</p>").arg(SV_VERSION).arg(version));
+    QMessageBox::information(this, title, text);
 }
 
 
