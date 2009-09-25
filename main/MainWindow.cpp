@@ -411,6 +411,7 @@ MainWindow::setupFileMenu()
     icon = il.load("filesaveas");
     icon.addPixmap(il.loadPixmap("filesaveas-22"));
     action = new QAction(icon, tr("Save Session &As..."), this);
+    action->setShortcut(tr("Ctrl+Shift+S"));
     action->setStatusTip(tr("Save the current session into a new Sonic Visualiser session file"));
     connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAs()));
     menu->addAction(action);
