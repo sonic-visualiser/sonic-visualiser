@@ -214,6 +214,18 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     connect(fontSize, SIGNAL(valueChanged(int)),
             this, SLOT(viewFontSizeChanged(int)));
 
+    QComboBox *ttMode = new QComboBox;
+    int tt = prefs->getPropertyRangeAndValue("Time To Text Mode", &min, &max,
+                                             &deflt);
+    m_timeToTextMode = tt;
+    for (i = min; i <= max; ++i) {
+        ttMode->addItem(prefs->getPropertyValueLabel("Time To Text Mode", i));
+    }
+    ttMode->setCurrentIndex(tt);
+
+    connect(ttMode, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(timeToTextModeChanged(int)));
+
     // General tab
 
     QFrame *frame = new QFrame;
@@ -270,6 +282,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                                                 ("View Font Size"))),
                        row, 0);
     subgrid->addWidget(fontSize, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Time To Text Mode"))),
+                       row, 0);
+    subgrid->addWidget(ttMode, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Show Splash Screen"))),
@@ -427,6 +444,13 @@ PreferencesDialog::backgroundModeChanged(int mode)
 }
 
 void
+PreferencesDialog::timeToTextModeChanged(int mode)
+{
+    m_timeToTextMode = mode;
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::viewFontSizeChanged(int sz)
 {
     m_viewFontSize = sz;
@@ -457,6 +481,7 @@ PreferencesDialog::applyClicked()
     prefs->setShowSplash(m_showSplash);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
+    prefs->setTimeToTextMode(Preferences::TimeToTextMode(m_timeToTextMode));
     prefs->setViewFontSize(m_viewFontSize);
     
     std::vector<QString> devices =
