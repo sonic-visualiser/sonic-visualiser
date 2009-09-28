@@ -625,6 +625,16 @@ MainWindow::setupEditMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
+    action = new QAction(tr("Insert Item at Selection"), this);
+    action->setShortcut(tr("Ctrl+Shift+Enter"));
+    action->setStatusTip(tr("Insert a new note or region item corresponding to the current selection"));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertItemAtSelection()));
+    connect(this, SIGNAL(canInsertItemAtSelection(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    menu->addSeparator();
+
     QMenu *numberingMenu = menu->addMenu(tr("Number New Instants with"));
     numberingMenu->setTearOffEnabled(true);
     QActionGroup *numberingGroup = new QActionGroup(this);
