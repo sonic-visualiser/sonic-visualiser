@@ -37,6 +37,7 @@
 #include "layer/SliceLayer.h"
 #include "layer/SliceableLayer.h"
 #include "layer/ImageLayer.h"
+#include "layer/RegionLayer.h"
 #include "widgets/Fader.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
@@ -277,6 +278,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     setupHelpMenu();
 
     statusBar();
+    m_currentLabel = new QLabel;
+    statusBar()->addPermanentWidget(m_currentLabel);
 
     connect(m_viewManager, SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
@@ -3491,6 +3494,33 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
     }
 
     statusBar()->showMessage(m_myStatusMessage);
+
+    updatePositionStatusDisplays();
+}
+
+void
+MainWindow::updatePositionStatusDisplays() const
+{
+    if (!statusBar()->isVisible()) return;
+
+    Pane *pane = 0;
+    size_t frame = m_viewManager->getPlaybackFrame();
+
+    if (m_paneStack) pane = m_paneStack->getCurrentPane();
+    if (!pane) return;
+
+    int layers = pane->getLayerCount();
+    if (layers == 0) m_currentLabel->setText("");
+
+    for (int i = layers-1; i >= 0; --i) {
+        Layer *layer = pane->getLayer(i);
+        if (!layer) continue;
+        if (!layer->isLayerEditable()) continue;
+        QString label = layer->getLabelPreceding
+            (pane->alignFromReference(frame));
+        m_currentLabel->setText(label);
+        break;
+    }
 }
 
 void
