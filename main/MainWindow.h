@@ -213,6 +213,8 @@ protected:
     QFrame                  *m_playControlsSpacer;
     int                      m_playControlsWidth;
 
+    QLabel                  *m_currentLabel;
+
     QPointer<PreferencesDialog> m_preferencesDialog;
     QPointer<LayerTreeDialog>   m_layerTreeDialog;
 
@@ -268,6 +270,7 @@ protected:
     virtual bool checkSaveModified();
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;
+    virtual void updatePositionStatusDisplays() const;
 
     virtual bool shouldCreateNewSessionForRDFAudio(bool *cancel);
     
