@@ -42,7 +42,7 @@ Surveyer::Surveyer(QObject *parent) :
     QSettings settings;
     settings.beginGroup("Survey");
     if (!settings.contains("countdown")) {
-        settings.setValue("countdown", 5);
+        settings.setValue("countdown", 15);
         settings.endGroup();
         return;
     }
