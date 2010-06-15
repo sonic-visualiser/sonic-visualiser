@@ -331,14 +331,6 @@ MainWindow::setupMenus()
 //        m_rightButtonMenu->setTearOffEnabled(true);
     }
 
-    if (m_rightButtonLayerMenu) {
-        m_rightButtonLayerMenu->clear();
-    } else {
-        m_rightButtonLayerMenu = m_rightButtonMenu->addMenu(tr("&Layer"));
-        m_rightButtonLayerMenu->setTearOffEnabled(true);
-        m_rightButtonMenu->addSeparator();
-    }
-
     if (m_rightButtonTransformsMenu) {
         m_rightButtonTransformsMenu->clear();
     } else {
@@ -904,6 +896,14 @@ MainWindow::setupPaneAndLayerMenus()
     } else {
 	m_layerMenu = menuBar()->addMenu(tr("&Layer"));
         m_layerMenu->setTearOffEnabled(true);
+    }
+
+    if (m_rightButtonLayerMenu) {
+        m_rightButtonLayerMenu->clear();
+    } else {
+        m_rightButtonLayerMenu = m_rightButtonMenu->addMenu(tr("&Layer"));
+        m_rightButtonLayerMenu->setTearOffEnabled(true);
+        m_rightButtonMenu->addSeparator();
     }
 
     QMenu *menu = m_paneMenu;
