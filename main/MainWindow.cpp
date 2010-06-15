@@ -339,6 +339,17 @@ MainWindow::setupMenus()
         m_rightButtonMenu->addSeparator();
     }
 
+    // This will be created (if not found) or cleared (if found) in
+    // setupPaneAndLayerMenus, but we want to ensure it's created
+    // sooner so it can go nearer the top of the right button menu
+    if (m_rightButtonLayerMenu) {
+        m_rightButtonLayerMenu->clear();
+    } else {
+        m_rightButtonLayerMenu = m_rightButtonMenu->addMenu(tr("&Layer"));
+        m_rightButtonLayerMenu->setTearOffEnabled(true);
+        m_rightButtonMenu->addSeparator();
+    }
+
     if (!m_mainMenusCreated) {
         CommandHistory::getInstance()->registerMenu(m_rightButtonMenu);
         m_rightButtonMenu->addSeparator();
@@ -1054,12 +1065,7 @@ MainWindow::setupPaneAndLayerMenus()
             default: break;
             }
 
-            std::vector<Model *> candidateModels;
-//            if (menuType == paneMenuType) {
-                candidateModels = models;
-//            } else {
-//                candidateModels.push_back(0);
-//            }
+            std::vector<Model *> candidateModels = models;
             
             for (std::vector<Model *>::iterator mi =
                      candidateModels.begin();
@@ -1084,18 +1090,9 @@ MainWindow::setupPaneAndLayerMenus()
                     bool isDefault = (c == 0);
                     bool isOnly = (isDefault && (channels == 1));
 
-//                    if (menuType == layerMenuType) {
-//                        if (isDefault) isOnly = true;
-//                        else continue;
-//                    }
+                    if (isOnly && !plural) {
 
-                    if (isOnly && (!plural /*|| menuType == layerMenuType*/)) {
-
-//                        if (menuType == layerMenuType && type != LayerFactory::Waveform) {
-//                            action = new QAction(mainText, this);
-//                        } else {
-                            action = new QAction(icon, mainText, this);
-//                        }                            
+                        action = new QAction(icon, mainText, this);
 
                         action->setShortcut(shortcutText);
                         action->setStatusTip(tipText);
@@ -1104,13 +1101,15 @@ MainWindow::setupPaneAndLayerMenus()
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_paneActions[action] = LayerConfiguration(type);
+                            m_paneActions[action] =
+                                LayerConfiguration(type, model);
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_layerActions[action] = LayerConfiguration(type);
+                            m_layerActions[action] =
+                                LayerConfiguration(type, model);
                         }
                         if (shortcutText != "") {
                             m_keyReference->registerShortcut(action);
@@ -1171,6 +1170,17 @@ MainWindow::setupPaneAndLayerMenus()
                         }
 
                         submenu->addAction(action);
+                    }
+
+                    if (isDefault && menuType == layerMenuType) {
+                        action = new QAction(icon, mainText, this);
+                        action->setStatusTip(tipText);
+                        connect(action, SIGNAL(triggered()),
+                                this, SLOT(addLayer()));
+                        connect(this, SIGNAL(canAddLayer(bool)),
+                                action, SLOT(setEnabled(bool)));
+                        m_layerActions[action] = LayerConfiguration(type, 0, 0);
+                        m_rightButtonLayerMenu->addAction(action);
                     }
 		}
 	    }
@@ -3078,7 +3088,9 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         }
     }
 
-    if (!model) model = m_document->getMainModel();
+    if (!model) {
+        model = m_document->getMainModel();
+    }
 
     m_document->setModel(newLayer, model);
 
@@ -3173,19 +3185,39 @@ MainWindow::addLayer()
 
 	} else {
 
-            if (!i->second.sourceModel) {
-                // e.g. time ruler
-                newLayer = m_document->createMainModelLayer(type);
-            } else {
+            Model *model = i->second.sourceModel;
+
+            if (!model) {
+                if (type == LayerFactory::TimeRuler) {
+                    newLayer = m_document->createMainModelLayer(type);
+                } else {
+                    // if model is unspecified and this is not a
+                    // time-ruler layer, use the topmost plausible
+                    // model from the current pane (if any) -- this is
+                    // the case for right-button menu layer additions
+                    for (int i = pane->getLayerCount(); i > 0; --i) {
+                        Layer *el = pane->getLayer(i-1);
+                        if (el &&
+                            el->getModel() &&
+                            dynamic_cast<RangeSummarisableTimeValueModel *>
+                            (el->getModel())) {
+                            model = el->getModel();
+                        }
+                    }
+                    if (!model) model = getMainModel();
+                }
+            }
+
+            if (model) {
                 newLayer = m_document->createLayer(type);
-                if (m_document->isKnownModel(i->second.sourceModel)) {
+                if (m_document->isKnownModel(model)) {
                     m_document->setChannel(newLayer, i->second.channel);
-                    m_document->setModel(newLayer, i->second.sourceModel);
+                    m_document->setModel(newLayer, model);
                 } else {
                     std::cerr << "WARNING: MainWindow::addLayer: unknown model "
-                              << i->second.sourceModel
+                              << model
                               << " (\""
-                              << (i->second.sourceModel ? i->second.sourceModel->objectName().toStdString() : "")
+                              << (model ? model->objectName().toStdString() : "")
                               << "\") in layer action map"
                               << std::endl;
                 }
