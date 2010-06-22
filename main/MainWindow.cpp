@@ -1187,6 +1187,8 @@ MainWindow::setupPaneAndLayerMenus()
 	}
     }
 
+    m_rightButtonLayerMenu->addSeparator();
+
     menu = m_paneMenu;
     menu->addSeparator();
 
