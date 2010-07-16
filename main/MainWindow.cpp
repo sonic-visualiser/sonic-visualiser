@@ -1013,6 +1013,7 @@ MainWindow::setupPaneAndLayerMenus()
                     shortcutText = tr("W");
                     tipText = tr("Add a new pane showing a waveform view");
                 } else {
+                    shortcutText = tr("Shift+W");
                     tipText = tr("Add a new layer showing a waveform view");
                 }
                 mono = false;
@@ -1025,6 +1026,7 @@ MainWindow::setupPaneAndLayerMenus()
                     shortcutText = tr("G");
                     tipText = tr("Add a new pane showing a spectrogram");
                 } else {
+                    shortcutText = tr("Shift+G");
                     tipText = tr("Add a new layer showing a spectrogram");
                 }
                 break;
@@ -1036,6 +1038,7 @@ MainWindow::setupPaneAndLayerMenus()
                     shortcutText = tr("M");
                     tipText = tr("Add a new pane showing a spectrogram set up for an overview of note pitches");
                 } else {
+                    shortcutText = tr("Shift+M");
                     tipText = tr("Add a new layer showing a spectrogram set up for an overview of note pitches");
                 }
                 break;
@@ -1047,6 +1050,7 @@ MainWindow::setupPaneAndLayerMenus()
                     shortcutText = tr("K");
                     tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
                 } else {
+                    shortcutText = tr("Shift+K");
                     tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
                 }
                 break;
@@ -1058,6 +1062,7 @@ MainWindow::setupPaneAndLayerMenus()
                     shortcutText = tr("U");
                     tipText = tr("Add a new pane showing a frequency spectrum");
                 } else {
+                    shortcutText = tr("Shift+U");
                     tipText = tr("Add a new layer showing a frequency spectrum");
                 }
                 break;
