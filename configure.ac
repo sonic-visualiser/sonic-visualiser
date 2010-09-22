@@ -109,14 +109,6 @@ if ! $QMAKE -r; then
    AC_MSG_ERROR([qmake failed: Command was "$QMAKE -r"])
 fi
 
-# qmake builds our static libraries, which is fine -- what we'd really
-# like to do afterwards is bundle them into a single .so with e.g.
-
-# gcc -Wl,--whole-archive */*.a -Wl,--no-whole-archive -o libsvcore.so
-
-# but how best to arrange this? if it's not possible, we'll presumably
-# just have to use a single (q)make(project)file instead.
-
 AC_MSG_NOTICE([
 
 Configuration complete.

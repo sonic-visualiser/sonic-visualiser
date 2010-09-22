@@ -6577,7 +6577,7 @@ else
 	liblo_LIBS=$pkg_cv_liblo_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $liblo_CFLAGS";LIBS="$LIBS $liblo_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -6723,7 +6723,7 @@ else
 	JACK_LIBS=$pkg_cv_JACK_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $JACK_CFLAGS";LIBS="$LIBS $JACK_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -6869,7 +6869,7 @@ else
 	libpulse_LIBS=$pkg_cv_libpulse_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $libpulse_CFLAGS";LIBS="$LIBS $libpulse_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -7015,7 +7015,7 @@ else
 	lrdf_LIBS=$pkg_cv_lrdf_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $lrdf_CFLAGS";LIBS="$LIBS $lrdf_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -7161,7 +7161,7 @@ else
 	oggz_LIBS=$pkg_cv_oggz_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $oggz_CFLAGS";LIBS="$LIBS $oggz_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -7307,7 +7307,7 @@ else
 	fishsound_LIBS=$pkg_cv_fishsound_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $fishsound_CFLAGS";LIBS="$LIBS $fishsound_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -7453,7 +7453,7 @@ else
 	mad_LIBS=$pkg_cv_mad_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $mad_CFLAGS";LIBS="$LIBS $mad_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -7599,7 +7599,7 @@ else
 	id3tag_LIBS=$pkg_cv_id3tag_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $id3tag_CFLAGS";LIBS="$LIBS $id3tag_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -10021,14 +10021,6 @@ fi
 if ! $QMAKE -r; then
    as_fn_error $? "qmake failed: Command was \"$QMAKE -r\"" "$LINENO" 5
 fi
-
-# qmake builds our static libraries, which is fine -- what we'd really
-# like to do afterwards is bundle them into a single .so with e.g.
-
-# gcc -Wl,--whole-archive */*.a -Wl,--no-whole-archive -o libsvcore.so
-
-# but how best to arrange this? if it's not possible, we'll presumably
-# just have to use a single (q)make(project)file instead.
 
 { $as_echo "$as_me:${as_lineno-$LINENO}:
 

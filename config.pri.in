@@ -6,3 +6,5 @@ QMAKE_CXXFLAGS += @CXXFLAGS@
 
 LIBS += @LIBS@
 
+linux*: LIBS += -lasound
+
