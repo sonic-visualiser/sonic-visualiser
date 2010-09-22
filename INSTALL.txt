@@ -1,0 +1,53 @@
+
+To compile from source
+----------------------
+
+This file provides various instructions useful when compiling the SV
+libraries from source, but it doesn't have a complete recipe for any
+one platform -- there are too many variables.  However, you can find a
+recipe for one platform (Ubuntu Linux) in the file INSTALL.ubuntu.
+
+To build, run
+
+$ ./configure && make
+
+The following additional libraries are required or optional when
+building the SV core libraries:
+
+REQUIRED	Qt v4.4 or newer	http://qt.nokia.com/
+REQUIRED	Vamp Plugin SDK	v2.x	http://www.vamp-plugins.org/
+REQUIRED	Rubber Band Library	http://www.breakfastquay.com/rubberband/
+REQUIRED	libsndfile		http://www.mega-nerd.com/libsndfile/
+REQUIRED	libsamplerate		http://www.mega-nerd.com/SRC/
+REQUIRED	FFTW3 			http://www.fftw.org/
+REQUIRED	bzip2 library		http://www.bzip.org/
+REQUIRED	Redland RDF libraries	http://librdf.org/
+
+Optional	MAD mp3 decoder		http://www.underbit.com/products/mad/
+Optional	Oggz and fishsound	http://www.annodex.net/software/libraries.html
+Optional        liblo OSC library	http://www.plugin.org.uk/liblo/
+
+The Redland RDF libraries include the Raptor RDF parser library,
+Rasqal RDF query library, and librdf, the Redland RDF datastore (which
+depends on both of those).  The SV libraries require all of these.
+
+If you are going to build the rest of the SV libraries, you will also
+need one or more of:
+
+Optional	JACK			http://www.jackaudio.org/
+Optional	PortAudio v19		http://www.portaudio.com/
+Optional	PulseAudio    	 	http://www.pulseaudio.org/
+
+Although JACK, PortAudio, and PulseAudio are individually optional,
+you will need to have one or the other of them in order to get any
+audio playback.  Usually JACK is preferred on Linux, with PulseAudio
+as a backup, and PortAudio is used elsewhere.
+
+On Linux, you will need the ALSA libraries (used for MIDI).
+
+If you happen to be using a Debian-based Linux, you probably want to
+apt-get install the following packages: libqt4-dev libsndfile1-dev
+libsamplerate0-dev fftw3-dev libbz2-dev libjack-dev libmad0-dev
+liboggz1-dev libfishsound1-dev libasound2-dev liblo0-dev liblrdf0-dev
+librdf0-dev .
+
