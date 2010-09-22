@@ -1,0 +1,1 @@
+#define SV_VERSION "@PACKAGE_VERSION@"
