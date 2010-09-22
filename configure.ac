@@ -1,7 +1,7 @@
 
-AC_INIT(SVcore, 1.8, cannam@all-day-breakfast.com)
+AC_INIT([Sonic Visualiser], 1.8, cannam@all-day-breakfast.com)
 
-AC_CONFIG_SRCDIR(base/base.pro)
+AC_CONFIG_SRCDIR(main/main.cpp)
 
 # Autoconf will set CXXFLAGS; we don't usually want it to, because we
 # either define our own flags (at least if GCC is in use) or else use
@@ -103,6 +103,7 @@ AC_SUBST(CXX)
 AC_SUBST(CODENAME)
 
 AC_OUTPUT([config.pri])
+AC_OUTPUT([version.h])
 
 if ! $QMAKE -r; then
    AC_MSG_ERROR([qmake failed: Command was "$QMAKE -r"])
