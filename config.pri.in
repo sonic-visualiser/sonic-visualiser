@@ -4,7 +4,10 @@ DEFINES += @HAVES@
 QMAKE_CFLAGS += @CFLAGS@
 QMAKE_CXXFLAGS += @CXXFLAGS@
 
-LIBS += @LIBS@
+linux*:LIBS += -lasound
 
-linux*: LIBS += -lasound
+macx*:DEFINES += HAVE_QUICKTIME
+macx*:LIBS += -framework QuickTime -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox
+
+LIBS += @LIBS@
 
