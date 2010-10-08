@@ -4157,7 +4157,7 @@ $as_echo "$as_me: WARNING:
 esac
 
 case "`uname`" in
-     *Linux) QMAKE="$QMAKE -spec macx-g++";;
+     *Darwin*) QMAKE="$QMAKE -spec macx-g++";;
 esac
 
 
