@@ -4156,6 +4156,10 @@ $as_echo "$as_me: WARNING:
 " >&2;}
 esac
 
+case "`uname`" in
+     *Linux) QMAKE="$QMAKE -spec macx-g++";;
+esac
+
 
 
 SV_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
