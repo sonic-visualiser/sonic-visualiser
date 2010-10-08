@@ -94,5 +94,9 @@ case "$QMAKE_VERSION_OUTPUT" in
 ])
 esac
 
+case "`uname`" in
+     *Darwin*) QMAKE="$QMAKE -spec macx-g++";;
+esac
+
 ])
 
