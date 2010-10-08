@@ -77,6 +77,7 @@ SV_MODULE_REQUIRED([rasqal],[rasqal >= 0.9.19],[rasqal/rasqal.h],[rasqal],[rasqa
 SV_MODULE_REQUIRED([redland],[redland >= 1.0.10],[librdf.h],[rdf],[librdf_new_world])
 
 SV_MODULE_OPTIONAL([liblo],[],[lo/lo.h],[lo],[lo_address_new])
+SV_MODULE_OPTIONAL([portaudio_2_0],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
 SV_MODULE_OPTIONAL([JACK],[jack >= 0.100],[jack/jack.h],[jack],[jack_client_open])
 SV_MODULE_OPTIONAL([libpulse],[libpulse >= 0.9],[pulse/pulseaudio.h],[pulse],[pa_stream_new])
 SV_MODULE_OPTIONAL([lrdf],[lrdf >= 0.2],[lrdf.h],[lrdf],[lrdf_init])
