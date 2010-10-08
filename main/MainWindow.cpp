@@ -26,6 +26,7 @@
 #include "data/model/Labeller.h"
 #include "data/osc/OSCQueue.h"
 #include "framework/Document.h"
+#include "framework/TransformUserConfigurator.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "layer/WaveformLayer.h"
@@ -3301,6 +3302,8 @@ MainWindow::addLayer(QString transformId)
     if (endFrame > startFrame) duration = endFrame - startFrame;
     else startFrame = 0;
 
+    TransformUserConfigurator configurator;
+
     ModelTransformer::Input input = ModelTransformerFactory::getInstance()->
         getConfigurationForTransform
         (transform,
@@ -3308,7 +3311,8 @@ MainWindow::addLayer(QString transformId)
          defaultInputModel,
          m_playSource,
          startFrame,
-         duration);
+         duration,
+         &configurator);
 
     if (!input.getModel()) return;
 
