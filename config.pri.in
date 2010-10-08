@@ -1,4 +1,6 @@
 
+CONFIG += @QMAKE_CONFIG@
+
 DEFINES += @HAVES@
 
 QMAKE_CC = @CC@

@@ -597,6 +597,7 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 CODENAME
+QMAKE_CONFIG
 HAVES
 CXXFLAGS_MINIMAL
 CUT
@@ -4184,10 +4185,13 @@ fi
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
 SV_DEFINES_BUILD="$SV_DEFINES_RELEASE"
 
+QMAKE_CONFIG="release"
+
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug; { $as_echo "$as_me:${as_lineno-$LINENO}: enabling debug build" >&5
 $as_echo "$as_me: enabling debug build" >&6;}
+QMAKE_CONFIG="debug"
 CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
 SV_DEFINES_BUILD="$SV_DEFINES_DEBUG"
 fi
@@ -7178,6 +7182,8 @@ fi
       fi
    fi
 fi
+
+
 
 
 
