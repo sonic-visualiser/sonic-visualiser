@@ -618,6 +618,8 @@ libpulse_LIBS
 libpulse_CFLAGS
 JACK_LIBS
 JACK_CFLAGS
+portaudio_2_0_LIBS
+portaudio_2_0_CFLAGS
 liblo_LIBS
 liblo_CFLAGS
 redland_LIBS
@@ -741,6 +743,8 @@ redland_CFLAGS
 redland_LIBS
 liblo_CFLAGS
 liblo_LIBS
+portaudio_2_0_CFLAGS
+portaudio_2_0_LIBS
 JACK_CFLAGS
 JACK_LIBS
 libpulse_CFLAGS
@@ -1419,6 +1423,10 @@ Some influential environment variables:
   liblo_CFLAGS
               C compiler flags for liblo, overriding pkg-config
   liblo_LIBS  linker flags for liblo, overriding pkg-config
+  portaudio_2_0_CFLAGS
+              C compiler flags for portaudio_2_0, overriding pkg-config
+  portaudio_2_0_LIBS
+              linker flags for portaudio_2_0, overriding pkg-config
   JACK_CFLAGS C compiler flags for JACK, overriding pkg-config
   JACK_LIBS   linker flags for JACK, overriding pkg-config
   libpulse_CFLAGS
@@ -5901,6 +5909,156 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $liblo_CFLAGS";LIBS="$LIBS $liblo_LIBS";SV_MODULE_FAILED=""
+fi
+fi
+if test -n "$SV_MODULE_FAILED"; then
+   as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
+eval as_val=\$$as_ac_Header
+   if test "x$as_val" = x""yes; then :
+  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
+$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+fi
+
+
+   if test -z "$SV_MODULE_FAILED"; then
+      if test -n "$SV_MODULE_LIB"; then
+           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
+$as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
+if { as_var=$as_ac_Lib; eval "test \"\${$as_var+set}\" = set"; }; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$SV_MODULE_LIB  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $SV_MODULE_FUNC ();
+int
+main ()
+{
+return $SV_MODULE_FUNC ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  eval "$as_ac_Lib=yes"
+else
+  eval "$as_ac_Lib=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+eval as_val=\$$as_ac_Lib
+   if test "x$as_val" = x""yes; then :
+  LIBS="$LIBS -l$SV_MODULE_LIB"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
+$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+fi
+
+      fi
+   fi
+fi
+
+
+SV_MODULE_MODULE=portaudio_2_0
+SV_MODULE_VERSION_TEST="portaudio-2.0 >= 19"
+SV_MODULE_HEADER=portaudio.h
+SV_MODULE_LIB=portaudio
+SV_MODULE_FUNC=Pa_IsFormatSupported
+SV_MODULE_HAVE=HAVE_$(echo portaudio_2_0 | tr 'a-z' 'A-Z')
+SV_MODULE_FAILED=1
+if test -z "$SV_MODULE_VERSION_TEST" ; then
+   SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
+fi
+if test -n "$PKG_CONFIG"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for portaudio_2_0" >&5
+$as_echo_n "checking for portaudio_2_0... " >&6; }
+
+if test -n "$PKG_CONFIG"; then
+    if test -n "$portaudio_2_0_CFLAGS"; then
+        pkg_cv_portaudio_2_0_CFLAGS="$portaudio_2_0_CFLAGS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_portaudio_2_0_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+if test -n "$PKG_CONFIG"; then
+    if test -n "$portaudio_2_0_LIBS"; then
+        pkg_cv_portaudio_2_0_LIBS="$portaudio_2_0_LIBS"
+    else
+        if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_portaudio_2_0_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+else
+  pkg_failed=yes
+fi
+    fi
+else
+	pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        portaudio_2_0_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "$SV_MODULE_VERSION_TEST"`
+        else
+	        portaudio_2_0_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "$SV_MODULE_VERSION_TEST"`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$portaudio_2_0_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+                { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+elif test $pkg_failed = untried; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+else
+	portaudio_2_0_CFLAGS=$pkg_cv_portaudio_2_0_CFLAGS
+	portaudio_2_0_LIBS=$pkg_cv_portaudio_2_0_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $portaudio_2_0_CFLAGS";LIBS="$LIBS $portaudio_2_0_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
