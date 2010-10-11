@@ -40,4 +40,6 @@ SOURCES += main/main.cpp \
            main/PreferencesDialog.cpp \
            main/Surveyer.cpp
 
+# for mac integration
+QMAKE_INFO_PLIST = osx/Info.plist
 
