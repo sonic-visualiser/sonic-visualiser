@@ -37,6 +37,10 @@
 #include <QTimer>
 #include <QPainter>
 #include <QFileOpenEvent>
+#include <QMenu>
+#ifdef Q_WS_MAC
+    void qt_mac_set_dock_menu(QMenu *menu); // must declare it ourselves, weirdly enough
+#endif
 
 #include "../version.h"
 
@@ -210,6 +214,16 @@ public:
 
     bool m_readyForFiles;
     QStringList m_filepathQueue;
+
+#ifdef Q_WS_MAC
+    void setupDockMenu() {
+        std::cerr << "SV adding mac dock menu" << std::endl;
+        QMenu *dockMenu = new QMenu();
+        dockMenu->addAction("a SV DOCK action");
+        qt_mac_set_dock_menu(dockMenu);
+    }
+#endif
+
 
 protected:
     MainWindow *m_mainWindow;
@@ -388,6 +402,10 @@ main(int argc, char **argv)
     }
 #endif
     settings.endGroup();
+#endif
+
+#ifdef Q_WS_MAC
+    application.setupDockMenu();
 #endif
 
     if (splash) splash->finish(gui);
