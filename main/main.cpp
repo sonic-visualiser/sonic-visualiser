@@ -23,8 +23,10 @@
 #include "widgets/TipDialog.h"
 #include "transform/TransformFactory.h"
 
+#ifdef Q_WS_MAC
 #include <ApplicationServices/ApplicationServices.h>
 #include <Carbon/Carbon.h>
+#endif
 
 #include <QMetaType>
 #include <QApplication>
