@@ -79,6 +79,9 @@
 #include "widgets/ModelDataTableDialog.h"
 #include "rdf/PluginRDFIndexer.h"
 #include "rdf/RDFExporter.h"
+#ifdef Q_WS_MAC
+	#include "osx/svitunes.h"
+#endif
 
 #include "Surveyer.h"
 #include "framework/VersionTester.h"
@@ -441,6 +444,16 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canImportMoreAudio(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+#ifdef Q_WS_MAC
+    action = new QAction(tr("Import current track from iTunes"), this);
+    action->setShortcut(tr("Ctrl+Alt+I"));
+    action->setStatusTip(tr("Import currently playing/selected iTunes track"));
+    connect(action, SIGNAL(triggered()), this, SLOT(importITunesAudio()));
+    //connect(this, SIGNAL(canImportITunesAudio(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+#endif
 
     action = new QAction(tr("&Export Audio File..."), this);
     action->setStatusTip(tr("Export selection as an audio file"));
@@ -2147,6 +2160,22 @@ MainWindow::importMoreAudio()
 	}
     }
 }
+
+#ifdef Q_WS_MAC
+void
+MainWindow::importITunesAudio()
+{
+    QString path = iTunesNowPlayingPath();
+
+    if (path != "") {
+	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+            emit hideSplash();
+	    QMessageBox::critical(this, tr("Failed to open file"),
+				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+	}
+    }
+}
+#endif
 
 void
 MainWindow::exportAudio()

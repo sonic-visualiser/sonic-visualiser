@@ -80,6 +80,9 @@ protected slots:
     virtual void openSession();
     virtual void importAudio();
     virtual void importMoreAudio();
+#ifdef Q_WS_MAC
+    virtual void importITunesAudio();
+#endif
     virtual void openSomething();
     virtual void openLocation();
     virtual void openRecentFile();
