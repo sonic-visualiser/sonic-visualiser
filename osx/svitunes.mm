@@ -37,7 +37,22 @@ QString iTunesNowPlayingPath(){
     NSAppleScript *scriptObject = [[NSAppleScript alloc]    initWithSource:@" \
 tell application \"System Events\" to set iTunesIsRunning to (name of processes) contains \"iTunes\" \n\
 if iTunesIsRunning is false then return \"\" \n\
-return \"twelve-bar blues track\""
+\
+tell application \"iTunes\" \n\
+    if player state is not stopped then \n\
+        set aTrack to current track \n\
+    else \n\
+        set sel to selection \n\
+        if sel is not {} then --and (length of sel) is 1 then \n\
+            set aTrack to item 1 of sel \n\
+        else \n\
+            return \"\" \n\
+        end if \n\
+    end if \n\
+    \
+    return the POSIX path of (location of aTrack as text) \n\
+end tell \n\
+"
     ];
     
     NSLog([scriptObject source]);
