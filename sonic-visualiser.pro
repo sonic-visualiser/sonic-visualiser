@@ -40,6 +40,10 @@ SOURCES += main/main.cpp \
            main/PreferencesDialog.cpp \
            main/Surveyer.cpp
 
-# for mac integration
-QMAKE_INFO_PLIST = osx/Info.plist
+mac {
+    QMAKE_INFO_PLIST = osx/Info.plist
+    
+    OBJECTIVE_SOURCES += osx/svitunes.mm
 
+    LIBS += -framework Foundation
+}

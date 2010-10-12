@@ -39,6 +39,7 @@
 #include <QFileOpenEvent>
 #include <QMenu>
 #ifdef Q_WS_MAC
+    #include "osx/svitunes.h"
     void qt_mac_set_dock_menu(QMenu *menu); // must declare it ourselves, weirdly enough
 #endif
 
@@ -219,7 +220,11 @@ public:
     void setupDockMenu() {
         std::cerr << "SV adding mac dock menu" << std::endl;
         QMenu *dockMenu = new QMenu();
-        dockMenu->addAction("a SV DOCK action");
+        QString theText = iTunesNowPlayingPath();
+        if (theText == ""){
+            theText = "[[No current track in iTunes]]";
+        }
+        dockMenu->addAction(theText);
         qt_mac_set_dock_menu(dockMenu);
     }
 #endif
