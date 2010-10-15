@@ -2218,16 +2218,16 @@ MainWindow::importITunesAudio()
 {
     QStringList nowPlaying = iTunesNowPlaying();
     QString path = nowPlaying.at(0);
-    QString genre = (nowPlaying.size() > 1) ? nowPlaying.at(1) : "";
-    std::cerr << "MainWindow::importITunesAudio(): genre is " << genre.toStdString() << std::endl;
-    QString tplName = templateNameFromGenre(genre);
 
     if (path != "") {
-    if (openAudio(path, ReplaceMainModel, tplName) == FileOpenFailed) {
-            emit hideSplash();
-        QMessageBox::critical(this, tr("Failed to open file"),
-                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-    }
+        QString genre = (nowPlaying.size() > 1) ? nowPlaying.at(1) : "";
+        std::cerr << "MainWindow::importITunesAudio(): genre is " << genre.toStdString() << std::endl;
+        QString tplName = templateNameFromGenre(genre);
+        if (openAudio(path, ReplaceMainModel, tplName) == FileOpenFailed) {
+                emit hideSplash();
+            QMessageBox::critical(this, tr("Failed to open file"),
+                      tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+        }
     }
 }
 #endif
