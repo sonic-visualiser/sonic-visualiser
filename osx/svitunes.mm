@@ -32,7 +32,7 @@ QString qt_mac_NSStringToQString(const NSString *nsstr)
     return result;
 }
 
-QString iTunesNowPlayingPath(){
+QStringList iTunesNowPlaying(){
     NSDictionary *errorDict;
     NSAppleScript *scriptObject = [[NSAppleScript alloc]    initWithSource:@" \
 tell application \"System Events\" to set iTunesIsRunning to (name of processes) contains \"iTunes\" \n\
@@ -50,7 +50,7 @@ tell application \"iTunes\" \n\
         end if \n\
     end if \n\
     \
-    return the POSIX path of (location of aTrack as text) \n\
+    return the POSIX path of (location of aTrack as text) & \"\n\" & (genre of aTrack) \n\
 end tell \n\
 "
     ];
@@ -73,5 +73,5 @@ end tell \n\
     QString resultString = qt_mac_NSStringToQString(nsResultString);
     
     [scriptObject release];
-    return resultString;
+    return resultString.split(QChar('\n'));
 }

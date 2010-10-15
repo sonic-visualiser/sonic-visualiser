@@ -2165,14 +2165,17 @@ MainWindow::importMoreAudio()
 void
 MainWindow::importITunesAudio()
 {
-    QString path = iTunesNowPlayingPath();
+    QStringList nowPlaying = iTunesNowPlaying();
+    QString path = nowPlaying.at(0);
+    QString genre = (nowPlaying.size() > 1) ? nowPlaying.at(1) : "";
+    std::cerr << "MainWindow::importITunesAudio(): genre is " << genre.toStdString() << std::endl;
 
     if (path != "") {
-	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+    if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
             emit hideSplash();
-	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-	}
+        QMessageBox::critical(this, tr("Failed to open file"),
+                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+    }
     }
 }
 #endif

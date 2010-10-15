@@ -17,7 +17,8 @@
 
 //LATER: bool iTunesRunning();
 
-QString iTunesNowPlayingPath();
+// Returns a list containing [posixpath, genre]
+QStringList iTunesNowPlaying();
 
 //LATER: QStringList iTunesSelectedPaths();
 
