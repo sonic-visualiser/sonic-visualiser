@@ -2,9 +2,9 @@
 <!DOCTYPE sonic-visualiser>
 <sv>
 <data>
-  <model id="0" name="MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac" sampleRate="44100" start="0" end="176400" type="wavefile" file="/home/dan/Music/_mcld_etc/Mouthpeaks/MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac" mainModel="true"/>
+  <model id="0" name="bass.wav" sampleRate="44100" start="0" end="176400" type="wavefile" file=":samples/bass.wav" mainModel="true"/>
   <playparameters mute="false" pan="0" gain="1" pluginId="" model="0"/>
-  <model id="2" name="MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac: Linear Frequency Centroid" sampleRate="44100" start="0" end="100352" type="sparse" dimensions="2" resolution="512" notifyOnAdd="true" dataset="1"  minimum="2027.39" maximum="6850.78" units="Hz"/>
+  <model id="2" name="bass.wav: Linear Frequency Centroid" sampleRate="44100" start="0" end="100352" type="sparse" dimensions="2" resolution="512" notifyOnAdd="true" dataset="1"  minimum="2027.39" maximum="6850.78" units="Hz"/>
   <dataset id="1" dimensions="2">
     <point frame="0" value="2027.39" label="" />
     <point frame="512" value="6045.79" label="" />
@@ -112,7 +112,7 @@
     sampleRate="0"/>
     <plugin identifier="spectralcentroid" name="Spectral Centroid" description="Calculate the centroid frequency of the spectrum of the input signal" maker="Vamp SDK Example Plugins" version="2" copyright="Freely redistributable (BSD license)"  />
   </derivation>
-  <model id="4" name="MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac: Amplitude Follower" sampleRate="44100" start="0" end="176128" type="sparse" dimensions="2" resolution="1024" notifyOnAdd="true" dataset="3"  minimum="0" maximum="0.718209" units="V"/>
+  <model id="4" name="bass.wav: Amplitude Follower" sampleRate="44100" start="0" end="176128" type="sparse" dimensions="2" resolution="1024" notifyOnAdd="true" dataset="3"  minimum="0" maximum="0.718209" units="V"/>
   <dataset id="3" dimensions="2">
     <point frame="0" value="0.452893" label="" />
     <point frame="1024" value="0.503583" label="" />
