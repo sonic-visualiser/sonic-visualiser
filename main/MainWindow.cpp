@@ -2161,6 +2161,57 @@ MainWindow::importMoreAudio()
     }
 }
 
+void
+MainWindow::initGenreToTemplateMap()
+{
+    // Note that the set of templates must always be kept small, for reasons of usability, manageability, code size.
+    
+    // TODO add all the standard ID3 + winamp genre labels (lowercased).
+
+    m_genreToTemplateMap["classical"]   = "classical";
+
+    // 'dance' template is for things where beat and rhythm are particularly important
+    m_genreToTemplateMap["dance"] = "dance";
+    m_genreToTemplateMap["disco"] = "dance";
+    m_genreToTemplateMap["electronic"]  = "dance";
+    m_genreToTemplateMap["funk"] = "dance";
+    m_genreToTemplateMap["hip-hop"]     = "dance";
+    m_genreToTemplateMap["industrial"] = "dance";
+    m_genreToTemplateMap["rap"] = "dance";
+    m_genreToTemplateMap["techno"] = "dance";
+
+    m_genreToTemplateMap["acoustic"] = "melodic";
+    m_genreToTemplateMap["alternative"] = "melodic"; // ???
+    m_genreToTemplateMap["blues"]       = "melodic";
+    m_genreToTemplateMap["classic rock"] = "melodic";
+    m_genreToTemplateMap["country"] = "melodic";
+    m_genreToTemplateMap["grunge"] = "melodic";
+    m_genreToTemplateMap["jazz"]        = "melodic";
+    m_genreToTemplateMap["metal"] = "melodic";
+    m_genreToTemplateMap["new age"] = "melodic";
+    m_genreToTemplateMap["oldies"] = "melodic";
+    m_genreToTemplateMap["other"] = "melodic";
+    m_genreToTemplateMap["pop"] = "melodic";
+    m_genreToTemplateMap["r&b"] = "melodic";
+    m_genreToTemplateMap["reggae"] = "melodic";
+    m_genreToTemplateMap["rock"]        = "melodic";
+    m_genreToTemplateMap["ska"] = "melodic";
+    m_genreToTemplateMap["soundtrack"]        = "melodic";
+}
+
+
+QString 
+MainWindow::templateNameFromGenre(QString genre){
+    if(m_genreToTemplateMap.isEmpty())
+        initGenreToTemplateMap();
+    
+    QString tplName = m_genreToTemplateMap.value(genre.toLower(), "");
+    
+    //return tplName;
+    return QString("testtemplate"); // TODO TEMPORARY - remove once templates are made
+}
+
+
 #ifdef Q_WS_MAC
 void
 MainWindow::importITunesAudio()
@@ -2169,9 +2220,10 @@ MainWindow::importITunesAudio()
     QString path = nowPlaying.at(0);
     QString genre = (nowPlaying.size() > 1) ? nowPlaying.at(1) : "";
     std::cerr << "MainWindow::importITunesAudio(): genre is " << genre.toStdString() << std::endl;
+    QString tplName = templateNameFromGenre(genre);
 
     if (path != "") {
-    if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+    if (openAudio(path, ReplaceMainModel, tplName) == FileOpenFailed) {
             emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open file"),
                   tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));

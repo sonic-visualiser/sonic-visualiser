@@ -68,6 +68,9 @@ public:
                bool withOSCSupport = true);
     virtual ~MainWindow();
 
+    // maps from known genre tags to template choices
+    QString templateNameFromGenre(QString genre);
+
 signals:
     virtual void canChangeSolo(bool);
     virtual void canAlign(bool);
@@ -278,6 +281,9 @@ protected:
     virtual bool shouldCreateNewSessionForRDFAudio(bool *cancel);
     
     virtual void connectLayerEditDialog(ModelDataTableDialog *);
+    
+    void initGenreToTemplateMap();
+    QHash<QString, QString> m_genreToTemplateMap;
 };
 
 
