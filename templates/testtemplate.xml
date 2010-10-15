@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+<data>
+  <model id="0" name="MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac" sampleRate="44100" start="0" end="176400" type="wavefile" file="/home/dan/Music/_mcld_etc/Mouthpeaks/MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac" mainModel="true"/>
+  <playparameters mute="false" pan="0" gain="1" pluginId="" model="0"/>
+  <model id="2" name="MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac: Linear Frequency Centroid" sampleRate="44100" start="0" end="100352" type="sparse" dimensions="2" resolution="512" notifyOnAdd="true" dataset="1"  minimum="2027.39" maximum="6850.78" units="Hz"/>
+  <dataset id="1" dimensions="2">
+    <point frame="0" value="2027.39" label="" />
+    <point frame="512" value="6045.79" label="" />
+    <point frame="1024" value="6418.15" label="" />
+    <point frame="1536" value="6509.11" label="" />
+    <point frame="2048" value="6559.68" label="" />
+    <point frame="2560" value="6311.73" label="" />
+    <point frame="3072" value="6506.64" label="" />
+    <point frame="3584" value="6451.55" label="" />
+    <point frame="4096" value="6522.18" label="" />
+    <point frame="4608" value="6486.36" label="" />
+    <point frame="5120" value="6291.02" label="" />
+    <point frame="5632" value="6432.67" label="" />
+    <point frame="6144" value="6232.32" label="" />
+    <point frame="6656" value="6235.87" label="" />
+    <point frame="7168" value="6422.67" label="" />
+    <point frame="7680" value="6405.53" label="" />
+    <point frame="8192" value="6693.63" label="" />
+    <point frame="8704" value="6285.09" label="" />
+    <point frame="9216" value="6571.57" label="" />
+    <point frame="9728" value="6283.38" label="" />
+    <point frame="10240" value="5595.98" label="" />
+    <point frame="10752" value="5900.23" label="" />
+    <point frame="11264" value="6108.65" label="" />
+    <point frame="11776" value="6403.87" label="" />
+    <point frame="12288" value="6399.26" label="" />
+    <point frame="12800" value="6383.65" label="" />
+    <point frame="13312" value="6440.11" label="" />
+    <point frame="13824" value="6401.14" label="" />
+    <point frame="14336" value="6592.96" label="" />
+    <point frame="14848" value="6793.75" label="" />
+    <point frame="15360" value="6850.78" label="" />
+    <point frame="43008" value="6292.49" label="" />
+    <point frame="43520" value="6226.9" label="" />
+    <point frame="44032" value="6137.03" label="" />
+    <point frame="44544" value="6800.03" label="" />
+    <point frame="45056" value="6480.42" label="" />
+    <point frame="45568" value="6373.64" label="" />
+    <point frame="46080" value="6561.55" label="" />
+    <point frame="46592" value="6675.7" label="" />
+    <point frame="47104" value="6300.43" label="" />
+    <point frame="47616" value="6347.15" label="" />
+    <point frame="48128" value="6569.65" label="" />
+    <point frame="48640" value="6192.86" label="" />
+    <point frame="49152" value="6741.45" label="" />
+    <point frame="49664" value="6343.96" label="" />
+    <point frame="50176" value="6519.43" label="" />
+    <point frame="50688" value="6206.12" label="" />
+    <point frame="51200" value="6203.37" label="" />
+    <point frame="51712" value="6452.43" label="" />
+    <point frame="52224" value="6111.09" label="" />
+    <point frame="52736" value="6316.1" label="" />
+    <point frame="53248" value="6143.94" label="" />
+    <point frame="53760" value="5972.78" label="" />
+    <point frame="54272" value="6214.94" label="" />
+    <point frame="54784" value="6088.9" label="" />
+    <point frame="55296" value="6000.24" label="" />
+    <point frame="55808" value="6120.26" label="" />
+    <point frame="56320" value="5979.33" label="" />
+    <point frame="56832" value="6009.34" label="" />
+    <point frame="57344" value="5667.14" label="" />
+    <point frame="57856" value="6131.38" label="" />
+    <point frame="84992" value="6021.28" label="" />
+    <point frame="85504" value="6117.33" label="" />
+    <point frame="86016" value="6378.78" label="" />
+    <point frame="86528" value="6236.34" label="" />
+    <point frame="87040" value="6517.15" label="" />
+    <point frame="87552" value="6337.55" label="" />
+    <point frame="88064" value="6453.63" label="" />
+    <point frame="88576" value="6345.03" label="" />
+    <point frame="89088" value="6445.87" label="" />
+    <point frame="89600" value="6286.36" label="" />
+    <point frame="90112" value="6240.12" label="" />
+    <point frame="90624" value="6414.77" label="" />
+    <point frame="91136" value="6541.36" label="" />
+    <point frame="91648" value="6181.47" label="" />
+    <point frame="92160" value="6055.27" label="" />
+    <point frame="92672" value="6190.43" label="" />
+    <point frame="93184" value="6355.06" label="" />
+    <point frame="93696" value="6113.15" label="" />
+    <point frame="94208" value="6154.23" label="" />
+    <point frame="94720" value="6268.98" label="" />
+    <point frame="95232" value="6110.25" label="" />
+    <point frame="95744" value="6143.01" label="" />
+    <point frame="96256" value="6220.78" label="" />
+    <point frame="96768" value="6240.79" label="" />
+    <point frame="97280" value="5937.51" label="" />
+    <point frame="97792" value="5806.91" label="" />
+    <point frame="98304" value="6196.3" label="" />
+    <point frame="98816" value="6082.98" label="" />
+    <point frame="99328" value="5885.61" label="" />
+    <point frame="99840" value="5735.53" label="" />
+    <point frame="100352" value="5965.07" label="" />
+  </dataset>
+  <derivation type="transform" source="0" model="2" channel="-1" domain="1" stepSize="512" blockSize="1024" windowType="3" transform="vamp:vamp-example-plugins:spectralcentroid:linearcentroid">
+    <transform
+    id="vamp:vamp-example-plugins:spectralcentroid:linearcentroid"
+    pluginVersion="2"
+    program=""
+    stepSize="512"
+    blockSize="1024"
+    windowType="hanning"
+    startTime="0.000000000"
+    duration="0.000000000"
+    sampleRate="0"/>
+    <plugin identifier="spectralcentroid" name="Spectral Centroid" description="Calculate the centroid frequency of the spectrum of the input signal" maker="Vamp SDK Example Plugins" version="2" copyright="Freely redistributable (BSD license)"  />
+  </derivation>
+  <model id="4" name="MCLD-Mouthpeaks-15-bombastic_blasts_from_ggmi.flac: Amplitude Follower" sampleRate="44100" start="0" end="176128" type="sparse" dimensions="2" resolution="1024" notifyOnAdd="true" dataset="3"  minimum="0" maximum="0.718209" units="V"/>
+  <dataset id="3" dimensions="2">
+    <point frame="0" value="0.452893" label="" />
+    <point frame="1024" value="0.503583" label="" />
+    <point frame="2048" value="0.470129" label="" />
+    <point frame="3072" value="0.463614" label="" />
+    <point frame="4096" value="0.625315" label="" />
+    <point frame="5120" value="0.70821" label="" />
+    <point frame="6144" value="0.617452" label="" />
+    <point frame="7168" value="0.501294" label="" />
+    <point frame="8192" value="0.457811" label="" />
+    <point frame="9216" value="0.596361" label="" />
+    <point frame="10240" value="0.718209" label="" />
+    <point frame="11264" value="0.67202" label="" />
+    <point frame="12288" value="0.47869" label="" />
+    <point frame="13312" value="0.44914" label="" />
+    <point frame="14336" value="0.625006" label="" />
+    <point frame="15360" value="0.583022" label="" />
+    <point frame="16384" value="0.00277777" label="" />
+    <point frame="17408" value="1.32345e-05" label="" />
+    <point frame="18432" value="6.30551e-08" label="" />
+    <point frame="19456" value="3.00422e-10" label="" />
+    <point frame="20480" value="1.43134e-12" label="" />
+    <point frame="21504" value="6.81955e-15" label="" />
+    <point frame="22528" value="3.24914e-17" label="" />
+    <point frame="23552" value="1.54803e-19" label="" />
+    <point frame="24576" value="7.3755e-22" label="" />
+    <point frame="25600" value="3.51401e-24" label="" />
+    <point frame="26624" value="1.67423e-26" label="" />
+    <point frame="27648" value="7.97677e-29" label="" />
+    <point frame="28672" value="3.80048e-31" label="" />
+    <point frame="29696" value="1.81072e-33" label="" />
+    <point frame="30720" value="8.62706e-36" label="" />
+    <point frame="31744" value="4.11031e-38" label="" />
+    <point frame="32768" value="1.95833e-40" label="" />
+    <point frame="33792" value="9.33265e-43" label="" />
+    <point frame="34816" value="4.2039e-45" label="" />
+    <point frame="35840" value="0" label="" />
+    <point frame="36864" value="0" label="" />
+    <point frame="37888" value="0" label="" />
+    <point frame="38912" value="0" label="" />
+    <point frame="39936" value="0" label="" />
+    <point frame="40960" value="0" label="" />
+    <point frame="41984" value="0" label="" />
+    <point frame="43008" value="0.499843" label="" />
+    <point frame="44032" value="0.552426" label="" />
+    <point frame="45056" value="0.535747" label="" />
+    <point frame="46080" value="0.520258" label="" />
+    <point frame="47104" value="0.551726" label="" />
+    <point frame="48128" value="0.554755" label="" />
+    <point frame="49152" value="0.554376" label="" />
+    <point frame="50176" value="0.568693" label="" />
+    <point frame="51200" value="0.562823" label="" />
+    <point frame="52224" value="0.587688" label="" />
+    <point frame="53248" value="0.556907" label="" />
+    <point frame="54272" value="0.563712" label="" />
+    <point frame="55296" value="0.559275" label="" />
+    <point frame="56320" value="0.558207" label="" />
+    <point frame="57344" value="0.518597" label="" />
+    <point frame="58368" value="0.0189318" label="" />
+    <point frame="59392" value="9.01995e-05" label="" />
+    <point frame="60416" value="4.2975e-07" label="" />
+    <point frame="61440" value="2.04752e-09" label="" />
+    <point frame="62464" value="9.75528e-12" label="" />
+    <point frame="63488" value="4.64785e-14" label="" />
+    <point frame="64512" value="2.21444e-16" label="" />
+    <point frame="65536" value="1.05506e-18" label="" />
+    <point frame="66560" value="5.02675e-21" label="" />
+    <point frame="67584" value="2.39496e-23" label="" />
+    <point frame="68608" value="1.14107e-25" label="" />
+    <point frame="69632" value="5.43654e-28" label="" />
+    <point frame="70656" value="2.59021e-30" label="" />
+    <point frame="71680" value="1.23409e-32" label="" />
+    <point frame="72704" value="5.87974e-35" label="" />
+    <point frame="73728" value="2.80137e-37" label="" />
+    <point frame="74752" value="1.3347e-39" label="" />
+    <point frame="75776" value="6.35909e-42" label="" />
+    <point frame="76800" value="3.08286e-44" label="" />
+    <point frame="77824" value="0" label="" />
+    <point frame="78848" value="0" label="" />
+    <point frame="79872" value="0" label="" />
+    <point frame="80896" value="0" label="" />
+    <point frame="81920" value="0" label="" />
+    <point frame="82944" value="0" label="" />
+    <point frame="83968" value="0" label="" />
+    <point frame="84992" value="0.401554" label="" />
+    <point frame="86016" value="0.544623" label="" />
+    <point frame="87040" value="0.578616" label="" />
+    <point frame="88064" value="0.611589" label="" />
+    <point frame="89088" value="0.601748" label="" />
+    <point frame="90112" value="0.612645" label="" />
+    <point frame="91136" value="0.612477" label="" />
+    <point frame="92160" value="0.62734" label="" />
+    <point frame="93184" value="0.620981" label="" />
+    <point frame="94208" value="0.610338" label="" />
+    <point frame="95232" value="0.600749" label="" />
+    <point frame="96256" value="0.628549" label="" />
+    <point frame="97280" value="0.633503" label="" />
+    <point frame="98304" value="0.622154" label="" />
+    <point frame="99328" value="0.621041" label="" />
+    <point frame="100352" value="0.124226" label="" />
+    <point frame="101376" value="0.00059187" label="" />
+    <point frame="102400" value="2.81993e-06" label="" />
+    <point frame="103424" value="1.34354e-08" label="" />
+    <point frame="104448" value="6.4012e-11" label="" />
+    <point frame="105472" value="3.04981e-13" label="" />
+    <point frame="106496" value="1.45307e-15" label="" />
+    <point frame="107520" value="6.92304e-18" label="" />
+    <point frame="108544" value="3.29844e-20" label="" />
+    <point frame="109568" value="1.57152e-22" label="" />
+    <point frame="110592" value="7.48743e-25" label="" />
+    <point frame="111616" value="3.56734e-27" label="" />
+    <point frame="112640" value="1.69964e-29" label="" />
+    <point frame="113664" value="8.09782e-32" label="" />
+    <point frame="114688" value="3.85816e-34" label="" />
+    <point frame="115712" value="1.8382e-36" label="" />
+    <point frame="116736" value="8.75798e-39" label="" />
+    <point frame="117760" value="4.17265e-41" label="" />
+    <point frame="118784" value="1.98984e-43" label="" />
+    <point frame="119808" value="1.4013e-45" label="" />
+    <point frame="120832" value="0" label="" />
+    <point frame="121856" value="0" label="" />
+    <point frame="122880" value="0" label="" />
+    <point frame="123904" value="0" label="" />
+    <point frame="124928" value="0" label="" />
+    <point frame="125952" value="0" label="" />
+    <point frame="126976" value="0" label="" />
+    <point frame="128000" value="0" label="" />
+    <point frame="129024" value="0" label="" />
+    <point frame="130048" value="0" label="" />
+    <point frame="131072" value="0" label="" />
+    <point frame="132096" value="0" label="" />
+    <point frame="133120" value="0" label="" />
+    <point frame="134144" value="0" label="" />
+    <point frame="135168" value="0" label="" />
+    <point frame="136192" value="0" label="" />
+    <point frame="137216" value="0" label="" />
+    <point frame="138240" value="0" label="" />
+    <point frame="139264" value="0" label="" />
+    <point frame="140288" value="0" label="" />
+    <point frame="141312" value="0" label="" />
+    <point frame="142336" value="0" label="" />
+    <point frame="143360" value="0" label="" />
+    <point frame="144384" value="0" label="" />
+    <point frame="145408" value="0" label="" />
+    <point frame="146432" value="0" label="" />
+    <point frame="147456" value="0" label="" />
+    <point frame="148480" value="0" label="" />
+    <point frame="149504" value="0" label="" />
+    <point frame="150528" value="0" label="" />
+    <point frame="151552" value="0" label="" />
+    <point frame="152576" value="0" label="" />
+    <point frame="153600" value="0" label="" />
+    <point frame="154624" value="0" label="" />
+    <point frame="155648" value="0" label="" />
+    <point frame="156672" value="0" label="" />
+    <point frame="157696" value="0" label="" />
+    <point frame="158720" value="0" label="" />
+    <point frame="159744" value="0" label="" />
+    <point frame="160768" value="0" label="" />
+    <point frame="161792" value="0" label="" />
+    <point frame="162816" value="0" label="" />
+    <point frame="163840" value="0" label="" />
+    <point frame="164864" value="0" label="" />
+    <point frame="165888" value="0" label="" />
+    <point frame="166912" value="0" label="" />
+    <point frame="167936" value="0" label="" />
+    <point frame="168960" value="0" label="" />
+    <point frame="169984" value="0" label="" />
+    <point frame="171008" value="0" label="" />
+    <point frame="172032" value="0" label="" />
+    <point frame="173056" value="0" label="" />
+    <point frame="174080" value="0" label="" />
+    <point frame="175104" value="0" label="" />
+    <point frame="176128" value="0" label="" />
+  </dataset>
+  <derivation type="transform" source="0" model="4" channel="-1" domain="0" stepSize="1024" blockSize="1024" windowType="3" transform="vamp:vamp-example-plugins:amplitudefollower:amplitude">
+    <transform
+    id="vamp:vamp-example-plugins:amplitudefollower:amplitude"
+    pluginVersion="1"
+    program=""
+    stepSize="1024"
+    blockSize="1024"
+    windowType="hanning"
+    startTime="0.000000000"
+    duration="0.000000000"
+    sampleRate="0">
+      <parameter name="attack" value="0.01"/>
+      <parameter name="release" value="0.01"/>
+    </transform>
+    <plugin identifier="amplitudefollower" name="Amplitude Follower" description="Track the amplitude of the audio signal" maker="Vamp SDK Example Plugins" version="1" copyright="Code copyright 2006 Dan Stowell; method from SuperCollider.  Freely redistributable (BSD license)"  param-attack="0.01" param-release="0.01" />
+  </derivation>
+  <layer id="5" type="timeruler" name="Ruler" model="0"  colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="6" type="waveform" name="Waveform" model="0"  gain="1" showMeans="1" greyscale="1" channelMode="0" channel="-1" scale="0" aggressive="0" autoNormalize="0" colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="7" type="timevalues" name="Amplitude Follower" model="4"  colourMap="0" plotStyle="1" verticalScale="0" scaleMinimum="0" scaleMaximum="0" drawDivisions="true" derivative="false"  colourName="Purple" colour="#c832ff" darkBackground="false" />
+  <layer id="8" type="timeruler" name="Ruler &lt;2&gt;" model="0"  colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="9" type="spectrogram" name="Spectrogram" model="0"  channel="-1" windowSize="1024" windowHopLevel="2" gain="1" threshold="0" minFrequency="10" maxFrequency="0" colourScale="3" colourScheme="0" colourRotation="0" frequencyScale="0" binDisplay="0" normalizeColumns="false" normalizeVisibleArea="false"/>
+  <layer id="10" type="timevalues" name="Linear Frequency Centroid" model="2"  colourMap="0" plotStyle="4" verticalScale="1" scaleMinimum="0" scaleMaximum="0" drawDivisions="true" derivative="false"  colourName="Orange" colour="#ff9632" darkBackground="false" />
+</data>
+<display>
+  <window width="1244" height="810"/>
+  <view centre="70705" zoom="360" followPan="1" followZoom="1" tracking="page"  type="pane" centreLineVisible="1" height="379" >
+    <layer id="5" type="timeruler" name="Ruler" model="0" visible="true"/>
+    <layer id="6" type="waveform" name="Waveform" model="0" visible="true"/>
+    <layer id="9" type="spectrogram" name="Spectrogram" model="0" visible="true"/>
+  </view>
+  <view centre="70705" zoom="360" followPan="1" followZoom="1" tracking="page"  type="pane" centreLineVisible="1" height="296" >
+    <layer id="8" type="timeruler" name="Ruler &lt;2&gt;" model="0" visible="true"/>
+    <layer id="7" type="timevalues" name="Amplitude Follower" model="4" visible="true"/>
+    <layer id="10" type="timevalues" name="Linear Frequency Centroid" model="2" visible="true"/>
+  </view>
+</display>
+<selections >
+</selections>
+</sv>
