@@ -43,6 +43,7 @@ SOURCES += main/main.cpp \
 mac {
     QMAKE_INFO_PLIST = osx/Info.plist
     
+    HEADERS += osx/svitunes.h
     OBJECTIVE_SOURCES += osx/svitunes.mm
 
     LIBS += -framework Foundation

@@ -79,9 +79,6 @@
 #include "widgets/ModelDataTableDialog.h"
 #include "rdf/PluginRDFIndexer.h"
 #include "rdf/RDFExporter.h"
-#ifdef Q_WS_MAC
-	#include "osx/svitunes.h"
-#endif
 
 #include "Surveyer.h"
 #include "framework/VersionTester.h"
@@ -160,7 +157,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_activityLog(new ActivityLog()),
-    m_keyReference(new KeyReference())
+    m_keyReference(new KeyReference()),
+    m_iTunes(new ITunesSVRemote())
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -2165,7 +2163,7 @@ MainWindow::importMoreAudio()
 void
 MainWindow::importITunesAudio()
 {
-    QStringList nowPlaying = iTunesNowPlaying();
+    QStringList nowPlaying = m_iTunes->getNowPlaying();
     QString path = nowPlaying.at(0);
     QString genre = (nowPlaying.size() > 1) ? nowPlaying.at(1) : "";
     std::cerr << "MainWindow::importITunesAudio(): genre is " << genre.toStdString() << std::endl;

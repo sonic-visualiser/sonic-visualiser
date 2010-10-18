@@ -32,7 +32,7 @@ QString qt_mac_NSStringToQString(const NSString *nsstr)
     return result;
 }
 
-QStringList iTunesNowPlaying(){
+QStringList ITunesSVRemote::getNowPlaying(){
     NSDictionary *errorDict;
     NSAppleScript *scriptObject = [[NSAppleScript alloc]    initWithSource:@" \
 tell application \"System Events\" to set iTunesIsRunning to (name of processes) contains \"iTunes\" \n\

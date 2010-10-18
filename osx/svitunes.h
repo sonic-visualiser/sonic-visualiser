@@ -18,11 +18,28 @@
 #include <QString>
 #include <QStringList>
 
-//LATER: bool iTunesRunning();
+//#import <Foundation/Foundation.h>
 
-// Returns a list containing [posixpath, genre]
-QStringList iTunesNowPlaying();
-
-//LATER: QStringList iTunesSelectedPaths();
+/**
+* Class to handle communication with a running iTunes program on the system.
+* Only implemented for Mac at present, since using applescript communication.
+* Pseudo-singleton - one instance expected to be owned by SVApplication.
+*/
+class ITunesSVRemote : QObject
+{
+    Q_OBJECT
+    
+    public:
+        
+        //LATER: bool iTunesRunning();
+    
+        // Returns a list containing [posixpath, genre]
+        QStringList getNowPlaying();
+    
+        //LATER: QStringList iTunesSelectedPaths();
+    
+//    private:
+//        QString qt_mac_NSStringToQString(const NSString *nsstr);
+};
 
 #endif

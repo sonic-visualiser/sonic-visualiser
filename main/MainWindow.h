@@ -33,6 +33,9 @@
 #include "data/fileio/FileSource.h"
 #include "widgets/LayerTreeDialog.h"
 #include <map>
+#ifdef Q_WS_MAC
+	#include "osx/svitunes.h"
+#endif
 
 class Document;
 class PaneStack;
@@ -282,6 +285,10 @@ protected:
     virtual bool shouldCreateNewSessionForRDFAudio(bool *cancel);
     
     virtual void connectLayerEditDialog(ModelDataTableDialog *);
+
+#ifdef Q_WS_MAC
+    ITunesSVRemote *m_iTunes;
+#endif
 };
 
 
