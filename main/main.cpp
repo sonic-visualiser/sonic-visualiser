@@ -209,6 +209,8 @@ protected:
 int
 main(int argc, char **argv)
 {
+    svSystemSpecificInitialisation();
+
 #ifdef Q_WS_X11
 #if QT_VERSION >= 0x040500
 //    QApplication::setGraphicsSystem("raster");
@@ -226,8 +228,6 @@ main(int argc, char **argv)
     signal(SIGHUP,  signalHandler);
     signal(SIGQUIT, signalHandler);
 #endif
-
-    svSystemSpecificInitialisation();
 
     bool audioOutput = true;
     bool oscSupport = true;
