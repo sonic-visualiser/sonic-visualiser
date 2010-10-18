@@ -58,6 +58,7 @@ class OSCMessage;
 class KeyReference;
 class Labeller;
 class ActivityLog;
+class SVApplication;
 
 class MainWindow : public MainWindowBase
 {
@@ -67,6 +68,8 @@ public:
     MainWindow(bool withAudioOutput = true,
                bool withOSCSupport = true);
     virtual ~MainWindow();
+    
+    friend class SVApplication;
 
 signals:
     virtual void canChangeSolo(bool);
@@ -209,6 +212,7 @@ protected:
     QAction                 *m_playAction;
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
+    QAction                 *m_importITunesAction;
 
     bool                     m_soloModified;
     bool                     m_prevSolo;

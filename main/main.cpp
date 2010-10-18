@@ -220,12 +220,15 @@ public:
     void setupDockMenu() {
         std::cerr << "SV adding mac dock menu" << std::endl;
         QMenu *dockMenu = new QMenu();
+        /*
         QStringList nowPlaying = iTunesNowPlaying();
         QString theText = nowPlaying.at(0);
         if (theText == ""){
             theText = "[[No current track in iTunes]]";
         }
         dockMenu->addAction(theText);
+        */
+        dockMenu->addAction(m_mainWindow->m_importITunesAction);
         qt_mac_set_dock_menu(dockMenu);
     }
 #endif

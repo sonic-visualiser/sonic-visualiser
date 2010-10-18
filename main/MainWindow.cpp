@@ -446,13 +446,13 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
 #ifdef Q_WS_MAC
-    action = new QAction(tr("Import current track from iTunes"), this);
-    action->setShortcut(tr("Ctrl+Alt+I"));
-    action->setStatusTip(tr("Import currently playing/selected iTunes track"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importITunesAudio()));
+    m_importITunesAction = new QAction(tr("Import current track from iTunes"), this);
+    m_importITunesAction->setShortcut(tr("Ctrl+Alt+I"));
+    m_importITunesAction->setStatusTip(tr("Import currently playing/selected iTunes track"));
+    connect(m_importITunesAction, SIGNAL(triggered()), this, SLOT(importITunesAudio()));
     //connect(this, SIGNAL(canImportITunesAudio(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_keyReference->registerShortcut(m_importITunesAction);
+    menu->addAction(m_importITunesAction);
 #endif
 
     action = new QAction(tr("&Export Audio File..."), this);
