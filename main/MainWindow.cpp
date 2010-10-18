@@ -2163,6 +2163,7 @@ MainWindow::importMoreAudio()
 void
 MainWindow::importITunesAudio()
 {
+    m_iTunes->resetPlayerState();
     QStringList nowPlaying = m_iTunes->getNowPlaying();
     QString path = nowPlaying.at(0);
     QString genre = (nowPlaying.size() > 1) ? nowPlaying.at(1) : "";
@@ -2175,6 +2176,10 @@ MainWindow::importITunesAudio()
                   tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
     }else{
         m_iTunes->updatePlayerState();
+        RealTime playerPos = RealTime::fromSeconds(m_iTunes->playerPos());
+        unsigned long positionFrames = RealTime::realTime2Frame(playerPos, getMainModel()->getSampleRate());
+        m_viewManager->setGlobalCentreFrame(positionFrames);
+        m_viewManager->setPlaybackFrame(positionFrames);
     }
     }
 }

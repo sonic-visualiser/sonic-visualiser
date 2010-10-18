@@ -39,6 +39,10 @@ class ITunesSVRemote : QObject
         // Returns a list containing [posixpath, genre]
         QStringList getNowPlaying();
         
+        // When importing a fresh track we don't want the old cached playback position.
+        // We can't simply update player position every time, since it only gets reported if playing.
+        void resetPlayerState();
+        
         // Queries iTunes about player state and stores results locally
         void updatePlayerState();
     

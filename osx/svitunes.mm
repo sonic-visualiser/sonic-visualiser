@@ -155,3 +155,7 @@ bool ITunesSVRemote::isPlaying(){
 unsigned int ITunesSVRemote::playerPos(){
     return m_playerPos;
 }
+
+void ITunesSVRemote::resetPlayerState(){
+    m_playerPos = 0;
+}
