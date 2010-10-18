@@ -15,6 +15,8 @@ INCLUDEPATH += . ../svcore ../svgui ../svapp
 
 LIBPATH = ../svapp ../svgui ../svcore $$LIBPATH
 
+TRANSLATIONS += i18n/sonic-visualiser_ru.ts i18n/sonic-visualiser_en_GB.ts i18n/sonic-visualiser_en_US.ts i18n/sonic-visualiser_cs_CZ.ts
+
 OBJECTS_DIR = o
 MOC_DIR = o
 
