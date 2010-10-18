@@ -23,7 +23,6 @@
 /**
 * Class to handle communication with a running iTunes program on the system.
 * Only implemented for Mac at present, since using applescript communication.
-* Pseudo-singleton - one instance expected to be owned by SVApplication.
 */
 class ITunesSVRemote : QObject
 {
@@ -31,15 +30,46 @@ class ITunesSVRemote : QObject
     
     public:
         
-        //LATER: bool iTunesRunning();
+        ITunesSVRemote() :
+            m_playerState(STATE_UNKNOWN),
+            m_playerPos(0)
+            { }
+        virtual ~ITunesSVRemote() { }
     
         // Returns a list containing [posixpath, genre]
         QStringList getNowPlaying();
+        
+        // Queries iTunes about player state and stores results locally
+        void updatePlayerState();
     
-        //LATER: QStringList iTunesSelectedPaths();
+        // Whether the app is running. Only correct if updatePlayerState() recently invoked.
+        bool isRunning();
+        
+        // Whether the app is playing back. Only correct if updatePlayerState() recently invoked.
+        bool isPlaying();
+        
+        // Playback position in seconds. Only correct if updatePlayerState() recently invoked.
+        unsigned int playerPos();
     
-//    private:
-//        QString qt_mac_NSStringToQString(const NSString *nsstr);
+    protected:
+        
+        enum {
+            STATE_UNKNOWN, // before ever querying
+            STATE_CLOSED,  // application not running
+            // The rest correspond to states reported by iTunes itself:
+            STATE_STOPPED, 
+            STATE_PLAYING, 
+            STATE_PAUSED,
+            STATE_FASTFORWARDING, 
+            STATE_REWINDING
+            };
+        
+        // itunes has a set of states: {playing, stopped, ...}.
+        // we also use "unknown" before checking, 
+        // and "closed" if iTunes isn't running.
+        int m_playerState;
+        unsigned int m_playerPos; // itunes only tells us seconds
+    
 };
 
 #endif

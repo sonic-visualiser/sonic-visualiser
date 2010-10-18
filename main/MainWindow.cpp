@@ -2173,6 +2173,8 @@ MainWindow::importITunesAudio()
             emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open file"),
                   tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+    }else{
+        m_iTunes->updatePlayerState();
     }
     }
 }
