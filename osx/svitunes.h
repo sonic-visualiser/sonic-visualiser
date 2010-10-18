@@ -18,8 +18,6 @@
 #include <QString>
 #include <QStringList>
 
-//#import <Foundation/Foundation.h>
-
 /**
 * Class to handle communication with a running iTunes program on the system.
 * Only implemented for Mac at present, since using applescript communication.
@@ -70,7 +68,11 @@ class ITunesSVRemote : QObject
         // and "closed" if iTunes isn't running.
         int m_playerState;
         unsigned int m_playerPos; // itunes only tells us seconds
-    
+        
+        // compiled applescript objects, persistent.
+        // void pointers because NSAppleScript is ObjC, which we keep out of this header. Hm.
+        void *m_nowPlayingScript;
+        void *m_updateStateScript;
 };
 
 #endif

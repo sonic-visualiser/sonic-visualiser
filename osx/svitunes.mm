@@ -36,17 +36,16 @@ QString qt_mac_NSStringToQString(const NSString *nsstr)
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// ctor and dtor
+
 ITunesSVRemote::ITunesSVRemote() {
     m_playerState = STATE_UNKNOWN; 
     m_playerPos = 0;
-}
 
-ITunesSVRemote::~ITunesSVRemote() {
-}
-
-QStringList ITunesSVRemote::getNowPlaying(){
     NSDictionary *errorDict;
-    NSAppleScript *scriptObject = [[NSAppleScript alloc]    initWithSource:@" \
+
+    m_nowPlayingScript = (void*)[[NSAppleScript alloc]    initWithSource:@" \
 tell application \"System Events\" to set iTunesIsRunning to (name of processes) contains \"iTunes\" \n\
 if iTunesIsRunning is false then return \"\" \n\
 \
@@ -66,28 +65,14 @@ tell application \"iTunes\" \n\
 end tell \n\
 "
     ];
-    
-    NSLog([scriptObject source]);
-    
-    [scriptObject compileAndReturnError: &errorDict];
-    
-    if(![scriptObject isCompiled]){
+    [(NSAppleScript*)m_nowPlayingScript compileAndReturnError: &errorDict];
+    NSLog([(NSAppleScript*)m_nowPlayingScript source]);
+    if(![(NSAppleScript*)m_nowPlayingScript isCompiled]){
         NSLog(@"SV ERROR: applescript object not compiled");
         NSLog([errorDict description]);
     }
-    
-    NSAppleEventDescriptor *eventDesc = [scriptObject executeAndReturnError: &errorDict];
-    NSString *nsResultString = [eventDesc stringValue];
-    
-    QString resultString = qt_mac_NSStringToQString(nsResultString);
-    
-    [scriptObject release];
-    return resultString.split(QChar('\n'));
-}
 
-void ITunesSVRemote::updatePlayerState(){
-    NSDictionary *errorDict;
-    NSAppleScript *scriptObject = [[NSAppleScript alloc]    initWithSource:@" \
+    m_updateStateScript = (void*)[[NSAppleScript alloc]    initWithSource:@" \
 tell application \"System Events\" to set iTunesIsRunning to (name of processes) contains \"iTunes\" \n\
 if iTunesIsRunning is false then return \"\" \n\
 \
@@ -102,17 +87,51 @@ tell application \"iTunes\" \n\
 end tell \n\
 "
     ];
+    [(NSAppleScript*)m_updateStateScript compileAndReturnError: &errorDict];
+    NSLog([(NSAppleScript*)m_updateStateScript source]);
+    if(![(NSAppleScript*)m_updateStateScript isCompiled]){
+        NSLog(@"SV ERROR: applescript object not compiled");
+        NSLog([errorDict description]);
+    }
+
     
-    NSLog([scriptObject source]);
+} // end ctor
+
+ITunesSVRemote::~ITunesSVRemote() {
+    [(NSAppleScript*)m_nowPlayingScript release];
+    [(NSAppleScript*)m_updateStateScript release];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// itunes actual communications
+
+QStringList ITunesSVRemote::getNowPlaying(){
+    NSDictionary *errorDict;
+    NSAppleScript *nowPlayingScript = (NSAppleScript*)m_nowPlayingScript;
     
-    [scriptObject compileAndReturnError: &errorDict];
-    
-    if(![scriptObject isCompiled]){
+    if(![nowPlayingScript isCompiled]){
         NSLog(@"SV ERROR: applescript object not compiled");
         NSLog([errorDict description]);
     }
     
-    NSAppleEventDescriptor *eventDesc = [scriptObject executeAndReturnError: &errorDict];
+    NSAppleEventDescriptor *eventDesc = [nowPlayingScript executeAndReturnError: &errorDict];
+    NSString *nsResultString = [eventDesc stringValue];
+    
+    QString resultString = qt_mac_NSStringToQString(nsResultString);
+    
+    return resultString.split(QChar('\n'));
+}
+
+void ITunesSVRemote::updatePlayerState(){
+    NSDictionary *errorDict;
+    NSAppleScript *updateStateScript = (NSAppleScript*)m_updateStateScript;
+    
+    if(![updateStateScript isCompiled]){
+        NSLog(@"SV ERROR: applescript object not compiled");
+        NSLog([errorDict description]);
+    }
+    
+    NSAppleEventDescriptor *eventDesc = [updateStateScript executeAndReturnError: &errorDict];
     NSString *nsResultString = [eventDesc stringValue];
     
     QString resultString = qt_mac_NSStringToQString(nsResultString);
@@ -126,7 +145,6 @@ end tell \n\
         if(results.size() != 2){
             std::cerr << "ITunesSVRemote::updatePlayerState() ERROR: results not in expected format:" 
                        << resultString.toStdString() << std::endl;
-            [scriptObject release];
             return;
         }
         
@@ -148,9 +166,9 @@ end tell \n\
                         << m_playerPos << std::endl;
         }
     }
-    
-    [scriptObject release];
 }
+
+////////////////////////////////////////////////////////////////////////////////
 
 bool ITunesSVRemote::isRunning(){
     return (m_playerState != STATE_UNKNOWN) && (m_playerState != STATE_CLOSED);
