@@ -12,6 +12,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef _SVITUNES_H_
+#define _SVITUNES_H_
+
 #include <QString>
 #include <QStringList>
 
@@ -22,3 +25,4 @@ QStringList iTunesNowPlaying();
 
 //LATER: QStringList iTunesSelectedPaths();
 
+#endif
