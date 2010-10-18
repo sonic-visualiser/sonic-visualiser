@@ -11,11 +11,17 @@ fi
 LANGUAGES="ru en_GB en_US cs_CZ"
 
 for LANG in $LANGUAGES; do
-    $LUPDATE */*.h */*/*.h */*.cpp */*/*.cpp \
-	-ts sv/i18n/sonic-visualiser_$LANG.ts
+    $LUPDATE \
+	../svcore/*/*.h ../svcore/*/*.cpp \
+	../svcore/*/*/*.h ../svcore/*/*/*.cpp \
+	../svgui/*/*.h ../svgui/*/*.cpp \
+	../svapp/*/*.h ../svapp/*/*.cpp \
+	../svapp/*/*/*.h ../svapp/*/*/*.cpp \
+	*/*.h */*.cpp \
+	-ts i18n/sonic-visualiser_$LANG.ts
 done
 
 for LANG in $LANGUAGES; do
-    $LRELEASE sv/i18n/sonic-visualiser_$LANG.ts
+    $LRELEASE i18n/sonic-visualiser_$LANG.ts
 done
 
