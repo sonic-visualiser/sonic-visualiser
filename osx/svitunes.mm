@@ -36,6 +36,14 @@ QString qt_mac_NSStringToQString(const NSString *nsstr)
     return result;
 }
 
+ITunesSVRemote::ITunesSVRemote() {
+    m_playerState = STATE_UNKNOWN; 
+    m_playerPos = 0;
+}
+
+ITunesSVRemote::~ITunesSVRemote() {
+}
+
 QStringList ITunesSVRemote::getNowPlaying(){
     NSDictionary *errorDict;
     NSAppleScript *scriptObject = [[NSAppleScript alloc]    initWithSource:@" \

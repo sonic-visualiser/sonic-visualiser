@@ -30,11 +30,8 @@ class ITunesSVRemote : QObject
     
     public:
         
-        ITunesSVRemote() :
-            m_playerState(STATE_UNKNOWN),
-            m_playerPos(0)
-            { }
-        virtual ~ITunesSVRemote() { }
+        ITunesSVRemote();
+        ~ITunesSVRemote();
     
         // Returns a list containing [posixpath, genre]
         QStringList getNowPlaying();
