@@ -839,7 +839,16 @@ MainWindow::setupViewMenu()
     overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-        
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Show All Time Rulers"), this);
+    action->setShortcut(tr("#"));
+    action->setStatusTip(tr("Show or hide all time rulers"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
     menu->addSeparator();
 
     action = new QAction(tr("Show &Zoom Wheels"), this);
@@ -850,7 +859,7 @@ MainWindow::setupViewMenu()
     action->setChecked(m_viewManager->getZoomWheelsEnabled());
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-        
+
     action = new QAction(tr("Show Property Bo&xes"), this);
     action->setShortcut(tr("X"));
     action->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
