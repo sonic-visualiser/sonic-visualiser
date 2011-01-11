@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.9">
+<dict>
+	<key>CFBundleIconFile</key>
+	<string>sv-macicon.icns</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+    <key>CFBundleGetInfoString</key>
+	<string>Created by Qt/QMake</string>
+	<key>CFBundleSignature</key>
+	<string>SNCV</string>
+	<key>CFBundleExecutable</key>
+	<string>Sonic Visualiser</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.isophonics.SonicVisualiser</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<!-- we are an 'editor' of SV files -->
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sv</string>
+			</array>
+			<!-- TODO
+			<key>CFBundleTypeIconFile</key>
+			<string>SVProject.icns</string> -->
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/x-sonic-visualiser-project</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Sonic Visualiser Project</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>****</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
+		</dict>
+		
+		<!-- we are a 'viewer' of general audio files -->
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mp3</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/mpeg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>MP3 Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+	</array>
+  </dict>
+</plist>
