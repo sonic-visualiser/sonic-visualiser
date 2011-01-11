@@ -62,6 +62,62 @@
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ogg</string>
+				<string>oga</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/ogg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Ogg Vorbis Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wav</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/x-wav</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Wave Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>aif</string>
+				<string>aiff</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/x-aiff</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>AIFF Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
 	</array>
   </dict>
 </plist>
