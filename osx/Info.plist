@@ -118,6 +118,24 @@
 			<key>LSHandlerRank</key>
 			<string>Alternate</string>
 		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>flac</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/flac</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FLAC Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
 	</array>
   </dict>
 </plist>
