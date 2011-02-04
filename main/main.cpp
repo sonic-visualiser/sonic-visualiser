@@ -36,6 +36,7 @@
 #include <QSplashScreen>
 #include <QTimer>
 #include <QPainter>
+#include <QFileOpenEvent>
 
 #include "../version.h"
 
@@ -188,7 +189,10 @@ class SVApplication : public QApplication
 public:
     SVApplication(int &argc, char **argv) :
         QApplication(argc, argv),
-        m_mainWindow(0) { }
+        m_readyForFiles(false),
+        m_filepathQueue(QStringList()),
+        m_mainWindow(0)
+        { }
     virtual ~SVApplication() { }
 
     void setMainWindow(MainWindow *mw) { m_mainWindow = mw; }
@@ -202,8 +206,15 @@ public:
         if (!success) manager.cancel();
     }
 
+    void handleFilepathArgument(QString path, QSplashScreen *splash);
+
+    bool m_readyForFiles;
+    QStringList m_filepathQueue;
+
 protected:
     MainWindow *m_mainWindow;
+    bool event(QEvent *);
+
 };
 
 int
@@ -347,59 +358,21 @@ main(int argc, char **argv)
     // complete.  As a lazy hack, apply it explicitly from here
     gui->preferenceChanged("Property Box Layout");
 
-    bool haveSession = false;
-    bool haveMainModel = false;
-    bool havePriorCommandLineModel = false;
+    application.m_readyForFiles = true; // Ready to receive files from e.g. Apple Events
 
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
-
-        MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 
         if (i == args.begin()) continue;
         if (i->startsWith('-')) continue;
 
         QString path = *i;
 
-        if (path.endsWith("sv")) {
-            if (!haveSession) {
-                status = gui->openSessionFile(path);
-                if (status == MainWindow::FileOpenSucceeded) {
-                    haveSession = true;
-                    haveMainModel = true;
-                }
-            } else {
-                std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
-                status = MainWindow::FileOpenSucceeded;
-            }
-        }
-        if (status != MainWindow::FileOpenSucceeded) {
-            if (!haveMainModel) {
-                status = gui->open(path, MainWindow::ReplaceMainModel);
-                if (status == MainWindow::FileOpenSucceeded) {
-                    haveMainModel = true;
-                }
-            } else {
-                if (haveSession && !havePriorCommandLineModel) {
-                    status = gui->open(path, MainWindow::AskUser);
-                    if (status == MainWindow::FileOpenSucceeded) {
-                        havePriorCommandLineModel = true;
-                    }
-                } else {
-                    status = gui->open(path, MainWindow::CreateAdditionalModel);
-                }
-            }
-        }
-        if (status == MainWindow::FileOpenFailed) {
-            if (splash) splash->hide();
-	    QMessageBox::critical
-                (gui, QMessageBox::tr("Failed to open file"),
-                 QMessageBox::tr("File or URL \"%1\" could not be opened").arg(path));
-        } else if (status == MainWindow::FileOpenWrongMode) {
-            if (splash) splash->hide();
-            QMessageBox::critical
-                (gui, QMessageBox::tr("Failed to open file"),
-                 QMessageBox::tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
-        }
+        application.handleFilepathArgument(path, splash);
+    }
+    
+    for (QStringList::iterator i = application.m_filepathQueue.begin(); i != application.m_filepathQueue.end(); ++i) {
+        QString path = *i;
+        application.handleFilepathArgument(path, splash);
     }
     
 #ifdef HAVE_FFTW3F
@@ -456,4 +429,69 @@ main(int argc, char **argv)
     delete gui;
 
     return rv;
+}
+
+bool SVApplication::event(QEvent *event){
+    QString thePath;
+    switch (event->type()) {
+    case QEvent::FileOpen:
+        thePath = static_cast<QFileOpenEvent *>(event)->file();
+        if(m_readyForFiles)
+            handleFilepathArgument(thePath, NULL);
+        else
+            m_filepathQueue.append(thePath);
+        return true;
+    default:
+        return QApplication::event(event);
+    }
+}
+
+/** Application-global handler for filepaths passed in, e.g. as command-line arguments or apple events */
+void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
+    static bool haveSession = false;
+    static bool haveMainModel = false;
+    static bool havePriorCommandLineModel = false;
+
+    MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
+
+    if (path.endsWith("sv")) {
+        if (!haveSession) {
+            status = m_mainWindow->openSessionFile(path);
+            if (status == MainWindow::FileOpenSucceeded) {
+                haveSession = true;
+                haveMainModel = true;
+            }
+        } else {
+            std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
+            status = MainWindow::FileOpenSucceeded;
+        }
+    }
+    if (status != MainWindow::FileOpenSucceeded) {
+        if (!haveMainModel) {
+            status = m_mainWindow->open(path, MainWindow::ReplaceMainModel);
+            if (status == MainWindow::FileOpenSucceeded) {
+                haveMainModel = true;
+            }
+        } else {
+            if (haveSession && !havePriorCommandLineModel) {
+                status = m_mainWindow->open(path, MainWindow::AskUser);
+                if (status == MainWindow::FileOpenSucceeded) {
+                    havePriorCommandLineModel = true;
+                }
+            } else {
+                status = m_mainWindow->open(path, MainWindow::CreateAdditionalModel);
+            }
+        }
+    }
+    if (status == MainWindow::FileOpenFailed) {
+        if (splash) splash->hide();
+        QMessageBox::critical
+            (m_mainWindow, QMessageBox::tr("Failed to open file"),
+             QMessageBox::tr("File or URL \"%1\" could not be opened").arg(path));
+    } else if (status == MainWindow::FileOpenWrongMode) {
+        if (splash) splash->hide();
+        QMessageBox::critical
+            (m_mainWindow, QMessageBox::tr("Failed to open file"),
+             QMessageBox::tr("<b>Audio required</b><p>Please load at least one audio file before importing annotation data"));
+    }
 }
