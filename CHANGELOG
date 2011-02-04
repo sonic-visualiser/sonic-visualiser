@@ -1,0 +1,313 @@
+
+Changes in Sonic Visualiser 1.8 since the previous release 1.7.2:
+
+ - Sonic Visualiser now registers as a file type handler on OS/X,
+ providing better integration with the desktop generally (Dan Stowell)
+
+ - There is a new function to toggle all Time Rulers at once (key #)
+
+ - Text overlays are now easier to read on dark backgrounds
+
+ - Hidden layers are now ignored when exporting an image (Dan Stowell)
+
+ - A crash when starting a new session or exiting the application
+   after loading a session with saved alignment data has been fixed
+
+ - The duplication of right-button menu functions when multiple files
+ were loaded has been fixed
+
+ - The layer-add menu functions now have shortcuts (Dan Stowell)
+
+ - The codebase has been reorganised into libraries and a configure
+ step added.  It should be easier to build and maintain on OS/X and
+ Linux than previously, although it won't make much difference on
+ Windows.
+
+Changes in Sonic Visualiser 1.7.2 since the previous release 1.7.1:
+
+ - The time-value layer now has an origin line and an option to
+ show derivatives (change from one point to the next) rather than
+ raw values
+
+ - A static initialiser race has been fixed, possibly fixing an
+ occasional crash on startup in Windows
+
+ - A crash when pressing Play straight after New Session has been
+ fixed
+
+Changes in Sonic Visualiser 1.7.1 since the previous release 1.7:
+
+ - The RDF importer does a better job of assigning labels to layers,
+ layers to panes, and values to labelled regions
+
+ - Interactive editing in the Text layer benefits from the same
+ improvements as made in 1.7 to Note and Region layers
+
+ - The layer data editor window has a text search feature
+
+ - The main window status bar now shows the last label to have passed
+ the playback position in the current layer, at the right end of the
+ status bar
+
+ - The Russian translation has been updated (thanks Alexandre)
+
+Changes in Sonic Visualiser 1.7 since the previous release 1.6:
+
+ - A new "Insert Item At Selection" function on the Edit menu
+ can be used to create Note and Region layer items whose time
+ extents correspond to the current selection(s)
+
+ - Interactively editing points in the Note and Region layers
+ now works much more smoothly
+
+ - SV can now import MIDI files that use SMPTE timecode for event
+ timing (importing MIDI files using with the more common
+ timebase-based timing was already supported)
+
+ - Time values throughout the display may optionally be shown in
+ seconds and frames at various frame rates
+ 
+ - A crash on exit in Windows has been fixed
+
+ - A very unobtrusive user survey is now included
+
+ - Various other bug fixes.
+
+Changes in Sonic Visualiser 1.6 since the previous release 1.5:
+
+ - The Colour 3D Plot layer now supports logarithmic vertical
+ scale and linear interpolation options.
+
+ - A new colour scheme (High Gain) has been added for spectrogram
+ and Colour 3D Plot, which improves readability for some data.
+
+ - Further performance improvements have been made to Colour 3D
+ Plot.
+
+ - Various other bug fixes.
+
+Changes in Sonic Visualiser 1.5 since the previous version 1.4:
+
+ - You can now insert time instants, time values, and notes using
+ a MIDI device during playback.  If a time value or note layer is
+ current it will be used for insertion (giving a value equal to
+ the pitch class, or the played note, respectively); otherwise an
+ existing or new time instants layer will be used just as it is
+ when inserting instants using the PC keyboard.  Using a MIDI
+ device should give better timing than using the PC keyboard.
+
+ - There is a new Activity Log window with a (purely informative) list
+ of events and user interactions that happen while SV is running.
+
+ - The spectrogram has somewhat improved graphical scaling, and
+ this is now the default (being much faster than the 4x oversampled
+ method).  The previous default is still available as a preference.
+
+ - Visualisation of very dense colour plots (such as spectrograms
+ calculated by plugins) is substantially faster in this release.
+
+ - Spectrogram display is now faster in many circumstances.
+
+ - Alignment using the MATCH plugin is faster on OS/X than before.
+
+ - SV will take into account RDF plugin descriptions, if available,
+ in order to make somewhat better decisions about display of plugin
+ outputs (for example, placing segmentation data into a layer with
+ segmentation plot type).
+
+ - You can now switch layers by clicking on the spare area at the left
+ end of the pane that is also used for the current pane indicator.
+
+ - The vertical black lines dividing segments in the time value
+ layer's segmentation plot style are now optional.
+
+ - Several widget layout bugs on OS/X have been fixed.
+
+ - Several serious crashing, deadlock, and data corruption bugs have
+ been fixed.
+
+
+New features in Sonic Visualiser 1.4 since the previous version 1.3:
+
+ - SV now has a Region layer type, used for display of features with
+ durations.  It also supports Vamp v2.0 plugins that provide durations
+ for features.
+
+ - Layer data can now be imported from RDF described using the Audio
+ Features Ontology, as well as from the existing text file types.  SV
+ can also export annotation layer data to RDF/Turtle, although in a
+ somewhat simplistic manner at present.
+
+ - You can search for transforms by text in the new "Find a Transform"
+ dialog.  This searches both installed plugins, and plugins that have
+ not been installed but that have descriptions available on the
+ semantic web.
+
+ - You can now zoom and scroll vertically in the time-value, note,
+ and colour 3d plot layers.
+
+ - Sonic Visualiser can now load sessions from uncompressed XML files
+ as well as its own compressed-XML .sv format.  Files with extension
+ .xml that contain suitable session data will be loaded as sessions.
+ Note that .xml extension files still do not show up in the default
+ file load filter.  This is intentional, as there may be any kind of
+ data in them -- if you want to load uncompressed session files from
+ XML, you need to know you're doing it.
+
+ - Several crashes and other bugs have been fixed.
+
+Changes in Sonic Visualiser 1.3 since the previous version 1.2:
+
+ - There is a new spreadsheet-style data viewer and editor for
+ viewing and editing the data in some types of annotation layer.
+
+ - Alignments are now saved to the session file.
+
+ - The spectrogram layer is usually somewhat faster than it was.
+
+ - You can now hold Shift while dragging to move an item, in order
+ to override the initial drag resistance introduced in 1.2.
+
+ - The gross mis-labelling of time lines in the ruler has been fixed.
+
+ - There is a new, somewhat provisional PulseAudio output driver.
+
+ - Several other bug fixes.
+
+New features in Sonic Visualiser 1.2, since the previous version 1.0:
+
+ - SV now supports time-alignment of multiple performances of a work
+ loaded at the same time.  This option is enabled when the MATCH Vamp
+ plugin is installed.  When alignment is switched on and more than one
+ audio file is open, SV will assume that all open files are
+ differently timed performances of the same work, and will calculate
+ time alignments for them.  Playback will then play only a single file
+ at a time, and the playback cursors in other files will track at the
+ varying speeds to try to ensure that each is at the same point in the
+ underlying score.  This enables effective comparison of several such
+ files, as well as a meaningful way to switch from one performance to
+ another during playback (ensuring that the switch happens at the
+ correct point in the performance being switched to).
+
+ - There is a new Image layer, which can display images from the
+ local filesystem or retrieved via HTTP or FTP.
+
+ - A new measurement tool has been added.  With the measurement tool
+ selected, dragging in a pane draws a rectangle labelled with the
+ scale values for its start and end corners and its size.  You can
+ have any number of measurements present at once; they are associated
+ with the top layer, their scale values depend on the scale for that
+ layer, and they are only shown when that layer is at the top and the
+ measurement tool is active.  Measurements are saved and reloaded in
+ the session file.  Drawing measurements can be undone and redone, and
+ a measurement can be deleted by hitting Del when highlighted.  Note
+ that the measurement tool shows the scale values associated with the
+ pixel positions of the mouse when dragging, not any values associated
+ with actual features present in the audio or its analysis (e.g. the
+ values are not rounded to the nearest spectrogram bin).
+
+ - You can double-click using the measurement tool in the spectrogram
+ to get an instant measurement rectangle for a feature.  This is a
+ purely graphical feature that works by calculating the boundary of a
+ contiguous region of pixels "similar to" the one you double-clicked
+ on; it does not use audio analysis.  Adjusting the gain and colour
+ scheme etc of the spectrogram will (by design) affect the
+ measurements obtained this way.
+
+ - The spectrum can now optionally show frequency estimates of peaks
+ aligned with a piano keyboard along the horizontal axis (this needs
+ some refinement).
+
+ - The harmonic cursor in the spectrogram has moved from the Select
+ tool to the Measurement tool.  There is now a similar harmonic cursor
+ in the spectrum.  Both of them show more information as text
+ alongside the cursor than previously.
+
+ - There is a new Erase tool for erasing individual points from an
+ editable layer.
+
+ - Several keyboard shortcuts have changed -- all of the Alt+key
+ shortcuts now either use Ctrl or a plain keypress with no modifier,
+ to avoid clashes with window manager shortcuts and to make them
+ easier to use and remember
+
+ - The playback controls are now in a Playback menu as well as the
+ toolbar.
+
+ - There is a new key and mouse control reference under Help (or press
+ F2).
+
+ - You can double-click on a pane in navigate mode to jump to a time.
+
+ - All of the single-colour layers (waveform, time values etc) now
+ allow you to define your own colours as well as using the built-in
+ set.  The colour of a layer is now shown next to its name on the pane.
+
+ - When you add a new single-colour layer it will use a default colour
+ that is not yet in use in another layer (if there is one).
+
+ - Single-colour layers can now optionally have black backgrounds (with
+ a set of lighter colours in the default colour palette that use black
+ backgrounds by default).
+
+ - There's a new Printer colour scheme in the spectrogram with only a
+ small number of grey shades.
+
+ - Vertical zoom in a log-scaled spectrogram is much more intuitive;
+ it now leaves the point that was in the centre of the visible area in
+ the centre after zoom, instead of the point that was in the centre of
+ the linear range corresponding to the visible area.
+
+ - You can now turn a colour 3d plot layer upside down by clicking the
+ Invert Vertical Scale button.
+
+ - There's a new Layer Summary window which shows the panes and
+ layer data in a tree layout.  This is very simplistic at the moment.
+
+ - Each pane now has an [X] button at its top left, which removes that
+ pane when clicked.
+
+ - There's a new Solo play mode toggle button; when active, only the
+ currently selected pane is played.  This is also the default when
+ time alignment is in use.
+
+ - Rewind/ffwd now stay confined to the selection if Play Selection is
+ enabled; also, the rewind and ffwd "one step" buttons are now enabled
+ even if there is no time instants layer for them to align to (they
+ align to the time ruler instead and so jump in steps of a size
+ dependent on the zoom level).
+
+ - You can now export note layers to MIDI.
+
+ - MIDI note velocity is partially supported.  Note velocity is
+ retained when importing and exporting MIDI and is used in playback,
+ but it is not yet shown in the display and cannot yet be edited.
+
+ - You can now drag-and-drop files (of whatever type) onto SV from
+ other programs such as file managers or web browsers.
+
+ - mp3 files (and Ogg, but they aren't supported on Windows at the
+ moment) are now decoded in a background thread so you can see the
+ start of the track without waiting for the rest to decode.
+
+ - Mac builds of SV can now load AAC/mp4 files and anything else
+ supported by QuickTime.
+
+ - There is now an option to resample audio files on import if they
+ don't match the samplerate of the first file loaded.  By default this
+ is switched off, as it affects the visible waveform.  The default
+ behaviour is unchanged (play at the wrong rate).  There is still no
+ option to handle multiple rates "correctly" (i.e. by resampling
+ on playback and showing the waveforms at different resolutions
+ according to each one's underlying rate) and there probably never
+ will be.
+
+ - SV can now open .m3u playlist files, though it's a hazardous thing
+ to do as it simply loads all the files in the playlist at once.
+
+ - SV now has various options for how to number tapped time instants
+ (bar/beat, plain counter, time in seconds, tempo etc).
+
+ - The official builds use Qt 4.3, which fixes some nasty
+ bugs in the file dialog that the version 1.0 builds suffered from.
+
