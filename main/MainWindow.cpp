@@ -550,6 +550,15 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
+    action = new QAction(tr("Paste at Playback Position"), this);
+    action->setShortcut(tr("Ctrl+Shift+V"));
+    action->setStatusTip(tr("Paste from the clipboard to the current layer, placing the first item at the playback position"));
+    connect(action, SIGNAL(triggered()), this, SLOT(pasteAtPlaybackPosition()));
+    connect(this, SIGNAL(canPaste(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
+
     m_deleteSelectedAction = new QAction(tr("&Delete Selected Items"), this);
     m_deleteSelectedAction->setShortcut(tr("Del"));
     m_deleteSelectedAction->setStatusTip(tr("Delete items in current selection from the current layer"));
