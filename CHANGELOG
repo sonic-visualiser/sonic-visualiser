@@ -23,6 +23,8 @@ Changes in Sonic Visualiser 1.8 since the previous release 1.7.2:
  Linux than previously, although it won't make much difference on
  Windows.
 
+ - A Czech translation is now included (thanks to Pavel Fric).
+
 Changes in Sonic Visualiser 1.7.2 since the previous release 1.7.1:
 
  - The time-value layer now has an origin line and an option to
