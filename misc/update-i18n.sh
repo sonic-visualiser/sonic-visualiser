@@ -16,7 +16,6 @@ for LANG in $LANGUAGES; do
 	../svcore/*/*/*.h ../svcore/*/*/*.cpp \
 	../svgui/*/*.h ../svgui/*/*.cpp \
 	../svapp/*/*.h ../svapp/*/*.cpp \
-	../svapp/*/*/*.h ../svapp/*/*/*.cpp \
 	*/*.h */*.cpp \
 	-ts i18n/sonic-visualiser_$LANG.ts
 done
