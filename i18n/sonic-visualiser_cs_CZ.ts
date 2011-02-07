@@ -331,6 +331,11 @@
         <translation>Nárůst snímků mezi řádky:</translation>
     </message>
     <message>
+        <location filename="../../svgui/widgets/CSVFormatDialog.cpp" line="203"/>
+        <source>Data will be displayed in a %1 layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>
 Example data from file:</source>
         <translation type="obsolete">
@@ -584,17 +589,17 @@ Hodnota:	%4</translation>
     <message>
         <location filename="../../svcore/data/model/DenseThreeDimensionalModel.h" line="110"/>
         <source>Dense 3-D</source>
-        <translation type="unfinished">Hustý trojrozměrný</translation>
+        <translation>Hustý trojrozměrný</translation>
     </message>
     <message>
         <location filename="../../svcore/data/model/DenseThreeDimensionalModel.h" line="127"/>
         <source>Time</source>
-        <translation type="unfinished">Čas</translation>
+        <translation>Čas</translation>
     </message>
     <message>
         <location filename="../../svcore/data/model/DenseThreeDimensionalModel.h" line="128"/>
         <source>Frame</source>
-        <translation type="unfinished">Snímek</translation>
+        <translation>Snímek</translation>
     </message>
 </context>
 <context>
@@ -602,7 +607,7 @@ Hodnota:	%4</translation>
     <message>
         <location filename="../../svcore/data/model/DenseTimeValueModel.h" line="89"/>
         <source>Dense Time-Value</source>
-        <translation type="unfinished">Hustá hodnota času</translation>
+        <translation>Hustá hodnota času</translation>
     </message>
 </context>
 <context>
@@ -623,7 +628,7 @@ Hodnota:	%4</translation>
     <message>
         <location filename="../../svcore/data/model/EditableDenseThreeDimensionalModel.h" line="139"/>
         <source>Editable Dense 3-D</source>
-        <translation type="unfinished">Upravovatelný hustý trojrozměrný</translation>
+        <translation>Upravovatelný hustý trojrozměrný</translation>
     </message>
 </context>
 <context>
@@ -2011,17 +2016,17 @@ Chcete jej najít?</translation>
     <message>
         <location filename="../main/MainWindow.cpp" line="553"/>
         <source>Paste at Playback Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit v poloze přehrávání</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="554"/>
         <source>Ctrl+Shift+V</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="555"/>
         <source>Paste from the clipboard to the current layer, placing the first item at the playback position</source>
-        <translation type="unfinished"></translation>
+        <translation>Vložit ze schránky do nynější vrstvy, první položka se umístí v poloze přehrávání</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="562"/>
@@ -2433,17 +2438,17 @@ Chcete jej najít?</translation>
     <message>
         <location filename="../main/MainWindow.cpp" line="854"/>
         <source>Show All Time Rulers</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat všechna časová pravítka</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="855"/>
         <source>#</source>
-        <translation type="unfinished"></translation>
+        <translation>#</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="856"/>
         <source>Show or hide all time rulers</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat nebo skrýt všechna časová pravítka</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="863"/>
@@ -4594,7 +4599,7 @@ Doba trvání:	%3
         <location filename="../../svgui/view/Pane.cpp" line="946"/>
         <location filename="../../svgui/view/Pane.cpp" line="962"/>
         <source>+%1</source>
-        <translation type="unfinished"></translation>
+        <translation>+%1</translation>
     </message>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1012"/>
@@ -5790,7 +5795,7 @@ Použití:
     <message>
         <location filename="../../svcore/data/model/RangeSummarisableTimeValueModel.h" line="124"/>
         <source>Range-Summarisable Time-Value</source>
-        <translation type="unfinished">Rozsahově shrnutelná časová hodnota</translation>
+        <translation>Rozsahově shrnutelná časová hodnota</translation>
     </message>
 </context>
 <context>
@@ -6200,7 +6205,7 @@ Rozsah:	%3 vzorky (%4)</translation>
     <message>
         <location filename="../../svcore/data/model/SparseModel.h" line="143"/>
         <source>Sparse</source>
-        <translation type="unfinished">Řídký</translation>
+        <translation>Řídký</translation>
     </message>
     <message>
         <source>Add Point</source>
@@ -6217,17 +6222,17 @@ Rozsah:	%3 vzorky (%4)</translation>
     <message>
         <location filename="../../svcore/data/model/SparseModel.h" line="328"/>
         <source>Edit Data</source>
-        <translation type="unfinished">Upravit data</translation>
+        <translation>Upravit data</translation>
     </message>
     <message>
         <location filename="../../svcore/data/model/SparseModel.h" line="344"/>
         <source>Insert Data Point</source>
-        <translation type="unfinished">Vložit datový bod</translation>
+        <translation>Vložit datový bod</translation>
     </message>
     <message>
         <location filename="../../svcore/data/model/SparseModel.h" line="355"/>
         <source>Delete Data Point</source>
-        <translation type="unfinished">Smazat datový bod</translation>
+        <translation>Smazat datový bod</translation>
     </message>
 </context>
 <context>
@@ -6235,7 +6240,7 @@ Rozsah:	%3 vzorky (%4)</translation>
     <message>
         <location filename="../../svcore/data/model/SparseModel.h" line="172"/>
         <source>Add Point</source>
-        <translation type="unfinished">Přidat bod</translation>
+        <translation>Přidat bod</translation>
     </message>
 </context>
 <context>
@@ -6243,7 +6248,7 @@ Rozsah:	%3 vzorky (%4)</translation>
     <message>
         <location filename="../../svcore/data/model/SparseModel.h" line="197"/>
         <source>Delete Point</source>
-        <translation type="unfinished">Smazat bod</translation>
+        <translation>Smazat bod</translation>
     </message>
 </context>
 <context>
@@ -6251,7 +6256,7 @@ Rozsah:	%3 vzorky (%4)</translation>
     <message>
         <location filename="../../svcore/data/model/SparseModel.h" line="254"/>
         <source>Re-Label Point</source>
-        <translation type="unfinished">Opatřit bod znovu štítkem</translation>
+        <translation>Opatřit bod znovu štítkem</translation>
     </message>
 </context>
 <context>
@@ -6330,7 +6335,7 @@ Rozsah:	%3 vzorky (%4)</translation>
     <message>
         <location filename="../../svcore/data/model/SparseValueModel.h" line="56"/>
         <source>Sparse Value</source>
-        <translation type="unfinished">Řídká hodnota</translation>
+        <translation>Řídká hodnota</translation>
     </message>
 </context>
 <context>

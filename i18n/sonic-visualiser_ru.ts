@@ -327,6 +327,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../svgui/widgets/CSVFormatDialog.cpp" line="203"/>
+        <source>Data will be displayed in a %1 layer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>
 Example data from file:</source>
         <translation type="obsolete">
