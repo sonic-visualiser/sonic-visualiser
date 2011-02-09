@@ -11,6 +11,7 @@ for dir in $subdirs; do
 done
 cat > Makefile <<EOF
 TARGETS = sub-svcore sub-svgui sub-svapp sub-sonic-visualiser
+all:	\$(TARGETS)
 sub-svcore:
 	\$(MAKE) --directory=svcore
 sub-svgui:
