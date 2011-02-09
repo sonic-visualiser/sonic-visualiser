@@ -13,8 +13,6 @@ solaris*:TARGET = sonic-visualiser
 DEPENDPATH += . ../svcore ../svgui ../svapp
 INCLUDEPATH += . ../svcore ../svgui ../svapp
 
-LIBPATH = ../svapp ../svgui ../svcore $$LIBPATH
-
 TRANSLATIONS += i18n/sonic-visualiser_ru.ts i18n/sonic-visualiser_en_GB.ts i18n/sonic-visualiser_en_US.ts i18n/sonic-visualiser_cs_CZ.ts
 
 OBJECTS_DIR = o
@@ -25,7 +23,7 @@ RC_FILE = icons/sv.rc
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -lsvapp -lsvgui -lsvcore $$LIBS
+LIBS = -L../svapp -L../svgui -L../svcore -lsvapp -lsvgui -lsvcore $$LIBS
 
 PRE_TARGETDEPS += ../svapp/libsvapp.a \
                   ../svgui/libsvgui.a \
