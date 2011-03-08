@@ -11,6 +11,13 @@ AC_CONFIG_SRCDIR(main/main.cpp)
 # piddling about.
 USER_CXXFLAGS="$CXXFLAGS"
 
+# If the user supplied CFLAGS but not CXXFLAGS, use CFLAGS instead
+if test x"$USER_CXXFLAGS" = x; then
+   if test x"$CFLAGS" != x; then
+      USER_CXXFLAGS="$CFLAGS"
+   fi
+fi
+
 AC_LANG_CPLUSPLUS
 
 AC_PROG_CC
