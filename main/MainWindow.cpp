@@ -161,7 +161,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 {
     Profiler profiler("MainWindow::MainWindow");
 
-    setWindowTitle(tr("Sonic Visualiser"));
+    setWindowTitle(tr("Sonic Visualiser (Kiosk edition)"));
 
     UnitDatabase *udb = UnitDatabase::getInstance();
     udb->registerUnit("Hz");
@@ -442,6 +442,7 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
+    /* //removes the Export Audio File functionnality from the File menu
     action = new QAction(tr("&Export Audio File..."), this);
     action->setStatusTip(tr("Export selection as an audio file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudio()));
@@ -449,6 +450,7 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
     menu->addSeparator();
+    */
 
     action = new QAction(tr("Import Annotation &Layer..."), this);
     action->setShortcut(tr("Ctrl+L"));
@@ -2157,6 +2159,7 @@ MainWindow::importMoreAudio()
     }
 }
 
+/*
 void
 MainWindow::exportAudio()
 {
@@ -2324,6 +2327,7 @@ MainWindow::exportAudio()
 	QMessageBox::critical(this, tr("Failed to write file"), error);
     }
 }
+*/
 
 void
 MainWindow::importLayer()
@@ -2619,7 +2623,7 @@ MainWindow::closeSession()
     m_timeRulerLayer = 0; // document owned this
 
     m_sessionFile = "";
-    setWindowTitle(tr("Sonic Visualiser"));
+    setWindowTitle(tr("Sonic Visualiser (Kiosk edition)"));
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -2989,7 +2993,7 @@ MainWindow::saveSessionAs()
 	QMessageBox::critical(this, tr("Failed to save file"),
 			      tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
     } else {
-	setWindowTitle(tr("Sonic Visualiser: %1")
+	setWindowTitle(tr("Sonic Visualiser (Kiosk edition): %1")
 		       .arg(QFileInfo(path).fileName()));
 	m_sessionFile = path;
 	CommandHistory::getInstance()->documentSaved();
@@ -3972,8 +3976,8 @@ MainWindow::about()
 
     QString aboutText;
 
-    aboutText += tr("<h3>About Sonic Visualiser</h3>");
-    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.<br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
+    aboutText += tr("<h3>About Sonic Visualiser (Kiosk edition)</h3>");
+    aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation. The Kiosk edition provides all of the features of the full Sonic Visualiser, except that audio files cannot be saved from it. <br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
     aboutText += tr("<p><small>%1 : %2 configuration</small></p>")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"));

@@ -83,7 +83,7 @@ protected slots:
     virtual void openSomething();
     virtual void openLocation();
     virtual void openRecentFile();
-    virtual void exportAudio();
+    //virtual void exportAudio(); //removes the Export Audio File functionnality from the File menu
     virtual void importLayer();
     virtual void exportLayer();
     virtual void exportImage();
