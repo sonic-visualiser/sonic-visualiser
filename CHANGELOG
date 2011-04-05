@@ -6,6 +6,9 @@ Changes in Sonic Visualiser 1.8 since the previous release 1.7.2:
 
  - There is a new function to toggle all Time Rulers at once (key #)
 
+ - The CSV import dialog has been overhauled, allowing more flexible
+ selection of purpose for each column
+
  - Text overlays are now easier to read on dark backgrounds
 
  - Hidden layers are now ignored when exporting an image (Dan Stowell)
