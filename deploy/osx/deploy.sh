@@ -30,6 +30,7 @@ dmg="$dmg"-"$version".dmg
 mkdir "$volume" || exit 1
 
 ln -s /Applications "$volume"/Applications
+cp README README.OSC COPYING CHANGELOG "$volume/"
 cp -rp "$source" "$target"
 
 echo "Done"

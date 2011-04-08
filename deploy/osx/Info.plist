@@ -5,7 +5,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleName</key>
-	<string>SonicVisualiser</string>
+	<string>Sonic Visualiser</string>
 	<key>CFBundleExecutable</key>
 	<string>Sonic Visualiser</string>
 	<key>CFBundleIconFile</key>
