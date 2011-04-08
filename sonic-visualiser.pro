@@ -41,5 +41,5 @@ SOURCES += main/main.cpp \
            main/Surveyer.cpp
 
 # for mac integration
-QMAKE_INFO_PLIST = osx/Info.plist
+QMAKE_INFO_PLIST = deploy/osx/Info.plist
 
