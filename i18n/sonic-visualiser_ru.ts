@@ -410,7 +410,7 @@ Bin:	%3
     <message>
         <location filename="../../svgui/layer/Colour3DPlotLayer.cpp" line="312"/>
         <source>Absolute</source>
-        <translation type="unfinished"></translation>
+        <translation>Абсолютный</translation>
     </message>
     <message>
         <location filename="../../svgui/layer/Colour3DPlotLayer.cpp" line="175"/>
@@ -620,7 +620,7 @@ Bin:	%3
     <message>
         <location filename="../../svapp/framework/Document.cpp" line="272"/>
         <source>Clear main model</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить основную модель</translation>
     </message>
 </context>
 <context>
@@ -1466,12 +1466,12 @@ Do you want to locate it?</source>
     <message>
         <location filename="../../svgui/layer/Layer.cpp" line="340"/>
         <source>Make Measurement</source>
-        <translation type="unfinished">Создать замер</translation>
+        <translation>Создать замер</translation>
     </message>
     <message>
         <location filename="../../svgui/layer/Layer.cpp" line="358"/>
         <source>Delete Measurement</source>
-        <translation type="unfinished">Удалить замер</translation>
+        <translation>Удалить замер</translation>
     </message>
 </context>
 <context>
@@ -3715,7 +3715,7 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
     <message>
         <location filename="../main/MainWindow.cpp" line="3986"/>
         <source>&lt;p&gt;&lt;small&gt;%1 : %2 configuration&lt;/small&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;p&gt;&lt;small&gt;%1 : конфигурация %2&lt;/small&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="3992"/>
@@ -3795,7 +3795,7 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
     <message>
         <location filename="../main/MainWindow.cpp" line="4086"/>
         <source>&lt;/small&gt;&lt;p&gt;&lt;small&gt;The OSC URL for this instance is: &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;/small&gt;&lt;p&gt;&lt;small&gt;Адрес OSC для этого сеанса: &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="4093"/>
@@ -4109,12 +4109,12 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
     <message>
         <location filename="../../svapp/framework/MainWindowBase.cpp" line="2455"/>
         <source>Add Pane</source>
-        <translation type="unfinished">Добавить окно</translation>
+        <translation>Добавить окно</translation>
     </message>
     <message>
         <location filename="../../svapp/framework/MainWindowBase.cpp" line="2500"/>
         <source>Remove Pane</source>
-        <translation type="unfinished">Удалить окно</translation>
+        <translation>Удалить окно</translation>
     </message>
     <message>
         <location filename="../../svapp/framework/MainWindowBase.cpp" line="2523"/>
@@ -4274,12 +4274,12 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
     <message>
         <location filename="../../svgui/widgets/ModelDataTableDialog.cpp" line="107"/>
         <source>Find:</source>
-        <translation type="unfinished">Искать:</translation>
+        <translation>Искать:</translation>
     </message>
     <message>
         <location filename="../../svgui/widgets/ModelDataTableDialog.cpp" line="108"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation> </translation>
     </message>
 </context>
 <context>
@@ -4469,7 +4469,7 @@ Label:	%4</source>
     <message>
         <location filename="../../svgui/layer/NoteLayer.cpp" line="486"/>
         <source>%1 (%2, %3 Hz)</source>
-        <translation>%1 (%2, %3Гц)</translation>
+        <translation>%1 (%2, %3 Гц)</translation>
     </message>
     <message>
         <location filename="../../svgui/layer/NoteLayer.cpp" line="493"/>
@@ -5628,7 +5628,7 @@ Apply them before closing?</source>
     <message>
         <location filename="../../svcore/base/PropertyContainer.cpp" line="244"/>
         <source>Set %1 Property</source>
-        <translation type="unfinished">Установить свойство %1</translation>
+        <translation>Установить свойство %1</translation>
     </message>
 </context>
 <context>
@@ -5725,7 +5725,7 @@ Sonic Visualiser — программа для просмотра и иссле�
     <message>
         <location filename="../main/main.cpp" line="495"/>
         <source>&lt;b&gt;Audio required&lt;/b&gt;&lt;p&gt;Please load at least one audio file before importing annotation data</source>
-        <translation type="unfinished">&lt;b&gt;Нужны звуковые данные&lt;/b&gt;&lt;p&gt;Загрузите хотя бы один звуковой файл перед импортом аннотаций</translation>
+        <translation>&lt;b&gt;Нужны звуковые данные&lt;/b&gt;&lt;p&gt;Загрузите хотя бы один звуковой файл перед импортом аннотаций</translation>
     </message>
 </context>
 <context>
@@ -7532,19 +7532,19 @@ What values do you want to use for these items?</source>
     <message numerus="yes">
         <location filename="../../svgui/widgets/TransformFinder.cpp" line="227"/>
         <source>Found %n description(s) containing &lt;b&gt;%1&lt;/b&gt;, showing the first %2 only</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Найдено %n описание, содержащее &lt;b&gt;%1&lt;/b&gt;, показаны первые %2</numerusform>
+            <numerusform>Найдено %n описания, содержащих &lt;b&gt;%1&lt;/b&gt;, показаны первые %2</numerusform>
+            <numerusform>Найдено %n описаний, содержащих &lt;b&gt;%1&lt;/b&gt;, показаны первые %2</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../svgui/widgets/TransformFinder.cpp" line="231"/>
         <source>Found %n description(s) containing &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Найдено %n описание, содержащее &lt;b&gt;%1&lt;/b&gt;</numerusform>
+            <numerusform>Найдено %n описания, содержащих &lt;b&gt;%1&lt;/b&gt;</numerusform>
+            <numerusform>Найдено %n описаний, содержащих &lt;b&gt;%1&lt;/b&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -7602,7 +7602,7 @@ What values do you want to use for these items?</source>
     <message>
         <location filename="../../svgui/widgets/TransformFinder.cpp" line="137"/>
         <source>&lt;p&gt;Type some text into the search box to search the descriptions of:&lt;ul&gt;&lt;li&gt;All currently installed &lt;a href=&quot;http://www.vamp-plugins.org/&quot;&gt;Vamp&lt;/a&gt; audio feature extraction plugins&lt;/li&gt;&lt;li&gt;All currently installed &lt;a href=&quot;http://www.ladspa.org/&quot;&gt;LADSPA&lt;/a&gt; audio effects plugins&lt;/li&gt;&lt;li&gt;Vamp plugins that are not currently installed but that have descriptions published via the semantic web&lt;/li&gt;&lt;/ul&gt;</source>
-        <translation>&lt;p&gt;Введите текст для поиска по описаниям среди:&lt;ul&gt;&lt;li&gt;всех установленных расширений &lt;a href=&quot;http://www.vamp-plugins.org/&quot;&gt;Vamp&lt;/a&gt; для извлечения анализируемых данных;&lt;/li&gt;&lt;li&gt;всех установленных эффектов&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;LADSPA&lt;/a&gt;;&lt;/li&gt;&lt;li&gt;еще не установленных расширений Vamp, чье описание опубликовано в семантической сети.&lt;/li&gt;&lt;/ul&gt;</translation>
+        <translation>&lt;p&gt;Введите текст для поиска по описаниям среди:&lt;ul&gt;&lt;li&gt;всех установленных расширений &lt;a href=&quot;http://www.vamp-plugins.org/&quot;&gt;Vamp&lt;/a&gt; для извлечения анализируемых данных;&lt;/li&gt;&lt;li&gt;всех установленных эффектов&lt;a href=&quot;http://www.ladspa.org/&quot;&gt;LADSPA&lt;/a&gt;;&lt;/li&gt;&lt;li&gt;еще не установленных расширений Vamp, чьё описание опубликовано в семантической сети.&lt;/li&gt;&lt;/ul&gt;</translation>
     </message>
     <message>
         <location filename="../../svgui/widgets/TransformFinder.cpp" line="140"/>
@@ -7785,8 +7785,6 @@ What values do you want to use for these items?</source>
         <location filename="../../svgui/view/ViewManager.cpp" line="576"/>
         <source>Zoom to %n sample(s) per pixel</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
