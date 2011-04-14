@@ -22,6 +22,7 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
+#include "data/model/RangeSummarisableTimeValueModel.h"
 #include "data/model/NoteModel.h"
 #include "data/model/Labeller.h"
 #include "data/osc/OSCQueue.h"
@@ -1196,7 +1197,11 @@ MainWindow::setupPaneAndLayerMenus()
                         submenu->addAction(action);
                     }
 
-                    if (isDefault && menuType == layerMenuType) {
+                    if (isDefault && menuType == layerMenuType &&
+                        mi == candidateModels.begin()) {
+                        // only add for one model, one channel, one menu on
+                        // right button -- the action itself will discover
+                        // which model is the correct one (based on pane)
                         action = new QAction(icon, mainText, this);
                         action->setStatusTip(tipText);
                         connect(action, SIGNAL(triggered()),
@@ -3213,22 +3218,21 @@ MainWindow::addLayer()
 
             Model *model = i->second.sourceModel;
 
+            cerr << "model = "<< model << endl;
+
             if (!model) {
                 if (type == LayerFactory::TimeRuler) {
                     newLayer = m_document->createMainModelLayer(type);
                 } else {
                     // if model is unspecified and this is not a
-                    // time-ruler layer, use the topmost plausible
-                    // model from the current pane (if any) -- this is
-                    // the case for right-button menu layer additions
-                    for (int i = pane->getLayerCount(); i > 0; --i) {
-                        Layer *el = pane->getLayer(i-1);
-                        if (el &&
-                            el->getModel() &&
-                            dynamic_cast<RangeSummarisableTimeValueModel *>
-                            (el->getModel())) {
-                            model = el->getModel();
-                        }
+                    // time-ruler layer, use any plausible model from
+                    // the current pane -- this is the case for
+                    // right-button menu layer additions
+                    Pane::ModelSet ms = pane->getModels();
+                    foreach (Model *m, ms) {
+                        RangeSummarisableTimeValueModel *r =
+                            dynamic_cast<RangeSummarisableTimeValueModel *>(m);
+                        if (r) model = m;
                     }
                     if (!model) model = getMainModel();
                 }
