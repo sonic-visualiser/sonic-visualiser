@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="0.9">
+<dict>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleName</key>
+	<string>Sonic Visualiser</string>
+	<key>CFBundleExecutable</key>
+	<string>Sonic Visualiser</string>
+	<key>CFBundleIconFile</key>
+	<string>sv-macicon.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.sonicvisualiser.SonicVisualiser</string>
+	<key>CFBundleShortVersionString</key>
+	<string>SV_VERSION</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<!-- we are an 'editor' of SV files -->
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sv</string>
+			</array>
+			<!-- TODO
+			<key>CFBundleTypeIconFile</key>
+			<string>SVProject.icns</string> -->
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/x-sonic-visualiser-session</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Sonic Visualiser Session</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>****</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSIsAppleDefaultForType</key>
+			<true/>
+		</dict>
+		
+		<!-- we are a 'viewer' of general audio files -->
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>mp3</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/mpeg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>MP3 Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ogg</string>
+				<string>oga</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/ogg</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Ogg Vorbis Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wav</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/x-wav</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Wave Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>aif</string>
+				<string>aiff</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/x-aiff</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>AIFF Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>flac</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>audio/flac</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>FLAC Audio</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSIsAppleDefaultForType</key>
+			<false/>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+		</dict>
+	</array>
+  </dict>
+</plist>

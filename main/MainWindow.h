@@ -69,8 +69,8 @@ public:
     virtual ~MainWindow();
 
 signals:
-    virtual void canChangeSolo(bool);
-    virtual void canAlign(bool);
+    void canChangeSolo(bool);
+    void canAlign(bool);
 
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
