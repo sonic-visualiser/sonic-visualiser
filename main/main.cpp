@@ -468,7 +468,7 @@ void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
     }
     if (status != MainWindow::FileOpenSucceeded) {
         if (!haveMainModel) {
-            status = m_mainWindow->open(path, MainWindow::ReplaceMainModel);
+            status = m_mainWindow->open(path, MainWindow::ReplaceSession);
             if (status == MainWindow::FileOpenSucceeded) {
                 haveMainModel = true;
             }
