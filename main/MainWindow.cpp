@@ -2149,7 +2149,7 @@ MainWindow::importAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+	if (openAudio(path, ReplaceSession) == FileOpenFailed) {
             emit hideSplash();
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
