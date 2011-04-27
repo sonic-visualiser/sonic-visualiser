@@ -22,6 +22,7 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "data/model/SparseOneDimensionalModel.h"
+#include "data/model/RangeSummarisableTimeValueModel.h"
 #include "data/model/NoteModel.h"
 #include "data/model/Labeller.h"
 #include "data/osc/OSCQueue.h"
@@ -550,6 +551,15 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
+    action = new QAction(tr("Paste at Playback Position"), this);
+    action->setShortcut(tr("Ctrl+Shift+V"));
+    action->setStatusTip(tr("Paste from the clipboard to the current layer, placing the first item at the playback position"));
+    connect(action, SIGNAL(triggered()), this, SLOT(pasteAtPlaybackPosition()));
+    connect(this, SIGNAL(canPaste(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+    m_rightButtonMenu->addAction(action);
+
     m_deleteSelectedAction = new QAction(tr("&Delete Selected Items"), this);
     m_deleteSelectedAction->setShortcut(tr("Del"));
     m_deleteSelectedAction->setStatusTip(tr("Delete items in current selection from the current layer"));
@@ -839,7 +849,16 @@ MainWindow::setupViewMenu()
     overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-        
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Show All Time Rulers"), this);
+    action->setShortcut(tr("#"));
+    action->setStatusTip(tr("Show or hide all time rulers"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
     menu->addSeparator();
 
     action = new QAction(tr("Show &Zoom Wheels"), this);
@@ -850,7 +869,7 @@ MainWindow::setupViewMenu()
     action->setChecked(m_viewManager->getZoomWheelsEnabled());
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-        
+
     action = new QAction(tr("Show Property Bo&xes"), this);
     action->setShortcut(tr("X"));
     action->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
@@ -1178,7 +1197,11 @@ MainWindow::setupPaneAndLayerMenus()
                         submenu->addAction(action);
                     }
 
-                    if (isDefault && menuType == layerMenuType) {
+                    if (isDefault && menuType == layerMenuType &&
+                        mi == candidateModels.begin()) {
+                        // only add for one model, one channel, one menu on
+                        // right button -- the action itself will discover
+                        // which model is the correct one (based on pane)
                         action = new QAction(icon, mainText, this);
                         action->setStatusTip(tipText);
                         connect(action, SIGNAL(triggered()),
@@ -3195,22 +3218,21 @@ MainWindow::addLayer()
 
             Model *model = i->second.sourceModel;
 
+            cerr << "model = "<< model << endl;
+
             if (!model) {
                 if (type == LayerFactory::TimeRuler) {
                     newLayer = m_document->createMainModelLayer(type);
                 } else {
                     // if model is unspecified and this is not a
-                    // time-ruler layer, use the topmost plausible
-                    // model from the current pane (if any) -- this is
-                    // the case for right-button menu layer additions
-                    for (int i = pane->getLayerCount(); i > 0; --i) {
-                        Layer *el = pane->getLayer(i-1);
-                        if (el &&
-                            el->getModel() &&
-                            dynamic_cast<RangeSummarisableTimeValueModel *>
-                            (el->getModel())) {
-                            model = el->getModel();
-                        }
+                    // time-ruler layer, use any plausible model from
+                    // the current pane -- this is the case for
+                    // right-button menu layer additions
+                    Pane::ModelSet ms = pane->getModels();
+                    foreach (Model *m, ms) {
+                        RangeSummarisableTimeValueModel *r =
+                            dynamic_cast<RangeSummarisableTimeValueModel *>(m);
+                        if (r) model = m;
                     }
                     if (!model) model = getMainModel();
                 }
@@ -4076,7 +4098,7 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2010 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2011 Chris Cannam and "
         "Queen Mary, University of London.</small></p>"
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "

@@ -2,12 +2,7 @@
 To compile from source
 ----------------------
 
-This file provides various instructions useful when compiling the SV
-libraries from source, but it doesn't have a complete recipe for any
-one platform -- there are too many variables.  However, you can find a
-recipe for one platform (Ubuntu Linux) in the file INSTALL.ubuntu.
-
-To build, run
+To build on a Unix-like system, run
 
 $ ./configure && make
 

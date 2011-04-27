@@ -1,0 +1,304 @@
+ladspa:adsr_1653:adsr::Amplitude > Dynamics
+ladspa:adsr_1680:adsr_g+t::Amplitude > Dynamics
+ladspa:alias_1407:alias::Amplitude > Distortions
+ladspa:allpass_1895:allpass_c::Time > Delays
+ladspa:allpass_1895:allpass_l::Time > Delays
+ladspa:allpass_1895:allpass_n::Time > Delays
+ladspa:amp_1181:amp::Amplitude > Amplifiers
+ladspa:amp_1654:amp_gaia_oa::Amplitude > Amplifiers
+ladspa:amp_1654:amp_gcia_oa::Amplitude > Amplifiers
+ladspa:amp:amp_mono::Amplitude > Amplifiers
+ladspa:amp:amp_stereo::Amplitude > Amplifiers
+ladspa:am_pitchshift_1433:amPitchshift::Frequency > Pitch shifters
+ladspa:analogue_osc_1416:analogueOsc::Generators > Oscillators
+ladspa:bandpass_a_iir_1893:bandpass_a_iir::Frequency > Filters > Bandpass
+ladspa:bandpass_iir_1892:bandpass_iir::Frequency > Filters > Bandpass
+ladspa:blvco:Pulse-VCO::Generators > Oscillators
+ladspa:blvco:Rec-VCO::Generators > Oscillators
+ladspa:blvco:Saw-VCO::Generators > Oscillators
+ladspa:bode_shifter_1431:bodeShifter::Spectral
+ladspa:bode_shifter_cv_1432:bodeShifterCV::Spectral
+ladspa:branch_1673:branch_ia_oaoa::Utilities
+ladspa:branch_1673:branch_ic_ococ::Utilities
+ladspa:butterworth_1902:butthigh_iir::Frequency > Filters > Highpass
+ladspa:butterworth_1902:buttlow_iir::Frequency > Filters > Lowpass
+ladspa:butterworth_1902:bwxover_iir::Frequency > Filters > Bandpass
+ladspa:caps:AmpIII::Amplitude > Distortions
+ladspa:caps:AmpIV::Amplitude > Distortions
+ladspa:caps:Cabinet::Amplitude > Distortions
+ladspa:caps:CEO::Generators > Oscillators
+ladspa:caps:Chorus::Time > Chorus
+ladspa:caps:Click::Utilities
+ladspa:caps:Clip::Amplitude > Distortions
+ladspa:caps:Compress::Amplitude > Dynamics > Compressors
+ladspa:caps:Eq::Frequency > EQs
+ladspa:caps:HRTF::Utilities
+ladspa:caps:JVRev::Time > Reverbs
+ladspa:caps:Lorenz::Generators
+ladspa:caps:Pan::Utilities
+ladspa:caps:Phaser::Time > Phasers
+ladspa:caps:Plate2x2::Time > Reverbs
+ladspa:caps:Plate::Time > Reverbs
+ladspa:caps:PreampIII::Amplitude > Distortions
+ladspa:caps:PreampIV::Amplitude > Distortions
+ladspa:caps:Roessler::Generators
+ladspa:caps:Sin::Generators
+ladspa:caps:StereoChorus::Time > Chorus
+ladspa:caps:SweepVF::Frequency > Filters
+ladspa:caps:VCOd::Generators > Oscillators
+ladspa:caps:VCOs::Generators > Oscillators
+ladspa:caps:White::Generators
+ladspa:chebstortion_1430:chebstortion::Amplitude > Distortions
+ladspa:cmt:am::Amplitude > Modulators
+ladspa:cmt:amp_mono::Amplitude > Amplifiers
+ladspa:cmt:amp_stereo::Amplitude > Amplifiers
+ladspa:cmt:analogue::Generators
+ladspa:cmt:bf2cube::Utilities > Ambisonic
+ladspa:cmt:bf2quad::Utilities > Ambisonic
+ladspa:cmt:bf2stereo::Utilities > Ambisonic
+ladspa:cmt:bf_rotate_z::Utilities > Ambisonic
+ladspa:cmt:canyon_delay::Time > Delays
+ladspa:cmt:compress_peak::Amplitude > Dynamics > Compressors
+ladspa:cmt:compress_rms::Amplitude > Dynamics > Compressors
+ladspa:cmt:delay_0.01s::Time > Delays
+ladspa:cmt:delay_0.1s::Time > Delays
+ladspa:cmt:delay_1s::Time > Delays
+ladspa:cmt:delay_5s::Time > Delays
+ladspa:cmt:delay_60s::Time > Delays
+ladspa:cmt:disintegrator::Amplitude > Distortions
+ladspa:cmt:encode_bformat::Utilities > Ambisonic
+ladspa:cmt:encode_fmh::Utilities > Ambisonic
+ladspa:cmt:expand_peak::Amplitude > Dynamics > Expanders
+ladspa:cmt:expand_rms::Amplitude > Dynamics > Expanders
+ladspa:cmt:fbdelay_0.01s::Time > Delays
+ladspa:cmt:fbdelay_0.1s::Time > Delays
+ladspa:cmt:fbdelay_1s::Time > Delays
+ladspa:cmt:fbdelay_5s::Time > Delays
+ladspa:cmt:fbdelay_60s::Time > Delays
+ladspa:cmt:fmh2bf::Utilities > Ambisonic
+ladspa:cmt:fmh2oct::Utilities > Ambisonic
+ladspa:cmt:fmh_rotate_z::Utilities > Ambisonic
+ladspa:cmt:freeverb3::Time > Reverbs
+ladspa:cmt:grain_scatter::Generators
+ladspa:cmt:hard_gate::Amplitude > Dynamics > Gates
+ladspa:cmt:hpf::Frequency > Filters > Highpass
+ladspa:cmt:identity_audio::Utilities
+ladspa:cmt:identity_control::Utilities
+ladspa:cmt:limit_peak::Amplitude > Dynamics > Limiters
+ladspa:cmt:limit_rms::Amplitude > Dynamics > Limiters
+ladspa:cmt:lofi::Amplitude > Distortions
+ladspa:cmt:logistic::Utilities
+ladspa:cmt:lpf::Frequency > Filters > Lowpass
+ladspa:cmt:mixer::Utilities
+ladspa:cmt:noise_source_white::Generators
+ladspa:cmt:null_ai::Utilities
+ladspa:cmt:null_ao::Utilities
+ladspa:cmt:null_ci::Utilities
+ladspa:cmt:null_co::Utilities
+ladspa:cmt:organ::Generators
+ladspa:cmt:peak::Utilities
+ladspa:cmt:phasemod::Generators
+ladspa:cmt:pink_full_frequency::Generators
+ladspa:cmt:pink_interpolated_audio::Generators
+ladspa:cmt:pink_sh::Generators
+ladspa:cmt:sine_faaa::Generators
+ladspa:cmt:sine_faac::Generators
+ladspa:cmt:sine_fcaa::Generators
+ladspa:cmt:sine_fcac::Generators
+ladspa:cmt:sledgehammer::Amplitude > Dynamics > Limiters
+ladspa:cmt:syndrum::Generators
+ladspa:cmt:track_max_peak::Utilities
+ladspa:cmt:track_max_rms::Utilities
+ladspa:cmt:track_peak::Utilities
+ladspa:cmt:track_rms::Utilities
+ladspa:cmt:vcf303::Frequency > Filters > Lowpass
+ladspa:cmt:wshape_sine::Amplitude > Waveshapers
+ladspa:comb_1190:comb::Frequency > Filters > Combs
+ladspa:comb_1887:comb_c::Time > Delays
+ladspa:comb_1887:comb_l::Time > Delays
+ladspa:comb_1887:comb_n::Time > Delays
+ladspa:comb_splitter_1411:combSplitter::Frequency > Filters > Combs
+ladspa:const_1909:const::Utilities
+ladspa:crossover_dist_1404:crossoverDist::Amplitude > Distortions
+ladspa:cs_chorus:Chorus1::Time > Chorus
+ladspa:cs_chorus:Chorus2::Time > Chorus
+ladspa:cs_phaser:Phaser1+LFO::Time > Phasers
+ladspa:cs_phaser:Phaser1::Time > Phasers
+ladspa:dahdsr_2021:dahdsr_cg+t_control::Amplitude > Dynamics
+ladspa:dahdsr_2021:dahdsr_g+t_audio::Amplitude > Dynamics
+ladspa:dahdsr_2021:dahdsr_g+t_control::Amplitude > Dynamics
+ladspa:dc_remove_1207:dcRemove::Frequency > Filters > Highpass
+ladspa:decay_1886:decay::Utilities
+ladspa:decimator_1202:decimator::Amplitude > Distortions
+ladspa:declip_1195:declip::Amplitude > Waveshapers
+ladspa:delay_1898:delay_c::Time > Delays
+ladspa:delay_1898:delay_l::Time > Delays
+ladspa:delay_1898:delay_n::Time > Delays
+ladspa:delay:delay_5s::Time > Delays
+ladspa:delayorama_1402:delayorama::Time > Delays
+ladspa:difference_2030:difference_iama_oa::Utilities
+ladspa:difference_2030:difference_iamc_oa::Utilities
+ladspa:difference_2030:difference_icma_oa::Utilities
+ladspa:difference_2030:difference_icmc_oc::Utilities
+ladspa:diode_1185:diode::Amplitude > Distortions
+ladspa:divider_1186:divider::Generators
+ladspa:dj_eq_1901:dj_eq::Frequency > EQs
+ladspa:dj_eq_1901:dj_eq_mono::Frequency > EQs
+ladspa:dj_flanger_1438:djFlanger::Time > Flangers
+ladspa:dyson_compress_1403:dysonCompress::Amplitude > Dynamics > Compressors
+ladspa:fad_delay_1192:fadDelay::Time > Delays
+ladspa:fast_lookahead_limiter_1913:fastLookaheadLimiter::Amplitude > Dynamics > Limiters
+ladspa:filter:hpf::Frequency > Filters > Highpass
+ladspa:filter:lpf::Frequency > Filters > Lowpass
+ladspa:filters:Parametric1::Frequency > Filters
+ladspa:flanger_1191:flanger::Time > Flangers
+ladspa:fmod_1656:fmod_fama_oa::Frequency
+ladspa:fmod_1656:fmod_famc_oa::Frequency
+ladspa:fmod_1656:fmod_fcma_oa::Frequency
+ladspa:fmod_1656:fmod_fcmc_oc::Frequency
+ladspa:fm_osc_1415:fmOsc::Generators > Oscillators
+ladspa:foldover_1213:foldover::Amplitude > Distortions
+ladspa:foverdrive_1196:foverdrive::Amplitude > Distortions
+ladspa:freq_tracker_1418:freqTracker::Frequency > Measurement
+ladspa:g2reverb:G2reverb::Time > Reverbs
+ladspa:gate_1410:gate::Amplitude > Dynamics > Gates
+ladspa:giant_flange_1437:giantFlange::Time > Flangers
+ladspa:gong_1424:gong::Simulators
+ladspa:gong_beater_1439:gongBeater::Generators
+ladspa:gsm_1215:gsm::Amplitude > Distortions
+ladspa:gverb_1216:gverb::Time > Reverbs
+ladspa:hard_limiter_1413:hardLimiter::Amplitude > Dynamics > Limiters
+ladspa:harmonic_gen_1220:harmonicGen::Generators
+ladspa:hermes_filter_1200:hermesFilter::Frequency > Filters
+ladspa:highpass_iir_1890:highpass_iir::Frequency > Filters > Highpass
+ladspa:hilbert_1440:hilbert::Utilities
+ladspa:imp_1199:imp::Spectral
+ladspa:impulse_1885:impulse_fc::Utilities
+ladspa:interpolator_1660:interpolator::Utilities
+ladspa:inv_1429:inv::Utilities
+ladspa:jamincont_1912:jaminController::Utilities
+ladspa:karaoke_1409:karaoke::Utilities
+ladspa:latency_1914:artificialLatency::Utilities
+ladspa:lcr_delay_1436:lcrDelay::Time > Delays
+ladspa:lowpass_iir_1891:lowpass_iir::Frequency > Filters > Lowpass
+ladspa:lp4pole_1671:lp4pole_faraia_oa::Frequency > Filters > Lowpass
+ladspa:lp4pole_1671:lp4pole_fcrcia_oa::Frequency > Filters > Lowpass
+ladspa:ls_filter_1908:lsFilter::Frequency > Filters
+ladspa:matrix_ms_st_1421:matrixMSSt::Utilities
+ladspa:matrix_spatialiser_1422:matrixSpatialiser::Utilities
+ladspa:matrix_st_ms_1420:matrixStMS::Utilities
+ladspa:mbeq_1197:mbeq::Frequency > EQs > Multiband
+ladspa:mod_delay_1419:modDelay::Time > Delays
+ladspa:multivoice_chorus_1201:multivoiceChorus::Time > Chorus
+ladspa:mvchpf24:Mvchpf-1::Frequency > Filters
+ladspa:mvclpf24:Mvclpf-1::Frequency > Filters
+ladspa:mvclpf24:Mvclpf-2::Frequency > Filters
+ladspa:mvclpf24:Mvclpf-3::Frequency > Filters
+ladspa:mvclpf24:Mvclpf-4::Frequency > Filters
+ladspa:noise:noise_white::Generators
+ladspa:notch_iir_1894:notch_iir::Frequency > Filters > Notch
+ladspa:phasers_1217:autoPhaser::Time > Phasers
+ladspa:phasers_1217:fourByFourPole::Frequency > Filters > Allpass
+ladspa:phasers_1217:lfoPhaser::Time > Phasers
+ladspa:pitch_scale_1193:pitchScale::Frequency > Pitch shifters
+ladspa:pitch_scale_1194:pitchScaleHQ::Frequency > Pitch shifters
+ladspa:plate_1423:plate::Time > Reverbs
+ladspa:pointer_cast_1910:pointerCastDistortion::Amplitude > Distortions
+ladspa:product_1668:product_iaia_oa::Utilities
+ladspa:product_1668:product_iaic_oa::Utilities
+ladspa:product_1668:product_icic_oc::Utilities
+ladspa:pulse_1645:pulse_fapa_oa::Generators > Oscillators
+ladspa:pulse_1645:pulse_fapc_oa::Generators > Oscillators
+ladspa:pulse_1645:pulse_fcpa_oa::Generators > Oscillators
+ladspa:pulse_1645:pulse_fcpc_oa::Generators > Oscillators
+ladspa:pvoc:Accumulate::Spectral
+ladspa:pvoc:Exaggerate::Spectral
+ladspa:pvoc:Transpose::Frequency > Pitch shifters
+ladspa:quantiser100_2029:quantiser100::Utilities
+ladspa:quantiser20_2027:quantiser20::Utilities
+ladspa:quantiser50_2028:quantiser50::Utilities
+ladspa:random_1661:random_fasa_oa::Generators
+ladspa:random_1661:random_fasc_oa::Generators
+ladspa:random_1661:random_fcsa_oa::Generators
+ladspa:random_1661:random_fcsc_oa::Generators
+ladspa:rate_shifter_1417:rateShifter::Frequency > Pitch shifters
+ladspa:ratio_2034:ratio_nada_oa::Utilities
+ladspa:ratio_2034:ratio_nadc_oa::Utilities
+ladspa:ratio_2034:ratio_ncda_oa::Utilities
+ladspa:ratio_2034:ratio_ncdc_oc::Utilities
+ladspa:retro_flange_1208:retroFlange::Time > Flangers
+ladspa:revdelay_1605:revdelay::Time > Delays
+ladspa:ringmod_1188:ringmod_1i1o1l::Amplitude > Modulators
+ladspa:ringmod_1188:ringmod_2i1o::Amplitude > Modulators
+ladspa:satan_maximiser_1408:satanMaximiser::Amplitude > Dynamics
+ladspa:sawtooth_1641:sawtooth_fa_oa::Generators > Oscillators
+ladspa:sawtooth_1641:sawtooth_fc_oa::Generators > Oscillators
+ladspa:sc1_1425:sc1::Amplitude > Dynamics > Compressors
+ladspa:sc2_1426:sc2::Amplitude > Dynamics > Compressors
+ladspa:sc3_1427:sc3::Amplitude > Dynamics > Compressors
+ladspa:sc4_1882:sc4::Amplitude > Dynamics > Compressors
+ladspa:sc4m_1916:sc4m::Amplitude > Dynamics > Compressors
+ladspa:se4_1883:se4::Amplitude > Dynamics > Compressors
+ladspa:sequencer16_1677:sequencer16::Simulators
+ladspa:sequencer32_1676:sequencer32::Simulators
+ladspa:sequencer64_1675:sequencer64::Simulators
+ladspa:shaper_1187:shaper::Amplitude > Waveshapers
+ladspa:sifter_1210:sifter::Amplitude > Distortions
+ladspa:sin_cos_1881:sinCos::Generators > Oscillators
+ladspa:sine:sine_faaa::Generators > Oscillators
+ladspa:sine:sine_faac::Generators > Oscillators
+ladspa:sine:sine_fcaa::Generators > Oscillators
+ladspa:sine:sine_fcac::Generators > Oscillators
+ladspa:single_para_1203:singlePara::Frequency > EQs > Parametric
+ladspa:sinus_wavewrapper_1198:sinusWavewrapper::Amplitude > Waveshapers
+ladspa:smooth_decimate_1414:smoothDecimate::Amplitude > Distortions
+ladspa:split_1406:split::Utilities
+ladspa:square_1643:square_fa_oa::Generators > Oscillators
+ladspa:square_1643:square_fc_oa::Generators > Oscillators
+ladspa:step_muxer_1212:stepMuxer::Utilities
+ladspa:sum_1665:sum_iaia_oa::Utilities
+ladspa:sum_1665:sum_iaic_oa::Utilities
+ladspa:sum_1665:sum_icic_oc::Utilities
+ladspa:surround_encoder_1401:surroundEncoder::Utilities
+ladspa:svf_1214:svf::Frequency > Filters
+ladspa:sync_pulse_2023:syncpulse_fapaga_oa::Generators > Oscillators
+ladspa:sync_pulse_2023:syncpulse_fcpcga_oa::Generators > Oscillators
+ladspa:sync_square_1678:syncsquare_faga_oa::Generators > Oscillators
+ladspa:sync_square_1678:syncsquare_fcga_oa::Generators > Oscillators
+ladspa:tap_autopan:tap_autopan::Amplitude > Modulators
+ladspa:tap_chorusflanger:tap_chorusflanger::Time > Flangers
+ladspa:tap_deesser:tap_deesser::Amplitude > Dynamics
+ladspa:tap_doubler:tap_doubler::Simulators
+ladspa:tap_dynamics_m:tap_dynamics_m::Amplitude > Dynamics
+ladspa:tap_dynamics_st:tap_dynamics_st::Amplitude > Dynamics
+ladspa:tap_echo:tap_stereo_echo::Time > Delays
+ladspa:tape_delay_1211:tapeDelay::Time > Delays
+ladspa:tap_eqbw:tap_equalizer_bw::Frequency > EQs
+ladspa:tap_eq:tap_equalizer::Frequency > EQs
+ladspa:tap_limiter:tap_limiter::Amplitude > Dynamics > Limiters
+ladspa:tap_pinknoise:tap_pinknoise::Utilities
+ladspa:tap_pitch:tap_pitch::Frequency > Pitch shifters
+ladspa:tap_reflector:tap_reflector::Time
+ladspa:tap_reverb:tap_reverb::Time > Reverbs
+ladspa:tap_rotspeak:tap_rotspeak::Simulators
+ladspa:tap_sigmoid:tap_sigmoid::Amplitude > Distortions
+ladspa:tap_tremolo:tap_tremolo::Amplitude > Modulators
+ladspa:tap_tubewarmth:tap_tubewarmth::Simulators
+ladspa:tap_vibrato:tap_vibrato::Amplitude > Modulators
+ladspa:tracker_2025:tracker_gaaadaia_oa::Amplitude > Waveshapers
+ladspa:tracker_2025:tracker_gaacdcia_oa::Amplitude > Waveshapers
+ladspa:transient_1206:transient::Amplitude > Dynamics
+ladspa:triangle_1649:triangle_fasa_oa::Generators > Oscillators
+ladspa:triangle_1649:triangle_fasc_oa::Generators > Oscillators
+ladspa:triangle_1649:triangle_fcsa_oa::Generators > Oscillators
+ladspa:triangle_1649:triangle_fcsc_oa::Generators > Oscillators
+ladspa:triple_para_1204:triplePara::Frequency > EQs > Parametric
+ladspa:valve_1209:valve::Amplitude > Distortions
+ladspa:valve_rect_1405:valveRect::Amplitude > Distortions
+ladspa:vco_sawpulse:Pulse-VCO::Generators > Oscillators
+ladspa:vco_sawpulse:Rec-VCO::Generators > Oscillators
+ladspa:vco_sawpulse:Saw-VCO::Generators > Oscillators
+ladspa:vynil_1905:vynil::Amplitude > Distortions
+ladspa:wave_terrain_1412:waveTerrain::Generators > Oscillators
+ladspa:xfade_1915:xfade4::Amplitude > Dynamics > Compressors
+ladspa:zm1_1428:zm1::Utilities

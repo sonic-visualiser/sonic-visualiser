@@ -1,0 +1,262 @@
+
+OSC control of Sonic Visualiser
+===============================
+
+Sonic Visualiser can be controlled remotely using the Open Sound
+Control protocol.  This facility requires Steve Harris's liblo (Lite
+OSC) library to have been available when Sonic Visualiser was built.
+
+Sonic Visualiser opens a single OSC port on startup.  The URL of this
+port is printed to standard output on startup, or can be read from the
+About box on the Help menu.
+
+OSC commands accepted by Sonic Visualiser take the form:
+
+  <scheme>://<host>:<port>/<method> [<arg> ...]
+
+For example, "osc.udp://localhost:12654/play 2.0" will play the
+current session from time 2.0 seconds.
+
+Methods that manipulate panes or layers act on the currently selected
+pane or layer.  Use the setcurrent method to choose the right target
+for subsequent such methods.
+
+There is a small program sv/osc/sv-osc-send.c that sends an OSC method
+and arguments to a given URL, and a small shell script sv/osc/sv-command
+that provides a basic command shell for Sonic Visualiser.
+
+
+OSC methods available
+=====================
+
+Main window methods
+-------------------
+
+  /open <filename>
+
+     Open a new file (of type determined by Sonic Visualiser).
+     If it is an audio file, use it to replace the existing main
+     audio file (if any).
+
+  /openadditional <filename> 
+
+     Open a new file.  If it is an audio file, open it in a new
+     pane in addition to the existing audio file (if any).
+
+  /recent <n>
+  /last
+
+     Open the <n>'th most recent file from the Recent Files menu,
+     counting from 1 for the most recent file opened.  "last" is a
+     synonym for "recent 1".
+
+  /save <filename>
+
+     Save the current session in <filename> as an SV session file.
+     This action will try to fail rather than overwrite an existing
+     file, but you probably shouldn't rely on that.
+
+  /export <filename>
+
+     Export the (first) selected area of the main audio file
+     (or all of it, if there is no selection) in <filename>, as a
+     WAV file.  This action will try to fail rather than overwrite
+     an existing file, but you probably shouldn't rely on that.
+
+  /jump <t>
+  /jump end
+  /jump selection
+
+     Jump the playback position to time <t> (in seconds); or to
+     the end of the file; or to the start of the current selection.
+
+  /play
+  /play <t>
+  /play selection
+
+     Start playback.  If a time <t> is given, start from that time
+     in seconds.  If the word "selection" is given instead, play
+     the current selection.
+
+  /stop
+
+     Stop playback.
+
+  /loop on
+  /loop off
+
+     Switch playback loop mode on or off.
+
+  /select <t0> <t1>
+  /select all
+  /select none
+
+     Select the region from times <t0> to <t1> in seconds; or select
+     the whole file; or clear the selection.  If there is a layer
+     selected that can be used as a snap guide for the selection, then
+     the selection will be snapped to it (in the same manner as when
+     making selections interactively).
+
+  /addselect <t0> <t1>
+
+     Make an additional selection (leaving any existing selection
+     in place) from times <t0> to <t1> in seconds.
+
+  /undo
+  /redo
+
+     Undo the last editing operation; redo the last undone operation.
+     Note that most of the classic editing operations (copy and paste
+     etc) are not controllable via OSC, but undo may still be useful
+     because Sonic Visualiser considers actions such as adding a pane
+     to be undoable editing operations as well.
+
+  /add <layertype>
+  /add <layertype> <channel>
+
+     Add a new pane containing a layer of the given type, based on
+     the main audio file.  If no <channel> is specified, use all
+     available channels.  Useful <layertype>s are:
+
+       waveform
+       spectrogram
+       spectrum
+       timeruler
+
+     The following <layertype>s are less useful, because they create
+     empty layers which there is currently no OSC support for editing:
+
+       timeinstants
+       timevalues
+       notes
+       text
+       colour3dplot
+
+  /set <control> <value>
+  /set pane <control> <value>
+  /set layer <control> <value>
+
+     Set a main window control; a property of the current pane; or a
+     property of the current layer.
+
+     Accepted main window <control>s are:
+
+	 gain
+           whose values are linear multipliers (i.e. 1.0 == unity gain).
+
+	 speedup
+           takes a value of a percentage increase in playback
+           speed, so 0 is the default playback speed, 100 sets double
+           the default speed, and -100 sets half the default speed 
+           (yes, I know, it's nonsense, sorry).
+
+	 overlays
+           controls the verbosity level of the text overlays on
+           each pane, from 0 (everything off) to 2 (everything on).
+
+         zoomwheels
+           controls whether the zoom wheels are displayed (1) or not (0).
+
+         propertyboxes
+           controls whether the property boxes are displayed (1) or not (0).
+
+     For pane and layer properties, the control name is the displayed
+     name of the given property (though you may use "-" or "_" in place
+     of any spaces in the name if it's easier for you).  The value may
+     be the displayed value or underlying integer for the property.
+
+     Some examples:
+
+         /set pane Global-Scroll off
+         /set pane Follow_Playback Scroll
+         /set layer Colour Blue
+         /set layer Scale-Units dB
+         /set layer Frequency-Scale Log
+
+     Note that while you can use "-" or "_" in place of spaces in the
+     property name, you cannot currently do so in the value text.  If
+     this is a problem for you, you might be able to set the value
+     as an integer instead (all layer properties can be set this way).
+
+  /setcurrent <pane>
+  /setcurrent <pane> <layer>
+
+     Make the given <pane> (a number counting from 1 for the topmost
+     pane) and optionally the given <layer> on that pane (a number
+     counting from 1 for the "frontmost" layer) the current pane and
+     layer for subsequent pane and layer operations.
+
+  /delete pane
+  /delete layer
+
+     Delete the current pane or layer.
+
+  /zoom <level>
+  /zoom in
+  /zoom out
+  /zoom default
+
+     Zoom to a given zoom <level>, given in audio sample frames per
+     pixel; or zoom in or out one step from the current level; or
+     return to the default zoom level.  This method acts on the
+     current pane (it only affects all panes if set to Global Zoom,
+     which is the default).
+
+  /zoomvertical <min> <max>
+  /zoomvertical in
+  /zoomvertical out
+  /zoomvertical default
+
+     Change the vertical zoom and origin so as to show the value
+     range from <min> to <max> in the vertical scale; or zoom in or
+     out vertically; or return to the default vertical zoom level.
+     The effect of this method is heavily dependent on the current
+     layer.
+
+  /transform <name>
+
+     Transform the current main audio file using the named transform.
+     Transforms are named according to the scheme
+
+         type:source:plugin:output
+
+     For example, the percussion onset detector from the Vamp example
+     plugin set can be invoked via
+
+         /transform vamp:vamp-example-plugins:percussiononsets:onsets
+
+     If the output is omitted, the first is used.  Note that you
+     need to use the plugin and output name, not description: in
+     this case "percussiononsets" rather than "Simple Percussion
+     Onset Detector".
+
+     There is not yet any way to run a transform via OSC on any but
+     the main audio file, nor with any but its default parameters,
+     processing block/step size, or channel selection.
+
+  /resize <w> <h>
+  /resize pane <h>
+
+     Resize the main window to width <w> and height <h> (if the
+     window system permits); resize the current pane to height <h>
+     if possible (!!! not yet working).
+
+  /quit
+
+     Exit the program abruptly without saving.
+
+Handy things still missing from the OSC interface include:
+
+ * the ability to run transforms with non-default parameters or
+   starting from different source models
+ * the ability to add layers to a pane (without transform)
+ * the ability to add panes (and layers) showing any but the
+   main model
+ * the ability to set play parameters on a layer/model and show/hide it
+ * the ability to set the vertical zoom range (vital for spectrogram)
+ * the ability to import and export layers
+ * a working pane resize
+ * quick shortcuts to Melodic Range Spectrogram, Peak Frequency Spectrogram
+ * the ability to rename a layer
+
+
