@@ -2677,7 +2677,7 @@ MainWindow::openSomething()
 
     if (path.isEmpty()) return;
 
-    FileOpenStatus status = open(path, ReplaceMainModel);
+    FileOpenStatus status = open(path, ReplaceSession);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -2737,7 +2737,7 @@ MainWindow::openRecentFile()
     QString path = action->text();
     if (path == "") return;
 
-    FileOpenStatus status = open(path, ReplaceMainModel);
+    FileOpenStatus status = open(path, ReplaceSession);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
