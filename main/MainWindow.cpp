@@ -388,7 +388,7 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     toolbar->addAction(action);
-
+/*
     icon = il.load("fileopensession");
     action = new QAction(icon, tr("&Open Session..."), this);
     action->setShortcut(tr("Ctrl+O"));
@@ -396,14 +396,39 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(openSession()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-
+*/
     icon = il.load("fileopen");
     icon.addPixmap(il.loadPixmap("fileopen-22"));
-
     action = new QAction(icon, tr("&Open..."), this);
+    action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(openSomething()));
     toolbar->addAction(action);
+    menu->addAction(action);
+
+    // We want this one to go on the toolbar now, if we add it at all,
+    // but on the menu later
+    QAction *iaction = new QAction(tr("&Import More Audio..."), this);
+    iaction->setShortcut(tr("Ctrl+I"));
+    iaction->setStatusTip(tr("Import an extra audio file into a new pane"));
+    connect(iaction, SIGNAL(triggered()), this, SLOT(importMoreAudio()));
+    connect(this, SIGNAL(canImportMoreAudio(bool)), iaction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(iaction);
+
+    action = new QAction(tr("Open Lo&cation..."), this);
+    action->setShortcut(tr("Ctrl+Shift+O"));
+    action->setStatusTip(tr("Open or import a file from a remote URL"));
+    connect(action, SIGNAL(triggered()), this, SLOT(openLocation()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    m_recentFilesMenu = menu->addMenu(tr("Open &Recent"));
+    m_recentFilesMenu->setTearOffEnabled(true);
+    setupRecentFilesMenu();
+    connect(&m_recentFiles, SIGNAL(recentChanged()),
+            this, SLOT(setupRecentFilesMenu()));
+
+    menu->addSeparator();
 
     icon = il.load("filesave");
     icon.addPixmap(il.loadPixmap("filesave-22"));
@@ -427,6 +452,7 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
+/*
     icon = il.load("fileopenaudio");
     action = new QAction(icon, tr("&Import Audio File..."), this);
     action->setShortcut(tr("Ctrl+I"));
@@ -434,14 +460,10 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+*/
 
-    action = new QAction(tr("Import Secondary Audio File..."), this);
-    action->setShortcut(tr("Ctrl+Shift+I"));
-    action->setStatusTip(tr("Import an extra audio file as a separate layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importMoreAudio()));
-    connect(this, SIGNAL(canImportMoreAudio(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    // the Import action we made earlier
+    menu->addAction(iaction);
 
     action = new QAction(tr("&Export Audio File..."), this);
     action->setStatusTip(tr("Export selection as an audio file"));
@@ -475,22 +497,6 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    action = new QAction(tr("Open Lo&cation..."), this);
-    action->setShortcut(tr("Ctrl+Shift+O"));
-    action->setStatusTip(tr("Open or import a file from a remote URL"));
-    connect(action, SIGNAL(triggered()), this, SLOT(openLocation()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-
-    menu->addSeparator();
-
-    m_recentFilesMenu = menu->addMenu(tr("&Recent Files"));
-    m_recentFilesMenu->setTearOffEnabled(true);
-    setupRecentFilesMenu();
-    connect(&m_recentFiles, SIGNAL(recentChanged()),
-            this, SLOT(setupRecentFilesMenu()));
-
-    menu->addSeparator();
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
@@ -2671,7 +2677,7 @@ MainWindow::openSomething()
 
     if (path.isEmpty()) return;
 
-    FileOpenStatus status = open(path, AskUser);
+    FileOpenStatus status = open(path, ReplaceMainModel);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -2703,7 +2709,7 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
-    FileOpenStatus status = open(text);
+    FileOpenStatus status = open(text, AskUser);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -2731,7 +2737,7 @@ MainWindow::openRecentFile()
     QString path = action->text();
     if (path == "") return;
 
-    FileOpenStatus status = open(path);
+    FileOpenStatus status = open(path, ReplaceMainModel);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
