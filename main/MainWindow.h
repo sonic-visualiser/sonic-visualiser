@@ -83,6 +83,7 @@ protected slots:
     virtual void openSomething();
     virtual void openLocation();
     virtual void openRecentFile();
+    virtual void changeTemplate();
     virtual void exportAudio();
     virtual void importLayer();
     virtual void exportLayer();
@@ -140,6 +141,7 @@ protected slots:
 
     virtual void setupRecentFilesMenu();
     virtual void setupRecentTransformsMenu();
+    virtual void setupTemplatesMenu();
 
     virtual void playSpeedChanged(int);
     virtual void playSoloToggled();
@@ -190,6 +192,7 @@ protected:
     QMenu                   *m_sliceMenu;
     QMenu                   *m_recentFilesMenu;
     QMenu                   *m_recentTransformsMenu;
+    QMenu                   *m_templatesMenu;
     QMenu                   *m_rightButtonMenu;
     QMenu                   *m_rightButtonLayerMenu;
     QMenu                   *m_rightButtonTransformsMenu;

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+<data>
+  <layer id="1" type="timeruler" name="Ruler" model="0"  colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="2" type="waveform" name="Waveform" model="0"  gain="1" showMeans="1" greyscale="1" channelMode="0" channel="-1" scale="0" aggressive="0" autoNormalize="0" colourName="Black" colour="#000000" darkBackground="false" />
+</data>
+<display>
+  <view centre="0" zoom="1024" followPan="1" followZoom="1" tracking="page"  type="pane" centreLineVisible="1">
+    <layer id="1" type="timeruler" name="Ruler" model="0" visible="true"/>
+    <layer id="2" type="waveform" name="Waveform" model="0" visible="true"/>
+  </view>
+</display>
+</sv>
