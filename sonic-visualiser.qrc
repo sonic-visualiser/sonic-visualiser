@@ -104,6 +104,7 @@
     <file>samples/stick.wav</file>
     <file>samples/strike.wav</file>
     <file>samples/tap.wav</file>
+    <file>templates/default.xml</file>
     <file>templates/testtemplate.xml</file>
     <file>i18n/sonic-visualiser_ru.qm</file>
     <file>i18n/sonic-visualiser_en_GB.qm</file>

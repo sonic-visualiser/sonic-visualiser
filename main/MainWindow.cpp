@@ -30,6 +30,7 @@
 #include "framework/TransformUserConfigurator.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
+#include "base/ResourceFinder.h"
 #include "layer/WaveformLayer.h"
 #include "layer/TimeRulerLayer.h"
 #include "layer/TimeInstantLayer.h"
@@ -427,6 +428,12 @@ MainWindow::setupFileMenu()
     setupRecentFilesMenu();
     connect(&m_recentFiles, SIGNAL(recentChanged()),
             this, SLOT(setupRecentFilesMenu()));
+
+    menu->addSeparator();
+
+    m_templatesMenu = menu->addMenu(tr("Set Session Open Template"));
+    m_templatesMenu->setTearOffEnabled(true);
+    setupTemplatesMenu();
 
     menu->addSeparator();
 
@@ -1623,6 +1630,49 @@ MainWindow::setupRecentFilesMenu()
 }
 
 void
+MainWindow::setupTemplatesMenu()
+{
+    m_templatesMenu->clear();
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    QString deflt = settings.value("sessiontemplate", "").toString();
+    setDefaultSessionTemplate(deflt);
+    settings.endGroup();
+
+    QActionGroup *templatesGroup = new QActionGroup(this);
+
+    QAction *action = new QAction(tr("Default"), this);
+    action->setObjectName("default");
+    connect(action, SIGNAL(triggered()), this, SLOT(changeTemplate()));
+    action->setCheckable(true);
+    action->setChecked(deflt == "" || deflt == "default");
+    templatesGroup->addAction(action);
+    m_templatesMenu->addAction(action);
+
+    m_templatesMenu->addSeparator();
+
+    QStringList templates = ResourceFinder().getResourceFiles("templates", "xml");
+    foreach (QString t, templates) {
+        QString tname = QFileInfo(t).baseName();
+        if (tname.toLower() == "default") continue;
+        action = new QAction(tname, this);
+        action->setObjectName(t);
+        connect(action, SIGNAL(triggered()), this, SLOT(changeTemplate()));
+        action->setCheckable(true);
+        action->setChecked(deflt == tname);
+        templatesGroup->addAction(action);
+        m_templatesMenu->addAction(action);
+    }
+
+    if (!templates.empty()) m_templatesMenu->addSeparator();
+
+    action = new QAction(tr("Save Session as New Template..."), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAsTemplate()));
+    m_templatesMenu->addAction(action);
+}
+
+void
 MainWindow::setupRecentTransformsMenu()
 {
     m_recentTransformsMenu->clear();
@@ -2748,6 +2798,12 @@ MainWindow::openRecentFile()
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(path));
     }
+}
+
+void
+MainWindow::changeTemplate()
+{
+    //!!!
 }
 
 void
