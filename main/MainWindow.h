@@ -171,6 +171,9 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
+    virtual void saveSessionAsTemplate();
+    virtual void manageSavedTemplates();
+
     virtual void website();
     virtual void help();
     virtual void about();
