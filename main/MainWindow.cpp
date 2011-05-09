@@ -113,6 +113,7 @@
 #include <QCheckBox>
 #include <QRegExp>
 #include <QScrollArea>
+#include <QDesktopServices>
 
 #include <iostream>
 #include <cstdio>
@@ -431,11 +432,17 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    m_templatesMenu = menu->addMenu(tr("Set Session Open Template"));
+    QString templatesMenuLabel = tr("Session Template for Audio Files");
+
+#ifdef Q_OS_MAC
+    // Normally this menu will go next to Preferences on the File
+    // menu.  But on OS/X Preferences doesn't appear on the File menu,
+    // so we put it next to the other Session stuff instead.
+    m_templatesMenu = menu->addMenu(templatesMenuLabel);
     m_templatesMenu->setTearOffEnabled(true);
     setupTemplatesMenu();
-
     menu->addSeparator();
+#endif
 
     icon = il.load("filesave");
     icon.addPixmap(il.loadPixmap("filesave-22"));
@@ -503,6 +510,13 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
     menu->addSeparator();
+
+#ifndef Q_OS_MAC
+    // See note for Q_OS_MAC alternative above
+    m_templatesMenu = menu->addMenu(templatesMenuLabel);
+    m_templatesMenu->setTearOffEnabled(true);
+    setupTemplatesMenu();
+#endif
 
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
@@ -1637,7 +1651,7 @@ MainWindow::setupTemplatesMenu()
     QSettings settings;
     settings.beginGroup("MainWindow");
     QString deflt = settings.value("sessiontemplate", "").toString();
-    setDefaultSessionTemplate(deflt);
+    setDefaultSessionTemplate(deflt == "" ? "default" : "");
     settings.endGroup();
 
     QActionGroup *templatesGroup = new QActionGroup(this);
@@ -1652,23 +1666,36 @@ MainWindow::setupTemplatesMenu()
 
     m_templatesMenu->addSeparator();
 
-    QStringList templates = ResourceFinder().getResourceFiles("templates", "xml");
+    QStringList templates = ResourceFinder().getResourceFiles("templates", "svt");
+
+    bool havePersonal = false;
+
+    // (ordered by name)
+    std::set<QString> byName;
     foreach (QString t, templates) {
-        QString tname = QFileInfo(t).baseName();
-        if (tname.toLower() == "default") continue;
-        action = new QAction(tname, this);
-        action->setObjectName(t);
+        if (!t.startsWith(":")) havePersonal = true;
+        byName.insert(QFileInfo(t).baseName());
+    }
+
+    foreach (QString t, byName) {
+        if (t.toLower() == "default") continue;
+        action = new QAction(t, this);
         connect(action, SIGNAL(triggered()), this, SLOT(changeTemplate()));
         action->setCheckable(true);
-        action->setChecked(deflt == tname);
+        action->setChecked(deflt == t);
         templatesGroup->addAction(action);
         m_templatesMenu->addAction(action);
     }
 
     if (!templates.empty()) m_templatesMenu->addSeparator();
 
-    action = new QAction(tr("Save Session as New Template..."), this);
+    action = new QAction(tr("Save Template from Current Session..."), this);
     connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAsTemplate()));
+    m_templatesMenu->addAction(action);
+
+    action = new QAction(tr("Manage Saved Templates"), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(manageSavedTemplates()));
+    action->setEnabled(havePersonal);
     m_templatesMenu->addAction(action);
 }
 
@@ -2803,7 +2830,46 @@ MainWindow::openRecentFile()
 void
 MainWindow::changeTemplate()
 {
-    //!!!
+    QObject *s = sender();
+    QAction *action = qobject_cast<QAction *>(s);
+
+    if (!action) {
+	std::cerr << "WARNING: MainWindow::changeTemplate: sender is not an action"
+		  << std::endl;
+	return;
+    }
+
+    QString n = action->objectName();
+    if (n == "") n = action->text();
+
+    if (n == "") {
+        std::cerr << "WARNING: MainWindow::changeTemplate: sender has no name"
+                  << std::endl;
+        return;
+    }
+
+    setDefaultSessionTemplate(n);
+}
+
+void
+MainWindow::saveSessionAsTemplate()
+{
+    QString name = QInputDialog::getText
+        (this, tr("Enter template name"),
+         tr("Please enter a name for the saved template:"));
+    if (name == "") return;
+    
+    //!!! sanitise!
+
+    
+}
+
+void
+MainWindow::manageSavedTemplates()
+{
+    //!!! really we should watch this directory and recreate the menu when it changes
+    ResourceFinder rf;
+    QDesktopServices::openUrl("file:" + rf.getResourceSaveDir("templates"));
 }
 
 void
