@@ -58,6 +58,7 @@ class OSCMessage;
 class KeyReference;
 class Labeller;
 class ActivityLog;
+class QFileSystemWatcher;
 
 class MainWindow : public MainWindowBase
 {
@@ -226,6 +227,8 @@ protected:
 
     ActivityLog             *m_activityLog;
     KeyReference            *m_keyReference;
+
+    QFileSystemWatcher      *m_templateWatcher;
 
     struct LayerConfiguration {
 	LayerConfiguration(LayerFactory::LayerType _layer
