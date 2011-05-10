@@ -1654,7 +1654,7 @@ MainWindow::setupTemplatesMenu()
     QSettings settings;
     settings.beginGroup("MainWindow");
     QString deflt = settings.value("sessiontemplate", "").toString();
-    setDefaultSessionTemplate(deflt == "" ? "default" : "");
+    setDefaultSessionTemplate(deflt == "" ? "default" : deflt);
     settings.endGroup();
 
     QActionGroup *templatesGroup = new QActionGroup(this);
@@ -2859,6 +2859,11 @@ MainWindow::changeTemplate()
     }
 
     setDefaultSessionTemplate(n);
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    settings.setValue("sessiontemplate", n);
+    settings.endGroup();
 }
 
 void
@@ -2881,7 +2886,6 @@ MainWindow::saveSessionAsTemplate()
 void
 MainWindow::manageSavedTemplates()
 {
-    //!!! really we should watch this directory and recreate the menu when it changes
     ResourceFinder rf;
     QDesktopServices::openUrl("file:" + rf.getResourceSaveDir("templates"));
 }
