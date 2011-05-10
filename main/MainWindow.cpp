@@ -114,6 +114,7 @@
 #include <QRegExp>
 #include <QScrollArea>
 #include <QDesktopServices>
+#include <QFileSystemWatcher>
 
 #include <iostream>
 #include <cstdio>
@@ -139,6 +140,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_sliceMenu(0),
     m_recentFilesMenu(0),
     m_recentTransformsMenu(0),
+    m_templatesMenu(0),
     m_rightButtonMenu(0),
     m_rightButtonLayerMenu(0),
     m_rightButtonTransformsMenu(0),
@@ -160,7 +162,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_activityLog(new ActivityLog()),
-    m_keyReference(new KeyReference())
+    m_keyReference(new KeyReference()),
+    m_templateWatcher(0)
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -1697,6 +1700,13 @@ MainWindow::setupTemplatesMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(manageSavedTemplates()));
     action->setEnabled(havePersonal);
     m_templatesMenu->addAction(action);
+
+    if (!m_templateWatcher) {
+        m_templateWatcher = new QFileSystemWatcher(this);
+        m_templateWatcher->addPath(ResourceFinder().getResourceSaveDir("templates"));
+        connect(m_templateWatcher, SIGNAL(directoryChanged(const QString &)),
+                this, SLOT(setupTemplatesMenu()));
+    }
 }
 
 void
@@ -2859,9 +2869,13 @@ MainWindow::saveSessionAsTemplate()
          tr("Please enter a name for the saved template:"));
     if (name == "") return;
     
-    //!!! sanitise!
+    //!!! sanitise name!
 
-    
+    //!!! check/confirm if target exists!
+
+    ResourceFinder rf;
+    QString dir = rf.getResourceSaveDir("templates");
+    saveSessionTemplate(QString("%1/%2.svt").arg(dir).arg(name));
 }
 
 void
