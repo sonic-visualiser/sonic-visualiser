@@ -100,6 +100,7 @@
     <file>samples/kick.wav</file>
     <file>samples/organ.wav</file>
     <file>samples/piano.wav</file>
+    <file>samples/silent.wav</file>
     <file>samples/snare.wav</file>
     <file>samples/stick.wav</file>
     <file>samples/strike.wav</file>
