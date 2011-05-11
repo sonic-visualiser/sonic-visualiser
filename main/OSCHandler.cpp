@@ -106,7 +106,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 } else {
                     WavFileWriter writer(path,
                                          getMainModel()->getSampleRate(),
-                                         getMainModel()->getChannelCount());
+                                         getMainModel()->getChannelCount(),
+                                         WavFileWriter::WriteToTemporary);
                     MultiSelection ms = m_viewManager->getSelection();
                     if (!ms.getSelections().empty()) {
                         writer.writeModel(getMainModel(), &ms);

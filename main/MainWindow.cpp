@@ -2306,7 +2306,8 @@ MainWindow::exportAudio()
 
 		WavFileWriter subwriter(subpath,
                                         model->getSampleRate(),
-                                        model->getChannelCount());
+                                        model->getChannelCount(),
+                                        WavFileWriter::WriteToTemporary);
                 subwriter.writeModel(model, &subms);
 		ok = subwriter.isOK();
 
@@ -2321,7 +2322,8 @@ MainWindow::exportAudio()
     if (!multiple) {
         WavFileWriter writer(path,
                              model->getSampleRate(),
-                             model->getChannelCount());
+                             model->getChannelCount(),
+                             WavFileWriter::WriteToTemporary);
         writer.writeModel(model, selectionToWrite);
 	ok = writer.isOK();
 	error = writer.getError();
