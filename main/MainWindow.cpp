@@ -2891,13 +2891,22 @@ MainWindow::saveSessionAsTemplate()
          tr("Please enter a name for the saved template:"));
     if (name == "") return;
     
-    //!!! sanitise name!
-
-    //!!! check/confirm if target exists!
+    name.replace(QRegExp("[^\\w\\s\\.\"'-]"), "_");
 
     ResourceFinder rf;
     QString dir = rf.getResourceSaveDir("templates");
-    saveSessionTemplate(QString("%1/%2.svt").arg(dir).arg(name));
+    QString filename = QString("%1/%2.svt").arg(dir).arg(name);
+    if (QFile(filename).exists()) {
+        if (QMessageBox::warning(this,
+                                 tr("Template file exists"),
+                                 tr("<b>Template file exists</b><p>The template \"%1\" already exists.<br>Overwrite it?").arg(name),
+                                 QMessageBox::Ok | QMessageBox::Cancel,
+                                 QMessageBox::Cancel) != QMessageBox::Ok) {
+            return;
+        }
+    }
+
+    saveSessionTemplate(filename);
 }
 
 void
