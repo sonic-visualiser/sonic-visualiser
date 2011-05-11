@@ -106,8 +106,9 @@
     <file>samples/strike.wav</file>
     <file>samples/tap.wav</file>
     <file>templates/default.svt</file>
-    <file>templates/tk.svt</file>
-    <file>templates/testtemplate.svt</file>
+    <file>templates/Scrolling Waveforms.svt</file>
+    <file>templates/Spectrograms.svt</file>
+    <file>templates/Waveform and Melodic Range Spectrogram.svt</file>
     <file>i18n/sonic-visualiser_ru.qm</file>
     <file>i18n/sonic-visualiser_en_GB.qm</file>
     <file>i18n/sonic-visualiser_en_US.qm</file>
