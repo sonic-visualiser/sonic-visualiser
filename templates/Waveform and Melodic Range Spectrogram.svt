@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+<data>
+  <model id="18" name="placeholder" sampleRate="44100" type="wavefile" file=":samples/silent.wav" mainModel="true"/>
+  <playparameters mute="false" pan="0" gain="1" pluginId="" model="18"/>
+  <layer id="19" type="waveform" name="Waveform" model="18"  gain="1" showMeans="1" greyscale="0" channelMode="0" channel="-1" scale="0" aggressive="0" autoNormalize="0" colourName="Bright Blue" colour="#1e96ff" darkBackground="true" />
+  <layer id="20" type="timeruler" name="Ruler" model="18"  colourName="Bright Orange" colour="#ffbc50" darkBackground="true" />
+  <layer id="21" type="timeruler" name="Ruler &lt;2&gt;" model="18"  colourName="Bright Orange" colour="#ffbc50" darkBackground="true" />
+  <layer id="22" type="spectrogram" name="Spectrogram" model="18"  channel="-1" windowSize="8192" windowHopLevel="4" gain="1" threshold="0" minFrequency="40" maxFrequency="1500" colourScale="0" colourScheme="1" colourRotation="0" frequencyScale="1" binDisplay="0" normalizeColumns="false" normalizeVisibleArea="false"/>
+</data>
+<display>
+  <window width="1147" height="686"/>
+  <view centre="0" zoom="1024" followPan="1" followZoom="1" tracking="page"  type="pane" centreLineVisible="1" height="197" >
+    <layer id="20" type="timeruler" name="Ruler" model="18" visible="true"/>
+    <layer id="19" type="waveform" name="Waveform" model="18" visible="true"/>
+  </view>
+  <view centre="0" zoom="1024" followPan="1" followZoom="1" tracking="page"  type="pane" centreLineVisible="1" height="333" >
+    <layer id="21" type="timeruler" name="Ruler &lt;2&gt;" model="18" visible="true"/>
+    <layer id="22" type="spectrogram" name="Spectrogram" model="18" visible="true"/>
+  </view>
+</display>
+<selections >
+</selections>
+</sv>

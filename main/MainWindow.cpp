@@ -1655,19 +1655,25 @@ MainWindow::setupTemplatesMenu()
     settings.beginGroup("MainWindow");
     QString deflt = settings.value("sessiontemplate", "").toString();
     setDefaultSessionTemplate(deflt == "" ? "default" : deflt);
-    settings.endGroup();
 
     QActionGroup *templatesGroup = new QActionGroup(this);
 
-    QAction *action = new QAction(tr("Default"), this);
-    action->setObjectName("default");
-    connect(action, SIGNAL(triggered()), this, SLOT(changeTemplate()));
-    action->setCheckable(true);
-    action->setChecked(deflt == "" || deflt == "default");
-    templatesGroup->addAction(action);
-    m_templatesMenu->addAction(action);
+    bool haveFoundDefault = false;
+
+    QAction *defaultAction = new QAction(tr("Default"), this);
+    defaultAction->setObjectName("default");
+    connect(defaultAction, SIGNAL(triggered()), this, SLOT(changeTemplate()));
+    defaultAction->setCheckable(true);
+    if (deflt == "" || deflt == "default") {
+        defaultAction->setChecked(true);
+        haveFoundDefault = true;
+    }
+    templatesGroup->addAction(defaultAction);
+    m_templatesMenu->addAction(defaultAction);
 
     m_templatesMenu->addSeparator();
+
+    QAction *action = 0;
 
     QStringList templates = ResourceFinder().getResourceFiles("templates", "svt");
 
@@ -1685,12 +1691,23 @@ MainWindow::setupTemplatesMenu()
         action = new QAction(t, this);
         connect(action, SIGNAL(triggered()), this, SLOT(changeTemplate()));
         action->setCheckable(true);
-        action->setChecked(deflt == t);
+        if (deflt == t) {
+            action->setChecked(true);
+            haveFoundDefault = true;
+        }
         templatesGroup->addAction(action);
         m_templatesMenu->addAction(action);
     }
 
     if (!templates.empty()) m_templatesMenu->addSeparator();
+
+    if (!haveFoundDefault) {
+        defaultAction->setChecked(true);
+        setDefaultSessionTemplate("default");
+        settings.setValue("sessiontemplate", "");
+    }
+
+    settings.endGroup();
 
     action = new QAction(tr("Save Template from Current Session..."), this);
     connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAsTemplate()));
