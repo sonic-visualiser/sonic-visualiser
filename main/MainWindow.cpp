@@ -1459,7 +1459,7 @@ MainWindow::setupTransformsMenu()
 	QString name = transforms[i].name;
 	if (name == "") name = transforms[i].identifier;
 
-//        std::cerr << "Plugin Name: " << name.toStdString() << std::endl;
+//        std::cerr << "Plugin Name: " << name << std::endl;
 
         TransformDescription::Type type = transforms[i].type;
         QString typeStr = factory->getTransformTypeName(type);
@@ -1495,8 +1495,8 @@ MainWindow::setupTransformsMenu()
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
-                      << name.toStdString() << "\" (category = \""
-                      << category.toStdString() << "\")" << std::endl;
+                      << name << "\" (category = \""
+                      << category << "\")" << std::endl;
         } else {
             categoryMenus[type][category]->addAction(action);
         }
@@ -1504,8 +1504,8 @@ MainWindow::setupTransformsMenu()
         if (makerMenus[type].find(maker) == makerMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No maker menu for transform \""
-                      << name.toStdString() << "\" (maker = \""
-                      << maker.toStdString() << "\")" << std::endl;
+                      << name << "\" (maker = \""
+                      << maker << "\")" << std::endl;
         } else {
             makerMenus[type][maker]->addAction(action);
         }
@@ -1516,7 +1516,7 @@ MainWindow::setupTransformsMenu()
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
         action->setStatusTip(transforms[i].longDescription);
 
-//        cerr << "Transform: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
+//        cerr << "Transform: \"" << name << "\": plugin name \"" << pluginName << "\"" << endl;
 
         if (pluginNameMenus[type].find(pluginName) ==
             pluginNameMenus[type].end()) {
@@ -1679,7 +1679,7 @@ MainWindow::setupExistingLayersMenus()
 	    }
 
 //	    std::cerr << "found new layer " << layer << " (name = " 
-//		      << layer->getLayerPresentationName().toStdString() << ")" << std::endl;
+//		      << layer->getLayerPresentationName() << ")" << std::endl;
 
 	    orderedLayers.push_back(layer);
 	    observedLayers.insert(layer);
@@ -2186,12 +2186,12 @@ MainWindow::exportAudio()
             for (int j = 0; j < pane->getLayerCount(); ++j) {
                 Layer *layer = pane->getLayer(j);
                 if (!layer) continue;
-                cerr << "layer = " << layer->objectName().toStdString() << endl;
+                cerr << "layer = " << layer->objectName() << endl;
                 Model *m = layer->getModel();
                 RangeSummarisableTimeValueModel *wm = 
                     dynamic_cast<RangeSummarisableTimeValueModel *>(m);
                 if (wm) {
-                    cerr << "found: " << wm->objectName().toStdString() << endl;
+                    cerr << "found: " << wm->objectName() << endl;
                     otherModels.insert(wm);
                     if (pane == m_paneStack->getCurrentPane()) {
                         current = wm;
@@ -3059,7 +3059,7 @@ MainWindow::addPane()
 
     if (i == m_paneActions.end()) {
 	std::cerr << "WARNING: MainWindow::addPane: unknown action "
-		  << action->objectName().toStdString() << std::endl;
+		  << action->objectName() << std::endl;
 	return;
     }
 
@@ -3196,7 +3196,7 @@ MainWindow::addLayer()
 	
 	if (i == m_layerActions.end()) {
 	    std::cerr << "WARNING: MainWindow::addLayer: unknown action "
-		      << action->objectName().toStdString() << std::endl;
+		      << action->objectName() << std::endl;
 	    return;
 	}
 
@@ -3338,7 +3338,7 @@ MainWindow::addLayer(QString transformId)
 
     if (!input.getModel()) return;
 
-//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName().toStdString() << "\"" << std::endl << "transform:" << std::endl << transform.toXmlString().toStdString() << std::endl;
+//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << std::endl << "transform:" << std::endl << transform.toXmlString() << std::endl;
 
     Layer *newLayer = m_document->createDerivedLayer(transform, input);
 
