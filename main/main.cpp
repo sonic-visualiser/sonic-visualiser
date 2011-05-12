@@ -245,7 +245,7 @@ main(int argc, char **argv)
 
     if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
         std::cerr << QApplication::tr(
-            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]).toStdString() << std::endl;
+            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]) << std::endl;
         exit(2);
     }
 
@@ -297,7 +297,7 @@ main(int argc, char **argv)
 
     QTranslator qtTranslator;
     QString qtTrName = QString("qt_%1").arg(language);
-    std::cerr << "Loading " << qtTrName.toStdString() << "... ";
+    std::cerr << "Loading " << qtTrName << "... ";
     bool success = false;
     if (!(success = qtTranslator.load(qtTrName))) {
         QString qtDir = getenv("QTDIR");
@@ -315,7 +315,7 @@ main(int argc, char **argv)
 
     QTranslator svTranslator;
     QString svTrName = QString("sonic-visualiser_%1").arg(language);
-    std::cerr << "Loading " << svTrName.toStdString() << "... ";
+    std::cerr << "Loading " << svTrName << "... ";
     svTranslator.load(svTrName, ":i18n");
     std::cerr << "Done" << std::endl;
     application.installTranslator(&svTranslator);
@@ -462,7 +462,7 @@ void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
                 haveMainModel = true;
             }
         } else {
-            std::cerr << "WARNING: Ignoring additional session file argument \"" << path.toStdString() << "\"" << std::endl;
+            std::cerr << "WARNING: Ignoring additional session file argument \"" << path << "\"" << std::endl;
             status = MainWindow::FileOpenSucceeded;
         }
     }
