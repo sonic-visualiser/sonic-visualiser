@@ -310,12 +310,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
 MainWindow::~MainWindow()
 {
-//    std::cerr << "MainWindow::~MainWindow" << std::endl;
+//    DEBUG << "MainWindow::~MainWindow" << endl;
     delete m_keyReference;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     Profiles::getInstance()->dump();
-//    std::cerr << "MainWindow::~MainWindow finishing" << std::endl;
+//    DEBUG << "MainWindow::~MainWindow finishing" << endl;
 }
 
 void
@@ -1648,7 +1648,7 @@ MainWindow::setupExistingLayersMenus()
 {
     if (!m_existingLayersMenu) return; // should have been created by setupMenus
 
-//    std::cerr << "MainWindow::setupExistingLayersMenu" << std::endl;
+//    DEBUG << "MainWindow::setupExistingLayersMenu" << endl;
 
     m_existingLayersMenu->clear();
     m_existingLayerActions.clear();
@@ -2815,7 +2815,7 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-//    std::cerr << "MainWindow::closeEvent" << std::endl;
+//    DEBUG << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
 //        std::cerr << "Busy - ignoring close event" << std::endl;
@@ -2824,7 +2824,7 @@ MainWindow::closeEvent(QCloseEvent *e)
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        std::cerr << "Ignoring close event" << std::endl;
+//        DEBUG << "Ignoring close event" << endl;
 	e->ignore();
 	return;
     }
@@ -3032,13 +3032,13 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 void
 MainWindow::propertyStacksResized(int width)
 {
-//    std::cerr << "MainWindow::propertyStacksResized(" << width << ")" << std::endl;
+//    DEBUG << "MainWindow::propertyStacksResized(" << width << ")" << endl;
 
     if (!m_playControlsSpacer) return;
 
     int spacerWidth = width - m_playControlsWidth - 4;
     
-//    std::cerr << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << std::endl;
+//    DEBUG << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << endl;
 
     m_playControlsSpacer->setFixedSize(QSize(spacerWidth, 2));
 }
@@ -3091,7 +3091,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
 		(LayerFactory::TimeRuler);
 	}
 
-//	std::cerr << "adding time ruler layer " << m_timeRulerLayer << std::endl;
+//	DEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
 
 	m_document->addLayerToView(pane, m_timeRulerLayer);
     }
@@ -3131,8 +3131,8 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
     m_paneStack->setCurrentPane(pane);
     m_paneStack->setCurrentLayer(pane, newLayer);
 
-//    std::cerr << "MainWindow::addPane: global centre frame is "
-//              << m_viewManager->getGlobalCentreFrame() << std::endl;
+//    DEBUG << "MainWindow::addPane: global centre frame is "
+//              << m_viewManager->getGlobalCentreFrame() << endl;
 //    pane->setCentreFrame(m_viewManager->getGlobalCentreFrame());
 
     CommandHistory::getInstance()->endCompoundOperation();
@@ -3338,7 +3338,7 @@ MainWindow::addLayer(QString transformId)
 
     if (!input.getModel()) return;
 
-//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << std::endl << "transform:" << std::endl << transform.toXmlString() << std::endl;
+//    DEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
 
     Layer *newLayer = m_document->createDerivedLayer(transform, input);
 
@@ -3882,7 +3882,7 @@ MainWindow::alignmentFailed(QString transformName, QString message)
 void
 MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
 {
-//    std::cerr << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << std::endl;
+//    DEBUG << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << endl;
     m_paneStack->setCurrentPane(pane);
     m_rightButtonMenu->popup(position);
 }
