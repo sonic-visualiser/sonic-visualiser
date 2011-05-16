@@ -347,7 +347,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
 PreferencesDialog::~PreferencesDialog()
 {
-    std::cerr << "PreferencesDialog::~PreferencesDialog()" << std::endl;
+    DEBUG << "PreferencesDialog::~PreferencesDialog()" << endl;
 }
 
 void
