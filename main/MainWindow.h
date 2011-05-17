@@ -84,7 +84,8 @@ protected slots:
     virtual void openSomething();
     virtual void openLocation();
     virtual void openRecentFile();
-    virtual void changeTemplate();
+    virtual void applyTemplate();
+    virtual void changeDefaultTemplate();
     virtual void exportAudio();
     virtual void importLayer();
     virtual void exportLayer();
