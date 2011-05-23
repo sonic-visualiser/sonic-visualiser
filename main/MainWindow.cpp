@@ -505,16 +505,24 @@ MainWindow::setupFileMenu()
     QString templatesMenuLabel = tr("Apply Session Template");
     m_templatesMenu = menu->addMenu(templatesMenuLabel);
     m_templatesMenu->setTearOffEnabled(true);
-    setupTemplatesMenu();
+    // We need to have a main model for this option to be useful:
+    // canExportAudio captures that
+    connect(this, SIGNAL(canExportAudio(bool)), m_templatesMenu, SLOT(setEnabled(bool)));
+
+    // Set up the menu in a moment, after m_manageTemplatesAction constructed
 
     action = new QAction(tr("Export Session as Template..."), this);
     connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAsTemplate()));
+    // We need to have something in the session for this to be useful:
+    // canDeleteCurrentLayer captures that
+    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    action = new QAction(tr("Manage Saved Templates"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(manageSavedTemplates()));
-//!!!    action->setEnabled(havePersonal);
-    menu->addAction(action);
+    m_manageTemplatesAction = new QAction(tr("Manage Exported Templates"), this);
+    connect(m_manageTemplatesAction, SIGNAL(triggered()), this, SLOT(manageSavedTemplates()));
+    menu->addAction(m_manageTemplatesAction);
+
+    setupTemplatesMenu();
 
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
@@ -1646,66 +1654,9 @@ MainWindow::setupTemplatesMenu()
 {
     m_templatesMenu->clear();
 
-    QAction *defaultAction = new QAction(tr("Default"), this);
+    QAction *defaultAction = new QAction(tr("Classic Waveform"), this);
     defaultAction->setObjectName("default");
     connect(defaultAction, SIGNAL(triggered()), this, SLOT(applyTemplate()));
-    m_templatesMenu->addAction(defaultAction);
-
-    m_templatesMenu->addSeparator();
-
-    QAction *action = 0;
-
-    QStringList templates = ResourceFinder().getResourceFiles("templates", "svt");
-
-    // (ordered by name)
-    std::set<QString> byName;
-    foreach (QString t, templates) {
-        byName.insert(QFileInfo(t).baseName());
-    }
-
-    foreach (QString t, byName) {
-        if (t.toLower() == "default") continue;
-        action = new QAction(t, this);
-        connect(action, SIGNAL(triggered()), this, SLOT(applyTemplate()));
-        m_templatesMenu->addAction(action);
-    }
-
-    if (!templates.empty()) m_templatesMenu->addSeparator();
-
-    if (!m_templateWatcher) {
-        m_templateWatcher = new QFileSystemWatcher(this);
-        m_templateWatcher->addPath(ResourceFinder().getResourceSaveDir("templates"));
-        connect(m_templateWatcher, SIGNAL(directoryChanged(const QString &)),
-                this, SLOT(setupTemplatesMenu()));
-    }
-}
-
-#ifdef NOT_DEFINED
-//!!!
-void
-MainWindow::setupTemplatesMenu()
-{
-    m_templatesMenu->clear();
-
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    QString deflt = settings.value("sessiontemplate", "").toString();
-    setDefaultSessionTemplate(deflt == "" ? "default" : deflt);
-
-    QActionGroup *templatesGroup = new QActionGroup(this);
-
-    bool haveFoundDefault = false;
-
-    QAction *defaultAction = new QAction(tr("Default"), this);
-    defaultAction->setObjectName("default");
-    connect(defaultAction, SIGNAL(triggered()), this, SLOT(applyTemplate()));
-/
-    defaultAction->setCheckable(true);
-    if (deflt == "" || deflt == "default") {
-        defaultAction->setChecked(true);
-        haveFoundDefault = true;
-    }
-    templatesGroup->addAction(defaultAction);
     m_templatesMenu->addAction(defaultAction);
 
     m_templatesMenu->addSeparator();
@@ -1727,42 +1678,27 @@ MainWindow::setupTemplatesMenu()
         if (t.toLower() == "default") continue;
         action = new QAction(t, this);
         connect(action, SIGNAL(triggered()), this, SLOT(applyTemplate()));
-        action->setCheckable(true);
-        if (deflt == t) {
-            action->setChecked(true);
-            haveFoundDefault = true;
-        }
-        templatesGroup->addAction(action);
         m_templatesMenu->addAction(action);
     }
 
     if (!templates.empty()) m_templatesMenu->addSeparator();
 
-    if (!haveFoundDefault) {
-        defaultAction->setChecked(true);
-        setDefaultSessionTemplate("default");
-        settings.setValue("sessiontemplate", "");
-    }
-
-    settings.endGroup();
-/*!!!
-    action = new QAction(tr("Save Template from Current Session..."), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAsTemplate()));
-    m_templatesMenu->addAction(action);
-
-    action = new QAction(tr("Manage Saved Templates"), this);
-    connect(action, SIGNAL(triggered()), this, SLOT(manageSavedTemplates()));
-    action->setEnabled(havePersonal);
-    m_templatesMenu->addAction(action);
-*/
     if (!m_templateWatcher) {
         m_templateWatcher = new QFileSystemWatcher(this);
         m_templateWatcher->addPath(ResourceFinder().getResourceSaveDir("templates"));
         connect(m_templateWatcher, SIGNAL(directoryChanged(const QString &)),
                 this, SLOT(setupTemplatesMenu()));
     }
+
+    QAction *setDefaultAction = new QAction(tr("Choose Default Template..."), this);
+    setDefaultAction->setObjectName("set_default_template");
+    connect(setDefaultAction, SIGNAL(triggered()), this, SLOT(preferences()));
+    m_templatesMenu->addSeparator();
+    m_templatesMenu->addAction(setDefaultAction);
+
+    m_manageTemplatesAction->setEnabled(havePersonal);
 }
-#endif
+
 
 void
 MainWindow::setupRecentTransformsMenu()
@@ -2923,35 +2859,6 @@ MainWindow::applyTemplate()
     } else {
         openSessionTemplate(n);
     }
-}
-
-void
-MainWindow::changeDefaultTemplate()
-{
-    QObject *s = sender();
-    QAction *action = qobject_cast<QAction *>(s);
-
-    if (!action) {
-	std::cerr << "WARNING: MainWindow::changeTemplate: sender is not an action"
-		  << std::endl;
-	return;
-    }
-
-    QString n = action->objectName();
-    if (n == "") n = action->text();
-
-    if (n == "") {
-        std::cerr << "WARNING: MainWindow::changeTemplate: sender has no name"
-                  << std::endl;
-        return;
-    }
-
-    setDefaultSessionTemplate(n);
-
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("sessiontemplate", n);
-    settings.endGroup();
 }
 
 void
@@ -4155,9 +4062,15 @@ MainWindow::showActivityLog()
 void
 MainWindow::preferences()
 {
+    bool goToTemplateTab =
+        (sender() && sender()->objectName() == "set_default_template");
+
     if (!m_preferencesDialog.isNull()) {
         m_preferencesDialog->show();
         m_preferencesDialog->raise();
+        if (goToTemplateTab) {
+            m_preferencesDialog->switchToTab(PreferencesDialog::TemplateTab);
+        }
         return;
     }
 
@@ -4172,6 +4085,9 @@ MainWindow::preferences()
     m_preferencesDialog->setAttribute(Qt::WA_DeleteOnClose);
 
     m_preferencesDialog->show();
+    if (goToTemplateTab) {
+        m_preferencesDialog->switchToTab(PreferencesDialog::TemplateTab);
+    }
 }
 
 void

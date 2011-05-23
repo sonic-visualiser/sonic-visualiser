@@ -31,12 +31,16 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSpinBox>
+#include <QListWidget>
 #include <QSettings>
+
+#include <set>
 
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
 #include "base/Preferences.h"
 #include "audioio/AudioTargetFactory.h"
+#include "base/ResourceFinder.h"
 
 PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     QDialog(parent, flags),
@@ -50,10 +54,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     QGridLayout *grid = new QGridLayout;
     setLayout(grid);
 
-    QTabWidget *tab = new QTabWidget;
-    grid->addWidget(tab, 0, 0);
+    m_tabs = new QTabWidget;
+    grid->addWidget(m_tabs, 0, 0);
     
-    tab->setTabPosition(QTabWidget::North);
+    m_tabs->setTabPosition(QTabWidget::North);
 
     // Create this first, as slots that get called from the ctor will
     // refer to it
@@ -257,7 +261,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
     subgrid->setRowStretch(row, 10);
     
-    tab->addTab(frame, tr("&General"));
+    m_tabOrdering[GeneralTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("&General"));
 
     // Appearance tab
 
@@ -295,7 +300,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 
     subgrid->setRowStretch(row, 10);
     
-    tab->addTab(frame, tr("&Appearance"));
+    m_tabOrdering[AppearanceTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("&Appearance"));
 
     // Analysis tab
 
@@ -328,7 +334,53 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     
     subgrid->setRowStretch(row, 10);
     
-    tab->addTab(frame, tr("Anal&ysis"));
+    m_tabOrdering[AnalysisTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("Anal&ysis"));
+
+    // Template tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+    
+    subgrid->addWidget(new QLabel(tr("Default session template for audio files:")), row++, 0);
+
+    QListWidget *lw = new QListWidget();
+    subgrid->addWidget(lw, row, 0);
+    subgrid->setRowStretch(row, 10);
+    row++;
+
+    settings.beginGroup("MainWindow");
+    m_currentTemplate = settings.value("sessiontemplate", "").toString();
+    settings.endGroup();
+
+    lw->addItem(tr("Classic Waveform"));
+    if (m_currentTemplate == "" || m_currentTemplate == "default") {
+        lw->setCurrentRow(lw->count()-1);
+    }
+    m_templates.push_back("");
+
+    QStringList templates = ResourceFinder().getResourceFiles("templates", "svt");
+
+    std::set<QString> byName;
+    foreach (QString t, templates) {
+        byName.insert(QFileInfo(t).baseName());
+    }
+
+    foreach (QString t, byName) {
+        if (t.toLower() == "default") continue;
+        m_templates.push_back(t);
+        lw->addItem(t);
+        if (m_currentTemplate == t) {
+            lw->setCurrentRow(lw->count()-1);
+        }
+    }
+
+    connect(lw, SIGNAL(currentRowChanged(int)), this, SLOT(defaultTemplateChanged(int)));
+
+    m_tabOrdering[TemplateTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("Session &Template"));
 
     QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
     grid->addWidget(bb, 1, 0);
@@ -348,6 +400,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
 PreferencesDialog::~PreferencesDialog()
 {
     std::cerr << "PreferencesDialog::~PreferencesDialog()" << std::endl;
+}
+
+void
+PreferencesDialog::switchToTab(Tab t)
+{
+    if (m_tabOrdering.contains(t)) {
+        m_tabs->setCurrentIndex(m_tabOrdering[t]);
+    }
 }
 
 void
@@ -414,6 +474,13 @@ PreferencesDialog::showSplashChanged(int state)
     m_showSplash = (state == Qt::Checked);
     m_applyButton->setEnabled(true);
     m_changesOnRestart = true;
+}
+
+void
+PreferencesDialog::defaultTemplateChanged(int i)
+{
+    m_currentTemplate = m_templates[i];
+    m_applyButton->setEnabled(true);
 }
 
 void
@@ -488,8 +555,13 @@ PreferencesDialog::applyClicked()
         AudioTargetFactory::getInstance()->getCallbackTargetNames();
 
     QSettings settings;
+
     settings.beginGroup("Preferences");
     settings.setValue("audio-target", devices[m_audioDevice]);
+    settings.endGroup();
+
+    settings.beginGroup("MainWindow");
+    settings.setValue("sessiontemplate", m_currentTemplate);
     settings.endGroup();
 
     m_applyButton->setEnabled(false);
