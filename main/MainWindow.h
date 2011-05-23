@@ -85,7 +85,6 @@ protected slots:
     virtual void openLocation();
     virtual void openRecentFile();
     virtual void applyTemplate();
-    virtual void changeDefaultTemplate();
     virtual void exportAudio();
     virtual void importLayer();
     virtual void exportLayer();
@@ -214,6 +213,7 @@ protected:
     QAction                 *m_playAction;
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
+    QAction                 *m_manageTemplatesAction;
 
     bool                     m_soloModified;
     bool                     m_prevSolo;
