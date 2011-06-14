@@ -35,7 +35,7 @@
 void
 MainWindow::handleOSCMessage(const OSCMessage &message)
 {
-    DEBUG << "MainWindow::handleOSCMessage: thread id = " 
+    SVDEBUG << "MainWindow::handleOSCMessage: thread id = " 
               << QThread::currentThreadId() << endl;
 
     // This large function should really be abstracted out.
@@ -88,7 +88,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
-                DEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in save" << endl;
+                SVDEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in save" << endl;
             } else {
                 saveSessionFile(path);
             }
@@ -102,7 +102,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 message.getArg(0).canConvert(QVariant::String)) {
                 path = message.getArg(0).toString();
                 if (QFileInfo(path).exists()) {
-                    DEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in export" << endl;
+                    SVDEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in export" << endl;
                 } else {
                     WavFileWriter writer(path,
                                          getMainModel()->getSampleRate(),

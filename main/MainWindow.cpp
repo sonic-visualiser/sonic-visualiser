@@ -310,12 +310,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
 MainWindow::~MainWindow()
 {
-//    DEBUG << "MainWindow::~MainWindow" << endl;
+//    SVDEBUG << "MainWindow::~MainWindow" << endl;
     delete m_keyReference;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     Profiles::getInstance()->dump();
-//    DEBUG << "MainWindow::~MainWindow finishing" << endl;
+//    SVDEBUG << "MainWindow::~MainWindow finishing" << endl;
 }
 
 void
@@ -1648,7 +1648,7 @@ MainWindow::setupExistingLayersMenus()
 {
     if (!m_existingLayersMenu) return; // should have been created by setupMenus
 
-//    DEBUG << "MainWindow::setupExistingLayersMenu" << endl;
+//    SVDEBUG << "MainWindow::setupExistingLayersMenu" << endl;
 
     m_existingLayersMenu->clear();
     m_existingLayerActions.clear();
@@ -2817,7 +2817,7 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-//    DEBUG << "MainWindow::closeEvent" << endl;
+//    SVDEBUG << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
 //        std::cerr << "Busy - ignoring close event" << std::endl;
@@ -2826,7 +2826,7 @@ MainWindow::closeEvent(QCloseEvent *e)
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        DEBUG << "Ignoring close event" << endl;
+//        SVDEBUG << "Ignoring close event" << endl;
 	e->ignore();
 	return;
     }
@@ -3034,13 +3034,13 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 void
 MainWindow::propertyStacksResized(int width)
 {
-//    DEBUG << "MainWindow::propertyStacksResized(" << width << ")" << endl;
+//    SVDEBUG << "MainWindow::propertyStacksResized(" << width << ")" << endl;
 
     if (!m_playControlsSpacer) return;
 
     int spacerWidth = width - m_playControlsWidth - 4;
     
-//    DEBUG << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << endl;
+//    SVDEBUG << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << endl;
 
     m_playControlsSpacer->setFixedSize(QSize(spacerWidth, 2));
 }
@@ -3093,7 +3093,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
 		(LayerFactory::TimeRuler);
 	}
 
-//	DEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
+//	SVDEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
 
 	m_document->addLayerToView(pane, m_timeRulerLayer);
     }
@@ -3133,7 +3133,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
     m_paneStack->setCurrentPane(pane);
     m_paneStack->setCurrentLayer(pane, newLayer);
 
-//    DEBUG << "MainWindow::addPane: global centre frame is "
+//    SVDEBUG << "MainWindow::addPane: global centre frame is "
 //              << m_viewManager->getGlobalCentreFrame() << endl;
 //    pane->setCentreFrame(m_viewManager->getGlobalCentreFrame());
 
@@ -3340,7 +3340,7 @@ MainWindow::addLayer(QString transformId)
 
     if (!input.getModel()) return;
 
-//    DEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
+//    SVDEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
 
     Layer *newLayer = m_document->createDerivedLayer(transform, input);
 
@@ -3884,7 +3884,7 @@ MainWindow::alignmentFailed(QString transformName, QString message)
 void
 MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
 {
-//    DEBUG << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << endl;
+//    SVDEBUG << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << endl;
     m_paneStack->setCurrentPane(pane);
     m_rightButtonMenu->popup(position);
 }
