@@ -310,12 +310,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
 MainWindow::~MainWindow()
 {
-//    std::cerr << "MainWindow::~MainWindow" << std::endl;
+//    DEBUG << "MainWindow::~MainWindow" << endl;
     delete m_keyReference;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     Profiles::getInstance()->dump();
-//    std::cerr << "MainWindow::~MainWindow finishing" << std::endl;
+//    DEBUG << "MainWindow::~MainWindow finishing" << endl;
 }
 
 void
@@ -1459,7 +1459,7 @@ MainWindow::setupTransformsMenu()
 	QString name = transforms[i].name;
 	if (name == "") name = transforms[i].identifier;
 
-//        std::cerr << "Plugin Name: " << name.toStdString() << std::endl;
+//        std::cerr << "Plugin Name: " << name << std::endl;
 
         TransformDescription::Type type = transforms[i].type;
         QString typeStr = factory->getTransformTypeName(type);
@@ -1495,8 +1495,8 @@ MainWindow::setupTransformsMenu()
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
-                      << name.toStdString() << "\" (category = \""
-                      << category.toStdString() << "\")" << std::endl;
+                      << name << "\" (category = \""
+                      << category << "\")" << std::endl;
         } else {
             categoryMenus[type][category]->addAction(action);
         }
@@ -1504,8 +1504,8 @@ MainWindow::setupTransformsMenu()
         if (makerMenus[type].find(maker) == makerMenus[type].end()) {
             std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No maker menu for transform \""
-                      << name.toStdString() << "\" (maker = \""
-                      << maker.toStdString() << "\")" << std::endl;
+                      << name << "\" (maker = \""
+                      << maker << "\")" << std::endl;
         } else {
             makerMenus[type][maker]->addAction(action);
         }
@@ -1516,7 +1516,7 @@ MainWindow::setupTransformsMenu()
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
         action->setStatusTip(transforms[i].longDescription);
 
-//        cerr << "Transform: \"" << name.toStdString() << "\": plugin name \"" << pluginName.toStdString() << "\"" << endl;
+//        cerr << "Transform: \"" << name << "\": plugin name \"" << pluginName << "\"" << endl;
 
         if (pluginNameMenus[type].find(pluginName) ==
             pluginNameMenus[type].end()) {
@@ -1648,7 +1648,7 @@ MainWindow::setupExistingLayersMenus()
 {
     if (!m_existingLayersMenu) return; // should have been created by setupMenus
 
-//    std::cerr << "MainWindow::setupExistingLayersMenu" << std::endl;
+//    DEBUG << "MainWindow::setupExistingLayersMenu" << endl;
 
     m_existingLayersMenu->clear();
     m_existingLayerActions.clear();
@@ -1679,7 +1679,7 @@ MainWindow::setupExistingLayersMenus()
 	    }
 
 //	    std::cerr << "found new layer " << layer << " (name = " 
-//		      << layer->getLayerPresentationName().toStdString() << ")" << std::endl;
+//		      << layer->getLayerPresentationName() << ")" << std::endl;
 
 	    orderedLayers.push_back(layer);
 	    observedLayers.insert(layer);
@@ -2186,12 +2186,12 @@ MainWindow::exportAudio()
             for (int j = 0; j < pane->getLayerCount(); ++j) {
                 Layer *layer = pane->getLayer(j);
                 if (!layer) continue;
-                cerr << "layer = " << layer->objectName().toStdString() << endl;
+                cerr << "layer = " << layer->objectName() << endl;
                 Model *m = layer->getModel();
                 RangeSummarisableTimeValueModel *wm = 
                     dynamic_cast<RangeSummarisableTimeValueModel *>(m);
                 if (wm) {
-                    cerr << "found: " << wm->objectName().toStdString() << endl;
+                    cerr << "found: " << wm->objectName() << endl;
                     otherModels.insert(wm);
                     if (pane == m_paneStack->getCurrentPane()) {
                         current = wm;
@@ -2817,7 +2817,7 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-//    std::cerr << "MainWindow::closeEvent" << std::endl;
+//    DEBUG << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
 //        std::cerr << "Busy - ignoring close event" << std::endl;
@@ -2826,7 +2826,7 @@ MainWindow::closeEvent(QCloseEvent *e)
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        std::cerr << "Ignoring close event" << std::endl;
+//        DEBUG << "Ignoring close event" << endl;
 	e->ignore();
 	return;
     }
@@ -3034,13 +3034,13 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 void
 MainWindow::propertyStacksResized(int width)
 {
-//    std::cerr << "MainWindow::propertyStacksResized(" << width << ")" << std::endl;
+//    DEBUG << "MainWindow::propertyStacksResized(" << width << ")" << endl;
 
     if (!m_playControlsSpacer) return;
 
     int spacerWidth = width - m_playControlsWidth - 4;
     
-//    std::cerr << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << std::endl;
+//    DEBUG << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << endl;
 
     m_playControlsSpacer->setFixedSize(QSize(spacerWidth, 2));
 }
@@ -3061,7 +3061,7 @@ MainWindow::addPane()
 
     if (i == m_paneActions.end()) {
 	std::cerr << "WARNING: MainWindow::addPane: unknown action "
-		  << action->objectName().toStdString() << std::endl;
+		  << action->objectName() << std::endl;
 	return;
     }
 
@@ -3093,7 +3093,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
 		(LayerFactory::TimeRuler);
 	}
 
-//	std::cerr << "adding time ruler layer " << m_timeRulerLayer << std::endl;
+//	DEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
 
 	m_document->addLayerToView(pane, m_timeRulerLayer);
     }
@@ -3133,8 +3133,8 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
     m_paneStack->setCurrentPane(pane);
     m_paneStack->setCurrentLayer(pane, newLayer);
 
-//    std::cerr << "MainWindow::addPane: global centre frame is "
-//              << m_viewManager->getGlobalCentreFrame() << std::endl;
+//    DEBUG << "MainWindow::addPane: global centre frame is "
+//              << m_viewManager->getGlobalCentreFrame() << endl;
 //    pane->setCentreFrame(m_viewManager->getGlobalCentreFrame());
 
     CommandHistory::getInstance()->endCompoundOperation();
@@ -3198,7 +3198,7 @@ MainWindow::addLayer()
 	
 	if (i == m_layerActions.end()) {
 	    std::cerr << "WARNING: MainWindow::addLayer: unknown action "
-		      << action->objectName().toStdString() << std::endl;
+		      << action->objectName() << std::endl;
 	    return;
 	}
 
@@ -3340,7 +3340,7 @@ MainWindow::addLayer(QString transformId)
 
     if (!input.getModel()) return;
 
-//    std::cerr << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName().toStdString() << "\"" << std::endl << "transform:" << std::endl << transform.toXmlString().toStdString() << std::endl;
+//    DEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
 
     Layer *newLayer = m_document->createDerivedLayer(transform, input);
 
@@ -3884,7 +3884,7 @@ MainWindow::alignmentFailed(QString transformName, QString message)
 void
 MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
 {
-//    std::cerr << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << std::endl;
+//    DEBUG << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << endl;
     m_paneStack->setCurrentPane(pane);
     m_rightButtonMenu->popup(position);
 }

@@ -35,8 +35,8 @@
 void
 MainWindow::handleOSCMessage(const OSCMessage &message)
 {
-    std::cerr << "MainWindow::handleOSCMessage: thread id = " 
-              << QThread::currentThreadId() << std::endl;
+    DEBUG << "MainWindow::handleOSCMessage: thread id = " 
+              << QThread::currentThreadId() << endl;
 
     // This large function should really be abstracted out.
 
@@ -47,7 +47,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             QString path = message.getArg(0).toString();
             if (open(path, ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
-                          << path.toStdString() << "\"" << std::endl;
+                          << path << "\"" << std::endl;
             }
             //!!! we really need to spin here and not return until the
             // file has been completely decoded...
@@ -60,7 +60,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             QString path = message.getArg(0).toString();
             if (open(path, CreateAdditionalModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
-                          << path.toStdString() << "\"" << std::endl;
+                          << path << "\"" << std::endl;
             }
         }
 
@@ -77,7 +77,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (n >= 0 && n < int(recent.size())) {
             if (open(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
                 std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
-                          << recent[n].toStdString() << "\"" << std::endl;
+                          << recent[n] << "\"" << std::endl;
             }
         }
 
@@ -88,7 +88,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
-                std::cerr << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in save" << std::endl;
+                DEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in save" << endl;
             } else {
                 saveSessionFile(path);
             }
@@ -102,7 +102,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 message.getArg(0).canConvert(QVariant::String)) {
                 path = message.getArg(0).toString();
                 if (QFileInfo(path).exists()) {
-                    std::cerr << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in export" << std::endl;
+                    DEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in export" << endl;
                 } else {
                     WavFileWriter writer(path,
                                          getMainModel()->getSampleRate(),
@@ -307,7 +307,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
                 if (type == LayerFactory::UnknownLayer) {
                     std::cerr << "WARNING: MainWindow::handleOSCMessage: unknown layer "
-                              << "type " << str.toStdString() << std::endl;
+                              << "type " << str << std::endl;
                 } else {
 
                     LayerConfiguration configuration(type,
@@ -431,7 +431,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             } else {
                 
-                std::cerr << "WARNING: MainWindow::handleOSCMessage: Unknown delete target " << target.toStdString() << std::endl;
+                std::cerr << "WARNING: MainWindow::handleOSCMessage: Unknown delete target " << target << std::endl;
             }
         }
 
