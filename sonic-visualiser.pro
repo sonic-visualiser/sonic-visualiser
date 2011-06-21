@@ -23,7 +23,7 @@ RC_FILE = icons/sv.rc
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -L../svapp -L../svgui -L../svcore -lsvapp -lsvgui -lsvcore $$LIBS
+LIBS = -L../svapp -L../svgui -L../svcore -lsvapp -lsvgui -lsvcore -lvamp-hostsdk $$LIBS
 
 PRE_TARGETDEPS += ../svapp/libsvapp.a \
                   ../svgui/libsvgui.a \
