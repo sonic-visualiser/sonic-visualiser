@@ -1602,8 +1602,8 @@ MainWindow::setupTransformsMenu()
 void
 MainWindow::setupHelpMenu()
 {
-    QMenu *menu = menuBar()->addMenu(tr("&Help"));
-    menu->setTearOffEnabled(true);
+    m_helpMenu = menuBar()->addMenu(tr("&Help"));
+    m_helpMenu->setTearOffEnabled(true);
     
     m_keyReference->setCategory(tr("Help"));
 
@@ -1615,24 +1615,24 @@ MainWindow::setupHelpMenu()
     action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
     connect(action, SIGNAL(triggered()), this, SLOT(help()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
 
     action = new QAction(tr("&Key and Mouse Reference"), this);
     action->setShortcut(tr("F2"));
     action->setStatusTip(tr("Open a window showing the keystrokes you can use in Sonic Visualiser"));
     connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
     
     action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
     action->setStatusTip(tr("Open the Sonic Visualiser website")); 
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
     
     action = new QAction(tr("&About Sonic Visualiser"), this); 
     action->setStatusTip(tr("Show information about Sonic Visualiser")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
 }
 
 void
@@ -4179,14 +4179,38 @@ MainWindow::toggleViewMode()
     bool show;
 
     if (wasMinimal) {
+
         show = true;
         m_viewManager->setMinimalModeEnabled(false);
         m_scroll->show();
+
+        // Restore the hidden menus. We need to make sure they go back
+        // in the right places, so first remove the ones that need to
+        // be to the right of them and then add those back in as well
+        // at the appropriate point
+        menuBar()->removeAction(m_helpMenu->menuAction());
+        menuBar()->removeAction(m_viewMenu->menuAction());
+        menuBar()->addMenu(m_editMenu);
+        menuBar()->addMenu(m_viewMenu);
+        menuBar()->addMenu(m_paneMenu);
+        menuBar()->addMenu(m_layerMenu);
+        menuBar()->addMenu(m_transformsMenu);
+        menuBar()->addMenu(m_playbackMenu);
+        menuBar()->addMenu(m_helpMenu);
+
     } else {
+
         settings.setValue("size", size());
+
         show = false;
         m_viewManager->setMinimalModeEnabled(true);
         m_scroll->hide();
+
+        menuBar()->removeAction(m_playbackMenu->menuAction());
+        menuBar()->removeAction(m_transformsMenu->menuAction());
+        menuBar()->removeAction(m_layerMenu->menuAction());
+        menuBar()->removeAction(m_paneMenu->menuAction());
+        menuBar()->removeAction(m_editMenu->menuAction());
     }
 
     //cerr << "Call to MainWindow::toggleViewMode"<< endl;
