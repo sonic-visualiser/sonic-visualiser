@@ -19,7 +19,7 @@ REQUIRED	bzip2 library		http://www.bzip.org/
 REQUIRED	Redland RDF libraries	http://librdf.org/
 
 Optional	MAD mp3 decoder		http://www.underbit.com/products/mad/
-Optional	Oggz and fishsound	http://www.annodex.net/software/libraries.html
+Optional	Oggz and fishsound	http://xiph.org/oggz/
 Optional        liblo OSC library	http://www.plugin.org.uk/liblo/
 
 The Redland RDF libraries include the Raptor RDF parser library,
