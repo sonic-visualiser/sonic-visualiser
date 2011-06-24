@@ -2868,11 +2868,16 @@ MainWindow::closeEvent(QCloseEvent *e)
 	return;
     }
 
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("size", size());
-    settings.setValue("position", pos());
-    settings.endGroup();
+    // Don't save size and position if in minimal mode (because we
+    // always start up in full mode)
+    bool minimal = m_viewManager->getMinimalModeEnabled();
+    if (!minimal) {
+        QSettings settings;
+        settings.beginGroup("MainWindow");
+        settings.setValue("size", size());
+        settings.setValue("position", pos());
+        settings.endGroup();
+    }
 
     delete m_keyReference;
     m_keyReference = 0;
