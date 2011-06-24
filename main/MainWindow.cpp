@@ -4172,34 +4172,34 @@ MainWindow::newerVersionAvailable(QString version)
 void
 MainWindow::toggleViewMode()
 {
-    bool visible;
+    bool show;
 
     if (m_viewManager->getMinimalModeEnabled()) {
-        visible = true;
+        show = true;
         m_viewManager->setMinimalModeEnabled(false);
         m_scroll->show();
     } else {
-        visible = false;
+        show = false;
         m_viewManager->setMinimalModeEnabled(true);
         m_scroll->hide();
     }
 
     //cerr << "Call to MainWindow::toggleViewMode"<< endl;
 
-    m_playModeToolBar->setVisible(visible);
-    m_editToolBar->setVisible(visible);
-    m_toolsToolBar->setVisible(visible);
+    m_playModeToolBar->setVisible(show);
+    m_editToolBar->setVisible(show);
+    m_toolsToolBar->setVisible(show);
 
-    m_importAnnotationLayerAction->setVisible(visible);
-    m_exportAnnotationLayerAction->setVisible(visible);
-    m_showNoOverlaysAction->setVisible(visible);
-    m_showMinimalOverlaysAction->setVisible(visible);
-    m_showStandardOverlaysAction->setVisible(visible);
-    m_showAllOverlaysAction->setVisible(visible);
-    m_showAllTimeRulersAction->setVisible(visible);
-    m_showZoomWheelsAction->setVisible(visible);
-    m_showPropertyBoxesAction->setVisible(visible);
-    m_showStatusBarAction->setVisible(visible);
+    m_importAnnotationLayerAction->setVisible(show);
+    m_exportAnnotationLayerAction->setVisible(show);
+    m_showNoOverlaysAction->setVisible(show);
+    m_showMinimalOverlaysAction->setVisible(show);
+    m_showStandardOverlaysAction->setVisible(show);
+    m_showAllOverlaysAction->setVisible(show);
+    m_showAllTimeRulersAction->setVisible(show);
+    m_showZoomWheelsAction->setVisible(show);
+    m_showPropertyBoxesAction->setVisible(show);
+    m_showStatusBarAction->setVisible(show);
 
     //layout()->activate();
     //layout()->update();
