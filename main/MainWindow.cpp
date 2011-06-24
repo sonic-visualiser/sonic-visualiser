@@ -4212,6 +4212,7 @@ MainWindow::toggleViewMode()
     if (wasMinimal) {
         resizeConstrained(settings.value("size").toSize());
     } else {
+        QApplication::processEvents();
         adjustSize(); //shrinks successfully the main window but does not remove the space allocated for the central widget containing panes
     }
 
