@@ -4189,6 +4189,7 @@ MainWindow::toggleViewMode()
         // be to the right of them and then add those back in as well
         // at the appropriate point
         menuBar()->removeAction(m_helpMenu->menuAction());
+        menuBar()->removeAction(m_playbackMenu->menuAction());
         menuBar()->removeAction(m_viewMenu->menuAction());
         menuBar()->addMenu(m_editMenu);
         menuBar()->addMenu(m_viewMenu);
@@ -4206,7 +4207,6 @@ MainWindow::toggleViewMode()
         m_viewManager->setMinimalModeEnabled(true);
         m_scroll->hide();
 
-        menuBar()->removeAction(m_playbackMenu->menuAction());
         menuBar()->removeAction(m_transformsMenu->menuAction());
         menuBar()->removeAction(m_layerMenu->menuAction());
         menuBar()->removeAction(m_paneMenu->menuAction());
