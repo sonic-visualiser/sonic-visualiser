@@ -14,3 +14,10 @@ doc/html/
 *~
 *.orig
 *.rej
+re:^autom4te\.cache/
+re:^qrc_sonic-visualiser\.cpp$
+re:^sonic-visualiser$
+re:^aclocal\.m4$
+re:^config\.log$
+re:^config\.pri$
+re:^config\.status$
