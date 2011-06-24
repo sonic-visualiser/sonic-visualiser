@@ -4172,13 +4172,18 @@ MainWindow::newerVersionAvailable(QString version)
 void
 MainWindow::toggleViewMode()
 {
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+
+    bool wasMinimal = m_viewManager->getMinimalModeEnabled();
     bool show;
 
-    if (m_viewManager->getMinimalModeEnabled()) {
+    if (wasMinimal) {
         show = true;
         m_viewManager->setMinimalModeEnabled(false);
         m_scroll->show();
     } else {
+        settings.setValue("size", size());
         show = false;
         m_viewManager->setMinimalModeEnabled(true);
         m_scroll->hide();
@@ -4203,7 +4208,14 @@ MainWindow::toggleViewMode()
 
     //layout()->activate();
     //layout()->update();
-    adjustSize(); //shrinks successfully the main window but does not remove the space allocated for the central widget containing panes
+
+    if (wasMinimal) {
+        resizeConstrained(settings.value("size").toSize());
+    } else {
+        adjustSize(); //shrinks successfully the main window but does not remove the space allocated for the central widget containing panes
+    }
+
+    settings.endGroup();
 
     //TO-DOS:
     //- when switching back to full mode, the pane is not shown entirely, should restore the previous size
