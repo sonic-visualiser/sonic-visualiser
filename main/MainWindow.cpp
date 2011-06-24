@@ -4213,6 +4213,12 @@ MainWindow::toggleViewMode()
         menuBar()->removeAction(m_editMenu->menuAction());
     }
 
+    QGridLayout *layout = qobject_cast<QGridLayout *>
+        (centralWidget()->layout());
+    if (layout) {
+        layout->setColumnMinimumWidth(0, wasMinimal ? 14 : 0);
+    }
+
     //cerr << "Call to MainWindow::toggleViewMode"<< endl;
 
     m_playModeToolBar->setVisible(show);
@@ -4230,8 +4236,7 @@ MainWindow::toggleViewMode()
     m_showPropertyBoxesAction->setVisible(show);
     m_showStatusBarAction->setVisible(show);
 
-    //layout()->activate();
-    //layout()->update();
+    m_playControlsSpacer->setVisible(show);
 
     if (wasMinimal) {
         resizeConstrained(settings.value("size").toSize());
