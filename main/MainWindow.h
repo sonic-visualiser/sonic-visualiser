@@ -58,6 +58,7 @@ class OSCMessage;
 class KeyReference;
 class Labeller;
 class ActivityLog;
+class QScrollArea;
 
 class MainWindow : public MainWindowBase
 {
@@ -182,6 +183,7 @@ protected:
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
+    QScrollArea             *m_scroll;
 
     bool                    m_mainMenusCreated;
     QMenu                   *m_paneMenu;

@@ -210,12 +210,11 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_descriptionLabel = new QLabel; //!!! hang on, this is declared in base class -- should be declared and initialised by same class
 
-    QScrollArea *scroll = new QScrollArea(frame);
-    scroll->setWidgetResizable(true);
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setFrameShape(QFrame::NoFrame);
-
-    scroll->setWidget(m_paneStack);
+    m_scroll = new QScrollArea(frame);
+    m_scroll->setWidgetResizable(true);
+    m_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroll->setFrameShape(QFrame::NoFrame);
+    m_scroll->setWidget(m_paneStack);
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
@@ -272,7 +271,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(4);
-    layout->addWidget(scroll, 0, 0, 1, 5);
+    layout->addWidget(m_scroll, 0, 0, 1, 5);
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_playControlsSpacer, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
@@ -4178,11 +4177,11 @@ MainWindow::toggleViewMode()
     if (m_viewManager->getMinimalModeEnabled()) {
         visible = true;
         m_viewManager->setMinimalModeEnabled(false);
-        m_paneStack->show();
+        m_scroll->show();
     } else {
         visible = false;
         m_viewManager->setMinimalModeEnabled(true);
-        m_paneStack->hide();
+        m_scroll->hide();
     }
 
     //cerr << "Call to MainWindow::toggleViewMode"<< endl;
