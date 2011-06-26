@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+<data>
+  <model id="7" name="placeholder" sampleRate="44100" type="wavefile" file=":samples/silent.wav" mainModel="true"/>
+  <playparameters mute="false" pan="0" gain="1" pluginId="" model="7"/>
+  <layer id="8" type="timeruler" name="Ruler &lt;2&gt;" model="7"  colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="3" type="spectrogram" name="Spectrogram &lt;3&gt;" model="7"  channel="0" windowSize="1024" windowHopLevel="2" gain="1" threshold="0" minFrequency="10" maxFrequency="0" colourScale="3" colourScheme="0" colourRotation="0" frequencyScale="0" binDisplay="0" normalizeColumns="false" normalizeVisibleArea="false"/>
+  <layer id="9" type="timeruler" name="Ruler &lt;4&gt;" model="7"  colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="10" type="waveform" name="Waveform &lt;3&gt;" model="7"  gain="1" showMeans="1" greyscale="1" channelMode="0" channel="-1" scale="0" aggressive="0" autoNormalize="0" colourName="Purple" colour="#c832ff" darkBackground="false" />
+  <layer id="11" type="timeruler" name="Ruler &lt;3&gt;" model="7"  colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="12" type="spectrogram" name="Spectrogram &lt;2&gt;" model="7"  channel="-1" windowSize="4096" windowHopLevel="5" gain="1" threshold="0" minFrequency="40" maxFrequency="2000" colourScale="0" colourScheme="0" colourRotation="0" frequencyScale="1" binDisplay="2" normalizeColumns="true" normalizeVisibleArea="false"/>
+  <layer id="13" type="waveform" name="Waveform" model="7"  gain="1" showMeans="1" greyscale="0" channelMode="0" channel="-1" scale="0" aggressive="0" autoNormalize="0" colourName="Black" colour="#000000" darkBackground="false" />
+  <layer id="14" type="waveform" name="Waveform &lt;2&gt;" model="7"  gain="1" showMeans="1" greyscale="1" channelMode="0" channel="-1" scale="0" aggressive="0" autoNormalize="0" colourName="Blue" colour="#000080" darkBackground="false" />
+  <layer id="15" type="spectrogram" name="Spectrogram" model="7"  channel="-1" windowSize="8192" windowHopLevel="4" gain="1" threshold="0" minFrequency="40" maxFrequency="1500" colourScale="0" colourScheme="1" colourRotation="0" frequencyScale="1" binDisplay="0" normalizeColumns="false" normalizeVisibleArea="false"/>
+  <layer id="16" type="timeruler" name="Ruler" model="7"  colourName="Black" colour="#000000" darkBackground="false" />
+</data>
+<display>
+  <window width="1216" height="701"/>
+  <view centre="0" zoom="1024" followPan="1" followZoom="1" tracking="scroll"  type="pane" centreLineVisible="1" height="210" >
+    <layer id="14" type="waveform" name="Waveform &lt;2&gt;" model="7" visible="true"/>
+    <layer id="11" type="timeruler" name="Ruler &lt;3&gt;" model="7" visible="true"/>
+  </view>
+  <view centre="0" zoom="16" followPan="1" followZoom="0" tracking="scroll"  type="pane" centreLineVisible="1" height="335" >
+    <layer id="9" type="timeruler" name="Ruler &lt;4&gt;" model="7" visible="false"/>
+    <layer id="10" type="waveform" name="Waveform &lt;3&gt;" model="7" visible="true"/>
+  </view>
+</display>
+<selections >
+</selections>
+</sv>

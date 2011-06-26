@@ -58,6 +58,7 @@ class OSCMessage;
 class KeyReference;
 class Labeller;
 class ActivityLog;
+class QFileSystemWatcher;
 
 class MainWindow : public MainWindowBase
 {
@@ -83,6 +84,7 @@ protected slots:
     virtual void openSomething();
     virtual void openLocation();
     virtual void openRecentFile();
+    virtual void applyTemplate();
     virtual void exportAudio();
     virtual void importLayer();
     virtual void exportLayer();
@@ -140,6 +142,7 @@ protected slots:
 
     virtual void setupRecentFilesMenu();
     virtual void setupRecentTransformsMenu();
+    virtual void setupTemplatesMenu();
 
     virtual void playSpeedChanged(int);
     virtual void playSoloToggled();
@@ -169,6 +172,9 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
+    virtual void saveSessionAsTemplate();
+    virtual void manageSavedTemplates();
+
     virtual void website();
     virtual void help();
     virtual void about();
@@ -190,6 +196,7 @@ protected:
     QMenu                   *m_sliceMenu;
     QMenu                   *m_recentFilesMenu;
     QMenu                   *m_recentTransformsMenu;
+    QMenu                   *m_templatesMenu;
     QMenu                   *m_rightButtonMenu;
     QMenu                   *m_rightButtonLayerMenu;
     QMenu                   *m_rightButtonTransformsMenu;
@@ -206,6 +213,7 @@ protected:
     QAction                 *m_playAction;
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
+    QAction                 *m_manageTemplatesAction;
 
     bool                     m_soloModified;
     bool                     m_prevSolo;
@@ -220,6 +228,8 @@ protected:
 
     ActivityLog             *m_activityLog;
     KeyReference            *m_keyReference;
+
+    QFileSystemWatcher      *m_templateWatcher;
 
     struct LayerConfiguration {
 	LayerConfiguration(LayerFactory::LayerType _layer
