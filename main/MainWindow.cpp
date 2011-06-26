@@ -30,6 +30,7 @@
 #include "framework/TransformUserConfigurator.h"
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
+#include "base/ResourceFinder.h"
 #include "layer/WaveformLayer.h"
 #include "layer/TimeRulerLayer.h"
 #include "layer/TimeInstantLayer.h"
@@ -112,6 +113,8 @@
 #include <QCheckBox>
 #include <QRegExp>
 #include <QScrollArea>
+#include <QDesktopServices>
+#include <QFileSystemWatcher>
 
 #include <iostream>
 #include <cstdio>
@@ -137,6 +140,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_sliceMenu(0),
     m_recentFilesMenu(0),
     m_recentTransformsMenu(0),
+    m_templatesMenu(0),
     m_rightButtonMenu(0),
     m_rightButtonLayerMenu(0),
     m_rightButtonTransformsMenu(0),
@@ -158,7 +162,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_activityLog(new ActivityLog()),
-    m_keyReference(new KeyReference())
+    m_keyReference(new KeyReference()),
+    m_templateWatcher(0)
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -388,7 +393,7 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     toolbar->addAction(action);
-
+/*
     icon = il.load("fileopensession");
     action = new QAction(icon, tr("&Open Session..."), this);
     action->setShortcut(tr("Ctrl+O"));
@@ -396,14 +401,39 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(openSession()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-
+*/
     icon = il.load("fileopen");
     icon.addPixmap(il.loadPixmap("fileopen-22"));
-
     action = new QAction(icon, tr("&Open..."), this);
+    action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(openSomething()));
     toolbar->addAction(action);
+    menu->addAction(action);
+
+    // We want this one to go on the toolbar now, if we add it at all,
+    // but on the menu later
+    QAction *iaction = new QAction(tr("&Import More Audio..."), this);
+    iaction->setShortcut(tr("Ctrl+I"));
+    iaction->setStatusTip(tr("Import an extra audio file into a new pane"));
+    connect(iaction, SIGNAL(triggered()), this, SLOT(importMoreAudio()));
+    connect(this, SIGNAL(canImportMoreAudio(bool)), iaction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(iaction);
+
+    action = new QAction(tr("Open Lo&cation..."), this);
+    action->setShortcut(tr("Ctrl+Shift+O"));
+    action->setStatusTip(tr("Open or import a file from a remote URL"));
+    connect(action, SIGNAL(triggered()), this, SLOT(openLocation()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    m_recentFilesMenu = menu->addMenu(tr("Open &Recent"));
+    m_recentFilesMenu->setTearOffEnabled(true);
+    setupRecentFilesMenu();
+    connect(&m_recentFiles, SIGNAL(recentChanged()),
+            this, SLOT(setupRecentFilesMenu()));
+
+    menu->addSeparator();
 
     icon = il.load("filesave");
     icon.addPixmap(il.loadPixmap("filesave-22"));
@@ -427,6 +457,7 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
+/*
     icon = il.load("fileopenaudio");
     action = new QAction(icon, tr("&Import Audio File..."), this);
     action->setShortcut(tr("Ctrl+I"));
@@ -434,14 +465,10 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+*/
 
-    action = new QAction(tr("Import Secondary Audio File..."), this);
-    action->setShortcut(tr("Ctrl+Shift+I"));
-    action->setStatusTip(tr("Import an extra audio file as a separate layer"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importMoreAudio()));
-    connect(this, SIGNAL(canImportMoreAudio(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    // the Import action we made earlier
+    menu->addAction(iaction);
 
     action = new QAction(tr("&Export Audio File..."), this);
     action->setStatusTip(tr("Export selection as an audio file"));
@@ -475,22 +502,28 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    action = new QAction(tr("Open Lo&cation..."), this);
-    action->setShortcut(tr("Ctrl+Shift+O"));
-    action->setStatusTip(tr("Open or import a file from a remote URL"));
-    connect(action, SIGNAL(triggered()), this, SLOT(openLocation()));
-    m_keyReference->registerShortcut(action);
+    QString templatesMenuLabel = tr("Apply Session Template");
+    m_templatesMenu = menu->addMenu(templatesMenuLabel);
+    m_templatesMenu->setTearOffEnabled(true);
+    // We need to have a main model for this option to be useful:
+    // canExportAudio captures that
+    connect(this, SIGNAL(canExportAudio(bool)), m_templatesMenu, SLOT(setEnabled(bool)));
+
+    // Set up the menu in a moment, after m_manageTemplatesAction constructed
+
+    action = new QAction(tr("Export Session as Template..."), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAsTemplate()));
+    // We need to have something in the session for this to be useful:
+    // canDeleteCurrentLayer captures that
+    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    menu->addSeparator();
+    m_manageTemplatesAction = new QAction(tr("Manage Exported Templates"), this);
+    connect(m_manageTemplatesAction, SIGNAL(triggered()), this, SLOT(manageSavedTemplates()));
+    menu->addAction(m_manageTemplatesAction);
 
-    m_recentFilesMenu = menu->addMenu(tr("&Recent Files"));
-    m_recentFilesMenu->setTearOffEnabled(true);
-    setupRecentFilesMenu();
-    connect(&m_recentFiles, SIGNAL(recentChanged()),
-            this, SLOT(setupRecentFilesMenu()));
+    setupTemplatesMenu();
 
-    menu->addSeparator();
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
@@ -1617,6 +1650,57 @@ MainWindow::setupRecentFilesMenu()
 }
 
 void
+MainWindow::setupTemplatesMenu()
+{
+    m_templatesMenu->clear();
+
+    QAction *defaultAction = new QAction(tr("Standard Waveform"), this);
+    defaultAction->setObjectName("default");
+    connect(defaultAction, SIGNAL(triggered()), this, SLOT(applyTemplate()));
+    m_templatesMenu->addAction(defaultAction);
+
+    m_templatesMenu->addSeparator();
+
+    QAction *action = 0;
+
+    QStringList templates = ResourceFinder().getResourceFiles("templates", "svt");
+
+    bool havePersonal = false;
+
+    // (ordered by name)
+    std::set<QString> byName;
+    foreach (QString t, templates) {
+        if (!t.startsWith(":")) havePersonal = true;
+        byName.insert(QFileInfo(t).baseName());
+    }
+
+    foreach (QString t, byName) {
+        if (t.toLower() == "default") continue;
+        action = new QAction(t, this);
+        connect(action, SIGNAL(triggered()), this, SLOT(applyTemplate()));
+        m_templatesMenu->addAction(action);
+    }
+
+    if (!templates.empty()) m_templatesMenu->addSeparator();
+
+    if (!m_templateWatcher) {
+        m_templateWatcher = new QFileSystemWatcher(this);
+        m_templateWatcher->addPath(ResourceFinder().getResourceSaveDir("templates"));
+        connect(m_templateWatcher, SIGNAL(directoryChanged(const QString &)),
+                this, SLOT(setupTemplatesMenu()));
+    }
+
+    QAction *setDefaultAction = new QAction(tr("Choose Default Template..."), this);
+    setDefaultAction->setObjectName("set_default_template");
+    connect(setDefaultAction, SIGNAL(triggered()), this, SLOT(preferences()));
+    m_templatesMenu->addSeparator();
+    m_templatesMenu->addAction(setDefaultAction);
+
+    m_manageTemplatesAction->setEnabled(havePersonal);
+}
+
+
+void
 MainWindow::setupRecentTransformsMenu()
 {
     m_recentTransformsMenu->clear();
@@ -2149,7 +2233,7 @@ MainWindow::importAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+	if (openAudio(path, ReplaceSession) == FileOpenFailed) {
             emit hideSplash();
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
@@ -2673,7 +2757,7 @@ MainWindow::openSomething()
 
     if (path.isEmpty()) return;
 
-    FileOpenStatus status = open(path, AskUser);
+    FileOpenStatus status = open(path, ReplaceSession);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -2705,7 +2789,7 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
-    FileOpenStatus status = open(text);
+    FileOpenStatus status = open(text, AskUser);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -2733,7 +2817,7 @@ MainWindow::openRecentFile()
     QString path = action->text();
     if (path == "") return;
 
-    FileOpenStatus status = open(path);
+    FileOpenStatus status = open(path, ReplaceSession);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -2744,6 +2828,70 @@ MainWindow::openRecentFile()
         QMessageBox::critical(this, tr("Failed to open location"),
                               tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(path));
     }
+}
+
+void
+MainWindow::applyTemplate()
+{
+    QObject *s = sender();
+    QAction *action = qobject_cast<QAction *>(s);
+
+    if (!action) {
+	std::cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
+		  << std::endl;
+	return;
+    }
+
+    QString n = action->objectName();
+    if (n == "") n = action->text();
+
+    if (n == "") {
+        std::cerr << "WARNING: MainWindow::applyTemplate: sender has no name"
+                  << std::endl;
+        return;
+    }
+
+    QString mainModelLocation;
+    WaveFileModel *mm = getMainModel();
+    if (mm) mainModelLocation = mm->getLocation();
+    if (mainModelLocation != "") {
+        openAudio(mainModelLocation, ReplaceSession, n);
+    } else {
+        openSessionTemplate(n);
+    }
+}
+
+void
+MainWindow::saveSessionAsTemplate()
+{
+    QString name = QInputDialog::getText
+        (this, tr("Enter template name"),
+         tr("Please enter a name for the saved template:"));
+    if (name == "") return;
+    
+    name.replace(QRegExp("[^\\w\\s\\.\"'-]"), "_");
+
+    ResourceFinder rf;
+    QString dir = rf.getResourceSaveDir("templates");
+    QString filename = QString("%1/%2.svt").arg(dir).arg(name);
+    if (QFile(filename).exists()) {
+        if (QMessageBox::warning(this,
+                                 tr("Template file exists"),
+                                 tr("<b>Template file exists</b><p>The template \"%1\" already exists.<br>Overwrite it?").arg(name),
+                                 QMessageBox::Ok | QMessageBox::Cancel,
+                                 QMessageBox::Cancel) != QMessageBox::Ok) {
+            return;
+        }
+    }
+
+    saveSessionTemplate(filename);
+}
+
+void
+MainWindow::manageSavedTemplates()
+{
+    ResourceFinder rf;
+    QDesktopServices::openUrl("file:" + rf.getResourceSaveDir("templates"));
 }
 
 void
@@ -3914,9 +4062,15 @@ MainWindow::showActivityLog()
 void
 MainWindow::preferences()
 {
+    bool goToTemplateTab =
+        (sender() && sender()->objectName() == "set_default_template");
+
     if (!m_preferencesDialog.isNull()) {
         m_preferencesDialog->show();
         m_preferencesDialog->raise();
+        if (goToTemplateTab) {
+            m_preferencesDialog->switchToTab(PreferencesDialog::TemplateTab);
+        }
         return;
     }
 
@@ -3931,6 +4085,9 @@ MainWindow::preferences()
     m_preferencesDialog->setAttribute(Qt::WA_DeleteOnClose);
 
     m_preferencesDialog->show();
+    if (goToTemplateTab) {
+        m_preferencesDialog->switchToTab(PreferencesDialog::TemplateTab);
+    }
 }
 
 void

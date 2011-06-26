@@ -17,12 +17,14 @@
 #define _PREFERENCES_DIALOG_H_
 
 #include <QDialog>
+#include <QMap>
 
 #include "base/Window.h"
 
 class WindowTypeSelector;
 class QPushButton;
 class QLineEdit;
+class QTabWidget;
 
 class PreferencesDialog : public QDialog
 {
@@ -31,6 +33,14 @@ class PreferencesDialog : public QDialog
 public:
     PreferencesDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
     virtual ~PreferencesDialog();
+
+    enum Tab {
+        GeneralTab,
+        AppearanceTab,
+        AnalysisTab,
+        TemplateTab
+    };
+    void switchToTab(Tab tab);
 
 public slots:
     void applicationClosing(bool quickly);
@@ -49,6 +59,7 @@ protected slots:
     void timeToTextModeChanged(int mode);
     void viewFontSizeChanged(int sz);
     void showSplashChanged(int state);
+    void defaultTemplateChanged(int);
 
     void tempDirButtonClicked();
 
@@ -60,7 +71,13 @@ protected:
     WindowTypeSelector *m_windowTypeSelector;
     QPushButton *m_applyButton;
 
+    QTabWidget *m_tabs;
+    QMap<Tab, int> m_tabOrdering;
+
     QLineEdit *m_tempDirRootEdit;
+
+    QString m_currentTemplate;
+    QStringList m_templates;
     
     WindowType m_windowType;
     int m_spectrogramSmoothing;
