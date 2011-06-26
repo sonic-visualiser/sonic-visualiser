@@ -355,7 +355,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     m_currentTemplate = settings.value("sessiontemplate", "").toString();
     settings.endGroup();
 
-    lw->addItem(tr("Classic Waveform"));
+    lw->addItem(tr("Standard Waveform"));
     if (m_currentTemplate == "" || m_currentTemplate == "default") {
         lw->setCurrentRow(lw->count()-1);
     }
