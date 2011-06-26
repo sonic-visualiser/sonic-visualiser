@@ -1654,7 +1654,7 @@ MainWindow::setupTemplatesMenu()
 {
     m_templatesMenu->clear();
 
-    QAction *defaultAction = new QAction(tr("Classic Waveform"), this);
+    QAction *defaultAction = new QAction(tr("Standard Waveform"), this);
     defaultAction->setObjectName("default");
     connect(defaultAction, SIGNAL(triggered()), this, SLOT(applyTemplate()));
     m_templatesMenu->addAction(defaultAction);
