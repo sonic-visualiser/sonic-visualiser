@@ -215,6 +215,7 @@ protected:
     QAction                 *m_playAction;
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
+    QAction                 *m_alAction;
 
     QAction                 *m_importAnnotationLayerAction;
     QAction                 *m_exportAnnotationLayerAction;

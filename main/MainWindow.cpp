@@ -153,6 +153,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playAction(0),
     m_playSelectionAction(0),
     m_playLoopAction(0),
+    m_alAction(0),
     m_playControlsSpacer(0),
     m_playControlsWidth(0),
     m_preferencesDialog(0),
@@ -1860,24 +1861,24 @@ MainWindow::setupToolbars()
     connect(m_soloAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
     connect(this, SIGNAL(canChangeSolo(bool)), m_soloAction, SLOT(setEnabled(bool)));
 
-    QAction *alAction = 0;
+    //QAction *alAction = 0;
     if (Document::canAlign()) {
-        alAction = m_playModeToolBar->addAction(il.load("align"),
+        m_alAction = m_playModeToolBar->addAction(il.load("align"),
                                       tr("Align File Timelines"));
-        alAction->setCheckable(true);
-        alAction->setChecked(m_viewManager->getAlignMode());
-        alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+        m_alAction->setCheckable(true);
+        m_alAction->setChecked(m_viewManager->getAlignMode());
+        m_alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
         connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
-                alAction, SLOT(setChecked(bool)));
-        connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
-        connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
+                m_alAction, SLOT(setChecked(bool)));
+        connect(m_alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+        connect(this, SIGNAL(canAlign(bool)), m_alAction, SLOT(setEnabled(bool)));
     }
 
     m_keyReference->registerShortcut(m_playAction);
     m_keyReference->registerShortcut(m_playSelectionAction);
     m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
-    if (alAction) m_keyReference->registerShortcut(alAction);
+    if (m_alAction) m_keyReference->registerShortcut(m_alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(m_rwdSimilarAction);
@@ -1889,7 +1890,7 @@ MainWindow::setupToolbars()
     menu->addAction(m_playSelectionAction);
     menu->addAction(m_playLoopAction);
     menu->addAction(m_soloAction);
-    if (alAction) menu->addAction(alAction);
+    if (m_alAction) menu->addAction(m_alAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -1905,7 +1906,7 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
-    if (alAction) m_rightButtonPlaybackMenu->addAction(alAction);
+    if (m_alAction) m_rightButtonPlaybackMenu->addAction(m_alAction);
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
@@ -4230,8 +4231,10 @@ MainWindow::toggleViewMode()
     m_editToolBar->setVisible(show);
     m_toolsToolBar->setVisible(show);
 
+    //add/remove actions from the File menu
     m_importAnnotationLayerAction->setVisible(show);
     m_exportAnnotationLayerAction->setVisible(show);
+    //add/remove actions from the View menu
     m_showNoOverlaysAction->setVisible(show);
     m_showMinimalOverlaysAction->setVisible(show);
     m_showStandardOverlaysAction->setVisible(show);
@@ -4240,6 +4243,11 @@ MainWindow::toggleViewMode()
     m_showZoomWheelsAction->setVisible(show);
     m_showPropertyBoxesAction->setVisible(show);
     m_showStatusBarAction->setVisible(show);
+    //add/remove actions from the Playback menu
+    m_playSelectionAction->setVisible(show);
+    m_playLoopAction->setVisible(show);
+    m_soloAction->setVisible(show);
+    m_alAction->setVisible(show);
 
     m_playControlsSpacer->setVisible(show);
 
@@ -4253,6 +4261,12 @@ MainWindow::toggleViewMode()
     settings.endGroup();
 
     //TO-DOS:
+    //The Constrain Playback to Selection option is still effective when the minimal mode is activated whereas
+    //the functionality to modify the selection has been removed from this mode. Playback mode should switch to
+    //normal when the minimal mode is activated and then be set up again to what it was when the full mode is
+    //activated again.
+
+    //done:
     //- when switching back to full mode, the pane is not shown entirely, should restore the previous size
     //- the size of the overview (namely its width) should be increased when the minimal mode is activated
     //- the menus which have no effects in the minimal mode should be removed (or their actions disabled)
