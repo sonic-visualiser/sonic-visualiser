@@ -749,7 +749,13 @@ MainWindow::setupViewMenu()
     action->setStatusTip(tr("Activates the Minimal Mode"));
     connect(action, SIGNAL(triggered()), this, SLOT(toggleViewMode()));
     action->setCheckable(true);
-    action->setChecked(m_viewManager->getMinimalModeEnabled());
+
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    bool mini = settings.value("start-in-mini-mode",true).toBool();
+    action->setChecked(mini);
+    settings.endGroup();
+
     m_keyReference->registerShortcut(action);
     m_viewMenu->addAction(action);
     m_viewToolBar->addAction(action);
@@ -925,7 +931,7 @@ MainWindow::setupViewMenu()
     m_showStatusBarAction->setChecked(true);
     m_viewMenu->addAction(m_showStatusBarAction);
 
-    QSettings settings;
+    //QSettings settings;
     settings.beginGroup("MainWindow");
     bool sb = settings.value("showstatusbar", true).toBool();
     if (!sb) {
@@ -2869,8 +2875,8 @@ MainWindow::closeEvent(QCloseEvent *e)
 	return;
     }
 
-    // Don't save size and position if in minimal mode (because we
-    // always start up in full mode)
+    // Don't save size and position if in minimal mode (in case we
+    //start up in full mode)
     bool minimal = m_viewManager->getMinimalModeEnabled();
     if (!minimal) {
         QSettings settings;
@@ -4182,6 +4188,9 @@ MainWindow::toggleViewMode()
     settings.beginGroup("MainWindow");
 
     bool wasMinimal = m_viewManager->getMinimalModeEnabled();
+
+    //std::cerr << "minimal mode enabled was: " << wasMinimal << std::endl;
+
     bool show;
 
     if (wasMinimal) {
@@ -4255,16 +4264,18 @@ MainWindow::toggleViewMode()
         resizeConstrained(settings.value("size").toSize());
     } else {
         QApplication::processEvents();
-        adjustSize(); //shrinks successfully the main window but does not remove the space allocated for the central widget containing panes
+        adjustSize();
     }
 
     settings.endGroup();
 
     //TO-DOS:
-    //The Constrain Playback to Selection option is still effective when the minimal mode is activated whereas
+    //- The Constrain Playback to Selection option is still effective when the minimal mode is activated whereas
     //the functionality to modify the selection has been removed from this mode. Playback mode should switch to
     //normal when the minimal mode is activated and then be set up again to what it was when the full mode is
     //activated again.
+    //- after adding the minimal mode at startup option in Preferences/Appearance, the minimal mode window size
+    //is not optimized as before
 
     //done:
     //- when switching back to full mode, the pane is not shown entirely, should restore the previous size
@@ -4272,5 +4283,6 @@ MainWindow::toggleViewMode()
     //- the menus which have no effects in the minimal mode should be removed (or their actions disabled)
     //even if this doesn't lead cause the application to crash (the actual changes are made in the hidden pane(s))
     //- the menu actions which have no effects in the minimal mode should be removed or disabled
+    //- add Minimal mode at startup in the Preferences/Appearance
 }
 

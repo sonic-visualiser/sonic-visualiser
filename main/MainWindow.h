@@ -76,6 +76,7 @@ signals:
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
     virtual bool commitData(bool mayAskUser);
+    virtual void toggleViewMode(); //to switch between minimal and full modes
 
 protected slots:
     virtual void openSession();
@@ -176,7 +177,7 @@ protected slots:
     virtual void keyReference();
     virtual void newerVersionAvailable(QString);
 
-    virtual void toggleViewMode(); //to switch between minimal and full modes
+    //virtual void toggleViewMode(); //to switch between minimal and full modes
 
 protected:
     Overview                *m_overview;

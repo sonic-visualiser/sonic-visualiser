@@ -187,6 +187,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
     connect(showSplash, SIGNAL(stateChanged(int)),
             this, SLOT(showSplashChanged(int)));
 
+    QCheckBox *startInMiniMode = new QCheckBox;
+    m_startInMiniMode = prefs->getStartInMiniMode();
+    startInMiniMode->setCheckState(m_startInMiniMode ? Qt::Checked : Qt::Unchecked);
+    connect(startInMiniMode, SIGNAL(stateChanged(int)),
+            this, SLOT(startInMiniModeChanged(int)));
+
 #ifndef Q_WS_MAC
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
@@ -292,6 +298,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
                                                 ("Show Splash Screen"))),
                        row, 0);
     subgrid->addWidget(showSplash, row++, 1, 1, 1);
+
+    subgrid->setRowStretch(row, 10);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Start In Minimal Mode"))),
+                       row, 0);
+    subgrid->addWidget(startInMiniMode, row++, 1, 1, 1);
 
     subgrid->setRowStretch(row, 10);
     
@@ -417,6 +430,14 @@ PreferencesDialog::showSplashChanged(int state)
 }
 
 void
+PreferencesDialog::startInMiniModeChanged(int state)
+{
+    m_startInMiniMode = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::tempDirRootChanged(QString r)
 {
     m_tempDirRoot = r;
@@ -479,6 +500,7 @@ PreferencesDialog::applyClicked()
     prefs->setResampleQuality(m_resampleQuality);
     prefs->setResampleOnLoad(m_resampleOnLoad);
     prefs->setShowSplash(m_showSplash);
+    prefs->setStartInMiniMode(m_startInMiniMode);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
     prefs->setTimeToTextMode(Preferences::TimeToTextMode(m_timeToTextMode));

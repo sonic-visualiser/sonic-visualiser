@@ -351,6 +351,16 @@ main(int argc, char **argv)
     }
     settings.endGroup();
     
+    settings.beginGroup("Preferences");
+    bool mini = settings.value("start-in-mini-mode",true).toBool();
+
+    //std::cerr << "Minimal mode at startup (true/false): " << mini << std::endl;
+
+    if (mini) {
+        gui->toggleViewMode();
+    }
+    settings.endGroup();
+
     gui->show();
 
     // The MainWindow class seems to have trouble dealing with this if
