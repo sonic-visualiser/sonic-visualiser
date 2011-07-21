@@ -13,7 +13,7 @@ rfile=/tmp/redundant_$$
 trap "rm -f $pfile $rfile" 0
 echo
 
-ldd "$target" | awk '{ print $3; }' | while read lib; do
+ldd "$target" | awk '{ print $3; }' | grep '^/' | while read lib; do
     if test -n "$lib" ; then
 	dpkg-query -S "$lib"
     fi
@@ -24,6 +24,7 @@ cat $pfile
 echo
 
 for p in `cat $pfile`; do 
+    echo Looking at $p 1>&2
     apt-cache showpkg "$p" | grep '^  ' | grep ',' | awk -F, '{ print $1; }' | \
 	while read d; do 
 	    if grep -q '^'$d'$' $pfile; then
