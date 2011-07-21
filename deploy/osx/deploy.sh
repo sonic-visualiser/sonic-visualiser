@@ -9,6 +9,9 @@ source="$1"
 dmg="$2"
 if [ -z "$source" ] || [ ! -d "$source" ] || [ -z "$dmg" ]; then
 	echo "Usage: $0 <source.app> <target-dmg-basename>"
+	echo "  e.g. $0 MyApplication.app MyApplication"
+ 	echo "  Version number and .dmg will be appended automatically,"
+        echo "  but the .app name must include .app"
 	exit 2
 fi
 app=`basename "$source" .app`
