@@ -740,13 +740,13 @@ MainWindow::setupViewMenu()
 
     m_viewToolBar = addToolBar(tr("View Toolbar"));
 
-    m_keyReference->setCategory(tr("User Interface design"));
+    m_keyReference->setCategory(tr("Display Features"));
 
     QIcon icon = il.load("toggle16");
     icon.addPixmap(il.loadPixmap("toggle22"));
     action = new QAction(icon,tr("Minimal Mode"), this);
     action->setShortcut(tr("C"));
-    action->setStatusTip(tr("Activates the Minimal Mode"));
+    action->setStatusTip(tr("Switch between minimal and full view modes"));
     connect(action, SIGNAL(triggered()), this, SLOT(toggleViewMode()));
     action->setCheckable(true);
 
