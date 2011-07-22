@@ -4193,6 +4193,8 @@ MainWindow::toggleViewMode()
 
     bool show;
 
+    int maxHeight = QWIDGETSIZE_MAX;
+
     if (wasMinimal) {
 
         show = true;
@@ -4217,6 +4219,8 @@ MainWindow::toggleViewMode()
     } else {
 
         settings.setValue("size", size());
+
+        maxHeight = height() - m_scroll->height();
 
         show = false;
         m_viewManager->setMinimalModeEnabled(true);
@@ -4256,9 +4260,11 @@ MainWindow::toggleViewMode()
     m_playSelectionAction->setVisible(show);
     m_playLoopAction->setVisible(show);
     m_soloAction->setVisible(show);
-    m_alAction->setVisible(show);
+    if (m_alAction) m_alAction->setVisible(show);
 
     m_playControlsSpacer->setVisible(show);
+
+    setMaximumHeight(maxHeight);
 
     if (wasMinimal) {
         resizeConstrained(settings.value("size").toSize());
