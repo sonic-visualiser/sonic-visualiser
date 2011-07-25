@@ -59,6 +59,7 @@ class KeyReference;
 class Labeller;
 class ActivityLog;
 class QFileSystemWatcher;
+class QScrollArea;
 
 class MainWindow : public MainWindowBase
 {
@@ -76,6 +77,7 @@ signals:
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
     virtual bool commitData(bool mayAskUser);
+    virtual void toggleViewMode(); //to switch between minimal and full modes
 
 protected slots:
     virtual void openSession();
@@ -181,13 +183,16 @@ protected slots:
     virtual void keyReference();
     virtual void newerVersionAvailable(QString);
 
+    //virtual void toggleViewMode(); //to switch between minimal and full modes
+
 protected:
     Overview                *m_overview;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
+    QScrollArea             *m_scroll;
 
-    bool                     m_mainMenusCreated;
+    bool                    m_mainMenusCreated;
     QMenu                   *m_paneMenu;
     QMenu                   *m_layerMenu;
     QMenu                   *m_transformsMenu;
@@ -202,6 +207,11 @@ protected:
     QMenu                   *m_rightButtonTransformsMenu;
     QMenu                   *m_rightButtonPlaybackMenu;
 
+    QMenu                   *m_fileMenu;
+    QMenu                   *m_editMenu;
+    QMenu                   *m_viewMenu;
+    QMenu                   *m_helpMenu;
+
     QAction                 *m_deleteSelectedAction;
     QAction                 *m_soloAction;
     QAction                 *m_rwdStartAction;
@@ -214,6 +224,25 @@ protected:
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
     QAction                 *m_manageTemplatesAction;
+    QAction                 *m_alAction;
+
+    QAction                 *m_importAnnotationLayerAction;
+    QAction                 *m_exportAnnotationLayerAction;
+    QAction                 *m_showNoOverlaysAction;
+    QAction                 *m_showMinimalOverlaysAction;
+    QAction                 *m_showStandardOverlaysAction;
+    QAction                 *m_showAllOverlaysAction;
+    QAction                 *m_showAllTimeRulersAction;
+    QAction                 *m_showZoomWheelsAction;
+    QAction                 *m_showPropertyBoxesAction;
+    QAction                 *m_showStatusBarAction;
+
+    QToolBar                *m_fileToolBar;
+    QToolBar                *m_playbackToolBar;
+    QToolBar                *m_viewToolBar;
+    QToolBar                *m_playModeToolBar;
+    QToolBar                *m_editToolBar;
+    QToolBar                *m_toolsToolBar;
 
     bool                     m_soloModified;
     bool                     m_prevSolo;

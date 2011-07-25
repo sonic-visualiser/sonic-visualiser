@@ -114,5 +114,7 @@
     <file>i18n/sonic-visualiser_en_US.qm</file>
     <file>i18n/sonic-visualiser_cs_CZ.qm</file>
     <file>i18n/tips_en.xml</file>
+    <file>icons/toggle16.png</file>
+    <file>icons/toggle22.png</file>
 </qresource>
 </RCC>

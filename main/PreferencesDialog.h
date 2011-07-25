@@ -61,6 +61,8 @@ protected slots:
     void showSplashChanged(int state);
     void defaultTemplateChanged(int);
 
+    void startInMiniModeChanged(int state);
+
     void tempDirButtonClicked();
 
     void okClicked();
@@ -92,6 +94,8 @@ protected:
     int m_timeToTextMode;
     int m_viewFontSize;
     bool m_showSplash;
+
+    bool m_startInMiniMode;
 
     bool m_changesOnRestart;
 };

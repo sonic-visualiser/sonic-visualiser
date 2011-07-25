@@ -157,13 +157,34 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playAction(0),
     m_playSelectionAction(0),
     m_playLoopAction(0),
+    m_alAction(0),
     m_playControlsSpacer(0),
     m_playControlsWidth(0),
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_activityLog(new ActivityLog()),
     m_keyReference(new KeyReference()),
-    m_templateWatcher(0)
+    m_templateWatcher(0),
+    m_fileMenu(0),
+    m_editMenu(0),
+    m_viewMenu(0),
+    m_helpMenu(0),
+    m_importAnnotationLayerAction(0),
+    m_exportAnnotationLayerAction(0),
+    m_showNoOverlaysAction(0),
+    m_showMinimalOverlaysAction(0),
+    m_showStandardOverlaysAction(0),
+    m_showAllOverlaysAction(0),
+    m_showAllTimeRulersAction(0),
+    m_showZoomWheelsAction(0),
+    m_showPropertyBoxesAction(0),
+    m_showStatusBarAction(0),
+    m_fileToolBar(0),
+    m_playbackToolBar(0),
+    m_viewToolBar(0),
+    m_playModeToolBar(0),
+    m_editToolBar(0),
+    m_toolsToolBar(0)
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -195,12 +216,11 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_descriptionLabel = new QLabel; //!!! hang on, this is declared in base class -- should be declared and initialised by same class
 
-    QScrollArea *scroll = new QScrollArea(frame);
-    scroll->setWidgetResizable(true);
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setFrameShape(QFrame::NoFrame);
-
-    scroll->setWidget(m_paneStack);
+    m_scroll = new QScrollArea(frame);
+    m_scroll->setWidgetResizable(true);
+    m_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_scroll->setFrameShape(QFrame::NoFrame);
+    m_scroll->setWidget(m_paneStack);
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
@@ -257,7 +277,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(4);
-    layout->addWidget(scroll, 0, 0, 1, 5);
+    layout->addWidget(m_scroll, 0, 0, 1, 5);
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_playControlsSpacer, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
@@ -376,9 +396,9 @@ MainWindow::setupFileMenu()
 {
     if (m_mainMenusCreated) return;
 
-    QMenu *menu = menuBar()->addMenu(tr("&File"));
-    menu->setTearOffEnabled(true);
-    QToolBar *toolbar = addToolBar(tr("File Toolbar"));
+    m_fileMenu = menuBar()->addMenu(tr("&File"));
+    m_fileMenu->setTearOffEnabled(true);
+    m_fileToolBar = addToolBar(tr("File Toolbar"));
 
     m_keyReference->setCategory(tr("File and Session Management"));
 
@@ -391,8 +411,8 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Abandon the current Sonic Visualiser session and start a new one"));
     connect(action, SIGNAL(triggered()), this, SLOT(newSession()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-    toolbar->addAction(action);
+    m_fileMenu->addAction(action);
+    m_fileToolBar->addAction(action);
 /*
     icon = il.load("fileopensession");
     action = new QAction(icon, tr("&Open Session..."), this);
@@ -400,7 +420,7 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Open a previously saved Sonic Visualiser session file"));
     connect(action, SIGNAL(triggered()), this, SLOT(openSession()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 */
     icon = il.load("fileopen");
     icon.addPixmap(il.loadPixmap("fileopen-22"));
@@ -408,8 +428,8 @@ MainWindow::setupFileMenu()
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(openSomething()));
-    toolbar->addAction(action);
-    menu->addAction(action);
+    m_fileToolBar->addAction(action);
+    m_fileMenu->addAction(action);
 
     // We want this one to go on the toolbar now, if we add it at all,
     // but on the menu later
@@ -425,7 +445,7 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Open or import a file from a remote URL"));
     connect(action, SIGNAL(triggered()), this, SLOT(openLocation()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 
     m_recentFilesMenu = menu->addMenu(tr("Open &Recent"));
     m_recentFilesMenu->setTearOffEnabled(true);
@@ -433,7 +453,7 @@ MainWindow::setupFileMenu()
     connect(&m_recentFiles, SIGNAL(recentChanged()),
             this, SLOT(setupRecentFilesMenu()));
 
-    menu->addSeparator();
+    m_fileMenu->addSeparator();
 
     icon = il.load("filesave");
     icon.addPixmap(il.loadPixmap("filesave-22"));
@@ -443,8 +463,8 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(saveSession()));
     connect(this, SIGNAL(canSave(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-    toolbar->addAction(action);
+    m_fileMenu->addAction(action);
+    m_fileToolBar->addAction(action);
 	
     icon = il.load("filesaveas");
     icon.addPixmap(il.loadPixmap("filesaveas-22"));
@@ -452,10 +472,10 @@ MainWindow::setupFileMenu()
     action->setShortcut(tr("Ctrl+Shift+S"));
     action->setStatusTip(tr("Save the current session into a new Sonic Visualiser session file"));
     connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAs()));
-    menu->addAction(action);
-    toolbar->addAction(action);
+    m_fileMenu->addAction(action);
+    m_fileToolBar->addAction(action);
 
-    menu->addSeparator();
+    m_fileMenu->addSeparator();
 
 /*
     icon = il.load("fileopenaudio");
@@ -464,48 +484,48 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Import an existing audio file"));
     connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 */
 
     // the Import action we made earlier
-    menu->addAction(iaction);
+    m_fileMenu->addAction(iaction);
 
     /* //removes the Export Audio File functionnality from the File menu
     action = new QAction(tr("&Export Audio File..."), this);
     action->setStatusTip(tr("Export selection as an audio file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudio()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 
-    menu->addSeparator();
+    m_fileMenu->addSeparator();
     */
 
-    action = new QAction(tr("Import Annotation &Layer..."), this);
-    action->setShortcut(tr("Ctrl+L"));
-    action->setStatusTip(tr("Import layer data from an existing file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importLayer()));
+    m_importAnnotationLayerAction = new QAction(tr("Import Annotation &Layer..."), this);
+    m_importAnnotationLayerAction->setShortcut(tr("Ctrl+L"));
+    m_importAnnotationLayerAction->setStatusTip(tr("Import layer data from an existing file"));
+    connect(m_importAnnotationLayerAction, SIGNAL(triggered()), this, SLOT(importLayer()));
     connect(this, SIGNAL(canImportLayer(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_keyReference->registerShortcut(m_importAnnotationLayerAction);
+    m_fileMenu->addAction(m_importAnnotationLayerAction);
 
-    action = new QAction(tr("Export Annotation Layer..."), this);
-    action->setStatusTip(tr("Export layer data to a file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(exportLayer()));
+    m_exportAnnotationLayerAction = new QAction(tr("Export Annotation Layer..."), this);
+    m_exportAnnotationLayerAction->setStatusTip(tr("Export layer data to a file"));
+    connect(m_exportAnnotationLayerAction, SIGNAL(triggered()), this, SLOT(exportLayer()));
     connect(this, SIGNAL(canExportLayer(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
+    m_fileMenu->addAction(m_exportAnnotationLayerAction);
 
-    menu->addSeparator();
+    m_fileMenu->addSeparator();
 
     action = new QAction(tr("Export Image File..."), this);
     action->setStatusTip(tr("Export a single pane to an image file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportImage()));
     connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 
-    menu->addSeparator();
+    m_fileMenu->addSeparator();
 
     QString templatesMenuLabel = tr("Apply Session Template");
-    m_templatesMenu = menu->addMenu(templatesMenuLabel);
+    m_templatesMenu = m_fileMenu->addMenu(templatesMenuLabel);
     m_templatesMenu->setTearOffEnabled(true);
     // We need to have a main model for this option to be useful:
     // canExportAudio captures that
@@ -518,27 +538,27 @@ MainWindow::setupFileMenu()
     // We need to have something in the session for this to be useful:
     // canDeleteCurrentLayer captures that
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 
     m_manageTemplatesAction = new QAction(tr("Manage Exported Templates"), this);
     connect(m_manageTemplatesAction, SIGNAL(triggered()), this, SLOT(manageSavedTemplates()));
-    menu->addAction(m_manageTemplatesAction);
+    m_fileMenu->addAction(m_manageTemplatesAction);
 
     setupTemplatesMenu();
 
     action = new QAction(tr("&Preferences..."), this);
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 	
-    menu->addSeparator();
+    m_fileMenu->addSeparator();
     action = new QAction(il.load("exit"),
                          tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
     action->setStatusTip(tr("Exit Sonic Visualiser"));
     connect(action, SIGNAL(triggered()), this, SLOT(close()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_fileMenu->addAction(action);
 }
 
 void
@@ -546,13 +566,13 @@ MainWindow::setupEditMenu()
 {
     if (m_mainMenusCreated) return;
 
-    QMenu *menu = menuBar()->addMenu(tr("&Edit"));
-    menu->setTearOffEnabled(true);
-    CommandHistory::getInstance()->registerMenu(menu);
+    m_editMenu = menuBar()->addMenu(tr("&Edit"));
+    m_editMenu->setTearOffEnabled(true);
+    CommandHistory::getInstance()->registerMenu(m_editMenu);
 
     m_keyReference->setCategory(tr("Editing"));
 
-    menu->addSeparator();
+    m_editMenu->addSeparator();
 
     IconLoader il;
 
@@ -563,7 +583,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(cut()));
     connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
     action = new QAction(il.load("editcopy"),
@@ -573,7 +593,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(copy()));
     connect(this, SIGNAL(canEditSelection(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
     action = new QAction(il.load("editpaste"),
@@ -583,7 +603,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(paste()));
     connect(this, SIGNAL(canPaste(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
     action = new QAction(tr("Paste at Playback Position"), this);
@@ -592,7 +612,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(pasteAtPlaybackPosition()));
     connect(this, SIGNAL(canPaste(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
     m_deleteSelectedAction = new QAction(tr("&Delete Selected Items"), this);
@@ -601,10 +621,10 @@ MainWindow::setupEditMenu()
     connect(m_deleteSelectedAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
     connect(this, SIGNAL(canDeleteSelection(bool)), m_deleteSelectedAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_deleteSelectedAction);
-    menu->addAction(m_deleteSelectedAction);
+    m_editMenu->addAction(m_deleteSelectedAction);
     m_rightButtonMenu->addAction(m_deleteSelectedAction);
 
-    menu->addSeparator();
+    m_editMenu->addSeparator();
     m_rightButtonMenu->addSeparator();
 
     m_keyReference->setCategory(tr("Selection"));
@@ -615,7 +635,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(selectAll()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
     m_rightButtonMenu->addAction(action);
 	
     action = new QAction(tr("Select &Visible Range"), this);
@@ -624,7 +644,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(selectVisible()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
 	
     action = new QAction(tr("Select to &Start"), this);
     action->setShortcut(tr("Shift+Left"));
@@ -632,7 +652,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(selectToStart()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
 	
     action = new QAction(tr("Select to &End"), this);
     action->setShortcut(tr("Shift+Right"));
@@ -640,7 +660,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(selectToEnd()));
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
 
     action = new QAction(tr("C&lear Selection"), this);
     action->setShortcut(tr("Esc"));
@@ -648,10 +668,10 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(clearSelection()));
     connect(this, SIGNAL(canClearSelection(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
     m_rightButtonMenu->addAction(action);
 
-    menu->addSeparator();
+    m_editMenu->addSeparator();
 
     m_keyReference->setCategory(tr("Tapping Time Instants"));
 
@@ -661,7 +681,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstant()));
     connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
 
     // Laptop shortcut (no keypad Enter key)
     QString shortcut(tr(";"));
@@ -675,7 +695,7 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstantsAtBoundaries()));
     connect(this, SIGNAL(canInsertInstantsAtBoundaries(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
 
     action = new QAction(tr("Insert Item at Selection"), this);
     action->setShortcut(tr("Ctrl+Shift+Enter"));
@@ -683,11 +703,11 @@ MainWindow::setupEditMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(insertItemAtSelection()));
     connect(this, SIGNAL(canInsertItemAtSelection(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
 
-    menu->addSeparator();
+    m_editMenu->addSeparator();
 
-    QMenu *numberingMenu = menu->addMenu(tr("Number New Instants with"));
+    QMenu *numberingMenu = m_editMenu->addMenu(tr("Number New Instants with"));
     numberingMenu->setTearOffEnabled(true);
     QActionGroup *numberingGroup = new QActionGroup(this);
 
@@ -731,14 +751,14 @@ MainWindow::setupEditMenu()
     action = new QAction(tr("Set Numbering Counters..."), this);
     action->setStatusTip(tr("Set the counters used for counter-based labelling"));
     connect(action, SIGNAL(triggered()), this, SLOT(resetInstantsCounters()));
-    menu->addAction(action);
+    m_editMenu->addAction(action);
             
     action = new QAction(tr("Renumber Selected Instants"), this);
     action->setStatusTip(tr("Renumber the selected instants using the current labelling scheme"));
     connect(action, SIGNAL(triggered()), this, SLOT(renumberInstants()));
     connect(this, SIGNAL(canRenumberInstants(bool)), action, SLOT(setEnabled(bool)));
 //    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_editMenu->addAction(action);
 }
 
 void
@@ -750,17 +770,42 @@ MainWindow::setupViewMenu()
 
     QAction *action = 0;
 
+    m_viewMenu = menuBar()->addMenu(tr("&View"));
+    m_viewMenu->setTearOffEnabled(true);
+
+    m_viewToolBar = addToolBar(tr("View Toolbar"));
+
+    m_keyReference->setCategory(tr("Display Features"));
+
+    QIcon icon = il.load("toggle16");
+    icon.addPixmap(il.loadPixmap("toggle22"));
+    action = new QAction(icon,tr("Minimal Mode"), this);
+    action->setShortcut(tr("C"));
+    action->setStatusTip(tr("Switch between minimal and full view modes"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleViewMode()));
+    action->setCheckable(true);
+
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    bool mini = settings.value("start-in-mini-mode",true).toBool();
+    action->setChecked(mini);
+    settings.endGroup();
+
+    m_keyReference->registerShortcut(action);
+    m_viewMenu->addAction(action);
+    m_viewToolBar->addAction(action);
+
+    m_viewMenu->addSeparator();
+
     m_keyReference->setCategory(tr("Panning and Navigation"));
 
-    QMenu *menu = menuBar()->addMenu(tr("&View"));
-    menu->setTearOffEnabled(true);
     action = new QAction(tr("Scroll &Left"), this);
     action->setShortcut(tr("Left"));
     action->setStatusTip(tr("Scroll the current pane to the left"));
     connect(action, SIGNAL(triggered()), this, SLOT(scrollLeft()));
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 	
     action = new QAction(tr("Scroll &Right"), this);
     action->setShortcut(tr("Right"));
@@ -768,7 +813,7 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(scrollRight()));
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 	
     action = new QAction(tr("&Jump Left"), this);
     action->setShortcut(tr("Ctrl+Left"));
@@ -776,7 +821,7 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(jumpLeft()));
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 	
     action = new QAction(tr("J&ump Right"), this);
     action->setShortcut(tr("Ctrl+Right"));
@@ -784,7 +829,7 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(jumpRight()));
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 
     action = new QAction(tr("Peek Left"), this);
     action->setShortcut(tr("Alt+Left"));
@@ -792,7 +837,7 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(peekLeft()));
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 	
     action = new QAction(tr("Peek Right"), this);
     action->setShortcut(tr("Alt+Right"));
@@ -800,9 +845,9 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(peekRight()));
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 
-    menu->addSeparator();
+    m_viewMenu->addSeparator();
 
     m_keyReference->setCategory(tr("Zoom"));
 
@@ -813,7 +858,7 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 	
     action = new QAction(il.load("zoom-out"),
                          tr("Zoom &Out"), this);
@@ -822,13 +867,13 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 	
     action = new QAction(tr("Restore &Default Zoom"), this);
     action->setStatusTip(tr("Restore the zoom level to the default"));
     connect(action, SIGNAL(triggered()), this, SLOT(zoomDefault()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 
     action = new QAction(il.load("zoom-fit"),
                          tr("Zoom to &Fit"), this);
@@ -837,91 +882,91 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 
-    menu->addSeparator();
+    m_viewMenu->addSeparator();
 
     m_keyReference->setCategory(tr("Display Features"));
 
     QActionGroup *overlayGroup = new QActionGroup(this);
         
-    action = new QAction(tr("Show &No Overlays"), this);
-    action->setShortcut(tr("0"));
-    action->setStatusTip(tr("Hide centre indicator, frame times, layer names and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showNoOverlaysAction = new QAction(tr("Show &No Overlays"), this);
+    m_showNoOverlaysAction->setShortcut(tr("0"));
+    m_showNoOverlaysAction->setStatusTip(tr("Hide centre indicator, frame times, layer names and scale"));
+    connect(m_showNoOverlaysAction, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
+    m_showNoOverlaysAction->setCheckable(true);
+    m_showNoOverlaysAction->setChecked(false);
+    overlayGroup->addAction(m_showNoOverlaysAction);
+    m_keyReference->registerShortcut(m_showNoOverlaysAction);
+    m_viewMenu->addAction(m_showNoOverlaysAction);
         
-    action = new QAction(tr("Show &Minimal Overlays"), this);
-    action->setShortcut(tr("9"));
-    action->setStatusTip(tr("Show centre indicator only"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showMinimalOverlaysAction = new QAction(tr("Show &Minimal Overlays"), this);
+    m_showMinimalOverlaysAction->setShortcut(tr("9"));
+    m_showMinimalOverlaysAction->setStatusTip(tr("Show centre indicator only"));
+    connect(m_showMinimalOverlaysAction, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
+    m_showMinimalOverlaysAction->setCheckable(true);
+    m_showMinimalOverlaysAction->setChecked(false);
+    overlayGroup->addAction(m_showMinimalOverlaysAction);
+    m_keyReference->registerShortcut(m_showMinimalOverlaysAction);
+    m_viewMenu->addAction(m_showMinimalOverlaysAction);
         
-    action = new QAction(tr("Show &Standard Overlays"), this);
-    action->setShortcut(tr("8"));
-    action->setStatusTip(tr("Show centre indicator, frame times and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showStandardOverlays()));
-    action->setCheckable(true);
-    action->setChecked(true);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showStandardOverlaysAction = new QAction(tr("Show &Standard Overlays"), this);
+    m_showStandardOverlaysAction->setShortcut(tr("8"));
+    m_showStandardOverlaysAction->setStatusTip(tr("Show centre indicator, frame times and scale"));
+    connect(m_showStandardOverlaysAction, SIGNAL(triggered()), this, SLOT(showStandardOverlays()));
+    m_showStandardOverlaysAction->setCheckable(true);
+    m_showStandardOverlaysAction->setChecked(true);
+    overlayGroup->addAction(m_showStandardOverlaysAction);
+    m_keyReference->registerShortcut(m_showStandardOverlaysAction);
+    m_viewMenu->addAction(m_showStandardOverlaysAction);
         
-    action = new QAction(tr("Show &All Overlays"), this);
-    action->setShortcut(tr("7"));
-    action->setStatusTip(tr("Show all texts and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showAllOverlaysAction = new QAction(tr("Show &All Overlays"), this);
+    m_showAllOverlaysAction->setShortcut(tr("7"));
+    m_showAllOverlaysAction->setStatusTip(tr("Show all texts and scale"));
+    connect(m_showAllOverlaysAction, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
+    m_showAllOverlaysAction->setCheckable(true);
+    m_showAllOverlaysAction->setChecked(false);
+    overlayGroup->addAction(m_showAllOverlaysAction);
+    m_keyReference->registerShortcut(m_showAllOverlaysAction);
+    m_viewMenu->addAction(m_showAllOverlaysAction);
 
-    menu->addSeparator();
+    m_viewMenu->addSeparator();
 
-    action = new QAction(tr("Show All Time Rulers"), this);
-    action->setShortcut(tr("#"));
-    action->setStatusTip(tr("Show or hide all time rulers"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showAllTimeRulersAction = new QAction(tr("Show All Time Rulers"), this);
+    m_showAllTimeRulersAction->setShortcut(tr("#"));
+    m_showAllTimeRulersAction->setStatusTip(tr("Show or hide all time rulers"));
+    connect(m_showAllTimeRulersAction, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
+    m_keyReference->registerShortcut(m_showAllTimeRulersAction);
+    m_viewMenu->addAction(m_showAllTimeRulersAction);
 
-    menu->addSeparator();
+    m_viewMenu->addSeparator();
 
-    action = new QAction(tr("Show &Zoom Wheels"), this);
-    action->setShortcut(tr("Z"));
-    action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleZoomWheels()));
-    action->setCheckable(true);
-    action->setChecked(m_viewManager->getZoomWheelsEnabled());
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showZoomWheelsAction = new QAction(tr("Show &Zoom Wheels"), this);
+    m_showZoomWheelsAction->setShortcut(tr("Z"));
+    m_showZoomWheelsAction->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
+    connect(m_showZoomWheelsAction, SIGNAL(triggered()), this, SLOT(toggleZoomWheels()));
+    m_showZoomWheelsAction->setCheckable(true);
+    m_showZoomWheelsAction->setChecked(m_viewManager->getZoomWheelsEnabled());
+    m_keyReference->registerShortcut(m_showZoomWheelsAction);
+    m_viewMenu->addAction(m_showZoomWheelsAction);
 
-    action = new QAction(tr("Show Property Bo&xes"), this);
-    action->setShortcut(tr("X"));
-    action->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
-    connect(action, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
-    action->setCheckable(true);
-    action->setChecked(true);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showPropertyBoxesAction = new QAction(tr("Show Property Bo&xes"), this);
+    m_showPropertyBoxesAction->setShortcut(tr("X"));
+    m_showPropertyBoxesAction->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
+    connect(m_showPropertyBoxesAction, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
+    m_showPropertyBoxesAction->setCheckable(true);
+    m_showPropertyBoxesAction->setChecked(true);
+    m_keyReference->registerShortcut(m_showPropertyBoxesAction);
+    m_viewMenu->addAction(m_showPropertyBoxesAction);
 
-    action = new QAction(tr("Show Status &Bar"), this);
-    action->setStatusTip(tr("Show context help information in the status bar at the bottom of the window"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleStatusBar()));
-    action->setCheckable(true);
-    action->setChecked(true);
-    menu->addAction(action);
+    m_showStatusBarAction = new QAction(tr("Show Status &Bar"), this);
+    m_showStatusBarAction->setStatusTip(tr("Show context help information in the status bar at the bottom of the window"));
+    connect(m_showStatusBarAction, SIGNAL(triggered()), this, SLOT(toggleStatusBar()));
+    m_showStatusBarAction->setCheckable(true);
+    m_showStatusBarAction->setChecked(true);
+    m_viewMenu->addAction(m_showStatusBarAction);
 
-    QSettings settings;
+    //QSettings settings;
     settings.beginGroup("MainWindow");
     bool sb = settings.value("showstatusbar", true).toBool();
     if (!sb) {
@@ -930,19 +975,19 @@ MainWindow::setupViewMenu()
     }
     settings.endGroup();
 
-    menu->addSeparator();
+    m_viewMenu->addSeparator();
 
     action = new QAction(tr("Show La&yer Summary"), this);
     action->setShortcut(tr("Y"));
     action->setStatusTip(tr("Open a window displaying the hierarchy of panes and layers in this session"));
     connect(action, SIGNAL(triggered()), this, SLOT(showLayerTree()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 
     action = new QAction(tr("Show Acti&vity Log"), this);
     action->setStatusTip(tr("Open a window listing interactions and other events"));
     connect(action, SIGNAL(triggered()), this, SLOT(showActivityLog()));
-    menu->addAction(action);
+    m_viewMenu->addAction(action);
 }
 
 void
@@ -1599,8 +1644,8 @@ MainWindow::setupTransformsMenu()
 void
 MainWindow::setupHelpMenu()
 {
-    QMenu *menu = menuBar()->addMenu(tr("&Help"));
-    menu->setTearOffEnabled(true);
+    m_helpMenu = menuBar()->addMenu(tr("&Help"));
+    m_helpMenu->setTearOffEnabled(true);
     
     m_keyReference->setCategory(tr("Help"));
 
@@ -1612,24 +1657,24 @@ MainWindow::setupHelpMenu()
     action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
     connect(action, SIGNAL(triggered()), this, SLOT(help()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
 
     action = new QAction(tr("&Key and Mouse Reference"), this);
     action->setShortcut(tr("F2"));
     action->setStatusTip(tr("Open a window showing the keystrokes you can use in Sonic Visualiser"));
     connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
     m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
     
     action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
     action->setStatusTip(tr("Open the Sonic Visualiser website")); 
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
     
     action = new QAction(tr("&About Sonic Visualiser"), this); 
     action->setStatusTip(tr("Show information about Sonic Visualiser")); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
-    menu->addAction(action);
+    m_helpMenu->addAction(action);
 }
 
 void
@@ -1820,16 +1865,15 @@ MainWindow::setupToolbars()
     m_rightButtonMenu->addSeparator();
     m_rightButtonPlaybackMenu = m_rightButtonMenu->addMenu(tr("Playback"));
 
-    QToolBar *toolbar = addToolBar(tr("Playback Toolbar"));
-
-    m_rwdStartAction = toolbar->addAction(il.load("rewind-start"),
-                                          tr("Rewind to Start"));
+    m_playbackToolBar = addToolBar(tr("Playback Toolbar"));
+    m_rwdStartAction = m_playbackToolBar->addAction(il.load("rewind-start"),
+                                                                           tr("Rewind to Start"));
     m_rwdStartAction->setShortcut(tr("Home"));
     m_rwdStartAction->setStatusTip(tr("Rewind to the start"));
     connect(m_rwdStartAction, SIGNAL(triggered()), this, SLOT(rewindStart()));
     connect(this, SIGNAL(canPlay(bool)), m_rwdStartAction, SLOT(setEnabled(bool)));
 
-    m_rwdAction = toolbar->addAction(il.load("rewind"), tr("Rewind"));
+    m_rwdAction = m_playbackToolBar->addAction(il.load("rewind"), tr("Rewind"));
     m_rwdAction->setShortcut(tr("PgUp"));
     m_rwdAction->setStatusTip(tr("Rewind to the previous time instant or time ruler notch"));
     connect(m_rwdAction, SIGNAL(triggered()), this, SLOT(rewind()));
@@ -1841,7 +1885,7 @@ MainWindow::setupToolbars()
     connect(m_rwdSimilarAction, SIGNAL(triggered()), this, SLOT(rewindSimilar()));
     connect(this, SIGNAL(canRewind(bool)), m_rwdSimilarAction, SLOT(setEnabled(bool)));
 
-    m_playAction = toolbar->addAction(il.load("playpause"),
+    m_playAction = m_playbackToolBar->addAction(il.load("playpause"),
                                       tr("Play / Pause"));
     m_playAction->setCheckable(true);
     m_playAction->setShortcut(tr("Space"));
@@ -1853,7 +1897,7 @@ MainWindow::setupToolbars()
             this, SLOT(playStatusChanged(bool)));
     connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
 
-    m_ffwdAction = toolbar->addAction(il.load("ffwd"),
+    m_ffwdAction = m_playbackToolBar->addAction(il.load("ffwd"),
                                       tr("Fast Forward"));
     m_ffwdAction->setShortcut(tr("PgDown"));
     m_ffwdAction->setStatusTip(tr("Fast-forward to the next time instant or time ruler notch"));
@@ -1866,16 +1910,16 @@ MainWindow::setupToolbars()
     connect(m_ffwdSimilarAction, SIGNAL(triggered()), this, SLOT(ffwdSimilar()));
     connect(this, SIGNAL(canFfwd(bool)), m_ffwdSimilarAction, SLOT(setEnabled(bool)));
 
-    m_ffwdEndAction = toolbar->addAction(il.load("ffwd-end"),
+    m_ffwdEndAction = m_playbackToolBar->addAction(il.load("ffwd-end"),
                                          tr("Fast Forward to End"));
     m_ffwdEndAction->setShortcut(tr("End"));
     m_ffwdEndAction->setStatusTip(tr("Fast-forward to the end"));
     connect(m_ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
     connect(this, SIGNAL(canPlay(bool)), m_ffwdEndAction, SLOT(setEnabled(bool)));
 
-    toolbar = addToolBar(tr("Play Mode Toolbar"));
+    m_playModeToolBar = addToolBar(tr("Play Mode Toolbar"));
 
-    m_playSelectionAction = toolbar->addAction(il.load("playselection"),
+    m_playSelectionAction = m_playModeToolBar->addAction(il.load("playselection"),
                                                tr("Constrain Playback to Selection"));
     m_playSelectionAction->setCheckable(true);
     m_playSelectionAction->setChecked(m_viewManager->getPlaySelectionMode());
@@ -1886,7 +1930,7 @@ MainWindow::setupToolbars()
     connect(m_playSelectionAction, SIGNAL(triggered()), this, SLOT(playSelectionToggled()));
     connect(this, SIGNAL(canPlaySelection(bool)), m_playSelectionAction, SLOT(setEnabled(bool)));
 
-    m_playLoopAction = toolbar->addAction(il.load("playloop"),
+    m_playLoopAction = m_playModeToolBar->addAction(il.load("playloop"),
                                           tr("Loop Playback"));
     m_playLoopAction->setCheckable(true);
     m_playLoopAction->setChecked(m_viewManager->getPlayLoopMode());
@@ -1897,7 +1941,7 @@ MainWindow::setupToolbars()
     connect(m_playLoopAction, SIGNAL(triggered()), this, SLOT(playLoopToggled()));
     connect(this, SIGNAL(canPlay(bool)), m_playLoopAction, SLOT(setEnabled(bool)));
 
-    m_soloAction = toolbar->addAction(il.load("solo"),
+    m_soloAction = m_playModeToolBar->addAction(il.load("solo"),
                                       tr("Solo Current Pane"));
     m_soloAction->setCheckable(true);
     m_soloAction->setChecked(m_viewManager->getPlaySoloMode());
@@ -1909,24 +1953,24 @@ MainWindow::setupToolbars()
     connect(m_soloAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
     connect(this, SIGNAL(canChangeSolo(bool)), m_soloAction, SLOT(setEnabled(bool)));
 
-    QAction *alAction = 0;
+    //QAction *alAction = 0;
     if (Document::canAlign()) {
-        alAction = toolbar->addAction(il.load("align"),
+        m_alAction = m_playModeToolBar->addAction(il.load("align"),
                                       tr("Align File Timelines"));
-        alAction->setCheckable(true);
-        alAction->setChecked(m_viewManager->getAlignMode());
-        alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+        m_alAction->setCheckable(true);
+        m_alAction->setChecked(m_viewManager->getAlignMode());
+        m_alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
         connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
-                alAction, SLOT(setChecked(bool)));
-        connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
-        connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
+                m_alAction, SLOT(setChecked(bool)));
+        connect(m_alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+        connect(this, SIGNAL(canAlign(bool)), m_alAction, SLOT(setEnabled(bool)));
     }
 
     m_keyReference->registerShortcut(m_playAction);
     m_keyReference->registerShortcut(m_playSelectionAction);
     m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
-    if (alAction) m_keyReference->registerShortcut(alAction);
+    if (m_alAction) m_keyReference->registerShortcut(m_alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(m_rwdSimilarAction);
@@ -1938,7 +1982,7 @@ MainWindow::setupToolbars()
     menu->addAction(m_playSelectionAction);
     menu->addAction(m_playLoopAction);
     menu->addAction(m_soloAction);
-    if (alAction) menu->addAction(alAction);
+    if (m_alAction) menu->addAction(m_alAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -1954,7 +1998,7 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
-    if (alAction) m_rightButtonPlaybackMenu->addAction(alAction);
+    if (m_alAction) m_rightButtonPlaybackMenu->addAction(m_alAction);
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdAction);
@@ -1989,15 +2033,15 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addAction(slowAction);
     m_rightButtonPlaybackMenu->addAction(normalAction);
 
-    toolbar = addToolBar(tr("Edit Toolbar"));
-    CommandHistory::getInstance()->registerToolbar(toolbar);
+    m_editToolBar = addToolBar(tr("Edit Toolbar"));
+    CommandHistory::getInstance()->registerToolbar(m_editToolBar);
 
     m_keyReference->setCategory(tr("Tool Selection"));
 
-    toolbar = addToolBar(tr("Tools Toolbar"));
+    m_toolsToolBar = addToolBar(tr("Tools Toolbar"));
     QActionGroup *group = new QActionGroup(this);
 
-    QAction *action = toolbar->addAction(il.load("navigate"),
+    QAction *action = m_toolsToolBar->addAction(il.load("navigate"),
                                          tr("Navigate"));
     action->setCheckable(true);
     action->setChecked(true);
@@ -2008,7 +2052,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::NavigateMode] = action;
 
-    action = toolbar->addAction(il.load("select"),
+    action = m_toolsToolBar->addAction(il.load("select"),
 				tr("Select"));
     action->setCheckable(true);
     action->setShortcut(tr("2"));
@@ -2018,7 +2062,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::SelectMode] = action;
 
-    action = toolbar->addAction(il.load("move"),
+    action = m_toolsToolBar->addAction(il.load("move"),
 				tr("Edit"));
     action->setCheckable(true);
     action->setShortcut(tr("3"));
@@ -2029,7 +2073,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::EditMode] = action;
 
-    action = toolbar->addAction(il.load("draw"),
+    action = m_toolsToolBar->addAction(il.load("draw"),
 				tr("Draw"));
     action->setCheckable(true);
     action->setShortcut(tr("4"));
@@ -2040,7 +2084,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::DrawMode] = action;
 
-    action = toolbar->addAction(il.load("erase"),
+    action = m_toolsToolBar->addAction(il.load("erase"),
 				tr("Erase"));
     action->setCheckable(true);
     action->setShortcut(tr("5"));
@@ -2051,7 +2095,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::EraseMode] = action;
 
-    action = toolbar->addAction(il.load("measure"), tr("Measure"));
+    action = m_toolsToolBar->addAction(il.load("measure"), tr("Measure"));
     action->setCheckable(true);
     action->setShortcut(tr("6"));
     action->setStatusTip(tr("Make measurements in layer"));
@@ -2983,11 +3027,16 @@ MainWindow::closeEvent(QCloseEvent *e)
 	return;
     }
 
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.setValue("size", size());
-    settings.setValue("position", pos());
-    settings.endGroup();
+    // Don't save size and position if in minimal mode (in case we
+    //start up in full mode)
+    bool minimal = m_viewManager->getMinimalModeEnabled();
+    if (!minimal) {
+        QSettings settings;
+        settings.beginGroup("MainWindow");
+        settings.setValue("size", size());
+        settings.setValue("position", pos());
+        settings.endGroup();
+    }
 
     delete m_keyReference;
     m_keyReference = 0;
@@ -4293,4 +4342,114 @@ MainWindow::newerVersionAvailable(QString version)
     settings.endGroup();
 }
 
+void
+MainWindow::toggleViewMode()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+
+    bool wasMinimal = m_viewManager->getMinimalModeEnabled();
+
+    //std::cerr << "minimal mode enabled was: " << wasMinimal << std::endl;
+
+    bool show;
+
+    int maxHeight = QWIDGETSIZE_MAX;
+
+    if (wasMinimal) {
+
+        show = true;
+        m_viewManager->setMinimalModeEnabled(false);
+        m_scroll->show();
+
+        // Restore the hidden menus. We need to make sure they go back
+        // in the right places, so first remove the ones that need to
+        // be to the right of them and then add those back in as well
+        // at the appropriate point
+        menuBar()->removeAction(m_helpMenu->menuAction());
+        menuBar()->removeAction(m_playbackMenu->menuAction());
+        menuBar()->removeAction(m_viewMenu->menuAction());
+        menuBar()->addMenu(m_editMenu);
+        menuBar()->addMenu(m_viewMenu);
+        menuBar()->addMenu(m_paneMenu);
+        menuBar()->addMenu(m_layerMenu);
+        menuBar()->addMenu(m_transformsMenu);
+        menuBar()->addMenu(m_playbackMenu);
+        menuBar()->addMenu(m_helpMenu);
+
+    } else {
+
+        settings.setValue("size", size());
+
+        maxHeight = height() - m_scroll->height();
+
+        show = false;
+        m_viewManager->setMinimalModeEnabled(true);
+        m_scroll->hide();
+
+        menuBar()->removeAction(m_transformsMenu->menuAction());
+        menuBar()->removeAction(m_layerMenu->menuAction());
+        menuBar()->removeAction(m_paneMenu->menuAction());
+        menuBar()->removeAction(m_editMenu->menuAction());
+    }
+
+    QGridLayout *layout = qobject_cast<QGridLayout *>
+        (centralWidget()->layout());
+    if (layout) {
+        layout->setColumnMinimumWidth(0, wasMinimal ? 14 : 0);
+    }
+
+    //cerr << "Call to MainWindow::toggleViewMode"<< endl;
+
+    m_playModeToolBar->setVisible(show);
+    m_editToolBar->setVisible(show);
+    m_toolsToolBar->setVisible(show);
+
+    //add/remove actions from the File menu
+    m_importAnnotationLayerAction->setVisible(show);
+    m_exportAnnotationLayerAction->setVisible(show);
+    //add/remove actions from the View menu
+    m_showNoOverlaysAction->setVisible(show);
+    m_showMinimalOverlaysAction->setVisible(show);
+    m_showStandardOverlaysAction->setVisible(show);
+    m_showAllOverlaysAction->setVisible(show);
+    m_showAllTimeRulersAction->setVisible(show);
+    m_showZoomWheelsAction->setVisible(show);
+    m_showPropertyBoxesAction->setVisible(show);
+    m_showStatusBarAction->setVisible(show);
+    //add/remove actions from the Playback menu
+    m_playSelectionAction->setVisible(show);
+    m_playLoopAction->setVisible(show);
+    m_soloAction->setVisible(show);
+    if (m_alAction) m_alAction->setVisible(show);
+
+    m_playControlsSpacer->setVisible(show);
+
+    setMaximumHeight(maxHeight);
+
+    if (wasMinimal) {
+        resizeConstrained(settings.value("size").toSize());
+    } else {
+        QApplication::processEvents();
+        adjustSize();
+    }
+
+    settings.endGroup();
+
+    //TO-DOS:
+    //- The Constrain Playback to Selection option is still effective when the minimal mode is activated whereas
+    //the functionality to modify the selection has been removed from this mode. Playback mode should switch to
+    //normal when the minimal mode is activated and then be set up again to what it was when the full mode is
+    //activated again.
+    //- after adding the minimal mode at startup option in Preferences/Appearance, the minimal mode window size
+    //is not optimized as before
+
+    //done:
+    //- when switching back to full mode, the pane is not shown entirely, should restore the previous size
+    //- the size of the overview (namely its width) should be increased when the minimal mode is activated
+    //- the menus which have no effects in the minimal mode should be removed (or their actions disabled)
+    //even if this doesn't lead cause the application to crash (the actual changes are made in the hidden pane(s))
+    //- the menu actions which have no effects in the minimal mode should be removed or disabled
+    //- add Minimal mode at startup in the Preferences/Appearance
+}
 
