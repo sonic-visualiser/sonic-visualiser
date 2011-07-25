@@ -245,7 +245,7 @@ main(int argc, char **argv)
 
     if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
         std::cerr << QApplication::tr(
-            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]) << std::endl;
+            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation. The Kiosk edition provides all of the features of the full Sonic Visualiser, except that audio files cannot be saved from it.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]).toStdString() << std::endl;
         exit(2);
     }
 
@@ -254,7 +254,7 @@ main(int argc, char **argv)
 
     QApplication::setOrganizationName("sonic-visualiser");
     QApplication::setOrganizationDomain("sonicvisualiser.org");
-    QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
+    QApplication::setApplicationName(QApplication::tr("Sonic Visualiser (Kiosk edition)"));
 
     QSplashScreen *splash = 0;
 
