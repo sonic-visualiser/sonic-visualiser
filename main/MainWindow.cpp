@@ -447,7 +447,7 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     m_fileMenu->addAction(action);
 
-    m_recentFilesMenu = menu->addMenu(tr("Open &Recent"));
+    m_recentFilesMenu = m_fileMenu->addMenu(tr("Open &Recent"));
     m_recentFilesMenu->setTearOffEnabled(true);
     setupRecentFilesMenu();
     connect(&m_recentFiles, SIGNAL(recentChanged()),
