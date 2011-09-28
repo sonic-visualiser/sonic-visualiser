@@ -82,7 +82,6 @@ SV_MODULE_REQUIRED([samplerate],[samplerate >= 0.1.2],[samplerate.h],[samplerate
 SV_MODULE_REQUIRED([vamp],[vamp >= 2.1],[vamp/vamp.h],[],[])
 SV_MODULE_REQUIRED([vamphostsdk],[vamp-hostsdk >= 2.0],[vamp-hostsdk/PluginLoader.h],[],[])
 SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],[rubberband],[rubberband_new])
-SV_MODULE_REQUIRED([raptor],[raptor >= 1.4.20],[raptor.h],[raptor],[raptor_start_parse])
 SV_MODULE_REQUIRED([rasqal],[rasqal >= 0.9.19],[rasqal/rasqal.h],[rasqal],[rasqal_new_world])
 SV_MODULE_REQUIRED([redland],[redland >= 1.0.10],[librdf.h],[rdf],[librdf_new_world])
 
