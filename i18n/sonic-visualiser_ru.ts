@@ -56,7 +56,7 @@
         <translation>Остановка в позиции %1</translation>
     </message>
     <message>
-        <location filename="../../svapp/audioio/AudioCallbackPlaySource.cpp" line="1071"/>
+        <location filename="../../svapp/audioio/AudioCallbackPlaySource.cpp" line="1061"/>
         <source>Change time-stretch factor to %1</source>
         <translation>Смена коэффициента растяжения во времени на %1</translation>
     </message>
@@ -1312,9 +1312,8 @@ Do you want to locate it?</source>
 <context>
     <name>LabFileWriter</name>
     <message>
-        <location filename="../../svcore/data/fileio/LabFileWriter.cpp" line="62"/>
         <source>Failed to open file %1 for writing</source>
-        <translation type="unfinished">Не удалось открыть файл %1 для записи</translation>
+        <translation type="obsolete">Не удалось открыть файл %1 для записи</translation>
     </message>
 </context>
 <context>
@@ -4667,12 +4666,12 @@ Label:	%4</source>
         <translation>%1 / %2 Гц%3</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2347"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2343"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2354"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2350"/>
         <source>Resize Selection</source>
         <translation>Изменить выделение</translation>
     </message>
@@ -4687,82 +4686,80 @@ Label:	%4</source>
         <translation>Вертикальное масштабирование</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2227"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2223"/>
         <source>Enter new range</source>
         <translation>Введите новый диапазон</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2228"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2224"/>
         <source>New vertical display range, from %1 to %2 %4:</source>
         <translation>Новый диапазон отображения по вертикали, от %1 до %2 %4:</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2513"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2509"/>
         <source>Click and drag to navigate</source>
         <translation>Щёлкните и потащите для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2530"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2519"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Ctrl for multi-select; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + Ctrl — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2524"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Cmd for multi-select; middle-click and drag to navigate</source>
-        <translation>Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
+        <translation type="obsolete">Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2532"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2521"/>
         <source>Click and drag to select a range; hold Ctrl for multi-select; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения диапазона; + Ctrl — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2526"/>
         <source>Click and drag to select a range; hold Cmd for multi-select; middle-click and drag to navigate</source>
-        <translation>Щёлкните и потащите для выделения диапазона; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
+        <translation type="obsolete">Щёлкните и потащите для выделения диапазона; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2541"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2529"/>
         <source>Click and drag to move the selection boundary</source>
         <translation>Щёлкните и потащите для перемещения границ выделения</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2546"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2534"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; middle-click to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2548"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2536"/>
         <source>Click and drag to select a range; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2556"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2544"/>
         <source>Click to add a new item in the active layer</source>
         <translation>Щёлкните для добавления нового объекта на активный слой</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2575"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2563"/>
         <source>Click and drag to move all items in the selected range</source>
         <translation>Щёлкните и потащите все объекты в выделенной области</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2591"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2579"/>
         <source>Click and drag to adjust the visible range of the vertical scale</source>
         <translation>Щёлкните и потащите для смены видимого диапазона масштабирования по вертикали</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2593"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2581"/>
         <source>Click and drag to adjust the vertical zoom level</source>
         <translation>Щёлкните и потащите для смены уровня масштабирования по вертикали</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2595"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2583"/>
         <source>Click and drag to adjust the horizontal zoom level</source>
         <translation>Щёлкните и потащите для смены уровня масштабирования по горизонтали</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2597"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2585"/>
         <source>Reset horizontal and vertical zoom levels to their defaults</source>
         <translation>Сбросить уровни масштабирования по горизонтали и вертикали до исходных значений</translation>
     </message>
@@ -4939,9 +4936,9 @@ Label:	%4</source>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1225"/>
         <location filename="../../svgui/view/Pane.cpp" line="1235"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1247"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1243"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1249"/>
         <location filename="../../svgui/view/Pane.cpp" line="1253"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1257"/>
         <source>Left</source>
         <translation>Левая клавиша</translation>
     </message>
@@ -4952,28 +4949,28 @@ Label:	%4</source>
     </message>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1227"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1261"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1257"/>
         <source>Zoom to Area</source>
         <translation>Масштабировать в выделение</translation>
     </message>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1227"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1243"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1261"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1239"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1257"/>
         <source>Shift+Left</source>
         <translation>Shift+Left</translation>
     </message>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1228"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1262"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1258"/>
         <source>Shift-click left button and drag to zoom to a rectangular area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1229"/>
         <location filename="../../svgui/view/Pane.cpp" line="1231"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1249"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1259"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1245"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1255"/>
         <source>Double-Click Left</source>
         <translation>Двойной щелчок левой клавишей</translation>
     </message>
@@ -4984,13 +4981,13 @@ Label:	%4</source>
     </message>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1231"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1249"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1245"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
         <location filename="../../svgui/view/Pane.cpp" line="1232"/>
-        <location filename="../../svgui/view/Pane.cpp" line="1250"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1246"/>
         <source>Double-click left button on an item to edit it</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5020,82 +5017,77 @@ Label:	%4</source>
         <translation>Ctrl+Влево</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1239"/>
-        <source>Cmd-click left button and drag to select an additional region</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1241"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1238"/>
         <source>Ctrl-click left button and drag to select an additional region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1243"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1239"/>
         <source>Fine Select</source>
         <translation>Выделить точно</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1244"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1240"/>
         <source>Shift-click left button and drag to select without snapping to items or grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1246"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1242"/>
         <source>Edit Tool Mouse Actions</source>
         <translation>Использование мыши с инструментом редактирования</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1247"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1243"/>
         <source>Move</source>
         <translation>Переместить</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1248"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1244"/>
         <source>Click left button on an item or selected region and drag to move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1252"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1248"/>
         <source>Draw Tool Mouse Actions</source>
         <translation>Использование мыши с инструментом рисования</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1253"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1249"/>
         <source>Draw</source>
         <translation>Рисовать</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1254"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1250"/>
         <source>Click left button and drag to create new item</source>
         <translation>Щелкните левой клавишей мыши и перетащите курсор для создания нового объекта</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1256"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1252"/>
         <source>Measure Tool Mouse Actions</source>
         <translation>Использование мыши с инструментом измерения</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1257"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1253"/>
         <source>Measure Area</source>
         <translation>Измерить область</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1258"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1254"/>
         <source>Click left button and drag to measure a rectangular area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1259"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1255"/>
         <source>Measure Item</source>
         <translation>Измерить объект</translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="1260"/>
+        <location filename="../../svgui/view/Pane.cpp" line="1256"/>
         <source>Click left button and drag to measure extents of an item or shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2563"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2551"/>
         <source>Click to erase an item from the active layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5105,7 +5097,7 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../svgui/view/Pane.cpp" line="2570"/>
+        <location filename="../../svgui/view/Pane.cpp" line="2558"/>
         <source>Click and drag an item in the active layer to move it; hold Shift to override initial resistance</source>
         <translation type="unfinished"></translation>
     </message>
