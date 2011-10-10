@@ -1,4 +1,14 @@
 
+Changes in Sonic Visualiser 1.9 since the previous release 1.8:
+
+ - Add session templates; save session as template; apply template to
+   session
+
+ - Tidy up the file open logic so as to remove the dialog asking how
+   to open a file, where possible
+
+ - Various bug fixes.
+
 Changes in Sonic Visualiser 1.8 since the previous release 1.7.2:
 
  - Sonic Visualiser now registers as a file type handler on OS/X,
