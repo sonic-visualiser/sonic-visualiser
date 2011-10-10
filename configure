@@ -668,50 +668,7 @@ INSTALL_DATA
 CXXCPP
 GREP
 EGREP
-PKG_CONFIG
-PKG_CONFIG_PATH
-PKG_CONFIG_LIBDIR
 QMAKE
-bz2_CFLAGS
-bz2_LIBS
-fftw3_CFLAGS
-fftw3_LIBS
-fftw3f_CFLAGS
-fftw3f_LIBS
-sndfile_CFLAGS
-sndfile_LIBS
-samplerate_CFLAGS
-samplerate_LIBS
-vamp_CFLAGS
-vamp_LIBS
-vamphostsdk_CFLAGS
-vamphostsdk_LIBS
-rubberband_CFLAGS
-rubberband_LIBS
-raptor_CFLAGS
-raptor_LIBS
-rasqal_CFLAGS
-rasqal_LIBS
-redland_CFLAGS
-redland_LIBS
-liblo_CFLAGS
-liblo_LIBS
-portaudio_2_0_CFLAGS
-portaudio_2_0_LIBS
-JACK_CFLAGS
-JACK_LIBS
-libpulse_CFLAGS
-libpulse_LIBS
-lrdf_CFLAGS
-lrdf_LIBS
-oggz_CFLAGS
-oggz_LIBS
-fishsound_CFLAGS
-fishsound_LIBS
-mad_CFLAGS
-mad_LIBS
-id3tag_CFLAGS
-id3tag_LIBS
 PERL
 XARGS
 MAKEDEPEND
@@ -735,50 +692,7 @@ CPPFLAGS
 CXX
 CXXFLAGS
 CCC
-CXXCPP
-PKG_CONFIG
-PKG_CONFIG_PATH
-PKG_CONFIG_LIBDIR
-bz2_CFLAGS
-bz2_LIBS
-fftw3_CFLAGS
-fftw3_LIBS
-fftw3f_CFLAGS
-fftw3f_LIBS
-sndfile_CFLAGS
-sndfile_LIBS
-samplerate_CFLAGS
-samplerate_LIBS
-vamp_CFLAGS
-vamp_LIBS
-vamphostsdk_CFLAGS
-vamphostsdk_LIBS
-rubberband_CFLAGS
-rubberband_LIBS
-raptor_CFLAGS
-raptor_LIBS
-rasqal_CFLAGS
-rasqal_LIBS
-redland_CFLAGS
-redland_LIBS
-liblo_CFLAGS
-liblo_LIBS
-portaudio_2_0_CFLAGS
-portaudio_2_0_LIBS
-JACK_CFLAGS
-JACK_LIBS
-libpulse_CFLAGS
-libpulse_LIBS
-lrdf_CFLAGS
-lrdf_LIBS
-oggz_CFLAGS
-oggz_LIBS
-fishsound_CFLAGS
-fishsound_LIBS
-mad_CFLAGS
-mad_LIBS
-id3tag_CFLAGS
-id3tag_LIBS'
+CXXCPP'
 
 
 # Initialize some variables set by options.
@@ -1362,73 +1276,6 @@ Some influential environment variables:
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   CXXCPP      C++ preprocessor
-  PKG_CONFIG  path to pkg-config utility
-  PKG_CONFIG_PATH
-              directories to add to pkg-config's search path
-  PKG_CONFIG_LIBDIR
-              path overriding pkg-config's built-in search path
-  bz2_CFLAGS  C compiler flags for bz2, overriding pkg-config
-  bz2_LIBS    linker flags for bz2, overriding pkg-config
-  fftw3_CFLAGS
-              C compiler flags for fftw3, overriding pkg-config
-  fftw3_LIBS  linker flags for fftw3, overriding pkg-config
-  fftw3f_CFLAGS
-              C compiler flags for fftw3f, overriding pkg-config
-  fftw3f_LIBS linker flags for fftw3f, overriding pkg-config
-  sndfile_CFLAGS
-              C compiler flags for sndfile, overriding pkg-config
-  sndfile_LIBS
-              linker flags for sndfile, overriding pkg-config
-  samplerate_CFLAGS
-              C compiler flags for samplerate, overriding pkg-config
-  samplerate_LIBS
-              linker flags for samplerate, overriding pkg-config
-  vamp_CFLAGS C compiler flags for vamp, overriding pkg-config
-  vamp_LIBS   linker flags for vamp, overriding pkg-config
-  vamphostsdk_CFLAGS
-              C compiler flags for vamphostsdk, overriding pkg-config
-  vamphostsdk_LIBS
-              linker flags for vamphostsdk, overriding pkg-config
-  rubberband_CFLAGS
-              C compiler flags for rubberband, overriding pkg-config
-  rubberband_LIBS
-              linker flags for rubberband, overriding pkg-config
-  raptor_CFLAGS
-              C compiler flags for raptor, overriding pkg-config
-  raptor_LIBS linker flags for raptor, overriding pkg-config
-  rasqal_CFLAGS
-              C compiler flags for rasqal, overriding pkg-config
-  rasqal_LIBS linker flags for rasqal, overriding pkg-config
-  redland_CFLAGS
-              C compiler flags for redland, overriding pkg-config
-  redland_LIBS
-              linker flags for redland, overriding pkg-config
-  liblo_CFLAGS
-              C compiler flags for liblo, overriding pkg-config
-  liblo_LIBS  linker flags for liblo, overriding pkg-config
-  portaudio_2_0_CFLAGS
-              C compiler flags for portaudio_2_0, overriding pkg-config
-  portaudio_2_0_LIBS
-              linker flags for portaudio_2_0, overriding pkg-config
-  JACK_CFLAGS C compiler flags for JACK, overriding pkg-config
-  JACK_LIBS   linker flags for JACK, overriding pkg-config
-  libpulse_CFLAGS
-              C compiler flags for libpulse, overriding pkg-config
-  libpulse_LIBS
-              linker flags for libpulse, overriding pkg-config
-  lrdf_CFLAGS C compiler flags for lrdf, overriding pkg-config
-  lrdf_LIBS   linker flags for lrdf, overriding pkg-config
-  oggz_CFLAGS C compiler flags for oggz, overriding pkg-config
-  oggz_LIBS   linker flags for oggz, overriding pkg-config
-  fishsound_CFLAGS
-              C compiler flags for fishsound, overriding pkg-config
-  fishsound_LIBS
-              linker flags for fishsound, overriding pkg-config
-  mad_CFLAGS  C compiler flags for mad, overriding pkg-config
-  mad_LIBS    linker flags for mad, overriding pkg-config
-  id3tag_CFLAGS
-              C compiler flags for id3tag, overriding pkg-config
-  id3tag_LIBS linker flags for id3tag, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -3893,129 +3740,7 @@ fi
 # preferred flags)
 AUTOCONF_CXXFLAGS="$CXXFLAGS"
 
-
-
-
-
-
-
-if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
-	if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}pkg-config", so it can be a program name with args.
-set dummy ${ac_tool_prefix}pkg-config; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
-if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-PKG_CONFIG=$ac_cv_path_PKG_CONFIG
-if test -n "$PKG_CONFIG"; then
-  { echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
-echo "${ECHO_T}$PKG_CONFIG" >&6; }
-else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-fi
-
-
-fi
-if test -z "$ac_cv_path_PKG_CONFIG"; then
-  ac_pt_PKG_CONFIG=$PKG_CONFIG
-  # Extract the first word of "pkg-config", so it can be a program name with args.
-set dummy pkg-config; ac_word=$2
-{ echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6; }
-if test "${ac_cv_path_ac_pt_PKG_CONFIG+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $ac_pt_PKG_CONFIG in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_ac_pt_PKG_CONFIG="$ac_pt_PKG_CONFIG" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
-    ac_cv_path_ac_pt_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-IFS=$as_save_IFS
-
-  ;;
-esac
-fi
-ac_pt_PKG_CONFIG=$ac_cv_path_ac_pt_PKG_CONFIG
-if test -n "$ac_pt_PKG_CONFIG"; then
-  { echo "$as_me:$LINENO: result: $ac_pt_PKG_CONFIG" >&5
-echo "${ECHO_T}$ac_pt_PKG_CONFIG" >&6; }
-else
-  { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-fi
-
-  if test "x$ac_pt_PKG_CONFIG" = x; then
-    PKG_CONFIG=""
-  else
-    case $cross_compiling:$ac_tool_warned in
-yes:)
-{ echo "$as_me:$LINENO: WARNING: In the future, Autoconf will not detect cross-tools
-whose name does not start with the host triplet.  If you think this
-configuration is useful to you, please write to autoconf@gnu.org." >&5
-echo "$as_me: WARNING: In the future, Autoconf will not detect cross-tools
-whose name does not start with the host triplet.  If you think this
-configuration is useful to you, please write to autoconf@gnu.org." >&2;}
-ac_tool_warned=yes ;;
-esac
-    PKG_CONFIG=$ac_pt_PKG_CONFIG
-  fi
-else
-  PKG_CONFIG="$ac_cv_path_PKG_CONFIG"
-fi
-
-fi
-if test -n "$PKG_CONFIG"; then
-	_pkg_min_version=0.9.0
-	{ echo "$as_me:$LINENO: checking pkg-config is at least version $_pkg_min_version" >&5
-echo $ECHO_N "checking pkg-config is at least version $_pkg_min_version... $ECHO_C" >&6; }
-	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
-		{ echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	else
-		{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-		PKG_CONFIG=""
-	fi
-fi
+PKG_PROG_PKG_CONFIG
 
 
 
@@ -4391,77 +4116,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for bz2" >&5
-echo $ECHO_N "checking for bz2... $ECHO_C" >&6; }
-
-if test -n "$bz2_CFLAGS"; then
-    pkg_cv_bz2_CFLAGS="$bz2_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_bz2_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$bz2_LIBS"; then
-    pkg_cv_bz2_LIBS="$bz2_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_bz2_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        bz2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        bz2_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$bz2_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	bz2_CFLAGS=$pkg_cv_bz2_CFLAGS
-	bz2_LIBS=$pkg_cv_bz2_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $bz2_CFLAGS";LIBS="$LIBS $bz2_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(bz2,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $bz2_CFLAGS";LIBS="$LIBS $bz2_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -4700,77 +4355,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for fftw3" >&5
-echo $ECHO_N "checking for fftw3... $ECHO_C" >&6; }
-
-if test -n "$fftw3_CFLAGS"; then
-    pkg_cv_fftw3_CFLAGS="$fftw3_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_fftw3_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$fftw3_LIBS"; then
-    pkg_cv_fftw3_LIBS="$fftw3_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_fftw3_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        fftw3_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        fftw3_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$fftw3_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	fftw3_CFLAGS=$pkg_cv_fftw3_CFLAGS
-	fftw3_LIBS=$pkg_cv_fftw3_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $fftw3_CFLAGS";LIBS="$LIBS $fftw3_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(fftw3,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $fftw3_CFLAGS";LIBS="$LIBS $fftw3_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -5009,77 +4594,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for fftw3f" >&5
-echo $ECHO_N "checking for fftw3f... $ECHO_C" >&6; }
-
-if test -n "$fftw3f_CFLAGS"; then
-    pkg_cv_fftw3f_CFLAGS="$fftw3f_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_fftw3f_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$fftw3f_LIBS"; then
-    pkg_cv_fftw3f_LIBS="$fftw3f_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_fftw3f_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        fftw3f_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        fftw3f_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$fftw3f_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	fftw3f_CFLAGS=$pkg_cv_fftw3f_CFLAGS
-	fftw3f_LIBS=$pkg_cv_fftw3f_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $fftw3f_CFLAGS";LIBS="$LIBS $fftw3f_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(fftw3f,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $fftw3f_CFLAGS";LIBS="$LIBS $fftw3f_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -5318,77 +4833,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for sndfile" >&5
-echo $ECHO_N "checking for sndfile... $ECHO_C" >&6; }
-
-if test -n "$sndfile_CFLAGS"; then
-    pkg_cv_sndfile_CFLAGS="$sndfile_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_sndfile_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$sndfile_LIBS"; then
-    pkg_cv_sndfile_LIBS="$sndfile_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_sndfile_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        sndfile_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        sndfile_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$sndfile_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	sndfile_CFLAGS=$pkg_cv_sndfile_CFLAGS
-	sndfile_LIBS=$pkg_cv_sndfile_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $sndfile_CFLAGS";LIBS="$LIBS $sndfile_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(sndfile,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $sndfile_CFLAGS";LIBS="$LIBS $sndfile_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -5627,77 +5072,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for samplerate" >&5
-echo $ECHO_N "checking for samplerate... $ECHO_C" >&6; }
-
-if test -n "$samplerate_CFLAGS"; then
-    pkg_cv_samplerate_CFLAGS="$samplerate_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_samplerate_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$samplerate_LIBS"; then
-    pkg_cv_samplerate_LIBS="$samplerate_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_samplerate_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        samplerate_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        samplerate_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$samplerate_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	samplerate_CFLAGS=$pkg_cv_samplerate_CFLAGS
-	samplerate_LIBS=$pkg_cv_samplerate_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $samplerate_CFLAGS";LIBS="$LIBS $samplerate_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(samplerate,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $samplerate_CFLAGS";LIBS="$LIBS $samplerate_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -5936,77 +5311,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for vamp" >&5
-echo $ECHO_N "checking for vamp... $ECHO_C" >&6; }
-
-if test -n "$vamp_CFLAGS"; then
-    pkg_cv_vamp_CFLAGS="$vamp_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_vamp_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$vamp_LIBS"; then
-    pkg_cv_vamp_LIBS="$vamp_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_vamp_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        vamp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        vamp_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$vamp_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	vamp_CFLAGS=$pkg_cv_vamp_CFLAGS
-	vamp_LIBS=$pkg_cv_vamp_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $vamp_CFLAGS";LIBS="$LIBS $vamp_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(vamp,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $vamp_CFLAGS";LIBS="$LIBS $vamp_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -6245,77 +5550,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for vamphostsdk" >&5
-echo $ECHO_N "checking for vamphostsdk... $ECHO_C" >&6; }
-
-if test -n "$vamphostsdk_CFLAGS"; then
-    pkg_cv_vamphostsdk_CFLAGS="$vamphostsdk_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_vamphostsdk_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$vamphostsdk_LIBS"; then
-    pkg_cv_vamphostsdk_LIBS="$vamphostsdk_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_vamphostsdk_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        vamphostsdk_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        vamphostsdk_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$vamphostsdk_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	vamphostsdk_CFLAGS=$pkg_cv_vamphostsdk_CFLAGS
-	vamphostsdk_LIBS=$pkg_cv_vamphostsdk_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $vamphostsdk_CFLAGS";LIBS="$LIBS $vamphostsdk_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(vamphostsdk,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $vamphostsdk_CFLAGS";LIBS="$LIBS $vamphostsdk_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -6554,77 +5789,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for rubberband" >&5
-echo $ECHO_N "checking for rubberband... $ECHO_C" >&6; }
-
-if test -n "$rubberband_CFLAGS"; then
-    pkg_cv_rubberband_CFLAGS="$rubberband_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_rubberband_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$rubberband_LIBS"; then
-    pkg_cv_rubberband_LIBS="$rubberband_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_rubberband_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        rubberband_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        rubberband_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$rubberband_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	rubberband_CFLAGS=$pkg_cv_rubberband_CFLAGS
-	rubberband_LIBS=$pkg_cv_rubberband_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $rubberband_CFLAGS";LIBS="$LIBS $rubberband_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(rubberband,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $rubberband_CFLAGS";LIBS="$LIBS $rubberband_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -6863,77 +6028,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for raptor" >&5
-echo $ECHO_N "checking for raptor... $ECHO_C" >&6; }
-
-if test -n "$raptor_CFLAGS"; then
-    pkg_cv_raptor_CFLAGS="$raptor_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_raptor_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$raptor_LIBS"; then
-    pkg_cv_raptor_LIBS="$raptor_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_raptor_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        raptor_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        raptor_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$raptor_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	raptor_CFLAGS=$pkg_cv_raptor_CFLAGS
-	raptor_LIBS=$pkg_cv_raptor_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $raptor_CFLAGS";LIBS="$LIBS $raptor_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(raptor,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $raptor_CFLAGS";LIBS="$LIBS $raptor_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -7172,77 +6267,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for rasqal" >&5
-echo $ECHO_N "checking for rasqal... $ECHO_C" >&6; }
-
-if test -n "$rasqal_CFLAGS"; then
-    pkg_cv_rasqal_CFLAGS="$rasqal_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_rasqal_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$rasqal_LIBS"; then
-    pkg_cv_rasqal_LIBS="$rasqal_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_rasqal_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        rasqal_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        rasqal_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$rasqal_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	rasqal_CFLAGS=$pkg_cv_rasqal_CFLAGS
-	rasqal_LIBS=$pkg_cv_rasqal_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $rasqal_CFLAGS";LIBS="$LIBS $rasqal_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(rasqal,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $rasqal_CFLAGS";LIBS="$LIBS $rasqal_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -7481,77 +6506,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for redland" >&5
-echo $ECHO_N "checking for redland... $ECHO_C" >&6; }
-
-if test -n "$redland_CFLAGS"; then
-    pkg_cv_redland_CFLAGS="$redland_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_redland_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$redland_LIBS"; then
-    pkg_cv_redland_LIBS="$redland_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_redland_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        redland_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        redland_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$redland_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	redland_CFLAGS=$pkg_cv_redland_CFLAGS
-	redland_LIBS=$pkg_cv_redland_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $redland_CFLAGS";LIBS="$LIBS $redland_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(redland,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $redland_CFLAGS";LIBS="$LIBS $redland_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -7791,77 +6746,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for liblo" >&5
-echo $ECHO_N "checking for liblo... $ECHO_C" >&6; }
-
-if test -n "$liblo_CFLAGS"; then
-    pkg_cv_liblo_CFLAGS="$liblo_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_liblo_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$liblo_LIBS"; then
-    pkg_cv_liblo_LIBS="$liblo_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_liblo_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        liblo_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        liblo_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$liblo_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	liblo_CFLAGS=$pkg_cv_liblo_CFLAGS
-	liblo_LIBS=$pkg_cv_liblo_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $liblo_CFLAGS";LIBS="$LIBS $liblo_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(liblo,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $liblo_CFLAGS";LIBS="$LIBS $liblo_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -8100,77 +6985,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for portaudio_2_0" >&5
-echo $ECHO_N "checking for portaudio_2_0... $ECHO_C" >&6; }
-
-if test -n "$portaudio_2_0_CFLAGS"; then
-    pkg_cv_portaudio_2_0_CFLAGS="$portaudio_2_0_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_portaudio_2_0_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$portaudio_2_0_LIBS"; then
-    pkg_cv_portaudio_2_0_LIBS="$portaudio_2_0_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_portaudio_2_0_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        portaudio_2_0_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        portaudio_2_0_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$portaudio_2_0_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	portaudio_2_0_CFLAGS=$pkg_cv_portaudio_2_0_CFLAGS
-	portaudio_2_0_LIBS=$pkg_cv_portaudio_2_0_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $portaudio_2_0_CFLAGS";LIBS="$LIBS $portaudio_2_0_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(portaudio_2_0,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $portaudio_2_0_CFLAGS";LIBS="$LIBS $portaudio_2_0_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -8409,77 +7224,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for JACK" >&5
-echo $ECHO_N "checking for JACK... $ECHO_C" >&6; }
-
-if test -n "$JACK_CFLAGS"; then
-    pkg_cv_JACK_CFLAGS="$JACK_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_JACK_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$JACK_LIBS"; then
-    pkg_cv_JACK_LIBS="$JACK_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_JACK_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        JACK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        JACK_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$JACK_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	JACK_CFLAGS=$pkg_cv_JACK_CFLAGS
-	JACK_LIBS=$pkg_cv_JACK_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $JACK_CFLAGS";LIBS="$LIBS $JACK_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(JACK,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $JACK_CFLAGS";LIBS="$LIBS $JACK_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -8718,77 +7463,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for libpulse" >&5
-echo $ECHO_N "checking for libpulse... $ECHO_C" >&6; }
-
-if test -n "$libpulse_CFLAGS"; then
-    pkg_cv_libpulse_CFLAGS="$libpulse_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_libpulse_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$libpulse_LIBS"; then
-    pkg_cv_libpulse_LIBS="$libpulse_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_libpulse_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        libpulse_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        libpulse_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$libpulse_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	libpulse_CFLAGS=$pkg_cv_libpulse_CFLAGS
-	libpulse_LIBS=$pkg_cv_libpulse_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $libpulse_CFLAGS";LIBS="$LIBS $libpulse_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(libpulse,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $libpulse_CFLAGS";LIBS="$LIBS $libpulse_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -9027,77 +7702,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for lrdf" >&5
-echo $ECHO_N "checking for lrdf... $ECHO_C" >&6; }
-
-if test -n "$lrdf_CFLAGS"; then
-    pkg_cv_lrdf_CFLAGS="$lrdf_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_lrdf_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$lrdf_LIBS"; then
-    pkg_cv_lrdf_LIBS="$lrdf_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_lrdf_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        lrdf_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        lrdf_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$lrdf_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	lrdf_CFLAGS=$pkg_cv_lrdf_CFLAGS
-	lrdf_LIBS=$pkg_cv_lrdf_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $lrdf_CFLAGS";LIBS="$LIBS $lrdf_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(lrdf,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $lrdf_CFLAGS";LIBS="$LIBS $lrdf_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -9336,77 +7941,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for oggz" >&5
-echo $ECHO_N "checking for oggz... $ECHO_C" >&6; }
-
-if test -n "$oggz_CFLAGS"; then
-    pkg_cv_oggz_CFLAGS="$oggz_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_oggz_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$oggz_LIBS"; then
-    pkg_cv_oggz_LIBS="$oggz_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_oggz_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        oggz_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        oggz_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$oggz_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	oggz_CFLAGS=$pkg_cv_oggz_CFLAGS
-	oggz_LIBS=$pkg_cv_oggz_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $oggz_CFLAGS";LIBS="$LIBS $oggz_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(oggz,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $oggz_CFLAGS";LIBS="$LIBS $oggz_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -9645,77 +8180,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for fishsound" >&5
-echo $ECHO_N "checking for fishsound... $ECHO_C" >&6; }
-
-if test -n "$fishsound_CFLAGS"; then
-    pkg_cv_fishsound_CFLAGS="$fishsound_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_fishsound_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$fishsound_LIBS"; then
-    pkg_cv_fishsound_LIBS="$fishsound_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_fishsound_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        fishsound_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        fishsound_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$fishsound_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	fishsound_CFLAGS=$pkg_cv_fishsound_CFLAGS
-	fishsound_LIBS=$pkg_cv_fishsound_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $fishsound_CFLAGS";LIBS="$LIBS $fishsound_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(fishsound,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $fishsound_CFLAGS";LIBS="$LIBS $fishsound_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -9954,77 +8419,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for mad" >&5
-echo $ECHO_N "checking for mad... $ECHO_C" >&6; }
-
-if test -n "$mad_CFLAGS"; then
-    pkg_cv_mad_CFLAGS="$mad_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_mad_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$mad_LIBS"; then
-    pkg_cv_mad_LIBS="$mad_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_mad_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        mad_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        mad_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$mad_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	mad_CFLAGS=$pkg_cv_mad_CFLAGS
-	mad_LIBS=$pkg_cv_mad_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $mad_CFLAGS";LIBS="$LIBS $mad_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(mad,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $mad_CFLAGS";LIBS="$LIBS $mad_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -10263,77 +8658,7 @@ if test -z "$SV_MODULE_VERSION_TEST" ; then
    SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
 fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ echo "$as_me:$LINENO: checking for id3tag" >&5
-echo $ECHO_N "checking for id3tag... $ECHO_C" >&6; }
-
-if test -n "$id3tag_CFLAGS"; then
-    pkg_cv_id3tag_CFLAGS="$id3tag_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_id3tag_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$id3tag_LIBS"; then
-    pkg_cv_id3tag_LIBS="$id3tag_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\"") >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; then
-  pkg_cv_id3tag_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        id3tag_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        id3tag_PKG_ERRORS=`$PKG_CONFIG --print-errors "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$id3tag_PKG_ERRORS" >&5
-
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-	{ echo "$as_me:$LINENO: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	id3tag_CFLAGS=$pkg_cv_id3tag_CFLAGS
-	id3tag_LIBS=$pkg_cv_id3tag_LIBS
-        { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $id3tag_CFLAGS";LIBS="$LIBS $id3tag_LIBS";SV_MODULE_FAILED=""
-fi
+   PKG_CHECK_MODULES(id3tag,$SV_MODULE_VERSION_TEST,HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $id3tag_CFLAGS";LIBS="$LIBS $id3tag_LIBS";SV_MODULE_FAILED="",AC_MSG_NOTICE([Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means]))
 fi
 if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
@@ -11258,53 +9583,21 @@ INSTALL_DATA!$INSTALL_DATA$ac_delim
 CXXCPP!$CXXCPP$ac_delim
 GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
-PKG_CONFIG!$PKG_CONFIG$ac_delim
-PKG_CONFIG_PATH!$PKG_CONFIG_PATH$ac_delim
-PKG_CONFIG_LIBDIR!$PKG_CONFIG_LIBDIR$ac_delim
 QMAKE!$QMAKE$ac_delim
-bz2_CFLAGS!$bz2_CFLAGS$ac_delim
-bz2_LIBS!$bz2_LIBS$ac_delim
-fftw3_CFLAGS!$fftw3_CFLAGS$ac_delim
-fftw3_LIBS!$fftw3_LIBS$ac_delim
-fftw3f_CFLAGS!$fftw3f_CFLAGS$ac_delim
-fftw3f_LIBS!$fftw3f_LIBS$ac_delim
-sndfile_CFLAGS!$sndfile_CFLAGS$ac_delim
-sndfile_LIBS!$sndfile_LIBS$ac_delim
-samplerate_CFLAGS!$samplerate_CFLAGS$ac_delim
-samplerate_LIBS!$samplerate_LIBS$ac_delim
-vamp_CFLAGS!$vamp_CFLAGS$ac_delim
-vamp_LIBS!$vamp_LIBS$ac_delim
-vamphostsdk_CFLAGS!$vamphostsdk_CFLAGS$ac_delim
-vamphostsdk_LIBS!$vamphostsdk_LIBS$ac_delim
-rubberband_CFLAGS!$rubberband_CFLAGS$ac_delim
-rubberband_LIBS!$rubberband_LIBS$ac_delim
-raptor_CFLAGS!$raptor_CFLAGS$ac_delim
-raptor_LIBS!$raptor_LIBS$ac_delim
-rasqal_CFLAGS!$rasqal_CFLAGS$ac_delim
-rasqal_LIBS!$rasqal_LIBS$ac_delim
-redland_CFLAGS!$redland_CFLAGS$ac_delim
-redland_LIBS!$redland_LIBS$ac_delim
-liblo_CFLAGS!$liblo_CFLAGS$ac_delim
-liblo_LIBS!$liblo_LIBS$ac_delim
-portaudio_2_0_CFLAGS!$portaudio_2_0_CFLAGS$ac_delim
-portaudio_2_0_LIBS!$portaudio_2_0_LIBS$ac_delim
-JACK_CFLAGS!$JACK_CFLAGS$ac_delim
-JACK_LIBS!$JACK_LIBS$ac_delim
-libpulse_CFLAGS!$libpulse_CFLAGS$ac_delim
-libpulse_LIBS!$libpulse_LIBS$ac_delim
-lrdf_CFLAGS!$lrdf_CFLAGS$ac_delim
-lrdf_LIBS!$lrdf_LIBS$ac_delim
-oggz_CFLAGS!$oggz_CFLAGS$ac_delim
-oggz_LIBS!$oggz_LIBS$ac_delim
-fishsound_CFLAGS!$fishsound_CFLAGS$ac_delim
-fishsound_LIBS!$fishsound_LIBS$ac_delim
-mad_CFLAGS!$mad_CFLAGS$ac_delim
-mad_LIBS!$mad_LIBS$ac_delim
-id3tag_CFLAGS!$id3tag_CFLAGS$ac_delim
-id3tag_LIBS!$id3tag_LIBS$ac_delim
+PERL!$PERL$ac_delim
+XARGS!$XARGS$ac_delim
+MAKEDEPEND!$MAKEDEPEND$ac_delim
+SHA1SUM!$SHA1SUM$ac_delim
+CUT!$CUT$ac_delim
+CXXFLAGS_MINIMAL!$CXXFLAGS_MINIMAL$ac_delim
+HAVES!$HAVES$ac_delim
+QMAKE_CONFIG!$QMAKE_CONFIG$ac_delim
+CODENAME!$CODENAME$ac_delim
+LIBOBJS!$LIBOBJS$ac_delim
+LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 65; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -11323,58 +9616,6 @@ fi
 
 cat >>$CONFIG_STATUS <<_ACEOF
 cat >"\$tmp/subs-1.sed" <<\CEOF$ac_eof
-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
-_ACEOF
-sed '
-s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g
-s/^/s,@/; s/!/@,|#_!!_#|/
-:n
-t n
-s/'"$ac_delim"'$/,g/; t
-s/$/\\/; p
-N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
-' >>$CONFIG_STATUS <conf$$subs.sed
-rm -f conf$$subs.sed
-cat >>$CONFIG_STATUS <<_ACEOF
-CEOF$ac_eof
-_ACEOF
-
-
-ac_delim='%!_!# '
-for ac_last_try in false false false false false :; do
-  cat >conf$$subs.sed <<_ACEOF
-PERL!$PERL$ac_delim
-XARGS!$XARGS$ac_delim
-MAKEDEPEND!$MAKEDEPEND$ac_delim
-SHA1SUM!$SHA1SUM$ac_delim
-CUT!$CUT$ac_delim
-CXXFLAGS_MINIMAL!$CXXFLAGS_MINIMAL$ac_delim
-HAVES!$HAVES$ac_delim
-QMAKE_CONFIG!$QMAKE_CONFIG$ac_delim
-CODENAME!$CODENAME$ac_delim
-LIBOBJS!$LIBOBJS$ac_delim
-LTLIBOBJS!$LTLIBOBJS$ac_delim
-_ACEOF
-
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 11; then
-    break
-  elif $ac_last_try; then
-    { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
-echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
-   { (exit 1); exit 1; }; }
-  else
-    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
-  fi
-done
-
-ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF/0/p' conf$$subs.sed`
-if test -n "$ac_eof"; then
-  ac_eof=`echo "$ac_eof" | sort -nru | sed 1q`
-  ac_eof=`expr $ac_eof + 1`
-fi
-
-cat >>$CONFIG_STATUS <<_ACEOF
-cat >"\$tmp/subs-2.sed" <<\CEOF$ac_eof
 /@[a-zA-Z_][a-zA-Z_0-9]*@/!b end
 _ACEOF
 sed '
@@ -11643,7 +9884,7 @@ s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
 s&@INSTALL@&$ac_INSTALL&;t t
 s&@MKDIR_P@&$ac_MKDIR_P&;t t
 $ac_datarootdir_hack
-" $ac_file_inputs | sed -f "$tmp/subs-1.sed" | sed -f "$tmp/subs-2.sed" >$tmp/out
+" $ac_file_inputs | sed -f "$tmp/subs-1.sed" >$tmp/out
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
@@ -12380,53 +10621,21 @@ INSTALL_DATA!$INSTALL_DATA$ac_delim
 CXXCPP!$CXXCPP$ac_delim
 GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
-PKG_CONFIG!$PKG_CONFIG$ac_delim
-PKG_CONFIG_PATH!$PKG_CONFIG_PATH$ac_delim
-PKG_CONFIG_LIBDIR!$PKG_CONFIG_LIBDIR$ac_delim
 QMAKE!$QMAKE$ac_delim
-bz2_CFLAGS!$bz2_CFLAGS$ac_delim
-bz2_LIBS!$bz2_LIBS$ac_delim
-fftw3_CFLAGS!$fftw3_CFLAGS$ac_delim
-fftw3_LIBS!$fftw3_LIBS$ac_delim
-fftw3f_CFLAGS!$fftw3f_CFLAGS$ac_delim
-fftw3f_LIBS!$fftw3f_LIBS$ac_delim
-sndfile_CFLAGS!$sndfile_CFLAGS$ac_delim
-sndfile_LIBS!$sndfile_LIBS$ac_delim
-samplerate_CFLAGS!$samplerate_CFLAGS$ac_delim
-samplerate_LIBS!$samplerate_LIBS$ac_delim
-vamp_CFLAGS!$vamp_CFLAGS$ac_delim
-vamp_LIBS!$vamp_LIBS$ac_delim
-vamphostsdk_CFLAGS!$vamphostsdk_CFLAGS$ac_delim
-vamphostsdk_LIBS!$vamphostsdk_LIBS$ac_delim
-rubberband_CFLAGS!$rubberband_CFLAGS$ac_delim
-rubberband_LIBS!$rubberband_LIBS$ac_delim
-raptor_CFLAGS!$raptor_CFLAGS$ac_delim
-raptor_LIBS!$raptor_LIBS$ac_delim
-rasqal_CFLAGS!$rasqal_CFLAGS$ac_delim
-rasqal_LIBS!$rasqal_LIBS$ac_delim
-redland_CFLAGS!$redland_CFLAGS$ac_delim
-redland_LIBS!$redland_LIBS$ac_delim
-liblo_CFLAGS!$liblo_CFLAGS$ac_delim
-liblo_LIBS!$liblo_LIBS$ac_delim
-portaudio_2_0_CFLAGS!$portaudio_2_0_CFLAGS$ac_delim
-portaudio_2_0_LIBS!$portaudio_2_0_LIBS$ac_delim
-JACK_CFLAGS!$JACK_CFLAGS$ac_delim
-JACK_LIBS!$JACK_LIBS$ac_delim
-libpulse_CFLAGS!$libpulse_CFLAGS$ac_delim
-libpulse_LIBS!$libpulse_LIBS$ac_delim
-lrdf_CFLAGS!$lrdf_CFLAGS$ac_delim
-lrdf_LIBS!$lrdf_LIBS$ac_delim
-oggz_CFLAGS!$oggz_CFLAGS$ac_delim
-oggz_LIBS!$oggz_LIBS$ac_delim
-fishsound_CFLAGS!$fishsound_CFLAGS$ac_delim
-fishsound_LIBS!$fishsound_LIBS$ac_delim
-mad_CFLAGS!$mad_CFLAGS$ac_delim
-mad_LIBS!$mad_LIBS$ac_delim
-id3tag_CFLAGS!$id3tag_CFLAGS$ac_delim
-id3tag_LIBS!$id3tag_LIBS$ac_delim
+PERL!$PERL$ac_delim
+XARGS!$XARGS$ac_delim
+MAKEDEPEND!$MAKEDEPEND$ac_delim
+SHA1SUM!$SHA1SUM$ac_delim
+CUT!$CUT$ac_delim
+CXXFLAGS_MINIMAL!$CXXFLAGS_MINIMAL$ac_delim
+HAVES!$HAVES$ac_delim
+QMAKE_CONFIG!$QMAKE_CONFIG$ac_delim
+CODENAME!$CODENAME$ac_delim
+LIBOBJS!$LIBOBJS$ac_delim
+LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 65; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -12445,58 +10654,6 @@ fi
 
 cat >>$CONFIG_STATUS <<_ACEOF
 cat >"\$tmp/subs-1.sed" <<\CEOF$ac_eof
-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
-_ACEOF
-sed '
-s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g
-s/^/s,@/; s/!/@,|#_!!_#|/
-:n
-t n
-s/'"$ac_delim"'$/,g/; t
-s/$/\\/; p
-N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
-' >>$CONFIG_STATUS <conf$$subs.sed
-rm -f conf$$subs.sed
-cat >>$CONFIG_STATUS <<_ACEOF
-CEOF$ac_eof
-_ACEOF
-
-
-ac_delim='%!_!# '
-for ac_last_try in false false false false false :; do
-  cat >conf$$subs.sed <<_ACEOF
-PERL!$PERL$ac_delim
-XARGS!$XARGS$ac_delim
-MAKEDEPEND!$MAKEDEPEND$ac_delim
-SHA1SUM!$SHA1SUM$ac_delim
-CUT!$CUT$ac_delim
-CXXFLAGS_MINIMAL!$CXXFLAGS_MINIMAL$ac_delim
-HAVES!$HAVES$ac_delim
-QMAKE_CONFIG!$QMAKE_CONFIG$ac_delim
-CODENAME!$CODENAME$ac_delim
-LIBOBJS!$LIBOBJS$ac_delim
-LTLIBOBJS!$LTLIBOBJS$ac_delim
-_ACEOF
-
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 11; then
-    break
-  elif $ac_last_try; then
-    { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
-echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
-   { (exit 1); exit 1; }; }
-  else
-    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
-  fi
-done
-
-ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF/0/p' conf$$subs.sed`
-if test -n "$ac_eof"; then
-  ac_eof=`echo "$ac_eof" | sort -nru | sed 1q`
-  ac_eof=`expr $ac_eof + 1`
-fi
-
-cat >>$CONFIG_STATUS <<_ACEOF
-cat >"\$tmp/subs-2.sed" <<\CEOF$ac_eof
 /@[a-zA-Z_][a-zA-Z_0-9]*@/!b end
 _ACEOF
 sed '
@@ -12765,7 +10922,7 @@ s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
 s&@INSTALL@&$ac_INSTALL&;t t
 s&@MKDIR_P@&$ac_MKDIR_P&;t t
 $ac_datarootdir_hack
-" $ac_file_inputs | sed -f "$tmp/subs-1.sed" | sed -f "$tmp/subs-2.sed" >$tmp/out
+" $ac_file_inputs | sed -f "$tmp/subs-1.sed" >$tmp/out
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
