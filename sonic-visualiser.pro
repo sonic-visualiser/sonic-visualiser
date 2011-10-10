@@ -23,11 +23,11 @@ RC_FILE = icons/sv.rc
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-LIBS = -L../svapp -L../svgui -L../svcore -lsvapp -lsvgui -lsvcore -lvamp-hostsdk $$LIBS
+LIBS = -L../svapp/release -L../svgui/release -L../svcore/release -lsvapp -lsvgui -lsvcore -lvamp-hostsdk $$LIBS
 
-PRE_TARGETDEPS += ../svapp/libsvapp.a \
-                  ../svgui/libsvgui.a \
-                  ../svcore/libsvcore.a
+PRE_TARGETDEPS += ../svapp/release/libsvapp.a \
+                  ../svgui/release/libsvgui.a \
+                  ../svcore/release/libsvcore.a
 
 RESOURCES += sonic-visualiser.qrc
 
