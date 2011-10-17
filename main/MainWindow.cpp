@@ -326,11 +326,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     
     TransformFactory::getInstance()->startPopulationThread();
 
-    Surveyer *surveyer = new Surveyer(this);
-    VersionTester *vt = new VersionTester
-        ("sonicvisualiser.org", "/latest-version.txt", SV_VERSION);
-    connect(vt, SIGNAL(newerVersionAvailable(QString)),
-            this, SLOT(newerVersionAvailable(QString)));
+    //mathieub: remove the version tester and the survey for the library edition
+    //Surveyer *surveyer = new Surveyer(this);
+    //VersionTester *vt = new VersionTester
+    //    ("sonicvisualiser.org", "/latest-version.txt", SV_VERSION);
+    //connect(vt, SIGNAL(newerVersionAvailable(QString)),
+    //        this, SLOT(newerVersionAvailable(QString)));
 }
 
 MainWindow::~MainWindow()
