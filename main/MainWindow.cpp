@@ -114,6 +114,7 @@
 #include <QRegExp>
 #include <QScrollArea>
 #include <QDesktopServices>
+#include <QDialogButtonBox>
 #include <QFileSystemWatcher>
 
 #include <iostream>
@@ -2864,27 +2865,50 @@ MainWindow::applyTemplate()
 void
 MainWindow::saveSessionAsTemplate()
 {
-    QString name = QInputDialog::getText
-        (this, tr("Enter template name"),
-         tr("Please enter a name for the saved template:"));
-    if (name == "") return;
-    
-    name.replace(QRegExp("[^\\w\\s\\.\"'-]"), "_");
+    QDialog *d = new QDialog;
+    d->setWindowTitle(tr("Enter template name"));
 
-    ResourceFinder rf;
-    QString dir = rf.getResourceSaveDir("templates");
-    QString filename = QString("%1/%2.svt").arg(dir).arg(name);
-    if (QFile(filename).exists()) {
-        if (QMessageBox::warning(this,
-                                 tr("Template file exists"),
-                                 tr("<b>Template file exists</b><p>The template \"%1\" already exists.<br>Overwrite it?").arg(name),
-                                 QMessageBox::Ok | QMessageBox::Cancel,
-                                 QMessageBox::Cancel) != QMessageBox::Ok) {
-            return;
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    layout->addWidget(new QLabel(tr("Please enter a name for the saved template:")),
+                 0, 0);
+    QLineEdit *lineEdit = new QLineEdit;
+    layout->addWidget(lineEdit, 1, 0);
+    QCheckBox *makeDefault = new QCheckBox(tr("Set as default template for future audio files"));
+    layout->addWidget(makeDefault, 2, 0);
+    
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                QDialogButtonBox::Cancel);
+    layout->addWidget(bb, 3, 0);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+    connect(bb, SIGNAL(rejected()), d, SLOT(reject()));
+    
+    if (d->exec() == QDialog::Accepted) {
+
+        QString name = lineEdit->text();
+        name.replace(QRegExp("[^\\w\\s\\.\"'-]"), "_");
+
+        ResourceFinder rf;
+        QString dir = rf.getResourceSaveDir("templates");
+        QString filename = QString("%1/%2.svt").arg(dir).arg(name);
+        if (QFile(filename).exists()) {
+            if (QMessageBox::warning(this,
+                                     tr("Template file exists"),
+                                     tr("<b>Template file exists</b><p>The template \"%1\" already exists.<br>Overwrite it?").arg(name),
+                                     QMessageBox::Ok | QMessageBox::Cancel,
+                                     QMessageBox::Cancel) != QMessageBox::Ok) {
+                return;
+            }
+        }
+
+        if (saveSessionTemplate(filename)) {
+            if (makeDefault->isChecked()) {
+                setDefaultSessionTemplate(name);
+            }
         }
     }
-
-    saveSessionTemplate(filename);
 }
 
 void
