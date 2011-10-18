@@ -324,8 +324,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
-    
-    TransformFactory::getInstance()->startPopulationThread();
+
+    //cc: remove for library edition    
+//    TransformFactory::getInstance()->startPopulationThread();
 
     //mathieub: remove the version tester and the survey for the library edition
     //Surveyer *surveyer = new Surveyer(this);
