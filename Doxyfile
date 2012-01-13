@@ -985,7 +985,7 @@ SEARCH_INCLUDES        = YES
 # contain include files that are not input files but should be processed by
 # the preprocessor.
 
-INCLUDE_PATH           = /home/studio/code/qt-433-static/include/Qt /home/studio/code/qt-433-static/include/QtCore /home/studio/code/qt-433-static/include/QtGui /home/studio/code/qt-433-static/include/QtXml /home/studio/code/qt-433-static/include/QtNetwork /home/studio/code/vamp-plugin-sdk /home/studio/code/vamp-plugin-sdk/vamp-sdk
+INCLUDE_PATH           = 
 
 # You can use the INCLUDE_FILE_PATTERNS tag to specify one or more wildcard
 # patterns (like *.h and *.hpp) to filter out the header-files in the
