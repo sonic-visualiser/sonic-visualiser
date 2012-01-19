@@ -149,6 +149,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_soloAction(0),
     m_soloModified(false),
     m_prevSolo(false),
+    m_exiting(false),
     m_rwdStartAction(0),
     m_rwdSimilarAction(0),
     m_rwdAction(0),
@@ -196,12 +197,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_descriptionLabel = new QLabel; //!!! hang on, this is declared in base class -- should be declared and initialised by same class
 
-    QScrollArea *scroll = new QScrollArea(frame);
-    scroll->setWidgetResizable(true);
-    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    scroll->setFrameShape(QFrame::NoFrame);
+    m_mainScroll = new QScrollArea(frame);
+    m_mainScroll->setWidgetResizable(true);
+    m_mainScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_mainScroll->setFrameShape(QFrame::NoFrame);
 
-    scroll->setWidget(m_paneStack);
+    m_mainScroll->setWidget(m_paneStack);
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
@@ -258,7 +259,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(4);
-    layout->addWidget(scroll, 0, 0, 1, 5);
+    layout->addWidget(m_mainScroll, 0, 0, 1, 5);
     layout->addWidget(m_overview, 1, 1);
     layout->addWidget(m_playControlsSpacer, 1, 2);
     layout->addWidget(m_playSpeed, 1, 3);
@@ -370,6 +371,13 @@ MainWindow::setupMenus()
     setupTransformsMenu();
 
     m_mainMenusCreated = true;
+}
+
+void
+MainWindow::goFullScreen()
+{
+    m_paneStack->setParent(0);
+    m_paneStack->showFullScreen();
 }
 
 void
@@ -2989,6 +2997,11 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
+    if (m_exiting) {
+        e->accept();
+        return;
+    }
+
 //    SVDEBUG << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
@@ -3021,6 +3034,10 @@ MainWindow::closeEvent(QCloseEvent *e)
     closeSession();
 
     e->accept();
+
+    m_exiting = true;
+    qApp->closeAllWindows();
+    
     return;
 }
 
