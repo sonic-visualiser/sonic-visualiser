@@ -149,6 +149,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_soloAction(0),
     m_soloModified(false),
     m_prevSolo(false),
+    m_exiting(false),
     m_rwdStartAction(0),
     m_rwdSimilarAction(0),
     m_rwdAction(0),
@@ -2989,6 +2990,11 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
+    if (m_exiting) {
+        e->accept();
+        return;
+    }
+
 //    SVDEBUG << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
@@ -3021,6 +3027,10 @@ MainWindow::closeEvent(QCloseEvent *e)
     closeSession();
 
     e->accept();
+
+    m_exiting = true;
+    qApp->closeAllWindows();
+    
     return;
 }
 
