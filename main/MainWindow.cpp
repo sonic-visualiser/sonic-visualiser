@@ -378,6 +378,8 @@ MainWindow::goFullScreen()
 {
     m_paneStack->setParent(0);
     m_paneStack->showFullScreen();
+    QApplication::processEvents();
+    m_paneStack->adjustSize();
 }
 
 void
