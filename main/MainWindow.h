@@ -59,6 +59,7 @@ class KeyReference;
 class Labeller;
 class ActivityLog;
 class QFileSystemWatcher;
+class QScrollArea;
 
 class MainWindow : public MainWindowBase
 {
@@ -76,6 +77,8 @@ signals:
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
     virtual bool commitData(bool mayAskUser);
+
+    void goFullScreen();
 
 protected slots:
     virtual void openSession();
@@ -186,6 +189,8 @@ protected:
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
+    
+    QScrollArea             *m_mainScroll;
 
     bool                     m_mainMenusCreated;
     QMenu                   *m_paneMenu;
@@ -217,6 +222,8 @@ protected:
 
     bool                     m_soloModified;
     bool                     m_prevSolo;
+
+    bool                     m_exiting;
 
     QFrame                  *m_playControlsSpacer;
     int                      m_playControlsWidth;

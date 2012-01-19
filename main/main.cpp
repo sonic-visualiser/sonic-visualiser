@@ -352,6 +352,7 @@ main(int argc, char **argv)
     settings.endGroup();
     
     gui->show();
+    gui->goFullScreen();
 
     // The MainWindow class seems to have trouble dealing with this if
     // it tries to adapt to this preference before the constructor is
