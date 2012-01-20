@@ -79,6 +79,7 @@ public slots:
     virtual bool commitData(bool mayAskUser);
 
     void goFullScreen();
+    void endFullScreen();
 
 protected slots:
     virtual void openSession();

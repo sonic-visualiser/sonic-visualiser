@@ -376,10 +376,22 @@ MainWindow::setupMenus()
 void
 MainWindow::goFullScreen()
 {
-    m_paneStack->setParent(0);
-    m_paneStack->showFullScreen();
-    QApplication::processEvents();
-    m_paneStack->adjustSize();
+    QWidget *ps = m_mainScroll->takeWidget();
+//    m_mainScroll->setWidget(0);
+    ps->setParent(0);
+    ps->showFullScreen();
+//    ps->showMaximized();
+    //!!! we don't really want to create this every time!
+    QShortcut *sc = new QShortcut(QKeySequence("Esc"), ps);
+    connect(sc, SIGNAL(activated()), this, SLOT(endFullScreen()));
+//    QApplication::processEvents();
+//    m_paneStack->adjustSize();
+}
+
+void
+MainWindow::endFullScreen()
+{
+    m_mainScroll->setWidget(m_paneStack);
 }
 
 void
