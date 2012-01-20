@@ -381,7 +381,6 @@ MainWindow::goFullScreen()
     ps->setParent(0);
     ps->showFullScreen();
 //    ps->showMaximized();
-    //!!! we don't really want to create this every time!
     QShortcut *sc = new QShortcut(QKeySequence("Esc"), ps);
     connect(sc, SIGNAL(activated()), this, SLOT(endFullScreen()));
 //    QApplication::processEvents();
@@ -391,6 +390,8 @@ MainWindow::goFullScreen()
 void
 MainWindow::endFullScreen()
 {
+    QShortcut *sc = dynamic_cast<QShortcut *>(sender());
+    if (sc) delete sc; // it was only created in goFullScreen
     m_mainScroll->setWidget(m_paneStack);
 }
 
@@ -963,6 +964,11 @@ MainWindow::setupViewMenu()
     action = new QAction(tr("Show Acti&vity Log"), this);
     action->setStatusTip(tr("Open a window listing interactions and other events"));
     connect(action, SIGNAL(triggered()), this, SLOT(showActivityLog()));
+    menu->addAction(action);
+
+    //!!!
+    action = new QAction(tr("Go Full-Screen"), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
     menu->addAction(action);
 }
 
