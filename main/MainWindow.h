@@ -220,6 +220,12 @@ protected:
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
     QAction                 *m_manageTemplatesAction;
+    QAction                 *m_zoomInAction;
+    QAction                 *m_zoomOutAction;
+    QAction                 *m_zoomFitAction;
+    QAction                 *m_scrollLeftAction;
+    QAction                 *m_scrollRightAction;
+    QAction                 *m_showPropertyBoxesAction;
 
     bool                     m_soloModified;
     bool                     m_prevSolo;

@@ -377,21 +377,39 @@ void
 MainWindow::goFullScreen()
 {
     QWidget *ps = m_mainScroll->takeWidget();
-//    m_mainScroll->setWidget(0);
     ps->setParent(0);
-    ps->showFullScreen();
-//    ps->showMaximized();
-    QShortcut *sc = new QShortcut(QKeySequence("Esc"), ps);
+
+    QShortcut *sc;
+
+    sc = new QShortcut(QKeySequence("Esc"), ps);
     connect(sc, SIGNAL(activated()), this, SLOT(endFullScreen()));
-//    QApplication::processEvents();
-//    m_paneStack->adjustSize();
+
+    sc = new QShortcut(QKeySequence("F11"), ps);
+    connect(sc, SIGNAL(activated()), this, SLOT(endFullScreen()));
+
+    QAction *acts[] = {
+        m_playAction, m_zoomInAction, m_zoomOutAction, m_zoomFitAction,
+        m_scrollLeftAction, m_scrollRightAction, m_showPropertyBoxesAction
+    };
+
+    for (int i = 0; i < sizeof(acts)/sizeof(acts[0]); ++i) {
+        sc = new QShortcut(acts[i]->shortcut(), ps);
+        connect(sc, SIGNAL(activated()), acts[i], SLOT(trigger()));
+    }
+
+    ps->showFullScreen();
 }
 
 void
 MainWindow::endFullScreen()
 {
-    QShortcut *sc = dynamic_cast<QShortcut *>(sender());
-    if (sc) delete sc; // it was only created in goFullScreen
+    // these were only created in goFullScreen:
+    QObjectList cl = m_paneStack->children();
+    foreach (QObject *o, cl) {
+        QShortcut *sc = qobject_cast<QShortcut *>(o);
+        if (sc) delete sc;
+    }
+
     m_mainScroll->setWidget(m_paneStack);
 }
 
@@ -776,21 +794,21 @@ MainWindow::setupViewMenu()
 
     QMenu *menu = menuBar()->addMenu(tr("&View"));
     menu->setTearOffEnabled(true);
-    action = new QAction(tr("Scroll &Left"), this);
-    action->setShortcut(tr("Left"));
-    action->setStatusTip(tr("Scroll the current pane to the left"));
-    connect(action, SIGNAL(triggered()), this, SLOT(scrollLeft()));
-    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_scrollLeftAction = new QAction(tr("Scroll &Left"), this);
+    m_scrollLeftAction->setShortcut(tr("Left"));
+    m_scrollLeftAction->setStatusTip(tr("Scroll the current pane to the left"));
+    connect(m_scrollLeftAction, SIGNAL(triggered()), this, SLOT(scrollLeft()));
+    connect(this, SIGNAL(canScroll(bool)), m_scrollLeftAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_scrollLeftAction);
+    menu->addAction(m_scrollLeftAction);
 	
-    action = new QAction(tr("Scroll &Right"), this);
-    action->setShortcut(tr("Right"));
-    action->setStatusTip(tr("Scroll the current pane to the right"));
-    connect(action, SIGNAL(triggered()), this, SLOT(scrollRight()));
-    connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_scrollRightAction = new QAction(tr("Scroll &Right"), this);
+    m_scrollRightAction->setShortcut(tr("Right"));
+    m_scrollRightAction->setStatusTip(tr("Scroll the current pane to the right"));
+    connect(m_scrollRightAction, SIGNAL(triggered()), this, SLOT(scrollRight()));
+    connect(this, SIGNAL(canScroll(bool)), m_scrollRightAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_scrollRightAction);
+    menu->addAction(m_scrollRightAction);
 	
     action = new QAction(tr("&Jump Left"), this);
     action->setShortcut(tr("Ctrl+Left"));
@@ -828,23 +846,23 @@ MainWindow::setupViewMenu()
 
     m_keyReference->setCategory(tr("Zoom"));
 
-    action = new QAction(il.load("zoom-in"),
-                         tr("Zoom &In"), this);
-    action->setShortcut(tr("Up"));
-    action->setStatusTip(tr("Increase the zoom level"));
-    connect(action, SIGNAL(triggered()), this, SLOT(zoomIn()));
-    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_zoomInAction = new QAction(il.load("zoom-in"),
+                                 tr("Zoom &In"), this);
+    m_zoomInAction->setShortcut(tr("Up"));
+    m_zoomInAction->setStatusTip(tr("Increase the zoom level"));
+    connect(m_zoomInAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
+    connect(this, SIGNAL(canZoom(bool)), m_zoomInAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_zoomInAction);
+    menu->addAction(m_zoomInAction);
 	
-    action = new QAction(il.load("zoom-out"),
-                         tr("Zoom &Out"), this);
-    action->setShortcut(tr("Down"));
-    action->setStatusTip(tr("Decrease the zoom level"));
-    connect(action, SIGNAL(triggered()), this, SLOT(zoomOut()));
-    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_zoomOutAction = new QAction(il.load("zoom-out"),
+                                  tr("Zoom &Out"), this);
+    m_zoomOutAction->setShortcut(tr("Down"));
+    m_zoomOutAction->setStatusTip(tr("Decrease the zoom level"));
+    connect(m_zoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOut()));
+    connect(this, SIGNAL(canZoom(bool)), m_zoomOutAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_zoomOutAction);
+    menu->addAction(m_zoomOutAction);
 	
     action = new QAction(tr("Restore &Default Zoom"), this);
     action->setStatusTip(tr("Restore the zoom level to the default"));
@@ -852,14 +870,14 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    action = new QAction(il.load("zoom-fit"),
-                         tr("Zoom to &Fit"), this);
-    action->setShortcut(tr("F"));
-    action->setStatusTip(tr("Zoom to show the whole file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(zoomToFit()));
-    connect(this, SIGNAL(canZoom(bool)), action, SLOT(setEnabled(bool)));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_zoomFitAction = new QAction(il.load("zoom-fit"),
+                                  tr("Zoom to &Fit"), this);
+    m_zoomFitAction->setShortcut(tr("F"));
+    m_zoomFitAction->setStatusTip(tr("Zoom to show the whole file"));
+    connect(m_zoomFitAction, SIGNAL(triggered()), this, SLOT(zoomToFit()));
+    connect(this, SIGNAL(canZoom(bool)), m_zoomFitAction, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(m_zoomFitAction);
+    menu->addAction(m_zoomFitAction);
 
     menu->addSeparator();
 
@@ -927,14 +945,14 @@ MainWindow::setupViewMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    action = new QAction(tr("Show Property Bo&xes"), this);
-    action->setShortcut(tr("X"));
-    action->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
-    connect(action, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
-    action->setCheckable(true);
-    action->setChecked(true);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
+    m_showPropertyBoxesAction = new QAction(tr("Show Property Bo&xes"), this);
+    m_showPropertyBoxesAction->setShortcut(tr("X"));
+    m_showPropertyBoxesAction->setStatusTip(tr("Show the layer property boxes at the side of the main window"));
+    connect(m_showPropertyBoxesAction, SIGNAL(triggered()), this, SLOT(togglePropertyBoxes()));
+    m_showPropertyBoxesAction->setCheckable(true);
+    m_showPropertyBoxesAction->setChecked(true);
+    m_keyReference->registerShortcut(m_showPropertyBoxesAction);
+    menu->addAction(m_showPropertyBoxesAction);
 
     action = new QAction(tr("Show Status &Bar"), this);
     action->setStatusTip(tr("Show context help information in the status bar at the bottom of the window"));
@@ -966,9 +984,13 @@ MainWindow::setupViewMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(showActivityLog()));
     menu->addAction(action);
 
-    //!!!
+    menu->addSeparator();
+
     action = new QAction(tr("Go Full-Screen"), this);
+    action->setShortcut(tr("F11"));
+    action->setStatusTip(tr("Expand the pane area to the whole screen"));
     connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
+    m_keyReference->registerShortcut(action);
     menu->addAction(action);
 }
 
