@@ -21,9 +21,32 @@ Methods that manipulate panes or layers act on the currently selected
 pane or layer.  Use the setcurrent method to choose the right target
 for subsequent such methods.
 
-There is a small program sv/osc/sv-osc-send.c that sends an OSC method
-and arguments to a given URL, and a small shell script sv/osc/sv-command
-that provides a basic command shell for Sonic Visualiser.
+If you need an OSC client, there is a small program in the svcore
+library at
+
+  svcore/data/osc/sv-osc-send.c 
+
+that sends an OSC method and arguments to a given URL -- this is not
+specific to SV but will work with it. To compile that program you
+should only have to run
+
+  $ gcc sv-osc-send.c -o sv-osc-send -llo
+
+provided you have liblo installed.
+
+Then there is a small shell script in the same directory, called
+sv-command, that provides a basic command shell for Sonic Visualiser.
+Start SV first, then sv-command should find its OSC port from the
+system process table when you start it.
+For example:
+
+  $ PATH=.:$PATH ./sv-command      # Set PATH so it can find sv-osc-send
+  /open snare_hex.wav
+  /add spectrogram
+  /set layer Colour Sunset
+  /play
+  /quit
+  $
 
 
 OSC methods available
