@@ -843,11 +843,29 @@ MainWindow::setupViewMenu()
 
     m_keyReference->setCategory(tr("Display Features"));
 
+    action = new QAction(tr("Show &Centre Line"), this);
+    action->setShortcut(tr("'"));
+    action->setStatusTip(tr("Show or hide the centre line"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleCentreLine()));
+    action->setCheckable(true);
+    action->setChecked(true);
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    action = new QAction(tr("Toggle All Time Rulers"), this);
+    action->setShortcut(tr("#"));
+    action->setStatusTip(tr("Show or hide all time rulers"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
+    m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    menu->addSeparator();
+
     QActionGroup *overlayGroup = new QActionGroup(this);
         
     action = new QAction(tr("Show &No Overlays"), this);
     action->setShortcut(tr("0"));
-    action->setStatusTip(tr("Hide centre indicator, frame times, layer names and scale"));
+    action->setStatusTip(tr("Hide times, layer names, and scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
     action->setCheckable(true);
     action->setChecked(false);
@@ -857,18 +875,8 @@ MainWindow::setupViewMenu()
         
     action = new QAction(tr("Show &Minimal Overlays"), this);
     action->setShortcut(tr("9"));
-    action->setStatusTip(tr("Show centre indicator only"));
+    action->setStatusTip(tr("Show times and basic scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
-    action->setCheckable(true);
-    action->setChecked(false);
-    overlayGroup->addAction(action);
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-        
-    action = new QAction(tr("Show &Standard Overlays"), this);
-    action->setShortcut(tr("8"));
-    action->setStatusTip(tr("Show centre indicator, frame times and scale"));
-    connect(action, SIGNAL(triggered()), this, SLOT(showStandardOverlays()));
     action->setCheckable(true);
     action->setChecked(true);
     overlayGroup->addAction(action);
@@ -876,8 +884,8 @@ MainWindow::setupViewMenu()
     menu->addAction(action);
         
     action = new QAction(tr("Show &All Overlays"), this);
-    action->setShortcut(tr("7"));
-    action->setStatusTip(tr("Show all texts and scale"));
+    action->setShortcut(tr("8"));
+    action->setStatusTip(tr("Show times, layer names, and scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
     action->setCheckable(true);
     action->setChecked(false);
@@ -886,16 +894,7 @@ MainWindow::setupViewMenu()
     menu->addAction(action);
 
     menu->addSeparator();
-
-    action = new QAction(tr("Show All Time Rulers"), this);
-    action->setShortcut(tr("#"));
-    action->setStatusTip(tr("Show or hide all time rulers"));
-    connect(action, SIGNAL(triggered()), this, SLOT(toggleTimeRulers()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-
-    menu->addSeparator();
-
+        
     action = new QAction(tr("Show &Zoom Wheels"), this);
     action->setShortcut(tr("Z"));
     action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));

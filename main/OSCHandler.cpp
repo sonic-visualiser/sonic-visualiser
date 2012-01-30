@@ -350,8 +350,6 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     m_viewManager->setOverlayMode(ViewManager::NoOverlays);
                 } else if (value < 1.5) {
                     m_viewManager->setOverlayMode(ViewManager::MinimalOverlays);
-                } else if (value < 2.5) {
-                    m_viewManager->setOverlayMode(ViewManager::StandardOverlays);
                 } else {
                     m_viewManager->setOverlayMode(ViewManager::AllOverlays);
                 }                    
