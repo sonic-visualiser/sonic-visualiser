@@ -149,7 +149,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_soloAction(0),
     m_soloModified(false),
     m_prevSolo(false),
-    m_exiting(false),
     m_rwdStartAction(0),
     m_rwdSimilarAction(0),
     m_rwdAction(0),
@@ -576,7 +575,7 @@ MainWindow::setupFileMenu()
                          tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
     action->setStatusTip(tr("Exit Sonic Visualiser"));
-    connect(action, SIGNAL(triggered()), this, SLOT(close()));
+    connect(action, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 }
@@ -3038,12 +3037,7 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-    if (m_exiting) {
-        e->accept();
-        return;
-    }
-
-//    SVDEBUG << "MainWindow::closeEvent" << endl;
+//    std::cerr << "MainWindow::closeEvent" << std::endl;
 
     if (m_openingAudioFile) {
 //        std::cerr << "Busy - ignoring close event" << std::endl;
@@ -3052,7 +3046,7 @@ MainWindow::closeEvent(QCloseEvent *e)
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        SVDEBUG << "Ignoring close event" << endl;
+//        std::cerr << "Close refused by user - ignoring close event" << endl;
 	e->ignore();
 	return;
     }
@@ -3076,9 +3070,6 @@ MainWindow::closeEvent(QCloseEvent *e)
 
     e->accept();
 
-    m_exiting = true;
-    qApp->closeAllWindows();
-    
     return;
 }
 
@@ -3437,7 +3428,7 @@ MainWindow::addLayer()
 	LayerFactory::LayerTypeSet emptyTypes =
 	    LayerFactory::getInstance()->getValidEmptyLayerTypes();
 
-	Layer *newLayer;
+	Layer *newLayer = 0;
 
 	if (emptyTypes.find(type) != emptyTypes.end()) {
 

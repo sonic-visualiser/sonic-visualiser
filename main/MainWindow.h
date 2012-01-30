@@ -230,8 +230,6 @@ protected:
     bool                     m_soloModified;
     bool                     m_prevSolo;
 
-    bool                     m_exiting;
-
     QFrame                  *m_playControlsSpacer;
     int                      m_playControlsWidth;
 
