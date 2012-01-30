@@ -25,9 +25,16 @@ contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
 LIBS = -L../svapp -L../svgui -L../svcore -lsvapp -lsvgui -lsvcore $$LIBS
 
+win* {
 PRE_TARGETDEPS += ../svapp/svapp.lib \
                   ../svgui/svgui.lib \
                   ../svcore/svcore.lib
+}
+!win* {
+PRE_TARGETDEPS += ../svapp/libsvapp.a \
+                  ../svgui/libsvgui.a \
+                  ../svcore/libsvcore.a
+}
 
 RESOURCES += sonic-visualiser.qrc
 
