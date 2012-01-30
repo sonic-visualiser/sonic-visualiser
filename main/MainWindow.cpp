@@ -3437,7 +3437,7 @@ MainWindow::addLayer()
 	LayerFactory::LayerTypeSet emptyTypes =
 	    LayerFactory::getInstance()->getValidEmptyLayerTypes();
 
-	Layer *newLayer;
+	Layer *newLayer = 0;
 
 	if (emptyTypes.find(type) != emptyTypes.end()) {
 
