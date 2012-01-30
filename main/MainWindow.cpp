@@ -318,6 +318,7 @@ MainWindow::~MainWindow()
 {
 //    SVDEBUG << "MainWindow::~MainWindow" << endl;
     delete m_keyReference;
+    delete m_activityLog;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     Profiles::getInstance()->dump();
@@ -2762,6 +2763,12 @@ MainWindow::closeSession()
 	m_paneStack->deletePane(pane);
     }
 
+    delete m_layerTreeDialog.data();
+    delete m_preferencesDialog.data();
+
+    m_activityLog->hide();
+    m_keyReference->hide();
+
     delete m_document;
     m_document = 0;
     m_viewManager->clearSelections();
@@ -3056,9 +3063,6 @@ MainWindow::closeEvent(QCloseEvent *e)
     settings.setValue("size", size());
     settings.setValue("position", pos());
     settings.endGroup();
-
-    delete m_keyReference;
-    m_keyReference = 0;
 
     if (m_preferencesDialog &&
         m_preferencesDialog->isVisible()) {
