@@ -12,15 +12,21 @@
     <file>icons/regions.png</file>
     <file>icons/colour3d.png</file>
     <file>icons/playpause.png</file>
+    <file>icons/playpause-on.png</file>
     <file>icons/ffwd.png</file>
     <file>icons/ffwd-end.png</file>
     <file>icons/rewind.png</file>
     <file>icons/rewind-start.png</file>
     <file>icons/playselection.png</file>
+    <file>icons/playselection-on.png</file>
     <file>icons/playloop.png</file>
+    <file>icons/playloop-on.png</file>
     <file>icons/playfollow.png</file>
+    <file>icons/playfollow-on.png</file>
     <file>icons/solo.png</file>
+    <file>icons/solo-on.png</file>
     <file>icons/align.png</file>
+    <file>icons/align-on.png</file>
     <file>icons/fader_background.png</file>
     <file>icons/fader_knob.png</file>
     <file>icons/fader_knob_red.png</file>
