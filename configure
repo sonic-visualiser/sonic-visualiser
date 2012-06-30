@@ -5479,7 +5479,7 @@ SV_MODULE_MODULE=dataquay
 SV_MODULE_VERSION_TEST="dataquay >= 0.9"
 SV_MODULE_HEADER=dataquay/Uri.h
 SV_MODULE_LIB=dataquay
-SV_MODULE_FUNC=
+SV_MODULE_FUNC=dataquay_v_0_9_present
 SV_MODULE_HAVE=HAVE_$(echo dataquay | tr 'a-z' 'A-Z')
 SV_MODULE_FAILED=1
 if test -n "$dataquay_LIBS" ; then
