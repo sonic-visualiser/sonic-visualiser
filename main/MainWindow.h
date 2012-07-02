@@ -85,6 +85,7 @@ protected slots:
     virtual void openSession();
     virtual void importAudio();
     virtual void importMoreAudio();
+    virtual void replaceMainAudio();
     virtual void openSomething();
     virtual void openLocation();
     virtual void openRecentFile();
