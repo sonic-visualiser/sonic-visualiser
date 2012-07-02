@@ -462,6 +462,13 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canImportMoreAudio(bool)), iaction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(iaction);
 
+    // We want this one to go on the toolbar now, if we add it at all,
+    // but on the menu later
+    QAction *raction = new QAction(tr("Replace &Main Audio..."), this);
+    raction->setStatusTip(tr("Replace the main audio file of the session with a different file"));
+    connect(raction, SIGNAL(triggered()), this, SLOT(replaceMainAudio()));
+    connect(this, SIGNAL(canReplaceMainAudio(bool)), raction, SLOT(setEnabled(bool)));
+
     action = new QAction(tr("Open Lo&cation..."), this);
     action->setShortcut(tr("Ctrl+Shift+O"));
     action->setStatusTip(tr("Open or import a file from a remote URL"));
@@ -508,6 +515,9 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 */
+
+    // the Replace action we made earlier
+    menu->addAction(raction);
 
     // the Import action we made earlier
     menu->addAction(iaction);
@@ -2298,6 +2308,20 @@ MainWindow::importMoreAudio()
 
     if (path != "") {
 	if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
+            emit hideSplash();
+	    QMessageBox::critical(this, tr("Failed to open file"),
+				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+	}
+    }
+}
+
+void
+MainWindow::replaceMainAudio()
+{
+    QString path = getOpenFileName(FileFinder::AudioFile);
+
+    if (path != "") {
+	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
             emit hideSplash();
 	    QMessageBox::critical(this, tr("Failed to open file"),
 				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
