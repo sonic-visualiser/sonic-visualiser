@@ -24,6 +24,11 @@ case "$version" in
 esac
 
 echo
+echo "Fixing up paths."
+
+deploy/osx/paths.sh "$app"
+
+echo
 echo "Making target tree."
 
 volume="$app"-"$version"
