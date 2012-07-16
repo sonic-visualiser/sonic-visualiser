@@ -46,6 +46,8 @@ perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
 
 echo "Done: check $target/Contents/Info.plist for sanity please"
 
+deploy/osx/sign.sh "$volume" || exit 1
+
 echo
 echo "Making dmg..."
 
