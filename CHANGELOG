@@ -1,4 +1,15 @@
 
+Changes in Sonic Visualiser 2.0 since the previous release 1.9:
+
+ - Support 64-bit builds on OS/X (using CoreAudio instead of
+   obsolete QuickTime audio file reader)
+
+ - Simplify RDF reading and fix some bugs. Now requires Dataquay
+   (http://breakfastquay.com/dataquay/) rather than using Redland
+   directly. Release builds use Sord/Serd rather than Redland
+
+ - Add a fullscreen mode on the F11 key
+
 Changes in Sonic Visualiser 1.9 since the previous release 1.8:
 
  - Add session templates; save session as template; apply template to
