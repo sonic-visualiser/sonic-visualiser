@@ -234,6 +234,7 @@ protected:
     QFrame                  *m_playControlsSpacer;
     int                      m_playControlsWidth;
 
+    QLabel                  *m_descriptionLabel;
     QLabel                  *m_currentLabel;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
