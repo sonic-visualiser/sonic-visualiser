@@ -168,7 +168,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 {
     Profiler profiler("MainWindow::MainWindow");
 
-    setWindowTitle(tr("Sonic Visualiser"));
+    setWindowTitle(QApplication::applicationName());
 
     UnitDatabase *udb = UnitDatabase::getInstance();
     udb->registerUnit("Hz");
@@ -430,20 +430,12 @@ MainWindow::setupFileMenu()
     icon.addPixmap(il.loadPixmap("filenew-22"));
     QAction *action = new QAction(icon, tr("&New Session"), this);
     action->setShortcut(tr("Ctrl+N"));
-    action->setStatusTip(tr("Abandon the current Sonic Visualiser session and start a new one"));
+    action->setStatusTip(tr("Abandon the current %1 session and start a new one").arg(QApplication::applicationName()));
     connect(action, SIGNAL(triggered()), this, SLOT(newSession()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     toolbar->addAction(action);
-/*
-    icon = il.load("fileopensession");
-    action = new QAction(icon, tr("&Open Session..."), this);
-    action->setShortcut(tr("Ctrl+O"));
-    action->setStatusTip(tr("Open a previously saved Sonic Visualiser session file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(openSession()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-*/
+
     icon = il.load("fileopen");
     icon.addPixmap(il.loadPixmap("fileopen-22"));
     action = new QAction(icon, tr("&Open..."), this);
@@ -488,7 +480,7 @@ MainWindow::setupFileMenu()
     icon.addPixmap(il.loadPixmap("filesave-22"));
     action = new QAction(icon, tr("&Save Session"), this);
     action->setShortcut(tr("Ctrl+S"));
-    action->setStatusTip(tr("Save the current session into a Sonic Visualiser session file"));
+    action->setStatusTip(tr("Save the current session into a %1 session file").arg(QApplication::applicationName()));
     connect(action, SIGNAL(triggered()), this, SLOT(saveSession()));
     connect(this, SIGNAL(canSave(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
@@ -499,7 +491,7 @@ MainWindow::setupFileMenu()
     icon.addPixmap(il.loadPixmap("filesaveas-22"));
     action = new QAction(icon, tr("Save Session &As..."), this);
     action->setShortcut(tr("Ctrl+Shift+S"));
-    action->setStatusTip(tr("Save the current session into a new Sonic Visualiser session file"));
+    action->setStatusTip(tr("Save the current session into a new %1 session file").arg(QApplication::applicationName()));
     connect(action, SIGNAL(triggered()), this, SLOT(saveSessionAs()));
     menu->addAction(action);
     toolbar->addAction(action);
@@ -585,7 +577,7 @@ MainWindow::setupFileMenu()
     action = new QAction(il.load("exit"),
                          tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
-    action->setStatusTip(tr("Exit Sonic Visualiser"));
+    action->setStatusTip(tr("Exit %1").arg(QApplication::applicationName()));
     connect(action, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -1664,28 +1656,30 @@ MainWindow::setupHelpMenu()
 
     IconLoader il;
 
+    QString name = QApplication::applicationName();
+
     QAction *action = new QAction(il.load("help"),
                                   tr("&Help Reference"), this); 
     action->setShortcut(tr("F1"));
-    action->setStatusTip(tr("Open the Sonic Visualiser reference manual")); 
+    action->setStatusTip(tr("Open the %1 reference manual").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(help()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
     action = new QAction(tr("&Key and Mouse Reference"), this);
     action->setShortcut(tr("F2"));
-    action->setStatusTip(tr("Open a window showing the keystrokes you can use in Sonic Visualiser"));
+    action->setStatusTip(tr("Open a window showing the keystrokes you can use in %1").arg(name));
     connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     
-    action = new QAction(tr("Sonic Visualiser on the &Web"), this); 
-    action->setStatusTip(tr("Open the Sonic Visualiser website")); 
+    action = new QAction(tr("%1 on the &Web").arg(name), this); 
+    action->setStatusTip(tr("Open the %1 website").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
-    action = new QAction(tr("&About Sonic Visualiser"), this); 
-    action->setStatusTip(tr("Show information about Sonic Visualiser")); 
+    action = new QAction(tr("&About %1").arg(name), this); 
+    action->setStatusTip(tr("Show information about %1").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
 }
@@ -2799,7 +2793,7 @@ MainWindow::closeSession()
     m_timeRulerLayer = 0; // document owned this
 
     m_sessionFile = "";
-    setWindowTitle(tr("Sonic Visualiser"));
+    setWindowTitle(QApplication::applicationName());
 
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
@@ -3254,7 +3248,8 @@ MainWindow::saveSessionAs()
 	QMessageBox::critical(this, tr("Failed to save file"),
 			      tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
     } else {
-	setWindowTitle(tr("Sonic Visualiser: %1")
+	setWindowTitle(tr("%1: %1")
+                       .arg(QApplication::applicationName())
 		       .arg(QFileInfo(path).fileName()));
 	m_sessionFile = path;
 	CommandHistory::getInstance()->documentSaved();
