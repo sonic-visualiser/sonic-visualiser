@@ -194,7 +194,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     QGridLayout *layout = new QGridLayout;
 
-    m_descriptionLabel = new QLabel; //!!! hang on, this is declared in base class -- should be declared and initialised by same class
+    m_descriptionLabel = new QLabel;
 
     m_mainScroll = new QScrollArea(frame);
     m_mainScroll->setWidgetResizable(true);
