@@ -119,7 +119,7 @@ AC_CONFIG_FILES([config.pri version.h])
 
 AC_OUTPUT
 
-if ! $QMAKE -r; then
+if ! $QMAKE -r sonic-visualiser.pro; then
    AC_MSG_ERROR([qmake failed: Command was "$QMAKE -r"])
 fi
 
