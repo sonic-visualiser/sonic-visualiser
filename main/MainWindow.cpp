@@ -2594,10 +2594,14 @@ MainWindow::exportLayer()
 
     } else if (suffix == "ttl" || suffix == "n3") {
 
-        RDFExporter exporter(path, model);
-        exporter.write();
-        if (!exporter.isOK()) {
-            error = exporter.getError();
+        if (!RDFExporter::canExportModel(model)) {
+            error = tr("Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)");
+        } else {
+            RDFExporter exporter(path, model);
+            exporter.write();
+            if (!exporter.isOK()) {
+                error = exporter.getError();
+            }
         }
 
     } else {
