@@ -4318,23 +4318,13 @@ MainWindow::about()
 #endif // !HAVE_VAMP
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
-#ifdef RAPTOR_VERSION
-    aboutText += tr("<br>With Raptor RDF parser v%1 &copy; Dave Beckett and the University of Bristol").arg(RAPTOR_VERSION);
-#else // !RAPTOR_VERSION
-    aboutText += tr("<br>With Raptor RDF parser &copy; Dave Beckett and the University of Bristol");
-#endif // RAPTOR_VERSION
-#ifdef RASQAL_VERSION
-    aboutText += tr("<br>With Rasqal RDF query engine v%1 &copy; Dave Beckett and the University of Bristol").arg(RASQAL_VERSION);
-#else // !RASQAL_VERSION
-    aboutText += tr("<br>With Rasqal RDF query engine &copy; Dave Beckett and the University of Bristol");
-#endif // RASQAL_VERSION
-#ifdef HAVE_REDLAND
 #ifdef REDLAND_VERSION
     aboutText += tr("<br>With Redland RDF datastore v%1 &copy; Dave Beckett and the University of Bristol").arg(REDLAND_VERSION);
 #else // !REDLAND_VERSION
     aboutText += tr("<br>With Redland RDF datastore &copy; Dave Beckett and the University of Bristol");
 #endif // REDLAND_VERSION
-#endif // HAVE_REDLAND
+    aboutText += tr("<br>With Serd and Sord RDF parser and store &copy; David Robillard");
+    aboutText += tr("<br>With Dataquay Qt/RDF library &copy; Chris Cannam");
 
     aboutText += tr("<br>With RtMidi &copy; Gary P. Scavone");
 
@@ -4357,7 +4347,7 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2012 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2013 Chris Cannam and "
         "Queen Mary, University of London.</small></p>"
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "

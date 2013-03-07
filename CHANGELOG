@@ -1,4 +1,8 @@
 
+Changes in Sonic Visualiser 2.0.1 since the previous release 2.0:
+
+ - Fix incorrect samplerate in reading m4a files on OS/X
+
 Changes in Sonic Visualiser 2.0 since the previous release 1.9:
 
  - Support 64-bit builds on OS/X (using CoreAudio instead of
