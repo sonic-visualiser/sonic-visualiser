@@ -82,7 +82,6 @@
 #include "rdf/PluginRDFIndexer.h"
 #include "rdf/RDFExporter.h"
 
-#include "Surveyer.h"
 #include "framework/VersionTester.h"
 
 // For version information
@@ -307,7 +306,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     
     TransformFactory::getInstance()->startPopulationThread();
 
-    Surveyer *surveyer = new Surveyer(this);
     VersionTester *vt = new VersionTester
         ("sonicvisualiser.org", "/latest-version.txt", SV_VERSION);
     connect(vt, SIGNAL(newerVersionAvailable(QString)),
@@ -1696,7 +1694,7 @@ MainWindow::setupRecentFilesMenu()
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
                 (tr("Re-open"),
-                 action->shortcut(),
+                 action->shortcut().toString(),
                  tr("Re-open the current or most recently opened file"));
         }
 	m_recentFilesMenu->addAction(action);
@@ -1772,7 +1770,7 @@ MainWindow::setupRecentTransformsMenu()
             ti->second->setShortcut(tr("Ctrl+T"));
             m_keyReference->registerShortcut
                 (tr("Repeat Transform"),
-                 ti->second->shortcut(),
+                 ti->second->shortcut().toString(),
                  tr("Re-select the most recently run transform"));
         } else {
             ti->second->setShortcut(QString(""));

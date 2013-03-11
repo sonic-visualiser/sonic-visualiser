@@ -31,7 +31,7 @@ class PreferencesDialog : public QDialog
     Q_OBJECT
 
 public:
-    PreferencesDialog(QWidget *parent = 0, Qt::WFlags flags = 0);
+    PreferencesDialog(QWidget *parent = 0);
     virtual ~PreferencesDialog();
 
     enum Tab {
