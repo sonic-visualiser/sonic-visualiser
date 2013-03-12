@@ -1,4 +1,4 @@
 svcore = https://code.soundsoftware.ac.uk/hg/svcore
 svgui = https://code.soundsoftware.ac.uk/hg/svgui
 svapp = https://code.soundsoftware.ac.uk/hg/svapp
-dataquay = http://hg.breakfastquay.com/dataquay
+dataquay = https://bitbucket.org/breakfastquay/dataquay
