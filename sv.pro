@@ -13,6 +13,15 @@ solaris*:TARGET = sonic-visualiser
 DEPENDPATH += . svcore svgui svapp
 INCLUDEPATH += . svcore svgui svapp
 
+win32-g++ {
+    INCLUDEPATH += sv-dependency-builds/win32-mingw/include
+    LIBS += sv-dependency-builds/win32-mingw/lib
+}
+win32-msvc* {
+    INCLUDEPATH += sv-dependency-builds/win32-msvc/include
+    LIBS += sv-dependency-builds/win32-msvc/lib
+}
+
 TRANSLATIONS += i18n/sonic-visualiser_ru.ts i18n/sonic-visualiser_en_GB.ts i18n/sonic-visualiser_en_US.ts i18n/sonic-visualiser_cs_CZ.ts
 
 OBJECTS_DIR = o
@@ -29,13 +38,17 @@ linux* {
 MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic
 }
 
+win* {
+MY_LIBS = -Lsvapp/debug -Lsvgui/debug -Lsvcore/debug -Ldataquay/debug $$MY_LIBS
+}
+
 LIBS = $$MY_LIBS $$LIBS
 
 win* {
-PRE_TARGETDEPS += svapp/svapp.lib \
-                  svgui/svgui.lib \
-                  svcore/svcore.lib \
-                  dataquay/dataquay.lib
+#PRE_TARGETDEPS += svapp/svapp.lib \
+#                  svgui/svgui.lib \
+#                  svcore/svcore.lib \
+#                  dataquay/dataquay.lib
 }
 !win* {
 PRE_TARGETDEPS += svapp/libsvapp.a \
