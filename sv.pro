@@ -1,12 +1,22 @@
 
 TEMPLATE = app
 
+win32-g++ {
+    INCLUDEPATH += sv-dependency-builds/win32-mingw/include
+    LIBS += -Lsv-dependency-builds/win32-mingw/lib
+}
+win32-msvc* {
+    INCLUDEPATH += sv-dependency-builds/win32-msvc/include
+    LIBS += -Lsv-dependency-builds/win32-msvc/lib
+}
+
 exists(config.pri) {
     include(config.pri)
 }
 win* {
     !exists(config.pri) {
         DEFINES += HAVE_BZ2 HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_SAMPLERATE HAVE_VAMP HAVE_VAMPHOSTSDK HAVE_RUBBERBAND HAVE_DATAQUAY HAVE_LIBLO HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO_2_0
+        LIBS += -lbz2 -lrubberband -lvamp-hostsdk -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -llo -lz -lsord-0 -lserd-0 -lwinmm -lws2_32
     }
 }
 
@@ -19,15 +29,6 @@ solaris*:TARGET = sonic-visualiser
 
 DEPENDPATH += . svcore svgui svapp
 INCLUDEPATH += . svcore svgui svapp
-
-win32-g++ {
-    INCLUDEPATH += sv-dependency-builds/win32-mingw/include
-    LIBS += sv-dependency-builds/win32-mingw/lib
-}
-win32-msvc* {
-    INCLUDEPATH += sv-dependency-builds/win32-msvc/include
-    LIBS += sv-dependency-builds/win32-msvc/lib
-}
 
 TRANSLATIONS += i18n/sonic-visualiser_ru.ts i18n/sonic-visualiser_en_GB.ts i18n/sonic-visualiser_en_US.ts i18n/sonic-visualiser_cs_CZ.ts
 
@@ -46,7 +47,7 @@ MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic
 }
 
 win* {
-MY_LIBS = -Lsvapp/debug -Lsvgui/debug -Lsvcore/debug -Ldataquay/debug $$MY_LIBS
+MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Ldataquay/release $$MY_LIBS
 }
 
 LIBS = $$MY_LIBS $$LIBS
