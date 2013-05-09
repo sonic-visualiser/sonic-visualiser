@@ -42,8 +42,8 @@
 #include "audioio/AudioTargetFactory.h"
 #include "base/ResourceFinder.h"
 
-PreferencesDialog::PreferencesDialog(QWidget *parent, Qt::WFlags flags) :
-    QDialog(parent, flags),
+PreferencesDialog::PreferencesDialog(QWidget *parent) :
+    QDialog(parent),
     m_audioDevice(0),
     m_changesOnRestart(false)
 {
