@@ -3974,8 +3974,8 @@ fi
 
 
 if test x$QMAKE = x ; then
-   	# Extract the first word of "qmake-qt4", so it can be a program name with args.
-set dummy qmake-qt4; ac_word=$2
+   	# Extract the first word of "qmake-qt5", so it can be a program name with args.
+set dummy qmake-qt5; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if ${ac_cv_prog_QMAKE+:} false; then :
@@ -3991,7 +3991,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_QMAKE="$QTDIR/bin/qmake-qt4"
+    ac_cv_prog_QMAKE="$QTDIR/bin/qmake-qt5"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -4091,8 +4091,8 @@ fi
 
 fi
 if test x$QMAKE = x ; then
-   	# Extract the first word of "qmake-qt4", so it can be a program name with args.
-set dummy qmake-qt4; ac_word=$2
+   	# Extract the first word of "qmake-qt5", so it can be a program name with args.
+set dummy qmake-qt5; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if ${ac_cv_prog_QMAKE+:} false; then :
@@ -4108,7 +4108,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_QMAKE="qmake-qt4"
+    ac_cv_prog_QMAKE="qmake-qt5"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -4170,9 +4170,9 @@ fi
 fi
 if test x$QMAKE = x ; then
    	as_fn_error $? "
-Failed to find the required qmake-qt4 or qmake program.  Please
-ensure you have the necessary Qt4 development files installed, and
-if necessary set QTDIR to the location of your Qt4 installation.
+Failed to find the required qmake-qt5 or qmake program.  Please
+ensure you have the necessary Qt5 development files installed, and
+if necessary set QTDIR to the location of your Qt5 installation.
 " "$LINENO" 5
 fi
 
@@ -4186,16 +4186,16 @@ fi
 #
 QMAKE_VERSION_OUTPUT=`$QMAKE -v`
 case "$QMAKE_VERSION_OUTPUT" in
-     *2.*4.*) ;;
+     *5.*) ;;
      *) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING:
  *** The version of qmake found in \"$QMAKE\" looks like it might be
-     from the wrong version of Qt (Qt4 is required).  Please check
-     that this is the correct version of qmake for Qt4 builds.
+     from the wrong version of Qt (Qt5 is required).  Please check
+     that this is the correct version of qmake for Qt5 builds.
 " >&5
 $as_echo "$as_me: WARNING:
  *** The version of qmake found in \"$QMAKE\" looks like it might be
-     from the wrong version of Qt (Qt4 is required).  Please check
-     that this is the correct version of qmake for Qt4 builds.
+     from the wrong version of Qt (Qt5 is required).  Please check
+     that this is the correct version of qmake for Qt5 builds.
 " >&2;}
 esac
 
