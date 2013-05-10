@@ -22,12 +22,21 @@
 
     <MajorUpgrade DowngradeErrorMessage="A later version of Sonic Visualiser is already installed. Setup will now exit."/>
 
-    <Media Id="1" Cabinet="Sonic Visualiser.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1"/>
+    <Media Id="1" Cabinet="SonicVisualiser.cab" EmbedCab="yes" DiskPrompt="CD-ROM #1"/>
     <Property Id="DiskPrompt" Value="Sonic Visualiser Installation [1]"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder" Name="PFiles">
         <Directory Id="VampPlugins" Name="Vamp Plugins">
+            <Component
+                Id="VampPlugins"
+                Guid="E68E4E0B-3C63-49bd-AD2D-44431EABDA6A">
+                <File
+                    Id="VampREADME"
+                    Name="README.txt"
+                    DiskId="1"
+                    Source="deploy\win32\README-Vamp.txt"/>
+            </Component>
         </Directory>
         <Directory Id="INSTALLDIR" Name="Sonic Visualiser">
             
@@ -47,7 +56,7 @@
                     Directory="ProgramMenuDir"
                     Name="Sonic Visualiser"
                     WorkingDirectory="INSTALLDIR"
-                    Icon="sv-winicon.ico"
+                    Icon="winicon.ico"
                     IconIndex="0"
                     Advertise="yes"/>
 
@@ -56,7 +65,7 @@
                     Directory="DesktopFolder"
                     Name="Sonic Visualiser"
                     WorkingDirectory="INSTALLDIR"
-                    Icon="sv-winicon.ico"
+                    Icon="winicon.ico"
                     IconIndex="0"
                     Advertise="yes"/>
               </File>
@@ -78,7 +87,7 @@
                   Source="CHANGELOG"/>
 
               <File
-                  Id="sv-winicon.ico"
+                  Id="winicon.ico"
                   Name="sv-winicon.ico"
                   DiskId="1"
                   Source="icons/sv-winicon.ico"/>
@@ -110,7 +119,7 @@
                   Source="release\Qt5Widgets.dll"/>
               <File
                   Id="QtXml"
-                  Name="Qt5Widgets.dll"
+                  Name="Qt5Xml.dll"
                   DiskId="1"
                   Source="release\Qt5Xml.dll"/>
               <File
@@ -194,8 +203,8 @@
     </Feature>
 
     <Icon
-        Id="sv-winicon.ico"
-        SourceFile="sv-winicon.ico"/>
+        Id="winicon.ico"
+        SourceFile="icons/sv-winicon.ico"/>
 
   </Product>
 </Wix>
