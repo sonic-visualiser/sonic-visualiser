@@ -66,7 +66,7 @@ AC_DEFUN([SV_CHECK_QT],
 AC_REQUIRE([AC_PROG_CXX])
 
 if test x$QMAKE = x ; then
-   	AC_CHECK_PROG(QMAKE, qmake-qt4, $QTDIR/bin/qmake-qt4,,$QTDIR/bin/)
+   	AC_CHECK_PROG(QMAKE, qmake-qt5, $QTDIR/bin/qmake-qt5,,$QTDIR/bin/)
 fi
 if test x$QMAKE = x ; then
    	AC_CHECK_PROG(QMAKE, qmake, $QTDIR/bin/qmake,,$QTDIR/bin/)
@@ -75,16 +75,16 @@ if test x$QMAKE = x ; then
 	AC_CHECK_PROG(QMAKE, qmake.exe, $QTDIR/bin/qmake.exe,,$QTDIR/bin/)
 fi
 if test x$QMAKE = x ; then
-   	AC_CHECK_PROG(QMAKE, qmake-qt4, qmake-qt4,,$PATH)
+   	AC_CHECK_PROG(QMAKE, qmake-qt5, qmake-qt5,,$PATH)
 fi
 if test x$QMAKE = x ; then
    	AC_CHECK_PROG(QMAKE, qmake, qmake,,$PATH)
 fi
 if test x$QMAKE = x ; then
    	AC_MSG_ERROR([
-Failed to find the required qmake-qt4 or qmake program.  Please
-ensure you have the necessary Qt4 development files installed, and
-if necessary set QTDIR to the location of your Qt4 installation.
+Failed to find the required qmake-qt5 or qmake program.  Please
+ensure you have the necessary Qt5 development files installed, and
+if necessary set QTDIR to the location of your Qt5 installation.
 ])
 fi
 
@@ -98,11 +98,11 @@ fi
 #
 QMAKE_VERSION_OUTPUT=`$QMAKE -v`
 case "$QMAKE_VERSION_OUTPUT" in
-     *2.*4.*) ;;
+     *5.*) ;;
      *) AC_MSG_WARN([
  *** The version of qmake found in "$QMAKE" looks like it might be
-     from the wrong version of Qt (Qt4 is required).  Please check
-     that this is the correct version of qmake for Qt4 builds.
+     from the wrong version of Qt (Qt5 is required).  Please check
+     that this is the correct version of qmake for Qt5 builds.
 ])
 esac
 

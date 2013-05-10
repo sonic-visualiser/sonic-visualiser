@@ -1,5 +1,5 @@
 
-AC_INIT([Sonic Visualiser], 2.0.1, cannam@all-day-breakfast.com)
+AC_INIT([Sonic Visualiser], 2.1, cannam@all-day-breakfast.com)
 
 AC_CONFIG_SRCDIR(main/main.cpp)
 
@@ -131,5 +131,5 @@ might care about, and then run "make".
 
 The file config.pri contains the configuration settings for
 qmake.  If you want to adjust these by hand, edit config.pri
-and run "qmake -r" again to regenerate the Makefile.
+and run "$QMAKE -r" again to regenerate the Makefile.
 ])
