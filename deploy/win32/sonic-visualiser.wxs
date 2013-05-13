@@ -167,18 +167,25 @@
                   Name="libwinpthread-1.dll"
                   DiskId="1"
                   Source="release\libwinpthread-1.dll"/>
-              <File
-                  Id="qminimal"
-                  Name="qminimal.dll"
-                  DiskId="1"
-                  Source="release\qminimal.dll"/>
-              <File
-                  Id="qwindows"
-                  Name="qwindows.dll"
-                  DiskId="1"
-                  Source="release\qwindows.dll"/>
             </Component>
 	    
+	    <Directory Id="Platforms" Name="platforms">
+              <Component
+                  Id="Qt5PlatformPlugins"
+                  Guid="1EDCEA4B-C83F-430B-B09D-CB113DFD4E77">
+		<File
+                    Id="qminimal"
+                    Name="qminimal.dll"
+                    DiskId="1"
+                    Source="release\qminimal.dll"/>
+		<File
+                    Id="qwindows"
+                    Name="qwindows.dll"
+                    DiskId="1"
+                    Source="release\qwindows.dll"/>
+              </Component>
+	    </Directory>
+
         </Directory>
       </Directory>
       
@@ -199,6 +206,7 @@
       <ComponentRef Id="VampPlugins"/>
       <ComponentRef Id="MainExecutable"/>
       <ComponentRef Id="Qt5"/>
+      <ComponentRef Id="Qt5PlatformPlugins"/>
       <ComponentRef Id="ProgramMenuDir"/>
     </Feature>
 
