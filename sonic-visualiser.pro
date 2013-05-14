@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = sub_dataquay svcore svgui svapp sub_sv svcore/data/fileio/test
+SUBDIRS = sub_dataquay svcore svgui svapp sub_sv #svcore/data/fileio/test
 
 sub_sv.file = sv.pro
 
