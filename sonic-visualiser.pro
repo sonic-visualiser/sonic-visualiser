@@ -1,7 +1,9 @@
 TEMPLATE = subdirs
-SUBDIRS = dataquay svcore svgui svapp sub_sv svcore/data/fileio/test
+SUBDIRS = sub_dataquay svcore svgui svapp sub_sv svcore/data/fileio/test
 
 sub_sv.file = sv.pro
+
+sub_dataquay.file = dataquay/lib.pro
 
 svgui.depends = svcore
 svapp.depends = svcore svgui
