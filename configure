@@ -654,8 +654,6 @@ portaudio_2_0_LIBS
 portaudio_2_0_CFLAGS
 liblo_LIBS
 liblo_CFLAGS
-dataquay_LIBS
-dataquay_CFLAGS
 rubberband_LIBS
 rubberband_CFLAGS
 vamphostsdk_LIBS
@@ -767,8 +765,6 @@ vamphostsdk_CFLAGS
 vamphostsdk_LIBS
 rubberband_CFLAGS
 rubberband_LIBS
-dataquay_CFLAGS
-dataquay_LIBS
 liblo_CFLAGS
 liblo_LIBS
 portaudio_2_0_CFLAGS
@@ -1443,10 +1439,6 @@ Some influential environment variables:
               C compiler flags for rubberband, overriding pkg-config
   rubberband_LIBS
               linker flags for rubberband, overriding pkg-config
-  dataquay_CFLAGS
-              C compiler flags for dataquay, overriding pkg-config
-  dataquay_LIBS
-              linker flags for dataquay, overriding pkg-config
   liblo_CFLAGS
               C compiler flags for liblo, overriding pkg-config
   liblo_LIBS  linker flags for liblo, overriding pkg-config
@@ -5175,10 +5167,10 @@ fi
 
 
 SV_MODULE_MODULE=vamphostsdk
-SV_MODULE_VERSION_TEST="vamp-hostsdk >= 2.3.1"
+SV_MODULE_VERSION_TEST="vamp-hostsdk >= 2.5"
 SV_MODULE_HEADER=vamp-hostsdk/PluginLoader.h
 SV_MODULE_LIB=vamp-hostsdk
-SV_MODULE_FUNC=libvamphostsdk_v_2_3_1_present
+SV_MODULE_FUNC=libvamphostsdk_v_2_5_present
 SV_MODULE_HAVE=HAVE_$(echo vamphostsdk | tr 'a-z' 'A-Z')
 SV_MODULE_FAILED=1
 if test -n "$vamphostsdk_LIBS" ; then
@@ -5415,157 +5407,6 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $rubberband_CFLAGS";LIBS="$LIBS $rubberband_LIBS";SV_MODULE_FAILED=""
-fi
-fi
-if test -n "$SV_MODULE_FAILED"; then
-   as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
-ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE"
-else
-  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
-fi
-
-
-   if test -n "$SV_MODULE_LIB"; then
-     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
-$as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
-if eval \${$as_ac_Lib+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-l$SV_MODULE_LIB  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char $SV_MODULE_FUNC ();
-int
-main ()
-{
-return $SV_MODULE_FUNC ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  eval "$as_ac_Lib=yes"
-else
-  eval "$as_ac_Lib=no"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-eval ac_res=\$$as_ac_Lib
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
-  LIBS="$LIBS -l$SV_MODULE_LIB"
-else
-  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
-fi
-
-   fi
-fi
-
-
-SV_MODULE_MODULE=dataquay
-SV_MODULE_VERSION_TEST="dataquay >= 0.9"
-SV_MODULE_HEADER=dataquay/Uri.h
-SV_MODULE_LIB=dataquay
-SV_MODULE_FUNC=dataquay_v_0_9_present
-SV_MODULE_HAVE=HAVE_$(echo dataquay | tr 'a-z' 'A-Z')
-SV_MODULE_FAILED=1
-if test -n "$dataquay_LIBS" ; then
-   { $as_echo "$as_me:${as_lineno-$LINENO}: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&6;}
-   CXXFLAGS="$CXXFLAGS $dataquay_CFLAGS"
-   LIBS="$LIBS $dataquay_LIBS"
-   SV_MODULE_FAILED=""
-fi
-if test -z "$SV_MODULE_VERSION_TEST" ; then
-   SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
-fi
-if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for dataquay" >&5
-$as_echo_n "checking for dataquay... " >&6; }
-
-if test -n "$dataquay_CFLAGS"; then
-    pkg_cv_dataquay_CFLAGS="$dataquay_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_dataquay_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$dataquay_LIBS"; then
-    pkg_cv_dataquay_LIBS="$dataquay_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_dataquay_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        dataquay_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        dataquay_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$dataquay_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	dataquay_CFLAGS=$pkg_cv_dataquay_CFLAGS
-	dataquay_LIBS=$pkg_cv_dataquay_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $dataquay_CFLAGS";LIBS="$LIBS $dataquay_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -7178,6 +7019,7 @@ fi
       fi
    fi
 fi
+
 
 
 

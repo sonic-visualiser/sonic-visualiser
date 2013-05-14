@@ -8,7 +8,7 @@ if [ -z "$app" ]; then
 fi
 
 echo
-echo "I expect you to have already copied QtCore, QtNetwork, QtGui and QtXml to "
+echo "I expect you to have already copied QtCore, QtNetwork, QtGui, QtXml and QtWidgets to "
 echo "$app.app/Contents/Frameworks -- expect errors to follow if they're missing"
 echo
 
@@ -18,12 +18,13 @@ install_name_tool -id QtCore "$app.app/Contents/Frameworks/QtCore"
 install_name_tool -id QtGui "$app.app/Contents/Frameworks/QtGui"
 install_name_tool -id QtNetwork "$app.app/Contents/Frameworks/QtNetwork"
 install_name_tool -id QtXml "$app.app/Contents/Frameworks/QtXml"
+install_name_tool -id QtWidgets "$app.app/Contents/Frameworks/QtWidgets"
 
 find "$app.app" -name \*.dylib -print | while read x; do
     install_name_tool -id "`basename \"$x\"`" "$x"
 done
 
-for fwk in QtCore QtGui QtNetwork QtXml QtSvg; do
+for fwk in QtCore QtGui QtNetwork QtXml QtWidgets; do
         find "$app.app" -type f -print | while read x; do
                 current=$(otool -L "$x" | grep "$fwk" | grep amework | awk '{ print $1; }')
                 [ -z "$current" ] && continue
