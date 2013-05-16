@@ -306,9 +306,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     
     TransformFactory::getInstance()->startPopulationThread();
 
-    VersionTester *vt = new VersionTester
+    m_versionTester = new VersionTester
         ("sonicvisualiser.org", "/latest-version.txt", SV_VERSION);
-    connect(vt, SIGNAL(newerVersionAvailable(QString)),
+    connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
             this, SLOT(newerVersionAvailable(QString)));
 }
 
@@ -319,6 +319,7 @@ MainWindow::~MainWindow()
     delete m_activityLog;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
+    delete m_versionTester;
     Profiles::getInstance()->dump();
 //    SVDEBUG << "MainWindow::~MainWindow finishing" << endl;
 }
