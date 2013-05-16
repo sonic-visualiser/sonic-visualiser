@@ -60,6 +60,7 @@ class Labeller;
 class ActivityLog;
 class QFileSystemWatcher;
 class QScrollArea;
+class VersionTester;
 
 class MainWindow : public MainWindowBase
 {
@@ -244,6 +245,8 @@ protected:
     KeyReference            *m_keyReference;
 
     QFileSystemWatcher      *m_templateWatcher;
+
+    VersionTester           *m_versionTester;
 
     struct LayerConfiguration {
 	LayerConfiguration(LayerFactory::LayerType _layer

@@ -445,6 +445,8 @@ main(int argc, char **argv)
 
     delete gui;
 
+    cleanupMutex.unlock();
+
     return rv;
 }
 
