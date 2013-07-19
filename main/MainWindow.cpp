@@ -375,6 +375,11 @@ MainWindow::setupMenus()
 void
 MainWindow::goFullScreen()
 {
+    if (m_viewManager->getZoomWheelsEnabled()) {
+        // The wheels seem to end up in the wrong place in full-screen mode
+        toggleZoomWheels();
+    }
+
     QWidget *ps = m_mainScroll->takeWidget();
     ps->setParent(0);
 
@@ -409,6 +414,7 @@ MainWindow::endFullScreen()
         if (sc) delete sc;
     }
 
+    m_paneStack->showNormal();
     m_mainScroll->setWidget(m_paneStack);
 }
 
