@@ -172,16 +172,21 @@
 */
 
 static QMutex cleanupMutex;
+static bool cleanedUp = false;
 
 static void
 signalHandler(int /* signal */)
 {
     // Avoid this happening more than once across threads
 
-    cleanupMutex.lock();
     std::cerr << "signalHandler: cleaning up and exiting" << std::endl;
-    TempDirectory::getInstance()->cleanup();
-    exit(0); // without releasing mutex
+    cleanupMutex.lock();
+    if (!cleanedUp) {
+        TempDirectory::getInstance()->cleanup();
+        cleanedUp = true;
+    }
+    cleanupMutex.unlock();
+    exit(0);
 }
 
 class SVApplication : public QApplication
@@ -422,8 +427,12 @@ main(int argc, char **argv)
 
     cleanupMutex.lock();
 
-    TransformFactory::deleteInstance();
-    TempDirectory::getInstance()->cleanup();
+    if (!cleanedUp) {
+        TransformFactory::deleteInstance();
+        TempDirectory::getInstance()->cleanup();
+        cleanedUp = true;
+    }
+
     application.releaseMainWindow();
 
 #ifdef HAVE_FFTW3F
@@ -444,6 +453,8 @@ main(int argc, char **argv)
 #endif
 
     delete gui;
+
+    cleanupMutex.unlock();
 
     cleanupMutex.unlock();
 
