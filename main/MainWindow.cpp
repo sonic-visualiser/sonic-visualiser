@@ -2061,6 +2061,7 @@ MainWindow::setupToolbars()
     action->setShortcut(tr("1"));
     action->setStatusTip(tr("Navigate"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolNavigateSelected()));
+    connect(this, SIGNAL(replacedDocument()), action, SLOT(trigger()));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::NavigateMode] = action;
