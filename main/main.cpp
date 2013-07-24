@@ -456,8 +456,6 @@ main(int argc, char **argv)
 
     cleanupMutex.unlock();
 
-    cleanupMutex.unlock();
-
     return rv;
 }
 
