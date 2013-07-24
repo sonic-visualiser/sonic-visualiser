@@ -257,9 +257,9 @@ main(int argc, char **argv)
     signal(SIGINT,  signalHandler);
     signal(SIGTERM, signalHandler);
 
-#ifndef Q_WS_WIN32
-//???    signal(SIGHUP,  signalHandler);
-//???    signal(SIGQUIT, signalHandler);
+#ifndef Q_OS_WIN32
+    signal(SIGHUP,  signalHandler);
+    signal(SIGQUIT, signalHandler);
 #endif
 
     bool audioOutput = true;
