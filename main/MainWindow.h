@@ -121,6 +121,7 @@ protected slots:
 
     virtual void setInstantsNumbering();
     virtual void setInstantsCounterCycle();
+    virtual void setInstantsCounters();
     virtual void resetInstantsCounters();
 
     virtual void modelGenerationFailed(QString, QString);

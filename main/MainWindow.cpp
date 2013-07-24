@@ -775,9 +775,15 @@ MainWindow::setupEditMenu()
         }
     }
 
+    action = new QAction(tr("Reset Numbering Counters"), this);
+    action->setStatusTip(tr("Reset to 1 all the counters used for counter-based labelling"));
+    connect(action, SIGNAL(triggered()), this, SLOT(resetInstantsCounters()));
+    connect(this, SIGNAL(replacedDocument()), action, SLOT(trigger()));
+    menu->addAction(action);
+
     action = new QAction(tr("Set Numbering Counters..."), this);
     action->setStatusTip(tr("Set the counters used for counter-based labelling"));
-    connect(action, SIGNAL(triggered()), this, SLOT(resetInstantsCounters()));
+    connect(action, SIGNAL(triggered()), this, SLOT(setInstantsCounters()));
     menu->addAction(action);
             
     action = new QAction(tr("Renumber Selected Instants"), this);
@@ -4049,11 +4055,17 @@ MainWindow::setInstantsCounterCycle()
 }
 
 void
-MainWindow::resetInstantsCounters()
+MainWindow::setInstantsCounters()
 {
     LabelCounterInputDialog dialog(m_labeller, this);
     dialog.setWindowTitle(tr("Reset Counters"));
     dialog.exec();
+}
+
+void
+MainWindow::resetInstantsCounters()
+{
+    if (m_labeller) m_labeller->resetCounters();
 }
 
 void
