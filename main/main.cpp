@@ -482,6 +482,10 @@ void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
 
     MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 
+#ifdef Q_OS_WIN32
+    path.replace("\\", "/");
+#endif
+
     if (path.endsWith("sv")) {
         if (!haveSession) {
             status = m_mainWindow->openSessionFile(path);
