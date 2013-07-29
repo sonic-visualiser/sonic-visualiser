@@ -439,7 +439,7 @@ Hodnota:	%4</translation>
     <name>CoreAudioFileReader</name>
     <message>
         <source>Decoding %1...</source>
-        <translation type="unfinished">Dekóduje se %1...</translation>
+        <translation>Dekóduje se %1...</translation>
     </message>
 </context>
 <context>
@@ -3159,119 +3159,119 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Abandon the current %1 session and start a new one</source>
-        <translation type="unfinished"></translation>
+        <translation>Opustit nynější sezení %1 a začít nové</translation>
     </message>
     <message>
         <source>Replace &amp;Main Audio...</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahradit &amp;hlavní zvuk...</translation>
     </message>
     <message>
         <source>Replace the main audio file of the session with a different file</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahradit soubor s hlavním zvukem v tomto sezení jiným souborem</translation>
     </message>
     <message>
         <source>Save the current session into a %1 session file</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit nynější sezení do %1 souboru se sezením</translation>
     </message>
     <message>
         <source>Save the current session into a new %1 session file</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit nynější sezení do nového %1 souboru se sezením</translation>
     </message>
     <message>
         <source>Exit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukončit %1</translation>
     </message>
     <message>
         <source>Reset Numbering Counters</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit číslovací počítadla znovu</translation>
     </message>
     <message>
         <source>Reset to 1 all the counters used for counter-based labelling</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit na 1 všechna počítadla používaná pro štítkování založené na počítadlech</translation>
     </message>
     <message>
         <source>Show &amp;Centre Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat &amp;středovou linku</translation>
     </message>
     <message>
         <source>&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;</translation>
     </message>
     <message>
         <source>Show or hide the centre line</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat nebo skrýt středovou linku</translation>
     </message>
     <message>
         <source>Toggle All Time Rulers</source>
-        <translation type="unfinished"></translation>
+        <translation>Přepnout všechna časová pravítka</translation>
     </message>
     <message>
         <source>Hide times, layer names, and scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Skrýt časy, názvy vrstev, a stupnici</translation>
     </message>
     <message>
         <source>Show times and basic scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat časy a základní stupnici</translation>
     </message>
     <message>
         <source>Show times, layer names, and scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat časy, názvy vrstev, a stupnici</translation>
     </message>
     <message>
         <source>Go Full-Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Jít na celou obrazovku</translation>
     </message>
     <message>
         <source>F11</source>
-        <translation type="unfinished">F11</translation>
+        <translation>F11</translation>
     </message>
     <message>
         <source>Expand the pane area to the whole screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Rozšířit oblast tabulky na celou obrazovku</translation>
     </message>
     <message>
         <source>Open the %1 reference manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Otevřít odbornou příručku k %1</translation>
     </message>
     <message>
         <source>Open a window showing the keystrokes you can use in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Otevřít okno ukazující klávesové zkratky, které lze použít v programu %1</translation>
     </message>
     <message>
         <source>%1 on the &amp;Web</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 na &amp;internetu</translation>
     </message>
     <message>
         <source>Open the %1 website</source>
-        <translation type="unfinished"></translation>
+        <translation>Otevřít internetové stránky programu %1</translation>
     </message>
     <message>
         <source>&amp;About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;O programu %1</translation>
     </message>
     <message>
         <source>Show information about %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat informace o programu %1</translation>
     </message>
     <message>
         <source>Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)</source>
-        <translation type="unfinished"></translation>
+        <translation>Promiňte, ale typ této vrstvu nelze vyvést do RDF (podporovanými typy jsou: oblast, poznámka, text, okamžiky času. hodnoty času)</translation>
     </message>
     <message>
         <source>Set as default template for future audio files</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit jako výchozí předlohu pro budoucí zvukové soubory</translation>
     </message>
     <message>
         <source>%1: %1</source>
-        <translation type="unfinished">%1: %1 {1:?}</translation>
+        <translation>%1: %1</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;Se syntaktickým analyzátorem Serd a Sord RDF a ukládáním &amp;copy; David Robillard</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Chris Cannam</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;S knihovnou Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
     </message>
 </context>
 <context>
@@ -4056,15 +4056,15 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Cmd-click left button and drag to select an additional region</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl-klepněte levým tlačítkem a táhněte pro výběr další oblasti</translation>
     </message>
     <message>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Cmd for multi-select; middle-click and drag to navigate</source>
-        <translation type="unfinished"></translation>
+        <translation>Klepněte a táhněte pro výběr rozsahu; držte klávesu Shift, abyste se vyhnul zapadávání k položkám; držte klávesu Ctrl pro provedení vícenásobného výběru; klepněte prostředním tlačítkem a táhněte pro navádění</translation>
     </message>
     <message>
         <source>Click and drag to select a range; hold Cmd for multi-select; middle-click and drag to navigate</source>
-        <translation type="unfinished"></translation>
+        <translation>Klepněte a táhněte pro výběr rozsahu; držte klávesu Ctrl pro provedení vícenásobného výběru; klepněte prostředním tlačítkem a táhněte pro navádění</translation>
     </message>
 </context>
 <context>
