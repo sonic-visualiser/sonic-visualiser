@@ -1703,7 +1703,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Ogg file decoder (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</source>
-        <translation>&lt;br&gt;S dekodérem souborů Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
+        <translation>&lt;br&gt;Dekodér souborů Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
         <source>Fast-forward to the next time instant or time ruler notch</source>
@@ -1759,7 +1759,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With PortAudio audio output library &amp;copy; Ross Bencina and Phil Burk</source>
-        <translation>&lt;br&gt;Se zvukovou výstupní knihovnou PortAudio &amp;copy; Ross Bencina a Phil Burk</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna PortAudio &amp;copy; Ross Bencina a Phil Burk</translation>
     </message>
     <message>
         <source>Switch to Next Pane</source>
@@ -1783,7 +1783,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;S Gumičkou (Rubber Band) &amp;copy; Chris Cannam</translation>
+        <translation>&lt;br&gt;Gumička (Rubber Band) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Erase items from layer</source>
@@ -1899,7 +1899,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With libsamplerate &amp;copy; Erik de Castro Lopo</source>
-        <translation>&lt;br&gt;S libsamplerate &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsamplerate &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Alt+Left</source>
@@ -1947,7 +1947,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Ogg file decoder &amp;copy; CSIRO Australia</source>
-        <translation>&lt;br&gt;S dekodérem souborů Ogg &amp;copy; CSIRO Australia</translation>
+        <translation>&lt;br&gt;Dekodér souborů Ogg &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
         <source>Fragment file %1 already exists, aborting</source>
@@ -2071,7 +2071,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With PulseAudio audio output library v%1 &amp;copy; Lennart Poettering and Pierre Ossman</source>
-        <translation>&lt;br&gt;Se zvukovou výstupní knihovnou PulseAudio v%1 &amp;copy; Lennart Poettering a Pierre Ossman</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna PulseAudio v%1 &amp;copy; Lennart Poettering a Pierre Ossman</translation>
     </message>
     <message>
         <source>Can&apos;t export non-note layers to MIDI</source>
@@ -2119,7 +2119,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With MAD mp3 decoder &amp;copy; Underbit Technologies Inc</source>
-        <translation>&lt;br&gt;S dekodérem souborů mp3 MAD &amp;copy; Underbit Technologies Inc</translation>
+        <translation>&lt;br&gt;Dekodér souborů mp3 MAD &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
         <source>Failed to calculate alignment</source>
@@ -2175,7 +2175,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band v%1 &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;S Gumičkou (Rubber Band) v%1 &amp;copy; Chris Cannam</translation>
+        <translation>&lt;br&gt;Gumička (Rubber Band) v%1 &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Show centre indicator, frame times and scale</source>
@@ -2187,7 +2187,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Using </source>
-        <translation>Za použití </translation>
+        <translation> </translation>
     </message>
     <message>
         <source>Find a Transform...</source>
@@ -2243,7 +2243,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With liblo Lite OSC library &amp;copy; Steve Harris</source>
-        <translation>&lt;br&gt;S knihovnou liblo Lite OSC &amp;copy; Steve Harris</translation>
+        <translation>&lt;br&gt;Knihovna liblo Lite OSC &amp;copy; Steve Harris</translation>
     </message>
     <message>
         <source>Insert Instants at Selection &amp;Boundaries</source>
@@ -2275,7 +2275,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</source>
-        <translation>&lt;br&gt;S FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</translation>
+        <translation>&lt;br&gt;FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</translation>
     </message>
     <message>
         <source>Time-stretch playback to speed it up without changing pitch</source>
@@ -2311,7 +2311,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With libsndfile &amp;copy; Erik de Castro Lopo</source>
-        <translation>&lt;br&gt;S libsndfile &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsndfile &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Shift+Right</source>
@@ -2367,7 +2367,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With liblo Lite OSC library v%1 &amp;copy; Steve Harris</source>
-        <translation>&lt;br&gt;S knihovnou liblo Lite OSC v%1 &amp;copy; Steve Harris</translation>
+        <translation>&lt;br&gt;Knihovna liblo Lite OSC v%1 &amp;copy; Steve Harris</translation>
     </message>
     <message>
         <source>Tapping Time Instants</source>
@@ -2503,7 +2503,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With JACK audio output library v%1 &amp;copy; Paul Davis and Jack O&apos;Quin</source>
-        <translation>&lt;br&gt;Se zvukovou výstupní knihovnou JACK v%1 &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna JACK v%1 &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
     </message>
     <message>
         <source>&amp;Insert Instant at Playback Position</source>
@@ -2519,7 +2519,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Redland RDF datastore &amp;copy; Dave Beckett and the University of Bristol</source>
-        <translation>&lt;br&gt;S datovým skladištěm RDF Redland &amp;copy; Dave Beckett a the University of Bristol</translation>
+        <translation>&lt;br&gt;Datové skladiště RDF Redland &amp;copy; Dave Beckett a the University of Bristol</translation>
     </message>
     <message>
         <source>Edit the currently active layer as a data grid</source>
@@ -2631,7 +2631,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With FFTW3 &amp;copy; Matteo Frigo and MIT</source>
-        <translation>&lt;br&gt;S FFTW3 &amp;copy; Matteo Frigo and MIT</translation>
+        <translation>&lt;br&gt;FFTW3 &amp;copy; Matteo Frigo and MIT</translation>
     </message>
     <message>
         <source>Failed to save image file</source>
@@ -2651,7 +2651,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Redland RDF datastore v%1 &amp;copy; Dave Beckett and the University of Bristol</source>
-        <translation>&lt;br&gt;S datovým skladištěm RDF Redland v%1 &amp;copy; Dave Beckett a the University of Bristol</translation>
+        <translation>&lt;br&gt;Datové skladiště RDF Redland v%1 &amp;copy; Dave Beckett a the University of Bristol</translation>
     </message>
     <message>
         <source>Show all texts and scale</source>
@@ -2659,7 +2659,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With libsndfile v%1 &amp;copy; Erik de Castro Lopo</source>
-        <translation>&lt;br&gt;S libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Import layer data from an existing file</source>
@@ -2667,7 +2667,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With DSSI plugin support (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</source>
-        <translation>&lt;br&gt;S podporou pro přídavné moduly DSSI (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</translation>
+        <translation>&lt;br&gt;Podpora pro přídavné moduly DSSI (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</translation>
     </message>
     <message>
         <source>Add a new pane showing a waveform view</source>
@@ -2855,7 +2855,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With JACK audio output library &amp;copy; Paul Davis and Jack O&apos;Quin</source>
-        <translation>&lt;br&gt;Se zvukovou výstupní knihovnou JACK &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna JACK &amp;copy; Paul Davis a Jack O&apos;Quin</translation>
     </message>
     <message>
         <source>&amp;Delete Selected Items</source>
@@ -2863,7 +2863,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With PulseAudio audio output library &amp;copy; Lennart Poettering and Pierre Ossman</source>
-        <translation>&lt;br&gt;Se zvukovou výstupní knihovnou PulseAudio &amp;copy; Lennart Poettering a Pierre Ossman</translation>
+        <translation>&lt;br&gt;Zvuková výstupní knihovna PulseAudio &amp;copy; Lennart Poettering a Pierre Ossman</translation>
     </message>
     <message>
         <source>Bright Purple</source>
@@ -2923,7 +2923,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With LADSPA plugin support (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</source>
-        <translation>&lt;br&gt;S podporou pro přídavné moduly LADSPA (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</translation>
+        <translation>&lt;br&gt;Podpora pro přídavné moduly LADSPA (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</translation>
     </message>
     <message>
         <source>Add a new layer showing a frequency spectrum</source>
@@ -2995,7 +2995,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With libsamplerate v%1 &amp;copy; Erik de Castro Lopo</source>
-        <translation>&lt;br&gt;S libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
+        <translation>&lt;br&gt;libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
         <source>Select from the current playback position to the end of the session</source>
@@ -3015,7 +3015,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With RtMidi &amp;copy; Gary P. Scavone</source>
-        <translation>&lt;br&gt;S RtMidi &amp;copy; Gary P. Scavone</translation>
+        <translation>&lt;br&gt;RtMidi &amp;copy; Gary P. Scavone</translation>
     </message>
     <message>
         <source>Copy the selection from the current layer to the clipboard</source>
@@ -3099,11 +3099,11 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With MAD mp3 decoder v%1 &amp;copy; Underbit Technologies Inc</source>
-        <translation>&lt;br&gt;S dekodérem souborů mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
+        <translation>&lt;br&gt;Dekodér souborů mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;S podporou pro přídavné moduly Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
+        <translation>&lt;br&gt;Podpora pro přídavné moduly Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Unclassified</source>
@@ -3267,11 +3267,11 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
-        <translation>&lt;br&gt;Se syntaktickým analyzátorem Serd a Sord RDF a ukládáním &amp;copy; David Robillard</translation>
+        <translation>&lt;br&gt;Syntaktický analyzátor Serd a Sord RDF a ukládání &amp;copy; David Robillard</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;S knihovnou Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
+        <translation>&lt;br&gt;Knihovna Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
     </message>
 </context>
 <context>
