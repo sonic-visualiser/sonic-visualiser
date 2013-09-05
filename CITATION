@@ -1,0 +1,12 @@
+If you are using Sonic Visualiser in research work for publication,
+please cite:
+
+@InProceedings{SonicVisualiser,
+  author =    {C. Cannam and C. Landone and M. Sandler},
+  title =     {Sonic Visualiser: An Open Source Application for Viewing, Analysing, and Annotating Music Audio Files},
+  pages =     {1467--1468},
+  booktitle = {Proceedings of the ACM Multimedia 2010 International Conference},
+  month =     {October},
+  year =      {2010},
+  address =   {Firenze, Italy},
+}
