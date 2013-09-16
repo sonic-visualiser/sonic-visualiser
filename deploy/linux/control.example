@@ -1,0 +1,16 @@
+Package: sonic-visualiser
+Priority: optional
+Maintainer: Chris Cannam <cannam@all-day-breakfast.com>
+Architecture: PLACE ARCHITECTURE HERE i386 or amd64
+Version: PLACE VERSION HERE e.g. 2.2cc-1
+Depends: libqtgui4 (>= 4.5.0), libexpat1, libfontconfig1, libfreetype6, libice6,
+ libpcre3, libstdc++6, libx11-6, libxau6, libxcursor1, libxdmcp6, libxext6, libx
+fixes3, libxrender1, zlib1g, libasound2, libc6
+Description: View and analyse the contents of music audio files
+ Sonic Visualiser is an application for viewing and analysing the contents of mu
+sic audio files. It was developed at the Centre for Digital Music at Queen Mary,
+ University of London. Our aim is for it to be the first program you reach for w
+hen want to study a musical recording rather than simply listen to it.
+ We hope Sonic Visualiser will be of particular interest to musicologists, archi
+vists, signal-processing researchers and anyone else looking for a friendly way 
+to take a look at what lies inside the audio file.
