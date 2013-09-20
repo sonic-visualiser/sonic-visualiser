@@ -3094,8 +3094,11 @@ MainWindow::closeEvent(QCloseEvent *e)
 
     QSettings settings;
     settings.beginGroup("MainWindow");
-    settings.setValue("size", size());
-    settings.setValue("position", pos());
+    settings.setValue("maximised", isMaximized());
+    if (!isMaximized()) {
+        settings.setValue("size", size());
+        settings.setValue("position", pos());
+    }
     settings.endGroup();
 
     if (m_preferencesDialog &&
