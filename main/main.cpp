@@ -363,14 +363,21 @@ main(int argc, char **argv)
     if (width > height * 2) width = height * 2;
 
     settings.beginGroup("MainWindow");
+
     QSize size = settings.value("size", QSize(width, height)).toSize();
     gui->resizeConstrained(size);
+
     if (settings.contains("position")) {
         QRect prevrect(settings.value("position").toPoint(), size);
         if (!(available & prevrect).isEmpty()) {
             gui->move(prevrect.topLeft());
         }
     }
+
+    if (settings.value("maximised", false).toBool()) {
+        gui->setWindowState(Qt::WindowMaximized);
+    }
+
     settings.endGroup();
     
     gui->show();
