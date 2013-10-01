@@ -38,14 +38,14 @@
                     Source="deploy\win32\README-Vamp.txt"/>
             </Component>
         </Directory>
-        <Directory Id="INSTALLDIR" Name="Sonic Visualiser">
+        <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
             
             <Component
                 Id="MainExecutable"
                 Guid="2C02DFB7-3CDF-4F73-B9D1-846326EE417D">
 
               <File
-                  Id="SV"
+                  Id="SVExecutable"
                   Name="Sonic Visualiser.exe"
                   DiskId="1"
                   Source="release\Sonic Visualiser.exe"
@@ -55,7 +55,7 @@
                     Id="SVStartEntry"
                     Directory="ProgramMenuDir"
                     Name="Sonic Visualiser"
-                    WorkingDirectory="INSTALLDIR"
+                    WorkingDirectory="APPLICATIONFOLDER"
                     Icon="winicon.ico"
                     IconIndex="0"
                     Advertise="yes"/>
@@ -64,7 +64,7 @@
                     Id="SVDesktop"
                     Directory="DesktopFolder"
                     Name="Sonic Visualiser"
-                    WorkingDirectory="INSTALLDIR"
+                    WorkingDirectory="APPLICATIONFOLDER"
                     Icon="winicon.ico"
                     IconIndex="0"
                     Advertise="yes"/>
@@ -92,7 +92,28 @@
                   DiskId="1"
                   Source="icons/sv-winicon.ico"/>
             </Component>
-
+            
+            <Component
+              Id="SVFileAssociation"
+              Guid="DC6B3DD1-46DE-47FC-90FB-D8ACD5D1A88A">
+              
+              <ProgId 
+                Id='SonicVisualiser.svfile' 
+                Description='Sonic Visualiser project file'
+                Icon="SVExecutable">
+                <Extension 
+                  Id='sv' 
+                  ContentType='application/sonicvisualiser'>
+                  <Verb 
+                    Id='open' 
+                    Command='Open' 
+                    TargetFile='SVExecutable' 
+                    Argument='"%1"' />
+                </Extension>
+              </ProgId>
+              
+            </Component>
+            
             <Component
                 Id="Qt5"
                 Guid="316341D4-B7B2-411D-BCCE-879A11D5709F">
@@ -202,17 +223,36 @@
 
     </Directory>
 
-    <Feature Id="Complete" Level="1">
+    <Feature 
+      Id="Complete"
+      Title="Required files"
+      Description="Installs the required files for running Sonic Visualiser."
+      AllowAdvertise="no"
+      Absent="disallow"
+      ConfigurableDirectory="APPLICATIONFOLDER"
+      Level="1">
       <ComponentRef Id="VampPlugins"/>
       <ComponentRef Id="MainExecutable"/>
+      <ComponentRef Id="SVFileAssociation"/>
+      <ComponentRef Id="SVFileAssociation"/>
       <ComponentRef Id="Qt5"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
       <ComponentRef Id="ProgramMenuDir"/>
     </Feature>
 
-    <Icon
-        Id="winicon.ico"
-        SourceFile="icons/sv-winicon.ico"/>
-
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+    </UI>
+		
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+    <Property Id="ApplicationFolderName" Value="Sonic Visualiser" />
+    <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    
+    <Icon Id="winicon.ico" SourceFile="icons/sv-winicon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
+        
   </Product>
 </Wix>
+
