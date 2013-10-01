@@ -234,7 +234,6 @@
       <ComponentRef Id="VampPlugins"/>
       <ComponentRef Id="MainExecutable"/>
       <ComponentRef Id="SVFileAssociation"/>
-      <ComponentRef Id="SVFileAssociation"/>
       <ComponentRef Id="Qt5"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
       <ComponentRef Id="ProgramMenuDir"/>
