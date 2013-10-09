@@ -525,6 +525,12 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
+    action = new QAction(tr("&Export Audio Data..."), this);
+    action->setStatusTip(tr("Export audio from selection into a data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
+    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
     menu->addSeparator();
 
     action = new QAction(tr("Import Annotation &Layer..."), this);
@@ -2338,6 +2344,18 @@ MainWindow::replaceMainAudio()
 void
 MainWindow::exportAudio()
 {
+    exportAudio(false);
+}
+
+void
+MainWindow::exportAudioData()
+{
+    exportAudio(true);
+}
+
+void
+MainWindow::exportAudio(bool asData)
+{
     if (!getMainModel()) return;
 
     RangeSummarisableTimeValueModel *model = getMainModel();
@@ -2399,7 +2417,12 @@ MainWindow::exportAudio()
         }
     }
 
-    QString path = getSaveFileName(FileFinder::AudioFile);
+    QString path;
+    if (asData) {
+        path = getSaveFileName(FileFinder::CSVFile);
+    } else {
+        path = getSaveFileName(FileFinder::AudioFile);
+    }
     if (path == "") return;
 
     bool ok = false;
@@ -2430,25 +2453,33 @@ MainWindow::exportAudio()
 
     } else if (selections.size() > 1) {
 
-	QStringList items;
-	items << tr("Export the selected regions into a single audio file")
-	      << tr("Export the selected regions into separate files")
-	      << tr("Export the whole audio file");
+        bool multiple = false;
 
-	QString item = ListInputDialog::getItem
-	    (this, tr("Select region to export"),
-	     tr("Multiple regions of the original audio file are selected.\nWhat do you want to export?"),
-	     items, 0, &ok);
+        if (!asData) { // Multi-file export not supported for data
+
+            QStringList items;
+            items << tr("Export the selected regions into a single file")
+                  << tr("Export the selected regions into separate files")
+                  << tr("Export the whole file");
+
+            QString item = ListInputDialog::getItem
+                (this, tr("Select region to export"),
+                 tr("Multiple regions of the original audio file are selected.\nWhat do you want to export?"),
+                 items, 0, &ok);
 	    
-	if (!ok || item.isEmpty()) return;
+            if (!ok || item.isEmpty()) return;
+            
+            if (item == items[0]) {
+                selectionToWrite = &ms;
+            } else if (item == items[1]) {
+                multiple = true;
+            }
 
-	if (item == items[0]) {
-
+        } else { // asData
             selectionToWrite = &ms;
+        }
 
-        } else if (item == items[1]) {
-
-            multiple = true;
+        if (multiple) { // Can only happen when asData false
 
 	    int n = 1;
 	    QString base = path;
@@ -2484,13 +2515,26 @@ MainWindow::exportAudio()
     }
 
     if (!multiple) {
-        WavFileWriter writer(path,
-                             model->getSampleRate(),
-                             model->getChannelCount(),
-                             WavFileWriter::WriteToTemporary);
-        writer.writeModel(model, selectionToWrite);
-	ok = writer.isOK();
-	error = writer.getError();
+        if (asData) {
+            CSVFileWriter writer(path, model,
+                                 ((QFileInfo(path).suffix() == "csv") ?
+                                  "," : "\t"));
+            if (selectionToWrite) {
+                writer.writeSelection(selectionToWrite);
+            } else {
+                writer.write();
+            }
+            ok = writer.isOK();
+            error = writer.getError();
+        } else {
+            WavFileWriter writer(path,
+                                 model->getSampleRate(),
+                                 model->getChannelCount(),
+                                 WavFileWriter::WriteToTemporary);
+            writer.writeModel(model, selectionToWrite);
+            ok = writer.isOK();
+            error = writer.getError();
+        }
     }
 
     if (ok) {
