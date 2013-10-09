@@ -92,6 +92,7 @@ protected slots:
     virtual void openRecentFile();
     virtual void applyTemplate();
     virtual void exportAudio();
+    virtual void exportAudioData();
     virtual void importLayer();
     virtual void exportLayer();
     virtual void exportImage();
@@ -296,6 +297,8 @@ protected:
 
     virtual void closeEvent(QCloseEvent *e);
     virtual bool checkSaveModified();
+
+    virtual void exportAudio(bool asData);
 
     virtual void updateVisibleRangeDisplay(Pane *p) const;
     virtual void updatePositionStatusDisplays() const;
