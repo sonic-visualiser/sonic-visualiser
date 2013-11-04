@@ -145,6 +145,7 @@ int group_tracks[maxtracks], group_volume;
 QString group_descr, group_name;
 int preset_type, fade_in;
 
+bool isIMAF;
 
 MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     MainWindowBase(withAudioOutput, withOSCSupport, true),
@@ -4700,7 +4701,7 @@ void CheckBox::saveImafFile()
 
     if( ImafFileName != "" ){   //if the user press cancel the function mainIMAFencoder won´t be called
         mainIMAFencoder(numtracks, files_paths, ImafFileName, ImageFileName, TextFileName,
-                        ImafVolumeValues, has_image, selrule_type, selrule_par1, selrule_par2,
+                        ImafVolumeValues, has_image, has_lyrics, selrule_type, selrule_par1, selrule_par2,
                         mixrule_type, mixrule_par1, mixrule_par2, mixrule_par3, mixrule_par4,
                         group_tracks, group_volume, group_name, group_descr, preset_type, fade_in);
     }
@@ -4834,6 +4835,9 @@ void MainWindow::importIMAF()
     filename = QFileDialog::getOpenFileName(this,
               tr("Import IMAF"), "/", tr("IMAF (*.ima)"));
 
+    if (filename.isEmpty()) return;
+    isIMAF = true;
+
     haslyrics = mainIMAFdecoder(filename);
 
     openMP3IMAF();
@@ -4861,7 +4865,6 @@ void MainWindow::importIMAF()
 
           //text decoder
           unsigned char dat,dat1,dat2,dat3;
-          QTextStream out(stdout);
           FILE *imf;
           imf = fopen (filename.toStdString().c_str(),"rb");
 

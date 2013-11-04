@@ -36,7 +36,7 @@ int sampledescription(MovieBox *moov, int);
 int presetcontainer(MovieBox *moov, int, int *vol_values, int type, int fade_in);
 int rulescontainer(MovieBox *moov, int SelRuleType, int SelRule_PAR1, int SelRule_PAR2,
                    int MixRuleType, int MixRule_PAR1, int MixRule_PAR2, int MixRule_PAR3, int MixRule_PAR4);
-void writemoovbox(MovieBox moov, int numtrack,int totaltracks, FILE *imf, FILE *text);
+void writemoovbox(MovieBox moov, int numtrack,int totaltracks, FILE *imf, FILE *text, bool HasTextFile);
 int readTrack(MovieBox *moov, int,const char *name);
 
 // Timed Text Functions
@@ -81,7 +81,7 @@ ExitWindow::ExitWindow()
 
 int mainIMAFencoder (int totaltracks, QString files_path[maxtracks],QString outimaf,
                      QString picturefile, QString textfile, int vol_values[maxtracks], bool HasImageFile,
-                     int SelRuleType, int SelRule_PAR1, int SelRule_PAR2,
+                     bool HasTextFile, int SelRuleType, int SelRule_PAR1, int SelRule_PAR2,
                      int MixRuleType, int MixRule_PAR1, int MixRule_PAR2, int MixRule_PAR3, int MixRule_PAR4,
                      int group_tracks[maxtracks], int group_volume, QString group_name, QString group_description,
                      int pres_type, int fade_in)
@@ -124,13 +124,14 @@ int mainIMAFencoder (int totaltracks, QString files_path[maxtracks],QString outi
     }
 
     //INPUT: Timed-Text
-    c_str2= textfile.toStdString().c_str(); //convert Qstring to const char
-    text = fopen(c_str2, "rb");
-    sizetext= getTextSize (text); //calculate the size of the text
-    if((text)==NULL) {
-            // do something
-        }
-
+    if (HasTextFile){
+        c_str2= textfile.toStdString().c_str(); //convert Qstring to const char
+        text = fopen(c_str2, "rb");
+        sizetext= getTextSize (text); //calculate the size of the text
+    }
+    else{
+        sizetext = 0;
+    }
     //Create OUTPUT file (.ima)
     imf = fopen (outimaf.toStdString().c_str(),"wb");
 
@@ -179,14 +180,15 @@ int mainIMAFencoder (int totaltracks, QString files_path[maxtracks],QString outi
                               MixRuleType, MixRule_PAR1, MixRule_PAR2, MixRule_PAR3, MixRule_PAR4); // Creates the rules, returns the size of the box.
 
     //Text track
-    c_str2= textfile.toStdString().c_str(); //convert Qstring to const char
-    sizeTRAK = trackstructure_text (&moov, numtrack, clock, durationTrack, sizemdat, c_str2, text, totaltracks) + sizeTRAK;
-
+    if (HasTextFile){
+        c_str2= textfile.toStdString().c_str(); //convert Qstring to const char
+        sizeTRAK = trackstructure_text (&moov, numtrack, clock, durationTrack, sizemdat, c_str2, text, totaltracks) + sizeTRAK;
+    }
     //Movie Header - Overall declarations
     moovheaderbox(&moov, clock, sizeTRAK, sizePRCO, totaltracks, durationTrack, sizeRUCO, sizeGRCO); // -> enter sizeGRCO instead of 0
 
     //Writes the movie box into the file
-    writemoovbox(moov, numtrack, totaltracks, imf, text);
+    writemoovbox(moov, numtrack, totaltracks, imf, text, HasTextFile);
 
     //Writes the meta box into the IMAF file
     if (HasImageFile){
@@ -321,7 +323,7 @@ int mdatbox(MediaDataBox *mdat, int totaltracks, FILE *imf, FILE *song, FILE *te
     }
 
     // copy the text in the 3gp to the ima and add the text modifiers
-
+  if (sizetext !=0){
     cnt=0;// the total number of bytes of the whole text including modifiers
     fseek(text,0,SEEK_CUR);
     sizestring=0;//number of bytes of a phrase (without modifiers)
@@ -457,7 +459,7 @@ int mdatbox(MediaDataBox *mdat, int totaltracks, FILE *imf, FILE *song, FILE *te
         fwrite(&swap, sizeof(u32), 1, imf);
         fseek(imf,(sizeMDAT-imagesize)-4,SEEK_CUR);	// (Image is yet to be written in the file at this point)
     } // close if (numtr==totaltracks-1)
-
+}//close if sizetext
     fclose(song);
 
     return size;
@@ -1591,7 +1593,7 @@ void moovheaderbox (MovieBox *moov, int clock, int sizeTRAK, int sizePRCO, int t
 }
 
 
-void writemoovbox(MovieBox moov, int numtrack,int totaltracks, FILE *imf, FILE *text)
+void writemoovbox(MovieBox moov, int numtrack,int totaltracks, FILE *imf, FILE *text, bool HasTextFile)
 {
     int i, j, k, m, t, swap, pos, temp, type;
     int cnt = 0, cnt2 = 0, d = 0, dat = 0, dat1 = 0, dat2 = 0, dat3 = 0, size = 0;
@@ -2075,6 +2077,8 @@ void writemoovbox(MovieBox moov, int numtrack,int totaltracks, FILE *imf, FILE *
     }
 
     //TIMED TEXT
+
+    if (HasTextFile){
     fwrite(&moov.TrackBox[numtrack].size, sizeof(u32), 1, imf);
     fwrite(&moov.TrackBox[numtrack].type, sizeof(u32), 1, imf);
     //Track header//
@@ -2277,7 +2281,7 @@ void writemoovbox(MovieBox moov, int numtrack,int totaltracks, FILE *imf, FILE *
         fwrite(&moov.TrackBox[numtrack].MediaBox.MediaInformationBox.SampleTableBox.
                 ChunkOffsetBox.chunk_offset[i], sizeof(u32), 1, imf);
     }
-
+    } // end if HasTextFile
     //Song Image//
     /* Go to function "writemeta" */
 
