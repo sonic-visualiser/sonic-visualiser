@@ -172,16 +172,21 @@
 */
 
 static QMutex cleanupMutex;
+static bool cleanedUp = false;
 
 static void
 signalHandler(int /* signal */)
 {
     // Avoid this happening more than once across threads
 
-    cleanupMutex.lock();
     std::cerr << "signalHandler: cleaning up and exiting" << std::endl;
-    TempDirectory::getInstance()->cleanup();
-    exit(0); // without releasing mutex
+    cleanupMutex.lock();
+    if (!cleanedUp) {
+        TempDirectory::getInstance()->cleanup();
+        cleanedUp = true;
+    }
+    cleanupMutex.unlock();
+    exit(0);
 }
 
 class SVApplication : public QApplication
@@ -358,14 +363,21 @@ main(int argc, char **argv)
     if (width > height * 2) width = height * 2;
 
     settings.beginGroup("MainWindow");
+
     QSize size = settings.value("size", QSize(width, height)).toSize();
     gui->resizeConstrained(size);
+
     if (settings.contains("position")) {
         QRect prevrect(settings.value("position").toPoint(), size);
         if (!(available & prevrect).isEmpty()) {
             gui->move(prevrect.topLeft());
         }
     }
+
+    if (settings.value("maximised", false).toBool()) {
+        gui->setWindowState(Qt::WindowMaximized);
+    }
+
     settings.endGroup();
     
     gui->show();
@@ -422,8 +434,12 @@ main(int argc, char **argv)
 
     cleanupMutex.lock();
 
-    TransformFactory::deleteInstance();
-    TempDirectory::getInstance()->cleanup();
+    if (!cleanedUp) {
+        TransformFactory::deleteInstance();
+        TempDirectory::getInstance()->cleanup();
+        cleanedUp = true;
+    }
+
     application.releaseMainWindow();
 
 #ifdef HAVE_FFTW3F
@@ -472,6 +488,10 @@ void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
     static bool havePriorCommandLineModel = false;
 
     MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
+
+#ifdef Q_OS_WIN32
+    path.replace("\\", "/");
+#endif
 
     if (path.endsWith("sv")) {
         if (!haveSession) {

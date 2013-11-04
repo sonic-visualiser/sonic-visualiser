@@ -1,4 +1,24 @@
 
+Changes in Sonic Visualiser 2.2 since the previous release 2.1:
+
+ - Build with support for hidpi ("retina") text on OS/X
+ - Fix very slow analysis when using Ogg or FLAC files decoded
+   via libsndfile
+ - Fix inaccurate scale auto-align between time-value layers and
+   others
+ - Fix failure to open files specified on command line (or via
+   Open With) on Windows
+ - Reset cyclical counters and switch back to navigate mode when
+   a new session is started
+
+Changes in Sonic Visualiser 2.1 since the previous release 2.0.1:
+
+ - Fix incorrect handling of FixedSampleRate outputs (Vamp SDK fix)
+ - Make it easier to see results from transforms that return a single point
+ - Make labelling clearer on time-value layers
+ - Add discrete-curve mode for time-value layers (for curves with gaps)
+ - Update code to build against Qt5
+
 Changes in Sonic Visualiser 2.0.1 since the previous release 2.0:
 
  - Fix incorrect samplerate in reading m4a files on OS/X

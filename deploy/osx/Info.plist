@@ -14,7 +14,15 @@
 	<string>org.sonicvisualiser.SonicVisualiser</string>
 	<key>CFBundleShortVersionString</key>
 	<string>SV_VERSION</string>
+
+	<!-- enable HiDPI -->
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSHighResolutionCapable</key>
+	<string>True</string>
+
 	<key>CFBundleDocumentTypes</key>
+
 	<array>
 		<!-- we are an 'editor' of SV files -->
 		<dict>
