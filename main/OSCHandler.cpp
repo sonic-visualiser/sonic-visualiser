@@ -5,7 +5,7 @@
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
     This file copyright 2006-2007 Chris Cannam and QMUL.
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -35,7 +35,7 @@
 void
 MainWindow::handleOSCMessage(const OSCMessage &message)
 {
-    SVDEBUG << "MainWindow::handleOSCMessage: thread id = " 
+    SVDEBUG << "MainWindow::handleOSCMessage: thread id = "
               << QThread::currentThreadId() << endl;
 
     // This large function should really be abstracted out.
@@ -154,7 +154,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             if (play) {
                 m_viewManager->setPlaySelectionMode(selection);
-            } 
+            }
 
             if (selection) {
                 MultiSelection::SelectionList sl = m_viewManager->getSelections();
@@ -199,7 +199,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
 
     } else if (message.getMethod() == "stop") {
-            
+
         if (m_playSource->isPlaying()) m_playSource->stop();
 
     } else if (message.getMethod() == "loop") {
@@ -241,7 +241,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             if (message.getArgCount() == 2 &&
                 message.getArg(0).canConvert(QVariant::Double) &&
                 message.getArg(1).canConvert(QVariant::Double)) {
-                
+
                 double t0 = message.getArg(0).toDouble();
                 double t1 = message.getArg(1).toDouble();
                 if (t1 < t0) { double temp = t0; t0 = t1; t1 = temp; }
@@ -250,7 +250,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
                 f0 = lrint(t0 * getMainModel()->getSampleRate());
                 f1 = lrint(t1 * getMainModel()->getSampleRate());
-                
+
                 Pane *pane = m_paneStack->getCurrentPane();
                 Layer *layer = 0;
                 if (pane) layer = pane->getSelectedLayer();
@@ -301,7 +301,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 }
 
                 QString str = message.getArg(0).toString();
-                
+
                 LayerFactory::LayerType type =
                     LayerFactory::getInstance()->getLayerTypeForName(str);
 
@@ -313,7 +313,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     LayerConfiguration configuration(type,
                                                      getMainModel(),
                                                      channel);
-                    
+
                     addPane(configuration,
                             tr("Add %1 Pane")
                             .arg(LayerFactory::getInstance()->
@@ -352,7 +352,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     m_viewManager->setOverlayMode(ViewManager::MinimalOverlays);
                 } else {
                     m_viewManager->setOverlayMode(ViewManager::AllOverlays);
-                }                    
+                }
             } else if (property == "zoomwheels") {
                 m_viewManager->setZoomWheelsEnabled(value > 0.5);
             } else if (property == "propertyboxes") {
@@ -360,7 +360,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                                (m_paneStack->getLayoutStyle() == PaneStack::NoPropertyStacks));
                 if (toggle) togglePropertyBoxes();
             }
-                
+
         } else {
             PropertyContainer *container = 0;
             Pane *pane = m_paneStack->getCurrentPane();
@@ -416,7 +416,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
-            
+
             QString target = message.getArg(0).toString();
 
             if (target == "pane") {
@@ -428,7 +428,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 deleteCurrentLayer();
 
             } else {
-                
+
                 std::cerr << "WARNING: MainWindow::handleOSCMessage: Unknown delete target " << target << std::endl;
             }
         }
@@ -491,12 +491,12 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
 
     } else if (message.getMethod() == "quit") {
-        
+
         m_abandoning = true;
         close();
 
     } else if (message.getMethod() == "resize") {
-        
+
         if (message.getArgCount() == 2) {
 
             int width = 0, height = 0;
@@ -530,9 +530,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             TransformId transformId = message.getArg(0).toString();
 
-	    Transform transform = TransformFactory::getInstance()->
+        Transform transform = TransformFactory::getInstance()->
                 getDefaultTransformFor(transformId);
-	    
+
             Layer *newLayer = m_document->createDerivedLayer
                 (transform, getMainModel());
 
@@ -548,5 +548,5 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                   << "method \"" << message.getMethod().toStdString()
                   << "\"" << std::endl;
     }
-            
+
 }

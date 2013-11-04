@@ -5,7 +5,7 @@
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
     This file copyright 2006 Chris Cannam.
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -56,7 +56,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     m_tabs = new QTabWidget;
     grid->addWidget(m_tabs, 0, 0);
-    
+
     m_tabs->setTabPosition(QTabWidget::North);
 
     // Create this first, as slots that get called from the ctor will
@@ -77,7 +77,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             this, SLOT(windowTypeChanged(WindowType)));
 
     QComboBox *smoothing = new QComboBox;
-    
+
     int sm = prefs->getPropertyRangeAndValue("Spectrogram Y Smoothing", &min, &max,
                                              &deflt);
     m_spectrogramSmoothing = sm;
@@ -92,7 +92,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             this, SLOT(spectrogramSmoothingChanged(int)));
 
     QComboBox *xsmoothing = new QComboBox;
-    
+
     int xsm = prefs->getPropertyRangeAndValue("Spectrogram X Smoothing", &min, &max,
                                              &deflt);
     m_spectrogramXSmoothing = xsm;
@@ -136,7 +136,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QComboBox *audioDevice = new QComboBox;
     std::vector<QString> devices =
         AudioTargetFactory::getInstance()->getCallbackTargetNames();
-    
+
     QSettings settings;
     settings.beginGroup("Preferences");
     QString targetName = settings.value("audio-target", "").toString();
@@ -233,7 +233,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     // General tab
 
     QFrame *frame = new QFrame;
-    
+
     QGridLayout *subgrid = new QGridLayout;
     frame->setLayout(subgrid);
 
@@ -260,7 +260,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
 
     subgrid->setRowStretch(row, 10);
-    
+
     m_tabOrdering[GeneralTab] = m_tabs->count();
     m_tabs->addTab(frame, tr("&General"));
 
@@ -299,7 +299,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(showSplash, row++, 1, 1, 1);
 
     subgrid->setRowStretch(row, 10);
-    
+
     m_tabOrdering[AppearanceTab] = m_tabs->count();
     m_tabs->addTab(frame, tr("&Appearance"));
 
@@ -331,9 +331,9 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(m_windowTypeSelector, row++, 1, 2, 2);
     subgrid->setRowStretch(row, 10);
     row++;
-    
+
     subgrid->setRowStretch(row, 10);
-    
+
     m_tabOrdering[AnalysisTab] = m_tabs->count();
     m_tabs->addTab(frame, tr("Anal&ysis"));
 
@@ -343,7 +343,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid = new QGridLayout;
     frame->setLayout(subgrid);
     row = 0;
-    
+
     subgrid->addWidget(new QLabel(tr("Default session template for audio files:")), row++, 0);
 
     QListWidget *lw = new QListWidget();
@@ -384,7 +384,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
     grid->addWidget(bb, 1, 0);
-    
+
     QPushButton *ok = new QPushButton(tr("OK"));
     QPushButton *cancel = new QPushButton(tr("Cancel"));
     bb->addButton(ok, QDialogButtonBox::AcceptRole);
@@ -550,7 +550,7 @@ PreferencesDialog::applyClicked()
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
     prefs->setTimeToTextMode(Preferences::TimeToTextMode(m_timeToTextMode));
     prefs->setViewFontSize(m_viewFontSize);
-    
+
     std::vector<QString> devices =
         AudioTargetFactory::getInstance()->getCallbackTargetNames();
 
@@ -571,7 +571,7 @@ PreferencesDialog::applyClicked()
                                  tr("<b>Restart required</b><p>One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.</p><p>Please exit and restart the application now if you want these changes to take effect immediately.</p>"));
         m_changesOnRestart = false;
     }
-}    
+}
 
 void
 PreferencesDialog::cancelClicked()

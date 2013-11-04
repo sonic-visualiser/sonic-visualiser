@@ -47,11 +47,15 @@ PRE_TARGETDEPS += svapp/libsvapp.a \
 RESOURCES += sonic-visualiser.qrc
 
 HEADERS += main/MainWindow.h \
-           main/PreferencesDialog.h
+           main/PreferencesDialog.h \
+           main/IMAFencoder.h \
+           main/checkbox.h
 SOURCES += main/main.cpp \
            main/OSCHandler.cpp \
            main/MainWindow.cpp \
-           main/PreferencesDialog.cpp 
+           main/PreferencesDialog.cpp \
+           main/IMAFencoder.c \
+           main/imafdecoder.cpp
 
 # for mac integration
 QMAKE_INFO_PLIST = deploy/osx/Info.plist
