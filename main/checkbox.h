@@ -2,7 +2,7 @@
 #define CHECKBOX_H
 
 #include <QWidget>
-#include <QlineEdit>
+#include <QLineEdit>
 #include <QButtonGroup>
 #include <QRadioButton>
 #include <QGroupBox>
