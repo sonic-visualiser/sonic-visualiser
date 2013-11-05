@@ -1,5 +1,7 @@
 
-include(./config.pri)
+exists(config.pri) {
+    include(./config.pri)
+}
 
 CONFIG += staticlib
 
@@ -9,3 +11,9 @@ EXTRALIBS -= -lrdf
 
 DEFINES += USE_SORD
 # Libraries and paths should be added by config.pri
+
+win32-g++: {
+    INCLUDEPATH += ../sv-dependency-builds/win32-mingw/include
+    LIBS += -L../../sv-dependency-builds/win32-mingw/lib
+}
+
