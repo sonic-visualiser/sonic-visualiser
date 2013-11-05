@@ -1,5 +1,12 @@
 TEMPLATE = subdirs
-SUBDIRS = sub_dataquay svcore svgui svapp sub_sv #svcore/data/fileio/test
+SUBDIRS = sub_dataquay svcore svgui svapp sub_sv 
+
+!win* {
+    # We should build and run the tests on any platform,
+    # but doing it automatically doesn't work so well from
+    # within an IDE on Windows, so remove that from here
+    svcore/data/fileio/test
+}
 
 sub_sv.file = sv.pro
 
