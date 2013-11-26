@@ -122,9 +122,6 @@
 #include <cstdio>
 #include <errno.h>
 
-using std::cerr;
-using std::endl;
-
 using std::vector;
 using std::map;
 using std::set;
@@ -302,7 +299,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
 
-    NetworkPermissionTester tester(this);
+    NetworkPermissionTester tester;
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
         TransformFactory::getInstance()->startPopulationThread();
@@ -1568,7 +1565,7 @@ MainWindow::setupTransformsMenu()
 	QString name = transforms[i].name;
 	if (name == "") name = transforms[i].identifier;
 
-//        std::cerr << "Plugin Name: " << name << std::endl;
+//        cerr << "Plugin Name: " << name << endl;
 
         TransformDescription::Type type = transforms[i].type;
         QString typeStr = factory->getTransformTypeName(type);
@@ -1602,19 +1599,19 @@ MainWindow::setupTransformsMenu()
         action->setStatusTip(transforms[i].longDescription);
 
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
-            std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
                       << name << "\" (category = \""
-                      << category << "\")" << std::endl;
+                      << category << "\")" << endl;
         } else {
             categoryMenus[type][category]->addAction(action);
         }
 
         if (makerMenus[type].find(maker) == makerMenus[type].end()) {
-            std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No maker menu for transform \""
                       << name << "\" (maker = \""
-                      << maker << "\")" << std::endl;
+                      << maker << "\")" << endl;
         } else {
             makerMenus[type][maker]->addAction(action);
         }
@@ -1787,9 +1784,9 @@ MainWindow::setupRecentTransformsMenu()
         TransformActionReverseMap::iterator ti =
             m_transformActionsReverse.find(transforms[i]);
         if (ti == m_transformActionsReverse.end()) {
-            std::cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
-                      << "Unknown transform \"" << transforms[i].toStdString()
-                      << "\" in recent transforms list" << std::endl;
+            cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
+                      << "Unknown transform \"" << transforms[i]
+                      << "\" in recent transforms list" << endl;
             continue;
         }
         if (i == 0) {
@@ -1836,12 +1833,12 @@ MainWindow::setupExistingLayersMenus()
 	    Layer *layer = pane->getLayer(j);
 	    if (!layer) continue;
 	    if (observedLayers.find(layer) != observedLayers.end()) {
-//		std::cerr << "found duplicate layer " << layer << std::endl;
+//		cerr << "found duplicate layer " << layer << endl;
 		continue;
 	    }
 
-//	    std::cerr << "found new layer " << layer << " (name = " 
-//		      << layer->getLayerPresentationName() << ")" << std::endl;
+//	    cerr << "found new layer " << layer << " (name = " 
+//		      << layer->getLayerPresentationName() << ")" << endl;
 
 	    orderedLayers.push_back(layer);
 	    observedLayers.insert(layer);
@@ -2416,7 +2413,7 @@ MainWindow::exportAudio(bool asData)
                  items, c, false, &ok);
             if (!ok || item.isEmpty()) return;
             if (m.find(item) == m.end()) {
-                cerr << "WARNING: Model " << item.toStdString()
+                cerr << "WARNING: Model " << item
                      << " not found in list!" << endl;
             } else {
                 model = m[item];
@@ -2563,13 +2560,13 @@ MainWindow::importLayer()
     
     if (!pane) {
 	// shouldn't happen, as the menu action should have been disabled
-	std::cerr << "WARNING: MainWindow::importLayer: no current pane" << std::endl;
+	cerr << "WARNING: MainWindow::importLayer: no current pane" << endl;
 	return;
     }
 
     if (!getMainModel()) {
 	// shouldn't happen, as the menu action should have been disabled
-	std::cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << std::endl;
+	cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
 	return;
     }
 
@@ -2950,8 +2947,8 @@ MainWindow::openRecentFile()
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
-	std::cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
-		  << std::endl;
+	cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
+		  << endl;
 	return;
     }
 
@@ -2978,8 +2975,8 @@ MainWindow::applyTemplate()
     QAction *action = qobject_cast<QAction *>(s);
 
     if (!action) {
-	std::cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
-		  << std::endl;
+	cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
+		  << endl;
 	return;
     }
 
@@ -2987,8 +2984,8 @@ MainWindow::applyTemplate()
     if (n == "") n = action->text();
 
     if (n == "") {
-        std::cerr << "WARNING: MainWindow::applyTemplate: sender has no name"
-                  << std::endl;
+        cerr << "WARNING: MainWindow::applyTemplate: sender has no name"
+                  << endl;
         return;
     }
 
@@ -3129,16 +3126,16 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-//    std::cerr << "MainWindow::closeEvent" << std::endl;
+//    cerr << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
-//        std::cerr << "Busy - ignoring close event" << std::endl;
+//        cerr << "Busy - ignoring close event" << endl;
 	e->ignore();
 	return;
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        std::cerr << "Close refused by user - ignoring close event" << endl;
+//        cerr << "Close refused by user - ignoring close event" << endl;
 	e->ignore();
 	return;
     }
@@ -3366,16 +3363,16 @@ MainWindow::addPane()
     QAction *action = dynamic_cast<QAction *>(s);
     
     if (!action) {
-	std::cerr << "WARNING: MainWindow::addPane: sender is not an action"
-		  << std::endl;
+	cerr << "WARNING: MainWindow::addPane: sender is not an action"
+		  << endl;
 	return;
     }
 
     PaneActionMap::iterator i = m_paneActions.find(action);
 
     if (i == m_paneActions.end()) {
-	std::cerr << "WARNING: MainWindow::addPane: unknown action "
-		  << action->objectName() << std::endl;
+	cerr << "WARNING: MainWindow::addPane: unknown action "
+		  << action->objectName() << endl;
 	return;
     }
 
@@ -3402,7 +3399,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         configuration.layer != LayerFactory::Spectrum) {
 
 	if (!m_timeRulerLayer) {
-//	    std::cerr << "no time ruler layer, creating one" << std::endl;
+//	    cerr << "no time ruler layer, creating one" << endl;
 	    m_timeRulerLayer = m_document->createMainModelLayer
 		(LayerFactory::TimeRuler);
 	}
@@ -3429,9 +3426,9 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         }
 
         if (!model) {
-            std::cerr << "WARNING: Model " << (void *)suggestedModel
+            cerr << "WARNING: Model " << (void *)suggestedModel
                       << " appears in pane action map, but is not reported "
-                      << "by document as a valid transform source" << std::endl;
+                      << "by document as a valid transform source" << endl;
         }
     }
 
@@ -3463,15 +3460,15 @@ MainWindow::addLayer()
     QAction *action = dynamic_cast<QAction *>(s);
     
     if (!action) {
-	std::cerr << "WARNING: MainWindow::addLayer: sender is not an action"
-		  << std::endl;
+	cerr << "WARNING: MainWindow::addLayer: sender is not an action"
+		  << endl;
 	return;
     }
 
     Pane *pane = m_paneStack->getCurrentPane();
     
     if (!pane) {
-	std::cerr << "WARNING: MainWindow::addLayer: no current pane" << std::endl;
+	cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
 	return;
     }
 
@@ -3511,8 +3508,8 @@ MainWindow::addLayer()
 	LayerActionMap::iterator i = m_layerActions.find(action);
 	
 	if (i == m_layerActions.end()) {
-	    std::cerr << "WARNING: MainWindow::addLayer: unknown action "
-		      << action->objectName() << std::endl;
+	    cerr << "WARNING: MainWindow::addLayer: unknown action "
+		      << action->objectName() << endl;
 	    return;
 	}
 
@@ -3560,12 +3557,12 @@ MainWindow::addLayer()
                     m_document->setChannel(newLayer, i->second.channel);
                     m_document->setModel(newLayer, model);
                 } else {
-                    std::cerr << "WARNING: MainWindow::addLayer: unknown model "
+                    cerr << "WARNING: MainWindow::addLayer: unknown model "
                               << model
                               << " (\""
-                              << (model ? model->objectName().toStdString() : "")
+                              << (model ? model->objectName() : "")
                               << "\") in layer action map"
-                              << std::endl;
+                              << endl;
                 }
             }
         }
@@ -3606,7 +3603,7 @@ MainWindow::addLayer(QString transformId)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) {
-	std::cerr << "WARNING: MainWindow::addLayer: no current pane" << std::endl;
+	cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
 	return;
     }
 
@@ -3762,7 +3759,7 @@ MainWindow::playSpeedChanged(int position)
     float percent = m_playSpeed->mappedValue();
     float factor = mapper.getFactorForValue(percent);
 
-//    std::cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << std::endl;
+//    cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << endl;
 
     bool something = (position != 100);
 

@@ -54,7 +54,7 @@ Surveyer::Surveyer(QString hostname, QString testPath, QString surveyPath) :
         // whether they want to or not) set the countdown to -1 so
         // that it is never offered again.
         QUrl url(QString("http://%1/%2").arg(m_hostname).arg(m_testPath));
-        std::cerr << "Surveyer: Test URL is " << url << std::endl;
+        cerr << "Surveyer: Test URL is " << url << endl;
         m_reply = m_nm->get(QNetworkRequest(url));
         connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(error(QNetworkReply::NetworkError)));
@@ -77,7 +77,7 @@ Surveyer::~Surveyer()
 void
 Surveyer::error(QNetworkReply::NetworkError)
 {
-    std::cerr << "Surveyer: error: " << m_reply->errorString() << std::endl;
+    cerr << "Surveyer: error: " << m_reply->errorString() << endl;
     m_httpFailed = true;
 }
 

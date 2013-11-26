@@ -179,7 +179,7 @@ signalHandler(int /* signal */)
 {
     // Avoid this happening more than once across threads
 
-    std::cerr << "signalHandler: cleaning up and exiting" << std::endl;
+    cerr << "signalHandler: cleaning up and exiting" << endl;
     cleanupMutex.lock();
     if (!cleanedUp) {
         TempDirectory::getInstance()->cleanup();
@@ -266,8 +266,8 @@ main(int argc, char **argv)
     bool oscSupport = true;
 
     if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
-        std::cerr << QApplication::tr(
-            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]) << std::endl;
+        cerr << QApplication::tr(
+            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]) << endl;
         exit(2);
     }
 
@@ -335,7 +335,7 @@ main(int argc, char **argv)
     if (!success) {
         SVDEBUG << "Failed\nFailed to load Qt translation for locale" << endl;
     } else {
-        std::cerr << "Done" << std::endl;
+        cerr << "Done" << endl;
     }
     application.installTranslator(&qtTranslator);
 
@@ -505,7 +505,7 @@ void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
                 haveMainModel = true;
             }
         } else {
-            std::cerr << "WARNING: Ignoring additional session file argument \"" << path << "\"" << std::endl;
+            cerr << "WARNING: Ignoring additional session file argument \"" << path << "\"" << endl;
             status = MainWindow::FileOpenSucceeded;
         }
     }
