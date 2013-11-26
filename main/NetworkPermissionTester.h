@@ -12,36 +12,16 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _SURVEYER_H_
-#define _SURVEYER_H_
+#ifndef NETWORK_PERMISSION_TESTER_H
+#define NETWORK_PERMISSION_TESTER_H
 
-#include <QStringList>
-#include <QString>
-#include <QObject>
-#include <QNetworkReply>
-
-class QNetworkAccessManager;
-
-class Surveyer : public QObject
+class NetworkPermissionTester
 {
-    Q_OBJECT
-
 public:
-    Surveyer(QString hostname, QString testPath, QString surveyPath);
-    virtual ~Surveyer();
-
-protected slots:
-    void finished();
-    void error(QNetworkReply::NetworkError);
-
-private:
-    bool m_httpFailed;
-    QString m_hostname;
-    QString m_testPath;
-    QString m_surveyPath;
-    QNetworkReply *m_reply;
-    QNetworkAccessManager *m_nm;
+    NetworkPermissionTester() { }
+    bool havePermission();
 };
 
 #endif
+
 
