@@ -221,7 +221,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
         QString f0 = f;
         f.replace("sonic-visualiser_", "").replace(".qm", "");
         if (f == f0) { // our expectations about filename format were not met
-            std::cerr << "INFO: Unexpected filename " << f << " in i18n resource directory" << std::endl;
+            cerr << "INFO: Unexpected filename " << f << " in i18n resource directory" << endl;
         } else {
             m_locales.push_back(f);
             QString displayText;

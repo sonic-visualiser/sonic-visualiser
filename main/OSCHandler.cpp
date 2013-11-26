@@ -46,8 +46,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
             if (open(path, ReplaceMainModel) != FileOpenSucceeded) {
-                std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
-                          << path << "\"" << std::endl;
+                cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                          << path << "\"" << endl;
             }
             //!!! we really need to spin here and not return until the
             // file has been completely decoded...
@@ -59,8 +59,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
             if (open(path, CreateAdditionalModel) != FileOpenSucceeded) {
-                std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
-                          << path << "\"" << std::endl;
+                cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                          << path << "\"" << endl;
             }
         }
 
@@ -76,8 +76,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         std::vector<QString> recent = m_recentFiles.getRecent();
         if (n >= 0 && n < int(recent.size())) {
             if (open(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
-                std::cerr << "MainWindow::handleOSCMessage: File open failed for path \""
-                          << recent[n] << "\"" << std::endl;
+                cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                          << recent[n] << "\"" << endl;
             }
         }
 
@@ -294,8 +294,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     channel = message.getArg(0).toInt();
                     if (channel < -1 ||
                         channel > int(getMainModel()->getChannelCount())) {
-                        std::cerr << "WARNING: MainWindow::handleOSCMessage: channel "
-                                  << channel << " out of range" << std::endl;
+                        cerr << "WARNING: MainWindow::handleOSCMessage: channel "
+                                  << channel << " out of range" << endl;
                         channel = -1;
                     }
                 }
@@ -306,8 +306,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     LayerFactory::getInstance()->getLayerTypeForName(str);
 
                 if (type == LayerFactory::UnknownLayer) {
-                    std::cerr << "WARNING: MainWindow::handleOSCMessage: unknown layer "
-                              << "type " << str << std::endl;
+                    cerr << "WARNING: MainWindow::handleOSCMessage: unknown layer "
+                              << "type " << str << endl;
                 } else {
 
                     LayerConfiguration configuration(type,
@@ -429,7 +429,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             } else {
                 
-                std::cerr << "WARNING: MainWindow::handleOSCMessage: Unknown delete target " << target << std::endl;
+                cerr << "WARNING: MainWindow::handleOSCMessage: Unknown delete target " << target << endl;
             }
         }
 
@@ -544,9 +544,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
 
     } else {
-        std::cerr << "WARNING: MainWindow::handleOSCMessage: Unknown or unsupported "
-                  << "method \"" << message.getMethod().toStdString()
-                  << "\"" << std::endl;
+        cerr << "WARNING: MainWindow::handleOSCMessage: Unknown or unsupported "
+                  << "method \"" << message.getMethod()
+                  << "\"" << endl;
     }
             
 }
