@@ -60,6 +60,7 @@ protected slots:
     void viewFontSizeChanged(int sz);
     void showSplashChanged(int state);
     void defaultTemplateChanged(int);
+    void localeChanged(int);
 
     void tempDirButtonClicked();
 
@@ -78,6 +79,9 @@ protected:
 
     QString m_currentTemplate;
     QStringList m_templates;
+
+    QString m_currentLocale;
+    QStringList m_locales;
     
     WindowType m_windowType;
     int m_spectrogramSmoothing;

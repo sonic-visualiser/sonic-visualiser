@@ -317,6 +317,10 @@ main(int argc, char **argv)
 
     QString language = QLocale::system().name();
 
+    settings.beginGroup("Preferences");
+    language = settings.value("locale", language).toString();
+    settings.endGroup();
+
     QTranslator qtTranslator;
     QString qtTrName = QString("qt_%1").arg(language);
     SVDEBUG << "Loading " << qtTrName << "... ";
