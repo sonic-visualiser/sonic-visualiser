@@ -82,6 +82,7 @@
 #include "rdf/PluginRDFIndexer.h"
 #include "rdf/RDFExporter.h"
 
+#include "Surveyer.h"
 #include "framework/VersionTester.h"
 
 // For version information
@@ -306,8 +307,11 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     
     TransformFactory::getInstance()->startPopulationThread();
 
+    m_surveyer = new Surveyer
+        ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
+
     m_versionTester = new VersionTester
-        ("sonicvisualiser.org", "/latest-version.txt", SV_VERSION);
+        ("sonicvisualiser.org", "latest-version.txt", SV_VERSION);
     connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
             this, SLOT(newerVersionAvailable(QString)));
 }
@@ -320,6 +324,7 @@ MainWindow::~MainWindow()
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     delete m_versionTester;
+    delete m_surveyer;
     Profiles::getInstance()->dump();
 //    SVDEBUG << "MainWindow::~MainWindow finishing" << endl;
 }

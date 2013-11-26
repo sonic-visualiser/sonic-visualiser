@@ -69,10 +69,12 @@ PRE_TARGETDEPS += svapp/svapp.lib \
 RESOURCES += sonic-visualiser.qrc
 
 HEADERS += main/MainWindow.h \
+           main/Surveyer.h \
            main/PreferencesDialog.h
 SOURCES += main/main.cpp \
            main/OSCHandler.cpp \
            main/MainWindow.cpp \
+           main/Surveyer.cpp \
            main/PreferencesDialog.cpp 
 
 # for mac integration

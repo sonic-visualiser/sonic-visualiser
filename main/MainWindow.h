@@ -61,6 +61,7 @@ class ActivityLog;
 class QFileSystemWatcher;
 class QScrollArea;
 class VersionTester;
+class Surveyer;
 
 class MainWindow : public MainWindowBase
 {
@@ -248,6 +249,7 @@ protected:
 
     QFileSystemWatcher      *m_templateWatcher;
 
+    Surveyer                *m_surveyer;
     VersionTester           *m_versionTester;
 
     struct LayerConfiguration {
