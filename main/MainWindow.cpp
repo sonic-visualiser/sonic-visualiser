@@ -83,6 +83,7 @@
 #include "rdf/RDFExporter.h"
 
 #include "Surveyer.h"
+#include "NetworkPermissionTester.h"
 #include "framework/VersionTester.h"
 
 // For version information
@@ -251,10 +252,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     IconLoader il;
 
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.endGroup();
-
     m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(4);
@@ -304,16 +301,21 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
-    
-    TransformFactory::getInstance()->startPopulationThread();
 
-    m_surveyer = new Surveyer
-        ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
-
-    m_versionTester = new VersionTester
-        ("sonicvisualiser.org", "latest-version.txt", SV_VERSION);
-    connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
-            this, SLOT(newerVersionAvailable(QString)));
+    NetworkPermissionTester tester(this);
+    bool networkPermission = tester.havePermission();
+    if (networkPermission) {
+        TransformFactory::getInstance()->startPopulationThread();
+        m_surveyer = new Surveyer
+            ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
+        m_versionTester = new VersionTester
+            ("sonicvisualiser.org", "latest-version.txt", SV_VERSION);
+        connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
+                this, SLOT(newerVersionAvailable(QString)));
+    } else {
+        m_surveyer = 0;
+        m_versionTester = 0;
+    }
 }
 
 MainWindow::~MainWindow()
@@ -4442,7 +4444,7 @@ MainWindow::newerVersionAvailable(QString version)
     QString tag = QString("version-%1-available-show").arg(version);
     if (settings.value(tag, true).toBool()) {
         QString title(tr("Newer version available"));
-        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of Sonic Visualiser, but version %3 is now available.</p><p>Please see the <a href=\"http://sonicvisualiser.org/\">Sonic Visualiser website</a> for more information.</p>").arg(SV_VERSION).arg(version));
+        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of Sonic Visualiser, but version %2 is now available.</p><p>Please see the <a href=\"http://sonicvisualiser.org/\">Sonic Visualiser website</a> for more information.</p>").arg(SV_VERSION).arg(version));
         QMessageBox::information(this, title, text);
         settings.setValue(tag, false);
     }
