@@ -142,7 +142,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QString targetName = settings.value("audio-target", "").toString();
     settings.endGroup();
 
-    for (int i = 0; i < devices.size(); ++i) {
+    for (int i = 0; i < (int)devices.size(); ++i) {
         audioDevice->addItem(AudioTargetFactory::getInstance()
                              ->getCallbackTargetDescription(devices[i]));
         if (targetName == devices[i]) audioDevice->setCurrentIndex(i);
@@ -205,6 +205,41 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             this, SLOT(backgroundModeChanged(int)));
 #endif
 
+    settings.beginGroup("Preferences");
+    QString userLocale = settings.value("locale", "").toString();
+    m_currentLocale = userLocale;
+    settings.endGroup();
+
+    QComboBox *locale = new QComboBox;
+    QStringList localeFiles = QDir(":i18n").entryList(QStringList() << "*.qm");
+    locale->addItem(tr("Follow system locale"));
+    m_locales.push_back("");
+    if (userLocale == "") {
+        locale->setCurrentIndex(0);
+    }
+    foreach (QString f, localeFiles) {
+        QString f0 = f;
+        f.replace("sonic-visualiser_", "").replace(".qm", "");
+        if (f == f0) { // our expectations about filename format were not met
+            std::cerr << "INFO: Unexpected filename " << f << " in i18n resource directory" << std::endl;
+        } else {
+            m_locales.push_back(f);
+            QString displayText;
+            // Add new translations here
+            if (f == "ru") displayText = tr("Russian");
+            else if (f == "en_GB") displayText = tr("British English");
+            else if (f == "en_US") displayText = tr("American English");
+            else if (f == "cs_CZ") displayText = tr("Czech");
+            else displayText = f;
+            locale->addItem(QString("%1 [%2]").arg(displayText).arg(f));
+            if (userLocale == f) {
+                locale->setCurrentIndex(locale->count() - 1);
+            }
+        }
+    }
+    connect(locale, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(localeChanged(int)));
+
     QSpinBox *fontSize = new QSpinBox;
     int fs = prefs->getPropertyRangeAndValue("View Font Size", &min, &max,
                                              &deflt);
@@ -238,6 +273,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     frame->setLayout(subgrid);
 
     int row = 0;
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("User interface language"))),
+                       row, 0);
+    subgrid->addWidget(locale, row++, 1, 1, 1);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Temporary Directory Root"))),
@@ -484,6 +523,14 @@ PreferencesDialog::defaultTemplateChanged(int i)
 }
 
 void
+PreferencesDialog::localeChanged(int i)
+{
+    m_currentLocale = m_locales[i];
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::tempDirRootChanged(QString r)
 {
     m_tempDirRoot = r;
@@ -562,6 +609,10 @@ PreferencesDialog::applyClicked()
 
     settings.beginGroup("MainWindow");
     settings.setValue("sessiontemplate", m_currentTemplate);
+    settings.endGroup();
+
+    settings.beginGroup("Preferences");
+    settings.setValue("locale", m_currentLocale);
     settings.endGroup();
 
     m_applyButton->setEnabled(false);
