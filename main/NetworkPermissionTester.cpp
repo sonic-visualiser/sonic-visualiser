@@ -51,19 +51,20 @@ NetworkPermissionTester::havePermission()
 	label->setText
 	    (QCoreApplication::translate
 	     ("NetworkPermissionTester",
-	      "<h3>Welcome to Sonic Visualiser!</h3>"
-	      "<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>"
+	      "<h2>Welcome to Sonic Visualiser!</h2>"
+	      "<p><img src=\":icons/qm-logo-smaller.png\" style=\"float:right\">Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>"
 	      "<p>Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Visualiser is provided free as open source software under the GNU General Public License.</p>"
-	      "<p><b>Before we start...</b></p>"
+              "<p><hr></p>"
+	      "<p><b>Before we go on...</b></p>"
 	      "<p>Sonic Visualiser needs to make occasional network requests to our servers.</p>"
-	      "<p>This is in order to:</p>"
-	      "<ul><li>download metadata about available and installed plugins; and</li>"
-	      "<li>find out when a newer version of Sonic Visualiser is available.</li></ul>"
-	      "<p>No personal or identifying information will be sent, and your use of the program will not be tracked.</p>"
-	      "<p>We recommend that you allow this, but if you do not wish to do so, please un-check the box below.<br></p>"));
+	      "<p>This is to:</p>"
+	      "<ul><li> look up information about available and installed plugins; and</li>"
+	      "<li> tell you when updates are available.</li></ul>"
+	      "<p>No personal information will be sent, no tracking is carried out, and all requests happen in the background without interrupting your work.</p>"
+	      "<p>We recommend that you allow this, because it makes Sonic Visualiser more useful. But if you do not wish to do so, please un-check the box below.<br></p>"));
 	layout->addWidget(label, 0, 0);
 
-	QCheckBox *cb = new QCheckBox(QCoreApplication::translate("NetworkPermissionTester", "Allow Sonic Visualiser to make these network requests"));
+	QCheckBox *cb = new QCheckBox(QCoreApplication::translate("NetworkPermissionTester", "Allow this"));
 	cb->setChecked(true);
 	layout->addWidget(cb, 1, 0);
 	

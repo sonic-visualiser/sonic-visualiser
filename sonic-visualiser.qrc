@@ -96,6 +96,8 @@
     <file>icons/sv-64x64.png</file>
     <file>icons/sv-128x128.png</file>
     <file>icons/sv-splash.png</file>
+    <file>icons/qm-logo-larger.png</file>
+    <file>icons/qm-logo-smaller.png</file>
     <file>samples/bass.wav</file>
     <file>samples/beep.wav</file>
     <file>samples/bounce.wav</file>
