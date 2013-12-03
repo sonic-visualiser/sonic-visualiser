@@ -60,10 +60,10 @@ PRE_TARGETDEPS += svapp/svapp.lib \
                   dataquay/dataquay.lib
 }
 !win* {
-#PRE_TARGETDEPS += svapp/libsvapp.a \
-#                  svgui/libsvgui.a \
-#                  svcore/libsvcore.a \
-#                  dataquay/libdataquay.a
+PRE_TARGETDEPS += svapp/libsvapp.a \
+                  svgui/libsvgui.a \
+                  svcore/libsvcore.a \
+                  dataquay/libdataquay.a
 }
 
 RESOURCES += sonic-visualiser.qrc
