@@ -529,7 +529,7 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    action = new QAction(tr("&Export Audio Data..."), this);
+    action = new QAction(tr("Export Audio Data..."), this);
     action->setStatusTip(tr("Export audio from selection into a data file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
