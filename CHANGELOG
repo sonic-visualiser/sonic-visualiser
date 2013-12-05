@@ -1,27 +1,65 @@
 
+
+Changes in Sonic Visualiser 2.3 since the previous release 2.2:
+
+ - Add a startup welcome dialog that also explains what SV makes
+   network connections for and allows user to forbid them
+
+ - Add "Export Audio Data" feature
+
+ - Show piano keyboard scale in note and time-value layers as well
+   as spectrogram, where vertical scale is log Hz; also show
+   numerical scale in note and region layers when not auto-aligned
+
+ - Speed up CSV file import and avoid showing crazily wide window
+   for CSV file format dialog when file has lots of columns
+
+ - Fix incorrectly saved window geometry when exiting from maximised
+   state
+
+ - Reduce number of timer wakeups when idle
+
+ - Add American English translation and make choice of translation
+   into a preference (defaulting to system locale)
+
+ - Permit installation to non-default location with Windows installer
+   build
+	
+
 Changes in Sonic Visualiser 2.2 since the previous release 2.1:
 
  - Build with support for hidpi ("retina") text on OS/X
+
  - Fix very slow analysis when using Ogg or FLAC files decoded
    via libsndfile
+
  - Fix inaccurate scale auto-align between time-value layers and
    others
+
  - Fix failure to open files specified on command line (or via
    Open With) on Windows
+
  - Reset cyclical counters and switch back to navigate mode when
    a new session is started
+
 
 Changes in Sonic Visualiser 2.1 since the previous release 2.0.1:
 
  - Fix incorrect handling of FixedSampleRate outputs (Vamp SDK fix)
+
  - Make it easier to see results from transforms that return a single point
+
  - Make labelling clearer on time-value layers
+
  - Add discrete-curve mode for time-value layers (for curves with gaps)
+
  - Update code to build against Qt5
+
 
 Changes in Sonic Visualiser 2.0.1 since the previous release 2.0:
 
  - Fix incorrect samplerate in reading m4a files on OS/X
+
 
 Changes in Sonic Visualiser 2.0 since the previous release 1.9:
 
@@ -34,6 +72,7 @@ Changes in Sonic Visualiser 2.0 since the previous release 1.9:
 
  - Add a fullscreen mode on the F11 key
 
+
 Changes in Sonic Visualiser 1.9 since the previous release 1.8:
 
  - Add session templates; save session as template; apply template to
@@ -43,6 +82,7 @@ Changes in Sonic Visualiser 1.9 since the previous release 1.8:
    to open a file, where possible
 
  - Various bug fixes.
+
 
 Changes in Sonic Visualiser 1.8 since the previous release 1.7.2:
 
@@ -73,6 +113,7 @@ Changes in Sonic Visualiser 1.8 since the previous release 1.7.2:
 
  - A Czech translation is now included (thanks to Pavel Fric).
 
+
 Changes in Sonic Visualiser 1.7.2 since the previous release 1.7.1:
 
  - The time-value layer now has an origin line and an option to
@@ -84,6 +125,7 @@ Changes in Sonic Visualiser 1.7.2 since the previous release 1.7.1:
 
  - A crash when pressing Play straight after New Session has been
  fixed
+
 
 Changes in Sonic Visualiser 1.7.1 since the previous release 1.7:
 
@@ -100,6 +142,7 @@ Changes in Sonic Visualiser 1.7.1 since the previous release 1.7:
  status bar
 
  - The Russian translation has been updated (thanks Alexandre)
+
 
 Changes in Sonic Visualiser 1.7 since the previous release 1.6:
 
@@ -123,6 +166,7 @@ Changes in Sonic Visualiser 1.7 since the previous release 1.6:
 
  - Various other bug fixes.
 
+
 Changes in Sonic Visualiser 1.6 since the previous release 1.5:
 
  - The Colour 3D Plot layer now supports logarithmic vertical
@@ -135,6 +179,7 @@ Changes in Sonic Visualiser 1.6 since the previous release 1.5:
  Plot.
 
  - Various other bug fixes.
+
 
 Changes in Sonic Visualiser 1.5 since the previous version 1.4:
 
@@ -206,6 +251,7 @@ New features in Sonic Visualiser 1.4 since the previous version 1.3:
 
  - Several crashes and other bugs have been fixed.
 
+
 Changes in Sonic Visualiser 1.3 since the previous version 1.2:
 
  - There is a new spreadsheet-style data viewer and editor for
@@ -223,6 +269,7 @@ Changes in Sonic Visualiser 1.3 since the previous version 1.2:
  - There is a new, somewhat provisional PulseAudio output driver.
 
  - Several other bug fixes.
+
 
 New features in Sonic Visualiser 1.2, since the previous version 1.0:
 
