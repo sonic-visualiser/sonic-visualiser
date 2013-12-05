@@ -2547,7 +2547,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Export the selected regions into a single audio file</source>
-        <translation>Vyvést vybrané oblasti do jednoho zvukového souboru</translation>
+        <translation type="obsolete">Vyvést vybrané oblasti do jednoho zvukového souboru</translation>
     </message>
     <message>
         <source>&lt;b&gt;Wrong sample rate&lt;/b&gt;&lt;p&gt;The sample rate of this audio file (%1 Hz) does not match
@@ -3272,6 +3272,22 @@ Co chcete vyvést?</translation>
     <message>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Chris Cannam</source>
         <translation>&lt;br&gt;Knihovna Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
+    </message>
+    <message>
+        <source>&amp;Export Audio Data...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export audio from selection into a data file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the selected regions into a single file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the whole file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4457,6 +4473,30 @@ Použít je před zavřením?</translation>
     <message>
         <source>Playback audio device:</source>
         <translation>Zvukové zařízení pro přehrávání:</translation>
+    </message>
+    <message>
+        <source>Follow system locale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>British English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>American English</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Czech</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User interface language</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

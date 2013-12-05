@@ -16,48 +16,13 @@
 #ifndef _MAIN_WINDOW_H_
 #define _MAIN_WINDOW_H_
 
-#include <QFrame>
-#include <QString>
-#include <QUrl>
-#include <QPointer>
-
 #include "framework/MainWindowBase.h"
-#include "base/Command.h"
-#include "view/ViewManager.h"
-#include "base/PropertyContainer.h"
-#include "base/RecentFiles.h"
-#include "layer/LayerFactory.h"
-#include "transform/Transform.h"
-#include "framework/SVFileReader.h"
-#include "data/fileio/FileFinder.h"
-#include "data/fileio/FileSource.h"
-#include "widgets/LayerTreeDialog.h"
-#include <map>
 
-class Document;
-class PaneStack;
-class Pane;
-class View;
-class Fader;
-class Overview;
-class Layer;
-class WaveformLayer;
-class WaveFileModel;
-class AudioCallbackPlaySource;
-class AudioCallbackPlayTarget;
-class CommandHistory;
-class QMenu;
-class AudioDial;
-class QLabel;
-class QCheckBox;
-class PreferencesDialog;
-class QTreeView;
-class QPushButton;
-class OSCQueue;
-class OSCMessage;
-class KeyReference;
-class Labeller;
+class VersionTester;
+class Surveyer;
+class LayerTreeDialog;
 class ActivityLog;
+
 class QFileSystemWatcher;
 class QScrollArea;
 
@@ -251,15 +216,18 @@ protected:
 
     QFileSystemWatcher      *m_templateWatcher;
 
+    Surveyer                *m_surveyer;
+    VersionTester           *m_versionTester;
+
     struct LayerConfiguration {
     LayerConfiguration(LayerFactory::LayerType _layer
                                    = LayerFactory::TimeRuler,
                            Model *_source = 0,
                            int _channel = -1) :
         layer(_layer), sourceModel(_source), channel(_channel) { }
-    LayerFactory::LayerType layer;
+        LayerFactory::LayerType layer;
         Model *sourceModel;
-    int channel;
+        int channel;
     };
 
     typedef std::map<QAction *, LayerConfiguration> PaneActionMap;

@@ -1,5 +1,5 @@
 
-AC_INIT([Sonic Visualiser], [2.2], cannam@all-day-breakfast.com)
+AC_INIT([Sonic Visualiser], [2.3-imaf], cannam@all-day-breakfast.com)
 
 AC_CONFIG_SRCDIR(main/main.cpp)
 

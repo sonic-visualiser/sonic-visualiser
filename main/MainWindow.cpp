@@ -83,6 +83,8 @@
 #include "rdf/PluginRDFIndexer.h"
 #include "rdf/RDFExporter.h"
 
+#include "Surveyer.h"
+#include "NetworkPermissionTester.h"
 #include "framework/VersionTester.h"
 
 // For version information
@@ -120,9 +122,6 @@
 #include <iostream>
 #include <cstdio>
 #include <errno.h>
-
-using std::cerr;
-using std::endl;
 
 using std::vector;
 using std::map;
@@ -269,10 +268,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     IconLoader il;
 
-    QSettings settings;
-    settings.beginGroup("MainWindow");
-    settings.endGroup();
-
     m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(4);
@@ -323,12 +318,24 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
 
-    TransformFactory::getInstance()->startPopulationThread();
-
-    VersionTester *vt = new VersionTester
-        ("sonicvisualiser.org", "/latest-version.txt", SV_VERSION);
-    connect(vt, SIGNAL(newerVersionAvailable(QString)),
-            this, SLOT(newerVersionAvailable(QString)));
+    NetworkPermissionTester tester;
+    bool networkPermission = tester.havePermission();
+    if (networkPermission) {
+        TransformFactory::getInstance()->startPopulationThread();
+        m_surveyer = 0;
+        m_versionTester = 0;
+/*
+        m_surveyer = new Surveyer
+            ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
+        m_versionTester = new VersionTester
+            ("sonicvisualiser.org", "latest-version.txt", SV_VERSION);
+        connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
+                this, SLOT(newerVersionAvailable(QString)));
+*/
+    } else {
+        m_surveyer = 0;
+        m_versionTester = 0;
+    }
 }
 
 MainWindow::~MainWindow()
@@ -338,6 +345,8 @@ MainWindow::~MainWindow()
     delete m_activityLog;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
+    delete m_versionTester;
+    delete m_surveyer;
     Profiles::getInstance()->dump();
 //    SVDEBUG << "MainWindow::~MainWindow finishing" << endl;
 }
@@ -543,18 +552,18 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    action = new QAction(tr("&Export Audio Data..."), this);
+    action = new QAction(tr("Export Audio Data..."), this);
     action->setStatusTip(tr("Export audio from selection into a data file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
-    QAction *actionCreateIMAF = new QAction(tr("&Export IMAF File..."), this);
+    QAction *actionCreateIMAF = new QAction(tr("Export IMAF File..."), this);
     actionCreateIMAF->setStatusTip(tr("Export selection as an IMAF file"));
     menu->addAction(actionCreateIMAF);
     connect(actionCreateIMAF,SIGNAL(triggered()),this,SLOT(exportIMAF()));
 
-    QAction *actionOpenIMAF = new QAction(tr("&Import IMAF File..."), this);
+    QAction *actionOpenIMAF = new QAction(tr("Import IMAF File..."), this);
     actionOpenIMAF->setStatusTip(tr("Import IMAF file"));
     menu->addAction(actionOpenIMAF);
     connect(actionOpenIMAF,SIGNAL(triggered()),this,SLOT(importIMAF()));
@@ -1588,7 +1597,7 @@ MainWindow::setupTransformsMenu()
     QString name = transforms[i].name;
     if (name == "") name = transforms[i].identifier;
 
-//        std::cerr << "Plugin Name: " << name << std::endl;
+//        cerr << "Plugin Name: " << name << endl;
 
         TransformDescription::Type type = transforms[i].type;
         QString typeStr = factory->getTransformTypeName(type);
@@ -1622,19 +1631,19 @@ MainWindow::setupTransformsMenu()
         action->setStatusTip(transforms[i].longDescription);
 
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
-            std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
                       << name << "\" (category = \""
-                      << category << "\")" << std::endl;
+                      << category << "\")" << endl;
         } else {
             categoryMenus[type][category]->addAction(action);
         }
 
         if (makerMenus[type].find(maker) == makerMenus[type].end()) {
-            std::cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No maker menu for transform \""
                       << name << "\" (maker = \""
-                      << maker << "\")" << std::endl;
+                      << maker << "\")" << endl;
         } else {
             makerMenus[type][maker]->addAction(action);
         }
@@ -1807,9 +1816,9 @@ MainWindow::setupRecentTransformsMenu()
         TransformActionReverseMap::iterator ti =
             m_transformActionsReverse.find(transforms[i]);
         if (ti == m_transformActionsReverse.end()) {
-            std::cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
-                      << "Unknown transform \"" << transforms[i].toStdString()
-                      << "\" in recent transforms list" << std::endl;
+            cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
+                      << "Unknown transform \"" << transforms[i]
+                      << "\" in recent transforms list" << endl;
             continue;
         }
         if (i == 0) {
@@ -1848,28 +1857,28 @@ MainWindow::setupExistingLayersMenus()
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
-    Pane *pane = m_paneStack->getPane(i);
-    if (!pane) continue;
+	Pane *pane = m_paneStack->getPane(i);
+	if (!pane) continue;
 
-    for (int j = 0; j < pane->getLayerCount(); ++j) {
+	for (int j = 0; j < pane->getLayerCount(); ++j) {
 
-        Layer *layer = pane->getLayer(j);
-        if (!layer) continue;
-        if (observedLayers.find(layer) != observedLayers.end()) {
-//		std::cerr << "found duplicate layer " << layer << std::endl;
-        continue;
-        }
+	    Layer *layer = pane->getLayer(j);
+	    if (!layer) continue;
+	    if (observedLayers.find(layer) != observedLayers.end()) {
+//		cerr << "found duplicate layer " << layer << endl;
+		continue;
+	    }
 
-//	    std::cerr << "found new layer " << layer << " (name = "
-//		      << layer->getLayerPresentationName() << ")" << std::endl;
-
-        orderedLayers.push_back(layer);
-        observedLayers.insert(layer);
+//	    cerr << "found new layer " << layer << " (name = " 
+//		      << layer->getLayerPresentationName() << ")" << endl;
+            
+            orderedLayers.push_back(layer);
+            observedLayers.insert(layer);
 
             if (factory->isLayerSliceable(layer)) {
                 sliceableLayers.insert(layer);
             }
-    }
+        }
     }
 
     map<QString, int> observedNames;
@@ -2438,7 +2447,7 @@ MainWindow::exportAudio(bool asData)
                  items, c, false, &ok);
             if (!ok || item.isEmpty()) return;
             if (m.find(item) == m.end()) {
-                cerr << "WARNING: Model " << item.toStdString()
+                cerr << "WARNING: Model " << item
                      << " not found in list!" << endl;
             } else {
                 model = m[item];
@@ -2586,15 +2595,15 @@ MainWindow::importLayer()
     Pane *pane = m_paneStack->getCurrentPane();
 
     if (!pane) {
-    // shouldn't happen, as the menu action should have been disabled
-    std::cerr << "WARNING: MainWindow::importLayer: no current pane" << std::endl;
-    return;
+	// shouldn't happen, as the menu action should have been disabled
+	cerr << "WARNING: MainWindow::importLayer: no current pane" << endl;
+	return;
     }
 
     if (!getMainModel()) {
-    // shouldn't happen, as the menu action should have been disabled
-    std::cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << std::endl;
-    return;
+	// shouldn't happen, as the menu action should have been disabled
+	cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
+	return;
     }
 
     QString path = getOpenFileName(FileFinder::LayerFile);
@@ -2979,9 +2988,9 @@ MainWindow::openRecentFile()
     QAction *action = dynamic_cast<QAction *>(obj);
 
     if (!action) {
-    std::cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
-          << std::endl;
-    return;
+	cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
+		  << endl;
+	return;
     }
 
     QString path = action->text();
@@ -3007,17 +3016,17 @@ MainWindow::applyTemplate()
     QAction *action = qobject_cast<QAction *>(s);
 
     if (!action) {
-    std::cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
-          << std::endl;
-    return;
+	cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
+		  << endl;
+	return;
     }
 
     QString n = action->objectName();
     if (n == "") n = action->text();
 
     if (n == "") {
-        std::cerr << "WARNING: MainWindow::applyTemplate: sender has no name"
-                  << std::endl;
+        cerr << "WARNING: MainWindow::applyTemplate: sender has no name"
+                  << endl;
         return;
     }
 
@@ -3158,18 +3167,18 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-//    std::cerr << "MainWindow::closeEvent" << std::endl;
+//    cerr << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
-//        std::cerr << "Busy - ignoring close event" << std::endl;
-    e->ignore();
-    return;
+//        cerr << "Busy - ignoring close event" << endl;
+	e->ignore();
+	return;
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        std::cerr << "Close refused by user - ignoring close event" << endl;
-    e->ignore();
-    return;
+//        cerr << "Close refused by user - ignoring close event" << endl;
+	e->ignore();
+	return;
     }
 
     QSettings settings;
@@ -3395,17 +3404,17 @@ MainWindow::addPane()
     QAction *action = dynamic_cast<QAction *>(s);
 
     if (!action) {
-    std::cerr << "WARNING: MainWindow::addPane: sender is not an action"
-          << std::endl;
-    return;
+	cerr << "WARNING: MainWindow::addPane: sender is not an action"
+		  << endl;
+	return;
     }
 
     PaneActionMap::iterator i = m_paneActions.find(action);
 
     if (i == m_paneActions.end()) {
-    std::cerr << "WARNING: MainWindow::addPane: unknown action "
-          << action->objectName() << std::endl;
-    return;
+	cerr << "WARNING: MainWindow::addPane: unknown action "
+		  << action->objectName() << endl;
+	return;
     }
 
     addPane(i->second, action->text());
@@ -3430,15 +3439,15 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
     if (configuration.layer != LayerFactory::TimeRuler &&
         configuration.layer != LayerFactory::Spectrum) {
 
-    if (!m_timeRulerLayer) {
-//	    std::cerr << "no time ruler layer, creating one" << std::endl;
-        m_timeRulerLayer = m_document->createMainModelLayer
-        (LayerFactory::TimeRuler);
-    }
+	if (!m_timeRulerLayer) {
+//	    cerr << "no time ruler layer, creating one" << endl;
+	    m_timeRulerLayer = m_document->createMainModelLayer
+		(LayerFactory::TimeRuler);
+	}
 
 //	SVDEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
 
-    m_document->addLayerToView(pane, m_timeRulerLayer);
+        m_document->addLayerToView(pane, m_timeRulerLayer);
     }
 
     Layer *newLayer = m_document->createLayer(configuration.layer);
@@ -3458,9 +3467,9 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         }
 
         if (!model) {
-            std::cerr << "WARNING: Model " << (void *)suggestedModel
+            cerr << "WARNING: Model " << (void *)suggestedModel
                       << " appears in pane action map, but is not reported "
-                      << "by document as a valid transform source" << std::endl;
+                      << "by document as a valid transform source" << endl;
         }
     }
 
@@ -3492,16 +3501,16 @@ MainWindow::addLayer()
     QAction *action = dynamic_cast<QAction *>(s);
 
     if (!action) {
-    std::cerr << "WARNING: MainWindow::addLayer: sender is not an action"
-          << std::endl;
-    return;
+	cerr << "WARNING: MainWindow::addLayer: sender is not an action"
+		  << endl;
+	return;
     }
 
     Pane *pane = m_paneStack->getCurrentPane();
 
     if (!pane) {
-    std::cerr << "WARNING: MainWindow::addLayer: no current pane" << std::endl;
-    return;
+	cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+	return;
     }
 
     ExistingLayerActionMap::iterator ei = m_existingLayerActions.find(action);
@@ -3538,29 +3547,30 @@ MainWindow::addLayer()
 
     if (i == m_transformActions.end()) {
 
-    LayerActionMap::iterator i = m_layerActions.find(action);
+	LayerActionMap::iterator i = m_layerActions.find(action);
+	
+	if (i == m_layerActions.end()) {
+	    cerr << "WARNING: MainWindow::addLayer: unknown action "
+		      << action->objectName() << endl;
+	    return;
+	}
 
-    if (i == m_layerActions.end()) {
-        std::cerr << "WARNING: MainWindow::addLayer: unknown action "
-              << action->objectName() << std::endl;
-        return;
-    }
+	LayerFactory::LayerType type = i->second.layer;
+	
+	LayerFactory::LayerTypeSet emptyTypes =
+	    LayerFactory::getInstance()->getValidEmptyLayerTypes();
 
-    LayerFactory::LayerType type = i->second.layer;
+	Layer *newLayer = 0;
 
-    LayerFactory::LayerTypeSet emptyTypes =
-        LayerFactory::getInstance()->getValidEmptyLayerTypes();
+	if (emptyTypes.find(type) != emptyTypes.end()) {
 
-    Layer *newLayer = 0;
+	    newLayer = m_document->createEmptyLayer(type);
 
-    if (emptyTypes.find(type) != emptyTypes.end()) {
-
-        newLayer = m_document->createEmptyLayer(type);
             if (newLayer) {
                 m_toolActions[ViewManager::DrawMode]->trigger();
             }
 
-    } else {
+        } else {
 
             Model *model = i->second.sourceModel;
 
@@ -3590,12 +3600,12 @@ MainWindow::addLayer()
                     m_document->setChannel(newLayer, i->second.channel);
                     m_document->setModel(newLayer, model);
                 } else {
-                    std::cerr << "WARNING: MainWindow::addLayer: unknown model "
+                    cerr << "WARNING: MainWindow::addLayer: unknown model "
                               << model
                               << " (\""
-                              << (model ? model->objectName().toStdString() : "")
+                              << (model ? model->objectName() : "")
                               << "\") in layer action map"
-                              << std::endl;
+                              << endl;
                 }
             }
         }
@@ -3636,8 +3646,8 @@ MainWindow:: addLayer(QString transformId)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) {
-    std::cerr << "WARNING: MainWindow::addLayer: no current pane" << std::endl;
-    return;
+	cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+	return;
     }
 
     Transform transform = TransformFactory::getInstance()->
@@ -3792,7 +3802,7 @@ MainWindow::playSpeedChanged(int position)
     float percent = m_playSpeed->mappedValue();
     float factor = mapper.getFactorForValue(percent);
 
-//    std::cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << std::endl;
+//    cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << endl;
 
     bool something = (position != 100);
 
@@ -4474,7 +4484,7 @@ MainWindow::newerVersionAvailable(QString version)
     QString tag = QString("version-%1-available-show").arg(version);
     if (settings.value(tag, true).toBool()) {
         QString title(tr("Newer version available"));
-        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of Sonic Visualiser, but version %3 is now available.</p><p>Please see the <a href=\"http://sonicvisualiser.org/\">Sonic Visualiser website</a> for more information.</p>").arg(SV_VERSION).arg(version));
+        QString text(tr("<h3>Newer version available</h3><p>You are using version %1 of Sonic Visualiser, but version %2 is now available.</p><p>Please see the <a href=\"http://sonicvisualiser.org/\">Sonic Visualiser website</a> for more information.</p>").arg(SV_VERSION).arg(version));
         QMessageBox::information(this, title, text);
         settings.setValue(tag, false);
     }

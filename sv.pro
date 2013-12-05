@@ -60,24 +60,29 @@ PRE_TARGETDEPS += svapp/svapp.lib \
                   dataquay/dataquay.lib
 }
 !win* {
-#PRE_TARGETDEPS += svapp/libsvapp.a \
-#                  svgui/libsvgui.a \
-#                  svcore/libsvcore.a \
-#                  dataquay/libdataquay.a
+PRE_TARGETDEPS += svapp/libsvapp.a \
+                  svgui/libsvgui.a \
+                  svcore/libsvcore.a \
+                  dataquay/libdataquay.a
 }
 
 RESOURCES += sonic-visualiser.qrc
 
 HEADERS += main/MainWindow.h \
-           main/PreferencesDialog.h \
            main/IMAFencoder.h \
-           main/checkbox.h
+           main/checkbox.h \
+           main/NetworkPermissionTester.h \
+           main/Surveyer.h \
+           main/PreferencesDialog.h
+
 SOURCES += main/main.cpp \
            main/OSCHandler.cpp \
            main/MainWindow.cpp \
-           main/PreferencesDialog.cpp \
            main/IMAFencoder.c \
-           main/imafdecoder.cpp
+           main/imafdecoder.cpp \
+           main/NetworkPermissionTester.cpp \
+           main/Surveyer.cpp \
+           main/PreferencesDialog.cpp 
 
 # for mac integration
 QMAKE_INFO_PLIST = deploy/osx/Info.plist
