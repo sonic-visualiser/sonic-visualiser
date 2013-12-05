@@ -250,6 +250,13 @@ main(int argc, char **argv)
 #endif
 #endif
 
+#ifdef Q_OS_MAC
+    if (QSysInfo::MacintoshVersion > QSysInfo::MV_10_8) {
+        // Fix for OS/X 10.9 font problem
+        QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
+    }
+#endif
+
     SVApplication application(argc, argv);
 
     QStringList args = application.arguments();
