@@ -74,7 +74,7 @@ NetworkPermissionTester::havePermission()
 	
 	d.exec();
 
-	bool permish = cb->isChecked();
+        permish = cb->isChecked();
 	settings.setValue(tag, permish);
     }
 
