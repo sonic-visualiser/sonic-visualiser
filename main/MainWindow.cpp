@@ -128,7 +128,7 @@ using std::set;
 
 
 MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
-    MainWindowBase(withAudioOutput, withOSCSupport, true),
+    MainWindowBase(withAudioOutput, true),
     m_overview(0),
     m_mainMenusCreated(false),
     m_paneMenu(0),
@@ -302,6 +302,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     NetworkPermissionTester tester;
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
+        if (withOSCSupport) {
+            startOSCQueue();
+        }
         TransformFactory::getInstance()->startPopulationThread();
         m_surveyer = new Surveyer
             ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");

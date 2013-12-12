@@ -42,6 +42,8 @@
 #include "audioio/AudioTargetFactory.h"
 #include "base/ResourceFinder.h"
 
+#include "version.h"
+
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
     m_audioDevice(0),
@@ -206,8 +208,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 #endif
 
     settings.beginGroup("Preferences");
+
     QString userLocale = settings.value("locale", "").toString();
     m_currentLocale = userLocale;
+    
+    QString permishTag = QString("network-permission-%1").arg(SV_VERSION);
+    m_networkPermission = settings.value(permishTag, false).toBool();
+
     settings.endGroup();
 
     QComboBox *locale = new QComboBox;
@@ -239,6 +246,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     }
     connect(locale, SIGNAL(currentIndexChanged(int)),
             this, SLOT(localeChanged(int)));
+
+    QCheckBox *networkPermish = new QCheckBox;
+    networkPermish->setCheckState(m_networkPermission ? Qt::Checked : Qt::Unchecked);
+    connect(networkPermish, SIGNAL(stateChanged(int)),
+            this, SLOT(networkPermissionChanged(int)));
 
     QSpinBox *fontSize = new QSpinBox;
     int fs = prefs->getPropertyRangeAndValue("View Font Size", &min, &max,
@@ -277,6 +289,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(new QLabel(tr("%1:").arg(tr("User interface language"))),
                        row, 0);
     subgrid->addWidget(locale, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("Allow network usage"))),
+                       row, 0);
+    subgrid->addWidget(networkPermish, row++, 1, 1, 1);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Temporary Directory Root"))),
@@ -508,6 +524,14 @@ PreferencesDialog::resampleOnLoadChanged(int state)
 }
 
 void
+PreferencesDialog::networkPermissionChanged(int state)
+{
+    m_networkPermission = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::showSplashChanged(int state)
 {
     m_showSplash = (state == Qt::Checked);
@@ -602,17 +626,15 @@ PreferencesDialog::applyClicked()
         AudioTargetFactory::getInstance()->getCallbackTargetNames();
 
     QSettings settings;
-
     settings.beginGroup("Preferences");
+    QString permishTag = QString("network-permission-%1").arg(SV_VERSION);
+    settings.setValue(permishTag, m_networkPermission);
     settings.setValue("audio-target", devices[m_audioDevice]);
+    settings.setValue("locale", m_currentLocale);
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
     settings.setValue("sessiontemplate", m_currentTemplate);
-    settings.endGroup();
-
-    settings.beginGroup("Preferences");
-    settings.setValue("locale", m_currentLocale);
     settings.endGroup();
 
     m_applyButton->setEnabled(false);

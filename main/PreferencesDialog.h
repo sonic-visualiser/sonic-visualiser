@@ -61,6 +61,7 @@ protected slots:
     void showSplashChanged(int state);
     void defaultTemplateChanged(int);
     void localeChanged(int);
+    void networkPermissionChanged(int state);
 
     void tempDirButtonClicked();
 
@@ -91,6 +92,7 @@ protected:
     int m_audioDevice;
     int m_resampleQuality;
     bool m_resampleOnLoad;
+    bool m_networkPermission;
     QString m_tempDirRoot;
     int m_backgroundMode;
     int m_timeToTextMode;
