@@ -54,10 +54,10 @@ MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Ldataquay/release $$
 LIBS = $$MY_LIBS $$LIBS
 
 win* {
-PRE_TARGETDEPS += svapp/svapp.lib \
-                  svgui/svgui.lib \
-                  svcore/svcore.lib \
-                  dataquay/dataquay.lib
+PRE_TARGETDEPS += svapp/release/libsvapp.a \
+                  svgui/release/libsvgui.a \
+                  svcore/release/libsvcore.a \
+                  dataquay/release/libdataquay.a
 }
 !win* {
 PRE_TARGETDEPS += svapp/libsvapp.a \
