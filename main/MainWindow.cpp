@@ -2648,7 +2648,7 @@ MainWindow::exportLayer()
         if (!nm) {
             error = tr("Can't export non-note layers to MIDI");
         } else {
-            MIDIFileWriter writer(path, nm);
+            MIDIFileWriter writer(path, nm, nm->getSampleRate());
             writer.write();
             if (!writer.isOK()) {
                 error = writer.getError();
