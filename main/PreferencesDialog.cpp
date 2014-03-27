@@ -122,6 +122,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(propertyLayout, SIGNAL(currentIndexChanged(int)),
             this, SLOT(propertyLayoutChanged(int)));
 
+    
+
     m_tuningFrequency = prefs->getTuningFrequency();
 
     QDoubleSpinBox *frequency = new QDoubleSpinBox;
@@ -134,6 +136,19 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     connect(frequency, SIGNAL(valueChanged(double)),
             this, SLOT(tuningFrequencyChanged(double)));
+
+    QComboBox *octaveSystem = new QComboBox;
+    int oct = prefs->getPropertyRangeAndValue
+        ("Octave Numbering System", &min, &max, &deflt);
+    m_octaveSystem = oct;
+    for (i = min; i <= max; ++i) {
+        octaveSystem->addItem(prefs->getPropertyValueLabel
+                              ("Octave Numbering System", i));
+    }
+    octaveSystem->setCurrentIndex(oct);
+
+    connect(octaveSystem, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(octaveSystemChanged(int)));
 
     QComboBox *audioDevice = new QComboBox;
     std::vector<QString> devices =
@@ -370,6 +385,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(frequency, row++, 1, 1, 2);
 
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Octave Numbering System"))),
+                       row, 0);
+    subgrid->addWidget(octaveSystem, row++, 1, 1, 2);
+
     subgrid->addWidget(new QLabel(prefs->getPropertyLabel
                                   ("Spectrogram Y Smoothing")),
                        row, 0);
@@ -589,6 +609,13 @@ PreferencesDialog::timeToTextModeChanged(int mode)
 }
 
 void
+PreferencesDialog::octaveSystemChanged(int system)
+{
+    m_octaveSystem = system;
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::viewFontSizeChanged(int sz)
 {
     m_viewFontSize = sz;
@@ -622,6 +649,8 @@ PreferencesDialog::applyClicked()
     prefs->setTimeToTextMode(Preferences::TimeToTextMode(m_timeToTextMode));
     prefs->setViewFontSize(m_viewFontSize);
     
+    prefs->setProperty("Octave Numbering System", m_octaveSystem);
+
     std::vector<QString> devices =
         AudioTargetFactory::getInstance()->getCallbackTargetNames();
 

@@ -57,6 +57,7 @@ protected slots:
     void tempDirRootChanged(QString root);
     void backgroundModeChanged(int mode);
     void timeToTextModeChanged(int mode);
+    void octaveSystemChanged(int system);
     void viewFontSizeChanged(int sz);
     void showSplashChanged(int state);
     void defaultTemplateChanged(int);
@@ -96,6 +97,7 @@ protected:
     QString m_tempDirRoot;
     int m_backgroundMode;
     int m_timeToTextMode;
+    int m_octaveSystem;
     int m_viewFontSize;
     bool m_showSplash;
 
