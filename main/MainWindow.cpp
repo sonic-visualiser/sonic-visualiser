@@ -914,7 +914,7 @@ MainWindow::setupViewMenu()
     action->setStatusTip(tr("Show or hide the centre line"));
     connect(action, SIGNAL(triggered()), this, SLOT(toggleCentreLine()));
     action->setCheckable(true);
-    action->setChecked(true);
+    action->setChecked(m_viewManager->shouldShowCentreLine());
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
@@ -929,12 +929,14 @@ MainWindow::setupViewMenu()
 
     QActionGroup *overlayGroup = new QActionGroup(this);
         
+    ViewManager::OverlayMode mode = m_viewManager->getOverlayMode();
+
     action = new QAction(tr("Show &No Overlays"), this);
     action->setShortcut(tr("0"));
     action->setStatusTip(tr("Hide times, layer names, and scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showNoOverlays()));
     action->setCheckable(true);
-    action->setChecked(false);
+    action->setChecked(mode == ViewManager::NoOverlays);
     overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -944,7 +946,7 @@ MainWindow::setupViewMenu()
     action->setStatusTip(tr("Show times and basic scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showMinimalOverlays()));
     action->setCheckable(true);
-    action->setChecked(true);
+    action->setChecked(mode == ViewManager::MinimalOverlays);
     overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -954,7 +956,7 @@ MainWindow::setupViewMenu()
     action->setStatusTip(tr("Show times, layer names, and scale"));
     connect(action, SIGNAL(triggered()), this, SLOT(showAllOverlays()));
     action->setCheckable(true);
-    action->setChecked(false);
+    action->setChecked(mode == ViewManager::AllOverlays);
     overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
