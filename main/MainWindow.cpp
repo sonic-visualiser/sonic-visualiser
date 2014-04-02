@@ -145,8 +145,6 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_rightButtonTransformsMenu(0),
     m_rightButtonPlaybackMenu(0),
     m_soloAction(0),
-    m_soloModified(false),
-    m_prevSolo(false),
     m_rwdStartAction(0),
     m_rwdSimilarAction(0),
     m_rwdAction(0),
@@ -156,6 +154,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_playAction(0),
     m_playSelectionAction(0),
     m_playLoopAction(0),
+    m_soloModified(false),
+    m_prevSolo(false),
     m_playControlsSpacer(0),
     m_playControlsWidth(0),
     m_preferencesDialog(0),
@@ -403,7 +403,7 @@ MainWindow::goFullScreen()
         m_scrollLeftAction, m_scrollRightAction, m_showPropertyBoxesAction
     };
 
-    for (int i = 0; i < sizeof(acts)/sizeof(acts[0]); ++i) {
+    for (int i = 0; i < int(sizeof(acts)/sizeof(acts[0])); ++i) {
         sc = new QShortcut(acts[i]->shortcut(), ps);
         connect(sc, SIGNAL(activated()), acts[i], SLOT(trigger()));
     }
@@ -454,6 +454,7 @@ MainWindow::setupFileMenu()
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
     connect(action, SIGNAL(triggered()), this, SLOT(openSomething()));
+    m_keyReference->registerShortcut(action);
     toolbar->addAction(action);
     menu->addAction(action);
 
@@ -2068,11 +2069,10 @@ MainWindow::setupToolbars()
     toolbar = addToolBar(tr("Edit Toolbar"));
     CommandHistory::getInstance()->registerToolbar(toolbar);
 
-    m_keyReference->setCategory(tr("Tool Selection"));
-
     toolbar = addToolBar(tr("Tools Toolbar"));
     QActionGroup *group = new QActionGroup(this);
 
+    m_keyReference->setCategory(tr("Tool Selection"));
     QAction *action = toolbar->addAction(il.load("navigate"),
                                          tr("Navigate"));
     action->setCheckable(true);
@@ -2084,7 +2084,23 @@ MainWindow::setupToolbars()
     group->addAction(action);
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::NavigateMode] = action;
+    
+    m_keyReference->setCategory
+        (tr("Navigate Tool Mouse Actions"));
+    m_keyReference->registerShortcut
+        (tr("Navigate"), tr("Left"), 
+         tr("Click left button and drag to move around"));
+    m_keyReference->registerShortcut
+        (tr("Zoom to Area"), tr("Shift+Left"), 
+         tr("Shift-click left button and drag to zoom to a rectangular area"));
+    m_keyReference->registerShortcut
+        (tr("Relocate"), tr("Double-Click Left"), 
+         tr("Double-click left button to jump to clicked location"));
+    m_keyReference->registerShortcut
+        (tr("Edit"), tr("Double-Click Left"), 
+         tr("Double-click left button on an item to edit it"));
 
+    m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("select"),
 				tr("Select"));
     action->setCheckable(true);
@@ -2094,7 +2110,26 @@ MainWindow::setupToolbars()
     group->addAction(action);
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::SelectMode] = action;
+        
+    m_keyReference->setCategory
+        (tr("Select Tool Mouse Actions"));
+    m_keyReference->registerShortcut
+        (tr("Select"), tr("Left"), 
+         tr("Click left button and drag to select region; drag region edge to resize"));
+#ifdef Q_OS_MAC
+    m_keyReference->registerShortcut
+        (tr("Multi Select"), tr("Ctrl+Left"), 
+         tr("Cmd-click left button and drag to select an additional region"));
+#else
+    m_keyReference->registerShortcut
+        (tr("Multi Select"), tr("Ctrl+Left"), 
+         tr("Ctrl-click left button and drag to select an additional region"));
+#endif
+    m_keyReference->registerShortcut
+        (tr("Fine Select"), tr("Shift+Left"), 
+        tr("Shift-click left button and drag to select without snapping to items or grid"));
 
+    m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("move"),
 				tr("Edit"));
     action->setCheckable(true);
@@ -2105,7 +2140,17 @@ MainWindow::setupToolbars()
     group->addAction(action);
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::EditMode] = action;
+    
+    m_keyReference->setCategory
+        (tr("Edit Tool Mouse Actions"));
+    m_keyReference->registerShortcut
+        (tr("Move"), tr("Left"), 
+        tr("Click left button on an item or selected region and drag to move"));
+    m_keyReference->registerShortcut
+        (tr("Edit"), tr("Double-Click Left"), 
+        tr("Double-click left button on an item to edit it"));
 
+    m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("draw"),
 				tr("Draw"));
     action->setCheckable(true);
@@ -2117,6 +2162,13 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::DrawMode] = action;
 
+    m_keyReference->setCategory
+        (tr("Draw Tool Mouse Actions"));
+    m_keyReference->registerShortcut
+        (tr("Draw"), tr("Left"), 
+        tr("Click left button and drag to create new item"));
+
+    m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("erase"),
 				tr("Erase"));
     action->setCheckable(true);
@@ -2128,6 +2180,13 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::EraseMode] = action;
 
+    m_keyReference->setCategory
+        (tr("Erase Tool Mouse Actions"));
+    m_keyReference->registerShortcut
+        (tr("Erase"), tr("Left"), 
+        tr("Click left button on an item to remove it from the layer"));
+
+    m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("measure"), tr("Measure"));
     action->setCheckable(true);
     action->setShortcut(tr("6"));
@@ -2137,6 +2196,18 @@ MainWindow::setupToolbars()
     group->addAction(action);
     m_keyReference->registerShortcut(action);
     m_toolActions[ViewManager::MeasureMode] = action;
+
+    m_keyReference->setCategory
+        (tr("Measure Tool Mouse Actions"));
+    m_keyReference->registerShortcut
+        (tr("Measure Area"), tr("Left"), 
+        tr("Click left button and drag to measure a rectangular area"));
+    m_keyReference->registerShortcut
+        (tr("Measure Item"), tr("Double-Click Left"), 
+        tr("Click left button and drag to measure extents of an item or shape"));
+    m_keyReference->registerShortcut
+        (tr("Zoom to Area"), tr("Shift+Left"), 
+        tr("Shift-click left button and drag to zoom to a rectangular area"));
 
     toolNavigateSelected();
 
