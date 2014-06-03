@@ -283,6 +283,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_currentLabel = new QLabel;
     statusBar()->addPermanentWidget(m_currentLabel);
 
+    finaliseMenus();
+
     connect(m_viewManager, SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
     connect(m_playSource, SIGNAL(activity(QString)),
