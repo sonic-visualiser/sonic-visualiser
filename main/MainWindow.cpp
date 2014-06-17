@@ -1137,6 +1137,11 @@ MainWindow::setupPaneAndLayerMenus()
             QString mainText, shortcutText, tipText, channelText;
             LayerFactory::LayerType type = backgroundTypes[i];
             bool mono = true;
+
+// Avoid warnings/errors with -Wextra because we aren't explicitly
+// handling all layer types (-Wall is OK with this because of the
+// default but the stricter level insists)
+#pragma GCC diagnostic ignored "-Wswitch-enum"
             
             switch (type) {
                     
@@ -2313,8 +2318,8 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
-    size_t ssr = getMainModel()->getSampleRate();
-    size_t tsr = ssr;
+    int ssr = getMainModel()->getSampleRate();
+    int tsr = ssr;
     if (m_playSource) tsr = m_playSource->getTargetSampleRate();
 
     if (ssr != tsr) {
@@ -2780,7 +2785,7 @@ MainWindow::exportImage()
     visible = pane->getImageSize(pane->getFirstVisibleFrame(),
                                  pane->getLastVisibleFrame());
 
-    size_t sf0 = 0, sf1 = 0;
+    int sf0 = 0, sf1 = 0;
  
     if (haveSelection) {
         MultiSelection::SelectionList selections = m_viewManager->getSelections();
@@ -2940,26 +2945,6 @@ MainWindow::closeSession()
     CommandHistory::getInstance()->clear();
     CommandHistory::getInstance()->documentSaved();
     documentRestored();
-}
-
-void
-MainWindow::openSession()
-{
-    if (!checkSaveModified()) return;
-
-    QString orig = m_audioFile;
-    if (orig == "") orig = ".";
-    else orig = QFileInfo(orig).absoluteDir().canonicalPath();
-
-    QString path = getOpenFileName(FileFinder::SessionFile);
-
-    if (path.isEmpty()) return;
-
-    if (openSessionFile(path) == FileOpenFailed) {
-        emit hideSplash();
-	QMessageBox::critical(this, tr("Failed to open file"),
-			      tr("<b>File open failed</b><p>Session file \"%1\" could not be opened").arg(path));
-    }
 }
 
 void
@@ -3709,8 +3694,8 @@ MainWindow::addLayer(QString transformId)
         if (defaultInputModel) break;
     }
     
-    size_t startFrame = 0, duration = 0;
-    size_t endFrame = 0;
+    int startFrame = 0, duration = 0;
+    int endFrame = 0;
     m_viewManager->getSelection().getExtents(startFrame, endFrame);
     if (endFrame > startFrame) duration = endFrame - startFrame;
     else startFrame = 0;
@@ -3909,7 +3894,7 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
     }
 
     bool haveSelection = false;
-    size_t startFrame = 0, endFrame = 0;
+    int startFrame = 0, endFrame = 0;
 
     if (m_viewManager && m_viewManager->haveInProgressSelection()) {
 
@@ -3960,7 +3945,7 @@ MainWindow::updatePositionStatusDisplays() const
     if (!statusBar()->isVisible()) return;
 
     Pane *pane = 0;
-    size_t frame = m_viewManager->getPlaybackFrame();
+    int frame = m_viewManager->getPlaybackFrame();
 
     if (m_paneStack) pane = m_paneStack->getCurrentPane();
     if (!pane) return;
@@ -3987,7 +3972,7 @@ MainWindow::outputLevelsChanged(float left, float right)
 }
 
 void
-MainWindow::sampleRateMismatch(size_t requested, size_t actual,
+MainWindow::sampleRateMismatch(int requested, int actual,
                                bool willResample)
 {
     if (!willResample) {
@@ -4044,7 +4029,7 @@ MainWindow::midiEventsAvailable()
 
         MIDIEvent ev(m_midiInput->readEvent());
 
-        size_t frame = currentPane->alignFromReference(ev.getTime());
+        int frame = currentPane->alignFromReference(ev.getTime());
 
         bool noteOn = (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON &&
                        ev.getVelocity() > 0);
@@ -4099,7 +4084,7 @@ MainWindow::midiEventsAvailable()
 }    
 
 void
-MainWindow::playStatusChanged(bool playing)
+MainWindow::playStatusChanged(bool )
 {
     Pane *currentPane = 0;
     NoteLayer *currentNoteLayer = 0;
@@ -4221,7 +4206,7 @@ MainWindow::modelGenerationFailed(QString transformName, QString message)
 }
 
 void
-MainWindow::modelGenerationWarning(QString transformName, QString message)
+MainWindow::modelGenerationWarning(QString /* transformName */, QString message)
 {
     emit hideSplash();
 
@@ -4255,7 +4240,8 @@ MainWindow::modelRegenerationFailed(QString layerName,
 
 void
 MainWindow::modelRegenerationWarning(QString layerName,
-                                     QString transformName, QString message)
+                                     QString /* transformName */,
+                                     QString message)
 {
     emit hideSplash();
 
