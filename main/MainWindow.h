@@ -47,7 +47,6 @@ public slots:
     void endFullScreen();
 
 protected slots:
-    virtual void openSession();
     virtual void importAudio();
     virtual void importMoreAudio();
     virtual void replaceMainAudio();
@@ -66,7 +65,7 @@ protected slots:
     virtual void closeSession();
     virtual void preferences();
 
-    virtual void sampleRateMismatch(size_t, size_t, bool);
+    virtual void sampleRateMismatch(int, int, bool);
     virtual void audioOverloadPluginDisabled();
     virtual void audioTimeStretchMultiChannelDisabled();
 
