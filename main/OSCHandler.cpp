@@ -123,7 +123,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (getMainModel()) {
 
-            unsigned long frame = m_viewManager->getPlaybackFrame();
+            int frame = m_viewManager->getPlaybackFrame();
             bool selection = false;
             bool play = (message.getMethod() == "play");
 
@@ -255,7 +255,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 Layer *layer = 0;
                 if (pane) layer = pane->getSelectedLayer();
                 if (layer) {
-                    size_t resolution;
+                    int resolution;
                     layer->snapToFeatureFrame(pane, f0, resolution,
                                               Layer::SnapLeft);
                     layer->snapToFeatureFrame(pane, f1, resolution,

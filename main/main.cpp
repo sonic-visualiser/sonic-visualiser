@@ -317,7 +317,7 @@ main(int argc, char **argv)
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
-    for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+    for (int i = 0; i < int(sizeof(sizes)/sizeof(sizes[0])); ++i) {
         icon.addFile(QString(":icons/sv-%1x%2.png").arg(sizes[i]).arg(sizes[i]));
     }
     QApplication::setWindowIcon(icon);
@@ -478,7 +478,14 @@ main(int argc, char **argv)
 }
 
 bool SVApplication::event(QEvent *event){
+
+// Avoid warnings/errors with -Wextra because we aren't explicitly
+// handling all event types (-Wall is OK with this because of the
+// default but the stricter level insists)
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+
     QString thePath;
+
     switch (event->type()) {
     case QEvent::FileOpen:
         thePath = static_cast<QFileOpenEvent *>(event)->file();
