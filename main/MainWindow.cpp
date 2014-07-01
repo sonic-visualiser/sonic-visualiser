@@ -3934,7 +3934,9 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
             .arg(startStr).arg(endStr).arg(durationStr);
     }
 
-    statusBar()->showMessage(m_myStatusMessage);
+    if (statusBar()->currentMessage() != m_myStatusMessage) {
+        statusBar()->showMessage(m_myStatusMessage);
+    }
 
     updatePositionStatusDisplays();
 }
