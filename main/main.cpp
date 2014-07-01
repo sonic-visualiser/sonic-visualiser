@@ -356,7 +356,6 @@ main(int argc, char **argv)
     StoreStartupLocale();
 
     // Permit size_t and PropertyName to be used as args in queued signal calls
-    qRegisterMetaType<size_t>("size_t");
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
     MainWindow *gui = new MainWindow(audioOutput, oscSupport);
@@ -513,7 +512,7 @@ void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
 
     if (path.endsWith("sv")) {
         if (!haveSession) {
-            status = m_mainWindow->openSessionFile(path);
+            status = m_mainWindow->openSessionPath(path);
             if (status == MainWindow::FileOpenSucceeded) {
                 haveSession = true;
                 haveMainModel = true;
