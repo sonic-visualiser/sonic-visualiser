@@ -43,6 +43,13 @@ cp -rp "$source" "$target"
 
 echo "Done"
 
+echo
+echo "Copying in qt.conf to set local-only plugin paths."
+echo "Make sure all necessary Qt plugins are in $target/Contents/plugins/*"
+echo "You probably want platforms/, accessible/ and imageformats/ subdirectories."
+cp deploy/osx/qt.conf "$target"/Contents/Resources/qt.conf
+
+echo
 echo "Writing version $bundleVersion in to bundle."
 echo "(This should be a three-part number: major.minor.point)"
 
