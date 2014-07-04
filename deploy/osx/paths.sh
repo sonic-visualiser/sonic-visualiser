@@ -7,24 +7,25 @@ if [ -z "$app" ]; then
 	exit 2
 fi
 
+frameworks="QtCore QtNetwork QtGui QtXml QtWidgets QtPrintSupport"
+
 echo
-echo "I expect you to have already copied QtCore, QtNetwork, QtGui, QtXml and QtWidgets to "
-echo "$app.app/Contents/Frameworks -- expect errors to follow if they're missing"
+echo "I expect you to have already copied these frameworks from the Qt installation to"
+echo "$app.app/Contents/Frameworks -- expect errors to follow if they're missing:"
+echo "$frameworks"
 echo
 
 echo "Fixing up loader paths in binaries..."
 
-install_name_tool -id QtCore "$app.app/Contents/Frameworks/QtCore"
-install_name_tool -id QtGui "$app.app/Contents/Frameworks/QtGui"
-install_name_tool -id QtNetwork "$app.app/Contents/Frameworks/QtNetwork"
-install_name_tool -id QtXml "$app.app/Contents/Frameworks/QtXml"
-install_name_tool -id QtWidgets "$app.app/Contents/Frameworks/QtWidgets"
+for fwk in $frameworks; do
+    install_name_tool -id $fwk "$app.app/Contents/Frameworks/$fwk"
+done
 
 find "$app.app" -name \*.dylib -print | while read x; do
     install_name_tool -id "`basename \"$x\"`" "$x"
 done
 
-for fwk in QtCore QtGui QtNetwork QtXml QtWidgets; do
+for fwk in $frameworks; do
         find "$app.app" -type f -print | while read x; do
                 current=$(otool -L "$x" | grep "$fwk" | grep amework | awk '{ print $1; }')
                 [ -z "$current" ] && continue

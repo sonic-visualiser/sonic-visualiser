@@ -9,15 +9,30 @@ win32-msvc* {
     INCLUDEPATH += sv-dependency-builds/win32-msvc/include
     LIBS += -Lsv-dependency-builds/win32-msvc/lib
 }
+mac* {
+    INCLUDEPATH += sv-dependency-builds/osx/include
+    LIBS += -Lsv-dependency-builds/osx/lib
+}
 
 exists(config.pri) {
     include(config.pri)
 }
 
-win* {
-    !exists(config.pri) {
-        DEFINES += HAVE_BZ2 HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_SAMPLERATE HAVE_VAMP HAVE_VAMPHOSTSDK HAVE_RUBBERBAND HAVE_DATAQUAY HAVE_LIBLO HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO_2_0
-        LIBS += -lbz2 -lrubberband -lvamp-hostsdk -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -llo -lz -lsord-0 -lserd-0 -lwinmm -lws2_32
+!exists(config.pri) {
+
+    CONFIG += release
+    DEFINES += NDEBUG BUILD_RELEASE NO_TIMING
+
+    DEFINES += HAVE_BZ2 HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_SAMPLERATE HAVE_VAMP HAVE_VAMPHOSTSDK HAVE_RUBBERBAND HAVE_DATAQUAY HAVE_LIBLO HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO_2_0
+
+    LIBS += -lbz2 -lrubberband -lvamp-hostsdk -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -lz -lsord-0 -lserd-0
+
+    win* {
+        LIBS += -llo -lwinmm -lws2_32
+    }
+    macx* {
+        DEFINES += HAVE_COREAUDIO
+        LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices -framework Accelerate
     }
 }
 

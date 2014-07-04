@@ -1,5 +1,5 @@
 syntax: glob
-Makefile
+Makefile*
 */Makefile
 o/*
 */o/*
@@ -21,3 +21,8 @@ re:^aclocal\.m4$
 re:^config\.log$
 re:^config\.pri$
 re:^config\.status$
+*.app
+Sonic Visualiser*
+.DS_Store
+*.stash
+
