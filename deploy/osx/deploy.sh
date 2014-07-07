@@ -24,6 +24,11 @@ case "$version" in
 esac
 
 echo
+echo "Copying in frameworks and plugins from Qt installation directory."
+
+deploy/osx/copy-qt.sh "$app" || exit 2
+
+echo
 echo "Fixing up paths."
 
 deploy/osx/paths.sh "$app"
