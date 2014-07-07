@@ -198,22 +198,6 @@ public:
         m_filepathQueue(QStringList()),
         m_mainWindow(0)
     {
-#ifdef Q_OS_MAC
-        // Override the Qt plugin load path. The default contains the
-        // Qt installation location as well as the application
-        // directory, but we don't ever want to load plugins from
-        // outside the app bundle because we don't know for sure what
-        // (potentially different) versions of the Qt framework
-        // libraries they may have dyld dependencies on.
-        QString apploc(applicationFilePath());
-        apploc.truncate(apploc.lastIndexOf(QLatin1Char('/')));
-        apploc = QDir(apploc).canonicalPath();
-        if (QFile::exists(apploc)) {
-            setLibraryPaths(QStringList() << apploc);
-        } else {
-            setLibraryPaths(QStringList());
-        }
-#endif
     }
     virtual ~SVApplication() { }
 
