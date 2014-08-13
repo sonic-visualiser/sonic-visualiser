@@ -1065,6 +1065,7 @@ MainWindow::setupPaneAndLayerMenus()
     m_paneActions[action] = LayerConfiguration(LayerFactory::TimeRuler);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+    cerr << "created new pane action " << action << ", name " << action->text() << endl;
 
     menu->addSeparator();
 
@@ -3424,6 +3425,8 @@ MainWindow::addPane()
 {
     QObject *s = sender();
     QAction *action = dynamic_cast<QAction *>(s);
+
+    cerr << "addPane: sender is " << s << ", action is " << action << ", name " << action->text() << endl;
     
     if (!action) {
 	cerr << "WARNING: MainWindow::addPane: sender is not an action"
@@ -3436,6 +3439,11 @@ MainWindow::addPane()
     if (i == m_paneActions.end()) {
 	cerr << "WARNING: MainWindow::addPane: unknown action "
 		  << action->objectName() << endl;
+        cerr << "known actions are:" << endl;
+        for (PaneActionMap::const_iterator i = m_paneActions.begin();
+             i != m_paneActions.end(); ++i) {
+            cerr << i->first << ", name " << i->first->text() << endl;
+        }
 	return;
     }
 
