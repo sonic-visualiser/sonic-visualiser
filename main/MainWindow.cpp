@@ -3880,6 +3880,29 @@ MainWindow::currentPaneChanged(Pane *pane)
     MainWindowBase::currentPaneChanged(pane);
 
     if (!pane || !m_panLayer) return;
+
+    // If this pane contains the main model, it usually makes sense to
+    // show the main model in the pan layer even if it isn't the top
+    // layer in the pane (e.g. if the top layer is one derived from
+    // the main model).
+    bool containsMainModel = false;
+    for (int i = pane->getLayerCount(); i > 0; ) {
+        --i;
+        Layer *layer = pane->getLayer(i);
+        if (layer &&
+            LayerFactory::getInstance()->getLayerType(layer) ==
+            LayerFactory::Waveform &&
+            layer->getModel() == getMainModel()) {
+            containsMainModel = true;
+            break;
+        }
+    }
+
+    if (containsMainModel) {
+        m_panLayer->setModel(getMainModel());
+        return;
+    }
+
     for (int i = pane->getLayerCount(); i > 0; ) {
         --i;
         Layer *layer = pane->getLayer(i);
