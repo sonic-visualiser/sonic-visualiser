@@ -132,6 +132,7 @@ protected slots:
 
     virtual void mainModelChanged(WaveFileModel *);
     virtual void modelAdded(Model *);
+    virtual void modelAboutToBeDeleted(Model *);
 
     virtual void showLayerTree();
     virtual void showActivityLog();

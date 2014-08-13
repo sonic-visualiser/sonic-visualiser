@@ -4147,6 +4147,19 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 }
 
 void
+MainWindow::modelAboutToBeDeleted(Model *model)
+{
+    if (model == m_panLayer->getModel()) {
+        if (model == getMainModel()) {
+            m_panLayer->setModel(0);
+        } else {
+            m_panLayer->setModel(getMainModel());
+        }
+    }
+    MainWindowBase::modelAboutToBeDeleted(model);
+}
+
+void
 MainWindow::setInstantsNumbering()
 {
     QAction *a = dynamic_cast<QAction *>(sender());
