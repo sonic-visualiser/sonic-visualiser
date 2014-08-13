@@ -3067,7 +3067,7 @@ MainWindow::applyTemplate()
 void
 MainWindow::saveSessionAsTemplate()
 {
-    QDialog *d = new QDialog;
+    QDialog *d = new QDialog(this);
     d->setWindowTitle(tr("Enter template name"));
 
     QGridLayout *layout = new QGridLayout;
@@ -4326,7 +4326,7 @@ MainWindow::showLayerTree()
         return;
     }
 
-    m_layerTreeDialog = new LayerTreeDialog(m_paneStack);
+    m_layerTreeDialog = new LayerTreeDialog(m_paneStack, this);
     m_layerTreeDialog->setAttribute(Qt::WA_DeleteOnClose); // see below
     m_layerTreeDialog->show();
 }
