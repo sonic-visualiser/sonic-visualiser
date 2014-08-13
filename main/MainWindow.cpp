@@ -1437,6 +1437,8 @@ MainWindow::setupPaneAndLayerMenus()
 
     m_keyReference->registerShortcut(raction); // rename after delete, so delete layer goes next to delete pane
     m_keyReference->registerShortcut(eaction); // edit also after delete
+
+    finaliseMenus();
 }
 
 void
