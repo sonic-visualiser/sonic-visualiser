@@ -21,6 +21,8 @@
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
 #include "widgets/TipDialog.h"
+#include "widgets/InteractiveFileFinder.h"
+#include "svapp/framework/TransformUserConfigurator.h"
 #include "transform/TransformFactory.h"
 
 #include <QMetaType>
@@ -344,6 +346,8 @@ main(int argc, char **argv)
 
     MainWindow *gui = new MainWindow(audioOutput, oscSupport);
     application.setMainWindow(gui);
+    InteractiveFileFinder::setParentWidget(gui);
+    TransformUserConfigurator::setParentWidget(gui);
     if (splash) {
         QObject::connect(gui, SIGNAL(hideSplash()), splash, SLOT(hide()));
     }
