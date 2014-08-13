@@ -1029,6 +1029,7 @@ MainWindow::setupPaneAndLayerMenus()
 {
     if (m_paneMenu) {
 	m_paneActions.clear();
+        cerr << "clearing pane menu " << m_paneMenu << endl;
 	m_paneMenu->clear();
     } else {
 	m_paneMenu = menuBar()->addMenu(tr("&Pane"));
@@ -1264,6 +1265,7 @@ MainWindow::setupPaneAndLayerMenus()
                     } else {
                         
                         if (!submenu) {
+                            cerr << "adding submenu of name " << mainText << " to menu " << menu << ", " << menu->title() << endl;
                             submenu = menu->addMenu(mainText);
                             submenu->setTearOffEnabled(true);
                         } else if (isDefault) {
@@ -1437,6 +1439,20 @@ MainWindow::setupPaneAndLayerMenus()
 
     m_keyReference->registerShortcut(raction); // rename after delete, so delete layer goes next to delete pane
     m_keyReference->registerShortcut(eaction); // edit also after delete
+
+    cerr << "pane menu contains:" << endl;
+    foreach (QAction *a, m_paneMenu->actions()) {
+        if (a->isSeparator()) {
+            cerr << "-----" << endl;
+            continue;
+        }
+        cerr << a->text() << " " << a->shortcut().toString() << endl;
+        if (a->menu()) {
+            foreach (QAction *aa, a->menu()->actions()) {
+                cerr << "   " << aa->text() << "   " << aa->shortcut().toString() << endl;
+            }
+        }
+    }
 
     finaliseMenus();
 }
