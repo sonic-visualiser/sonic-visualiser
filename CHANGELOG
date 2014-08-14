@@ -1,12 +1,15 @@
 
 Changes in Sonic Visualiser 2.4 since the previous release 2.3:
 
+ - Add support for left/right scrolling using a two-finger touchpad
+   gesture (where available)
+
  - Make the octave numbering into a configurable option, and change
    the default. Previously Sonic Visualiser labelled middle-C as "C3";
    now it labels middle-C as "C4", a more common standard in the world
-   outside MIDI sequencer software. The previous system available as
-   an option in the Preferences. This affects only the visible labels:
-   there is no change to analysis or to the file format
+   outside MIDI sequencer software. The previous system is available
+   as an option in the Preferences. This affects only the visible
+   labels: there is no change to analysis or to the file format
 
  - Sonify time-value layers. Any time-value curve whose scale unit is
    set to Hz will now acquire a playback toggle control; this control
