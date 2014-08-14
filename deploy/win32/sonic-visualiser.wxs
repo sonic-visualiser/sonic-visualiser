@@ -5,7 +5,7 @@
       Id="*"
       Language="1033"
       Codepage="1252" 
-      Version="2.3.0"
+      Version="2.3.90"
       UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
       Manufacturer="Queen Mary, University of London">
     
@@ -13,7 +13,7 @@
         Id="*"
         Keywords="Installer"
         Description="Sonic Visualiser Installer" 
-        Comments="Copyright (c) 2013 Queen Mary, University of London and others." 
+        Comments="Copyright (c) 2014 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="100" 
         Languages="1033" 
@@ -144,40 +144,25 @@
                   DiskId="1"
                   Source="release\Qt5Xml.dll"/>
               <File
-                  Id="D3DCompiler"
-                  Name="D3DCompiler_43.dll"
+                  Id="icudt52"
+                  Name="icudt52.dll"
                   DiskId="1"
-                  Source="release\D3DCompiler_43.dll"/>
+                  Source="release\icudt52.dll"/>
               <File
-                  Id="icudt49"
-                  Name="icudt49.dll"
+                  Id="icuin52"
+                  Name="icuin52.dll"
                   DiskId="1"
-                  Source="release\icudt49.dll"/>
+                  Source="release\icuin52.dll"/>
               <File
-                  Id="icuin49"
-                  Name="icuin49.dll"
+                  Id="icuuc52"
+                  Name="icuuc52.dll"
                   DiskId="1"
-                  Source="release\icuin49.dll"/>
-              <File
-                  Id="icuuc49"
-                  Name="icuuc49.dll"
-                  DiskId="1"
-                  Source="release\icuuc49.dll"/>
-              <File
-                  Id="libEGL"
-                  Name="libEGL.dll"
-                  DiskId="1"
-                  Source="release\libEGL.dll"/>
+                  Source="release\icuuc52.dll"/>
               <File
                   Id="libgcc"
-                  Name="libgcc_s_sjlj-1.dll"
+                  Name="libgcc_s_dw2-1.dll"
                   DiskId="1"
-                  Source="release\libgcc_s_sjlj-1.dll"/>
-              <File
-                  Id="libGLESv2"
-                  Name="libGLESv2.dll"
-                  DiskId="1"
-                  Source="release\libGLESv2.dll"/>
+                  Source="release\libgcc_s_dw2-1.dll"/>
               <File
                   Id="libstdcplusplus"
                   Name="libstdc++-6.dll"
