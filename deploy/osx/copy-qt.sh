@@ -9,7 +9,7 @@ fi
 
 frameworks="QtCore QtNetwork QtGui QtXml QtWidgets QtPrintSupport"
 
-plugins="qtaccessiblewidgets qdds qgif qicns qico qjp2 qjpeg qmng qtga qtiff qwbmp qwebp qcocoa qminimal"
+plugins="taccessiblewidgets dds gif icns ico jp2 jpeg mng tga tiff wbmp webp cocoa minimal offscreen"
 
 qtdir=$(grep "Command:" Makefile | head -1 | awk '{ print $3; }' | sed s,/bin/.*,,)
 
@@ -35,13 +35,17 @@ echo "Done"
 echo
 echo "Copying plugins..."
 for plug in $plugins; do
-    pfile=$(ls "$qtdir"/plugins/*/lib"$plug".dylib)
+    pfile=$(ls "$qtdir"/plugins/*/libq"$plug".dylib)
     if [ ! -f "$pfile" ]; then
 	echo "Failed to find plugin $plug, exiting"
 	exit 2
     fi
-    cp -v "$pfile" "$pdir" || exit 2
+    target="$pdir"/${pfile##?*plugins/}
+    tdir=`dirname "$target"`
+    mkdir -p "$tdir"
+    cp -v "$pfile" "$target" || exit 2
 done
 
 echo "Done"
+
 
