@@ -304,12 +304,19 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
             this, SLOT(midiEventsAvailable()));
 
 #ifdef BETA_RELEASE
+    QStringList bits = QString(SV_VERSION).split(".");
+    QString beta = SV_VERSION;
+    if (bits.length() == 3) {
+        beta = QString("%1.%2 beta").arg(bits[0]).arg(bits[1].toInt() + 1);
+    }
     QMessageBox::information
         (this, tr("Test release"),
-         tr("<p>This is a test release of %1.</p>"
+         tr("<p>This is a test release of %1 (v%2 / v%3).</p>"
             "<p>See the <a href=\"http://code.soundsoftware.ac.uk/projects/sonic-visualiser/repository/entry/CHANGELOG\">changelog</a> for details of what has changed since the last release.</p>"
             "<p>Please let us know if you have any problems with this test release, and especially if it crashes. Use the <a href=\"http://sourceforge.net/p/sv1/bugs/\">bug tracker</a> or <a href=\"mailto:cannam+sv@all-day-breakfast.com\">email</a> to report bugs.</p><p>Please do not use this software for real work, and do not distribute it to other people who have real work to do! Use it only if you are prepared to report any bugs you find.</p>")
-         .arg(QApplication::applicationName()));
+         .arg(QApplication::applicationName())
+         .arg(SV_VERSION)
+         .arg(beta));
 
     (void)withOSCSupport; // avoid warning
 #else
