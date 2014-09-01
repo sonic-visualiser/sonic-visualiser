@@ -337,6 +337,17 @@ void
 MainWindow::setupMenus()
 {
     if (!m_mainMenusCreated) {
+
+#ifdef Q_OS_LINUX
+        // In Ubuntu 14.04 the window's menu bar goes missing entirely
+        // if the user is running any desktop environment other than Unity
+        // (in which the faux single-menubar appears). The user has a
+        // workaround, to remove the appmenu-qt5 package, but that is
+        // awkward and the problem is so severe that it merits disabling
+        // the system menubar integration altogether. Like this:
+	menuBar()->setNativeMenuBar(false);  // fix #1039
+#endif
+
         m_rightButtonMenu = new QMenu();
 
         // No -- we don't want tear-off enabled on the right-button
