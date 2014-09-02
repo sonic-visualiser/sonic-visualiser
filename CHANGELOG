@@ -28,7 +28,7 @@ Changes in Sonic Visualiser 2.4 since the previous release 2.3:
 
  - Fix various bugs related to layer ordering: layer tabs re-ordering
    themselves randomly when new layer added, layers being ordered
-   randomly when reloading a session
+   randomly when saving and reloading a session
 
  - Shade the start and end of the main audio file, to make them easier
    to see for files that start or end in silence
