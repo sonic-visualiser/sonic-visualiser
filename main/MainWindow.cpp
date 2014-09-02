@@ -1398,7 +1398,6 @@ MainWindow::setupPaneAndLayerMenus()
 
     setupExistingLayersMenus();
 
-/*!!! These don't work correctly -- fix or omit
     menu->addSeparator();
 
     action = new QAction(tr("Switch to Previous Layer"), this);
@@ -1416,7 +1415,7 @@ MainWindow::setupPaneAndLayerMenus()
     connect(this, SIGNAL(canSelectNextLayer(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-*/
+
     m_rightButtonLayerMenu->addSeparator();
     menu->addSeparator();
 
