@@ -23,6 +23,13 @@ Changes in Sonic Visualiser 2.4 since the previous release 2.3:
    electric piano with sustain. The piano sample is still available,
    and any sessions saved using it should continue to use it
 
+ - Add keyboard shortcuts to cycle the current layer (in addition to
+   the existing ones to cycle the current pane)
+
+ - Fix various bugs related to layer ordering: layer tabs re-ordering
+   themselves randomly when new layer added, layers being ordered
+   randomly when reloading a session
+
  - Shade the start and end of the main audio file, to make them easier
    to see for files that start or end in silence
 
