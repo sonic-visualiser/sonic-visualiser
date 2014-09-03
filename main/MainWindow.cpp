@@ -752,7 +752,7 @@ MainWindow::setupEditMenu()
     menu->addAction(action);
 
     action = new QAction(tr("Insert Item at Selection"), this);
-    action->setShortcut(tr("Ctrl+Shift+Enter"));
+    action->setShortcut(tr("Ctrl+Shift+Return"));
     action->setStatusTip(tr("Insert a new note or region item corresponding to the current selection"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertItemAtSelection()));
     connect(this, SIGNAL(canInsertItemAtSelection(bool)), action, SLOT(setEnabled(bool)));
