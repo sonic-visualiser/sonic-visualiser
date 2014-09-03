@@ -4054,12 +4054,23 @@ MainWindow::midiEventsAvailable()
     NoteLayer *currentNoteLayer = 0;
     TimeValueLayer *currentTimeValueLayer = 0;
 
-    if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+    if (m_paneStack) {
+        currentPane = m_paneStack->getCurrentPane();
+    }
+
     if (currentPane) {
         currentNoteLayer = dynamic_cast<NoteLayer *>
             (currentPane->getSelectedLayer());
         currentTimeValueLayer = dynamic_cast<TimeValueLayer *>
             (currentPane->getSelectedLayer());
+    }
+
+    if (!currentNoteLayer && !currentTimeValueLayer) {
+        // discard these events
+        while (m_midiInput->getEventsAvailable() > 0) {
+            (void)m_midiInput->readEvent();
+        }
+        return;
     }
 
     // This is called through a serialised signal/slot invocation
