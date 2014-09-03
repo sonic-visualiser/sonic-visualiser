@@ -2552,8 +2552,6 @@ MainWindow::exportAudio(bool asData)
 
     } else if (selections.size() > 1) {
 
-        bool multiple = false;
-
         if (!asData) { // Multi-file export not supported for data
 
             QStringList items;
