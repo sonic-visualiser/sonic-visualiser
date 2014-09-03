@@ -3640,7 +3640,7 @@ MainWindow::addLayer()
                     cerr << "WARNING: MainWindow::addLayer: unknown model "
                               << model
                               << " (\""
-                              << (model ? model->objectName() : "")
+                              << model->objectName()
                               << "\") in layer action map"
                               << endl;
                 }
@@ -4063,9 +4063,7 @@ MainWindow::midiEventsAvailable()
             (currentPane->getSelectedLayer());
         currentTimeValueLayer = dynamic_cast<TimeValueLayer *>
             (currentPane->getSelectedLayer());
-    }
-
-    if (!currentNoteLayer && !currentTimeValueLayer) {
+    } else {
         // discard these events
         while (m_midiInput->getEventsAvailable() > 0) {
             (void)m_midiInput->readEvent();
@@ -4127,9 +4125,13 @@ MainWindow::midiEventsAvailable()
                     (tvm, point, tr("Add Point"));
                 CommandHistory::getInstance()->addCommand(command);
             }
-            continue;
 
+            continue;
         }
+
+        // This is reached only if !currentNoteLayer and
+        // !currentTimeValueLayer, i.e. there is some other sort of
+        // layer that may be insertable-into
 
         if (!noteOn) continue;
         insertInstantAt(ev.getTime());
