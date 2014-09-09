@@ -512,18 +512,18 @@ void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
     }
     if (status != MainWindow::FileOpenSucceeded) {
         if (!haveMainModel) {
-            status = m_mainWindow->open(path, MainWindow::ReplaceSession);
+            status = m_mainWindow->openPath(path, MainWindow::ReplaceSession);
             if (status == MainWindow::FileOpenSucceeded) {
                 haveMainModel = true;
             }
         } else {
             if (haveSession && !havePriorCommandLineModel) {
-                status = m_mainWindow->open(path, MainWindow::AskUser);
+                status = m_mainWindow->openPath(path, MainWindow::AskUser);
                 if (status == MainWindow::FileOpenSucceeded) {
                     havePriorCommandLineModel = true;
                 }
             } else {
-                status = m_mainWindow->open(path, MainWindow::CreateAdditionalModel);
+                status = m_mainWindow->openPath(path, MainWindow::CreateAdditionalModel);
             }
         }
     }
