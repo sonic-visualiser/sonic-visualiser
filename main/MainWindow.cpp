@@ -2968,7 +2968,7 @@ MainWindow::openSomething()
 
     if (path.isEmpty()) return;
 
-    FileOpenStatus status = open(path, ReplaceSession);
+    FileOpenStatus status = openPath(path, ReplaceSession);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -3000,7 +3000,7 @@ MainWindow::openLocation()
 
     if (text.isEmpty()) return;
 
-    FileOpenStatus status = open(text, AskUser);
+    FileOpenStatus status = openPath(text, AskUser);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -3028,7 +3028,7 @@ MainWindow::openRecentFile()
     QString path = action->text();
     if (path == "") return;
 
-    FileOpenStatus status = open(path, ReplaceSession);
+    FileOpenStatus status = openPath(path, ReplaceSession);
 
     if (status == FileOpenFailed) {
         emit hideSplash();
@@ -3156,9 +3156,9 @@ MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
         FileOpenStatus status;
 
         if (i == uriList.begin()) {
-            status = open(*i, ReplaceCurrentPane);
+            status = openPath(*i, ReplaceCurrentPane);
         } else {
-            status = open(*i, CreateAdditionalModel);
+            status = openPath(*i, CreateAdditionalModel);
         }
 
         if (status == FileOpenFailed) {
