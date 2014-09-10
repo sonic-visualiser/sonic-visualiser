@@ -1,6 +1,8 @@
 
 TEMPLATE = app
 
+DEFINES += BETA_RELEASE
+
 win32-g++ {
     INCLUDEPATH += sv-dependency-builds/win32-mingw/include
     LIBS += -Lsv-dependency-builds/win32-mingw/lib
