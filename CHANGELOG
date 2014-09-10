@@ -30,6 +30,9 @@ Changes in Sonic Visualiser 2.4 since the previous release 2.3:
    themselves randomly when new layer added, layers being ordered
    randomly when saving and reloading a session
 
+ - Fix incorrect interaction with non-Unicode usernames when creating
+   temporary and template directories on Windows
+
  - Shade the start and end of the main audio file, to make them easier
    to see for files that start or end in silence
 
@@ -37,6 +40,10 @@ Changes in Sonic Visualiser 2.4 since the previous release 2.3:
 
  - Make it possible to import CSV files directly into Note layers by
    adding Pitch as a data type in the CSV file import dialog
+
+ - Fix problems with keyboard shortcuts when using Qt5 on OS/X. This
+   is the first release in which the official builds use Qt5 for all
+   platforms.
 
 
 Changes in Sonic Visualiser 2.3 since the previous release 2.2:
