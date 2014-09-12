@@ -25,4 +25,4 @@ re:^config\.status$
 Sonic Visualiser*
 .DS_Store
 *.stash
-
+cov-int/*
