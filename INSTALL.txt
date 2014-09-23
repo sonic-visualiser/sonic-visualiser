@@ -9,25 +9,21 @@ $ ./configure && make
 The following additional libraries are required or optional when
 building the SV core libraries:
 
-REQUIRED	Qt v4.4 or newer	http://qt.nokia.com/
+REQUIRED	Qt v4.6 or newer	http://qt-project.org/
 REQUIRED	Vamp Plugin SDK	v2.x	http://www.vamp-plugins.org/
 REQUIRED	Rubber Band Library	http://www.breakfastquay.com/rubberband/
 REQUIRED	libsndfile		http://www.mega-nerd.com/libsndfile/
 REQUIRED	libsamplerate		http://www.mega-nerd.com/SRC/
 REQUIRED	FFTW3 			http://www.fftw.org/
 REQUIRED	bzip2 library		http://www.bzip.org/
-REQUIRED	Redland RDF libraries	http://librdf.org/
+REQUIRED	Sord and Serd libraries	http://drobilla.net/software/
 
 Optional	MAD mp3 decoder		http://www.underbit.com/products/mad/
 Optional	Oggz and fishsound	http://xiph.org/oggz/
 Optional        liblo OSC library	http://www.plugin.org.uk/liblo/
 
-The Redland RDF libraries include the Raptor RDF parser library,
-Rasqal RDF query library, and librdf, the Redland RDF datastore (which
-depends on both of those).  The SV libraries require all of these.
-
-If you are going to build the rest of the SV libraries, you will also
-need one or more of:
+If you are going to build the rest of the SV libraries and the Sonic
+Visualiser application, you will also need one or more of:
 
 Optional	JACK			http://www.jackaudio.org/
 Optional	PortAudio v19		http://www.portaudio.com/
@@ -41,8 +37,8 @@ as a backup, and PortAudio is used elsewhere.
 On Linux, you will need the ALSA libraries (used for MIDI).
 
 If you happen to be using a Debian-based Linux, you probably want to
-apt-get install the following packages: libqt4-dev libsndfile1-dev
-libsamplerate0-dev fftw3-dev libbz2-dev libjack-dev libmad0-dev
-liboggz1-dev libfishsound1-dev libasound2-dev liblo0-dev liblrdf0-dev
-librdf0-dev .
+apt-get install something like the following packages: libqt4-dev
+libsndfile1-dev libsamplerate0-dev fftw3-dev libbz2-dev libjack-dev
+libmad0-dev liboggz1-dev libfishsound1-dev libasound2-dev liblo0-dev
+liblrdf0-dev libsord0-dev libserd0-dev.
 
