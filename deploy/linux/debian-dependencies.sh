@@ -28,7 +28,7 @@ for p in `cat $pfile`; do
     apt-cache showpkg "$p" | grep '^  ' | grep ',' | awk -F, '{ print $1; }' | \
 	while read d; do 
 	    if grep -q '^'$d'$' $pfile; then
-		echo $p 1>&2
+		echo $p
 	    fi
     done
 done | sort | uniq > $rfile
@@ -37,6 +37,6 @@ echo "Packages that can be eliminated because other packages depend on them:" 1>
 cat $rfile 1>&2
 echo 1>&2
 
-cat $pfile $rfile | sort | uniq -u | sed 's/$/,/' | fmt -1000 | sed 's/^/Depends: /'
+cat $pfile $rfile | sort | uniq -u | sed 's/$/,/' | fmt -1000 | sed 's/^/Depends: /' | sed 's/,$/, libc6/'
 
 
