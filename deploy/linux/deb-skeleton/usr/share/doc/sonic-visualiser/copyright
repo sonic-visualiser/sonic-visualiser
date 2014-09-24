@@ -1,0 +1,32 @@
+Sonic Visualiser was developed at the Centre for Digital Music,
+Queen Mary, University of London.
+
+  http://www.elec.qmul.ac.uk/digitalmusic/
+
+The main program is by Chris Cannam, with additional DSP and program
+design work by Christian Landone.  Thanks also to Craig Sapp for his
+suggestions and useful feedback.
+
+Code copyright 2005-2007 Chris Cannam and copyright 2006-2014 Queen
+Mary, University of London, except where indicated in the individual
+source files.
+
+This work was partially funded by the European Commission through the
+SIMAC project IST-FP6-507142 and the EASAIER project IST-FP6-033902.
+
+This work was partially funded by the Arts and Humanities Research
+Council through its Research Centre for the History and Analysis of
+Recorded Music (CHARM).
+
+This work was partially funded by the Engineering and Physical
+Sciences Research Council through the OMRAS2 project EP/E017614/1.
+
+This work was partially funded by the Engineering and Physical
+Sciences Research Council through the Musicology for the Masses
+project EP/I001832/1.
+
+Sonic Visualiser is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or (at
+your option) any later version. See the file /usr/share/common-licenses/GPL-2 
+for more information.
