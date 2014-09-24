@@ -9,7 +9,7 @@ $ ./configure && make
 The following additional libraries are required or optional when
 building the SV core libraries:
 
-REQUIRED	Qt v4.6 or newer	http://qt-project.org/
+REQUIRED	Qt v5			http://qt-project.org/
 REQUIRED	Vamp Plugin SDK	v2.x	http://www.vamp-plugins.org/
 REQUIRED	Rubber Band Library	http://www.breakfastquay.com/rubberband/
 REQUIRED	libsndfile		http://www.mega-nerd.com/libsndfile/
@@ -37,8 +37,9 @@ as a backup, and PortAudio is used elsewhere.
 On Linux, you will need the ALSA libraries (used for MIDI).
 
 If you happen to be using a Debian-based Linux, you probably want to
-apt-get install something like the following packages: libqt4-dev
-libsndfile1-dev libsamplerate0-dev fftw3-dev libbz2-dev libjack-dev
-libmad0-dev liboggz1-dev libfishsound1-dev libasound2-dev liblo0-dev
-liblrdf0-dev libsord0-dev libserd0-dev.
+apt-get install something like the following packages: qtbase5-dev
+qt5-default libsndfile1-dev libsamplerate0-dev libfftw3-dev libbz2-dev
+libjack-dev libjack0 libpulse-dev libmad0-dev libid3tag0-dev
+liboggz2-dev libfishsound1-dev libasound2-dev liblo-dev liblrdf0-dev
+libsord-dev libserd-dev vamp-plugin-sdk librubberband-dev.
 
