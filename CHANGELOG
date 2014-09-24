@@ -23,6 +23,10 @@ Changes in Sonic Visualiser 2.4 since the previous release 2.3:
    electric piano with sustain. The piano sample is still available,
    and any sessions saved using it should continue to use it
 
+ - Add a cancel button for Vamp plugin processing: currently,
+   cancelling a transform results in a part-complete layer rather than
+   removing the results
+
  - Add keyboard shortcuts to cycle the current layer (in addition to
    the existing ones to cycle the current pane)
 
