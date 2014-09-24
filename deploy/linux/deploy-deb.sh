@@ -46,6 +46,10 @@ cp README "$targetdir"/usr/share/doc/"$program"/
 
 perl -i -p -e "s/Architecture: .*/Architecture: $arch/" "$targetdir"/DEBIAN/control
 
+deps=`bash "$depdir"/debian-dependencies.sh "$program"`
+
+perl -i -p -e "s/Depends: .*/$deps/" "$targetdir"/DEBIAN/control
+
 bash "$depdir"/fix-lintian-bits.sh "$targetdir"
 
 sudo dpkg-deb --build "$targetdir" && lintian "$targetdir".deb
