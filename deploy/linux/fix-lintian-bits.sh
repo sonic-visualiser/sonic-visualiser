@@ -13,3 +13,4 @@ find "$dir" -name \*~ -exec rm \{\} \;
 
 sudo chown -R root.root "$dir"/*
 
+sudo chmod -R g-w "$dir"/*
