@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Sonic Visualiser
+Exec=sonic-visualiser %U
+Keywords=audio; sound; visualiser; sonic;
+Terminal=false
+Type=Application
+Icon=sv-icon
+Categories=Audio;AudioVideo;
+MimeType=application/x-sonicvisualiser;application/x-sonicvisualiser-layer;application/x-ogg;audio/mp3;audio/mpeg;audio/mpegurl;audio/x-flac;audio/x-mp3;audio/x-mpeg;audio/x-mpegurl;audio/x-wav;audio/wav;application/ogg;audio/x-vorbis+ogg;
