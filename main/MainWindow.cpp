@@ -55,6 +55,7 @@
 #include "widgets/TransformFinder.h"
 #include "widgets/LabelCounterInputDialog.h"
 #include "widgets/ActivityLog.h"
+#include "widgets/UnitConverter.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
@@ -161,6 +162,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_activityLog(new ActivityLog()),
+    m_unitConverter(new UnitConverter()),
     m_keyReference(new KeyReference()),
     m_templateWatcher(0)
 {
@@ -296,6 +298,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
     m_activityLog->hide();
 
+    m_unitConverter->hide();
+    
     newSession();
 
     connect(m_midiInput, SIGNAL(eventsAvailable()),
@@ -325,6 +329,7 @@ MainWindow::~MainWindow()
 //    SVDEBUG << "MainWindow::~MainWindow" << endl;
     delete m_keyReference;
     delete m_activityLog;
+    delete m_unitConverter;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     delete m_versionTester;
@@ -1023,6 +1028,11 @@ MainWindow::setupViewMenu()
     action = new QAction(tr("Show Acti&vity Log"), this);
     action->setStatusTip(tr("Open a window listing interactions and other events"));
     connect(action, SIGNAL(triggered()), this, SLOT(showActivityLog()));
+    menu->addAction(action);
+
+    action = new QAction(tr("Show &Unit Converter"), this);
+    action->setStatusTip(tr("Open a window of pitch and timing conversion utilities"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showUnitConverter()));
     menu->addAction(action);
 
     menu->addSeparator();
@@ -2942,6 +2952,7 @@ MainWindow::closeSession()
     delete m_preferencesDialog.data();
 
     m_activityLog->hide();
+    m_unitConverter->hide();
     m_keyReference->hide();
 
     delete m_document;
@@ -4358,6 +4369,13 @@ MainWindow::showActivityLog()
     m_activityLog->show();
     m_activityLog->raise();
     m_activityLog->scrollToEnd();
+}
+
+void
+MainWindow::showUnitConverter()
+{
+    m_unitConverter->show();
+    m_unitConverter->raise();
 }
 
 void
