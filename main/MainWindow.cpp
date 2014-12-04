@@ -24,6 +24,7 @@
 #include "data/model/SparseOneDimensionalModel.h"
 #include "data/model/RangeSummarisableTimeValueModel.h"
 #include "data/model/NoteModel.h"
+#include "data/model/AggregateWaveModel.h"
 #include "data/model/Labeller.h"
 #include "data/osc/OSCQueue.h"
 #include "framework/Document.h"
@@ -3705,21 +3706,45 @@ MainWindow::addLayer(QString transformId)
         m_document->getTransformInputModels();
 
     Model *defaultInputModel = 0;
+
     for (int j = 0; j < pane->getLayerCount(); ++j) {
+
         Layer *layer = pane->getLayer(j);
         if (!layer) continue;
+
         if (LayerFactory::getInstance()->getLayerType(layer) !=
             LayerFactory::Waveform &&
             !layer->isLayerOpaque()) continue;
+
         Model *model = layer->getModel();
         if (!model) continue;
+
         for (size_t k = 0; k < candidateInputModels.size(); ++k) {
             if (candidateInputModels[k] == model) {
                 defaultInputModel = model;
                 break;
             }
         }
+
         if (defaultInputModel) break;
+    }
+
+    if (candidateInputModels.size() > 1) {
+        // Add an aggregate model as another option
+        AggregateWaveModel::ChannelSpecList sl;
+        foreach (Model *m, candidateInputModels) {
+            RangeSummarisableTimeValueModel *r =
+                qobject_cast<RangeSummarisableTimeValueModel *>(m);
+            if (r) {
+                sl.push_back(AggregateWaveModel::ModelChannelSpec(r, -1));
+            }
+        }
+        if (!sl.empty()) {
+            AggregateWaveModel *aggregate = new AggregateWaveModel(sl);
+            aggregate->setObjectName(tr("Multiplex all of the above"));
+            candidateInputModels.push_back(aggregate);
+            //!!! but it leaks
+        }
     }
     
     int startFrame = 0, duration = 0;
