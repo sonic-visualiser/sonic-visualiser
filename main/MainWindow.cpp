@@ -3400,7 +3400,7 @@ MainWindow::saveSessionAs()
 	QMessageBox::critical(this, tr("Failed to save file"),
 			      tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
     } else {
-	setWindowTitle(tr("%1: %1")
+	setWindowTitle(tr("%1: %2")
                        .arg(QApplication::applicationName())
 		       .arg(QFileInfo(path).fileName()));
 	m_sessionFile = path;
