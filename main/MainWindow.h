@@ -22,6 +22,7 @@ class VersionTester;
 class Surveyer;
 class LayerTreeDialog;
 class ActivityLog;
+class UnitConverter;
 
 class QFileSystemWatcher;
 class QScrollArea;
@@ -136,6 +137,7 @@ protected slots:
 
     virtual void showLayerTree();
     virtual void showActivityLog();
+    virtual void showUnitConverter();
 
     virtual void mouseEnteredWidget();
     virtual void mouseLeftWidget();
@@ -208,6 +210,7 @@ protected:
     QPointer<LayerTreeDialog>   m_layerTreeDialog;
 
     ActivityLog             *m_activityLog;
+    UnitConverter           *m_unitConverter;
     KeyReference            *m_keyReference;
 
     QFileSystemWatcher      *m_templateWatcher;
