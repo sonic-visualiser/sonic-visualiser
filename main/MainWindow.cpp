@@ -24,6 +24,7 @@
 #include "data/model/SparseOneDimensionalModel.h"
 #include "data/model/RangeSummarisableTimeValueModel.h"
 #include "data/model/NoteModel.h"
+#include "data/model/AggregateWaveModel.h"
 #include "data/model/Labeller.h"
 #include "data/osc/OSCQueue.h"
 #include "framework/Document.h"
@@ -55,6 +56,7 @@
 #include "widgets/TransformFinder.h"
 #include "widgets/LabelCounterInputDialog.h"
 #include "widgets/ActivityLog.h"
+#include "widgets/UnitConverter.h"
 #include "audioio/AudioCallbackPlaySource.h"
 #include "audioio/AudioCallbackPlayTarget.h"
 #include "audioio/AudioTargetFactory.h"
@@ -161,6 +163,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_preferencesDialog(0),
     m_layerTreeDialog(0),
     m_activityLog(new ActivityLog()),
+    m_unitConverter(new UnitConverter()),
     m_keyReference(new KeyReference()),
     m_templateWatcher(0)
 {
@@ -296,6 +299,8 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
     m_activityLog->hide();
 
+    m_unitConverter->hide();
+    
     newSession();
 
     connect(m_midiInput, SIGNAL(eventsAvailable()),
@@ -325,6 +330,7 @@ MainWindow::~MainWindow()
 //    SVDEBUG << "MainWindow::~MainWindow" << endl;
     delete m_keyReference;
     delete m_activityLog;
+    delete m_unitConverter;
     delete m_preferencesDialog;
     delete m_layerTreeDialog;
     delete m_versionTester;
@@ -1023,6 +1029,11 @@ MainWindow::setupViewMenu()
     action = new QAction(tr("Show Acti&vity Log"), this);
     action->setStatusTip(tr("Open a window listing interactions and other events"));
     connect(action, SIGNAL(triggered()), this, SLOT(showActivityLog()));
+    menu->addAction(action);
+
+    action = new QAction(tr("Show &Unit Converter"), this);
+    action->setStatusTip(tr("Open a window of pitch and timing conversion utilities"));
+    connect(action, SIGNAL(triggered()), this, SLOT(showUnitConverter()));
     menu->addAction(action);
 
     menu->addSeparator();
@@ -2942,6 +2953,7 @@ MainWindow::closeSession()
     delete m_preferencesDialog.data();
 
     m_activityLog->hide();
+    m_unitConverter->hide();
     m_keyReference->hide();
 
     delete m_document;
@@ -3388,7 +3400,7 @@ MainWindow::saveSessionAs()
 	QMessageBox::critical(this, tr("Failed to save file"),
 			      tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
     } else {
-	setWindowTitle(tr("%1: %1")
+	setWindowTitle(tr("%1: %2")
                        .arg(QApplication::applicationName())
 		       .arg(QFileInfo(path).fileName()));
 	m_sessionFile = path;
@@ -3694,21 +3706,45 @@ MainWindow::addLayer(QString transformId)
         m_document->getTransformInputModels();
 
     Model *defaultInputModel = 0;
+
     for (int j = 0; j < pane->getLayerCount(); ++j) {
+
         Layer *layer = pane->getLayer(j);
         if (!layer) continue;
+
         if (LayerFactory::getInstance()->getLayerType(layer) !=
             LayerFactory::Waveform &&
             !layer->isLayerOpaque()) continue;
+
         Model *model = layer->getModel();
         if (!model) continue;
+
         for (size_t k = 0; k < candidateInputModels.size(); ++k) {
             if (candidateInputModels[k] == model) {
                 defaultInputModel = model;
                 break;
             }
         }
+
         if (defaultInputModel) break;
+    }
+
+    if (candidateInputModels.size() > 1) {
+        // Add an aggregate model as another option
+        AggregateWaveModel::ChannelSpecList sl;
+        foreach (Model *m, candidateInputModels) {
+            RangeSummarisableTimeValueModel *r =
+                qobject_cast<RangeSummarisableTimeValueModel *>(m);
+            if (r) {
+                sl.push_back(AggregateWaveModel::ModelChannelSpec(r, -1));
+            }
+        }
+        if (!sl.empty()) {
+            AggregateWaveModel *aggregate = new AggregateWaveModel(sl);
+            aggregate->setObjectName(tr("Multiplex all of the above"));
+            candidateInputModels.push_back(aggregate);
+            //!!! but it leaks
+        }
     }
     
     int startFrame = 0, duration = 0;
@@ -4358,6 +4394,13 @@ MainWindow::showActivityLog()
     m_activityLog->show();
     m_activityLog->raise();
     m_activityLog->scrollToEnd();
+}
+
+void
+MainWindow::showUnitConverter()
+{
+    m_unitConverter->show();
+    m_unitConverter->raise();
 }
 
 void
