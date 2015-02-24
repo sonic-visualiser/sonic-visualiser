@@ -53,7 +53,8 @@ CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 
 if test "x$GCC" = "xyes"; then
-        CXXFLAGS_DEBUG="-std=c++11 -Wall -Wextra -Werror -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -g -pipe"
+        CXXFLAGS_DEBUG="-std=c++11 -fpie -pie -fsanitize=thread -Wall -Wextra -Werror -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -g -pipe"
+	LIBS="$LIBS -std=c++11 -fpie -pie -fsanitize=thread"
    	CXXFLAGS_RELEASE="-std=c++11 -g0 -O2 -Wall -pipe"
    	CXXFLAGS_MINIMAL="-std=c++11 -g0 -O0"
 fi
