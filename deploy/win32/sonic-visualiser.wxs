@@ -144,20 +144,20 @@
                   DiskId="1"
                   Source="release\Qt5Xml.dll"/>
               <File
-                  Id="icudt52"
-                  Name="icudt52.dll"
+                  Id="icudt53"
+                  Name="icudt53.dll"
                   DiskId="1"
-                  Source="release\icudt52.dll"/>
+                  Source="release\icudt53.dll"/>
               <File
-                  Id="icuin52"
-                  Name="icuin52.dll"
+                  Id="icuin53"
+                  Name="icuin53.dll"
                   DiskId="1"
-                  Source="release\icuin52.dll"/>
+                  Source="release\icuin53.dll"/>
               <File
-                  Id="icuuc52"
-                  Name="icuuc52.dll"
+                  Id="icuuc53"
+                  Name="icuuc53.dll"
                   DiskId="1"
-                  Source="release\icuuc52.dll"/>
+                  Source="release\icuuc53.dll"/>
               <File
                   Id="libgcc"
                   Name="libgcc_s_dw2-1.dll"
@@ -228,8 +228,9 @@
       <UIRef Id="WixUI_InstallDir" />
       <UIRef Id="WixUI_ErrorProgressText" />
     </UI>
-		
+
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONFOLDER" />
+    <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
     <Property Id="ApplicationFolderName" Value="Sonic Visualiser" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
