@@ -20,6 +20,7 @@
 #include "base/TempDirectory.h"
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
+#include "data/fileio/FileSource.h"
 #include "widgets/TipDialog.h"
 #include "widgets/InteractiveFileFinder.h"
 #include "svapp/framework/TransformUserConfigurator.h"
@@ -457,6 +458,8 @@ main(int argc, char **argv)
     settings.endGroup();
 #endif
 
+    FileSource::debugReport();
+    
     delete gui;
 
     cleanupMutex.unlock();

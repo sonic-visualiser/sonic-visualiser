@@ -108,6 +108,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTextStream>
+#include <QTextCodec>
 #include <QProcess>
 #include <QShortcut>
 #include <QSettings>
@@ -2726,6 +2727,7 @@ MainWindow::exportLayer()
             error = tr("Failed to open file %1 for writing").arg(path);
         } else {
             QTextStream out(&file);
+            out.setCodec(QTextCodec::codecForName("UTF-8"));
             out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                 << "<!DOCTYPE sonic-visualiser>\n"
                 << "<sv>\n"

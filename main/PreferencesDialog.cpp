@@ -292,6 +292,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(ttMode, SIGNAL(currentIndexChanged(int)),
             this, SLOT(timeToTextModeChanged(int)));
 
+    QCheckBox *hms = new QCheckBox;
+    int showHMS = prefs->getPropertyRangeAndValue
+        ("Show Hours And Minutes", &min, &max, &deflt);
+    m_showHMS = (showHMS != 0);
+    hms->setCheckState(m_showHMS ? Qt::Checked : Qt::Unchecked);
+    connect(hms, SIGNAL(stateChanged(int)),
+            this, SLOT(showHMSChanged(int)));
+    
     // General tab
 
     QFrame *frame = new QFrame;
@@ -342,6 +350,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     row = 0;
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Show Splash Screen"))),
+                       row, 0);
+    subgrid->addWidget(showSplash, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Property Box Layout"))),
                        row, 0);
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
@@ -364,9 +377,9 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(ttMode, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Show Splash Screen"))),
+                                                ("Show Hours And Minutes"))),
                        row, 0);
-    subgrid->addWidget(showSplash, row++, 1, 1, 1);
+    subgrid->addWidget(hms, row++, 1, 1, 1);
 
     subgrid->setRowStretch(row, 10);
     
@@ -609,6 +622,13 @@ PreferencesDialog::timeToTextModeChanged(int mode)
 }
 
 void
+PreferencesDialog::showHMSChanged(int state)
+{
+    m_showHMS = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::octaveSystemChanged(int system)
 {
     m_octaveSystem = system;
@@ -647,6 +667,7 @@ PreferencesDialog::applyClicked()
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
     prefs->setTimeToTextMode(Preferences::TimeToTextMode(m_timeToTextMode));
+    prefs->setShowHMS(m_showHMS);
     prefs->setViewFontSize(m_viewFontSize);
     
     prefs->setProperty("Octave Numbering System", m_octaveSystem);
