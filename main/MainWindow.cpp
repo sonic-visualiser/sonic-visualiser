@@ -3749,8 +3749,8 @@ MainWindow::addLayer(QString transformId)
         }
     }
     
-    int startFrame = 0, duration = 0;
-    int endFrame = 0;
+    sv_frame_t startFrame = 0, duration = 0;
+    sv_frame_t endFrame = 0;
     m_viewManager->getSelection().getExtents(startFrame, endFrame);
     if (endFrame > startFrame) duration = endFrame - startFrame;
     else startFrame = 0;

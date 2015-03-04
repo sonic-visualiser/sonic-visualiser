@@ -7,6 +7,7 @@ CONFIG += staticlib
 
 DEFINES -= USE_REDLAND
 QMAKE_CXXFLAGS -= -I/usr/include/rasqal -I/usr/include/raptor2
+QMAKE_CXXFLAGS -= -Werror
 EXTRALIBS -= -lrdf
 
 DEFINES += USE_SORD
