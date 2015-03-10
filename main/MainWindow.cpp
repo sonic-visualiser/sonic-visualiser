@@ -4052,7 +4052,8 @@ MainWindow::outputLevelsChanged(float left, float right)
 }
 
 void
-MainWindow::sampleRateMismatch(int requested, int actual,
+MainWindow::sampleRateMismatch(sv_samplerate_t requested,
+                               sv_samplerate_t actual,
                                bool willResample)
 {
     if (!willResample) {

@@ -66,7 +66,7 @@ protected slots:
     virtual void closeSession();
     virtual void preferences();
 
-    virtual void sampleRateMismatch(int, int, bool);
+    virtual void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool);
     virtual void audioOverloadPluginDisabled();
     virtual void audioTimeStretchMultiChannelDisabled();
 
