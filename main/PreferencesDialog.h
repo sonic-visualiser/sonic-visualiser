@@ -90,7 +90,7 @@ protected:
     int m_spectrogramSmoothing;
     int m_spectrogramXSmoothing;
     int m_propertyLayout;
-    float m_tuningFrequency;
+    double m_tuningFrequency;
     int m_audioDevice;
     int m_resampleQuality;
     bool m_resampleOnLoad;
