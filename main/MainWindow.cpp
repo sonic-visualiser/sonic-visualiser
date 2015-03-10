@@ -2342,8 +2342,8 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
-    int ssr = getMainModel()->getSampleRate();
-    int tsr = ssr;
+    sv_samplerate_t ssr = getMainModel()->getSampleRate();
+    sv_samplerate_t tsr = ssr;
     if (m_playSource) tsr = m_playSource->getTargetSampleRate();
 
     if (ssr != tsr) {
@@ -2808,7 +2808,7 @@ MainWindow::exportImage()
     visible = pane->getImageSize(pane->getFirstVisibleFrame(),
                                  pane->getLastVisibleFrame());
 
-    int sf0 = 0, sf1 = 0;
+    sv_frame_t sf0 = 0, sf1 = 0;
  
     if (haveSelection) {
         MultiSelection::SelectionList selections = m_viewManager->getSelections();
@@ -3874,14 +3874,14 @@ MainWindow::playSpeedChanged(int position)
 {
     PlaySpeedRangeMapper mapper(0, 200);
 
-    float percent = m_playSpeed->mappedValue();
-    float factor = mapper.getFactorForValue(percent);
+    double percent = m_playSpeed->mappedValue();
+    double factor = mapper.getFactorForValue(percent);
 
 //    cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << endl;
 
     bool something = (position != 100);
 
-    int pc = lrintf(percent);
+    int pc = int(lrint(percent));
 
     if (!something) {
         contextHelpChanged(tr("Playback speed: Normal"));
@@ -3972,7 +3972,7 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
     }
 
     bool haveSelection = false;
-    int startFrame = 0, endFrame = 0;
+    sv_frame_t startFrame = 0, endFrame = 0;
 
     if (m_viewManager && m_viewManager->haveInProgressSelection()) {
 
@@ -4025,7 +4025,7 @@ MainWindow::updatePositionStatusDisplays() const
     if (!statusBar()->isVisible()) return;
 
     Pane *pane = 0;
-    int frame = m_viewManager->getPlaybackFrame();
+    sv_frame_t frame = m_viewManager->getPlaybackFrame();
 
     if (m_paneStack) pane = m_paneStack->getCurrentPane();
     if (!pane) return;
@@ -4119,7 +4119,7 @@ MainWindow::midiEventsAvailable()
 
         MIDIEvent ev(m_midiInput->readEvent());
 
-        int frame = currentPane->alignFromReference(ev.getTime());
+        sv_frame_t frame = currentPane->alignFromReference(ev.getTime());
 
         bool noteOn = (ev.getMessageType() == MIDIConstants::MIDI_NOTE_ON &&
                        ev.getVelocity() > 0);

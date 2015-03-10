@@ -123,7 +123,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (getMainModel()) {
 
-            int frame = m_viewManager->getPlaybackFrame();
+            sv_frame_t frame = m_viewManager->getPlaybackFrame();
             bool selection = false;
             bool play = (message.getMethod() == "play");
 
@@ -452,7 +452,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 double level = message.getArg(0).toDouble();
                 Pane *currentPane = m_paneStack->getCurrentPane();
                 if (level < 1.0) level = 1.0;
-                if (currentPane) currentPane->setZoomLevel(lrint(level));
+                if (currentPane) currentPane->setZoomLevel(int(lrint(level)));
             }
         }
 
