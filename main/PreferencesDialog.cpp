@@ -122,7 +122,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(propertyLayout, SIGNAL(currentIndexChanged(int)),
             this, SLOT(propertyLayoutChanged(int)));
 
-    
 
     m_tuningFrequency = prefs->getTuningFrequency();
 
