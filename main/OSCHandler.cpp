@@ -233,8 +233,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (getMainModel()) {
 
-            int f0 = getMainModel()->getStartFrame();
-            int f1 = getMainModel()->getEndFrame();
+            sv_frame_t f0 = getMainModel()->getStartFrame();
+            sv_frame_t f1 = getMainModel()->getEndFrame();
 
             bool done = false;
 
