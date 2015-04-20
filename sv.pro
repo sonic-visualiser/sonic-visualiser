@@ -36,7 +36,7 @@ exists(config.pri) {
     }
 }
 
-CONFIG += qt thread warn_on stl rtti exceptions
+CONFIG += qt thread warn_on stl rtti exceptions c++11
 QT += network xml gui widgets
 
 TARGET = "Sonic Visualiser"
