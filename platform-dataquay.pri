@@ -3,10 +3,11 @@ exists(config.pri) {
     include(./config.pri)
 }
 
-CONFIG += staticlib
+CONFIG += staticlib c++11
 
 DEFINES -= USE_REDLAND
 QMAKE_CXXFLAGS -= -I/usr/include/rasqal -I/usr/include/raptor2
+QMAKE_CXXFLAGS -= -Werror
 EXTRALIBS -= -lrdf
 
 DEFINES += USE_SORD

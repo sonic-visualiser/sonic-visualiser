@@ -1,5 +1,5 @@
 
-AC_INIT([Sonic Visualiser], [2.4], cannam@all-day-breakfast.com)
+AC_INIT([Sonic Visualiser], [2.4.1], cannam@all-day-breakfast.com)
 
 AC_CONFIG_SRCDIR(main/main.cpp)
 
@@ -24,6 +24,9 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
+
+# We are daringly making use of C++11 now
+AX_CXX_COMPILE_STDCXX_11(noext)
 
 AC_HEADER_STDC
 
@@ -50,9 +53,10 @@ CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 
 if test "x$GCC" = "xyes"; then
-        CXXFLAGS_DEBUG="-Wall -Wextra -Werror -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -g -pipe"
-   	CXXFLAGS_RELEASE="-g0 -O2 -Wall -pipe"
-   	CXXFLAGS_MINIMAL="-g0 -O0"
+   	CXXFLAGS_ANY="-Wall -Wextra -Werror -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g"
+   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O2"
+   	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
 fi
 
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
