@@ -1,5 +1,5 @@
 
-AC_INIT([Sonic Visualiser], [2.4.1], cannam@all-day-breakfast.com)
+AC_INIT([Sonic Visualiser], [], cannam@all-day-breakfast.com)
 
 AC_CONFIG_SRCDIR(main/main.cpp)
 
@@ -121,7 +121,7 @@ AC_SUBST(CXX)
 AC_SUBST(QMAKE_CONFIG)
 
 AC_CONFIG_SUBDIRS([svcore svgui svapp])
-AC_CONFIG_FILES([config.pri version.h])
+AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT
 
