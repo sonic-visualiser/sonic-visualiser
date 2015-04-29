@@ -64,6 +64,7 @@ protected slots:
     void defaultTemplateChanged(int);
     void localeChanged(int);
     void networkPermissionChanged(int state);
+    void retinaChanged(int state);
 
     void tempDirButtonClicked();
 
@@ -95,6 +96,7 @@ protected:
     int m_resampleQuality;
     bool m_resampleOnLoad;
     bool m_networkPermission;
+    bool m_retina;
     QString m_tempDirRoot;
     int m_backgroundMode;
     int m_timeToTextMode;
