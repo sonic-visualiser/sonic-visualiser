@@ -223,6 +223,15 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     settings.beginGroup("Preferences");
 
+#ifdef Q_OS_MAC
+    m_retina = settings.value("scaledHiDpi", true).toBool();
+    QCheckBox *retina = new QCheckBox;
+    retina->setCheckState(m_retina ? Qt::Checked : Qt::Unchecked);
+    connect(retina, SIGNAL(stateChanged(int)), this, SLOT(retinaChanged(int)));
+#else
+    m_retina = false;
+#endif
+
     QString userLocale = settings.value("locale", "").toString();
     m_currentLocale = userLocale;
     
@@ -352,6 +361,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                                 ("Show Splash Screen"))),
                        row, 0);
     subgrid->addWidget(showSplash, row++, 1, 1, 1);
+
+#ifdef Q_OS_MAC
+    if (devicePixelRatio() > 1) {
+        subgrid->addWidget(new QLabel(tr("Draw layers at Retina resolution:")), row, 0);
+        subgrid->addWidget(retina, row++, 1, 1, 1);
+    }
+#endif
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Property Box Layout"))),
@@ -564,6 +580,14 @@ PreferencesDialog::networkPermissionChanged(int state)
 }
 
 void
+PreferencesDialog::retinaChanged(int state)
+{
+    m_retina = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+    // Does not require a restart
+}
+
+void
 PreferencesDialog::showSplashChanged(int state)
 {
     m_showSplash = (state == Qt::Checked);
@@ -680,6 +704,9 @@ PreferencesDialog::applyClicked()
     settings.setValue(permishTag, m_networkPermission);
     settings.setValue("audio-target", devices[m_audioDevice]);
     settings.setValue("locale", m_currentLocale);
+#ifdef Q_OS_MAC
+    settings.setValue("scaledHiDpi", m_retina);
+#endif
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
