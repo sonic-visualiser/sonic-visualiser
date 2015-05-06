@@ -93,7 +93,7 @@ SVSplash::drawContents(QPainter *painter)
     QString text = QString("v%1").arg(SV_VERSION);
     painter->drawText
 	(width() - painter->fontMetrics().width(text) - (width()/50),
-	 (width()/50) + painter->fontMetrics().ascent(),
+	 (width()/70) + painter->fontMetrics().ascent(),
 	 text);
 }
 
