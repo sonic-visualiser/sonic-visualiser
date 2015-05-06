@@ -1,5 +1,29 @@
 <!DOCTYPE RCC><RCC version="1.0">
-<qresource>
+  <qresource>
+    <file>icons/scalable/align.svg</file>
+    <file>icons/scalable/colour3d.svg</file>
+    <file>icons/scalable/cross.svg</file>
+    <file>icons/scalable/draw.svg</file>
+    <file>icons/scalable/erase.svg</file>
+    <file>icons/scalable/filenew.svg</file>
+    <file>icons/scalable/fileopen.svg</file>
+    <file>icons/scalable/filesaveas.svg</file>
+    <file>icons/scalable/filesave.svg</file>
+    <file>icons/scalable/filesavesv.svg</file>
+    <file>icons/scalable/ffwd-end.svg</file>
+    <file>icons/scalable/ffwd.svg</file>
+    <file>icons/scalable/navigate.svg</file>
+    <file>icons/scalable/pause.svg</file>
+    <file>icons/scalable/playloop.svg</file>
+    <file>icons/scalable/playpause.svg</file>
+    <file>icons/scalable/play.svg</file>
+    <file>icons/scalable/rewind-start.svg</file>
+    <file>icons/scalable/rewind.svg</file>
+    <file>icons/scalable/select.svg</file>
+    <file>icons/scalable/sv-icon-light.svg</file>
+    <file>icons/scalable/sv-icon.svg</file>
+    <file>icons/scalable/sv-splash.svg</file>
+    <file>icons/scalable/waveform.svg</file>
     <file>icons/waveform.png</file>
     <file>icons/spectrum.png</file>
     <file>icons/spectrogram.png</file>
