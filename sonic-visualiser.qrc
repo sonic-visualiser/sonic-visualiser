@@ -23,6 +23,8 @@
     <file>icons/scalable/sv-icon-light.svg</file>
     <file>icons/scalable/sv-icon.svg</file>
     <file>icons/scalable/sv-splash.svg</file>
+    <file>icons/scalable/sv-splash.png</file>
+    <file>icons/scalable/sv-splash@2x.png</file>
     <file>icons/scalable/waveform.svg</file>
     <file>icons/waveform.png</file>
     <file>icons/spectrum.png</file>
