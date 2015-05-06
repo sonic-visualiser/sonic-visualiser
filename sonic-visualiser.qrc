@@ -17,10 +17,12 @@
     <file>icons/scalable/playloop.svg</file>
     <file>icons/scalable/playpause.svg</file>
     <file>icons/scalable/playselection.svg</file>
+    <file>icons/scalable/solo.svg</file>
     <file>icons/scalable/play.svg</file>
     <file>icons/scalable/rewind-start.svg</file>
     <file>icons/scalable/rewind.svg</file>
     <file>icons/scalable/select.svg</file>
+    <file>icons/scalable/spectrogram.svg</file>
     <file>icons/scalable/sv-icon-light.svg</file>
     <file>icons/scalable/sv-icon.svg</file>
     <file>icons/scalable/sv-splash.svg</file>
