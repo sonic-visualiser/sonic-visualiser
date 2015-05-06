@@ -21,6 +21,8 @@
 #include <QDesktopWidget>
 #include <QSvgRenderer>
 
+#include <cmath>
+
 #include <iostream>
 using namespace std;
 
