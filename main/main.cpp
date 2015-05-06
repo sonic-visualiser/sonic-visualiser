@@ -272,13 +272,15 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
 
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
     QSplashScreen *splash = 0;
 
     QSettings settings;
 
     settings.beginGroup("Preferences");
     if (settings.value("show-splash", true).toBool()) {
-        QPixmap pixmap(":/icons/sv-splash.png");
+        QPixmap pixmap(":/icons/scalable/sv-splash@2x.png");
         QPainter painter;
         painter.begin(&pixmap);
         QString text = QString("v%1").arg(SV_VERSION);
