@@ -21,8 +21,16 @@
     <file>icons/scalable/play.svg</file>
     <file>icons/scalable/rewind-start.svg</file>
     <file>icons/scalable/rewind.svg</file>
+    <file>icons/scalable/undo.svg</file>
+    <file>icons/scalable/redo.svg</file>
     <file>icons/scalable/select.svg</file>
+    <file>icons/scalable/instants.svg</file>
+    <file>icons/scalable/notes.svg</file>
+    <file>icons/scalable/values.svg</file>
+    <file>icons/scalable/regions.svg</file>
     <file>icons/scalable/spectrogram.svg</file>
+    <file>icons/scalable/spectrum.svg</file>
+    <file>icons/scalable/text.svg</file>
     <file>icons/scalable/sv-icon-light.svg</file>
     <file>icons/scalable/sv-icon.svg</file>
     <file>icons/scalable/sv-splash.svg</file>
