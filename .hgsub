@@ -3,3 +3,4 @@ svgui = https://code.soundsoftware.ac.uk/hg/svgui
 svapp = https://code.soundsoftware.ac.uk/hg/svapp
 dataquay = https://bitbucket.org/breakfastquay/dataquay
 sv-dependency-builds = https://code.soundsoftware.ac.uk/hg/sv-dependency-builds
+icons/scalable = https://code.soundsoftware.ac.uk/hg/sv-iconset
