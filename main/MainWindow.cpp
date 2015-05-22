@@ -569,10 +569,12 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    action = new QAction(tr("Export Annotation Layer..."), this);
+    action = new QAction(tr("Export Annotation La&yer..."), this);
+    action->setShortcut(tr("Ctrl+Y"));
     action->setStatusTip(tr("Export layer data to a file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportLayer()));
     connect(this, SIGNAL(canExportLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
     menu->addSeparator();
