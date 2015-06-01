@@ -31,6 +31,11 @@
     <file>icons/scalable/spectrogram.svg</file>
     <file>icons/scalable/spectrum.svg</file>
     <file>icons/scalable/text.svg</file>
+    <file>icons/scalable/timeruler.svg</file>
+    <file>icons/scalable/zoom.svg</file>
+    <file>icons/scalable/zoom-in.svg</file>
+    <file>icons/scalable/zoom-out.svg</file>
+    <file>icons/scalable/zoom-fit.svg</file>
     <file>icons/scalable/sv-icon-light.svg</file>
     <file>icons/scalable/sv-icon.svg</file>
     <file>icons/scalable/sv-splash.svg</file>
@@ -40,7 +45,6 @@
     <file>icons/waveform.png</file>
     <file>icons/spectrum.png</file>
     <file>icons/spectrogram.png</file>
-    <file>icons/timeruler.png</file>
     <file>icons/pane.png</file>
     <file>icons/instants.png</file>
     <file>icons/notes.png</file>
@@ -81,10 +85,6 @@
     <file>icons/measure2mask.xbm</file>
     <file>icons/move.png</file>
     <file>icons/navigate.png</file>
-    <file>icons/zoom.png</file>
-    <file>icons/zoom-in.png</file>
-    <file>icons/zoom-out.png</file>
-    <file>icons/zoom-fit.png</file>
     <file>icons/zoom-reset.png</file>
     <file>icons/undo.png</file>
     <file>icons/redo.png</file>
