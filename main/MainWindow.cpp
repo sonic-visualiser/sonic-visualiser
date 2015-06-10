@@ -565,10 +565,12 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    action = new QAction(tr("Export Annotation Layer..."), this);
+    action = new QAction(tr("Export Annotation La&yer..."), this);
+    action->setShortcut(tr("Ctrl+Y"));
     action->setStatusTip(tr("Export layer data to a file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportLayer()));
     connect(this, SIGNAL(canExportLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
     menu->addSeparator();
@@ -4290,20 +4292,25 @@ MainWindow::modelGenerationFailed(QString transformName, QString message)
 {
     emit hideSplash();
 
+    QString quoted;
+    if (transformName != "") {
+        quoted = QString("\"%1\" ").arg(transformName);
+    }
+    
     if (message != "") {
 
         QMessageBox::warning
             (this,
              tr("Failed to generate layer"),
-             tr("<b>Layer generation failed</b><p>Failed to generate derived layer.<p>The layer transform \"%1\" failed:<p>%2")
-             .arg(transformName).arg(message),
+             tr("<b>Layer generation failed</b><p>Failed to generate derived layer.<p>The layer transform %1failed:<p>%2")
+             .arg(quoted).arg(message),
              QMessageBox::Ok);
     } else {
         QMessageBox::warning
             (this,
              tr("Failed to generate layer"),
-             tr("<b>Layer generation failed</b><p>Failed to generate a derived layer.<p>The layer transform \"%1\" failed.<p>No error information is available.")
-             .arg(transformName),
+             tr("<b>Layer generation failed</b><p>Failed to generate a derived layer.<p>The layer transform %1failed.<p>No error information is available.")
+             .arg(quoted),
              QMessageBox::Ok);
     }
 }
