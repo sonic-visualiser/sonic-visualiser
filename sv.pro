@@ -37,7 +37,7 @@ exists(config.pri) {
 }
 
 CONFIG += qt thread warn_on stl rtti exceptions c++11
-QT += network xml gui widgets
+QT += network xml gui widgets svg
 
 TARGET = "Sonic Visualiser"
 linux*:TARGET = sonic-visualiser
@@ -86,12 +86,14 @@ RESOURCES += sonic-visualiser.qrc
 HEADERS += main/MainWindow.h \
            main/NetworkPermissionTester.h \
            main/Surveyer.h \
+           main/SVSplash.h \
            main/PreferencesDialog.h
 SOURCES += main/main.cpp \
            main/OSCHandler.cpp \
            main/MainWindow.cpp \
            main/NetworkPermissionTester.cpp \
            main/Surveyer.cpp \
+           main/SVSplash.cpp \
            main/PreferencesDialog.cpp 
 
 # for mac integration

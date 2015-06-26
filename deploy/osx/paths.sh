@@ -7,7 +7,7 @@ if [ -z "$app" ]; then
 	exit 2
 fi
 
-frameworks="QtCore QtNetwork QtGui QtXml QtWidgets QtPrintSupport"
+frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtWidgets QtPrintSupport"
 
 echo
 echo "I expect you to have already copied these frameworks from the Qt installation to"
