@@ -3,8 +3,14 @@
     <file>icons/scalable/align.svg</file>
     <file>icons/scalable/colour3d.svg</file>
     <file>icons/scalable/cross.svg</file>
+    <file>icons/scalable/dataedit.svg</file>
     <file>icons/scalable/draw.svg</file>
     <file>icons/scalable/erase.svg</file>
+    <file>icons/scalable/editcopy.svg</file>
+    <file>icons/scalable/editcut.svg</file>
+    <file>icons/scalable/editdelete.svg</file>
+    <file>icons/scalable/editpaste.svg</file>
+    <file>icons/scalable/exit.svg</file>
     <file>icons/scalable/filenew.svg</file>
     <file>icons/scalable/fileopen.svg</file>
     <file>icons/scalable/filesaveas.svg</file>
