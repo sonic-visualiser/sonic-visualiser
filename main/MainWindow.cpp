@@ -2929,7 +2929,7 @@ MainWindow::openSomething()
 
     QString path = getOpenFileName(FileFinder::AnyFile);
 
-    if (path.isEmpty()) return;
+        if (path.isEmpty()) return;
 
     FileOpenStatus status = open(path, ReplaceSession);
 
@@ -2943,9 +2943,9 @@ MainWindow::openSomething()
                               tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(path));
     }
 
-     files_paths[0] = path;
-     QTextStream out(stdout);
-     out << path;
+    files_paths[0] = path;
+    QTextStream out(stdout);
+    out << path;
 
 }
 
@@ -4902,15 +4902,13 @@ void MainWindow::insertLyrics(size_t frame, QString text){
 void MainWindow::importIMAF()
 {
 
-    QString filename;
     int haslyrics; // if this variable != 2 -> there are lyrics
-    filename = QFileDialog::getOpenFileName(this,
-              tr("Import IMAF"), "/", tr("IMAF (*.ima)"));
+    QString path = getOpenFileName(FileFinder::IMAFile);
 
-    if (filename.isEmpty()) return;
+    if (path.isEmpty()) return;
     isIMAF = true;
 
-    haslyrics = mainIMAFdecoder(filename);
+    haslyrics = mainIMAFdecoder(path);
 
     openMP3IMAF();
 
@@ -4938,7 +4936,7 @@ void MainWindow::importIMAF()
           //text decoder
           unsigned char dat,dat1,dat2,dat3;
           FILE *imf;
-          imf = fopen (filename.toStdString().c_str(),"rb");
+          imf = fopen (path.toStdString().c_str(),"rb");
 
           fseek (imf,0,SEEK_SET);
           fseek (imf,24,SEEK_CUR); //jump to 'mdat'
