@@ -235,15 +235,15 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
-    m_playSpeed->setMaximum(200);
-    m_playSpeed->setValue(100);
+    m_playSpeed->setMaximum(120);
+    m_playSpeed->setValue(60);
     m_playSpeed->setFixedWidth(32);
     m_playSpeed->setFixedHeight(32);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
-    m_playSpeed->setObjectName(tr("Playback Speedup"));
-    m_playSpeed->setDefaultValue(100);
-    m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper(0, 200));
+    m_playSpeed->setObjectName(tr("Playback Speed"));
+    m_playSpeed->setRangeMapper(new PlaySpeedRangeMapper);
+    m_playSpeed->setDefaultValue(60);
     m_playSpeed->setShowToolTip(true);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
 	    this, SLOT(playSpeedChanged(int)));
@@ -3869,26 +3869,38 @@ MainWindow::alignToggled()
 void
 MainWindow::playSpeedChanged(int position)
 {
-    PlaySpeedRangeMapper mapper(0, 200);
+    PlaySpeedRangeMapper mapper;
 
     double percent = m_playSpeed->mappedValue();
     double factor = mapper.getFactorForValue(percent);
 
-//    cerr << "speed = " << position << " percent = " << percent << " factor = " << factor << endl;
+//    cerr << "play speed position = " << position << " (range 0-120) percent = " << percent << " factor = " << factor << endl;
 
-    bool something = (position != 100);
+    int centre = m_playSpeed->defaultValue();
 
-    int pc = int(lrint(percent));
+    // Percentage is shown to 0dp if >100, to 1dp if <100; factor is
+    // shown to 3sf
 
-    if (!something) {
+    char pcbuf[30];
+    char facbuf[30];
+    
+    if (position == centre) {
         contextHelpChanged(tr("Playback speed: Normal"));
+    } else if (position < centre) {
+        sprintf(pcbuf, "%.1f", percent);
+        sprintf(facbuf, "%.3g", 1.0 / factor);
+        contextHelpChanged(tr("Playback speed: %1% (%2x slower)")
+                           .arg(pcbuf)
+                           .arg(facbuf));
     } else {
-        contextHelpChanged(tr("Playback speed: %1%2%")
-                           .arg(position > 100 ? "+" : "")
-                           .arg(pc));
+        sprintf(pcbuf, "%.0f", percent);
+        sprintf(facbuf, "%.3g", factor);
+        contextHelpChanged(tr("Playback speed: %1% (%2x faster)")
+                           .arg(pcbuf)
+                           .arg(facbuf));
     }
 
-    m_playSource->setTimeStretch(factor);
+    m_playSource->setTimeStretch(1.0 / factor); // factor is a speedup
 
     updateMenuStates();
 }
