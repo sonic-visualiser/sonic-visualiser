@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = sub_dataquay svcore svgui svapp sub_sv 
+SUBDIRS = sub_bq sub_dataquay svcore svgui svapp sub_sv 
 
 !win* {
     # We should build and run the tests on any platform,
@@ -8,6 +8,7 @@ SUBDIRS = sub_dataquay svcore svgui svapp sub_sv
     SUBDIRS += svcore/base/test svcore/data/fileio/test svcore/data/model/test
 }
 
+sub_bq.file = bq.pro
 sub_sv.file = sv.pro
 
 sub_dataquay.file = dataquay/lib.pro

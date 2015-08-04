@@ -22,13 +22,14 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "widgets/CommandHistory.h"
-#include "audioio/AudioCallbackPlaySource.h"
-#include "audioio/AudioCallbackPlayTarget.h"
+#include "audio/AudioCallbackPlaySource.h"
 #include "framework/Document.h"
 #include "data/fileio/WavFileWriter.h"
 #include "transform/TransformFactory.h"
 #include "widgets/Fader.h"
 #include "widgets/AudioDial.h"
+
+#include <bqaudioio/SystemPlaybackTarget.h>
 
 #include <QFileInfo>
 
