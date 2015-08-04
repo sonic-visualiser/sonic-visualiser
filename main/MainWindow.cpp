@@ -57,10 +57,8 @@
 #include "widgets/LabelCounterInputDialog.h"
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
-#include "audioio/AudioCallbackPlaySource.h"
-#include "audioio/AudioCallbackPlayTarget.h"
-#include "audioio/AudioTargetFactory.h"
-#include "audioio/PlaySpeedRangeMapper.h"
+#include "audio/AudioCallbackPlaySource.h"
+#include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
 #include "data/fileio/WavFileWriter.h"
@@ -93,6 +91,8 @@
 #include <vamp-hostsdk/PluginBase.h>
 #include "plugin/api/ladspa.h"
 #include "plugin/api/dssi.h"
+
+#include <bqaudioio/SystemPlaybackTarget.h>
 
 #include <QApplication>
 #include <QMessageBox>
@@ -4239,7 +4239,15 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     if (m_playTarget) {
         connect(m_fader, SIGNAL(valueChanged(float)),
-                m_playTarget, SLOT(setOutputGain(float)));
+                this, SLOT(mainModelGainChanged(float)));
+    }
+}
+
+void
+MainWindow::mainModelGainChanged(float gain)
+{
+    if (m_playTarget) {
+        m_playTarget->setOutputGain(gain);
     }
 }
 

@@ -648,8 +648,8 @@ libpulse_LIBS
 libpulse_CFLAGS
 JACK_LIBS
 JACK_CFLAGS
-portaudio_2_0_LIBS
-portaudio_2_0_CFLAGS
+portaudio_LIBS
+portaudio_CFLAGS
 liblo_LIBS
 liblo_CFLAGS
 serd_LIBS
@@ -662,8 +662,8 @@ vamphostsdk_LIBS
 vamphostsdk_CFLAGS
 vamp_LIBS
 vamp_CFLAGS
-samplerate_LIBS
-samplerate_CFLAGS
+libsamplerate_LIBS
+libsamplerate_CFLAGS
 sndfile_LIBS
 sndfile_CFLAGS
 fftw3f_LIBS
@@ -760,8 +760,8 @@ fftw3f_CFLAGS
 fftw3f_LIBS
 sndfile_CFLAGS
 sndfile_LIBS
-samplerate_CFLAGS
-samplerate_LIBS
+libsamplerate_CFLAGS
+libsamplerate_LIBS
 vamp_CFLAGS
 vamp_LIBS
 vamphostsdk_CFLAGS
@@ -774,8 +774,8 @@ serd_CFLAGS
 serd_LIBS
 liblo_CFLAGS
 liblo_LIBS
-portaudio_2_0_CFLAGS
-portaudio_2_0_LIBS
+portaudio_CFLAGS
+portaudio_LIBS
 JACK_CFLAGS
 JACK_LIBS
 libpulse_CFLAGS
@@ -1429,10 +1429,10 @@ Some influential environment variables:
               C compiler flags for sndfile, overriding pkg-config
   sndfile_LIBS
               linker flags for sndfile, overriding pkg-config
-  samplerate_CFLAGS
-              C compiler flags for samplerate, overriding pkg-config
-  samplerate_LIBS
-              linker flags for samplerate, overriding pkg-config
+  libsamplerate_CFLAGS
+              C compiler flags for libsamplerate, overriding pkg-config
+  libsamplerate_LIBS
+              linker flags for libsamplerate, overriding pkg-config
   vamp_CFLAGS C compiler flags for vamp, overriding pkg-config
   vamp_LIBS   linker flags for vamp, overriding pkg-config
   vamphostsdk_CFLAGS
@@ -1450,10 +1450,10 @@ Some influential environment variables:
   liblo_CFLAGS
               C compiler flags for liblo, overriding pkg-config
   liblo_LIBS  linker flags for liblo, overriding pkg-config
-  portaudio_2_0_CFLAGS
-              C compiler flags for portaudio_2_0, overriding pkg-config
-  portaudio_2_0_LIBS
-              linker flags for portaudio_2_0, overriding pkg-config
+  portaudio_CFLAGS
+              C compiler flags for portaudio, overriding pkg-config
+  portaudio_LIBS
+              linker flags for portaudio, overriding pkg-config
   JACK_CFLAGS C compiler flags for JACK, overriding pkg-config
   JACK_LIBS   linker flags for JACK, overriding pkg-config
   libpulse_CFLAGS
@@ -5009,18 +5009,18 @@ fi
 fi
 
 
-SV_MODULE_MODULE=samplerate
+SV_MODULE_MODULE=libsamplerate
 SV_MODULE_VERSION_TEST="samplerate >= 0.1.2"
 SV_MODULE_HEADER=samplerate.h
 SV_MODULE_LIB=samplerate
 SV_MODULE_FUNC=src_new
-SV_MODULE_HAVE=HAVE_$(echo samplerate | tr 'a-z' 'A-Z')
+SV_MODULE_HAVE=HAVE_$(echo libsamplerate | tr 'a-z' 'A-Z')
 SV_MODULE_FAILED=1
-if test -n "$samplerate_LIBS" ; then
+if test -n "$libsamplerate_LIBS" ; then
    { $as_echo "$as_me:${as_lineno-$LINENO}: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&5
 $as_echo "$as_me: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&6;}
-   CXXFLAGS="$CXXFLAGS $samplerate_CFLAGS"
-   LIBS="$LIBS $samplerate_LIBS"
+   CXXFLAGS="$CXXFLAGS $libsamplerate_CFLAGS"
+   LIBS="$LIBS $libsamplerate_LIBS"
    SV_MODULE_FAILED=""
 fi
 if test -z "$SV_MODULE_VERSION_TEST" ; then
@@ -5029,11 +5029,11 @@ fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for samplerate" >&5
-$as_echo_n "checking for samplerate... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libsamplerate" >&5
+$as_echo_n "checking for libsamplerate... " >&6; }
 
-if test -n "$samplerate_CFLAGS"; then
-    pkg_cv_samplerate_CFLAGS="$samplerate_CFLAGS"
+if test -n "$libsamplerate_CFLAGS"; then
+    pkg_cv_libsamplerate_CFLAGS="$libsamplerate_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
@@ -5041,7 +5041,7 @@ if test -n "$samplerate_CFLAGS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_samplerate_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+  pkg_cv_libsamplerate_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5049,8 +5049,8 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$samplerate_LIBS"; then
-    pkg_cv_samplerate_LIBS="$samplerate_LIBS"
+if test -n "$libsamplerate_LIBS"; then
+    pkg_cv_libsamplerate_LIBS="$libsamplerate_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
@@ -5058,7 +5058,7 @@ if test -n "$samplerate_LIBS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_samplerate_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+  pkg_cv_libsamplerate_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5079,12 +5079,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        samplerate_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+	        libsamplerate_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
         else
-	        samplerate_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+	        libsamplerate_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$samplerate_PKG_ERRORS" >&5
+	echo "$libsamplerate_PKG_ERRORS" >&5
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
 $as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
@@ -5094,11 +5094,11 @@ $as_echo "no" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
 $as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
-	samplerate_CFLAGS=$pkg_cv_samplerate_CFLAGS
-	samplerate_LIBS=$pkg_cv_samplerate_LIBS
+	libsamplerate_CFLAGS=$pkg_cv_libsamplerate_CFLAGS
+	libsamplerate_LIBS=$pkg_cv_libsamplerate_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $samplerate_CFLAGS";LIBS="$LIBS $samplerate_LIBS";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $libsamplerate_CFLAGS";LIBS="$LIBS $libsamplerate_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
@@ -6071,18 +6071,18 @@ fi
 fi
 
 
-SV_MODULE_MODULE=portaudio_2_0
+SV_MODULE_MODULE=portaudio
 SV_MODULE_VERSION_TEST="portaudio-2.0 >= 19"
 SV_MODULE_HEADER=portaudio.h
 SV_MODULE_LIB=portaudio
 SV_MODULE_FUNC=Pa_IsFormatSupported
-SV_MODULE_HAVE=HAVE_$(echo portaudio_2_0 | tr 'a-z' 'A-Z')
+SV_MODULE_HAVE=HAVE_$(echo portaudio | tr 'a-z' 'A-Z')
 SV_MODULE_FAILED=1
-if test -n "$portaudio_2_0_LIBS" ; then
+if test -n "$portaudio_LIBS" ; then
    { $as_echo "$as_me:${as_lineno-$LINENO}: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&5
 $as_echo "$as_me: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&6;}
-   CXXFLAGS="$CXXFLAGS $portaudio_2_0_CFLAGS"
-   LIBS="$LIBS $portaudio_2_0_LIBS"
+   CXXFLAGS="$CXXFLAGS $portaudio_CFLAGS"
+   LIBS="$LIBS $portaudio_LIBS"
    SV_MODULE_FAILED=""
 fi
 if test -z "$SV_MODULE_VERSION_TEST" ; then
@@ -6091,11 +6091,11 @@ fi
 if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
 
 pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for portaudio_2_0" >&5
-$as_echo_n "checking for portaudio_2_0... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for portaudio" >&5
+$as_echo_n "checking for portaudio... " >&6; }
 
-if test -n "$portaudio_2_0_CFLAGS"; then
-    pkg_cv_portaudio_2_0_CFLAGS="$portaudio_2_0_CFLAGS"
+if test -n "$portaudio_CFLAGS"; then
+    pkg_cv_portaudio_CFLAGS="$portaudio_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
@@ -6103,7 +6103,7 @@ if test -n "$portaudio_2_0_CFLAGS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_portaudio_2_0_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+  pkg_cv_portaudio_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -6111,8 +6111,8 @@ fi
  else
     pkg_failed=untried
 fi
-if test -n "$portaudio_2_0_LIBS"; then
-    pkg_cv_portaudio_2_0_LIBS="$portaudio_2_0_LIBS"
+if test -n "$portaudio_LIBS"; then
+    pkg_cv_portaudio_LIBS="$portaudio_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
@@ -6120,7 +6120,7 @@ if test -n "$portaudio_2_0_LIBS"; then
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_portaudio_2_0_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+  pkg_cv_portaudio_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -6141,12 +6141,12 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        portaudio_2_0_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+	        portaudio_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
         else
-	        portaudio_2_0_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+	        portaudio_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
-	echo "$portaudio_2_0_PKG_ERRORS" >&5
+	echo "$portaudio_PKG_ERRORS" >&5
 
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
 $as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
@@ -6156,11 +6156,11 @@ $as_echo "no" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
 $as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
-	portaudio_2_0_CFLAGS=$pkg_cv_portaudio_2_0_CFLAGS
-	portaudio_2_0_LIBS=$pkg_cv_portaudio_2_0_LIBS
+	portaudio_CFLAGS=$pkg_cv_portaudio_CFLAGS
+	portaudio_LIBS=$pkg_cv_portaudio_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $portaudio_2_0_CFLAGS";LIBS="$LIBS $portaudio_2_0_LIBS";SV_MODULE_FAILED=""
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $portaudio_CFLAGS";LIBS="$LIBS $portaudio_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then
