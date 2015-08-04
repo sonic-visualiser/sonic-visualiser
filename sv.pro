@@ -23,7 +23,7 @@ exists(config.pri) {
     CONFIG += release
     DEFINES += NDEBUG BUILD_RELEASE NO_TIMING
 
-    DEFINES += HAVE_BZ2 HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_SAMPLERATE HAVE_VAMP HAVE_VAMPHOSTSDK HAVE_RUBBERBAND HAVE_DATAQUAY HAVE_LIBLO HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO_2_0
+    DEFINES += HAVE_BZ2 HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_SAMPLERATE HAVE_VAMP HAVE_VAMPHOSTSDK HAVE_RUBBERBAND HAVE_DATAQUAY HAVE_LIBLO HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO
 
     LIBS += -lbz2 -lrubberband -lvamp-hostsdk -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -lz -lsord-0 -lserd-0 -llo
 
@@ -43,8 +43,8 @@ TARGET = "Sonic Visualiser"
 linux*:TARGET = sonic-visualiser
 solaris*:TARGET = sonic-visualiser
 
-DEPENDPATH += . svcore svgui svapp
-INCLUDEPATH += . svcore svgui svapp
+DEPENDPATH += . bqaudioio svcore svgui svapp
+INCLUDEPATH += . bqaudioio svcore svgui svapp
 
 TRANSLATIONS += i18n/sonic-visualiser_ru.ts i18n/sonic-visualiser_en_GB.ts i18n/sonic-visualiser_en_US.ts i18n/sonic-visualiser_cs_CZ.ts
 
@@ -56,7 +56,8 @@ RC_FILE = icons/sv.rc
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-MY_LIBS = -Lsvapp -Lsvgui -Lsvcore -Ldataquay -lsvapp -lsvgui -lsvcore -ldataquay
+MY_LIBS = -Lsvapp -Lsvgui -Lsvcore -Ldataquay -L. \
+          -lsvapp -lsvgui -lsvcore -ldataquay -lbq
 
 linux* {
 MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic

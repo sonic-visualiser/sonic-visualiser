@@ -39,8 +39,9 @@
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
 #include "base/Preferences.h"
-#include "audioio/AudioTargetFactory.h"
 #include "base/ResourceFinder.h"
+
+//#include "audioio/AudioTargetFactory.h"
 
 #include "version.h"
 
@@ -149,11 +150,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(octaveSystem, SIGNAL(currentIndexChanged(int)),
             this, SLOT(octaveSystemChanged(int)));
 
+    QSettings settings;
+
+    /*!!! restore
     QComboBox *audioDevice = new QComboBox;
     std::vector<QString> devices =
         AudioTargetFactory::getInstance()->getCallbackTargetNames();
     
-    QSettings settings;
     settings.beginGroup("Preferences");
     QString targetName = settings.value("audio-target", "").toString();
     settings.endGroup();
@@ -166,7 +169,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     connect(audioDevice, SIGNAL(currentIndexChanged(int)),
             this, SLOT(audioDeviceChanged(int)));
-
+    */
     QComboBox *resampleQuality = new QComboBox;
 
     int rsq = prefs->getPropertyRangeAndValue("Resample Quality", &min, &max,
@@ -328,8 +331,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
 
-    subgrid->addWidget(new QLabel(tr("Playback audio device:")), row, 0);
-    subgrid->addWidget(audioDevice, row++, 1, 1, 2);
+//!!!    subgrid->addWidget(new QLabel(tr("Playback audio device:")), row, 0);
+//!!!    subgrid->addWidget(audioDevice, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Resample Quality"))),
@@ -671,14 +674,14 @@ PreferencesDialog::applyClicked()
     
     prefs->setProperty("Octave Numbering System", m_octaveSystem);
 
-    std::vector<QString> devices =
-        AudioTargetFactory::getInstance()->getCallbackTargetNames();
+//!!!    std::vector<QString> devices =
+//!!!        AudioTargetFactory::getInstance()->getCallbackTargetNames();
 
     QSettings settings;
     settings.beginGroup("Preferences");
     QString permishTag = QString("network-permission-%1").arg(SV_VERSION);
     settings.setValue(permishTag, m_networkPermission);
-    settings.setValue("audio-target", devices[m_audioDevice]);
+//!!!    settings.setValue("audio-target", devices[m_audioDevice]);
     settings.setValue("locale", m_currentLocale);
     settings.endGroup();
 
