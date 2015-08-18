@@ -130,8 +130,8 @@ using std::map;
 using std::set;
 
 
-MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
-    MainWindowBase(withAudioOutput, true),
+MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
+    MainWindowBase(options),
     m_overview(0),
     m_mainMenusCreated(false),
     m_paneMenu(0),
