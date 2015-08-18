@@ -223,7 +223,6 @@ public:
 protected:
     MainWindow *m_mainWindow;
     bool event(QEvent *);
-
 };
 
 int
@@ -345,7 +344,10 @@ main(int argc, char **argv)
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow *gui = new MainWindow(audioOutput, oscSupport);
+    MainWindow::SoundOptions options = MainWindow::WithEverything;
+    if (!audioOutput) options = 0;
+    
+    MainWindow *gui = new MainWindow(options, oscSupport);
     application.setMainWindow(gui);
     InteractiveFileFinder::setParentWidget(gui);
     TransformUserConfigurator::setParentWidget(gui);

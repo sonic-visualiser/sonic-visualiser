@@ -32,8 +32,7 @@ class MainWindow : public MainWindowBase
     Q_OBJECT
 
 public:
-    MainWindow(bool withAudioOutput = true,
-               bool withOSCSupport = true);
+    MainWindow(SoundOptions options, bool withOSCSupport = true);
     virtual ~MainWindow();
 
 signals:
