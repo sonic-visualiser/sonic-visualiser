@@ -187,6 +187,7 @@ protected:
     QAction                 *m_ffwdSimilarAction;
     QAction                 *m_ffwdEndAction;
     QAction                 *m_playAction;
+    QAction                 *m_recordAction;
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
     QAction                 *m_manageTemplatesAction;
