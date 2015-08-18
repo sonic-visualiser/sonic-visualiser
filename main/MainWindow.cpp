@@ -58,6 +58,7 @@
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
 #include "audio/AudioCallbackPlaySource.h"
+#include "audio/AudioRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
@@ -155,6 +156,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_ffwdSimilarAction(0),
     m_ffwdEndAction(0),
     m_playAction(0),
+    m_recordAction(0),
     m_playSelectionAction(0),
     m_playLoopAction(0),
     m_soloModified(false),
@@ -1984,6 +1986,17 @@ MainWindow::setupToolbars()
     m_ffwdEndAction->setStatusTip(tr("Fast-forward to the end"));
     connect(m_ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
     connect(this, SIGNAL(canPlay(bool)), m_ffwdEndAction, SLOT(setEnabled(bool)));
+
+    m_recordAction = toolbar->addAction(il.load("record"),
+                                        tr("Record"));
+    m_recordAction->setCheckable(true);
+    m_recordAction->setShortcut(tr("Ctrl+Space"));
+    m_recordAction->setStatusTip(tr("Record a new audio file"));
+    connect(m_recordAction, SIGNAL(triggered()), this, SLOT(record()));
+    connect(m_recordTarget, SIGNAL(recordStatusChanged(bool)),
+	    m_recordAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canRecord(bool)),
+            m_recordAction, SLOT(setEnabled(bool)));
 
     toolbar = addToolBar(tr("Play Mode Toolbar"));
 
