@@ -93,6 +93,7 @@
 #include "plugin/api/dssi.h"
 
 #include <bqaudioio/SystemPlaybackTarget.h>
+#include <bqaudioio/SystemAudioIO.h>
 
 #include <QApplication>
 #include <QMessageBox>
@@ -2043,6 +2044,7 @@ MainWindow::setupToolbars()
     }
 
     m_keyReference->registerShortcut(m_playAction);
+    m_keyReference->registerShortcut(m_recordAction);
     m_keyReference->registerShortcut(m_playSelectionAction);
     m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
@@ -2069,6 +2071,8 @@ MainWindow::setupToolbars()
     menu->addAction(m_rwdStartAction);
     menu->addAction(m_ffwdEndAction);
     menu->addSeparator();
+    menu->addAction(m_recordAction);
+    menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(m_playAction);
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
@@ -2081,6 +2085,8 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdStartAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdEndAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
@@ -2288,7 +2294,7 @@ MainWindow::updateMenuStates()
         (haveCurrentPane &&
          (currentLayer != 0));
     bool havePlayTarget =
-	(m_playTarget != 0);
+	(m_playTarget != 0 || m_audioIO != 0);
     bool haveSelection = 
 	(m_viewManager &&
 	 !m_viewManager->getSelections().empty());
@@ -4245,7 +4251,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     MainWindowBase::mainModelChanged(model);
 
-    if (m_playTarget) {
+    if (m_playTarget || m_audioIO) {
         connect(m_fader, SIGNAL(valueChanged(float)),
                 this, SLOT(mainModelGainChanged(float)));
     }
@@ -4256,6 +4262,8 @@ MainWindow::mainModelGainChanged(float gain)
 {
     if (m_playTarget) {
         m_playTarget->setOutputGain(gain);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputGain(gain);
     }
 }
 

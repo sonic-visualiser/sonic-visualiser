@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 app="$1"
 if [ -z "$app" ]; then
 	echo "Usage: $0 <appname>"
