@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Execute this from the top-level directory of the project (the one
 # that contains the .app bundle).  Supply the name of the .app bundle
 # as argument (the target will use $app.app regardless, but we need
@@ -16,11 +18,14 @@ if [ -z "$source" ] || [ ! -d "$source" ] || [ -z "$dmg" ]; then
 fi
 app=`basename "$source" .app`
 
+set -u
+
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
-case "$version" in
+stem=${version%%-*}
+case "$stem" in
     [0-9].[0-9]) bundleVersion="$version".0 ;;
     [0-9].[0-9].[0-9]) bundleVersion="$version" ;;
-    *) echo "Error: Version $version is neither two- nor three-part number" ;;
+    *) echo "Error: Version stem $stem (of version $version) is neither two- nor three-part number" ;;
 esac
 
 echo
