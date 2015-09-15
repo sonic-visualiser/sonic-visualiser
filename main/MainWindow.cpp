@@ -303,6 +303,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_activityLog->hide();
 
     m_unitConverter->hide();
+
+    setAudioRecordMode(RecordCreateAdditionalModel);
     
     newSession();
 
@@ -585,6 +587,13 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Export a single pane to an image file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportImage()));
     connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Browse Recorded Audio Folder"), this);
+    action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
+    connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
     menu->addAction(action);
 
     menu->addSeparator();
@@ -2048,6 +2057,7 @@ MainWindow::setupToolbars()
     }
 
     m_keyReference->registerShortcut(m_playAction);
+    m_keyReference->registerShortcut(m_recordAction);
     m_keyReference->registerShortcut(m_playSelectionAction);
     m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
@@ -2060,6 +2070,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(m_ffwdEndAction);
 
     menu->addAction(m_playAction);
+    menu->addAction(m_recordAction);
     menu->addAction(m_playSelectionAction);
     menu->addAction(m_playLoopAction);
     menu->addAction(m_soloAction);
@@ -2076,6 +2087,7 @@ MainWindow::setupToolbars()
     menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(m_playAction);
+    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
@@ -2892,6 +2904,17 @@ MainWindow::exportImage()
     }
     
     delete image;
+}
+
+void
+MainWindow::browseRecordedAudio()
+{
+    if (!m_recordTarget) return;
+
+    QString path = m_recordTarget->getRecordFolder();
+    if (path == "") return;
+
+    openLocalFolder(path);
 }
 
 void
