@@ -3,11 +3,11 @@ TEMPLATE = app
 
 win32-g++ {
     INCLUDEPATH += sv-dependency-builds/win32-mingw/include
-    LIBS += -Lsv-dependency-builds/win32-mingw/lib
+    LIBS += -Lrelease -Lsv-dependency-builds/win32-mingw/lib
 }
 win32-msvc* {
     INCLUDEPATH += sv-dependency-builds/win32-msvc/include
-    LIBS += -Lsv-dependency-builds/win32-msvc/lib
+    LIBS += -Lrelease -Lsv-dependency-builds/win32-msvc/lib
 }
 mac* {
     INCLUDEPATH += sv-dependency-builds/osx/include
