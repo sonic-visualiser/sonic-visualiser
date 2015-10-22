@@ -1,3 +1,18 @@
+Changes in Sonic Visualiser 2.5 since the previous release 2.4.1:
+
+ - Add unit-converter dialog, for converting between various pitch and
+   timing units
+
+ - Fix failure to reload note layers from session file
+
+ - Use a more sensible scale for the play-speed dial
+
+ - Fix crash when importing very wide CSV files
+
+ - Fix generation of wrong layer type from some CSV files
+
+ - Fix failure to export last instant in a time-instant layer
+
 Changes in Sonic Visualiser 2.4.1 since the previous release 2.4:
 
  - Fix a crash when rendering certain colour 3d plot layers
