@@ -39,6 +39,21 @@ echo "Fixing up paths."
 deploy/osx/paths.sh "$app"
 
 echo
+echo "Copying in qt.conf to set local-only plugin paths."
+echo "Make sure all necessary Qt plugins are in $source/Contents/plugins/*"
+echo "You probably want platforms/, accessible/ and imageformats/ subdirectories."
+cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
+
+echo
+echo "Writing version $bundleVersion in to bundle."
+echo "(This should be a three-part number: major.minor.point)"
+
+perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
+    > "$source"/Contents/Info.plist
+
+echo "Done: check $source/Contents/Info.plist for sanity please"
+
+echo
 echo "Making target tree."
 
 volume="$app"-"$version"
@@ -52,21 +67,6 @@ cp README README.OSC COPYING CHANGELOG "$volume/"
 cp -rp "$source" "$target"
 
 echo "Done"
-
-echo
-echo "Copying in qt.conf to set local-only plugin paths."
-echo "Make sure all necessary Qt plugins are in $target/Contents/plugins/*"
-echo "You probably want platforms/, accessible/ and imageformats/ subdirectories."
-cp deploy/osx/qt.conf "$target"/Contents/Resources/qt.conf
-
-echo
-echo "Writing version $bundleVersion in to bundle."
-echo "(This should be a three-part number: major.minor.point)"
-
-perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
-    > "$target"/Contents/Info.plist
-
-echo "Done: check $target/Contents/Info.plist for sanity please"
 
 deploy/osx/sign.sh "$volume" || exit 1
 

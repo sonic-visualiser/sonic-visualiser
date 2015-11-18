@@ -50,6 +50,10 @@ deps=`bash "$depdir"/debian-dependencies.sh "$program"`
 
 perl -i -p -e "s/Depends: .*/$deps/" "$targetdir"/DEBIAN/control
 
+control_ver=${version%-?}
+
+perl -i -p -e "s/Version: .*/Version: $control_ver/" "$targetdir"/DEBIAN/control
+
 bash "$depdir"/fix-lintian-bits.sh "$targetdir"
 
 sudo dpkg-deb --build "$targetdir" && lintian "$targetdir".deb

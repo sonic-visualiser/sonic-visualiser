@@ -4355,8 +4355,8 @@ CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 
 if test "x$GCC" = "xyes"; then
-   	CXXFLAGS_ANY="-Wall -Wextra -Werror -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
-        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g"
+   	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O2"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
 fi
