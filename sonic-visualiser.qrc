@@ -32,6 +32,8 @@
     <file>icons/scalable/undo.svg</file>
     <file>icons/scalable/redo.svg</file>
     <file>icons/scalable/select.svg</file>
+    <file>icons/scalable/measure.svg</file>
+    <file>icons/scalable/speaker.svg</file>
     <file>icons/scalable/instants.svg</file>
     <file>icons/scalable/notes.svg</file>
     <file>icons/scalable/values.svg</file>
