@@ -300,6 +300,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     connect(this, SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
     connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
+
     m_activityLog->hide();
 
     m_unitConverter->hide();
@@ -328,6 +329,9 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_surveyer = 0;
         m_versionTester = 0;
     }
+
+    QString warning = TransformFactory::getInstance()->getPluginPopulationWarning();
+    if (warning != "") pluginPopulationWarning(warning);
 }
 
 MainWindow::~MainWindow()
@@ -4134,6 +4138,12 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
         (this, tr("Audio processing overload"),
          tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
     shownOnce = true;
+}
+
+void
+MainWindow::pluginPopulationWarning(QString warning)
+{
+    QMessageBox::warning(this, tr("Problems loading plugins"), warning);
 }
 
 void
