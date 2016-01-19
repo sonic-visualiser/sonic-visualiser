@@ -210,7 +210,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(showSplash, SIGNAL(stateChanged(int)),
             this, SLOT(showSplashChanged(int)));
 
-#ifndef Q_OS_MAC
+#ifdef NOT_DEFINED // This no longer works correctly on any platform AFAICS
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
                                              &deflt);
@@ -377,7 +377,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
 
-#ifndef Q_OS_MAC
+#ifdef NOT_DEFINED // see earlier
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Background Mode"))),
                        row, 0);
