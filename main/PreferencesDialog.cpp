@@ -40,6 +40,7 @@
 #include "widgets/IconLoader.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
+#include "layer/ColourMapper.h"
 
 //#include "audioio/AudioTargetFactory.h"
 
@@ -123,6 +124,25 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(propertyLayout, SIGNAL(currentIndexChanged(int)),
             this, SLOT(propertyLayoutChanged(int)));
 
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    m_spectrogramGColour = (settings.value("spectrogram-colour",
+                                           int(ColourMapper::Green)).toInt());
+    m_spectrogramMColour = (settings.value("spectrogram-melodic-colour",
+                                           int(ColourMapper::Sunset)).toInt());
+    settings.endGroup();
+    QComboBox *spectrogramGColour = new QComboBox;
+    QComboBox *spectrogramMColour = new QComboBox;
+    for (i = 0; i < ColourMapper::getColourMapCount(); ++i) {
+        spectrogramGColour->addItem(ColourMapper::getColourMapName(i));
+        spectrogramMColour->addItem(ColourMapper::getColourMapName(i));
+        if (i == m_spectrogramGColour) spectrogramGColour->setCurrentIndex(i);
+        if (i == m_spectrogramMColour) spectrogramMColour->setCurrentIndex(i);
+    }
+    connect(spectrogramGColour, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(spectrogramGColourChanged(int)));
+    connect(spectrogramMColour, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(spectrogramMColourChanged(int)));
 
     m_tuningFrequency = prefs->getTuningFrequency();
 
@@ -149,8 +169,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     connect(octaveSystem, SIGNAL(currentIndexChanged(int)),
             this, SLOT(octaveSystemChanged(int)));
-
-    QSettings settings;
 
     /*!!! restore
     QComboBox *audioDevice = new QComboBox;
@@ -377,6 +395,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
 
+    subgrid->addWidget(new QLabel(tr("Default spectrogram color:")),
+                       row, 0);
+    subgrid->addWidget(spectrogramGColour, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Default melodic spectrogram color:")),
+                       row, 0);
+    subgrid->addWidget(spectrogramMColour, row++, 1, 1, 2);
+
 #ifdef NOT_DEFINED // see earlier
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Background Mode"))),
@@ -534,6 +560,20 @@ void
 PreferencesDialog::spectrogramXSmoothingChanged(int smoothing)
 {
     m_spectrogramXSmoothing = smoothing;
+    m_applyButton->setEnabled(true);
+}
+
+void
+PreferencesDialog::spectrogramGColourChanged(int colour)
+{
+    m_spectrogramGColour = colour;
+    m_applyButton->setEnabled(true);
+}
+
+void
+PreferencesDialog::spectrogramMColourChanged(int colour)
+{
+    m_spectrogramMColour = colour;
     m_applyButton->setEnabled(true);
 }
 
@@ -710,6 +750,8 @@ PreferencesDialog::applyClicked()
 #ifdef Q_OS_MAC
     settings.setValue("scaledHiDpi", m_retina);
 #endif
+    settings.setValue("spectrogram-colour", m_spectrogramGColour);
+    settings.setValue("spectrogram-melodic-colour", m_spectrogramMColour);
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
