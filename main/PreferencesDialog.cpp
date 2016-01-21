@@ -130,19 +130,26 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                            int(ColourMapper::Green)).toInt());
     m_spectrogramMColour = (settings.value("spectrogram-melodic-colour",
                                            int(ColourMapper::Sunset)).toInt());
+    m_colour3DColour = (settings.value("colour-3d-plot-colour",
+                                       int(ColourMapper::Green)).toInt());
     settings.endGroup();
     QComboBox *spectrogramGColour = new QComboBox;
     QComboBox *spectrogramMColour = new QComboBox;
+    QComboBox *colour3DColour = new QComboBox;
     for (i = 0; i < ColourMapper::getColourMapCount(); ++i) {
         spectrogramGColour->addItem(ColourMapper::getColourMapName(i));
         spectrogramMColour->addItem(ColourMapper::getColourMapName(i));
+        colour3DColour->addItem(ColourMapper::getColourMapName(i));
         if (i == m_spectrogramGColour) spectrogramGColour->setCurrentIndex(i);
         if (i == m_spectrogramMColour) spectrogramMColour->setCurrentIndex(i);
+        if (i == m_colour3DColour) colour3DColour->setCurrentIndex(i);
     }
     connect(spectrogramGColour, SIGNAL(currentIndexChanged(int)),
             this, SLOT(spectrogramGColourChanged(int)));
     connect(spectrogramMColour, SIGNAL(currentIndexChanged(int)),
             this, SLOT(spectrogramMColourChanged(int)));
+    connect(colour3DColour, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(colour3DColourChanged(int)));
 
     m_tuningFrequency = prefs->getTuningFrequency();
 
@@ -403,6 +410,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(spectrogramMColour, row++, 1, 1, 2);
 
+    subgrid->addWidget(new QLabel(tr("Default color 3D plot color:")),
+                       row, 0);
+    subgrid->addWidget(colour3DColour, row++, 1, 1, 2);
+
 #ifdef NOT_DEFINED // see earlier
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Background Mode"))),
@@ -574,6 +585,13 @@ void
 PreferencesDialog::spectrogramMColourChanged(int colour)
 {
     m_spectrogramMColour = colour;
+    m_applyButton->setEnabled(true);
+}
+
+void
+PreferencesDialog::colour3DColourChanged(int colour)
+{
+    m_colour3DColour = colour;
     m_applyButton->setEnabled(true);
 }
 
@@ -752,6 +770,7 @@ PreferencesDialog::applyClicked()
 #endif
     settings.setValue("spectrogram-colour", m_spectrogramGColour);
     settings.setValue("spectrogram-melodic-colour", m_spectrogramMColour);
+    settings.setValue("colour-3d-plot-colour", m_colour3DColour);
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
