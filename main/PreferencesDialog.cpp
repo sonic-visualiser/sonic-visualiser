@@ -402,15 +402,15 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(propertyLayout, row++, 1, 1, 2);
 
-    subgrid->addWidget(new QLabel(tr("Default spectrogram color:")),
+    subgrid->addWidget(new QLabel(tr("Default spectrogram colour:")),
                        row, 0);
     subgrid->addWidget(spectrogramGColour, row++, 1, 1, 2);
 
-    subgrid->addWidget(new QLabel(tr("Default melodic spectrogram color:")),
+    subgrid->addWidget(new QLabel(tr("Default melodic spectrogram colour:")),
                        row, 0);
     subgrid->addWidget(spectrogramMColour, row++, 1, 1, 2);
 
-    subgrid->addWidget(new QLabel(tr("Default color 3D plot color:")),
+    subgrid->addWidget(new QLabel(tr("Default colour 3D plot colour:")),
                        row, 0);
     subgrid->addWidget(colour3DColour, row++, 1, 1, 2);
 
