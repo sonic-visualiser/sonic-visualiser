@@ -3275,19 +3275,19 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&amp;Export Audio Data...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vyvést zvuková data...</translation>
     </message>
     <message>
         <source>Export audio from selection into a data file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést zvuk z výběru do datového souboru</translation>
     </message>
     <message>
         <source>Export the selected regions into a single file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést vybrané oblasti do jednoho souboru</translation>
     </message>
     <message>
         <source>Export the whole file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést celý soubor</translation>
     </message>
 </context>
 <context>
@@ -4476,27 +4476,27 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Follow system locale</source>
-        <translation type="unfinished"></translation>
+        <translation>Použít jazyk systému</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruština</translation>
     </message>
     <message>
         <source>British English</source>
-        <translation type="unfinished"></translation>
+        <translation>Britská angličtina</translation>
     </message>
     <message>
         <source>American English</source>
-        <translation type="unfinished"></translation>
+        <translation>Americká angličtina</translation>
     </message>
     <message>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Čeština</translation>
     </message>
     <message>
         <source>User interface language</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazyk uživatelského rozhraní</translation>
     </message>
 </context>
 <context>
