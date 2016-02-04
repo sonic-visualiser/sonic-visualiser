@@ -32,7 +32,7 @@ exists(config.pri) {
         LIBS += -lwinmm -lws2_32
     }
     macx* {
-        DEFINES += HAVE_COREAUDIO
+        DEFINES += HAVE_COREAUDIO MALLOC_IS_ALIGNED
         LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices -framework Accelerate
     }
 }
