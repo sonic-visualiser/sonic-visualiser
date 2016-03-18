@@ -1,6 +1,8 @@
 
 TEMPLATE = app
 
+INCLUDEPATH += vamp-plugin-sdk
+
 win32-g++ {
     INCLUDEPATH += sv-dependency-builds/win32-mingw/include
     LIBS += -Lrelease -Lsv-dependency-builds/win32-mingw/lib
@@ -84,18 +86,40 @@ PRE_TARGETDEPS += svapp/libsvapp.a \
 
 RESOURCES += sonic-visualiser.qrc
 
-HEADERS += main/MainWindow.h \
-           main/NetworkPermissionTester.h \
-           main/Surveyer.h \
-           main/SVSplash.h \
-           main/PreferencesDialog.h
-SOURCES += main/main.cpp \
-           main/OSCHandler.cpp \
-           main/MainWindow.cpp \
-           main/NetworkPermissionTester.cpp \
-           main/Surveyer.cpp \
-           main/SVSplash.cpp \
-           main/PreferencesDialog.cpp 
+HEADERS += \
+        vamp-plugin-sdk/vamp-hostsdk/PluginBase.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginBufferingAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginChannelAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/Plugin.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginHostAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginInputDomainAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginLoader.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginSummarisingAdapter.h \
+        vamp-plugin-sdk/vamp-hostsdk/PluginWrapper.h \
+        vamp-plugin-sdk/vamp-hostsdk/RealTime.h \
+        vamp-plugin-sdk/src/vamp-hostsdk/Window.h \
+        main/MainWindow.h \
+        main/NetworkPermissionTester.h \
+        main/Surveyer.h \
+        main/SVSplash.h \
+        main/PreferencesDialog.h
+SOURCES +=  \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginBufferingAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginChannelAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginHostAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginInputDomainAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginLoader.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginSummarisingAdapter.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp \
+        vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp \
+	main/main.cpp \
+        main/OSCHandler.cpp \
+        main/MainWindow.cpp \
+        main/NetworkPermissionTester.cpp \
+        main/Surveyer.cpp \
+        main/SVSplash.cpp \
+        main/PreferencesDialog.cpp 
 
 # for mac integration
 QMAKE_INFO_PLIST = deploy/osx/Info.plist
