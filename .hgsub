@@ -1,3 +1,4 @@
+vamp-plugin-sdk = https://code.soundsoftware.ac.uk/hg/vamp-plugin-sdk
 svcore = https://code.soundsoftware.ac.uk/hg/svcore
 svgui = https://code.soundsoftware.ac.uk/hg/svgui
 svapp = https://code.soundsoftware.ac.uk/hg/svapp
