@@ -69,6 +69,7 @@
 #include "data/fileio/FileSource.h"
 #include "data/midi/MIDIInput.h"
 #include "base/RecentFiles.h"
+#include "plugin/PluginScan.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
 #include "base/PlayParameterRepository.h"
@@ -330,7 +331,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = 0;
     }
 
-    QString warning = TransformFactory::getInstance()->getPluginPopulationWarning();
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
     if (warning != "") pluginPopulationWarning(warning);
 }
 
