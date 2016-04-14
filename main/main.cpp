@@ -26,6 +26,7 @@
 #include "widgets/InteractiveFileFinder.h"
 #include "svapp/framework/TransformUserConfigurator.h"
 #include "transform/TransformFactory.h"
+#include "svcore/plugin/PluginScan.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -332,6 +333,10 @@ main(int argc, char **argv)
 
     StoreStartupLocale();
 
+    // Make known-plugins query as early as possible after showing
+    // splash screen
+    PluginScan::getInstance()->scan();
+    
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 

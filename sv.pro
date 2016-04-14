@@ -58,15 +58,15 @@ RC_FILE = icons/sv.rc
 
 contains(DEFINES, BUILD_STATIC):LIBS -= -ljack
 
-MY_LIBS = -Lsvapp -Lsvgui -Lsvcore -Ldataquay -L. \
-          -lsvapp -lsvgui -lsvcore -ldataquay -lbq
+MY_LIBS = -Lsvapp -Lsvgui -Lsvcore -Lvamp-plugin-load-checker -Ldataquay -L. \
+          -lsvapp -lsvgui -lsvcore -lchecker -ldataquay -lbq
 
 linux* {
 MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic
 }
 
 win* {
-MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Ldataquay/release $$MY_LIBS
+MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Lvamp-plugin-load-checker/release -Ldataquay/release $$MY_LIBS
 }
 
 LIBS = $$MY_LIBS $$LIBS
@@ -75,13 +75,15 @@ win* {
 PRE_TARGETDEPS += svapp/release/libsvapp.a \
                   svgui/release/libsvgui.a \
                   svcore/release/libsvcore.a \
-                  dataquay/release/libdataquay.a
+                  dataquay/release/libdataquay.a \
+                  vamp-plugin-load-checker/release/libchecker.a
 }
 !win* {
 PRE_TARGETDEPS += svapp/libsvapp.a \
                   svgui/libsvgui.a \
                   svcore/libsvcore.a \
-                  dataquay/libdataquay.a
+                  dataquay/libdataquay.a \
+                  vamp-plugin-load-checker/libchecker.a
 }
 
 RESOURCES += sonic-visualiser.qrc
