@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = sub_bq sub_dataquay svcore svgui svapp vamp-plugin-load-checker sub_sv 
+SUBDIRS = sub_bq sub_dataquay svcore svgui svapp checker sub_sv 
 
 !win* {
     # We should build and run the tests on any platform,
