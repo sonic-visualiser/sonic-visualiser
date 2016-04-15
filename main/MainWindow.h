@@ -147,7 +147,7 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
-    virtual void pluginPopulationWarning(QString);
+    virtual void pluginPopulationWarning();
 
     virtual void saveSessionAsTemplate();
     virtual void manageSavedTemplates();
