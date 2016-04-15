@@ -69,6 +69,7 @@
 #include "data/fileio/FileSource.h"
 #include "data/midi/MIDIInput.h"
 #include "base/RecentFiles.h"
+#include "plugin/PluginScan.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
 #include "base/PlayParameterRepository.h"
@@ -330,8 +331,10 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = 0;
     }
 
-    QString warning = TransformFactory::getInstance()->getPluginPopulationWarning();
-    if (warning != "") pluginPopulationWarning(warning);
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
+    if (warning != "") {
+        QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -4141,8 +4144,9 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 }
 
 void
-MainWindow::pluginPopulationWarning(QString warning)
+MainWindow::pluginPopulationWarning()
 {
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
     QMessageBox::warning(this, tr("Problems loading plugins"), warning);
 }
 
