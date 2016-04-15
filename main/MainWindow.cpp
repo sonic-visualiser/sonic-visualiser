@@ -332,7 +332,9 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     }
 
     QString warning = PluginScan::getInstance()->getStartupFailureReport();
-    if (warning != "") pluginPopulationWarning(warning);
+    if (warning != "") {
+        QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -4142,8 +4144,9 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 }
 
 void
-MainWindow::pluginPopulationWarning(QString warning)
+MainWindow::pluginPopulationWarning()
 {
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
     QMessageBox::warning(this, tr("Problems loading plugins"), warning);
 }
 
