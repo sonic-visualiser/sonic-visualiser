@@ -5,13 +5,14 @@
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
     This file copyright 2006-2007 Chris Cannam and QMUL.
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
 
 #include "../version.h"
 
@@ -131,6 +132,24 @@ using std::vector;
 using std::map;
 using std::set;
 
+//IMAF REQUIRED LIBRARIES AND VARIABLES
+#include "IMAFencoder.c"
+#include "checkbox.h"
+#include <QFileDialog>
+#include "imafdecoder.cpp"
+
+QString ImafFileName,ImageFileName,TextFileName; //name of the files
+QString files_paths[maxtracks]; // change maxtracks in IMAFencoder.h
+int ImafVolumeValues[maxtracks];
+int numtracks;
+bool has_image, has_lyrics;
+int selrule_type, selrule_par1, selrule_par2;
+int mixrule_type, mixrule_par1, mixrule_par2, mixrule_par3, mixrule_par4;
+int group_tracks[maxtracks], group_volume;
+QString group_descr, group_name;
+int preset_type, fade_in;
+
+bool isIMAF;
 
 MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     MainWindowBase(options),
@@ -250,7 +269,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_playSpeed->setDefaultValue(60);
     m_playSpeed->setShowToolTip(true);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
-	    this, SLOT(playSpeedChanged(int)));
+        this, SLOT(playSpeedChanged(int)));
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
@@ -265,7 +284,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     layout->addWidget(m_playSpeed, 1, 3);
     layout->addWidget(m_fader, 1, 4);
 
-    m_playControlsWidth = 
+    m_playControlsWidth =
         m_fader->width() + m_playSpeed->width() + layout->spacing() * 2;
 
     layout->setColumnMinimumWidth(0, 14);
@@ -320,12 +339,16 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
             startOSCQueue();
         }
         TransformFactory::getInstance()->startPopulationThread();
+        m_surveyer = 0;
+        m_versionTester = 0;
+/*
         m_surveyer = new Surveyer
             ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
         m_versionTester = new VersionTester
             ("sonicvisualiser.org", "latest-version.txt", SV_VERSION);
         connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
                 this, SLOT(newerVersionAvailable(QString)));
+*/
     } else {
         m_surveyer = 0;
         m_versionTester = 0;
@@ -527,7 +550,7 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     toolbar->addAction(action);
-	
+
     icon = il.load("filesaveas");
     action = new QAction(icon, tr("Save Session &As..."), this);
     action->setShortcut(tr("Ctrl+Shift+S"));
@@ -565,6 +588,16 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
+
+    QAction *actionCreateIMAF = new QAction(tr("Export IMAF File..."), this);
+    actionCreateIMAF->setStatusTip(tr("Export selection as an IMAF file"));
+    menu->addAction(actionCreateIMAF);
+    connect(actionCreateIMAF,SIGNAL(triggered()),this,SLOT(exportIMAF()));
+
+    QAction *actionOpenIMAF = new QAction(tr("Import IMAF File..."), this);
+    actionOpenIMAF->setStatusTip(tr("Import IMAF file"));
+    menu->addAction(actionOpenIMAF);
+    connect(actionOpenIMAF,SIGNAL(triggered()),this,SLOT(importIMAF()));
 
     menu->addSeparator();
 
@@ -627,7 +660,7 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
     menu->addAction(action);
-	
+
     menu->addSeparator();
     action = new QAction(il.load("exit"),
                          tr("&Quit"), this);
@@ -714,7 +747,7 @@ MainWindow::setupEditMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     m_rightButtonMenu->addAction(action);
-	
+
     action = new QAction(tr("Select &Visible Range"), this);
     action->setShortcut(tr("Ctrl+Shift+A"));
     action->setStatusTip(tr("Select the time range corresponding to the current window width"));
@@ -722,7 +755,7 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+
     action = new QAction(tr("Select to &Start"), this);
     action->setShortcut(tr("Shift+Left"));
     action->setStatusTip(tr("Select from the start of the session to the current playback position"));
@@ -730,7 +763,7 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+
     action = new QAction(tr("Select to &End"), this);
     action->setShortcut(tr("Shift+Right"));
     action->setStatusTip(tr("Select from the current playback position to the end of the session"));
@@ -835,7 +868,7 @@ MainWindow::setupEditMenu()
     action->setStatusTip(tr("Set the counters used for counter-based labelling"));
     connect(action, SIGNAL(triggered()), this, SLOT(setInstantsCounters()));
     menu->addAction(action);
-            
+
     action = new QAction(tr("Renumber Selected Instants"), this);
     action->setStatusTip(tr("Renumber the selected instants using the current labelling scheme"));
     connect(action, SIGNAL(triggered()), this, SLOT(renumberInstants()));
@@ -864,7 +897,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), m_scrollLeftAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_scrollLeftAction);
     menu->addAction(m_scrollLeftAction);
-	
+
     m_scrollRightAction = new QAction(tr("Scroll &Right"), this);
     m_scrollRightAction->setShortcut(tr("Right"));
     m_scrollRightAction->setStatusTip(tr("Scroll the current pane to the right"));
@@ -872,7 +905,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), m_scrollRightAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_scrollRightAction);
     menu->addAction(m_scrollRightAction);
-	
+
     action = new QAction(tr("&Jump Left"), this);
     action->setShortcut(tr("Ctrl+Left"));
     action->setStatusTip(tr("Scroll the current pane a big step to the left"));
@@ -880,7 +913,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+
     action = new QAction(tr("J&ump Right"), this);
     action->setShortcut(tr("Ctrl+Right"));
     action->setStatusTip(tr("Scroll the current pane a big step to the right"));
@@ -896,7 +929,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+
     action = new QAction(tr("Peek Right"), this);
     action->setShortcut(tr("Alt+Right"));
     action->setStatusTip(tr("Scroll the current pane to the right without moving the playback cursor or other panes"));
@@ -917,7 +950,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), m_zoomInAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_zoomInAction);
     menu->addAction(m_zoomInAction);
-	
+
     m_zoomOutAction = new QAction(il.load("zoom-out"),
                                   tr("Zoom &Out"), this);
     m_zoomOutAction->setShortcut(tr("Down"));
@@ -926,7 +959,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), m_zoomOutAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_zoomOutAction);
     menu->addAction(m_zoomOutAction);
-	
+
     action = new QAction(tr("Restore &Default Zoom"), this);
     action->setStatusTip(tr("Restore the zoom level to the default"));
     connect(action, SIGNAL(triggered()), this, SLOT(zoomDefault()));
@@ -977,7 +1010,7 @@ MainWindow::setupViewMenu()
     overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-        
+
     action = new QAction(tr("Show &Minimal Overlays"), this);
     action->setShortcut(tr("9"));
     action->setStatusTip(tr("Show times and basic scale"));
@@ -987,7 +1020,7 @@ MainWindow::setupViewMenu()
     overlayGroup->addAction(action);
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-        
+
     action = new QAction(tr("Show &All Overlays"), this);
     action->setShortcut(tr("8"));
     action->setStatusTip(tr("Show times, layer names, and scale"));
@@ -999,7 +1032,7 @@ MainWindow::setupViewMenu()
     menu->addAction(action);
 
     menu->addSeparator();
-        
+
     action = new QAction(tr("Show &Zoom Wheels"), this);
     action->setShortcut(tr("Z"));
     action->setStatusTip(tr("Show thumbwheels for zooming horizontally and vertically"));
@@ -1067,18 +1100,18 @@ void
 MainWindow::setupPaneAndLayerMenus()
 {
     if (m_paneMenu) {
-	m_paneActions.clear();
-	m_paneMenu->clear();
+    m_paneActions.clear();
+    m_paneMenu->clear();
     } else {
-	m_paneMenu = menuBar()->addMenu(tr("&Pane"));
+    m_paneMenu = menuBar()->addMenu(tr("&Pane"));
         m_paneMenu->setTearOffEnabled(true);
     }
 
     if (m_layerMenu) {
-	m_layerActions.clear();
-	m_layerMenu->clear();
+    m_layerActions.clear();
+    m_layerMenu->clear();
     } else {
-	m_layerMenu = menuBar()->addMenu(tr("&Layer"));
+    m_layerMenu = menuBar()->addMenu(tr("&Layer"));
         m_layerMenu->setTearOffEnabled(true);
     }
 
@@ -1112,44 +1145,43 @@ MainWindow::setupPaneAndLayerMenus()
 //    menu->addSeparator();
 
     LayerFactory::LayerTypeSet emptyLayerTypes =
-	LayerFactory::getInstance()->getValidEmptyLayerTypes();
+    LayerFactory::getInstance()->getValidEmptyLayerTypes();
 
     for (LayerFactory::LayerTypeSet::iterator i = emptyLayerTypes.begin();
-	 i != emptyLayerTypes.end(); ++i) {
-	
-	QIcon icon;
-	QString mainText, tipText, channelText;
-	LayerFactory::LayerType type = *i;
-	QString name = LayerFactory::getInstance()->getLayerPresentationName(type);
-	
-	icon = il.load(LayerFactory::getInstance()->getLayerIconName(type));
+     i != emptyLayerTypes.end(); ++i) {
 
-	mainText = tr("Add New %1 Layer").arg(name);
-	tipText = tr("Add a new empty layer of type %1").arg(name);
+    QIcon icon;
+    QString mainText, tipText, channelText;
+    LayerFactory::LayerType type = *i;
+    QString name = LayerFactory::getInstance()->getLayerPresentationName(type);
 
-	action = new QAction(icon, mainText, this);
-	action->setStatusTip(tipText);
+    icon = il.load(LayerFactory::getInstance()->getLayerIconName(type));
 
-	if (type == LayerFactory::Text) {
-	    action->setShortcut(tr("T"));
+    mainText = tr("Add New %1 Layer").arg(name);
+    tipText = tr("Add a new empty layer of type %1").arg(name);
+
+    action = new QAction(icon, mainText, this);
+    action->setStatusTip(tipText);
+
+    if (type == LayerFactory::Text) {
+        action->setShortcut(tr("T"));
             m_keyReference->registerShortcut(action);
-	}
-
-	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_layerActions[action] = LayerConfiguration(type);
-	menu->addAction(action);
-        m_rightButtonLayerMenu->addAction(action);
     }
-    
+    connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_layerActions[action] = LayerConfiguration(type);
+    menu->addAction(action);
+       m_rightButtonLayerMenu->addAction(action);
+    }
+
     m_rightButtonLayerMenu->addSeparator();
     menu->addSeparator();
 
     LayerFactory::LayerType backgroundTypes[] = {
-	LayerFactory::Waveform,
-	LayerFactory::Spectrogram,
-	LayerFactory::MelodicRangeSpectrogram,
-	LayerFactory::PeakFrequencySpectrogram,
+    LayerFactory::Waveform,
+    LayerFactory::Spectrogram,
+    LayerFactory::MelodicRangeSpectrogram,
+    LayerFactory::PeakFrequencySpectrogram,
         LayerFactory::Spectrum
     };
 
@@ -1161,16 +1193,16 @@ MainWindow::setupPaneAndLayerMenus()
     }
 
     for (unsigned int i = 0;
-	 i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
+     i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
 
         const int paneMenuType = 0, layerMenuType = 1;
 
-	for (int menuType = paneMenuType; menuType <= layerMenuType; ++menuType) {
+    for (int menuType = paneMenuType; menuType <= layerMenuType; ++menuType) {
 
-	    if (menuType == paneMenuType) menu = m_paneMenu;
-	    else menu = m_layerMenu;
+        if (menuType == paneMenuType) menu = m_paneMenu;
+        else menu = m_layerMenu;
 
-	    QMenu *submenu = 0;
+        QMenu *submenu = 0;
 
             QIcon icon;
             QString mainText, shortcutText, tipText, channelText;
@@ -1183,7 +1215,7 @@ MainWindow::setupPaneAndLayerMenus()
 #pragma GCC diagnostic ignored "-Wswitch-enum"
             
             switch (type) {
-                    
+
             case LayerFactory::Waveform:
                 icon = il.load("waveform");
                 mainText = tr("Add &Waveform");
@@ -1196,7 +1228,7 @@ MainWindow::setupPaneAndLayerMenus()
                 }
                 mono = false;
                 break;
-		
+
             case LayerFactory::Spectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Spectro&gram");
@@ -1208,7 +1240,7 @@ MainWindow::setupPaneAndLayerMenus()
                     tipText = tr("Add a new layer showing a spectrogram");
                 }
                 break;
-		
+
             case LayerFactory::MelodicRangeSpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add &Melodic Range Spectrogram");
@@ -1220,7 +1252,7 @@ MainWindow::setupPaneAndLayerMenus()
                     tipText = tr("Add a new layer showing a spectrogram set up for an overview of note pitches");
                 }
                 break;
-		
+
             case LayerFactory::PeakFrequencySpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Pea&k Frequency Spectrogram");
@@ -1232,7 +1264,7 @@ MainWindow::setupPaneAndLayerMenus()
                     tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
                 }
                 break;
-                
+
             case LayerFactory::Spectrum:
                 icon = il.load("spectrum");
                 mainText = tr("Add Spectr&um");
@@ -1244,16 +1276,16 @@ MainWindow::setupPaneAndLayerMenus()
                     tipText = tr("Add a new layer showing a frequency spectrum");
                 }
                 break;
-                
+
             default: break;
             }
 
             std::vector<Model *> candidateModels = models;
-            
+
             for (std::vector<Model *>::iterator mi =
                      candidateModels.begin();
                  mi != candidateModels.end(); ++mi) {
-                
+
                 Model *model = *mi;
 
                 int channels = 0;
@@ -1298,9 +1330,9 @@ MainWindow::setupPaneAndLayerMenus()
                             m_keyReference->registerShortcut(action);
                         }
                         menu->addAction(action);
-                        
+
                     } else {
-                        
+
                         if (!submenu) {
                             submenu = menu->addMenu(mainText);
                             submenu->setTearOffEnabled(true);
@@ -1328,7 +1360,7 @@ MainWindow::setupPaneAndLayerMenus()
                         if (isDefault) {
                             action = new QAction(icon, actionText, this);
                             if (!model || model == getMainModel()) {
-                                action->setShortcut(shortcutText); 
+                                action->setShortcut(shortcutText);
                             }
                         } else {
                             action = new QAction(actionText, this);
@@ -1369,9 +1401,9 @@ MainWindow::setupPaneAndLayerMenus()
                         m_layerActions[action] = LayerConfiguration(type, 0, 0);
                         m_rightButtonLayerMenu->addAction(action);
                     }
-		}
-	    }
-	}
+        }
+        }
+    }
     }
 
     m_rightButtonLayerMenu->addSeparator();
@@ -1486,7 +1518,7 @@ MainWindow::setupTransformsMenu()
         m_transformActionsReverse.clear();
         m_transformsMenu->clear();
     } else {
-	m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
+    m_transformsMenu = menuBar()->addMenu(tr("&Transform"));
         m_transformsMenu->setTearOffEnabled(true);
         m_transformsMenu->setSeparatorsCollapsible(true);
     }
@@ -1512,7 +1544,7 @@ MainWindow::setupTransformsMenu()
 
     m_transformsMenu->addSeparator();
     m_rightButtonTransformsMenu->addSeparator();
-    
+
     for (vector<TransformDescription::Type>::iterator i = types.begin();
          i != types.end(); ++i) {
 
@@ -1614,9 +1646,9 @@ MainWindow::setupTransformsMenu()
     }
 
     for (unsigned int i = 0; i < transforms.size(); ++i) {
-	
-	QString name = transforms[i].name;
-	if (name == "") name = transforms[i].identifier;
+
+    QString name = transforms[i].name;
+    if (name == "") name = transforms[i].identifier;
 
 //        cerr << "Plugin Name: " << name << endl;
 
@@ -1643,11 +1675,11 @@ MainWindow::setupTransformsMenu()
                 .arg(output);
         }
 
-	QAction *action = new QAction(tr("%1...").arg(name), this);
-	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	m_transformActions[action] = transforms[i].identifier;
+    QAction *action = new QAction(tr("%1...").arg(name), this);
+    connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+    m_transformActions[action] = transforms[i].identifier;
         m_transformActionsReverse[transforms[i].identifier] = action;
-	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
         action->setStatusTip(transforms[i].longDescription);
 
@@ -1686,7 +1718,7 @@ MainWindow::setupTransformsMenu()
             if (output == "") {
                 parentMenu->addAction(pluginName, action);
             } else {
-                pluginNameMenus[type][pluginName] = 
+                pluginNameMenus[type][pluginName] =
                     parentMenu->addMenu(pluginName);
                 connect(this, SIGNAL(canAddLayer(bool)),
                         pluginNameMenus[type][pluginName],
@@ -1725,7 +1757,7 @@ MainWindow::setupHelpMenu()
 {
     QMenu *menu = menuBar()->addMenu(tr("&Help"));
     menu->setTearOffEnabled(true);
-    
+
     m_keyReference->setCategory(tr("Help"));
 
     IconLoader il;
@@ -1733,9 +1765,9 @@ MainWindow::setupHelpMenu()
     QString name = QApplication::applicationName();
 
     QAction *action = new QAction(il.load("help"),
-                                  tr("&Help Reference"), this); 
+                                  tr("&Help Reference"), this);
     action->setShortcut(tr("F1"));
-    action->setStatusTip(tr("Open the %1 reference manual").arg(name)); 
+    action->setStatusTip(tr("Open the %1 reference manual").arg(name));
     connect(action, SIGNAL(triggered()), this, SLOT(help()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
@@ -1746,14 +1778,14 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(keyReference()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-    
-    action = new QAction(tr("%1 on the &Web").arg(name), this); 
-    action->setStatusTip(tr("Open the %1 website").arg(name)); 
+
+    action = new QAction(tr("%1 on the &Web").arg(name), this);
+    action->setStatusTip(tr("Open the %1 website").arg(name));
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
-    
-    action = new QAction(tr("&About %1").arg(name), this); 
-    action->setStatusTip(tr("Show information about %1").arg(name)); 
+
+    action = new QAction(tr("&About %1").arg(name), this);
+    action->setStatusTip(tr("Show information about %1").arg(name));
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
     menu->addAction(action);
 }
@@ -1764,8 +1796,8 @@ MainWindow::setupRecentFilesMenu()
     m_recentFilesMenu->clear();
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
-	QAction *action = new QAction(files[i], this);
-	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+    QAction *action = new QAction(files[i], this);
+    connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
         if (i == 0) {
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
@@ -1773,7 +1805,7 @@ MainWindow::setupRecentFilesMenu()
                  action->shortcut().toString(),
                  tr("Re-open the current or most recently opened file"));
         }
-	m_recentFilesMenu->addAction(action);
+    m_recentFilesMenu->addAction(action);
     }
 }
 
@@ -1851,7 +1883,7 @@ MainWindow::setupRecentTransformsMenu()
         } else {
             ti->second->setShortcut(QString(""));
         }
-	m_recentTransformsMenu->addAction(ti->second);
+    m_recentTransformsMenu->addAction(ti->second);
     }
 }
 
@@ -1892,35 +1924,35 @@ MainWindow::setupExistingLayersMenus()
 
 //	    cerr << "found new layer " << layer << " (name = " 
 //		      << layer->getLayerPresentationName() << ")" << endl;
-
-	    orderedLayers.push_back(layer);
-	    observedLayers.insert(layer);
+            
+            orderedLayers.push_back(layer);
+            observedLayers.insert(layer);
 
             if (factory->isLayerSliceable(layer)) {
                 sliceableLayers.insert(layer);
             }
-	}
+        }
     }
 
     map<QString, int> observedNames;
 
     for (size_t i = 0; i < orderedLayers.size(); ++i) {
-	
+
         Layer *layer = orderedLayers[i];
 
-	QString name = layer->getLayerPresentationName();
-	int n = ++observedNames[name];
-	if (n > 1) name = QString("%1 <%2>").arg(name).arg(n);
+    QString name = layer->getLayerPresentationName();
+    int n = ++observedNames[name];
+    if (n > 1) name = QString("%1 <%2>").arg(name).arg(n);
 
-	QIcon icon = il.load(factory->getLayerIconName
+    QIcon icon = il.load(factory->getLayerIconName
                              (factory->getLayerType(layer)));
 
-	QAction *action = new QAction(icon, name, this);
-	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_existingLayerActions[action] = layer;
+    QAction *action = new QAction(icon, name, this);
+    connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+    connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+    m_existingLayerActions[action] = layer;
 
-	m_existingLayersMenu->addAction(action);
+    m_existingLayersMenu->addAction(action);
 
         if (sliceableLayers.find(layer) != sliceableLayers.end()) {
             action = new QAction(icon, name, this);
@@ -1974,7 +2006,7 @@ MainWindow::setupToolbars()
     m_playAction->setStatusTip(tr("Start or stop playback from the current position"));
     connect(m_playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
-	    m_playAction, SLOT(setChecked(bool)));
+        m_playAction, SLOT(setChecked(bool)));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
             this, SLOT(playStatusChanged(bool)));
     connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
@@ -2112,7 +2144,7 @@ MainWindow::setupToolbars()
     fastAction->setStatusTip(tr("Time-stretch playback to speed it up without changing pitch"));
     connect(fastAction, SIGNAL(triggered()), this, SLOT(speedUpPlayback()));
     connect(this, SIGNAL(canSpeedUpPlayback(bool)), fastAction, SLOT(setEnabled(bool)));
-    
+
     QAction *slowAction = menu->addAction(tr("Slow Down"));
     slowAction->setShortcut(tr("Ctrl+PgDown"));
     slowAction->setStatusTip(tr("Time-stretch playback to slow it down without changing pitch"));
@@ -2169,7 +2201,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("select"),
-				tr("Select"));
+                tr("Select"));
     action->setCheckable(true);
     action->setShortcut(tr("2"));
     action->setStatusTip(tr("Select ranges"));
@@ -2198,7 +2230,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("move"),
-				tr("Edit"));
+                tr("Edit"));
     action->setCheckable(true);
     action->setShortcut(tr("3"));
     action->setStatusTip(tr("Edit items in layer"));
@@ -2219,7 +2251,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("draw"),
-				tr("Draw"));
+                tr("Draw"));
     action->setCheckable(true);
     action->setShortcut(tr("4"));
     action->setStatusTip(tr("Draw new items in layer"));
@@ -2237,7 +2269,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("erase"),
-				tr("Erase"));
+                tr("Erase"));
     action->setCheckable(true);
     action->setShortcut(tr("5"));
     action->setStatusTip(tr("Erase items from layer"));
@@ -2317,15 +2349,15 @@ MainWindow::updateMenuStates()
 	(m_viewManager &&
 	 !m_viewManager->getSelections().empty());
     bool haveCurrentEditableLayer =
-	(haveCurrentLayer &&
-	 currentLayer->isLayerEditable());
-    bool haveCurrentTimeInstantsLayer = 
-	(haveCurrentLayer &&
-	 dynamic_cast<TimeInstantLayer *>(currentLayer));
-    bool haveCurrentTimeValueLayer = 
-	(haveCurrentLayer &&
-	 dynamic_cast<TimeValueLayer *>(currentLayer));
-    
+    (haveCurrentLayer &&
+     currentLayer->isLayerEditable());
+    bool haveCurrentTimeInstantsLayer =
+    (haveCurrentLayer &&
+     dynamic_cast<TimeInstantLayer *>(currentLayer));
+    bool haveCurrentTimeValueLayer =
+    (haveCurrentLayer &&
+     dynamic_cast<TimeValueLayer *>(currentLayer));
+
     bool alignMode = m_viewManager && m_viewManager->getAlignMode();
     emit canChangeSolo(havePlayTarget && !alignMode);
     emit canAlign(havePlayTarget && m_document && m_document->canAlign());
@@ -2335,7 +2367,7 @@ MainWindow::updateMenuStates()
     emit canSpeedUpPlayback(v < m_playSpeed->maximum());
     emit canSlowDownPlayback(v > m_playSpeed->minimum());
 
-    if (m_viewManager && 
+    if (m_viewManager &&
         (m_viewManager->getToolMode() == ViewManager::MeasureMode)) {
         emit canDeleteSelection(haveCurrentLayer);
         m_deleteSelectedAction->setText(tr("&Delete Current Measurement"));
@@ -2370,8 +2402,8 @@ void
 MainWindow::updateDescriptionLabel()
 {
     if (!getMainModel()) {
-	m_descriptionLabel->setText(tr("No audio file loaded."));
-	return;
+    m_descriptionLabel->setText(tr("No audio file loaded."));
+    return;
     }
 
     QString description;
@@ -2381,15 +2413,15 @@ MainWindow::updateDescriptionLabel()
     if (m_playSource) tsr = m_playSource->getTargetSampleRate();
 
     if (ssr != tsr) {
-	description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
+    description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
     } else {
-	description = QString("%1Hz").arg(ssr);
+    description = QString("%1Hz").arg(ssr);
     }
 
     description = QString("%1 - %2")
-	.arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
-	     .toText(false).c_str())
-	.arg(description);
+    .arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
+         .toText(false).c_str())
+    .arg(description);
 
     m_descriptionLabel->setText(description);
 }
@@ -2450,11 +2482,11 @@ MainWindow::importAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, ReplaceSession) == FileOpenFailed) {
+    if (openAudio(path, ReplaceSession) == FileOpenFailed) {
             emit hideSplash();
-	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-	}
+        QMessageBox::critical(this, tr("Failed to open file"),
+                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+    }
     }
 }
 
@@ -2464,12 +2496,14 @@ MainWindow::importMoreAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
+        if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
             emit hideSplash();
-	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-	}
+            QMessageBox::critical(this, tr("Failed to open file"),
+                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+        }
     }
+
+    files_paths[int(m_paneStack->getPaneCount())-1] = path;
 }
 
 void
@@ -2478,11 +2512,11 @@ MainWindow::replaceMainAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+    if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
             emit hideSplash();
-	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-	}
+        QMessageBox::critical(this, tr("Failed to open file"),
+                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+    }
     }
 }
 
@@ -2515,7 +2549,7 @@ MainWindow::exportAudio(bool asData)
                 if (!layer) continue;
                 cerr << "layer = " << layer->objectName() << endl;
                 Model *m = layer->getModel();
-                RangeSummarisableTimeValueModel *wm = 
+                RangeSummarisableTimeValueModel *wm =
                     dynamic_cast<RangeSummarisableTimeValueModel *>(m);
                 if (wm) {
                     cerr << "found: " << wm->objectName() << endl;
@@ -2582,19 +2616,19 @@ MainWindow::exportAudio(bool asData)
 
     if (selections.size() == 1) {
 
-	QStringList items;
-	items << tr("Export the selected region only")
-	      << tr("Export the whole audio file");
-	
-	bool ok = false;
-	QString item = ListInputDialog::getItem
-	    (this, tr("Select region to export"),
-	     tr("Which region from the original audio file do you want to export?"),
-	     items, 0, &ok);
-	
-	if (!ok || item.isEmpty()) return;
-	
-	if (item == items[0]) selectionToWrite = &ms;
+    QStringList items;
+    items << tr("Export the selected region only")
+          << tr("Export the whole audio file");
+
+    bool ok = false;
+    QString item = ListInputDialog::getItem
+        (this, tr("Select region to export"),
+         tr("Which region from the original audio file do you want to export?"),
+         items, 0, &ok);
+
+    if (!ok || item.isEmpty()) return;
+
+    if (item == items[0]) selectionToWrite = &ms;
 
     } else if (selections.size() > 1) {
 
@@ -2617,44 +2651,43 @@ MainWindow::exportAudio(bool asData)
             } else if (item == items[1]) {
                 multiple = true;
             }
-
         } else { // asData
             selectionToWrite = &ms;
         }
 
         if (multiple) { // Can only happen when asData false
 
-	    int n = 1;
-	    QString base = path;
-	    base.replace(".wav", "");
+        int n = 1;
+        QString base = path;
+        base.replace(".wav", "");
 
-	    for (MultiSelection::SelectionList::iterator i = selections.begin();
-		 i != selections.end(); ++i) {
+        for (MultiSelection::SelectionList::iterator i = selections.begin();
+         i != selections.end(); ++i) {
 
-		MultiSelection subms;
-		subms.setSelection(*i);
+        MultiSelection subms;
+        subms.setSelection(*i);
 
-		QString subpath = QString("%1.%2.wav").arg(base).arg(n);
-		++n;
+        QString subpath = QString("%1.%2.wav").arg(base).arg(n);
+        ++n;
 
-		if (QFileInfo(subpath).exists()) {
-		    error = tr("Fragment file %1 already exists, aborting").arg(subpath);
-		    break;
-		}
+        if (QFileInfo(subpath).exists()) {
+            error = tr("Fragment file %1 already exists, aborting").arg(subpath);
+            break;
+        }
 
-		WavFileWriter subwriter(subpath,
+        WavFileWriter subwriter(subpath,
                                         model->getSampleRate(),
                                         model->getChannelCount(),
                                         WavFileWriter::WriteToTemporary);
                 subwriter.writeModel(model, &subms);
-		ok = subwriter.isOK();
+        ok = subwriter.isOK();
 
-		if (!ok) {
-		    error = subwriter.getError();
-		    break;
-		}
-	    }
-	}
+        if (!ok) {
+            error = subwriter.getError();
+            break;
+        }
+        }
+    }
     }
 
     if (!multiple) {
@@ -2688,15 +2721,18 @@ MainWindow::exportAudio(bool asData)
             m_recentFiles.addFile(path);
         }
     } else {
-	QMessageBox::critical(this, tr("Failed to write file"), error);
+        QMessageBox::critical(this, tr("Failed to write file"), error);
     }
 }
+
+
+
 
 void
 MainWindow::importLayer()
 {
     Pane *pane = m_paneStack->getCurrentPane();
-    
+
     if (!pane) {
 	// shouldn't happen, as the menu action should have been disabled
 	cerr << "WARNING: MainWindow::importLayer: no current pane" << endl;
@@ -2714,7 +2750,7 @@ MainWindow::importLayer()
     if (path != "") {
 
         FileOpenStatus status = openLayer(path);
-        
+
         if (status == FileOpenFailed) {
             emit hideSplash();
             QMessageBox::critical(this, tr("Failed to open file"),
@@ -2828,7 +2864,7 @@ MainWindow::exportImage()
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) return;
-    
+
     QString path = getSaveFileName(FileFinder::ImageFile);
 
     if (path == "") return;
@@ -2887,7 +2923,7 @@ MainWindow::exportImage()
     bool ok = lid->exec();
     QString item = lid->getCurrentString();
     delete lid;
-	    
+
     if (!ok || item.isEmpty()) return;
 
     settings.setValue("lastimageexportregion", deflt);
@@ -2909,7 +2945,7 @@ MainWindow::exportImage()
         QMessageBox::critical(this, tr("Failed to save image file"),
                               tr("Failed to save image file %1").arg(path));
     }
-    
+
     delete image;
 }
 
@@ -2938,8 +2974,8 @@ MainWindow::newSession()
             this, SLOT(contextHelpChanged(const QString &)));
 
     if (!m_timeRulerLayer) {
-	m_timeRulerLayer = m_document->createMainModelLayer
-	    (LayerFactory::TimeRuler);
+    m_timeRulerLayer = m_document->createMainModelLayer
+        (LayerFactory::TimeRuler);
     }
 
     m_document->addLayerToView(pane, m_timeRulerLayer);
@@ -2971,29 +3007,29 @@ MainWindow::closeSession()
 
     while (m_paneStack->getPaneCount() > 0) {
 
-	Pane *pane = m_paneStack->getPane(m_paneStack->getPaneCount() - 1);
+    Pane *pane = m_paneStack->getPane(m_paneStack->getPaneCount() - 1);
 
-	while (pane->getLayerCount() > 0) {
-	    m_document->removeLayerFromView
-		(pane, pane->getLayer(pane->getLayerCount() - 1));
-	}
+    while (pane->getLayerCount() > 0) {
+        m_document->removeLayerFromView
+        (pane, pane->getLayer(pane->getLayerCount() - 1));
+    }
 
-	m_overview->unregisterView(pane);
-	m_paneStack->deletePane(pane);
+    m_overview->unregisterView(pane);
+    m_paneStack->deletePane(pane);
     }
 
     while (m_paneStack->getHiddenPaneCount() > 0) {
 
-	Pane *pane = m_paneStack->getHiddenPane
-	    (m_paneStack->getHiddenPaneCount() - 1);
+    Pane *pane = m_paneStack->getHiddenPane
+        (m_paneStack->getHiddenPaneCount() - 1);
 
-	while (pane->getLayerCount() > 0) {
-	    m_document->removeLayerFromView
-		(pane, pane->getLayer(pane->getLayerCount() - 1));
-	}
+    while (pane->getLayerCount() > 0) {
+        m_document->removeLayerFromView
+        (pane, pane->getLayer(pane->getLayerCount() - 1));
+    }
 
-	m_overview->unregisterView(pane);
-	m_paneStack->deletePane(pane);
+    m_overview->unregisterView(pane);
+    m_paneStack->deletePane(pane);
     }
 
     delete m_layerTreeDialog.data();
@@ -3025,7 +3061,7 @@ MainWindow::openSomething()
 
     QString path = getOpenFileName(FileFinder::AnyFile);
 
-    if (path.isEmpty()) return;
+        if (path.isEmpty()) return;
 
     FileOpenStatus status = openPath(path, ReplaceSession);
 
@@ -3038,6 +3074,11 @@ MainWindow::openSomething()
         QMessageBox::critical(this, tr("Failed to open file"),
                               tr("<b>Audio required</b><p>Unable to load layer data from \"%1\" without an audio file.<br>Please load at least one audio file before importing annotations.").arg(path));
     }
+
+    files_paths[0] = path;
+    QTextStream out(stdout);
+    out << path;
+
 }
 
 void
@@ -3077,7 +3118,7 @@ MainWindow::openRecentFile()
 {
     QObject *obj = sender();
     QAction *action = dynamic_cast<QAction *>(obj);
-    
+
     if (!action) {
 	cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
 		  << endl;
@@ -3146,14 +3187,14 @@ MainWindow::saveSessionAsTemplate()
     layout->addWidget(lineEdit, 1, 0);
     QCheckBox *makeDefault = new QCheckBox(tr("Set as default template for future audio files"));
     layout->addWidget(makeDefault, 2, 0);
-    
+
     QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok |
                                                 QDialogButtonBox::Cancel);
     layout->addWidget(bb, 3, 0);
     connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
     connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
     connect(bb, SIGNAL(rejected()), d, SLOT(reject()));
-    
+
     if (d->exec() == QDialog::Accepted) {
 
         QString name = lineEdit->text();
@@ -3191,19 +3232,19 @@ void
 MainWindow::paneAdded(Pane *pane)
 {
     if (m_overview) m_overview->registerView(pane);
-}    
+}
 
 void
 MainWindow::paneHidden(Pane *pane)
 {
-    if (m_overview) m_overview->unregisterView(pane); 
-}    
+    if (m_overview) m_overview->unregisterView(pane);
+}
 
 void
 MainWindow::paneAboutToBeDeleted(Pane *pane)
 {
-    if (m_overview) m_overview->unregisterView(pane); 
-}    
+    if (m_overview) m_overview->unregisterView(pane);
+}
 
 void
 MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
@@ -3242,8 +3283,8 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
     if (pane) m_paneStack->setCurrentPane(pane);
 
     QUrl testUrl(text);
-    if (testUrl.scheme() == "file" || 
-        testUrl.scheme() == "http" || 
+    if (testUrl.scheme() == "file" ||
+        testUrl.scheme() == "http" ||
         testUrl.scheme() == "ftp") {
         QStringList list;
         list.push_back(text);
@@ -3325,7 +3366,7 @@ MainWindow::commitData(bool mayAskUser)
         } else {
             if (!QFileInfo(svDir).isDir()) return false;
         }
-        
+
         // This name doesn't have to be unguessable
 #ifndef _WIN32
         QString fname = QString("tmp-%1-%2.sv")
@@ -3357,23 +3398,23 @@ MainWindow::checkSaveModified()
 
     emit hideSplash();
 
-    int button = 
-	QMessageBox::warning(this,
-			     tr("Session modified"),
-			     tr("<b>Session modified</b><p>The current session has been modified.<br>Do you want to save it?"),
-			     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+    int button =
+    QMessageBox::warning(this,
+                 tr("Session modified"),
+                 tr("<b>Session modified</b><p>The current session has been modified.<br>Do you want to save it?"),
+                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                              QMessageBox::Yes);
 
     if (button == QMessageBox::Yes) {
-	saveSession();
-	if (m_documentModified) { // save failed -- don't proceed!
-	    return false;
-	} else {
+    saveSession();
+    if (m_documentModified) { // save failed -- don't proceed!
+        return false;
+    } else {
             return true; // saved, so it's safe to continue now
         }
     } else if (button == QMessageBox::No) {
-	m_documentModified = false; // so we know to abandon it
-	return true;
+    m_documentModified = false; // so we know to abandon it
+    return true;
     }
 
     // else cancel
@@ -3391,7 +3432,7 @@ MainWindow::shouldCreateNewSessionForRDFAudio(bool *cancel)
     bool prevNewSession = settings.value("newsessionforrdfaudio", true).toBool();
     settings.endGroup();
     bool newSession = true;
-            
+
     QStringList items;
     items << tr("Close the current session and create a new one")
           << tr("Add this data to the current session");
@@ -3401,12 +3442,12 @@ MainWindow::shouldCreateNewSessionForRDFAudio(bool *cancel)
         (this, tr("Select target for import"),
          tr("<b>Select a target for import</b><p>This RDF document refers to one or more audio files.<br>You already have an audio waveform loaded.<br>What would you like to do with the new data?"),
          items, prevNewSession ? 0 : 1, &ok);
-            
+
     if (!ok || item.isEmpty()) {
         *cancel = true;
         return false;
     }
-            
+
     newSession = (item == items[0]);
     settings.beginGroup("MainWindow");
     settings.setValue("newsessionforrdfaudio", newSession);
@@ -3420,15 +3461,15 @@ void
 MainWindow::saveSession()
 {
     if (m_sessionFile != "") {
-	if (!saveSessionFile(m_sessionFile)) {
-	    QMessageBox::critical(this, tr("Failed to save file"),
-				  tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(m_sessionFile));
-	} else {
-	    CommandHistory::getInstance()->documentSaved();
-	    documentRestored();
-	}
+    if (!saveSessionFile(m_sessionFile)) {
+        QMessageBox::critical(this, tr("Failed to save file"),
+                  tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(m_sessionFile));
     } else {
-	saveSessionAs();
+        CommandHistory::getInstance()->documentSaved();
+        documentRestored();
+    }
+    } else {
+    saveSessionAs();
     }
 }
 
@@ -3444,15 +3485,15 @@ MainWindow::saveSessionAs()
     if (path == "") return;
 
     if (!saveSessionFile(path)) {
-	QMessageBox::critical(this, tr("Failed to save file"),
-			      tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
+    QMessageBox::critical(this, tr("Failed to save file"),
+                  tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
     } else {
 	setWindowTitle(tr("%1: %2")
                        .arg(QApplication::applicationName())
-		       .arg(QFileInfo(path).fileName()));
-	m_sessionFile = path;
-	CommandHistory::getInstance()->documentSaved();
-	documentRestored();
+                       .arg(QFileInfo(path).fileName()));
+    m_sessionFile = path;
+    CommandHistory::getInstance()->documentSaved();
+    documentRestored();
         m_recentFiles.addFile(path);
         emit activity(tr("Save session as \"%1\"").arg(path));
     }
@@ -3470,8 +3511,8 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
         } else {
             m_panLayer->setBaseColour
                 (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-        }      
-    }     
+        }
+    }
 }
 
 void
@@ -3482,7 +3523,7 @@ MainWindow::propertyStacksResized(int width)
     if (!m_playControlsSpacer) return;
 
     int spacerWidth = width - m_playControlsWidth - 4;
-    
+
 //    SVDEBUG << "resizing spacer from " << m_playControlsSpacer->width() << " to " << spacerWidth << endl;
 
     m_playControlsSpacer->setFixedSize(QSize(spacerWidth, 2));
@@ -3545,7 +3586,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
 
 //	SVDEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
 
-	m_document->addLayerToView(pane, m_timeRulerLayer);
+        m_document->addLayerToView(pane, m_timeRulerLayer);
     }
 
     Layer *newLayer = m_document->createLayer(configuration.layer);
@@ -3597,7 +3638,7 @@ MainWindow::addLayer()
 {
     QObject *s = sender();
     QAction *action = dynamic_cast<QAction *>(s);
-    
+
     if (!action) {
 	cerr << "WARNING: MainWindow::addLayer: sender is not an action"
 		  << endl;
@@ -3605,7 +3646,7 @@ MainWindow::addLayer()
     }
 
     Pane *pane = m_paneStack->getCurrentPane();
-    
+
     if (!pane) {
 	cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
 	return;
@@ -3614,10 +3655,10 @@ MainWindow::addLayer()
     ExistingLayerActionMap::iterator ei = m_existingLayerActions.find(action);
 
     if (ei != m_existingLayerActions.end()) {
-	Layer *newLayer = ei->second;
-	m_document->addLayerToView(pane, newLayer);
-	m_paneStack->setCurrentLayer(pane, newLayer);
-	return;
+    Layer *newLayer = ei->second;
+    m_document->addLayerToView(pane, newLayer);
+    m_paneStack->setCurrentLayer(pane, newLayer);
+    return;
     }
 
     ei = m_sliceActions.find(action);
@@ -3634,10 +3675,11 @@ MainWindow::addLayer()
                     dest, SLOT(sliceableModelReplaced(const Model *, const Model *)));
             connect(m_document, SIGNAL(modelAboutToBeDeleted(Model *)),
                     dest, SLOT(modelAboutToBeDeleted(Model *)));
+
         }
-	m_document->addLayerToView(pane, newLayer);
-	m_paneStack->setCurrentLayer(pane, newLayer);
-	return;
+    m_document->addLayerToView(pane, newLayer);
+    m_paneStack->setCurrentLayer(pane, newLayer);
+    return;
     }
 
     TransformActionMap::iterator i = m_transformActions.find(action);
@@ -3662,11 +3704,12 @@ MainWindow::addLayer()
 	if (emptyTypes.find(type) != emptyTypes.end()) {
 
 	    newLayer = m_document->createEmptyLayer(type);
+
             if (newLayer) {
                 m_toolActions[ViewManager::DrawMode]->trigger();
             }
 
-	} else {
+        } else {
 
             Model *model = i->second.sourceModel;
 
@@ -3711,7 +3754,7 @@ MainWindow::addLayer()
             m_paneStack->setCurrentLayer(pane, newLayer);
         }
 
-	return;
+    return;
     }
 
     //!!! want to do something like this, but it's not supported in
@@ -3720,11 +3763,11 @@ MainWindow::addLayer()
     int channel = -1;
     // pick up the default channel from any existing layers on the same pane
     for (int j = 0; j < pane->getLayerCount(); ++j) {
-	int c = LayerFactory::getInstance()->getChannel(pane->getLayer(j));
-	if (c != -1) {
-	    channel = c;
-	    break;
-	}
+    int c = LayerFactory::getInstance()->getChannel(pane->getLayer(j));
+    if (c != -1) {
+        channel = c;
+        break;
+    }
     }
     */
 
@@ -3738,7 +3781,7 @@ MainWindow::addLayer()
 }
 
 void
-MainWindow::addLayer(QString transformId)
+MainWindow:: addLayer(QString transformId)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) {
@@ -3796,6 +3839,7 @@ MainWindow::addLayer(QString transformId)
     
     sv_frame_t startFrame = 0, duration = 0;
     sv_frame_t endFrame = 0;
+
     m_viewManager->getSelection().getExtents(startFrame, endFrame);
     if (endFrame > startFrame) duration = endFrame - startFrame;
     else startFrame = 0;
@@ -3833,18 +3877,18 @@ MainWindow::renameCurrentLayer()
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (pane) {
-	Layer *layer = pane->getSelectedLayer();
-	if (layer) {
-	    bool ok = false;
-	    QString newName = QInputDialog::getText
-		(this, tr("Rename Layer"),
-		 tr("New name for this layer:"),
-		 QLineEdit::Normal, layer->objectName(), &ok);
-	    if (ok) {
-		layer->setPresentationName(newName);
-		setupExistingLayersMenus();
-	    }
-	}
+    Layer *layer = pane->getSelectedLayer();
+    if (layer) {
+        bool ok = false;
+        QString newName = QInputDialog::getText
+        (this, tr("Rename Layer"),
+         tr("New name for this layer:"),
+         QLineEdit::Normal, layer->objectName(), &ok);
+        if (ok) {
+        layer->setPresentationName(newName);
+        setupExistingLayersMenus();
+        }
+    }
     }
 }
 
@@ -3858,7 +3902,7 @@ MainWindow::findTransform()
     }
     TransformId transform = finder->getTransform();
     delete finder;
-    
+
     if (getMainModel() != 0 && m_paneStack->getCurrentPane() != 0) {
         addLayer(transform);
     }
@@ -3875,13 +3919,13 @@ void
 MainWindow::alignToggled()
 {
     QAction *action = dynamic_cast<QAction *>(sender());
-    
+
     if (!m_viewManager) return;
 
     if (action) {
-	m_viewManager->setAlignMode(action->isChecked());
+    m_viewManager->setAlignMode(action->isChecked());
     } else {
-	m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
+    m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
     }
 
     if (m_viewManager->getAlignMode()) {
@@ -3907,8 +3951,8 @@ MainWindow::alignToggled()
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
-	Pane *pane = m_paneStack->getPane(i);
-	if (!pane) continue;
+    Pane *pane = m_paneStack->getPane(i);
+    if (!pane) continue;
 
         pane->update();
     }
@@ -4011,7 +4055,7 @@ MainWindow::currentPaneChanged(Pane *pane)
         Layer *layer = pane->getLayer(i);
         if (LayerFactory::getInstance()->getLayerType(layer) ==
             LayerFactory::Waveform) {
-            RangeSummarisableTimeValueModel *tvm = 
+            RangeSummarisableTimeValueModel *tvm =
                 dynamic_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
             if (tvm) {
                 m_panLayer->setModel(tvm);
@@ -4119,7 +4163,7 @@ MainWindow::sampleRateMismatch(sv_samplerate_t requested,
             (this, tr("Sample rate mismatch"),
              tr("<b>Wrong sample rate</b><p>The sample rate of this audio file (%1 Hz) does not match\nthe current playback rate (%2 Hz).<p>The file will play at the wrong speed and pitch.<p>Change the <i>Resample mismatching files on import</i> option under <i>File</i> -> <i>Preferences</i> if you want to alter this behaviour.")
              .arg(requested).arg(actual));
-    }        
+    }
 
     updateDescriptionLabel();
 }
@@ -4239,7 +4283,7 @@ MainWindow::midiEventsAvailable()
         if (!noteOn) continue;
         insertInstantAt(ev.getTime());
     }
-}    
+}
 
 void
 MainWindow::playStatusChanged(bool )
@@ -4323,7 +4367,7 @@ MainWindow::setInstantsNumbering()
     if (!a) return;
 
     int type = m_numberingActions[a];
-    
+
     if (m_labeller) m_labeller->setType(Labeller::ValueType(type));
 
     QSettings settings;
@@ -4337,12 +4381,12 @@ MainWindow::setInstantsCounterCycle()
 {
     QAction *a = dynamic_cast<QAction *>(sender());
     if (!a) return;
-    
+
     int cycle = a->text().toInt();
     if (cycle == 0) return;
 
     if (m_labeller) m_labeller->setCounterCycleSize(cycle);
-    
+
     QSettings settings;
     settings.beginGroup("MainWindow");
     settings.setValue("labellercycle", cycle);
@@ -4680,7 +4724,7 @@ MainWindow::about()
         "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</small></p>";
-    
+
     QMessageBox::about(this, tr("About Sonic Visualiser"), aboutText);
 }
 
@@ -4706,3 +4750,767 @@ MainWindow::newerVersionAvailable(QString version)
 }
 
 
+
+CheckBox::CheckBox(QWidget *parent)
+    : QWidget(parent)
+{
+// SELECTION RULES
+    QGroupBox *selrule_box = new QGroupBox(QString::fromUtf8("SELECTION RULES"),this);
+    selrule_box->setFont(QFont("Times", 9, QFont::Bold));
+    selrule_box->move(5,5);
+    selrule_box->resize(235,130);
+    QButtonGroup *selrule_group = new QButtonGroup(this);
+    selrule_group->setObjectName("Selection Rule");
+
+    QRadioButton *minmax_rule = new QRadioButton(QString::fromUtf8("Min/Max Rule"),this);
+    minmax_rule->move(20,25);
+    minmax_rule->setObjectName("0");
+    QRadioButton *exclusion_rule = new QRadioButton(QString::fromUtf8("Exclusion Rule"),this);
+    exclusion_rule->move(20,45);
+    exclusion_rule->setObjectName("1");
+    QRadioButton *notmute_rule = new QRadioButton(QString::fromUtf8("Not Mute Rule"),this);
+    notmute_rule->move(130,25);
+    notmute_rule->setObjectName("2");
+    QRadioButton *implication_rule = new QRadioButton(QString::fromUtf8("Implication Rule"),this);
+    implication_rule->move(130,45);
+    implication_rule->setObjectName("3");
+
+    selrule_group->addButton(minmax_rule);
+    selrule_group->addButton(exclusion_rule);
+    selrule_group->addButton(notmute_rule);
+    selrule_group->addButton(implication_rule);
+
+    QSpinBox *sel_par1 = new QSpinBox(this);
+    sel_par1->setEnabled(true);
+    sel_par1->setGeometry(QRect(20, 75, 40, 20));
+    sel_par1->setMinimum(1);
+    sel_par1->setMaximum(numtracks);
+    selrule_par1 = sel_par1->value();
+
+    sel_rule1 = new QLabel(this);
+    sel_rule1->setText("Parameter 1");
+    sel_rule1->setGeometry(70, 75, 100, 20);
+
+    QSpinBox *sel_par2 = new QSpinBox(this);
+    sel_par2->setEnabled(true);
+    sel_par2->setGeometry(QRect(20, 100, 40, 20));
+    sel_par2->setMinimum(1);
+    sel_par2->setMaximum(numtracks);
+    selrule_par2 = sel_par2->value();
+
+    sel_rule2 = new QLabel(this);
+    sel_rule2->setText("Parameter 2");
+    sel_rule2->setGeometry(70, 100, 100, 20);
+
+    connect(selrule_group, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(set_selruleType(QAbstractButton*)));
+    connect(sel_par1, SIGNAL(valueChanged(int)), this, SLOT(set_selrulePAR1(int)));
+    connect(sel_par2, SIGNAL(valueChanged(int)), this, SLOT(set_selrulePAR2(int)));
+
+// MIXING RULES (yet to implement)
+    QGroupBox *mixrule_box = new QGroupBox(QString::fromUtf8("MIXING RULES"),this);
+    mixrule_box->setFont(QFont("Times", 9, QFont::Bold));
+    mixrule_box->move(255,5);
+    mixrule_box->resize(330,130);
+    QButtonGroup *mixrule_group = new QButtonGroup(this);
+    mixrule_group->setObjectName("Mixing Rule");
+
+    QRadioButton *equivalence_rule = new QRadioButton(QString::fromUtf8("Equivalence Rule"),this);
+    equivalence_rule->move(270,25);
+    equivalence_rule->setObjectName("0");
+    QRadioButton *upper_rule = new QRadioButton(QString::fromUtf8("Upper Rule"),this);
+    upper_rule->move(270,45);
+    upper_rule->setObjectName("1");
+    QRadioButton *lower_rule = new QRadioButton(QString::fromUtf8("Lower Rule"),this);
+    lower_rule->move(380,25);
+    lower_rule->setObjectName("2");
+    QRadioButton *limit_rule = new QRadioButton(QString::fromUtf8("Limit Rule"),this);
+    limit_rule->move(380,45);
+    limit_rule->setObjectName("3");
+
+    mixrule_group->addButton(equivalence_rule);
+    mixrule_group->addButton(upper_rule);
+    mixrule_group->addButton(lower_rule);
+    mixrule_group->addButton(limit_rule);
+
+    QSpinBox *mix_par1 = new QSpinBox(this);
+    mix_par1->setEnabled(true);
+    mix_par1->setGeometry(QRect(270, 75, 40, 20));
+    mix_par1->setMinimum(1);
+    mix_par1->setMaximum(numtracks);
+    mixrule_par1 = mix_par1->value();
+
+    mix_rule1 = new QLabel(this);
+    mix_rule1->setText("Parameter 1");
+    mix_rule1->setGeometry(320, 75, 100, 20);
+
+    QSpinBox *mix_par2 = new QSpinBox(this);
+    mix_par2->setEnabled(true);
+    mix_par2->setGeometry(QRect(270, 100, 40, 20));
+    mix_par2->setMinimum(1);
+    mix_par2->setMaximum(numtracks);
+    mixrule_par2 = mix_par2->value();
+
+    mix_rule2 = new QLabel(this);
+    mix_rule2->setText("Parameter 2");
+    mix_rule2->setGeometry(320, 100, 100, 20);
+
+    QSpinBox *mix_par3 = new QSpinBox(this);
+    mix_par3->setEnabled(true);
+    mix_par3->setGeometry(QRect(410, 75, 40, 20));
+    mix_par3->setMinimum(0);
+    mix_par3->setMaximum(100);
+    mixrule_par3 = mix_par3->value();
+
+    mix_rule3 = new QLabel(this);
+    mix_rule3->setText("Parameter 3");
+    mix_rule3->setGeometry(460, 75, 100, 20);
+
+    QSpinBox *mix_par4 = new QSpinBox(this);
+    mix_par4->setEnabled(true);
+    mix_par4->setGeometry(QRect(410, 100, 40, 20));
+    mix_par4->setMinimum(0);
+    mix_par4->setMaximum(100);
+    mixrule_par4 = mix_par4->value();
+
+    mix_rule4 = new QLabel(this);
+    mix_rule4->setText("Parameter 4");
+    mix_rule4->setGeometry(460, 100, 100, 20);
+
+    connect(mixrule_group, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(set_mixruleType(QAbstractButton*)));
+    connect(mix_par1, SIGNAL(valueChanged(int)), this, SLOT(set_mixrulePAR1(int)));
+    connect(mix_par2, SIGNAL(valueChanged(int)), this, SLOT(set_mixrulePAR2(int)));
+    connect(mix_par3, SIGNAL(valueChanged(int)), this, SLOT(set_mixrulePAR3(int)));
+    connect(mix_par4, SIGNAL(valueChanged(int)), this, SLOT(set_mixrulePAR4(int)));
+//    connect(equivalence_rule, SIGNAL(toggled(bool)), mix_rule1, SLOT()
+
+// GROUPS
+    QGroupBox *group_box = new QGroupBox(QString::fromUtf8("GROUPS"),this);
+    group_box->setFont(QFont("Times", 9, QFont::Bold));
+    group_box->move(5,150);
+    group_box->resize(580,100);
+
+    group_label = new QLabel(this);
+    group_label->setText("Select tracks for the group:");
+    group_label->setGeometry(20, 165, 200, 20);
+
+    QButtonGroup *group_cb = new QButtonGroup(this);
+    group_cb->setObjectName("Group");
+
+    for (int i=1; i<=numtracks; i++) {
+        QCheckBox *track_cb = new QCheckBox(QString::number(i), this);
+        track_cb->setGeometry(80*i,185,95,30);
+        track_cb->setObjectName(QString::number(i));
+        group_cb->setExclusive(false);
+        group_cb->addButton(track_cb);
+    }
+
+    QSpinBox *group_vol = new QSpinBox(this);
+    group_vol->setEnabled(true);
+    group_vol->setGeometry(QRect(280, 220, 40, 20));
+    group_vol->setMinimum(0);
+    group_vol->setMaximum(100);
+    group_vol->setValue(100);
+    group_volume = group_vol->value();
+
+    grp_vol = new QLabel(this);
+    grp_vol->setText("Group Volume");
+    grp_vol->setGeometry(330, 220, 100, 20);
+
+    group_name_line = new QLineEdit(this);
+    group_name_line->setGeometry(25,220,150,20);
+    group_name_line->setText("Insert a name");
+    group_name_line->setMaxLength(20);
+
+    grp_name = new QLabel(this);
+    grp_name->setText("Group Name");
+    grp_name->setGeometry(180,220,100,20);
+
+    connect(group_cb, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(set_TrackInGroup(QAbstractButton*)));
+    connect(group_name_line, SIGNAL(textChanged(QString)), this, SLOT(set_GroupName(QString)));
+    connect(group_vol, SIGNAL(valueChanged(int)), this, SLOT(set_GroupVolume(int)));
+
+// PRESETS
+    QGroupBox *preset_box = new QGroupBox(QString::fromUtf8("PRESETS"),this);
+    preset_box->setFont(QFont("Times", 9, QFont::Bold));
+    preset_box->move(5,270);
+    preset_box->resize(580,90);
+
+    QButtonGroup *preset_group = new QButtonGroup(this);
+    preset_group->setObjectName("Presets");
+
+    QRadioButton *static_preset = new QRadioButton(QString::fromUtf8("Static Volume"),this);
+    static_preset->move(20,290);
+    static_preset->setObjectName("0");
+
+    QRadioButton *dynamic_preset = new QRadioButton(QString::fromUtf8("Dynamic Volume"),this);
+    dynamic_preset->move(150,290);
+    dynamic_preset->setObjectName("4");
+
+    preset_group->addButton(static_preset);
+    preset_group->addButton(dynamic_preset);
+
+    QButtonGroup *fade_group = new QButtonGroup(this);
+    fade_group->setObjectName("Fade IN/OUT");
+
+    QRadioButton *fade_in = new QRadioButton(QString::fromUtf8("Fade IN"),this);
+    fade_in->move(170,310);
+    fade_in->setObjectName("1");
+    fade_in->setDisabled(true);
+
+    QRadioButton *fade_out = new QRadioButton(QString::fromUtf8("Fade OUT"),this);
+    fade_out->move(170,330);
+    fade_out->setObjectName("0");
+    fade_out->setDisabled(true);
+
+    fade_group->addButton(fade_in);
+    fade_group->addButton(fade_out);
+
+    connect(preset_group, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(set_presetType(QAbstractButton*)));
+    connect(dynamic_preset, SIGNAL(toggled(bool)), fade_in, SLOT(setEnabled(bool)));
+    connect(dynamic_preset, SIGNAL(toggled(bool)), fade_out, SLOT(setEnabled(bool)));
+    connect(fade_group, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(set_fade(QAbstractButton*)));
+
+
+// IMAGE AND LYRICS
+    QCheckBox *text_cb = new QCheckBox("Include lyrics", this);
+    text_cb->setGeometry(20, 380, 95, 30);
+    QCheckBox *jpeg_cb = new QCheckBox("Include picture", this);
+    jpeg_cb->setGeometry(20, 430, 95, 30);
+
+    line->setGeometry(120, 380, 320, 30);
+    line2->setGeometry(120, 430, 320, 30);
+
+    QPushButton *create = new QPushButton("Export", this);
+    create->setGeometry(20, 500, 95, 30);
+
+    QPushButton *TextFilePath = new QPushButton("Select text file", this);
+    TextFilePath->setGeometry(460, 380, 95, 30);
+    TextFilePath->setDisabled(true);
+
+    QPushButton *JpegFilePath = new QPushButton("Select JPEG file", this);
+    JpegFilePath->setGeometry(460, 430, 95, 30);
+    JpegFilePath->setDisabled(true);
+
+    // Enable/disable push buttons
+    connect(text_cb, SIGNAL(toggled(bool)), TextFilePath, SLOT(setEnabled(bool)));
+    connect(jpeg_cb, SIGNAL(toggled(bool)), JpegFilePath, SLOT(setEnabled(bool)));
+    // Check the inclusion of image and text
+    connect(text_cb, SIGNAL(stateChanged(int)), this, SLOT(insertLyrics(int))); // yet to implement
+    connect(jpeg_cb, SIGNAL(stateChanged(int)), this, SLOT(insertImage(int)));
+    // Set image and text paths
+    connect(TextFilePath, SIGNAL(clicked()), this , SLOT(defineImafTextFile()));
+    connect(JpegFilePath, SIGNAL(clicked()), this , SLOT(defineImafImageFile()));
+    // Create the file
+    connect(create, SIGNAL(clicked()), this , SLOT(saveImafFile()));
+    connect(create, SIGNAL(clicked()), this, SLOT(close()));
+}
+
+void CheckBox::insertImage(int state)
+{
+    if (state) {
+        has_image = true;
+        } else{
+        has_image = false;
+    }
+}
+
+void CheckBox::insertLyrics(int state)
+{
+    if (state) {
+        has_lyrics = true;
+        } else{
+        has_lyrics = false;
+    }
+}
+
+void CheckBox::saveImafFile()
+{
+    ImafFileName = QFileDialog::getSaveFileName(this, tr("Save IMAF"), "/", tr("IMAF (*.ima)"));
+
+    group_descr = "Thisgroup";
+
+    if( ImafFileName != "" ){   //if the user press cancel the function mainIMAFencoder won´t be called
+        mainIMAFencoder(numtracks, files_paths, ImafFileName, ImageFileName, TextFileName,
+                        ImafVolumeValues, has_image, has_lyrics, selrule_type, selrule_par1, selrule_par2,
+                        mixrule_type, mixrule_par1, mixrule_par2, mixrule_par3, mixrule_par4,
+                        group_tracks, group_volume, group_name, group_descr, preset_type, fade_in);
+    }
+}
+
+void CheckBox::defineImafImageFile()
+{
+    ImageFileName = QFileDialog::getOpenFileName(this, tr("Select JPEG"), "/", tr("JPEG (*.jpg)"));
+    line2->setText(ImageFileName);
+}
+
+void CheckBox::defineImafTextFile()
+{
+    TextFileName = QFileDialog::getOpenFileName(this, tr("Select text file"), "/", tr("Text File (*.3gp)"));
+    line->setText(TextFileName);
+}
+
+void
+MainWindow::exportIMAF()
+{
+    numtracks = m_paneStack->getPaneCount();
+
+    for (int i = 0; i < numtracks; ++i) {
+        //ImafVolumeValues[i] = int(m_paneStack->getPane(i)->getLayer(0)->getPlayParameters()->getVolImaf())/2;
+    }
+
+    CheckBox *imaf_window = new CheckBox();
+
+    imaf_window->resize(600,540);
+    imaf_window->move(100,100);
+    imaf_window->setWindowTitle("Export IMAF");
+    imaf_window->show();
+}
+
+
+
+void MainWindow::insertLyrics(size_t frame, QString text){
+  Pane *pane = m_paneStack->getCurrentPane();
+
+
+    pane = m_paneStack->getCurrentPane();
+    if (!pane) {
+        return;
+    }
+
+    frame = pane->alignFromReference(frame);
+
+    Layer *layer = dynamic_cast<TimeInstantLayer *>
+            (pane->getSelectedLayer());
+
+    if (!layer) {
+        for (int i = pane->getLayerCount(); i > 0; --i) {
+            layer = dynamic_cast<TimeInstantLayer *>(pane->getLayer(i - 1));
+            if (layer) break;
+        }
+
+        if (!layer) {
+            CommandHistory::getInstance()->startCompoundOperation
+                    (tr("Add Point"), true);
+            layer = m_document->createEmptyLayer(LayerFactory::TimeInstants);
+            if (layer) {
+                m_document->addLayerToView(pane, layer);
+                m_paneStack->setCurrentLayer(pane, layer);
+            }
+            CommandHistory::getInstance()->endCompoundOperation();
+        }
+    }
+
+    if (layer) {
+
+        Model *model = layer->getModel();
+        SparseOneDimensionalModel *sodm = dynamic_cast<SparseOneDimensionalModel *>
+                (model);
+
+        if (sodm) {
+            SparseOneDimensionalModel::Point point(frame, "");
+
+            SparseOneDimensionalModel::Point prevPoint(0);
+            bool havePrevPoint = false;
+
+            SparseOneDimensionalModel::EditCommand *command =
+                    new SparseOneDimensionalModel::EditCommand(sodm, tr("Add Point"));
+
+            if (m_labeller->requiresPrevPoint()) {
+
+                SparseOneDimensionalModel::PointList prevPoints =
+                        sodm->getPreviousPoints(frame);
+
+                if (!prevPoints.empty()) {
+                    prevPoint = *prevPoints.begin();
+                    havePrevPoint = true;
+                }
+            }
+
+            if (m_labeller) {
+
+                m_labeller->setSampleRate(sodm->getSampleRate());
+
+                if (m_labeller->actingOnPrevPoint()) {
+                    command->deletePoint(prevPoint);
+                }
+
+                m_labeller->label<SparseOneDimensionalModel::Point>
+                        (point, havePrevPoint ? &prevPoint : 0);
+
+                if (m_labeller->actingOnPrevPoint()) {
+                    command->addPoint(prevPoint);
+                }
+            }
+            point.label=text;
+            command->addPoint(point);
+
+            command->setName(tr("Add Point at %1 s")
+                             .arg(RealTime::frame2RealTime
+                                  (frame,
+                                   sodm->getSampleRate())
+                                  .toText(false).c_str()));
+
+            Command *c = command->finish();
+            if (c) CommandHistory::getInstance()->addCommand(c, false);
+        }
+    }
+
+}
+
+void MainWindow::importIMAF()
+{
+
+    int haslyrics; // if this variable != 2 -> there are lyrics
+    QString path = getOpenFileName(FileFinder::IMAFile);
+
+    if (path.isEmpty()) return;
+    isIMAF = true;
+
+    haslyrics = mainIMAFdecoder(path);
+
+    openMP3IMAF();
+
+    if (haslyrics!=2){
+          addPaneToStack();//it creates a new pane to show the lyrics
+
+          Pane *pane = m_paneStack->getCurrentPane();
+          LayerFactory::LayerType type ; //set the type of layer
+          type = LayerFactory::TimeInstants;
+         //create a new layer
+          Layer *newLayer = 0;
+          newLayer = m_document->createEmptyLayer(type);
+          m_toolActions[ViewManager::DrawMode]->trigger();
+          m_document->addLayerToView(pane, newLayer);
+
+          //create a new layer
+          Layer *newLayer1 = 0;
+          newLayer1 = m_document->createEmptyLayer(type);
+          m_toolActions[ViewManager::DrawMode]->trigger();
+          m_document->addLayerToView(pane, newLayer1);
+          m_paneStack->setCurrentLayer(pane, newLayer);
+
+          //editCurrentLayer();
+
+          //text decoder
+          unsigned char dat,dat1,dat2,dat3;
+          FILE *imf;
+          imf = fopen (path.toStdString().c_str(),"rb");
+
+          fseek (imf,0,SEEK_SET);
+          fseek (imf,24,SEEK_CUR); //jump to 'mdat'
+          fread(&dat, sizeof(unsigned char), 1, imf);
+          fread(&dat1, sizeof(unsigned char), 1, imf);
+          fread(&dat2, sizeof(unsigned char), 1, imf);
+          fread(&dat3, sizeof(unsigned char), 1, imf);
+          int sizemdat = (dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3);
+          fseek(imf, sizemdat-4, SEEK_CUR); // -4 because we have to sub the 4 bytes of size
+
+          fseek (imf,16,SEEK_CUR);
+          fseek (imf,96,SEEK_CUR); // next track id is placed 96 bytes after the last byte of type 'mvhd'
+
+          fread(&dat, sizeof(unsigned char), 1, imf);
+          fread(&dat1, sizeof(unsigned char), 1, imf);
+          fread(&dat2, sizeof(unsigned char), 1, imf);
+          fread(&dat3, sizeof(unsigned char), 1, imf);
+
+
+          audiotracks = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3)) -1 ; //read the number of audio tracks.It is ´-1´ because the field indicates the number of tracks +1
+
+          fread(&dat, sizeof(unsigned char), 1, imf);//read the size of trak.Every track must be the same size
+          fread(&dat1, sizeof(unsigned char), 1, imf);
+          fread(&dat2, sizeof(unsigned char), 1, imf);
+          fread(&dat3, sizeof(unsigned char), 1, imf);
+
+          int sizetrak = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3));
+
+          fseek(imf, (sizetrak-4)*audiotracks, SEEK_CUR);
+
+          int d=0;
+          while (d==0){
+
+            fread(&dat, sizeof(unsigned char), 1, imf);
+            fread(&dat1, sizeof(unsigned char), 1, imf);
+            fread(&dat2, sizeof(unsigned char), 1, imf);
+            fread(&dat3, sizeof(unsigned char), 1, imf);
+
+
+            if (dat == 0x73 && dat1 == 0x74 && dat2 == 0x74 && dat3 == 0x73) {  // 73 74 74 73 = s t t s
+                 d=1;
+            }
+
+            else{
+                fseek(imf, -3, SEEK_CUR); //if we have not readen ´stts´
+            }
+
+          } //close while
+
+          fread(&dat, sizeof(unsigned char), 1, imf);//avanzamos 4 bytes (son los 4 bytes de version)
+          fread(&dat, sizeof(unsigned char), 1, imf);
+          fread(&dat, sizeof(unsigned char), 1, imf);
+          fread(&dat, sizeof(unsigned char), 1, imf);
+
+          fread(&dat, sizeof(unsigned char), 1, imf);//estos 4 bytes son los de número de entradas de la tabla (entry_count)
+          fread(&dat1, sizeof(unsigned char), 1, imf);
+          fread(&dat2, sizeof(unsigned char), 1, imf);
+          fread(&dat3, sizeof(unsigned char), 1, imf);
+
+          int entry_count = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3));
+
+          int sample_count [entry_count];
+          int sample_delta [entry_count];
+
+          for (int i=0;i<entry_count;i++){
+
+
+             fread(&dat, sizeof(unsigned char), 1, imf);
+             fread(&dat1, sizeof(unsigned char), 1, imf);
+             fread(&dat2, sizeof(unsigned char), 1, imf);
+             fread(&dat3, sizeof(unsigned char), 1, imf);
+
+             sample_count[i] = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3));
+
+             fread(&dat, sizeof(unsigned char), 1, imf);
+             fread(&dat1, sizeof(unsigned char), 1, imf);
+             fread(&dat2, sizeof(unsigned char), 1, imf);
+             fread(&dat3, sizeof(unsigned char), 1, imf);
+
+
+             sample_delta[i] = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3));
+
+          }
+
+          d=0;
+          while (d==0){
+
+             fread(&dat, sizeof(unsigned char), 1, imf);
+             fread(&dat1, sizeof(unsigned char), 1, imf);
+             fread(&dat2, sizeof(unsigned char), 1, imf);
+             fread(&dat3, sizeof(unsigned char), 1, imf);
+
+             if (dat == 0x73 && dat1 == 0x74 && dat2 == 0x73 && dat3 == 0x7A) {  // 73 74 73 7A = s t s z
+                 d=1;
+             }
+
+             else{
+                 fseek(imf, -3, SEEK_CUR); //if we have not readen ´stts´
+             }
+
+          } //close while
+
+          for (int i=1;i<=8;i++){  //avanzamos 8 posiciones
+
+            fread(&dat, sizeof(unsigned char), 1, imf);
+
+          }
+
+          fread(&dat, sizeof(unsigned char), 1, imf); //read sample_count
+          fread(&dat1, sizeof(unsigned char), 1, imf);
+          fread(&dat2, sizeof(unsigned char), 1, imf);
+          fread(&dat3, sizeof(unsigned char), 1, imf);
+
+          int samplecount = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3));
+          int sample_size[samplecount];
+          for (int i=0;i<samplecount;i++){
+
+                fread(&dat, sizeof(unsigned char), 1, imf);
+                fread(&dat1, sizeof(unsigned char), 1, imf);
+                fread(&dat2, sizeof(unsigned char), 1, imf);
+                fread(&dat3, sizeof(unsigned char), 1, imf);
+
+                sample_size[i] = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3));// the size of every string including modifiers
+
+          }
+
+          d=0;
+          while (d==0){
+
+             fread(&dat, sizeof(unsigned char), 1, imf);
+             fread(&dat1, sizeof(unsigned char), 1, imf);
+             fread(&dat2, sizeof(unsigned char), 1, imf);
+             fread(&dat3, sizeof(unsigned char), 1, imf);
+
+             if (dat == 0x63 && dat1 == 0x6F && dat2 == 0x36 && dat3 == 0x34) {  // 63 6F 36 34 = c o 6 4
+                     d=1;
+             }
+
+             else{
+                 fseek(imf, -3, SEEK_CUR); //if we have not readen ´stts´
+             }
+
+          } //close while
+
+          for (int i=1;i<=12;i++){  //advance 12 memory bytes
+
+                fread(&dat, sizeof(unsigned char), 1, imf);
+
+          }
+
+          fread(&dat, sizeof(unsigned char), 1, imf); //read co64 box
+          fread(&dat1, sizeof(unsigned char), 1, imf);
+          fread(&dat2, sizeof(unsigned char), 1, imf);
+          fread(&dat3, sizeof(unsigned char), 1, imf);
+
+          int chunk_offset = ((dat<<24)  | (dat1<<16) | (dat2<<8) | (dat3));
+
+          fseek (imf,0,SEEK_SET);
+          fseek (imf,chunk_offset,SEEK_CUR); //jump to the position where starts text strings
+
+          int num_modifiers;
+          float duration1;
+          for (int j=0;j<samplecount;j++){
+
+            fread(&dat, sizeof(unsigned char), 1, imf); // read sizestring
+            fread(&dat1, sizeof(unsigned char), 1, imf);
+
+            int sizestring = ((dat<<8) | (dat1));
+
+            char text [sizestring+1];
+
+            for (int i=0;i<sizestring;i++){
+                 fread(&dat, sizeof(unsigned char), 1, imf);
+                 text [i] = dat;
+            }
+            text[sizestring]= '\0';// indicates the end of the char string.If we don´t add this character, the conversion to QString does not work
+            num_modifiers = sample_size[j]-sizestring-2;
+
+            for (int i=0;i<num_modifiers;i++){
+                 fread(&dat, sizeof(unsigned char), 1, imf);
+            }
+            QString result (text);//convert string char to QString
+            duration1=0;
+            for (int h=0;h<j;h++){
+                duration1 = sample_delta[h]+duration1;
+            }
+            float duration2 = duration1 / 1000;
+            int duration3 = duration2 * 44100;
+            if (sizestring >1){ //sizestring = 1 when there is only a blank space.We do not want to add a blank space alone.
+
+                     if (samplecount%2==0){//to avoid overlapping
+                             m_paneStack->setCurrentLayer(pane, newLayer);
+                             insertLyrics (duration3, result);
+                     }
+                     else{
+                             m_paneStack->setCurrentLayer(pane, newLayer1);
+                             insertLyrics (duration3, result);
+                     }
+
+
+            } // close if
+         } //close for
+    } // close if haslyrics
+
+}
+void
+MainWindow::openMP3IMAF()
+{
+  FileOpenStatus status;
+
+  for (int i=0;i<audiotracks;i++){
+
+      char buf[2];
+       sprintf(buf, "%d", i); //convert int to char
+       status = openPath(buf, CreateAdditionalModel);
+       remove (buf);
+
+  }
+
+}
+
+void CheckBox::set_selruleType(QAbstractButton *button)
+{
+    selrule_type = button->objectName().toInt();
+
+    if( (selrule_type == 0) || (selrule_type == 1) || (selrule_type == 3) ){
+        sel_rule1->setText("Track A");
+        sel_rule1->setDisabled(false);
+        sel_rule2->setText("Track B");
+        sel_rule2->setDisabled(false);
+    }else{
+        sel_rule1->setText("Track A");
+        sel_rule1->setDisabled(false);
+        sel_rule2->setDisabled(true);
+    }
+}
+
+void CheckBox::set_selrulePAR1(int value)
+{
+    selrule_par1 = value; // TRACK A
+}
+
+void CheckBox::set_selrulePAR2(int value)
+{
+    selrule_par2 = value; // TRACK B
+}
+
+void CheckBox::set_mixruleType(QAbstractButton *button)
+{
+    mixrule_type = button->objectName().toInt();
+
+    if( (mixrule_type == 0) || (mixrule_type == 1) || (mixrule_type == 2) ){
+        mix_rule1->setText("Track A");
+        mix_rule1->setDisabled(false);
+        mix_rule2->setText("Track B");
+        mix_rule2->setDisabled(false);
+        mix_rule3->setDisabled(true);
+        mix_rule4->setDisabled(true);
+    }else{
+        mix_rule1->setText("Track A");
+        mix_rule1->setDisabled(false);
+        mix_rule2->setDisabled(true);
+        mix_rule3->setText("Min Volume");
+        mix_rule3->setDisabled(false);
+        mix_rule4->setText("Max Volume");
+        mix_rule4->setDisabled(false);
+    }
+}
+
+void CheckBox::set_mixrulePAR1(int value)
+{
+    mixrule_par1 = value; // TRACK A
+}
+
+void CheckBox::set_mixrulePAR2(int value)
+{
+    mixrule_par2 = value; // TRACK B
+}
+
+void CheckBox::set_mixrulePAR3(int value)
+{
+    mixrule_par3 = value; // MIN VOL for Limit Rule
+}
+
+void CheckBox::set_mixrulePAR4(int value)
+{
+    mixrule_par4 = value; // MAX VOL for Limit Rule
+}
+
+void CheckBox::set_TrackInGroup(QAbstractButton *button)
+{
+    int temp = button->objectName().toInt();
+
+    if (button->isChecked()){
+        group_tracks[temp-1] = 1;
+        }else{
+        group_tracks[temp-1] = 0;
+    }
+}
+
+void CheckBox::set_GroupName(QString name)
+{
+    group_name = name;
+}
+
+void CheckBox::set_GroupVolume(int value)
+{
+    group_volume = value;
+}
+
+void CheckBox::set_presetType(QAbstractButton *button)
+{
+    preset_type = button->objectName().toInt();
+}
+
+void CheckBox::set_fade(QAbstractButton *button)
+{
+    fade_in = button->objectName().toInt();
+}

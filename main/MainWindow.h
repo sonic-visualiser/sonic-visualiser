@@ -5,7 +5,7 @@
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
     This file copyright 2006-2007 Chris Cannam and QMUL.
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -157,13 +157,17 @@ protected slots:
     virtual void about();
     virtual void keyReference();
     virtual void newerVersionAvailable(QString);
+    virtual void exportIMAF();
+    virtual void importIMAF();
+    virtual void openMP3IMAF();
+    virtual void insertLyrics(size_t frame, QString text);
 
 protected:
     Overview                *m_overview;
     Fader                   *m_fader;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
-    
+
     QScrollArea             *m_mainScroll;
 
     bool                     m_mainMenusCreated;
@@ -223,14 +227,14 @@ protected:
     VersionTester           *m_versionTester;
 
     struct LayerConfiguration {
-	LayerConfiguration(LayerFactory::LayerType _layer
-			                       = LayerFactory::TimeRuler,
+    LayerConfiguration(LayerFactory::LayerType _layer
+                                   = LayerFactory::TimeRuler,
                            Model *_source = 0,
                            int _channel = -1) :
-	    layer(_layer), sourceModel(_source), channel(_channel) { }
-	LayerFactory::LayerType layer;
+        layer(_layer), sourceModel(_source), channel(_channel) { }
+        LayerFactory::LayerType layer;
         Model *sourceModel;
-	int channel;
+        int channel;
     };
 
     typedef std::map<QAction *, LayerConfiguration> PaneActionMap;
@@ -276,7 +280,7 @@ protected:
     virtual void updatePositionStatusDisplays() const;
 
     virtual bool shouldCreateNewSessionForRDFAudio(bool *cancel);
-    
+
     virtual void connectLayerEditDialog(ModelDataTableDialog *);
 };
 

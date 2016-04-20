@@ -62,7 +62,7 @@ MY_LIBS = -Lsvapp -Lsvgui -Lsvcore -Lchecker -Ldataquay -L. \
           -lsvapp -lsvgui -lsvcore -lchecker -ldataquay -lbq
 
 linux* {
-MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic
+MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic -ldl
 }
 
 win* {
@@ -72,6 +72,7 @@ MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Lchecker/release -Ld
 LIBS = $$MY_LIBS $$LIBS
 
 win* {
+
 PRE_TARGETDEPS += svapp/release/libsvapp.a \
                   svgui/release/libsvgui.a \
                   svcore/release/libsvcore.a \
@@ -101,6 +102,8 @@ HEADERS += \
         vamp-plugin-sdk/vamp-hostsdk/RealTime.h \
         vamp-plugin-sdk/src/vamp-hostsdk/Window.h \
         main/MainWindow.h \
+        main/IMAFencoder.h \
+        main/checkbox.h \
         main/NetworkPermissionTester.h \
         main/Surveyer.h \
         main/SVSplash.h \
@@ -118,6 +121,8 @@ SOURCES +=  \
 	main/main.cpp \
         main/OSCHandler.cpp \
         main/MainWindow.cpp \
+        main/IMAFencoder.c \
+        main/imafdecoder.cpp \
         main/NetworkPermissionTester.cpp \
         main/Surveyer.cpp \
         main/SVSplash.cpp \

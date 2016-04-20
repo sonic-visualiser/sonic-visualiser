@@ -54,6 +54,7 @@ NetworkPermissionTester::havePermission()
 	      "<h2>Welcome to Sonic Visualiser!</h2>"
 	      "<p><img src=\":icons/qm-logo-smaller.png\" style=\"float:right\">Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>"
 	      "<p>Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Visualiser is provided free as open source software under the GNU General Public License.</p>"
+              "<p><b>This is an experimental release of Sonic Visualiser with support for import and export of IM-AF encoded multitrack files.</b><br>It is not a standard Sonic Visualiser release.</p>"
               "<p><hr></p>"
 	      "<p><b>Before we go on...</b></p>"
 	      "<p>Sonic Visualiser would like to make networking connections and open a network port.</p>"
