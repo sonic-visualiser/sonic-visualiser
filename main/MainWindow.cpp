@@ -4436,15 +4436,13 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentFailed(QString transformName, QString message)
+MainWindow::alignmentFailed(QString message)
 {
-    emit hideSplash();
-
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
-         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment using transform \"%1\":<p>%2")
-         .arg(transformName).arg(message),
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
+         .arg(message),
          QMessageBox::Ok);
 }
 
