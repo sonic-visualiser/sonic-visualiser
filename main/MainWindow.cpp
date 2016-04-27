@@ -4576,7 +4576,7 @@ MainWindow::about()
 
     aboutText += "<small>";
 
-    aboutText += tr("With Qt v%1 &copy; Nokia Corporation").arg(QT_VERSION_STR);
+    aboutText += tr("With Qt v%1 &copy; The Qt Company").arg(QT_VERSION_STR);
 
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION
