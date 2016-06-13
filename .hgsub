@@ -1,3 +1,4 @@
+vamp-plugin-sdk = https://code.soundsoftware.ac.uk/hg/vamp-plugin-sdk
 svcore = https://code.soundsoftware.ac.uk/hg/svcore
 svgui = https://code.soundsoftware.ac.uk/hg/svgui
 svapp = https://code.soundsoftware.ac.uk/hg/svapp
@@ -7,3 +8,4 @@ bqresample = https://bitbucket.org/breakfastquay/bqresample
 bqaudioio = https://bitbucket.org/breakfastquay/bqaudioio
 sv-dependency-builds = https://code.soundsoftware.ac.uk/hg/sv-dependency-builds
 icons/scalable = https://code.soundsoftware.ac.uk/hg/sv-iconset
+checker = https://code.soundsoftware.ac.uk/hg/vamp-plugin-load-checker

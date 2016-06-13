@@ -93,7 +93,7 @@ protected slots:
     virtual void modelGenerationWarning(QString, QString);
     virtual void modelRegenerationFailed(QString, QString, QString);
     virtual void modelRegenerationWarning(QString, QString, QString);
-    virtual void alignmentFailed(QString, QString);
+    virtual void alignmentFailed(QString);
 
     virtual void rightButtonMenuRequested(Pane *, QPoint point);
 
@@ -147,7 +147,7 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
-    virtual void pluginPopulationWarning(QString);
+    virtual void pluginPopulationWarning();
 
     virtual void saveSessionAsTemplate();
     virtual void manageSavedTemplates();

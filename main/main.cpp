@@ -26,6 +26,7 @@
 #include "widgets/InteractiveFileFinder.h"
 #include "svapp/framework/TransformUserConfigurator.h"
 #include "transform/TransformFactory.h"
+#include "svcore/plugin/PluginScan.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -332,6 +333,28 @@ main(int argc, char **argv)
 
     StoreStartupLocale();
 
+    // Make known-plugins query as early as possible after showing
+    // splash screen. This depends on our helper executable, which
+    // must exist either in the same directory as this one or
+    // (preferably) a subdirectory called "checker".
+    QString myDir = application.applicationDirPath();
+    QString helperPath = myDir + "/checker/plugin-checker-helper";
+    QString helperSuffix = "";
+#ifdef _WIN32
+    helperSuffix = ".exe";
+#endif
+    if (!QFile(helperPath + helperSuffix).exists()) {
+        cerr << "NOTE: helper not found at " << (helperPath + helperSuffix)
+             << ", trying in my own directory" << endl;
+        helperPath = myDir + "/plugin-checker-helper";
+    }
+    helperPath += helperSuffix;
+    if (!QFile(helperPath + helperSuffix).exists()) {
+        cerr << "NOTE: helper not found at " << (helperPath + helperSuffix)
+             << endl;
+    }
+    PluginScan::getInstance()->scan(helperPath);
+    
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
