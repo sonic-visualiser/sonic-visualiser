@@ -46,17 +46,17 @@
 <context>
     <name>AudioCallbackPlaySource</name>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="501"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="499"/>
         <source>Play from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="524"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="522"/>
         <source>Stop at %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1109"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1105"/>
         <source>Change time-stretch factor to %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -543,7 +543,7 @@ Value:	%4</source>
 <context>
     <name>Dense3DModelPeakCache</name>
     <message>
-        <location filename="../svcore/data/model/Dense3DModelPeakCache.h" line="82"/>
+        <location filename="../svcore/data/model/Dense3DModelPeakCache.h" line="79"/>
         <source>Dense 3-D Peak Cache</source>
         <translation type="unfinished"></translation>
     </message>
@@ -551,17 +551,17 @@ Value:	%4</source>
 <context>
     <name>DenseThreeDimensionalModel</name>
     <message>
-        <location filename="../svcore/data/model/DenseThreeDimensionalModel.h" line="129"/>
+        <location filename="../svcore/data/model/DenseThreeDimensionalModel.h" line="120"/>
         <source>Dense 3-D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/DenseThreeDimensionalModel.h" line="146"/>
+        <location filename="../svcore/data/model/DenseThreeDimensionalModel.h" line="137"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/DenseThreeDimensionalModel.h" line="147"/>
+        <location filename="../svcore/data/model/DenseThreeDimensionalModel.h" line="138"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
@@ -590,7 +590,7 @@ Value:	%4</source>
 <context>
     <name>EditableDenseThreeDimensionalModel</name>
     <message>
-        <location filename="../svcore/data/model/EditableDenseThreeDimensionalModel.h" line="187"/>
+        <location filename="../svcore/data/model/EditableDenseThreeDimensionalModel.h" line="182"/>
         <source>Editable Dense 3-D</source>
         <translation type="unfinished"></translation>
     </message>
@@ -598,7 +598,7 @@ Value:	%4</source>
 <context>
     <name>FFTModel</name>
     <message>
-        <location filename="../svcore/data/model/FFTModel.h" line="139"/>
+        <location filename="../svcore/data/model/FFTModel.h" line="138"/>
         <source>FFT</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4544,13 +4544,13 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <location filename="../svapp/framework/MainWindowBase.cpp" line="1468"/>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="1892"/>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="2022"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2760"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2763"/>
         <source>%1: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="1475"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2767"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2770"/>
         <source>%1: %2 [%3]</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4650,57 +4650,57 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2216"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2217"/>
         <source>Couldn&apos;t open audio device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2217"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2218"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open an audio device for playback.&lt;p&gt;Automatic audio device detection failed. Audio playback will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3388"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3392"/>
         <source>Recording: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2307"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2320"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2358"/>
-        <source>Failed to write file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="2308"/>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="2321"/>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="2359"/>
+        <source>Failed to write file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2309"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2322"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2360"/>
         <source>&lt;b&gt;Save failed&lt;/b&gt;&lt;p&gt;Failed to write to file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2780"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2783"/>
         <source>Import Recorded Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3071"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3075"/>
         <source>Add Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3117"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3121"/>
         <source>Remove Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3140"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3557"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3144"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3561"/>
         <source>Delete Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3376"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3380"/>
         <source>Playing: %1 of %2 (%3 remaining)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6740,358 +6740,358 @@ Range:	%3 samples (%4)</source>
 <context>
     <name>SpectrogramLayer</name>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="179"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="221"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="177"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="219"/>
         <source>Colour</source>
         <translation type="unfinished">Color</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="180"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="178"/>
         <source>Colour Scale</source>
         <translation type="unfinished">Color Scale</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="181"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="179"/>
         <source>Window Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="182"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="180"/>
         <source>Window Overlap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="183"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="181"/>
         <source>Normalization</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="184"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="182"/>
         <source>Bin Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="185"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="183"/>
         <source>Threshold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="186"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="184"/>
         <source>Gain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="187"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="185"/>
         <source>Colour Rotation</source>
         <translation type="unfinished">Color Rotation</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="188"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="186"/>
         <source>Min Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="189"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="187"/>
         <source>Max Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="190"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="188"/>
         <source>Frequency Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="191"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="189"/>
         <source>Smoothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="215"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="213"/>
         <source>Bins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="218"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="216"/>
         <source>Window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="224"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="222"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="391"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="452"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="389"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="450"/>
         <source>Linear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="392"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="390"/>
         <source>Meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="393"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="391"/>
         <source>dBV^2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="394"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="392"/>
         <source>dBV</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="395"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="393"/>
         <source>Phase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="407"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="416"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="405"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="414"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="408"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="406"/>
         <source>25 %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="409"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="407"/>
         <source>50 %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="410"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="408"/>
         <source>75 %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="411"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="409"/>
         <source>87.5 %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="412"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="410"/>
         <source>93.75 %</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="422"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="420"/>
         <source>No min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="423"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="421"/>
         <source>10 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="424"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="422"/>
         <source>20 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="425"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="423"/>
         <source>40 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="426"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="424"/>
         <source>100 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="427"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="425"/>
         <source>250 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="428"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="437"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="426"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="435"/>
         <source>500 Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="429"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="438"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="427"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="436"/>
         <source>1 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="430"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="441"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="428"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="439"/>
         <source>4 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="431"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="429"/>
         <source>10 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="439"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="437"/>
         <source>1.5 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="440"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="438"/>
         <source>2 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="442"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="440"/>
         <source>6 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="443"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="441"/>
         <source>8 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="444"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="442"/>
         <source>12 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="445"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="443"/>
         <source>16 KHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="446"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="444"/>
         <source>No max</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="453"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="451"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="459"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="457"/>
         <source>All Bins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="460"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="458"/>
         <source>Peak Bins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="461"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="459"/>
         <source>Frequencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="464"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="462"/>
         <source>&lt;unknown&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="487"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="490"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="485"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="488"/>
         <source>dB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1553"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1492"/>
         <source>FFT cache failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1554"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="1493"/>
         <source>Failed to create the FFT model for this spectrogram.
 There may be insufficient memory or disc space to continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3062"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2968"/>
         <source>Peak Frequency:	%1 - %2 Hz
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3065"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2971"/>
         <source>Peak Frequency:	%1 Hz
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3073"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2979"/>
         <source>Peak Pitch:	%3 - %4
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3075"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2981"/>
         <source>Peak Pitch:	%2
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3086"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2992"/>
         <source>Time:	%1 - %2
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3090"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="2996"/>
         <source>Time:	%1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3095"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3001"/>
         <source>%1Bin Frequency:	%2 - %3 Hz
 %4Bin Pitch:	%5 - %6
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3103"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3009"/>
         <source>%1Bin Frequency:	%2 Hz
 %3Bin Pitch:	%4
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3116"/>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3121"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3022"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3027"/>
         <source>-Inf</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3126"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3032"/>
         <source>dB:	%1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3128"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3034"/>
         <source>dB:	%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3131"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3037"/>
         <source>
 Phase:	%1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3133"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3039"/>
         <source>
 Phase:	%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3163"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3069"/>
         <source>43Hz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3310"/>
+        <location filename="../svgui/layer/SpectrogramLayer.cpp" line="3216"/>
         <source>%1Hz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7868,44 +7868,44 @@ What values do you want to use for these items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1147"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1185"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1157"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1195"/>
         <source>Plugin type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1149"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1187"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1159"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1197"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1150"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1188"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1160"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1198"/>
         <source>System Identifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1151"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1189"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1161"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1199"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1152"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1190"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1162"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1200"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1153"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1191"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1163"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1201"/>
         <source>Maker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1154"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1192"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1164"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1202"/>
         <source>Units</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8111,63 +8111,63 @@ What values do you want to use for these items?</source>
 <context>
     <name>View</name>
     <message>
-        <location filename="../svgui/view/View.cpp" line="97"/>
+        <location filename="../svgui/view/View.cpp" line="96"/>
         <source>Global Scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="98"/>
+        <location filename="../svgui/view/View.cpp" line="97"/>
         <source>Global Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="99"/>
+        <location filename="../svgui/view/View.cpp" line="98"/>
         <source>Follow Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="142"/>
+        <location filename="../svgui/view/View.cpp" line="141"/>
         <source>Scroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="143"/>
+        <location filename="../svgui/view/View.cpp" line="142"/>
         <source>Page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="144"/>
+        <location filename="../svgui/view/View.cpp" line="143"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="147"/>
+        <location filename="../svgui/view/View.cpp" line="146"/>
         <source>&lt;unknown&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="1580"/>
+        <location filename="../svgui/view/View.cpp" line="1581"/>
         <source>Layer rendering error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="1602"/>
+        <location filename="../svgui/view/View.cpp" line="1603"/>
         <source>Alignment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="2426"/>
+        <location filename="../svgui/view/View.cpp" line="2427"/>
         <source>Waiting for layers to be ready...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="2427"/>
-        <location filename="../svgui/view/View.cpp" line="2456"/>
+        <location filename="../svgui/view/View.cpp" line="2428"/>
+        <location filename="../svgui/view/View.cpp" line="2457"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="2455"/>
+        <location filename="../svgui/view/View.cpp" line="2456"/>
         <source>Rendering image...</source>
         <translation type="unfinished"></translation>
     </message>

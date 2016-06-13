@@ -69,6 +69,7 @@
 #include "data/fileio/FileSource.h"
 #include "data/midi/MIDIInput.h"
 #include "base/RecentFiles.h"
+#include "plugin/PluginScan.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
 #include "base/PlayParameterRepository.h"
@@ -330,8 +331,10 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = 0;
     }
 
-    QString warning = TransformFactory::getInstance()->getPluginPopulationWarning();
-    if (warning != "") pluginPopulationWarning(warning);
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
+    if (warning != "") {
+        QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
+    }
 }
 
 MainWindow::~MainWindow()
@@ -4141,8 +4144,9 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 }
 
 void
-MainWindow::pluginPopulationWarning(QString warning)
+MainWindow::pluginPopulationWarning()
 {
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
     QMessageBox::warning(this, tr("Problems loading plugins"), warning);
 }
 
@@ -4432,15 +4436,13 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentFailed(QString transformName, QString message)
+MainWindow::alignmentFailed(QString message)
 {
-    emit hideSplash();
-
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
-         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment using transform \"%1\":<p>%2")
-         .arg(transformName).arg(message),
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
+         .arg(message),
          QMessageBox::Ok);
 }
 
@@ -4574,7 +4576,7 @@ MainWindow::about()
 
     aboutText += "<small>";
 
-    aboutText += tr("With Qt v%1 &copy; Nokia Corporation").arg(QT_VERSION_STR);
+    aboutText += tr("With Qt v%1 &copy; The Qt Company").arg(QT_VERSION_STR);
 
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION

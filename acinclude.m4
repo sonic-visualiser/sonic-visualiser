@@ -69,6 +69,9 @@ if test x$QMAKE = x ; then
    	AC_CHECK_PROG(QMAKE, qmake-qt5, $QTDIR/bin/qmake-qt5,,$QTDIR/bin/)
 fi
 if test x$QMAKE = x ; then
+   	AC_CHECK_PROG(QMAKE, qt5-qmake, $QTDIR/bin/qt5-qmake,,$QTDIR/bin/)
+fi
+if test x$QMAKE = x ; then
    	AC_CHECK_PROG(QMAKE, qmake, $QTDIR/bin/qmake,,$QTDIR/bin/)
 fi
 if test x$QMAKE = x ; then
@@ -76,6 +79,9 @@ if test x$QMAKE = x ; then
 fi
 if test x$QMAKE = x ; then
    	AC_CHECK_PROG(QMAKE, qmake-qt5, qmake-qt5,,$PATH)
+fi
+if test x$QMAKE = x ; then
+   	AC_CHECK_PROG(QMAKE, qt5-qmake, qt5-qmake,,$PATH)
 fi
 if test x$QMAKE = x ; then
    	AC_CHECK_PROG(QMAKE, qmake, qmake,,$PATH)
