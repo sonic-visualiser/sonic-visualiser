@@ -1764,8 +1764,11 @@ MainWindow::setupRecentFilesMenu()
     m_recentFilesMenu->clear();
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
-	QAction *action = new QAction(files[i], this);
-	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        /* F. Nicol patch 13 Aug. 2016 */
+        const QString& path = files[i];
+        QAction *action = new QAction(path, this);
+        connect(action, &QAction::triggered, [this, path] { openRecentFile(path);});
+        /* end of patch */
         if (i == 0) {
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
@@ -3073,8 +3076,10 @@ MainWindow::openLocation()
 }
 
 void
-MainWindow::openRecentFile()
+MainWindow::openRecentFile(const QString& path)
 {
+   /* F. Nicol patch 13 Aug. 2016 */
+#if 0
     QObject *obj = sender();
     QAction *action = dynamic_cast<QAction *>(obj);
     
@@ -3085,6 +3090,9 @@ MainWindow::openRecentFile()
     }
 
     QString path = action->text();
+#endif
+   /* End of F. Nicol patch 13 Aug. 2016 */
+
     if (path == "") return;
 
     FileOpenStatus status = openPath(path, ReplaceSession);
