@@ -39,6 +39,8 @@ exists(config.pri) {
     }
 }
 
+LIBS += -lcapnp -lkj ##!!!
+
 CONFIG += qt thread warn_on stl rtti exceptions c++11
 QT += network xml gui widgets svg
 
@@ -46,8 +48,8 @@ TARGET = "Sonic Visualiser"
 linux*:TARGET = sonic-visualiser
 solaris*:TARGET = sonic-visualiser
 
-DEPENDPATH += . bqaudioio svcore svgui svapp
-INCLUDEPATH += . bqaudioio svcore svgui svapp
+DEPENDPATH += . bqaudioio piper-cpp svcore svgui svapp
+INCLUDEPATH += . bqaudioio piper-cpp svcore svgui svapp
 
 TRANSLATIONS += i18n/sonic-visualiser_ru.ts i18n/sonic-visualiser_en_GB.ts i18n/sonic-visualiser_en_US.ts i18n/sonic-visualiser_cs_CZ.ts
 
@@ -116,6 +118,7 @@ SOURCES +=  \
         vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp \
         vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp \
         vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp \
+        piper-cpp/vamp-capnp/piper.capnp.c++ \
 	main/main.cpp \
         main/OSCHandler.cpp \
         main/MainWindow.cpp \
