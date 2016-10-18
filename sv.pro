@@ -8,8 +8,10 @@ win32-g++ {
     LIBS += -Lrelease -Lsv-dependency-builds/win32-mingw/lib
 }
 win32-msvc* {
-    INCLUDEPATH += sv-dependency-builds/win32-msvc/include
-    LIBS += -Lrelease -Lsv-dependency-builds/win32-msvc/lib
+    # We actually expect MSVC to be used only for 64-bit builds,
+    # though the qmake spec is still called win32-msvc*
+    INCLUDEPATH += sv-dependency-builds/win64-msvc/include
+    LIBS += -Lrelease -Lsv-dependency-builds/win64-msvc/lib
 }
 mac* {
     INCLUDEPATH += sv-dependency-builds/osx/include
@@ -30,8 +32,13 @@ exists(config.pri) {
     LIBS += -lbz2 -lrubberband -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -lz -lsord-0 -lserd-0 -llo
 
     win* {
-        DEFINES += _USE_MATH_DEFINES
+        DEFINES += NOMINMAX _USE_MATH_DEFINES
+        DEFINES -= HAVE_LIBLO
         LIBS += -lwinmm -lws2_32
+    }
+    win32-msvc* {
+        LIBS -= -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -lsord-0 -lserd-0 -llo
+        LIBS += -lsord -lserd -ladvapi32
     }
     macx* {
         DEFINES += HAVE_COREAUDIO
