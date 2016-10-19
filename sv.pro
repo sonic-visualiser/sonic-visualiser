@@ -11,7 +11,16 @@ win32-msvc* {
     # We actually expect MSVC to be used only for 64-bit builds,
     # though the qmake spec is still called win32-msvc*
     INCLUDEPATH += sv-dependency-builds/win64-msvc/include
-    LIBS += -Lrelease -Lsv-dependency-builds/win64-msvc/lib
+# bah, this is happening even if not debug build
+#    CONFIG(debug) {
+#        LIBS += -NODEFAULTLIB:MSVCRT -Ldebug \
+#            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib/debug \
+#            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
+#    }
+    CONFIG(release) {
+        LIBS += -Lrelease \
+            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
+    }
 }
 mac* {
     INCLUDEPATH += sv-dependency-builds/osx/include
@@ -25,7 +34,8 @@ exists(config.pri) {
 !exists(config.pri) {
 
     CONFIG += release
-    DEFINES += NDEBUG BUILD_RELEASE NO_TIMING
+    DEFINES += NDEBUG BUILD_RELEASE
+    DEFINES += NO_TIMING
 
     DEFINES += HAVE_BZ2 HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_SAMPLERATE HAVE_VAMP HAVE_VAMPHOSTSDK HAVE_RUBBERBAND HAVE_DATAQUAY HAVE_LIBLO HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO
 
@@ -73,13 +83,17 @@ linux* {
 MY_LIBS = -Wl,-Bstatic $$MY_LIBS -Wl,-Bdynamic
 }
 
-win* {
+##??? how to set this appropriately for debug/release
+win32*:CONFIG(debug) {
+MY_LIBS = -Lsvapp/debug -Lsvgui/debug -Lsvcore/debug -Lchecker/debug -Ldataquay/debug $$MY_LIBS
+}
+win32*:CONFIG(release) {
 MY_LIBS = -Lsvapp/release -Lsvgui/release -Lsvcore/release -Lchecker/release -Ldataquay/release $$MY_LIBS
 }
 
 LIBS = $$MY_LIBS $$LIBS
 
-win* {
+win32-g++* {
 PRE_TARGETDEPS += svapp/release/libsvapp.a \
                   svgui/release/libsvgui.a \
                   svcore/release/libsvcore.a \
@@ -92,6 +106,21 @@ PRE_TARGETDEPS += svapp/libsvapp.a \
                   svcore/libsvcore.a \
                   dataquay/libdataquay.a \
                   checker/libchecker.a
+}
+
+win32-msvc*:CONFIG(debug) {
+PRE_TARGETDEPS += svapp/debug/svapp.lib \
+                  svgui/debug/svgui.lib \
+                  svcore/debug/svcore.lib \
+                  dataquay/debug/dataquay.lib \
+                  checker/debug/checker.lib
+}
+win32-msvc*:CONFIG(release) {
+PRE_TARGETDEPS += svapp/release/svapp.lib \
+                  svgui/release/svgui.lib \
+                  svcore/release/svcore.lib \
+                  dataquay/release/dataquay.lib \
+                  checker/release/checker.lib
 }
 
 RESOURCES += sonic-visualiser.qrc
