@@ -18,8 +18,10 @@ win32-g++ {
     LIBS += -L../../sv-dependency-builds/win32-mingw/lib
 }
 win32-msvc* {
-    INCLUDEPATH += ../sv-dependency-builds/win32-msvc/include
-    LIBS += -L../../sv-dependency-builds/win32-msvc/lib
+    # We actually expect MSVC to be used only for 64-bit builds,
+    # though the qmake spec is still called win32-msvc*
+    INCLUDEPATH += ../sv-dependency-builds/win64-msvc/include
+    LIBS += -L../../sv-dependency-builds/win64-msvc/lib
 }
 mac* {
     INCLUDEPATH += ../sv-dependency-builds/osx/include
