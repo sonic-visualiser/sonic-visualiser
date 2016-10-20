@@ -154,7 +154,7 @@ SOURCES +=  \
         vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp \
         vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp \
         vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp \
-        piper-cpp/vamp-capnp/piper.capnp.c++ \
+        piper-cpp/vamp-capnp/piper-capnp.cpp \
 	main/main.cpp \
         main/OSCHandler.cpp \
         main/MainWindow.cpp \
