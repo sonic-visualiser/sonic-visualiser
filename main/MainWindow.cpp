@@ -1180,7 +1180,9 @@ MainWindow::setupPaneAndLayerMenus()
 // Avoid warnings/errors with -Wextra because we aren't explicitly
 // handling all layer types (-Wall is OK with this because of the
 // default but the stricter level insists)
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
             
             switch (type) {
                     
@@ -4578,9 +4580,10 @@ MainWindow::about()
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
     aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.<br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
-    aboutText += tr("<p><small>%1 : %2 configuration</small></p>")
+    aboutText += tr("<p><small>%1 : %2 configuration, %3-bit build</small></p>")
         .arg(version)
-        .arg(debug ? tr("Debug") : tr("Release"));
+        .arg(debug ? tr("Debug") : tr("Release"))
+        .arg(sizeof(void *) * 8);
 
     aboutText += "<small>";
 
@@ -4679,7 +4682,7 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2015 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2016 Chris Cannam and "
         "Queen Mary, University of London.</small></p>"
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "
