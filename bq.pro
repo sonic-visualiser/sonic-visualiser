@@ -6,8 +6,10 @@ win32-g++ {
     LIBS += -Lsv-dependency-builds/win32-mingw/lib
 }
 win32-msvc* {
-    INCLUDEPATH += sv-dependency-builds/win32-msvc/include
-    LIBS += -Lsv-dependency-builds/win32-msvc/lib
+    # We actually expect MSVC to be used only for 64-bit builds,
+    # though the qmake spec is still called win32-msvc*
+    INCLUDEPATH += sv-dependency-builds/win64-msvc/include
+    LIBS += -Lrelease -Lsv-dependency-builds/win64-msvc/lib
 }
 mac* {
     INCLUDEPATH += sv-dependency-builds/osx/include
@@ -23,14 +25,24 @@ exists(config.pri) {
     CONFIG += release
     DEFINES += NDEBUG BUILD_RELEASE NO_TIMING
 
-    DEFINES += HAVE_BZ2 HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_LIBSAMPLERATE HAVE_VAMP HAVE_VAMPHOSTSDK HAVE_RUBBERBAND HAVE_DATAQUAY HAVE_LIBLO HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO
+    linux* {
+        DEFINES += HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_LIBSAMPLERATE HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO
+        LIBS += -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -lz
+    }
 
-    LIBS += -lbz2 -lrubberband -lvamp-hostsdk -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -lz -lsord-0 -lserd-0 -llo
-
-    win* {
+    win32-g++ {
+        DEFINES += HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_LIBSAMPLERATE HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO
+        LIBS += -lfftw3 -lfftw3f -lsndfile -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -lz
         DEFINES += USE_OWN_ALIGNED_MALLOC _USE_MATH_DEFINES
         LIBS += -lwinmm -lws2_32
     }
+    win32-msvc* {
+        DEFINES += HAVE_FFTW3 HAVE_FFTW3F HAVE_SNDFILE HAVE_LIBSAMPLERATE HAVE_MAD HAVE_ID3TAG HAVE_PORTAUDIO
+        LIBS += -lfftw3 -lfftw3f -lportaudio
+        DEFINES += USE_OWN_ALIGNED_MALLOC _USE_MATH_DEFINES
+        LIBS += -lwinmm -lws2_32
+    }
+
     macx* {
         DEFINES += HAVE_COREAUDIO MALLOC_IS_ALIGNED
         LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices -framework Accelerate
