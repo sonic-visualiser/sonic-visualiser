@@ -767,6 +767,7 @@ PreferencesDialog::applyClicked()
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setResampleQuality(m_resampleQuality);
     prefs->setResampleOnLoad(m_resampleOnLoad);
+    prefs->setRunPluginsInProcess(m_runPluginsInProcess);
     prefs->setShowSplash(m_showSplash);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
