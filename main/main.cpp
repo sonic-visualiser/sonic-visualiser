@@ -356,11 +356,11 @@ main(int argc, char **argv)
              << ", trying in my own directory" << endl;
         helperPath = myDir + "/plugin-checker-helper";
     }
-    helperPath += helperSuffix;
     if (!QFile(helperPath + helperSuffix).exists()) {
         cerr << "NOTE: helper not found at " << (helperPath + helperSuffix)
              << endl;
     }
+    helperPath += helperSuffix;
     PluginScan::getInstance()->scan(helperPath);
     
     // Permit size_t and PropertyName to be used as args in queued signal calls
