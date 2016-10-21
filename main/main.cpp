@@ -279,6 +279,7 @@ main(int argc, char **argv)
     settings.beginGroup("Preferences");
     // Default to using Piper server; can change in preferences
     if (!settings.contains("run-vamp-plugins-in-process")) {
+        cerr << "setting does not exist yet" << endl;
         settings.setValue("run-vamp-plugins-in-process", false);
     }
     settings.endGroup();
