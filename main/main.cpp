@@ -277,6 +277,13 @@ main(int argc, char **argv)
     QSettings settings;
 
     settings.beginGroup("Preferences");
+    // Default to using Piper server; can change in preferences
+    if (!settings.contains("run-vamp-plugins-in-process")) {
+        settings.setValue("run-vamp-plugins-in-process", false);
+    }
+    settings.endGroup();
+
+    settings.beginGroup("Preferences");
     if (settings.value("show-splash", true).toBool()) {
         splash = new SVSplash();
         splash->show();
