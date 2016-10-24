@@ -86,6 +86,8 @@ SV_MODULE_REQUIRED([libsamplerate],[samplerate >= 0.1.2],[samplerate.h],[sampler
 SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],[rubberband],[rubberband_new])
 SV_MODULE_REQUIRED([sord],[sord-0 >= 0.5],[sord/sord.h],[sord-0],[sord_world_new])
 SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_read_file])
+SV_MODULE_REQUIRED([capnp],[capnp >= 0.6],[capnp/common.h],[capnp],[])
+SV_MODULE_REQUIRED([kj],[kj >= 0.6],[kj/common.h],[kj],[])
 
 SV_MODULE_OPTIONAL([liblo],[],[lo/lo.h],[lo],[lo_address_new])
 SV_MODULE_OPTIONAL([portaudio],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
@@ -118,7 +120,6 @@ AC_SUBST(CXX)
 
 AC_SUBST(QMAKE_CONFIG)
 
-AC_CONFIG_SUBDIRS([svcore svgui svapp])
 AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT
