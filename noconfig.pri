@@ -102,7 +102,7 @@ macx* {
     INCLUDEPATH += sv-dependency-builds/osx/include
     LIBS += -Lsv-dependency-builds/osx/lib
 
-    DEFINES += HAVE_COREAUDIO
+    DEFINES += HAVE_COREAUDIO MALLOC_IS_ALIGNED HAVE_VDSP
     LIBS += \
         -framework CoreAudio \
 	-framework CoreMidi \
