@@ -11,6 +11,8 @@ exists(config.pri) {
 
 !exists(config.pri) {
     include(noconfig.pri)
+
+    macx*: LIBS -= -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices -framework Accelerate -lbz2 -lz
 }
 
 # Using the "console" CONFIG flag above should ensure this happens for
