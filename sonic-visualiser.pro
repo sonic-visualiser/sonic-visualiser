@@ -2,6 +2,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
+	checker \
 	sub_server \
 	sub_sv
 
