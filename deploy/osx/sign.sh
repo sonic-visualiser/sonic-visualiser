@@ -1,5 +1,7 @@
 #!/bin/bash 
 
+set -eu
+
 # Execute this from the top-level directory of the project (the one
 # that contains the .app bundle).  Supply the name of the .app bundle
 # as argument
