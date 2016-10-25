@@ -1,8 +1,9 @@
 
 TEMPLATE = app
 
-CONFIG += qt stl c++11 exceptions console warn_on
-QT -= xml network gui widgets
+CONFIG += stl c++11 exceptions console warn_on
+
+CONFIG -= qt
 
 exists(config.pri) {
     include(config.pri)
@@ -14,7 +15,9 @@ exists(config.pri) {
 
 # Using the "console" CONFIG flag above should ensure this happens for
 # normal Windows builds, but this may be necessary when cross-compiling
-win32-x-g++:QMAKE_LFLAGS += -Wl,-subsystem,console
+win32-x-g++: QMAKE_LFLAGS += -Wl,-subsystem,console
+
+macx*: CONFIG -= app_bundle
 
 linux*: LIBS += -ldl
 
@@ -27,8 +30,8 @@ INCLUDEPATH += piper-cpp vamp-plugin-sdk
 
 include(vamp-plugin-sdk-files.pri)
 
-for (file, VAMP_SOURCES)     { SOURCES += $$file }
-for (file, VAMP_HEADERS)     { HEADERS += $$file }
+for (file, VAMP_SOURCES) { SOURCES += $$file }
+for (file, VAMP_HEADERS) { HEADERS += $$file }
 
 HEADERS += \
         piper-cpp/vamp-capnp/piper.capnp.h \

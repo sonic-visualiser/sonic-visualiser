@@ -43,9 +43,9 @@ mac* {
        LIBS += -lsord -lserd -ladvapi32
    }
    macx* {
-       DEFINES += HAVE_COREAUDIO
+       DEFINES += HAVE_COREAUDIO MALLOC_IS_ALIGNED HAVE_LIBSAMPLERATE HAVE_VDSP
        LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices -framework Accelerate
    }
 
 
-
+LIBS += -lcapnp -lkj
