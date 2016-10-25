@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = sub_bq sub_dataquay svcore svgui svapp checker sub_sv 
+SUBDIRS = sub_bq sub_dataquay svcore svgui svapp checker sub_server sub_sv
 
 !win* {
     # We should build and run the tests on any platform,
@@ -12,6 +12,8 @@ sub_bq.file = bq.pro
 sub_sv.file = sv.pro
 
 sub_dataquay.file = dataquay/lib.pro
+
+sub_server.file = server.pro
 
 svgui.depends = svcore
 svapp.depends = svcore svgui
