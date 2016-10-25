@@ -80,6 +80,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(m_windowTypeSelector, SIGNAL(windowTypeChanged(WindowType)),
             this, SLOT(windowTypeChanged(WindowType)));
 
+    QCheckBox *vampProcessSeparation = new QCheckBox;
+    m_runPluginsInProcess = prefs->getRunPluginsInProcess();
+    vampProcessSeparation->setCheckState(m_runPluginsInProcess ? Qt::Unchecked :
+                                         Qt::Checked);
+    connect(vampProcessSeparation, SIGNAL(stateChanged(int)),
+            this, SLOT(vampProcessSeparationChanged(int)));
+    
     QComboBox *smoothing = new QComboBox;
     
     int sm = prefs->getPropertyRangeAndValue("Spectrogram Y Smoothing", &min, &max,
@@ -472,8 +479,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                                 ("Window Type"))),
                        row, 0);
     subgrid->addWidget(m_windowTypeSelector, row++, 1, 2, 2);
+
     subgrid->setRowStretch(row, 10);
     row++;
+
+    subgrid->addWidget(new QLabel(tr("Run Vamp plugins in separate process:")),
+                       row, 0);
+    subgrid->addWidget(vampProcessSeparation, row++, 1, 1, 1);
     
     subgrid->setRowStretch(row, 10);
     
@@ -633,6 +645,14 @@ PreferencesDialog::resampleOnLoadChanged(int state)
 }
 
 void
+PreferencesDialog::vampProcessSeparationChanged(int state)
+{
+    m_runPluginsInProcess = (state == Qt::Unchecked);
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::networkPermissionChanged(int state)
 {
     m_networkPermission = (state == Qt::Checked);
@@ -747,6 +767,7 @@ PreferencesDialog::applyClicked()
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setResampleQuality(m_resampleQuality);
     prefs->setResampleOnLoad(m_resampleOnLoad);
+    prefs->setRunPluginsInProcess(m_runPluginsInProcess);
     prefs->setShowSplash(m_showSplash);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
     prefs->setBackgroundMode(Preferences::BackgroundMode(m_backgroundMode));
