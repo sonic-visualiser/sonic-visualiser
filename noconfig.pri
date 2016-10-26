@@ -68,18 +68,21 @@ win32-msvc* {
     # need to add a way to distinguish the two.
     
     INCLUDEPATH += sv-dependency-builds/win64-msvc/include
-    
-    CONFIG(debug) {
-        LIBS += -NODEFAULTLIB:MSVCRT -Ldebug \
-            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib/debug \
-            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
-    }
+
+## This seems to be intruding even when we're supposed to be release
+#    CONFIG(debug) {
+#        LIBS += -NODEFAULTLIB:MSVCRT -Ldebug \
+#            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib/debug \
+#            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
+#    }
     CONFIG(release) {
         LIBS += -Lrelease \
             -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
     }
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES
+    DEFINES += NOMINMAX _USE_MATH_DEFINES USE_OWN_ALIGNED_MALLOC CAPNP_LITE
+
+    QMAKE_CXXFLAGS_RELEASE += -fp:fast
 
     # No Ogg/FLAC support in the sndfile build on this platform yet
     LIBS -= -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile
