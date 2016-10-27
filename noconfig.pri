@@ -49,9 +49,12 @@ win32-g++ {
     # This config is currently used for 32-bit Windows builds.
 
     INCLUDEPATH += sv-dependency-builds/win32-mingw/include
-    LIBS += -Lrelease -Lsv-dependency-builds/win32-mingw/lib
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES
+    LIBS += -Lrelease -Lsv-dependency-builds/win32-mingw/lib -L../sonic-visualiser/sv-dependency-builds/win32-mingw/lib
+
+    DEFINES += NOMINMAX _USE_MATH_DEFINES USE_OWN_ALIGNED_MALLOC CAPNP_LITE
+
+    QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
     # Don't have liblo
     DEFINES -= HAVE_LIBLO
@@ -104,6 +107,8 @@ macx* {
 
     INCLUDEPATH += sv-dependency-builds/osx/include
     LIBS += -Lsv-dependency-builds/osx/lib
+
+    QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
     DEFINES += HAVE_COREAUDIO MALLOC_IS_ALIGNED HAVE_VDSP
     LIBS += \
