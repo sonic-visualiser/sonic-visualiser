@@ -13,6 +13,13 @@ exists(config.pri) {
     include(noconfig.pri)
 
     macx*: LIBS -= -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices -framework Accelerate -lbz2 -lz
+
+    LIBS -= -lbz2 -lrubberband -lfftw3 -lfftw3f -lsndfile -lFLAC -lvorbis -lvorbisenc -lvorbisfile -logg -lmad -lid3tag -lportaudio -lsamplerate -lz -lsord-0 -lserd-0 -lpthread
+
+    win32-g++: {
+        QMAKE_CXXFLAGS += -static-libgcc -static-libstdc++
+        QMAKE_LFLAGS += -static-libgcc -static-libstdc++
+    }
 }
 
 # Using the "console" CONFIG flag above should ensure this happens for

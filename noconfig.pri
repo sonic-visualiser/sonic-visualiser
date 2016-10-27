@@ -1,5 +1,9 @@
 
 CONFIG += release
+
+#CONFIG -= release
+#CONFIG += debug
+
 DEFINES += NDEBUG BUILD_RELEASE
 DEFINES += NO_TIMING
 
