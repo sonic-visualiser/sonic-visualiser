@@ -41,4 +41,5 @@ HEADERS += \
 
 SOURCES += \
         piper-cpp/vamp-capnp/piper-capnp.cpp \
+        piper-cpp/json11/json11.cpp \
         piper-cpp/vamp-server/server.cpp
