@@ -54,8 +54,8 @@ SVSplash::SVSplash()
 	m_pixmap = new QPixmap(int(floor(sw * dpratio)),
 			       int(floor(sh * dpratio)));
 
-	cerr << "pixmap size = " << m_pixmap->width() << " * "
-	     << m_pixmap->height() << endl;
+//	cerr << "pixmap size = " << m_pixmap->width() << " * "
+//	     << m_pixmap->height() << endl;
 	
 	m_pixmap->fill(Qt::red);
 	QSvgRenderer renderer(QString(":icons/scalable/sv-splash.svg"));

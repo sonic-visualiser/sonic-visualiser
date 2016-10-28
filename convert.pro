@@ -26,7 +26,7 @@ macx*: CONFIG -= app_bundle
 
 linux*: LIBS += -ldl
 
-TARGET = piper-vamp-simple-server
+TARGET = piper-convert
 
 OBJECTS_DIR = o
 MOC_DIR = o
@@ -45,4 +45,4 @@ HEADERS += \
 SOURCES += \
         piper-cpp/vamp-capnp/piper-capnp.cpp \
         piper-cpp/json11/json11.cpp \
-        piper-cpp/vamp-server/simple-server.cpp
+        piper-cpp/vamp-server/convert.cpp

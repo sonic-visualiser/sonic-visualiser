@@ -46,8 +46,11 @@ cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
 echo "Copying in plugin load checker helper."
-cp checker/plugin-checker-helper.app/Contents/MacOS/plugin-checker-helper \
-    "$source"/Contents/MacOS/
+cp checker/plugin-checker-helper "$source"/Contents/MacOS/
+
+echo
+echo "Copying in plugin server."
+cp piper-vamp-server "$source"/Contents/MacOS/
 
 echo
 echo "Writing version $bundleVersion in to bundle."
@@ -73,7 +76,12 @@ cp -rp "$source" "$target"
 
 echo "Done"
 
+echo
+echo "Code-signing volume..."
+
 deploy/osx/sign.sh "$volume" || exit 1
+
+echo "Done"
 
 echo
 echo "Making dmg..."

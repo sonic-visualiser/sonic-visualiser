@@ -11,7 +11,7 @@ QMAKE_CFLAGS += @CFLAGS@
 QMAKE_CXXFLAGS += @CXXFLAGS@
 QMAKE_LFLAGS += @LDFLAGS@
 
-linux*:LIBS += -lasound
+linux*:LIBS += -lasound -ldl
 
 macx*:DEFINES += HAVE_COREAUDIO
 macx*:LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices
