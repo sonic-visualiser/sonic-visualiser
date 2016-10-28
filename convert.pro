@@ -15,6 +15,9 @@ exists(config.pri) {
     macx*: LIBS -= -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices -framework Accelerate -lbz2 -lz
 }
 
+# Can't support this flag with the JSON11 and basen modules as they stand
+QMAKE_CXXFLAGS -= -Werror
+
 # Using the "console" CONFIG flag above should ensure this happens for
 # normal Windows builds, but this may be necessary when cross-compiling
 win32-x-g++: QMAKE_LFLAGS += -Wl,-subsystem,console
