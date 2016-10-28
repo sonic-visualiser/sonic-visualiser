@@ -30,7 +30,7 @@ macx*: CONFIG -= app_bundle
 
 linux*: LIBS += -ldl
 
-TARGET = piper-vamp-server
+TARGET = piper-vamp-simple-server
 
 OBJECTS_DIR = o
 MOC_DIR = o
@@ -49,4 +49,4 @@ HEADERS += \
 SOURCES += \
         piper-cpp/vamp-capnp/piper-capnp.cpp \
         piper-cpp/json11/json11.cpp \
-        piper-cpp/vamp-server/server.cpp
+        piper-cpp/vamp-server/simple-server.cpp
