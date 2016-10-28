@@ -277,6 +277,14 @@ main(int argc, char **argv)
     QSettings settings;
 
     settings.beginGroup("Preferences");
+    // Default to using Piper server; can change in preferences
+    if (!settings.contains("run-vamp-plugins-in-process")) {
+        cerr << "setting does not exist yet" << endl;
+        settings.setValue("run-vamp-plugins-in-process", false);
+    }
+    settings.endGroup();
+
+    settings.beginGroup("Preferences");
     if (settings.value("show-splash", true).toBool()) {
         splash = new SVSplash();
         splash->show();
@@ -348,11 +356,11 @@ main(int argc, char **argv)
              << ", trying in my own directory" << endl;
         helperPath = myDir + "/plugin-checker-helper";
     }
-    helperPath += helperSuffix;
     if (!QFile(helperPath + helperSuffix).exists()) {
         cerr << "NOTE: helper not found at " << (helperPath + helperSuffix)
              << endl;
     }
+    helperPath += helperSuffix;
     PluginScan::getInstance()->scan(helperPath);
     
     // Permit size_t and PropertyName to be used as args in queued signal calls

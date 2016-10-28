@@ -57,6 +57,7 @@ protected slots:
     void audioDeviceChanged(int device);
     void resampleQualityChanged(int quality);
     void resampleOnLoadChanged(int state);
+    void vampProcessSeparationChanged(int state);
     void tempDirRootChanged(QString root);
     void backgroundModeChanged(int mode);
     void timeToTextModeChanged(int mode);
@@ -101,6 +102,7 @@ protected:
     int m_audioDevice;
     int m_resampleQuality;
     bool m_resampleOnLoad;
+    bool m_runPluginsInProcess;
     bool m_networkPermission;
     bool m_retina;
     QString m_tempDirRoot;
