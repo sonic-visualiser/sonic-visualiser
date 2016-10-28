@@ -1496,6 +1496,11 @@ MainWindow::setupTransformsMenu()
     TransformFactory *factory = TransformFactory::getInstance();
 
     TransformList transforms = factory->getAllTransformDescriptions();
+
+    if (factory->getStartupFailureReport() != "") {
+        pluginPopulationWarning();
+    }
+    
     vector<TransformDescription::Type> types = factory->getAllTransformTypes();
 
     map<TransformDescription::Type, map<QString, SubdividingMenu *> > categoryMenus;
@@ -4156,8 +4161,21 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 void
 MainWindow::pluginPopulationWarning()
 {
-    QString warning = PluginScan::getInstance()->getStartupFailureReport();
-    QMessageBox::warning(this, tr("Problems loading plugins"), warning);
+    QString scanWarning = PluginScan::getInstance()->getStartupFailureReport();
+    QString factWarning = TransformFactory::getInstance()->getStartupFailureReport();
+    QString warning;
+    if (factWarning != "") {
+        // The order of events on startup implies that, if scanWarning
+        // and factWarning are both present, then we have already been
+        // called once for scanWarning so don't want to report it again
+        warning = factWarning;
+    } else if (scanWarning != "") {
+        warning = scanWarning;
+    }
+    if (warning != "") {
+        emit hideSplash();
+        QMessageBox::warning(this, tr("Problems loading plugins"), warning);
+    }
 }
 
 void
