@@ -4661,14 +4661,12 @@ MainWindow::about()
 #endif // HAVE_FFTW3F
 #ifdef HAVE_RUBBERBAND
 #ifdef RUBBERBAND_VERSION
-    aboutText += tr("<br>With Rubber Band v%1 &copy; Chris Cannam").arg(RUBBERBAND_VERSION);
+    aboutText += tr("<br>With Rubber Band Library v%1 &copy; Particular Programs Ltd").arg(RUBBERBAND_VERSION);
 #else // !RUBBERBAND_VERSION
-    aboutText += tr("<br>With Rubber Band &copy; Chris Cannam");
+    aboutText += tr("<br>With Rubber Band Library &copy; Particular Programs Ltd");
 #endif // RUBBERBAND_VERSION
 #endif // HAVE_RUBBERBAND
-#ifdef HAVE_VAMP
-    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
-#endif // !HAVE_VAMP
+    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam and QMUL").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
 #ifdef REDLAND_VERSION
@@ -4677,8 +4675,8 @@ MainWindow::about()
     aboutText += tr("<br>With Redland RDF datastore &copy; Dave Beckett and the University of Bristol");
 #endif // REDLAND_VERSION
     aboutText += tr("<br>With Serd and Sord RDF parser and store &copy; David Robillard");
-    aboutText += tr("<br>With Dataquay Qt/RDF library &copy; Chris Cannam");
-
+    aboutText += tr("<br>With Dataquay Qt/RDF library &copy; Particular Programs Ltd");
+    aboutText += tr("<br>With Cap'n Proto serialisation &copy; Sandstorm Development Group");
     aboutText += tr("<br>With RtMidi &copy; Gary P. Scavone");
 
 #ifdef HAVE_LIBLO
