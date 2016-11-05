@@ -7,6 +7,8 @@ CONFIG += release
 DEFINES += NDEBUG BUILD_RELEASE
 DEFINES += NO_TIMING
 
+DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
+
 # Full set of defines expected for all platforms when we have the
 # sv-dependency-builds subrepo available to provide the dependencies.
 
