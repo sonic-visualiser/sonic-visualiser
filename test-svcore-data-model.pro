@@ -25,3 +25,4 @@ include(svcore/data/model/test/files.pri)
 for (file, TEST_SOURCES) { SOURCES += $$sprintf("svcore/data/model/test/%1", $$file) }
 for (file, TEST_HEADERS) { HEADERS += $$sprintf("svcore/data/model/test/%1", $$file) }
 
+QMAKE_POST_LINK = ./$${TARGET}$${TARGET_EXT}
