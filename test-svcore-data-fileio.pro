@@ -15,6 +15,9 @@ CONFIG += console
 QT += network xml testlib
 QT -= gui
 
+win32-x-g++:QMAKE_LFLAGS += -Wl,-subsystem,console
+macx*: CONFIG -= app_bundle
+
 TARGET = test-svcore-data-fileio
 
 OBJECTS_DIR = o
