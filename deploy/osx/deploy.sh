@@ -50,7 +50,7 @@ cp checker/plugin-checker-helper "$source"/Contents/MacOS/
 
 echo
 echo "Copying in plugin server."
-cp piper-vamp-server "$source"/Contents/MacOS/
+cp piper-vamp-simple-server "$source"/Contents/MacOS/
 
 echo
 echo "Writing version $bundleVersion in to bundle."
