@@ -3,6 +3,7 @@ SV_INCLUDEPATH = \
         . \
 	bqvec \
 	bqvec/bqvec \
+	bqfft \
 	bqresample \
 	bqaudioio \
 	bqaudioio/bqaudioio \
