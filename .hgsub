@@ -4,6 +4,7 @@ svgui = https://code.soundsoftware.ac.uk/hg/svgui
 svapp = https://code.soundsoftware.ac.uk/hg/svapp
 dataquay = https://bitbucket.org/breakfastquay/dataquay
 bqvec = https://bitbucket.org/breakfastquay/bqvec
+bqfft = https://bitbucket.org/breakfastquay/bqfft
 bqresample = https://bitbucket.org/breakfastquay/bqresample
 bqaudioio = https://bitbucket.org/breakfastquay/bqaudioio
 sv-dependency-builds = https://code.soundsoftware.ac.uk/hg/sv-dependency-builds
