@@ -24,3 +24,5 @@ sub_test_svcore_data_model.file = test-svcore-data-model.pro
 sub_server.file = server.pro
 sub_convert.file = convert.pro
 sub_sv.file = sv.pro
+
+CONFIG += ordered
