@@ -842,11 +842,19 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canRenumberInstants(bool)), action, SLOT(setEnabled(bool)));
 //    m_keyReference->registerShortcut(action);
     menu->addAction(action);
-            
+
+    menu->addSeparator();
+    
     action = new QAction(tr("Subdivide Selected Instants..."), this);
     action->setStatusTip(tr("Add new instants at regular intervals between the selected instants"));
     connect(action, SIGNAL(triggered()), this, SLOT(subdivideInstants()));
     connect(this, SIGNAL(canSubdivideInstants(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+            
+    action = new QAction(tr("Winnow Selected Instants..."), this);
+    action->setStatusTip(tr("Remove subdivisions, leaving only every Nth instant"));
+    connect(action, SIGNAL(triggered()), this, SLOT(winnowInstants()));
+    connect(this, SIGNAL(canWinnowInstants(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 }
 
@@ -4414,6 +4422,28 @@ MainWindow::subdivideInstants()
     if (ok) {
         settings.setValue("subdivisions", n);
         subdivideInstantsBy(n);
+    }
+
+    settings.endGroup();
+}
+
+void
+MainWindow::winnowInstants()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int n = settings.value("winnow-subdivisions", 4).toInt();
+    
+    bool ok;
+
+    n = QInputDialog::getInt(this,
+                             tr("Winnow instants"),
+                             tr("Remove all instants apart from multiples of:"),
+                             n, 2, 96, 1, &ok);
+
+    if (ok) {
+        settings.setValue("winnow-subdivisions", n);
+        winnowInstantsBy(n);
     }
 
     settings.endGroup();
