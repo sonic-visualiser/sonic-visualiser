@@ -842,6 +842,12 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canRenumberInstants(bool)), action, SLOT(setEnabled(bool)));
 //    m_keyReference->registerShortcut(action);
     menu->addAction(action);
+            
+    action = new QAction(tr("Subdivide Selected Instants..."), this);
+    action->setStatusTip(tr("Add new instants at regular intervals between the selected instants"));
+    connect(action, SIGNAL(triggered()), this, SLOT(subdivideInstants()));
+    connect(this, SIGNAL(canSubdivideInstants(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 }
 
 void
@@ -4389,6 +4395,28 @@ void
 MainWindow::resetInstantsCounters()
 {
     if (m_labeller) m_labeller->resetCounters();
+}
+
+void
+MainWindow::subdivideInstants()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int n = settings.value("subdivisions", 4).toInt();
+    
+    bool ok;
+
+    n = QInputDialog::getInt(this,
+                             tr("Subdivide instants"),
+                             tr("Number of subdivisions:"),
+                             n, 2, 96, 1, &ok);
+
+    if (ok) {
+        settings.setValue("subdivisions", n);
+        subdivideInstantsBy(n);
+    }
+
+    settings.endGroup();
 }
 
 void
