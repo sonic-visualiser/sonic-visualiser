@@ -90,6 +90,7 @@ protected slots:
     virtual void setInstantsCounterCycle();
     virtual void setInstantsCounters();
     virtual void resetInstantsCounters();
+    virtual void subdivideInstants();
 
     virtual void modelGenerationFailed(QString, QString);
     virtual void modelGenerationWarning(QString, QString);
