@@ -224,6 +224,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(resampleOnLoad, SIGNAL(stateChanged(int)),
             this, SLOT(resampleOnLoadChanged(int)));
 
+    QCheckBox *gaplessMode = new QCheckBox;
+    m_gapless = prefs->getUseGaplessMode();
+    gaplessMode->setCheckState(m_gapless ? Qt::Checked : Qt::Unchecked);
+    connect(gaplessMode, SIGNAL(stateChanged(int)),
+            this, SLOT(gaplessModeChanged(int)));
+
     m_tempDirRootEdit = new QLineEdit;
     QString dir = prefs->getTemporaryDirectoryRoot();
     m_tempDirRoot = dir;
@@ -371,6 +377,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                                 ("Resample On Load"))),
                        row, 0);
     subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Use Gapless Mode"))),
+                       row, 0);
+    subgrid->addWidget(gaplessMode, row++, 1, 1, 1);
 
 //!!!    subgrid->addWidget(new QLabel(tr("Playback audio device:")), row, 0);
 //!!!    subgrid->addWidget(audioDevice, row++, 1, 1, 2);
@@ -645,6 +656,13 @@ PreferencesDialog::resampleOnLoadChanged(int state)
 }
 
 void
+PreferencesDialog::gaplessModeChanged(int state)
+{
+    m_gapless = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::vampProcessSeparationChanged(int state)
 {
     m_runPluginsInProcess = (state == Qt::Unchecked);
@@ -767,6 +785,7 @@ PreferencesDialog::applyClicked()
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setResampleQuality(m_resampleQuality);
     prefs->setResampleOnLoad(m_resampleOnLoad);
+    prefs->setUseGaplessMode(m_gapless);
     prefs->setRunPluginsInProcess(m_runPluginsInProcess);
     prefs->setShowSplash(m_showSplash);
     prefs->setTemporaryDirectoryRoot(m_tempDirRoot);
