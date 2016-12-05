@@ -4,6 +4,7 @@
     <file>icons/scalable/colour3d.svg</file>
     <file>icons/scalable/cross.svg</file>
     <file>icons/scalable/dataedit.svg</file>
+    <file>icons/scalable/datadelete.svg</file>
     <file>icons/scalable/draw.svg</file>
     <file>icons/scalable/erase.svg</file>
     <file>icons/scalable/editcopy.svg</file>
@@ -20,10 +21,13 @@
     <file>icons/scalable/ffwd.svg</file>
     <file>icons/scalable/navigate.svg</file>
     <file>icons/scalable/move.svg</file>
+    <file>icons/scalable/normalise.svg</file>
+    <file>icons/scalable/normalise-columns.svg</file>
     <file>icons/scalable/pause.svg</file>
     <file>icons/scalable/playloop.svg</file>
     <file>icons/scalable/playpause.svg</file>
     <file>icons/scalable/playselection.svg</file>
+    <file>icons/scalable/playfollow.svg</file>
     <file>icons/scalable/solo.svg</file>
     <file>icons/scalable/play.svg</file>
     <file>icons/scalable/record.svg</file>
@@ -40,6 +44,7 @@
     <file>icons/scalable/regions.svg</file>
     <file>icons/scalable/spectrogram.svg</file>
     <file>icons/scalable/spectrum.svg</file>
+    <file>icons/scalable/pane.svg</file>
     <file>icons/scalable/text.svg</file>
     <file>icons/scalable/timeruler.svg</file>
     <file>icons/scalable/zoom.svg</file>
@@ -71,9 +76,7 @@
     <file>icons/playselection.png</file>
     <file>icons/playselection-on.png</file>
     <file>icons/playloop.png</file>
-    <file>icons/playloop-on.png</file>
     <file>icons/playfollow.png</file>
-    <file>icons/playfollow-on.png</file>
     <file>icons/solo.png</file>
     <file>icons/solo-on.png</file>
     <file>icons/align.png</file>
