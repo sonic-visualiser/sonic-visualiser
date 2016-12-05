@@ -47,6 +47,7 @@
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
+#include "widgets/LevelPanWidget.h"
 #include "widgets/IconLoader.h"
 #include "widgets/LayerTreeDialog.h"
 #include "widgets/ListInputDialog.h"
@@ -233,10 +234,6 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
             (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
     }
 
-    m_fader = new Fader(frame, false);
-    connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_fader, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
@@ -254,7 +251,15 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    IconLoader il;
+    m_mainLevelPan = new LevelPanWidget(frame);
+    connect(m_mainLevelPan, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_mainLevelPan, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+    
+/*!!!
+    m_fader = new Fader(frame, false);
+    connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_fader, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+*/
 
     m_playControlsSpacer = new QFrame;
 
@@ -263,10 +268,11 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     layout->addWidget(m_overview, 1, 0);
     layout->addWidget(m_playControlsSpacer, 1, 1);
     layout->addWidget(m_playSpeed, 1, 2);
-    layout->addWidget(m_fader, 1, 3);
+//    layout->addWidget(m_fader, 1, 3);
+    layout->addWidget(m_mainLevelPan, 1, 3);
 
     m_playControlsWidth = 
-        m_fader->width() + m_playSpeed->width() + layout->spacing() * 2;
+        m_mainLevelPan->width() + m_playSpeed->width() + layout->spacing() * 2;
 
     m_paneStack->setPropertyStackMinWidth(m_playControlsWidth
                                           + 2 + layout->spacing());
@@ -4130,8 +4136,7 @@ MainWindow::updatePositionStatusDisplays() const
 void
 MainWindow::outputLevelsChanged(float left, float right)
 {
-    m_fader->setPeakLeft(left);
-    m_fader->setPeakRight(right);
+    m_mainLevelPan->setMonitoringLevels(left, right);
 }
 
 void
@@ -4327,8 +4332,10 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     MainWindowBase::mainModelChanged(model);
 
     if (m_playTarget || m_audioIO) {
-        connect(m_fader, SIGNAL(valueChanged(float)),
+        connect(m_mainLevelPan, SIGNAL(levelChanged(float)),
                 this, SLOT(mainModelGainChanged(float)));
+        connect(m_mainLevelPan, SIGNAL(panChanged(float)),
+                this, SLOT(mainModelPanChanged(float)));
     }
 }
 
@@ -4339,6 +4346,17 @@ MainWindow::mainModelGainChanged(float gain)
         m_playTarget->setOutputGain(gain);
     } else if (m_audioIO) {
         m_audioIO->setOutputGain(gain);
+    }
+}
+
+void
+MainWindow::mainModelPanChanged(float balance)
+{
+    // this is indeed stereo balance rather than pan
+    if (m_playTarget) {
+        m_playTarget->setOutputBalance(balance);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputBalance(balance);
     }
 }
 
@@ -4603,8 +4621,8 @@ MainWindow::mouseEnteredWidget()
     QWidget *w = dynamic_cast<QWidget *>(sender());
     if (!w) return;
 
-    if (w == m_fader) {
-        contextHelpChanged(tr("Adjust the master playback level"));
+    if (w == m_mainLevelPan) {
+        contextHelpChanged(tr("Adjust the master playback level and pan"));
     } else if (w == m_playSpeed) {
         contextHelpChanged(tr("Adjust the master playback speed"));
     }
