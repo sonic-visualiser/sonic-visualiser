@@ -55,7 +55,6 @@ protected slots:
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
     void audioDeviceChanged(int device);
-    void resampleQualityChanged(int quality);
     void resampleOnLoadChanged(int state);
     void gaplessModeChanged(int state);
     void vampProcessSeparationChanged(int state);
@@ -101,7 +100,6 @@ protected:
     int m_propertyLayout;
     double m_tuningFrequency;
     int m_audioDevice;
-    int m_resampleQuality;
     bool m_resampleOnLoad;
     bool m_gapless;
     bool m_runPluginsInProcess;
