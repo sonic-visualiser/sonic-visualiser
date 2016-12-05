@@ -210,7 +210,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
-    m_overview->setFixedHeight(40);
+    m_overview->setFixedHeight(m_viewManager->scalePixelSize(40));
 #ifndef _WIN32
     // For some reason, the contents of the overview never appear if we
     // make this setting on Windows.  I have no inclination at the moment
@@ -241,8 +241,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(32);
-    m_playSpeed->setFixedHeight(32);
+    m_playSpeed->setFixedWidth(m_viewManager->scalePixelSize(32));
+    m_playSpeed->setFixedHeight(m_viewManager->scalePixelSize(32));
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -258,24 +258,21 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 
     m_playControlsSpacer = new QFrame;
 
-    layout->setSpacing(4);
-    layout->addWidget(m_mainScroll, 0, 0, 1, 5);
-    layout->addWidget(m_overview, 1, 1);
-    layout->addWidget(m_playControlsSpacer, 1, 2);
-    layout->addWidget(m_playSpeed, 1, 3);
-    layout->addWidget(m_fader, 1, 4);
+    layout->setSpacing(m_viewManager->scalePixelSize(4));
+    layout->addWidget(m_mainScroll, 0, 0, 1, 4);
+    layout->addWidget(m_overview, 1, 0);
+    layout->addWidget(m_playControlsSpacer, 1, 1);
+    layout->addWidget(m_playSpeed, 1, 2);
+    layout->addWidget(m_fader, 1, 3);
 
     m_playControlsWidth = 
         m_fader->width() + m_playSpeed->width() + layout->spacing() * 2;
-
-    layout->setColumnMinimumWidth(0, 14);
-    layout->setColumnStretch(0, 0);
 
     m_paneStack->setPropertyStackMinWidth(m_playControlsWidth
                                           + 2 + layout->spacing());
     m_playControlsSpacer->setFixedSize(QSize(2, 2));
 
-    layout->setColumnStretch(1, 10);
+    layout->setColumnStretch(0, 10);
 
     connect(m_paneStack, SIGNAL(propertyStacksResized(int)),
             this, SLOT(propertyStacksResized(int)));
