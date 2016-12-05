@@ -1069,12 +1069,16 @@ MainWindow::setupViewMenu()
 
     menu->addSeparator();
 
+#ifndef Q_OS_MAC
+    // Only on non-Mac platforms -- on the Mac this interacts very
+    // badly with the "native" full-screen mode
     action = new QAction(tr("Go Full-Screen"), this);
     action->setShortcut(tr("F11"));
     action->setStatusTip(tr("Expand the pane area to the whole screen"));
     connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+#endif
 }
 
 void
