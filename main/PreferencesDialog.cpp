@@ -202,20 +202,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(audioDevice, SIGNAL(currentIndexChanged(int)),
             this, SLOT(audioDeviceChanged(int)));
     */
-    QComboBox *resampleQuality = new QComboBox;
-
-    int rsq = prefs->getPropertyRangeAndValue("Resample Quality", &min, &max,
-                                              &deflt);
-    m_resampleQuality = rsq;
-
-    for (i = min; i <= max; ++i) {
-        resampleQuality->addItem(prefs->getPropertyValueLabel("Resample Quality", i));
-    }
-
-    resampleQuality->setCurrentIndex(rsq);
-
-    connect(resampleQuality, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(resampleQualityChanged(int)));
 
     QCheckBox *resampleOnLoad = new QCheckBox;
     m_resampleOnLoad = prefs->getResampleOnLoad();
@@ -385,11 +371,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
 //!!!    subgrid->addWidget(new QLabel(tr("Playback audio device:")), row, 0);
 //!!!    subgrid->addWidget(audioDevice, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Resample Quality"))),
-                       row, 0);
-    subgrid->addWidget(resampleQuality, row++, 1, 1, 2);
 
     subgrid->setRowStretch(row, 10);
     
@@ -641,13 +622,6 @@ PreferencesDialog::audioDeviceChanged(int s)
 }
 
 void
-PreferencesDialog::resampleQualityChanged(int q)
-{
-    m_resampleQuality = q;
-    m_applyButton->setEnabled(true);
-}
-
-void
 PreferencesDialog::resampleOnLoadChanged(int state)
 {
     m_resampleOnLoad = (state == Qt::Checked);
@@ -783,7 +757,6 @@ PreferencesDialog::applyClicked()
     prefs->setPropertyBoxLayout(Preferences::PropertyBoxLayout
                                 (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
-    prefs->setResampleQuality(m_resampleQuality);
     prefs->setResampleOnLoad(m_resampleOnLoad);
     prefs->setUseGaplessMode(m_gapless);
     prefs->setRunPluginsInProcess(m_runPluginsInProcess);
