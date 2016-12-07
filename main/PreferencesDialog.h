@@ -25,6 +25,7 @@ class WindowTypeSelector;
 class QPushButton;
 class QLineEdit;
 class QTabWidget;
+class QComboBox;
 
 class PreferencesDialog : public QDialog
 {
@@ -54,7 +55,9 @@ protected slots:
     void colour3DColourChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
-    void audioDeviceChanged(int device);
+    void audioImplementationChanged(int impl);
+    void audioPlaybackDeviceChanged(int device);
+    void audioRecordDeviceChanged(int device);
     void resampleOnLoadChanged(int state);
     void gaplessModeChanged(int state);
     void vampProcessSeparationChanged(int state);
@@ -85,6 +88,10 @@ protected:
 
     QLineEdit *m_tempDirRootEdit;
 
+    QComboBox *m_audioPlaybackDeviceCombo;
+    QComboBox *m_audioRecordDeviceCombo;
+    void rebuildDeviceCombos();
+    
     QString m_currentTemplate;
     QStringList m_templates;
 
@@ -99,7 +106,9 @@ protected:
     int m_colour3DColour;
     int m_propertyLayout;
     double m_tuningFrequency;
-    int m_audioDevice;
+    int m_audioImplementation;
+    int m_audioPlaybackDevice;
+    int m_audioRecordDevice;
     bool m_resampleOnLoad;
     bool m_gapless;
     bool m_runPluginsInProcess;
