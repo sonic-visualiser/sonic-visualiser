@@ -58,6 +58,7 @@
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
 #include "audio/AudioCallbackPlaySource.h"
+#include "audio/AudioRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
@@ -66,9 +67,9 @@
 #include "data/fileio/MIDIFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
 #include "data/fileio/FileSource.h"
-#include "data/fft/FFTDataServer.h"
 #include "data/midi/MIDIInput.h"
 #include "base/RecentFiles.h"
+#include "plugin/PluginScan.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
 #include "base/PlayParameterRepository.h"
@@ -93,6 +94,7 @@
 #include "plugin/api/dssi.h"
 
 #include <bqaudioio/SystemPlaybackTarget.h>
+#include <bqaudioio/SystemAudioIO.h>
 
 #include <QApplication>
 #include <QMessageBox>
@@ -130,8 +132,8 @@ using std::map;
 using std::set;
 
 
-MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
-    MainWindowBase(withAudioOutput, true),
+MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
+    MainWindowBase(options),
     m_overview(0),
     m_mainMenusCreated(false),
     m_paneMenu(0),
@@ -155,6 +157,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_ffwdSimilarAction(0),
     m_ffwdEndAction(0),
     m_playAction(0),
+    m_recordAction(0),
     m_playSelectionAction(0),
     m_playLoopAction(0),
     m_soloModified(false),
@@ -298,9 +301,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(this, SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
     connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
+
     m_activityLog->hide();
 
     m_unitConverter->hide();
+
+    setAudioRecordMode(RecordCreateAdditionalModel);
     
     newSession();
 
@@ -323,6 +329,11 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     } else {
         m_surveyer = 0;
         m_versionTester = 0;
+    }
+
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
+    if (warning != "") {
+        QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
     }
 }
 
@@ -459,7 +470,6 @@ MainWindow::setupFileMenu()
     IconLoader il;
 
     QIcon icon = il.load("filenew");
-    icon.addPixmap(il.loadPixmap("filenew-22"));
     QAction *action = new QAction(icon, tr("&New Session"), this);
     action->setShortcut(tr("Ctrl+N"));
     action->setStatusTip(tr("Abandon the current %1 session and start a new one").arg(QApplication::applicationName()));
@@ -469,7 +479,6 @@ MainWindow::setupFileMenu()
     toolbar->addAction(action);
 
     icon = il.load("fileopen");
-    icon.addPixmap(il.loadPixmap("fileopen-22"));
     action = new QAction(icon, tr("&Open..."), this);
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
@@ -510,7 +519,6 @@ MainWindow::setupFileMenu()
     menu->addSeparator();
 
     icon = il.load("filesave");
-    icon.addPixmap(il.loadPixmap("filesave-22"));
     action = new QAction(icon, tr("&Save Session"), this);
     action->setShortcut(tr("Ctrl+S"));
     action->setStatusTip(tr("Save the current session into a %1 session file").arg(QApplication::applicationName()));
@@ -521,7 +529,6 @@ MainWindow::setupFileMenu()
     toolbar->addAction(action);
 	
     icon = il.load("filesaveas");
-    icon.addPixmap(il.loadPixmap("filesaveas-22"));
     action = new QAction(icon, tr("Save Session &As..."), this);
     action->setShortcut(tr("Ctrl+Shift+S"));
     action->setStatusTip(tr("Save the current session into a new %1 session file").arg(QApplication::applicationName()));
@@ -583,6 +590,13 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Export a single pane to an image file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportImage()));
     connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Browse Recorded Audio Folder"), this);
+    action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
+    connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
     menu->addAction(action);
 
     menu->addSeparator();
@@ -828,6 +842,20 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canRenumberInstants(bool)), action, SLOT(setEnabled(bool)));
 //    m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+    menu->addSeparator();
+    
+    action = new QAction(tr("Subdivide Selected Instants..."), this);
+    action->setStatusTip(tr("Add new instants at regular intervals between the selected instants"));
+    connect(action, SIGNAL(triggered()), this, SLOT(subdivideInstants()));
+    connect(this, SIGNAL(canSubdivideInstants(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+            
+    action = new QAction(tr("Winnow Selected Instants..."), this);
+    action->setStatusTip(tr("Remove subdivisions, leaving only every Nth instant"));
+    connect(action, SIGNAL(triggered()), this, SLOT(winnowInstants()));
+    connect(this, SIGNAL(canWinnowInstants(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 }
 
 void
@@ -1041,12 +1069,16 @@ MainWindow::setupViewMenu()
 
     menu->addSeparator();
 
+#ifndef Q_OS_MAC
+    // Only on non-Mac platforms -- on the Mac this interacts very
+    // badly with the "native" full-screen mode
     action = new QAction(tr("Go Full-Screen"), this);
     action->setShortcut(tr("F11"));
     action->setStatusTip(tr("Expand the pane area to the whole screen"));
     connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+#endif
 }
 
 void
@@ -1166,7 +1198,9 @@ MainWindow::setupPaneAndLayerMenus()
 // Avoid warnings/errors with -Wextra because we aren't explicitly
 // handling all layer types (-Wall is OK with this because of the
 // default but the stricter level insists)
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
             
             switch (type) {
                     
@@ -1480,6 +1514,11 @@ MainWindow::setupTransformsMenu()
     TransformFactory *factory = TransformFactory::getInstance();
 
     TransformList transforms = factory->getAllTransformDescriptions();
+
+    if (factory->getStartupFailureReport() != "") {
+        pluginPopulationWarning();
+    }
+    
     vector<TransformDescription::Type> types = factory->getAllTransformTypes();
 
     map<TransformDescription::Type, map<QString, SubdividingMenu *> > categoryMenus;
@@ -1750,8 +1789,11 @@ MainWindow::setupRecentFilesMenu()
     m_recentFilesMenu->clear();
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
-	QAction *action = new QAction(files[i], this);
-	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        /* F. Nicol patch 13 Aug. 2016 */
+        const QString& path = files[i];
+        QAction *action = new QAction(path, this);
+        connect(action, &QAction::triggered, [this, path] { openRecentFile(path);});
+        /* end of patch */
         if (i == 0) {
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
@@ -1985,6 +2027,17 @@ MainWindow::setupToolbars()
     connect(m_ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
     connect(this, SIGNAL(canPlay(bool)), m_ffwdEndAction, SLOT(setEnabled(bool)));
 
+    m_recordAction = toolbar->addAction(il.load("record"),
+                                        tr("Record"));
+    m_recordAction->setCheckable(true);
+    m_recordAction->setShortcut(tr("Ctrl+Space"));
+    m_recordAction->setStatusTip(tr("Record a new audio file"));
+    connect(m_recordAction, SIGNAL(triggered()), this, SLOT(record()));
+    connect(m_recordTarget, SIGNAL(recordStatusChanged(bool)),
+	    m_recordAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canRecord(bool)),
+            m_recordAction, SLOT(setEnabled(bool)));
+
     toolbar = addToolBar(tr("Play Mode Toolbar"));
 
     m_playSelectionAction = toolbar->addAction(il.load("playselection"),
@@ -2035,6 +2088,7 @@ MainWindow::setupToolbars()
     }
 
     m_keyReference->registerShortcut(m_playAction);
+    m_keyReference->registerShortcut(m_recordAction);
     m_keyReference->registerShortcut(m_playSelectionAction);
     m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
@@ -2047,6 +2101,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(m_ffwdEndAction);
 
     menu->addAction(m_playAction);
+    menu->addAction(m_recordAction);
     menu->addAction(m_playSelectionAction);
     menu->addAction(m_playLoopAction);
     menu->addAction(m_soloAction);
@@ -2061,8 +2116,11 @@ MainWindow::setupToolbars()
     menu->addAction(m_rwdStartAction);
     menu->addAction(m_ffwdEndAction);
     menu->addSeparator();
+    menu->addAction(m_recordAction);
+    menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(m_playAction);
+    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
@@ -2073,6 +2131,8 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdStartAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdEndAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
@@ -2280,7 +2340,7 @@ MainWindow::updateMenuStates()
         (haveCurrentPane &&
          (currentLayer != 0));
     bool havePlayTarget =
-	(m_playTarget != 0);
+	(m_playTarget != 0 || m_audioIO != 0);
     bool haveSelection = 
 	(m_viewManager &&
 	 !m_viewManager->getSelections().empty());
@@ -2882,6 +2942,17 @@ MainWindow::exportImage()
 }
 
 void
+MainWindow::browseRecordedAudio()
+{
+    if (!m_recordTarget) return;
+
+    QString path = m_recordTarget->getRecordFolder();
+    if (path == "") return;
+
+    openLocalFolder(path);
+}
+
+void
 MainWindow::newSession()
 {
     if (!checkSaveModified()) return;
@@ -3030,8 +3101,10 @@ MainWindow::openLocation()
 }
 
 void
-MainWindow::openRecentFile()
+MainWindow::openRecentFile(const QString& path)
 {
+   /* F. Nicol patch 13 Aug. 2016 */
+#if 0
     QObject *obj = sender();
     QAction *action = dynamic_cast<QAction *>(obj);
     
@@ -3042,6 +3115,9 @@ MainWindow::openRecentFile()
     }
 
     QString path = action->text();
+#endif
+   /* End of F. Nicol patch 13 Aug. 2016 */
+
     if (path == "") return;
 
     FileOpenStatus status = openPath(path, ReplaceSession);
@@ -4101,6 +4177,26 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
 }
 
 void
+MainWindow::pluginPopulationWarning()
+{
+    QString scanWarning = PluginScan::getInstance()->getStartupFailureReport();
+    QString factWarning = TransformFactory::getInstance()->getStartupFailureReport();
+    QString warning;
+    if (factWarning != "") {
+        // The order of events on startup implies that, if scanWarning
+        // and factWarning are both present, then we have already been
+        // called once for scanWarning so don't want to report it again
+        warning = factWarning;
+    } else if (scanWarning != "") {
+        warning = scanWarning;
+    }
+    if (warning != "") {
+        emit hideSplash();
+        QMessageBox::warning(this, tr("Problems loading plugins"), warning);
+    }
+}
+
+void
 MainWindow::midiEventsAvailable()
 {
     Pane *currentPane = 0;
@@ -4237,7 +4333,7 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     MainWindowBase::mainModelChanged(model);
 
-    if (m_playTarget) {
+    if (m_playTarget || m_audioIO) {
         connect(m_fader, SIGNAL(valueChanged(float)),
                 this, SLOT(mainModelGainChanged(float)));
     }
@@ -4248,6 +4344,8 @@ MainWindow::mainModelGainChanged(float gain)
 {
     if (m_playTarget) {
         m_playTarget->setOutputGain(gain);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputGain(gain);
     }
 }
 
@@ -4309,6 +4407,50 @@ void
 MainWindow::resetInstantsCounters()
 {
     if (m_labeller) m_labeller->resetCounters();
+}
+
+void
+MainWindow::subdivideInstants()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int n = settings.value("subdivisions", 4).toInt();
+    
+    bool ok;
+
+    n = QInputDialog::getInt(this,
+                             tr("Subdivide instants"),
+                             tr("Number of subdivisions:"),
+                             n, 2, 96, 1, &ok);
+
+    if (ok) {
+        settings.setValue("subdivisions", n);
+        subdivideInstantsBy(n);
+    }
+
+    settings.endGroup();
+}
+
+void
+MainWindow::winnowInstants()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int n = settings.value("winnow-subdivisions", 4).toInt();
+    
+    bool ok;
+
+    n = QInputDialog::getInt(this,
+                             tr("Winnow instants"),
+                             tr("Remove all instants apart from multiples of:"),
+                             n, 2, 96, 1, &ok);
+
+    if (ok) {
+        settings.setValue("winnow-subdivisions", n);
+        winnowInstantsBy(n);
+    }
+
+    settings.endGroup();
 }
 
 void
@@ -4384,15 +4526,13 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentFailed(QString transformName, QString message)
+MainWindow::alignmentFailed(QString message)
 {
-    emit hideSplash();
-
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
-         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment using transform \"%1\":<p>%2")
-         .arg(transformName).arg(message),
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
+         .arg(message),
          QMessageBox::Ok);
 }
 
@@ -4520,13 +4660,14 @@ MainWindow::about()
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
     aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.<br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
-    aboutText += tr("<p><small>%1 : %2 configuration</small></p>")
+    aboutText += tr("<p><small>%1 : %2 configuration, %3-bit build</small></p>")
         .arg(version)
-        .arg(debug ? tr("Debug") : tr("Release"));
+        .arg(debug ? tr("Debug") : tr("Release"))
+        .arg(sizeof(void *) * 8);
 
     aboutText += "<small>";
 
-    aboutText += tr("With Qt v%1 &copy; Nokia Corporation").arg(QT_VERSION_STR);
+    aboutText += tr("With Qt v%1 &copy; The Qt Company").arg(QT_VERSION_STR);
 
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION
@@ -4582,14 +4723,12 @@ MainWindow::about()
 #endif // HAVE_FFTW3F
 #ifdef HAVE_RUBBERBAND
 #ifdef RUBBERBAND_VERSION
-    aboutText += tr("<br>With Rubber Band v%1 &copy; Chris Cannam").arg(RUBBERBAND_VERSION);
+    aboutText += tr("<br>With Rubber Band Library v%1 &copy; Particular Programs Ltd").arg(RUBBERBAND_VERSION);
 #else // !RUBBERBAND_VERSION
-    aboutText += tr("<br>With Rubber Band &copy; Chris Cannam");
+    aboutText += tr("<br>With Rubber Band Library &copy; Particular Programs Ltd");
 #endif // RUBBERBAND_VERSION
 #endif // HAVE_RUBBERBAND
-#ifdef HAVE_VAMP
-    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
-#endif // !HAVE_VAMP
+    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam and QMUL").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
 #ifdef REDLAND_VERSION
@@ -4598,8 +4737,8 @@ MainWindow::about()
     aboutText += tr("<br>With Redland RDF datastore &copy; Dave Beckett and the University of Bristol");
 #endif // REDLAND_VERSION
     aboutText += tr("<br>With Serd and Sord RDF parser and store &copy; David Robillard");
-    aboutText += tr("<br>With Dataquay Qt/RDF library &copy; Chris Cannam");
-
+    aboutText += tr("<br>With Dataquay Qt/RDF library &copy; Particular Programs Ltd");
+    aboutText += tr("<br>With Cap'n Proto serialisation &copy; Sandstorm Development Group");
     aboutText += tr("<br>With RtMidi &copy; Gary P. Scavone");
 
 #ifdef HAVE_LIBLO
@@ -4621,7 +4760,7 @@ MainWindow::about()
 #endif
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2015 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2016 Chris Cannam and "
         "Queen Mary, University of London.</small></p>"
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "

@@ -14,6 +14,7 @@
 */
 
 #include "MainWindow.h"
+#include "SVSplash.h"
 
 #include "system/System.h"
 #include "system/Init.h"
@@ -25,6 +26,7 @@
 #include "widgets/InteractiveFileFinder.h"
 #include "svapp/framework/TransformUserConfigurator.h"
 #include "transform/TransformFactory.h"
+#include "svcore/plugin/PluginScan.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -36,12 +38,9 @@
 #include <QIcon>
 #include <QSessionManager>
 #include <QDir>
-#include <QSplashScreen>
 #include <QTimer>
 #include <QPainter>
 #include <QFileOpenEvent>
-
-#include "../version.h"
 
 #include <iostream>
 #include <signal.h>
@@ -215,7 +214,7 @@ public:
         if (!success) manager.cancel();
     }
 
-    void handleFilepathArgument(QString path, QSplashScreen *splash);
+    void handleFilepathArgument(QString path, SVSplash *splash);
 
     bool m_readyForFiles;
     QStringList m_filepathQueue;
@@ -223,7 +222,6 @@ public:
 protected:
     MainWindow *m_mainWindow;
     bool event(QEvent *);
-
 };
 
 int
@@ -272,22 +270,23 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
 
-    QSplashScreen *splash = 0;
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+
+    SVSplash *splash = 0;
 
     QSettings settings;
 
     settings.beginGroup("Preferences");
+    // Default to using Piper server; can change in preferences
+    if (!settings.contains("run-vamp-plugins-in-process")) {
+        cerr << "setting does not exist yet" << endl;
+        settings.setValue("run-vamp-plugins-in-process", false);
+    }
+    settings.endGroup();
+
+    settings.beginGroup("Preferences");
     if (settings.value("show-splash", true).toBool()) {
-        QPixmap pixmap(":/icons/sv-splash.png");
-        QPainter painter;
-        painter.begin(&pixmap);
-        QString text = QString("v%1").arg(SV_VERSION);
-        painter.drawText
-            (pixmap.width() - painter.fontMetrics().width(text) - 10,
-             10 + painter.fontMetrics().ascent(),
-             text);
-        painter.end();
-        splash = new QSplashScreen(pixmap);
+        splash = new SVSplash();
         splash->show();
         QTimer::singleShot(5000, splash, SLOT(hide()));
         application.processEvents();
@@ -342,15 +341,24 @@ main(int argc, char **argv)
 
     StoreStartupLocale();
 
+    // Make known-plugins query as early as possible after showing
+    // splash screen.
+    PluginScan::getInstance()->scan();
+    
     // Permit size_t and PropertyName to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
 
-    MainWindow *gui = new MainWindow(audioOutput, oscSupport);
+    MainWindow::SoundOptions options = MainWindow::WithEverything;
+    if (!audioOutput) options = 0;
+    
+    MainWindow *gui = new MainWindow(options, oscSupport);
     application.setMainWindow(gui);
     InteractiveFileFinder::setParentWidget(gui);
     TransformUserConfigurator::setParentWidget(gui);
     if (splash) {
         QObject::connect(gui, SIGNAL(hideSplash()), splash, SLOT(hide()));
+        QObject::connect(gui, SIGNAL(hideSplash(QWidget *)),
+                         splash, SLOT(finishSplash(QWidget *)));
     }
 
     QDesktopWidget *desktop = QApplication::desktop();
@@ -418,15 +426,6 @@ main(int argc, char **argv)
     settings.endGroup();
 #endif
 
-    if (splash) splash->finish(gui);
-    delete splash;
-
-/*
-    TipDialog tipDialog;
-    if (tipDialog.isOK()) {
-        tipDialog.exec();
-    }
-*/
     int rv = application.exec();
 
     gui->hide();
@@ -490,7 +489,7 @@ bool SVApplication::event(QEvent *event){
 }
 
 /** Application-global handler for filepaths passed in, e.g. as command-line arguments or apple events */
-void SVApplication::handleFilepathArgument(QString path, QSplashScreen *splash){
+void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
     static bool haveSession = false;
     static bool haveMainModel = false;
     static bool havePriorCommandLineModel = false;

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Execute this from the top-level directory of the project (the one
 # that contains the .app bundle).  Supply the name of the .app bundle
 # as argument (the target will use $app.app regardless, but we need
@@ -16,11 +18,14 @@ if [ -z "$source" ] || [ ! -d "$source" ] || [ -z "$dmg" ]; then
 fi
 app=`basename "$source" .app`
 
+set -u
+
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
-case "$version" in
+stem=${version%%-*}
+case "$stem" in
     [0-9].[0-9]) bundleVersion="$version".0 ;;
     [0-9].[0-9].[0-9]) bundleVersion="$version" ;;
-    *) echo "Error: Version $version is neither two- nor three-part number" ;;
+    *) echo "Error: Version stem $stem (of version $version) is neither two- nor three-part number" ;;
 esac
 
 echo
@@ -32,6 +37,29 @@ echo
 echo "Fixing up paths."
 
 deploy/osx/paths.sh "$app"
+
+echo
+echo "Copying in qt.conf to set local-only plugin paths."
+echo "Make sure all necessary Qt plugins are in $source/Contents/plugins/*"
+echo "You probably want platforms/, accessible/ and imageformats/ subdirectories."
+cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
+
+echo
+echo "Copying in plugin load checker helper."
+cp checker/plugin-checker-helper "$source"/Contents/MacOS/
+
+echo
+echo "Copying in plugin server."
+cp piper-vamp-simple-server "$source"/Contents/MacOS/
+
+echo
+echo "Writing version $bundleVersion in to bundle."
+echo "(This should be a three-part number: major.minor.point)"
+
+perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
+    > "$source"/Contents/Info.plist
+
+echo "Done: check $source/Contents/Info.plist for sanity please"
 
 echo
 echo "Making target tree."
@@ -49,21 +77,11 @@ cp -rp "$source" "$target"
 echo "Done"
 
 echo
-echo "Copying in qt.conf to set local-only plugin paths."
-echo "Make sure all necessary Qt plugins are in $target/Contents/plugins/*"
-echo "You probably want platforms/, accessible/ and imageformats/ subdirectories."
-cp deploy/osx/qt.conf "$target"/Contents/Resources/qt.conf
-
-echo
-echo "Writing version $bundleVersion in to bundle."
-echo "(This should be a three-part number: major.minor.point)"
-
-perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
-    > "$target"/Contents/Info.plist
-
-echo "Done: check $target/Contents/Info.plist for sanity please"
+echo "Code-signing volume..."
 
 deploy/osx/sign.sh "$volume" || exit 1
+
+echo "Done"
 
 echo
 echo "Making dmg..."

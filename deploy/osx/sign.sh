@@ -1,5 +1,7 @@
 #!/bin/bash 
 
+set -eu
+
 # Execute this from the top-level directory of the project (the one
 # that contains the .app bundle).  Supply the name of the .app bundle
 # as argument
@@ -15,6 +17,9 @@ for app in "$dir"/*.app; do
 	codesign -s "Developer ID Application: Chris Cannam" -fv "$fr"
     done
     find "$app" -name \*.dylib -print | while read fr; do
+	codesign -s "Developer ID Application: Chris Cannam" -fv "$fr"
+    done
+    find "$app/Contents/MacOS" -type f -print | while read fr; do
 	codesign -s "Developer ID Application: Chris Cannam" -fv "$fr"
     done
     codesign -s "Developer ID Application: Chris Cannam" -fv \
