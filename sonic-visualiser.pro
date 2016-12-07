@@ -1,18 +1,28 @@
+
 TEMPLATE = subdirs
-SUBDIRS = sub_bq sub_dataquay svcore svgui svapp sub_sv 
 
 !win* {
     # We should build and run the tests on any platform,
     # but doing it automatically doesn't work so well from
     # within an IDE on Windows, so remove that from here
-    SUBDIRS += svcore/base/test svcore/data/fileio/test svcore/data/model/test
+    SUBDIRS += \
+	sub_test_svcore_base \
+        sub_test_svcore_data_fileio \
+        sub_test_svcore_data_model
 }
 
-sub_bq.file = bq.pro
+SUBDIRS += \
+	checker \
+	sub_server \
+        sub_convert \
+	sub_sv
+
+sub_test_svcore_base.file = test-svcore-base.pro
+sub_test_svcore_data_fileio.file = test-svcore-data-fileio.pro
+sub_test_svcore_data_model.file = test-svcore-data-model.pro
+
+sub_server.file = server.pro
+sub_convert.file = convert.pro
 sub_sv.file = sv.pro
 
-sub_dataquay.file = dataquay/lib.pro
-
-svgui.depends = svcore
-svapp.depends = svcore svgui
-sub_sv.depends = svcore svgui svapp
+CONFIG += ordered
