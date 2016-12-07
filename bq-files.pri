@@ -15,6 +15,7 @@ BQ_HEADERS += \
 	bqaudioio/bqaudioio/ApplicationPlaybackSource.h \
 	bqaudioio/bqaudioio/ApplicationRecordTarget.h \
 	bqaudioio/bqaudioio/AudioFactory.h \
+	bqaudioio/bqaudioio/ResamplerWrapper.h \
 	bqaudioio/bqaudioio/SystemAudioIO.h \
 	bqaudioio/bqaudioio/SystemPlaybackTarget.h \
 	bqaudioio/bqaudioio/SystemRecordSource.h \
@@ -33,6 +34,7 @@ BQ_SOURCES += \
 	bqaudioio/src/JACKAudioIO.cpp \
 	bqaudioio/src/PortAudioIO.cpp \
 	bqaudioio/src/PulseAudioIO.cpp \
+	bqaudioio/src/ResamplerWrapper.cpp \
 	bqaudioio/src/SystemPlaybackTarget.cpp \
 	bqaudioio/src/SystemRecordSource.cpp
 
