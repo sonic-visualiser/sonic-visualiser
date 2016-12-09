@@ -2404,6 +2404,8 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
+//!!!???
+    
     sv_samplerate_t ssr = getMainModel()->getSampleRate();
     sv_samplerate_t tsr = ssr;
     if (m_playSource) tsr = m_playSource->getTargetSampleRate();
