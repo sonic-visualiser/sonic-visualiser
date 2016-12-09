@@ -2408,7 +2408,7 @@ MainWindow::updateDescriptionLabel()
     
     sv_samplerate_t ssr = getMainModel()->getSampleRate();
     sv_samplerate_t tsr = ssr;
-    if (m_playSource) tsr = m_playSource->getTargetSampleRate();
+    if (m_playSource) tsr = m_playSource->getDeviceSampleRate();
 
     if (ssr != tsr) {
 	description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
