@@ -345,8 +345,9 @@ main(int argc, char **argv)
     // splash screen.
     PluginScan::getInstance()->scan();
     
-    // Permit size_t and PropertyName to be used as args in queued signal calls
+    // Permit these types to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
+    qRegisterMetaType<ZoomLevel>("ZoomLevel");
 
     MainWindow::SoundOptions options = MainWindow::WithEverything;
     if (!audioOutput) options = 0;
