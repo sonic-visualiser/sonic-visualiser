@@ -586,9 +586,6 @@ PreferencesDialog::rebuildDeviceCombos()
         implementationName = names[m_audioImplementation-1];
     }
 
-    m_audioPlaybackDeviceCombo->clear();
-    m_audioRecordDeviceCombo->clear();
-
     QString suffix;
     if (implementationName != "") {
         suffix = "-" + QString(implementationName.c_str());
@@ -597,6 +594,7 @@ PreferencesDialog::rebuildDeviceCombos()
     names = breakfastquay::AudioFactory::getPlaybackDeviceNames(implementationName);
     QString playbackDeviceName = settings.value
         ("audio-playback-device" + suffix, "").toString();
+    m_audioPlaybackDeviceCombo->clear();
     m_audioPlaybackDeviceCombo->addItem(tr("(auto)"));
     m_audioPlaybackDeviceCombo->setCurrentIndex(0);
     m_audioPlaybackDevice = 0;
@@ -611,6 +609,7 @@ PreferencesDialog::rebuildDeviceCombos()
     names = breakfastquay::AudioFactory::getRecordDeviceNames(implementationName);
     QString recordDeviceName = settings.value
         ("audio-record-device" + suffix, "").toString();
+    m_audioRecordDeviceCombo->clear();
     m_audioRecordDeviceCombo->addItem(tr("(auto)"));
     m_audioRecordDeviceCombo->setCurrentIndex(0);
     m_audioRecordDevice = 0;
