@@ -875,6 +875,9 @@ PreferencesDialog::applyClicked()
 
     vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
     string implementationName;
+    if (m_audioImplementation > int(names.size())) {
+        m_audioImplementation = 0;
+    }
     if (m_audioImplementation > 0) {
         implementationName = names[m_audioImplementation-1];
     }
@@ -887,6 +890,9 @@ PreferencesDialog::applyClicked()
     
     names = breakfastquay::AudioFactory::getPlaybackDeviceNames(implementationName);
     string deviceName;
+    if (m_audioPlaybackDevice > int(names.size())) {
+        m_audioPlaybackDevice = 0;
+    }
     if (m_audioPlaybackDevice > 0) {
         deviceName = names[m_audioPlaybackDevice-1];
     }
@@ -894,6 +900,9 @@ PreferencesDialog::applyClicked()
 
     names = breakfastquay::AudioFactory::getRecordDeviceNames(implementationName);
     deviceName = "";
+    if (m_audioRecordDevice > int(names.size())) {
+        m_audioRecordDevice = 0;
+    }
     if (m_audioRecordDevice > 0) {
         deviceName = names[m_audioRecordDevice-1];
     }
@@ -922,6 +931,7 @@ PreferencesDialog::applyClicked()
 
     if (m_audioDeviceChanged) {
         emit audioDeviceChanged();
+        m_audioDeviceChanged = false;
     }
 }    
 
