@@ -2948,7 +2948,8 @@ MainWindow::browseRecordedAudio()
 {
     if (!m_recordTarget) return;
 
-    QString path = m_recordTarget->getRecordFolder();
+    QString path = m_recordTarget->getRecordContainerFolder();
+    if (path == "") path = m_recordTarget->getRecordFolder();
     if (path == "") return;
 
     openLocalFolder(path);
