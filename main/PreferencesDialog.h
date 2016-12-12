@@ -43,6 +43,9 @@ public:
     };
     void switchToTab(Tab tab);
 
+signals:
+    void audioDeviceChanged();
+                             
 public slots:
     void applicationClosing(bool quickly);
 
@@ -122,6 +125,7 @@ protected:
     int m_viewFontSize;
     bool m_showSplash;
 
+    bool m_audioDeviceChanged;
     bool m_changesOnRestart;
 };
 

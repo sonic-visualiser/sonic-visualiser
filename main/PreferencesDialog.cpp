@@ -53,6 +53,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     m_audioImplementation(0),
     m_audioPlaybackDevice(0),
     m_audioRecordDevice(0),
+    m_audioDeviceChanged(false),
     m_changesOnRestart(false)
 {
     setWindowTitle(tr("Sonic Visualiser: Application Preferences"));
@@ -219,7 +220,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     settings.endGroup();
 
     rebuildDeviceCombos();
-    m_changesOnRestart = false; // the rebuild will have changed this
+    m_audioDeviceChanged = false; // the rebuild will have changed this
 
     QCheckBox *resampleOnLoad = new QCheckBox;
     m_resampleOnLoad = prefs->getResampleOnLoad();
@@ -695,7 +696,7 @@ PreferencesDialog::audioImplementationChanged(int s)
         m_audioImplementation = s;
         rebuildDeviceCombos();
         m_applyButton->setEnabled(true);
-        m_changesOnRestart = true;
+        m_audioDeviceChanged = true;
     }
 }
 
@@ -705,7 +706,7 @@ PreferencesDialog::audioPlaybackDeviceChanged(int s)
     if (m_audioPlaybackDevice != s) {
         m_audioPlaybackDevice = s;
         m_applyButton->setEnabled(true);
-        m_changesOnRestart = true;
+        m_audioDeviceChanged = true;
     }
 }
 
@@ -715,7 +716,7 @@ PreferencesDialog::audioRecordDeviceChanged(int s)
     if (m_audioRecordDevice != s) {
         m_audioRecordDevice = s;
         m_applyButton->setEnabled(true);
-        m_changesOnRestart = true;
+        m_audioDeviceChanged = true;
     }
 }
 
@@ -917,6 +918,10 @@ PreferencesDialog::applyClicked()
         QMessageBox::information(this, tr("Preferences"),
                                  tr("<b>Restart required</b><p>One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.</p><p>Please exit and restart the application now if you want these changes to take effect immediately.</p>"));
         m_changesOnRestart = false;
+    }
+
+    if (m_audioDeviceChanged) {
+        emit audioDeviceChanged();
     }
 }    
 

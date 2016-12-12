@@ -4592,6 +4592,9 @@ MainWindow::preferences()
 
     m_preferencesDialog = new PreferencesDialog(this);
 
+    connect(m_preferencesDialog, SIGNAL(audioDeviceChanged()),
+            this, SLOT(recreateAudioIO()));
+    
     // DeleteOnClose is safe here, because m_preferencesDialog is a
     // QPointer that will be zeroed when the dialog is deleted.  We
     // use it in preference to leaving the dialog lying around because
