@@ -523,6 +523,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->setRowStretch(row, 10);
     row++;
 
+    subgrid->addWidget(new QLabel(tr("(Use \"%1\" in the File menu to add to these.)")
+                                  .arg(tr("Export Session as Template..."))),
+                       row++, 0);
+
     settings.beginGroup("MainWindow");
     m_currentTemplate = settings.value("sessiontemplate", "").toString();
     settings.endGroup();
