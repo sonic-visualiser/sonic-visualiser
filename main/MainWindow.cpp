@@ -2407,9 +2407,11 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
+//!!!???
+    
     sv_samplerate_t ssr = getMainModel()->getSampleRate();
     sv_samplerate_t tsr = ssr;
-    if (m_playSource) tsr = m_playSource->getTargetSampleRate();
+    if (m_playSource) tsr = m_playSource->getDeviceSampleRate();
 
     if (ssr != tsr) {
 	description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
@@ -2949,7 +2951,8 @@ MainWindow::browseRecordedAudio()
 {
     if (!m_recordTarget) return;
 
-    QString path = m_recordTarget->getRecordFolder();
+    QString path = m_recordTarget->getRecordContainerFolder();
+    if (path == "") path = m_recordTarget->getRecordFolder();
     if (path == "") return;
 
     openLocalFolder(path);
@@ -4605,6 +4608,9 @@ MainWindow::preferences()
 
     m_preferencesDialog = new PreferencesDialog(this);
 
+    connect(m_preferencesDialog, SIGNAL(audioDeviceChanged()),
+            this, SLOT(recreateAudioIO()));
+    
     // DeleteOnClose is safe here, because m_preferencesDialog is a
     // QPointer that will be zeroed when the dialog is deleted.  We
     // use it in preference to leaving the dialog lying around because
