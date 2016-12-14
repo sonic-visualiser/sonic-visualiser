@@ -15,18 +15,14 @@ BQ_HEADERS += \
 	bqaudioio/bqaudioio/ApplicationPlaybackSource.h \
 	bqaudioio/bqaudioio/ApplicationRecordTarget.h \
 	bqaudioio/bqaudioio/AudioFactory.h \
+	bqaudioio/bqaudioio/ResamplerWrapper.h \
 	bqaudioio/bqaudioio/SystemAudioIO.h \
 	bqaudioio/bqaudioio/SystemPlaybackTarget.h \
 	bqaudioio/bqaudioio/SystemRecordSource.h \
 	bqaudioio/src/DynamicJACK.h \
 	bqaudioio/src/JACKAudioIO.h \
-	bqaudioio/src/JACKPlaybackTarget.h \
-	bqaudioio/src/JACKRecordSource.h \
 	bqaudioio/src/PortAudioIO.h \
-	bqaudioio/src/PortAudioPlaybackTarget.h \
-	bqaudioio/src/PortAudioRecordSource.h \
-	bqaudioio/src/PulseAudioIO.h \
-	bqaudioio/src/PulseAudioPlaybackTarget.h
+	bqaudioio/src/PulseAudioIO.h
 
 BQ_SOURCES += \
 	bqvec/src/Allocators.cpp \
@@ -36,13 +32,9 @@ BQ_SOURCES += \
 	bqresample/src/Resampler.cpp \
 	bqaudioio/src/AudioFactory.cpp \
 	bqaudioio/src/JACKAudioIO.cpp \
-	bqaudioio/src/JACKPlaybackTarget.cpp \
-	bqaudioio/src/JACKRecordSource.cpp \
 	bqaudioio/src/PortAudioIO.cpp \
-	bqaudioio/src/PortAudioPlaybackTarget.cpp \
-	bqaudioio/src/PortAudioRecordSource.cpp \
 	bqaudioio/src/PulseAudioIO.cpp \
-	bqaudioio/src/PulseAudioPlaybackTarget.cpp \
+	bqaudioio/src/ResamplerWrapper.cpp \
 	bqaudioio/src/SystemPlaybackTarget.cpp \
 	bqaudioio/src/SystemRecordSource.cpp
 

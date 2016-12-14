@@ -42,13 +42,18 @@
 #include "base/ResourceFinder.h"
 #include "layer/ColourMapper.h"
 
-//#include "audioio/AudioTargetFactory.h"
+#include "bqaudioio/AudioFactory.h"
 
 #include "version.h"
 
+using namespace std;
+
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
-    m_audioDevice(0),
+    m_audioImplementation(0),
+    m_audioPlaybackDevice(0),
+    m_audioRecordDevice(0),
+    m_audioDeviceChanged(false),
     m_changesOnRestart(false)
 {
     setWindowTitle(tr("Sonic Visualiser: Application Preferences"));
@@ -184,24 +189,38 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(octaveSystem, SIGNAL(currentIndexChanged(int)),
             this, SLOT(octaveSystemChanged(int)));
 
-    /*!!! restore
-    QComboBox *audioDevice = new QComboBox;
-    std::vector<QString> devices =
-        AudioTargetFactory::getInstance()->getCallbackTargetNames();
-    
     settings.beginGroup("Preferences");
-    QString targetName = settings.value("audio-target", "").toString();
+
+    QComboBox *audioImplementation = new QComboBox;
+    connect(audioImplementation, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(audioImplementationChanged(int)));
+
+    m_audioPlaybackDeviceCombo = new QComboBox;
+    connect(m_audioPlaybackDeviceCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(audioPlaybackDeviceChanged(int)));
+
+    m_audioRecordDeviceCombo = new QComboBox;
+    connect(m_audioRecordDeviceCombo, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(audioRecordDeviceChanged(int)));
+
+    vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
+    QString implementationName = settings.value("audio-target", "").toString();
+    if (implementationName == "auto") implementationName = "";
+    audioImplementation->addItem(tr("(auto)"));
+    m_audioImplementation = 0;
+    for (int i = 0; in_range_for(names, i); ++i) {
+        audioImplementation->addItem
+            (breakfastquay::AudioFactory::getImplementationDescription(names[i]).
+             c_str());
+        if (implementationName.toStdString() == names[i]) {
+            audioImplementation->setCurrentIndex(i+1);
+            m_audioImplementation = i+1;
+        }
+    }
     settings.endGroup();
 
-    for (int i = 0; i < (int)devices.size(); ++i) {
-        audioDevice->addItem(AudioTargetFactory::getInstance()
-                             ->getCallbackTargetDescription(devices[i]));
-        if (targetName == devices[i]) audioDevice->setCurrentIndex(i);
-    }
-
-    connect(audioDevice, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(audioDeviceChanged(int)));
-    */
+    rebuildDeviceCombos();
+    m_audioDeviceChanged = false; // the rebuild will have changed this
 
     QCheckBox *resampleOnLoad = new QCheckBox;
     m_resampleOnLoad = prefs->getResampleOnLoad();
@@ -369,8 +388,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(gaplessMode, row++, 1, 1, 1);
 
-//!!!    subgrid->addWidget(new QLabel(tr("Playback audio device:")), row, 0);
-//!!!    subgrid->addWidget(audioDevice, row++, 1, 1, 2);
+    subgrid->addWidget(new QLabel(tr("Audio service:")), row, 0);
+    subgrid->addWidget(audioImplementation, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Audio playback device:")), row, 0);
+    subgrid->addWidget(m_audioPlaybackDeviceCombo, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Audio record device:")), row, 0);
+    subgrid->addWidget(m_audioRecordDeviceCombo, row++, 1, 1, 2);
 
     subgrid->setRowStretch(row, 10);
     
@@ -498,6 +523,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->setRowStretch(row, 10);
     row++;
 
+    subgrid->addWidget(new QLabel(tr("(Use \"%1\" in the File menu to add to these.)")
+                                  .arg(tr("Export Session as Template..."))),
+                       row++, 0);
+
     settings.beginGroup("MainWindow");
     m_currentTemplate = settings.value("sessiontemplate", "").toString();
     settings.endGroup();
@@ -510,7 +539,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     QStringList templates = ResourceFinder().getResourceFiles("templates", "svt");
 
-    std::set<QString> byName;
+    set<QString> byName;
     foreach (QString t, templates) {
         byName.insert(QFileInfo(t).baseName());
     }
@@ -547,6 +576,56 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 PreferencesDialog::~PreferencesDialog()
 {
     SVDEBUG << "PreferencesDialog::~PreferencesDialog()" << endl;
+}
+
+void
+PreferencesDialog::rebuildDeviceCombos()
+{
+    QSettings settings;
+    settings.beginGroup("Preferences");
+
+    vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
+    string implementationName;
+    if (in_range_for(names, m_audioImplementation-1)) {
+        implementationName = names[m_audioImplementation-1];
+    }
+
+    QString suffix;
+    if (implementationName != "") {
+        suffix = "-" + QString(implementationName.c_str());
+    }
+    
+    names = breakfastquay::AudioFactory::getPlaybackDeviceNames(implementationName);
+    QString playbackDeviceName = settings.value
+        ("audio-playback-device" + suffix, "").toString();
+    m_audioPlaybackDeviceCombo->clear();
+    m_audioPlaybackDeviceCombo->addItem(tr("(auto)"));
+    m_audioPlaybackDeviceCombo->setCurrentIndex(0);
+    m_audioPlaybackDevice = 0;
+    for (int i = 0; in_range_for(names, i); ++i) {
+        m_audioPlaybackDeviceCombo->addItem(names[i].c_str());
+        if (playbackDeviceName.toStdString() == names[i]) {
+            m_audioPlaybackDeviceCombo->setCurrentIndex(i+1);
+            m_audioPlaybackDevice = i+1;
+        }
+    }
+    
+    names = breakfastquay::AudioFactory::getRecordDeviceNames(implementationName);
+    QString recordDeviceName = settings.value
+        ("audio-record-device" + suffix, "").toString();
+    m_audioRecordDeviceCombo->clear();
+    m_audioRecordDeviceCombo->addItem(tr("(auto)"));
+    m_audioRecordDeviceCombo->setCurrentIndex(0);
+    m_audioRecordDevice = 0;
+    for (int i = 0; in_range_for(names, i); ++i) {
+        m_audioRecordDeviceCombo->addItem(names[i].c_str());
+        if (recordDeviceName.toStdString() == names[i]) {
+            m_audioRecordDeviceCombo->setCurrentIndex(i+1);
+            m_audioRecordDevice = i+1;
+        }
+    }
+
+    settings.endGroup();
 }
 
 void
@@ -614,11 +693,34 @@ PreferencesDialog::tuningFrequencyChanged(double freq)
 }
 
 void
-PreferencesDialog::audioDeviceChanged(int s)
+PreferencesDialog::audioImplementationChanged(int s)
 {
-    m_audioDevice = s;
-    m_applyButton->setEnabled(true);
-    m_changesOnRestart = true;
+    if (m_audioImplementation != s) {
+        m_audioImplementation = s;
+        rebuildDeviceCombos();
+        m_applyButton->setEnabled(true);
+        m_audioDeviceChanged = true;
+    }
+}
+
+void
+PreferencesDialog::audioPlaybackDeviceChanged(int s)
+{
+    if (m_audioPlaybackDevice != s) {
+        m_audioPlaybackDevice = s;
+        m_applyButton->setEnabled(true);
+        m_audioDeviceChanged = true;
+    }
+}
+
+void
+PreferencesDialog::audioRecordDeviceChanged(int s)
+{
+    if (m_audioRecordDevice != s) {
+        m_audioRecordDevice = s;
+        m_applyButton->setEnabled(true);
+        m_audioDeviceChanged = true;
+    }
 }
 
 void
@@ -769,14 +871,46 @@ PreferencesDialog::applyClicked()
     
     prefs->setProperty("Octave Numbering System", m_octaveSystem);
 
-//!!!    std::vector<QString> devices =
-//!!!        AudioTargetFactory::getInstance()->getCallbackTargetNames();
-
     QSettings settings;
     settings.beginGroup("Preferences");
     QString permishTag = QString("network-permission-%1").arg(SV_VERSION);
     settings.setValue(permishTag, m_networkPermission);
-//!!!    settings.setValue("audio-target", devices[m_audioDevice]);
+
+    vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
+    string implementationName;
+    if (m_audioImplementation > int(names.size())) {
+        m_audioImplementation = 0;
+    }
+    if (m_audioImplementation > 0) {
+        implementationName = names[m_audioImplementation-1];
+    }
+    settings.setValue("audio-target", implementationName.c_str());
+
+    QString suffix;
+    if (implementationName != "") {
+        suffix = "-" + QString(implementationName.c_str());
+    }
+    
+    names = breakfastquay::AudioFactory::getPlaybackDeviceNames(implementationName);
+    string deviceName;
+    if (m_audioPlaybackDevice > int(names.size())) {
+        m_audioPlaybackDevice = 0;
+    }
+    if (m_audioPlaybackDevice > 0) {
+        deviceName = names[m_audioPlaybackDevice-1];
+    }
+    settings.setValue("audio-playback-device" + suffix, deviceName.c_str());
+
+    names = breakfastquay::AudioFactory::getRecordDeviceNames(implementationName);
+    deviceName = "";
+    if (m_audioRecordDevice > int(names.size())) {
+        m_audioRecordDevice = 0;
+    }
+    if (m_audioRecordDevice > 0) {
+        deviceName = names[m_audioRecordDevice-1];
+    }
+    settings.setValue("audio-record-device" + suffix, deviceName.c_str());
+    
     settings.setValue("locale", m_currentLocale);
 #ifdef Q_OS_MAC
     settings.setValue("scaledHiDpi", m_retina);
@@ -796,6 +930,11 @@ PreferencesDialog::applyClicked()
         QMessageBox::information(this, tr("Preferences"),
                                  tr("<b>Restart required</b><p>One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.</p><p>Please exit and restart the application now if you want these changes to take effect immediately.</p>"));
         m_changesOnRestart = false;
+    }
+
+    if (m_audioDeviceChanged) {
+        emit audioDeviceChanged();
+        m_audioDeviceChanged = false;
     }
 }    
 
