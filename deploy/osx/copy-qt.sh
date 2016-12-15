@@ -29,6 +29,12 @@ mkdir -p "$pdir"
 echo
 echo "Copying frameworks..."
 for fwk in $frameworks; do
+    if [ ! -d "$qtdir/lib/$fwk.framework" ]; then
+	if [ "$fwk" = "QtDBus" ]; then
+	    echo "QtDBus.framework not found, assuming Qt was built without DBus support"
+	    continue
+	fi
+    fi
     cp -v "$qtdir/lib/$fwk.framework/$fwk" "$fdir" || exit 2
 done
 

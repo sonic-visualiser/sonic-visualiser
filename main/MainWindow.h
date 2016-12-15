@@ -137,6 +137,7 @@ protected slots:
 
     virtual void mainModelChanged(WaveFileModel *);
     virtual void mainModelGainChanged(float);
+    virtual void mainModelPanChanged(float);
     virtual void modelAdded(Model *);
     virtual void modelAboutToBeDeleted(Model *);
 
@@ -164,7 +165,8 @@ protected slots:
 
 protected:
     Overview                *m_overview;
-    Fader                   *m_fader;
+//!!!    Fader                   *m_fader;
+    LevelPanToolButton      *m_mainLevelPan;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
     

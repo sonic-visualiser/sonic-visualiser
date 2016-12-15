@@ -353,54 +353,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     hms->setCheckState(m_showHMS ? Qt::Checked : Qt::Unchecked);
     connect(hms, SIGNAL(stateChanged(int)),
             this, SLOT(showHMSChanged(int)));
-    
-    // General tab
 
-    QFrame *frame = new QFrame;
-    
-    QGridLayout *subgrid = new QGridLayout;
-    frame->setLayout(subgrid);
-
+    QFrame *frame = 0;
+    QGridLayout *subgrid = 0;
     int row = 0;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("User interface language"))),
-                       row, 0);
-    subgrid->addWidget(locale, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("Allow network usage"))),
-                       row, 0);
-    subgrid->addWidget(networkPermish, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Temporary Directory Root"))),
-                       row, 0);
-    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
-    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
-    row++;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Resample On Load"))),
-                       row, 0);
-    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Use Gapless Mode"))),
-                       row, 0);
-    subgrid->addWidget(gaplessMode, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("Audio service:")), row, 0);
-    subgrid->addWidget(audioImplementation, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("Audio playback device:")), row, 0);
-    subgrid->addWidget(m_audioPlaybackDeviceCombo, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("Audio record device:")), row, 0);
-    subgrid->addWidget(m_audioRecordDeviceCombo, row++, 1, 1, 2);
-
-    subgrid->setRowStretch(row, 10);
-    
-    m_tabOrdering[GeneralTab] = m_tabs->count();
-    m_tabs->addTab(frame, tr("&General"));
 
     // Appearance tab
 
@@ -408,11 +364,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid = new QGridLayout;
     frame->setLayout(subgrid);
     row = 0;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Show Splash Screen"))),
-                       row, 0);
-    subgrid->addWidget(showSplash, row++, 1, 1, 1);
 
 #ifdef Q_OS_MAC
     if (devicePixelRatio() > 1) {
@@ -516,7 +467,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     frame->setLayout(subgrid);
     row = 0;
     
-    subgrid->addWidget(new QLabel(tr("Default session template for audio files:")), row++, 0);
+    subgrid->addWidget(new QLabel(tr("Default session template when loading audio files:")), row++, 0);
 
     QListWidget *lw = new QListWidget();
     subgrid->addWidget(lw, row, 0);
@@ -557,6 +508,69 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     m_tabOrdering[TemplateTab] = m_tabs->count();
     m_tabs->addTab(frame, tr("Session &Template"));
+
+    // Audio IO tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+
+    subgrid->addWidget(new QLabel(tr("Audio service:")), row, 0);
+    subgrid->addWidget(audioImplementation, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Audio playback device:")), row, 0);
+    subgrid->addWidget(m_audioPlaybackDeviceCombo, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Audio record device:")), row, 0);
+    subgrid->addWidget(m_audioRecordDeviceCombo, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Use Gapless Mode"))),
+                       row, 0);
+    subgrid->addWidget(gaplessMode, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Resample On Load"))),
+                       row, 0);
+    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
+
+    subgrid->setRowStretch(row, 10);
+    
+    m_tabOrdering[AudioIOTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("A&udio I/O"));
+ 
+    // General tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("User interface language"))),
+                       row, 0);
+    subgrid->addWidget(locale, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("Allow network usage"))),
+                       row, 0);
+    subgrid->addWidget(networkPermish, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Show Splash Screen"))),
+                       row, 0);
+    subgrid->addWidget(showSplash, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Temporary Directory Root"))),
+                       row, 0);
+    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
+    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
+    row++;
+    
+    subgrid->setRowStretch(row, 10);
+    
+    m_tabOrdering[GeneralTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("&Other"));
 
     QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
     grid->addWidget(bb, 1, 0);
