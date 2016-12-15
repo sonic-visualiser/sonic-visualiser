@@ -120,6 +120,7 @@
 #include <QCheckBox>
 #include <QRegExp>
 #include <QScrollArea>
+#include <QCloseEvent>
 #include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QFileSystemWatcher>
