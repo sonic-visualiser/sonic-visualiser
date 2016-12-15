@@ -3323,7 +3323,7 @@ MainWindow::closeEvent(QCloseEvent *e)
     if (m_preferencesDialog &&
         m_preferencesDialog->isVisible()) {
         closeSession(); // otherwise we'll have to wait for prefs changes
-        m_preferencesDialog->applicationClosing(false);
+        m_preferencesDialog->applicationClosing(true);
     }
 
     closeSession();
