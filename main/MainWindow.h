@@ -166,7 +166,7 @@ protected slots:
 protected:
     Overview                *m_overview;
 //!!!    Fader                   *m_fader;
-    LevelPanWidget          *m_mainLevelPan;
+    LevelPanToolButton      *m_mainLevelPan;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
     

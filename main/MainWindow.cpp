@@ -42,12 +42,12 @@
 #include "layer/SliceableLayer.h"
 #include "layer/ImageLayer.h"
 #include "layer/RegionLayer.h"
-#include "widgets/Fader.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
 #include "widgets/LevelPanWidget.h"
+#include "widgets/LevelPanToolButton.h"
 #include "widgets/IconLoader.h"
 #include "widgets/LayerTreeDialog.h"
 #include "widgets/ListInputDialog.h"
@@ -211,7 +211,9 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
-    m_overview->setFixedHeight(m_viewManager->scalePixelSize(40));
+    int overviewHeight = m_viewManager->scalePixelSize(35);
+    if (overviewHeight < 40) overviewHeight = 40;
+    m_overview->setFixedHeight(overviewHeight);
 #ifndef _WIN32
     // For some reason, the contents of the overview never appear if we
     // make this setting on Windows.  I have no inclination at the moment
@@ -238,8 +240,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(m_viewManager->scalePixelSize(32));
-    m_playSpeed->setFixedHeight(m_viewManager->scalePixelSize(32));
+    m_playSpeed->setFixedWidth(overviewHeight);
+    m_playSpeed->setFixedHeight(overviewHeight);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -251,24 +253,21 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    m_mainLevelPan = new LevelPanWidget(frame);
+    m_mainLevelPan = new LevelPanToolButton(frame);
     connect(m_mainLevelPan, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_mainLevelPan, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-    
-/*!!!
-    m_fader = new Fader(frame, false);
-    connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_fader, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
-*/
+    m_mainLevelPan->setFixedHeight(overviewHeight);
+    m_mainLevelPan->setFixedWidth(overviewHeight);
+    m_mainLevelPan->setImageSize((overviewHeight * 3) / 4);
+    m_mainLevelPan->setBigImageSize(overviewHeight * 3);
 
     m_playControlsSpacer = new QFrame;
 
     layout->setSpacing(m_viewManager->scalePixelSize(4));
     layout->addWidget(m_mainScroll, 0, 0, 1, 4);
     layout->addWidget(m_overview, 1, 0);
-    layout->addWidget(m_playControlsSpacer, 1, 1);
-    layout->addWidget(m_playSpeed, 1, 2);
-//    layout->addWidget(m_fader, 1, 3);
+    layout->addWidget(m_playSpeed, 1, 1);
+    layout->addWidget(m_playControlsSpacer, 1, 2);
     layout->addWidget(m_mainLevelPan, 1, 3);
 
     m_playControlsWidth = 

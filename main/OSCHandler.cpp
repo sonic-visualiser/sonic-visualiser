@@ -27,6 +27,7 @@
 #include "data/fileio/WavFileWriter.h"
 #include "transform/TransformFactory.h"
 #include "widgets/LevelPanWidget.h"
+#include "widgets/LevelPanToolButton.h"
 #include "widgets/AudioDial.h"
 
 #include <bqaudioio/SystemPlaybackTarget.h>
