@@ -37,6 +37,7 @@ public:
 
     enum Tab {
         GeneralTab,
+        AudioIOTab,
         AppearanceTab,
         AnalysisTab,
         TemplateTab
