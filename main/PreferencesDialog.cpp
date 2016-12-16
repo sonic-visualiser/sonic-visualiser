@@ -39,9 +39,11 @@
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
 #include "widgets/ColourMapComboBox.h"
+#include "widgets/ColourComboBox.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
 #include "layer/ColourMapper.h"
+#include "layer/ColourDatabase.h"
 
 #include "bqaudioio/AudioFactory.h"
 
@@ -55,6 +57,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     m_audioPlaybackDevice(0),
     m_audioRecordDevice(0),
     m_audioDeviceChanged(false),
+    m_coloursChanged(false),
     m_changesOnRestart(false)
 {
     setWindowTitle(tr("Sonic Visualiser: Application Preferences"));
@@ -145,6 +148,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                            int(ColourMapper::Sunset)).toInt());
     m_colour3DColour = (settings.value("colour-3d-plot-colour",
                                        int(ColourMapper::Green)).toInt());
+    m_overviewColour =
+        (settings.value("overview-colour",
+                        ColourDatabase::getInstance()->getColour(tr("Green"))))
+        .value<QColor>();
     settings.endGroup();
 
     ColourMapComboBox *spectrogramGColour = new ColourMapComboBox(true);
@@ -156,12 +163,22 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     ColourMapComboBox *colour3DColour = new ColourMapComboBox(true);
     colour3DColour->setCurrentIndex(m_colour3DColour);
 
+    // can't have "add new colour", as it gets saved in the session not in prefs
+    ColourComboBox *overviewColour = new ColourComboBox(false);
+    int overviewColourIndex =
+        ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
+    if (overviewColourIndex >= 0) {
+        overviewColour->setCurrentIndex(overviewColourIndex);
+    }
+
     connect(spectrogramGColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(spectrogramGColourChanged(int)));
     connect(spectrogramMColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(spectrogramMColourChanged(int)));
     connect(colour3DColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(colour3DColourChanged(int)));
+    connect(overviewColour, SIGNAL(colourChanged(int)),
+            this, SLOT(overviewColourChanged(int)));
 
     m_tuningFrequency = prefs->getTuningFrequency();
 
@@ -388,6 +405,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(new QLabel(tr("Default colour 3D plot colour:")),
                        row, 0);
     subgrid->addWidget(colour3DColour, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Overview waveform colour:")),
+                       row, 0);
+    subgrid->addWidget(overviewColour, row++, 1, 1, 2);
 
 #ifdef NOT_DEFINED // see earlier
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
@@ -675,6 +696,7 @@ void
 PreferencesDialog::spectrogramGColourChanged(int colour)
 {
     m_spectrogramGColour = colour;
+    m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
 
@@ -682,6 +704,7 @@ void
 PreferencesDialog::spectrogramMColourChanged(int colour)
 {
     m_spectrogramMColour = colour;
+    m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
 
@@ -689,6 +712,15 @@ void
 PreferencesDialog::colour3DColourChanged(int colour)
 {
     m_colour3DColour = colour;
+    m_coloursChanged = true;
+    m_applyButton->setEnabled(true);
+}
+
+void
+PreferencesDialog::overviewColourChanged(int colour)
+{
+    m_overviewColour = ColourDatabase::getInstance()->getColour(colour);
+    m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
 
@@ -932,6 +964,7 @@ PreferencesDialog::applyClicked()
     settings.setValue("spectrogram-colour", m_spectrogramGColour);
     settings.setValue("spectrogram-melodic-colour", m_spectrogramMColour);
     settings.setValue("colour-3d-plot-colour", m_colour3DColour);
+    settings.setValue("overview-colour", m_overviewColour);
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
@@ -949,6 +982,11 @@ PreferencesDialog::applyClicked()
     if (m_audioDeviceChanged) {
         emit audioDeviceChanged();
         m_audioDeviceChanged = false;
+    }
+
+    if (m_coloursChanged) {
+        emit coloursChanged();
+        m_coloursChanged = false;
     }
 }    
 

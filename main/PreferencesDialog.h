@@ -18,6 +18,7 @@
 
 #include <QDialog>
 #include <QMap>
+#include <QColor>
 
 #include "base/Window.h"
 
@@ -46,6 +47,7 @@ public:
 
 signals:
     void audioDeviceChanged();
+    void coloursChanged();
                              
 public slots:
     void applicationClosing(bool quickly);
@@ -57,6 +59,7 @@ protected slots:
     void spectrogramGColourChanged(int state);
     void spectrogramMColourChanged(int state);
     void colour3DColourChanged(int state);
+    void overviewColourChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
     void audioImplementationChanged(int impl);
@@ -108,6 +111,7 @@ protected:
     int m_spectrogramGColour;
     int m_spectrogramMColour;
     int m_colour3DColour;
+    QColor m_overviewColour;
     int m_propertyLayout;
     double m_tuningFrequency;
     int m_audioImplementation;
@@ -127,6 +131,7 @@ protected:
     bool m_showSplash;
 
     bool m_audioDeviceChanged;
+    bool m_coloursChanged;
     bool m_changesOnRestart;
 };
 

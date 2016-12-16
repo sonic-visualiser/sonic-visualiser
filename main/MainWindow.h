@@ -41,6 +41,8 @@ signals:
 
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
+    virtual void coloursChanged();
+
     virtual bool commitData(bool mayAskUser);
 
     void goFullScreen();
