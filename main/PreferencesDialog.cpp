@@ -38,6 +38,7 @@
 
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
+#include "widgets/ColourMapComboBox.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
 #include "layer/ColourMapper.h"
@@ -145,22 +146,21 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     m_colour3DColour = (settings.value("colour-3d-plot-colour",
                                        int(ColourMapper::Green)).toInt());
     settings.endGroup();
-    QComboBox *spectrogramGColour = new QComboBox;
-    QComboBox *spectrogramMColour = new QComboBox;
-    QComboBox *colour3DColour = new QComboBox;
-    for (i = 0; i < ColourMapper::getColourMapCount(); ++i) {
-        spectrogramGColour->addItem(ColourMapper::getColourMapName(i));
-        spectrogramMColour->addItem(ColourMapper::getColourMapName(i));
-        colour3DColour->addItem(ColourMapper::getColourMapName(i));
-        if (i == m_spectrogramGColour) spectrogramGColour->setCurrentIndex(i);
-        if (i == m_spectrogramMColour) spectrogramMColour->setCurrentIndex(i);
-        if (i == m_colour3DColour) colour3DColour->setCurrentIndex(i);
-    }
-    connect(spectrogramGColour, SIGNAL(currentIndexChanged(int)),
+
+    ColourMapComboBox *spectrogramGColour = new ColourMapComboBox(true);
+    spectrogramGColour->setCurrentIndex(m_spectrogramGColour);
+
+    ColourMapComboBox *spectrogramMColour = new ColourMapComboBox(true);
+    spectrogramMColour->setCurrentIndex(m_spectrogramMColour);
+
+    ColourMapComboBox *colour3DColour = new ColourMapComboBox(true);
+    colour3DColour->setCurrentIndex(m_colour3DColour);
+
+    connect(spectrogramGColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(spectrogramGColourChanged(int)));
-    connect(spectrogramMColour, SIGNAL(currentIndexChanged(int)),
+    connect(spectrogramMColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(spectrogramMColourChanged(int)));
-    connect(colour3DColour, SIGNAL(currentIndexChanged(int)),
+    connect(colour3DColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(colour3DColourChanged(int)));
 
     m_tuningFrequency = prefs->getTuningFrequency();
