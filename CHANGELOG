@@ -1,3 +1,47 @@
+
+Changes in Sonic Visualiser 3.0 since the previous release 2.5:
+
+ - Add ability to record audio, and ability to change audio device for
+   playback or recording in the preferences
+
+ - Add complete support for high-resolution (Hi-DPI or retina)
+   displays, spanning layer data rendering and UI controls and
+   icons. This makes the biggest difference when using a retina Mac,
+   on which previous versions did not render layer data at retina
+   resolution, but it also improves scaling and rendering of UI
+   elements on Hi-DPI displays on Windows and Linux
+
+ - Add ability to open, display, and analyse very long audio files (of
+   more than 2^32 sample frames)
+
+ - Run plugins in a separate process, so that if a plugin crashes, it
+   no longer brings down Sonic Visualiser with it. In every other
+   respect the behaviour should be unchanged
+
+ - Scan plugins on startup in a separate process, and report on any
+   that crash or won't load
+
+ - Change mp3 file loading so as to compensate for encoder/decoder
+   delay and padding (using "gapless playback" logic). While this is a
+   real improvement, unfortunately it does mean that the initial
+   padding in mp3 file load has changed from previous versions, which
+   may mean some sessions saved in previous versions are no longer
+   correctly aligned. It's not a great idea to use mp3 as a file
+   format of record, because of differences like this between
+   decoders. The previous behaviour is still available as a preference.
+
+ - Add function to subdivide time instant layers into regular
+   intervals (and its inverse)
+
+ - Add new preference for default colour scales
+
+ - Switch to using combined level/pan controls in layer property boxes
+   and for the main volume control
+
+ - Finally switch the Windows built to 64-bit by default (with
+   adapters to run either 32- or 64-bit plugins)
+ 
+
 Changes in Sonic Visualiser 2.5 since the previous release 2.4.1:
 
  - Add unit-converter dialog, for converting between various pitch and
