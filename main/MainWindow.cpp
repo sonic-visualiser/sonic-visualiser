@@ -229,13 +229,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_panLayer->setAggressiveCacheing(true);
     m_overview->addLayer(m_panLayer);
 
-    if (m_viewManager->getGlobalDarkBackground()) {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-    } else {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-    }
+    coloursChanged(); // sets pan layer colour from preferences
 
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
@@ -3502,15 +3496,30 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 {
     MainWindowBase::preferenceChanged(name);
 
-    if (name == "Background Mode" && m_viewManager) {
-        if (m_viewManager->getGlobalDarkBackground()) {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-        } else {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-        }      
+    if (name == "Background Mode") {
+        coloursChanged();
     }     
+}
+
+void
+MainWindow::coloursChanged()
+{
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    QString defaultColourName(tr("Green"));
+    if (m_viewManager && m_viewManager->getGlobalDarkBackground()) {
+        defaultColourName = tr("Bright Green");
+    }
+    ColourDatabase *cdb = ColourDatabase::getInstance();
+    QColor colour =
+        ((settings.value("overview-colour", cdb->getColour(defaultColourName)))
+         .value<QColor>());
+    settings.endGroup();
+
+    int index = cdb->getColourIndex(colour);
+    if (index >= 0) {
+        m_panLayer->setBaseColour(index);
+    }
 }
 
 void
@@ -4610,6 +4619,8 @@ MainWindow::preferences()
 
     connect(m_preferencesDialog, SIGNAL(audioDeviceChanged()),
             this, SLOT(recreateAudioIO()));
+    connect(m_preferencesDialog, SIGNAL(coloursChanged()),
+            this, SLOT(coloursChanged()));
     
     // DeleteOnClose is safe here, because m_preferencesDialog is a
     // QPointer that will be zeroed when the dialog is deleted.  We
