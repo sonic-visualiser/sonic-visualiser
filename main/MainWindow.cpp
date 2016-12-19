@@ -589,6 +589,12 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
+    action = new QAction(tr("Export SVG File..."), this);
+    action->setStatusTip(tr("Export a single pane to a scalable SVG image file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportSVG()));
+    connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
     menu->addSeparator();
 
     action = new QAction(tr("Browse Recorded Audio Folder"), this);
@@ -2856,18 +2862,21 @@ MainWindow::exportImage()
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) return;
     
+//!!!    QString path = getSaveFileName(FileFinder::ImageFile);
+//    if (path == "") return;
+//    if (QFileInfo(path).suffix() == "") path += ".png";
     QString path = getSaveFileName(FileFinder::ImageFile);
-
     if (path == "") return;
+    if (QFileInfo(path).suffix() == "") path += ".svg";
 
-    if (QFileInfo(path).suffix() == "") path += ".png";
-
+    bool scalable = true; //!!!
+    
     bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
 
     QSize total, visible, selected;
-    total = pane->getImageSize();
-    visible = pane->getImageSize(pane->getFirstVisibleFrame(),
-                                 pane->getLastVisibleFrame());
+    total = pane->getRenderedImageSize();
+    visible = pane->getRenderedPartImageSize(pane->getFirstVisibleFrame(),
+                                             pane->getLastVisibleFrame());
 
     sv_frame_t sf0 = 0, sf1 = 0;
  
@@ -2877,7 +2886,7 @@ MainWindow::exportImage()
         MultiSelection::SelectionList::iterator e = selections.end();
         --e;
         sf1 = e->getEndFrame();
-        selected = pane->getImageSize(sf0, sf1);
+        selected = pane->getRenderedPartImageSize(sf0, sf1);
     }
 
     QStringList items;
@@ -2896,7 +2905,7 @@ MainWindow::exportImage()
     settings.beginGroup("MainWindow");
     int deflt = settings.value("lastimageexportregion", 0).toInt();
     if (deflt == 2 && !haveSelection) deflt = 1;
-    if (deflt == 0 && total.width() > 32767) deflt = 1;
+    if (deflt == 0 && !scalable && total.width() > 32767) deflt = 1;
 
     ListInputDialog *lid = new ListInputDialog
         (this, tr("Select region to export"),
@@ -2906,7 +2915,7 @@ MainWindow::exportImage()
     if (!haveSelection) {
         lid->setItemAvailability(2, false);
     }
-    if (total.width() > 32767) { // appears to be the limit of a QImage
+    if (!scalable && total.width() > 32767) { // appears to be limit of a QImage
         lid->setItemAvailability(0, false);
         lid->setFootnote(tr("Note: the whole pane is too wide to be exported as a single image."));
     }
@@ -2919,25 +2928,114 @@ MainWindow::exportImage()
 
     settings.setValue("lastimageexportregion", deflt);
 
-    QImage *image = 0;
+    if (scalable) {
 
-    if (item == items[0]) {
-        image = pane->toNewImage();
-    } else if (item == items[1]) {
-        image = pane->toNewImage(pane->getFirstVisibleFrame(),
-                                 pane->getLastVisibleFrame());
-    } else if (haveSelection) {
-        image = pane->toNewImage(sf0, sf1);
+        bool result = false;
+        
+        if (item == items[0]) {
+            result = pane->renderToSvgFile(path );
+        } else if (item == items[1]) {
+            result = pane->renderPartToSvgFile(path,
+                                               pane->getFirstVisibleFrame(),
+                                               pane->getLastVisibleFrame());
+        } else if (haveSelection) {
+            result = pane->renderPartToSvgFile(path, sf0, sf1);
+        }
+
+        if (!result) {
+            QMessageBox::critical(this, tr("Failed to save SVG file"),
+                                  tr("Failed to save SVG file %1").arg(path));
+        }
+
+    } else {
+        
+        QImage *image = 0;
+
+        if (item == items[0]) {
+            image = pane->renderToNewImage();
+        } else if (item == items[1]) {
+            image = pane->renderPartToNewImage(pane->getFirstVisibleFrame(),
+                                               pane->getLastVisibleFrame());
+        } else if (haveSelection) {
+            image = pane->renderPartToNewImage(sf0, sf1);
+        }
+
+        if (!image) return;
+
+        if (!image->save(path, "PNG")) {
+            QMessageBox::critical(this, tr("Failed to save image file"),
+                                  tr("Failed to save image file %1").arg(path));
+        }
+    
+        delete image;
+    }
+}
+
+void
+MainWindow::exportSVG()
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (!pane) return;
+    
+    QString path = getSaveFileName(FileFinder::SVGFile);
+    if (path == "") return;
+    if (QFileInfo(path).suffix() == "") path += ".svg";
+
+    bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
+
+    sv_frame_t sf0 = 0, sf1 = 0;
+ 
+    if (haveSelection) {
+        MultiSelection::SelectionList selections = m_viewManager->getSelections();
+        sf0 = selections.begin()->getStartFrame();
+        MultiSelection::SelectionList::iterator e = selections.end();
+        --e;
+        sf1 = e->getEndFrame();
     }
 
-    if (!image) return;
+    QStringList items;
+    items << tr("Export the whole pane");
+    items << tr("Export the visible area only");
+    items << tr("Export the selection extent");
 
-    if (!image->save(path, "PNG")) {
-        QMessageBox::critical(this, tr("Failed to save image file"),
-                              tr("Failed to save image file %1").arg(path));
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int deflt = settings.value("lastsvgexportregion", 0).toInt();
+    if (deflt == 2 && !haveSelection) deflt = 1;
+
+    ListInputDialog *lid = new ListInputDialog
+        (this, tr("Select region to export"),
+         tr("Which region of the current pane do you want to export as a scalable SVG image?"),
+         items, deflt);
+
+    if (!haveSelection) {
+        lid->setItemAvailability(2, false);
+    }
+
+    bool ok = lid->exec();
+    QString item = lid->getCurrentString();
+    delete lid;
+	    
+    if (!ok || item.isEmpty()) return;
+
+    settings.setValue("lastsvgexportregion", deflt);
+
+    bool result = false;
+        
+    if (item == items[0]) {
+        result = pane->renderToSvgFile(path );
+    } else if (item == items[1]) {
+        result = pane->renderPartToSvgFile(path,
+                                           pane->getFirstVisibleFrame(),
+                                           pane->getLastVisibleFrame());
+    } else if (haveSelection) {
+        result = pane->renderPartToSvgFile(path, sf0, sf1);
     }
     
-    delete image;
+    if (!result) {
+        QMessageBox::critical(this, tr("Failed to save SVG file"),
+                              tr("Failed to save SVG file %1").arg(path));
+    }
 }
 
 void

@@ -63,6 +63,7 @@ protected slots:
     virtual void importLayer();
     virtual void exportLayer();
     virtual void exportImage();
+    virtual void exportSVG();
     virtual void browseRecordedAudio();
     virtual void saveSession();
     virtual void saveSessionAs();
