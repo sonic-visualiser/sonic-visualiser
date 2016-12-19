@@ -14,6 +14,8 @@ Changes in Sonic Visualiser 3.0 since the previous release 2.5:
  - Add ability to open, display, and analyse very long audio files (of
    more than 2^32 sample frames)
 
+ - Add ability to export scalable (SVG) image files
+
  - Run plugins in a separate process, so that if a plugin crashes, it
    no longer brings down Sonic Visualiser with it. In every other
    respect the behaviour should be unchanged
@@ -40,7 +42,7 @@ Changes in Sonic Visualiser 3.0 since the previous release 2.5:
 
  - Finally switch the Windows built to 64-bit by default (with
    adapters to run either 32- or 64-bit plugins)
- 
+
 
 Changes in Sonic Visualiser 2.5 since the previous release 2.4.1:
 
