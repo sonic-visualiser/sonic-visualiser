@@ -59,9 +59,11 @@ Changes in Sonic Visualiser 2.5 since the previous release 2.4.1:
 
  - Fix failure to export last instant in a time-instant layer
 
+
 Changes in Sonic Visualiser 2.4.1 since the previous release 2.4:
 
  - Fix a crash when rendering certain colour 3d plot layers
+
 
 Changes in Sonic Visualiser 2.4 since the previous release 2.3:
 
