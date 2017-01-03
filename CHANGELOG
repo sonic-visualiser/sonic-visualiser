@@ -32,6 +32,12 @@ Changes in Sonic Visualiser 3.0 since the previous release 2.5:
    format of record, because of differences like this between
    decoders. The previous behaviour is still available as a preference.
 
+ - Add new Hybrid normalisation type for spectrogram and colour 3d
+   plot layers. This normalises each column to its peak value and then
+   scales the normalised values by the log of the peak in order to
+   restore some distinction in scale between columns with different
+   levels. It can provide quite visually clear results.
+
  - Add function to subdivide time instant layers into regular
    intervals (and its inverse)
 
