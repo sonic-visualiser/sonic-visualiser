@@ -279,6 +279,12 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 
     frame->setLayout(layout);
 
+#ifdef Q_OS_MAC
+    // Mac doesn't align menu labels when icons are shown: result is messy
+    QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
+    setIconsVisibleInMenus(false);
+#endif
+
     setupMenus();
     setupToolbars();
     setupHelpMenu();
@@ -352,11 +358,6 @@ void
 MainWindow::setupMenus()
 {
     if (!m_mainMenusCreated) {
-
-#ifdef Q_OS_MAC
-        // Mac doesn't align menu labels when icons are shown: result is messy
-        QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
-#endif
 
 #ifdef Q_OS_LINUX
         // In Ubuntu 14.04 the window's menu bar goes missing entirely
