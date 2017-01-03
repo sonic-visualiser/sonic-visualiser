@@ -3587,9 +3587,9 @@ MainWindow::coloursChanged()
         defaultColourName = tr("Bright Green");
     }
     ColourDatabase *cdb = ColourDatabase::getInstance();
-    QColor colour =
-        ((settings.value("overview-colour", cdb->getColour(defaultColourName)))
-         .value<QColor>());
+    QColor colour = QColor
+        (settings.value("overview-colour",
+                        cdb->getColour(defaultColourName).name()).toString());
     settings.endGroup();
 
     int index = cdb->getColourIndex(colour);

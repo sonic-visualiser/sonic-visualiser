@@ -148,10 +148,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                            int(ColourMapper::Sunset)).toInt());
     m_colour3DColour = (settings.value("colour-3d-plot-colour",
                                        int(ColourMapper::Green)).toInt());
-    m_overviewColour =
-        (settings.value("overview-colour",
-                        ColourDatabase::getInstance()->getColour(tr("Green"))))
-        .value<QColor>();
+    m_overviewColour = ColourDatabase::getInstance()->getColour(tr("Green"));
+    if (settings.contains("overview-colour")) {
+        QString qcolorName =
+            settings.value("overview-colour", m_overviewColour.name())
+            .toString();
+        m_overviewColour.setNamedColor(qcolorName);
+        cerr << "loaded colour " << m_overviewColour.name() << " from settings" << endl;
+    }
     settings.endGroup();
 
     ColourMapComboBox *spectrogramGColour = new ColourMapComboBox(true);
@@ -167,6 +171,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     ColourComboBox *overviewColour = new ColourComboBox(false);
     int overviewColourIndex =
         ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
+    cerr << "index = " << overviewColourIndex << " for colour " << m_overviewColour.name() << endl;
     if (overviewColourIndex >= 0) {
         overviewColour->setCurrentIndex(overviewColourIndex);
     }
@@ -976,7 +981,7 @@ PreferencesDialog::applyClicked()
     settings.setValue("spectrogram-colour", m_spectrogramGColour);
     settings.setValue("spectrogram-melodic-colour", m_spectrogramMColour);
     settings.setValue("colour-3d-plot-colour", m_colour3DColour);
-    settings.setValue("overview-colour", m_overviewColour);
+    settings.setValue("overview-colour", m_overviewColour.name());
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
