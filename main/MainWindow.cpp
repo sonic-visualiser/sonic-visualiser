@@ -353,11 +353,6 @@ MainWindow::setupMenus()
 {
     if (!m_mainMenusCreated) {
 
-#ifdef Q_OS_MAC
-        // Mac doesn't align menu labels when icons are shown: result is messy
-        QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
-#endif
-
 #ifdef Q_OS_LINUX
         // In Ubuntu 14.04 the window's menu bar goes missing entirely
         // if the user is running any desktop environment other than Unity
@@ -2866,14 +2861,9 @@ MainWindow::exportImage()
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) return;
     
-//!!!    QString path = getSaveFileName(FileFinder::ImageFile);
-//    if (path == "") return;
-//    if (QFileInfo(path).suffix() == "") path += ".png";
     QString path = getSaveFileName(FileFinder::ImageFile);
     if (path == "") return;
-    if (QFileInfo(path).suffix() == "") path += ".svg";
-
-    bool scalable = true; //!!!
+    if (QFileInfo(path).suffix() == "") path += ".png";
     
     bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
 
@@ -2909,7 +2899,7 @@ MainWindow::exportImage()
     settings.beginGroup("MainWindow");
     int deflt = settings.value("lastimageexportregion", 0).toInt();
     if (deflt == 2 && !haveSelection) deflt = 1;
-    if (deflt == 0 && !scalable && total.width() > 32767) deflt = 1;
+    if (deflt == 0 && total.width() > 32767) deflt = 1;
 
     ListInputDialog *lid = new ListInputDialog
         (this, tr("Select region to export"),
@@ -2919,7 +2909,7 @@ MainWindow::exportImage()
     if (!haveSelection) {
         lid->setItemAvailability(2, false);
     }
-    if (!scalable && total.width() > 32767) { // appears to be limit of a QImage
+    if (total.width() > 32767) { // appears to be limit of a QImage
         lid->setItemAvailability(0, false);
         lid->setFootnote(tr("Note: the whole pane is too wide to be exported as a single image."));
     }
@@ -2932,47 +2922,25 @@ MainWindow::exportImage()
 
     settings.setValue("lastimageexportregion", deflt);
 
-    if (scalable) {
-
-        bool result = false;
-        
-        if (item == items[0]) {
-            result = pane->renderToSvgFile(path );
-        } else if (item == items[1]) {
-            result = pane->renderPartToSvgFile(path,
-                                               pane->getFirstVisibleFrame(),
-                                               pane->getLastVisibleFrame());
-        } else if (haveSelection) {
-            result = pane->renderPartToSvgFile(path, sf0, sf1);
-        }
-
-        if (!result) {
-            QMessageBox::critical(this, tr("Failed to save SVG file"),
-                                  tr("Failed to save SVG file %1").arg(path));
-        }
-
-    } else {
-        
-        QImage *image = 0;
-
-        if (item == items[0]) {
-            image = pane->renderToNewImage();
-        } else if (item == items[1]) {
-            image = pane->renderPartToNewImage(pane->getFirstVisibleFrame(),
-                                               pane->getLastVisibleFrame());
-        } else if (haveSelection) {
-            image = pane->renderPartToNewImage(sf0, sf1);
-        }
-
-        if (!image) return;
-
-        if (!image->save(path, "PNG")) {
-            QMessageBox::critical(this, tr("Failed to save image file"),
-                                  tr("Failed to save image file %1").arg(path));
-        }
+    QImage *image = 0;
     
-        delete image;
+    if (item == items[0]) {
+        image = pane->renderToNewImage();
+    } else if (item == items[1]) {
+        image = pane->renderPartToNewImage(pane->getFirstVisibleFrame(),
+                                           pane->getLastVisibleFrame());
+    } else if (haveSelection) {
+        image = pane->renderPartToNewImage(sf0, sf1);
     }
+    
+    if (!image) return;
+    
+    if (!image->save(path, "PNG")) {
+        QMessageBox::critical(this, tr("Failed to save image file"),
+                              tr("Failed to save image file %1").arg(path));
+    }
+    
+    delete image;
 }
 
 void
