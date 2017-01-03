@@ -308,9 +308,11 @@ main(int argc, char **argv)
     QApplication::setWindowIcon(icon);
 
     QString language = QLocale::system().name();
+    SVDEBUG << "System language is: " << language << endl;
 
     settings.beginGroup("Preferences");
-    language = settings.value("locale", language).toString();
+    QString prefLanguage = settings.value("locale", language).toString();
+    if (prefLanguage != QString()) language = prefLanguage;
     settings.endGroup();
 
     QTranslator qtTranslator;
