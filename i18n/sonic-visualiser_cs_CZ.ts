@@ -38,6 +38,13 @@
     </message>
 </context>
 <context>
+    <name>AlignmentView</name>
+    <message>
+        <source>AlignmentView</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AudioCallbackPlaySource</name>
     <message>
         <source>Stop at %1</source>
@@ -81,6 +88,10 @@
     <message>
         <source>New value for %1, from %2 to %3 %4:</source>
         <translation>Nová hodnota pro %1, od %2 do %3 %4:</translation>
+    </message>
+    <message>
+        <source>%1: %2</source>
+        <translation type="unfinished">%1: %2</translation>
     </message>
 </context>
 <context>
@@ -294,11 +305,11 @@
     </message>
     <message>
         <source>Normalize Columns</source>
-        <translation>Normalizovat sloupce</translation>
+        <translation type="vanished">Normalizovat sloupce</translation>
     </message>
     <message>
         <source>Normalize Visible Area</source>
-        <translation>Normalizovat viditelnou oblast</translation>
+        <translation type="vanished">Normalizovat viditelnou oblast</translation>
     </message>
     <message>
         <source>Colour</source>
@@ -336,12 +347,51 @@ Hodnota:	%4</translation>
         <source>Invert Vertical Scale</source>
         <translation>Obrátit svislou stupnici</translation>
     </message>
+    <message>
+        <source>Normalization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Col</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hybrid</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ColourComboBox</name>
+    <message>
+        <source>Name New Colour</source>
+        <translation type="unfinished">Pojmenovat novou barvu</translation>
+    </message>
+    <message>
+        <source>Enter a name for the new colour:</source>
+        <translation type="unfinished">Zadejte název pro novou barvu:</translation>
+    </message>
+    <message>
+        <source>Prefer black background for this colour</source>
+        <translation type="unfinished">Upřednostňovat černé pozadí pro tuto barvu</translation>
+    </message>
+    <message>
+        <source>Add New Colour...</source>
+        <translation type="unfinished">Přidat novou barvu...</translation>
+    </message>
 </context>
 <context>
     <name>ColourMapper</name>
     <message>
         <source>Black on White</source>
-        <translation>Černá na bílé</translation>
+        <translation type="vanished">Černá na bílé</translation>
     </message>
     <message>
         <source>Yellow on Black</source>
@@ -349,19 +399,19 @@ Hodnota:	%4</translation>
     </message>
     <message>
         <source>Banded</source>
-        <translation>Pruhovaný</translation>
+        <translation type="vanished">Pruhovaný</translation>
     </message>
     <message>
         <source>&lt;unknown&gt;</source>
-        <translation>&lt;neznámý&gt;</translation>
+        <translation type="vanished">&lt;neznámý&gt;</translation>
     </message>
     <message>
         <source>Sunset</source>
-        <translation>Západ slunce</translation>
+        <translation type="vanished">Západ slunce</translation>
     </message>
     <message>
         <source>Fruit Salad</source>
-        <translation>Ovocný salát</translation>
+        <translation type="vanished">Ovocný salát</translation>
     </message>
     <message>
         <source>Red on Blue</source>
@@ -369,7 +419,7 @@ Hodnota:	%4</translation>
     </message>
     <message>
         <source>Printer</source>
-        <translation>Tiskárna</translation>
+        <translation type="vanished">Tiskárna</translation>
     </message>
     <message>
         <source>Blue on Black</source>
@@ -381,31 +431,19 @@ Hodnota:	%4</translation>
     </message>
     <message>
         <source>High Gain</source>
-        <translation>Zesílení výšek</translation>
+        <translation type="vanished">Zesílení výšek</translation>
     </message>
     <message>
         <source>Highlight</source>
-        <translation>Zvýraznění</translation>
+        <translation type="vanished">Zvýraznění</translation>
     </message>
     <message>
         <source>White on Black</source>
-        <translation>Bílá na černé</translation>
+        <translation type="vanished">Bílá na černé</translation>
     </message>
     <message>
         <source>Green</source>
-        <translation type="unfinished">Zelená</translation>
-    </message>
-    <message>
-        <source>Cherry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Wasp</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ice</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Zelená</translation>
     </message>
 </context>
 <context>
@@ -1253,6 +1291,11 @@ Text files (*.txt)
 All files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Scalable Vector Graphics files (*.svg)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ItemEditDialog</name>
@@ -1405,6 +1448,14 @@ All files (*.*)</source>
         <source>Cyclical counter</source>
         <translation>Cyklické počítadlo</translation>
     </message>
+    <message>
+        <source>Subdivide Points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winnow Points</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Layer</name>
@@ -1509,6 +1560,20 @@ All files (*.*)</source>
     <message>
         <source>Played</source>
         <translation>Přehrávaná</translation>
+    </message>
+</context>
+<context>
+    <name>LevelPanToolButton</name>
+    <message>
+        <source>Click to adjust level and pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LevelPanWidget</name>
+    <message>
+        <source>Drag vertically to adjust level, horizontally to adjust pan</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2087,7 +2152,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Gumička (Rubber Band) &amp;copy; Chris Cannam</translation>
+        <translation type="vanished">&lt;br&gt;Gumička (Rubber Band) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Erase items from layer</source>
@@ -2123,7 +2188,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment using transform &quot;%1&quot;:&lt;p&gt;%2</source>
-        <translation>&lt;b&gt;Spočítání zarovnání se nezdařilo&lt;/b&gt;&lt;p&gt;Zarovnání zvuku se spočítat s pomocí &quot;%1&quot; nepodařilo:&lt;p&gt;%2</translation>
+        <translation type="vanished">&lt;b&gt;Spočítání zarovnání se nezdařilo&lt;/b&gt;&lt;p&gt;Zarovnání zvuku se spočítat s pomocí &quot;%1&quot; nepodařilo:&lt;p&gt;%2</translation>
     </message>
     <message>
         <source>Show Acti&amp;vity Log</source>
@@ -2383,7 +2448,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Adjust the master playback level</source>
-        <translation>Přizpůsobit hlavní úroveň přehrávání</translation>
+        <translation type="vanished">Přizpůsobit hlavní úroveň přehrávání</translation>
     </message>
     <message>
         <source>&lt;p&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;br&gt;&lt;a href=&quot;http://www.sonicvisualiser.org/&quot;&gt;http://www.sonicvisualiser.org/&lt;/a&gt;&lt;/p&gt;</source>
@@ -2479,7 +2544,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band v%1 &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Gumička (Rubber Band) v%1 &amp;copy; Chris Cannam</translation>
+        <translation type="vanished">&lt;br&gt;Gumička (Rubber Band) v%1 &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Show centre indicator, frame times and scale</source>
@@ -2647,7 +2712,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>With Qt v%1 &amp;copy; Nokia Corporation</source>
-        <translation>S Qt v%1 &amp;copy; Nokia Corporation</translation>
+        <translation type="vanished">S Qt v%1 &amp;copy; Nokia Corporation</translation>
     </message>
     <message>
         <source>Add a new layer showing a time ruler</source>
@@ -3339,7 +3404,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;p&gt;&lt;small&gt;%1 : %2 configuration&lt;/small&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;small&gt;%1 : %2 nastavení&lt;/small&gt;&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;&lt;small&gt;%1 : %2 nastavení&lt;/small&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Template file exists&lt;/b&gt;&lt;p&gt;The template &quot;%1&quot; already exists.&lt;br&gt;Overwrite it?</source>
@@ -3407,7 +3472,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Podpora pro přídavné moduly Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
+        <translation type="vanished">&lt;br&gt;Podpora pro přídavné moduly Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Unclassified</source>
@@ -3575,7 +3640,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Knihovna Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
+        <translation type="vanished">&lt;br&gt;Knihovna Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Export audio from selection into a data file</source>
@@ -3805,6 +3870,102 @@ Co chcete vyvést?</translation>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %2 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;h3&gt;Je dostupná novější verze&lt;/h3&gt;&lt;p&gt;Používáte verzi %1 programu Sonic Visualiser, ale nyní je dostupná verze %3.&lt;/p&gt;&lt;p&gt;Podívejte se, prosím, na stránky &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;projektu Sonic Visualiser&lt;/a&gt;, abyste získal více informací.&lt;/p&gt; {3&gt;?} {3&gt;?} {1 ?} {2 ?}</translation>
     </message>
+    <message>
+        <source>Export SVG File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export a single pane to a scalable SVG image file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subdivide Selected Instants...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add new instants at regular intervals between the selected instants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winnow Selected Instants...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove subdivisions, leaving only every Nth instant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the whole pane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the visible area only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Which region of the current pane do you want to export as a scalable SVG image?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SVG file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SVG file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subdivide instants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of subdivisions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winnow instants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove all instants apart from multiples of:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment:&lt;p&gt;%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the master playback level and pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;small&gt;%1 : %2 configuration, %3-bit build&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>With Qt v%1 &amp;copy; The Qt Company</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Rubber Band Library v%1 &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Rubber Band Library &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam and QMUL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Cap&apos;n Proto serialisation &amp;copy; Sandstorm Development Group</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>
@@ -3892,7 +4053,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio device (&quot;%1&quot;).&lt;p&gt;Audio playback will not be available during this session.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;b&gt;Žádný zvuk není dostupný&lt;/b&gt;&lt;p&gt; Vámi upřednostňované zvukové zařízení se nepodařilo otevřít (&quot;%1&quot;).&lt;p&gt;Přehrávání zvuku během tohoto sezení nebude dostupné.&lt;/p&gt;</translation>
+        <translation>&lt;b&gt;Žádný zvuk není dostupný&lt;/b&gt;&lt;p&gt; Vámi upřednostňované zvukové zařízení se nepodařilo otevřít (&quot;%1&quot;).&lt;p&gt;Přehrávání zvuku během tohoto sezení nebude dostupné.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Delete Pane</source>
@@ -4976,6 +5137,10 @@ ale dostupné jsou %2. Použije se pouze první %3.
         <source>C5 - used in Cakewalk and others</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Load mp3 files in gapless mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreferencesDialog</name>
@@ -5019,7 +5184,7 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Default session template for audio files:</source>
-        <translation>Výchozí předloha sezení pro zvukové soubory:</translation>
+        <translation type="vanished">Výchozí předloha sezení pro zvukové soubory:</translation>
     </message>
     <message>
         <source>Anal&amp;ysis</source>
@@ -5047,7 +5212,7 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>&amp;General</source>
-        <translation>&amp;Obecné</translation>
+        <translation type="vanished">&amp;Obecné</translation>
     </message>
     <message>
         <source>Playback audio device:</source>
@@ -5097,6 +5262,54 @@ Použít je před zavřením?</translation>
         <source>Default colour 3D plot colour:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished">Zelená</translation>
+    </message>
+    <message>
+        <source>(auto)</source>
+        <translation type="unfinished">(auto)</translation>
+    </message>
+    <message>
+        <source>Overview waveform colour:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run Vamp plugins in separate process:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default session template when loading audio files:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(Use &quot;%1&quot; in the File menu to add to these.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Session as Template...</source>
+        <translation type="unfinished">Vyvést předlohu jako sezení...</translation>
+    </message>
+    <message>
+        <source>Audio service:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio playback device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio record device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A&amp;udio I/O</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Other</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ProgressDialog</name>
@@ -5109,11 +5322,11 @@ Použít je před zavřením?</translation>
     <name>PropertyBox</name>
     <message>
         <source>dB</source>
-        <translation>dB</translation>
+        <translation type="vanished">dB</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Přehrát</translation>
+        <translation type="vanished">Přehrát</translation>
     </message>
     <message>
         <source>Show</source>
@@ -5137,11 +5350,11 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Playback Pan / Balance</source>
-        <translation>Vyvážení přehrávání/rovnováha</translation>
+        <translation type="vanished">Vyvážení přehrávání/rovnováha</translation>
     </message>
     <message>
         <source>Prefer black background for this colour</source>
-        <translation>Upřednostňovat černé pozadí pro tuto barvu</translation>
+        <translation type="vanished">Upřednostňovat černé pozadí pro tuto barvu</translation>
     </message>
     <message>
         <source>Toggle Visibility of %1</source>
@@ -5153,22 +5366,34 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Add New Colour...</source>
-        <translation>Přidat novou barvu...</translation>
+        <translation type="vanished">Přidat novou barvu...</translation>
     </message>
     <message>
         <source>Name New Colour</source>
-        <translation>Pojmenovat novou barvu</translation>
+        <translation type="vanished">Pojmenovat novou barvu</translation>
     </message>
     <message>
         <source>Enter a name for the new colour:</source>
-        <translation>Zadejte název pro novou barvu:</translation>
+        <translation type="vanished">Zadejte název pro novou barvu:</translation>
     </message>
     <message>
         <source>Playback Gain</source>
-        <translation>Zesílení přehrávání</translation>
+        <translation type="vanished">Zesílení přehrávání</translation>
     </message>
     <message>
         <source>Set playback clip:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to toggle playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust playback level and pan of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change sound used for playback (currently &quot;%1&quot;)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5280,32 +5505,95 @@ Použití:
 <context>
     <name>QObject</name>
     <message>
-        <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;
-</source>
+        <source>External plugin host executable does not appear to be installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to load library</source>
+        <source>Could not start external plugin host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to query plugins from library after loading</source>
+        <source>External plugin host exited unexpectedly while listing plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Unknown failure</source>
+        <source>External plugin host invocation failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Success: internal error?</source>
+        <source>&lt;b&gt;Failed to scan for plugins&lt;/b&gt;&lt;p&gt;Failed to scan for plugins at startup. Possibly the plugin checker helper program was not correctly installed alongside %1?&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Did not scan for plugins&lt;/b&gt;&lt;p&gt;Apparently no scan for plugins was attempted (internal error?)&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;These plugins may be incompatible with the system, and will be ignored during this run of %1.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;unknown&gt;</source>
+        <translation type="unfinished">&lt;neznámý&gt;</translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished">Zelená</translation>
+    </message>
+    <message>
+        <source>White on Black</source>
+        <translation type="unfinished">Bílá na černé</translation>
+    </message>
+    <message>
+        <source>Black on White</source>
+        <translation type="unfinished">Černá na bílé</translation>
+    </message>
+    <message>
+        <source>Cherry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wasp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sunset</source>
+        <translation type="unfinished">Západ slunce</translation>
+    </message>
+    <message>
+        <source>Fruit Salad</source>
+        <translation type="unfinished">Ovocný salát</translation>
+    </message>
+    <message>
+        <source>Banded</source>
+        <translation type="unfinished">Pruhovaný</translation>
+    </message>
+    <message>
+        <source>Highlight</source>
+        <translation type="unfinished">Zvýraznění</translation>
+    </message>
+    <message>
+        <source>Printer</source>
+        <translation type="unfinished">Tiskárna</translation>
+    </message>
+    <message>
+        <source>High Gain</source>
+        <translation type="unfinished">Zesílení výšek</translation>
     </message>
 </context>
 <context>
     <name>QuickTimeFileReader</name>
     <message>
         <source>Decoding %1...</source>
-        <translation>Dekóduje se %1...</translation>
+        <translation type="vanished">Dekóduje se %1...</translation>
     </message>
 </context>
 <context>
@@ -5790,7 +6078,7 @@ Koš:	%5
     </message>
     <message>
         <source>-Inf</source>
-        <translation>-Inf</translation>
+        <translation type="vanished">-Inf</translation>
     </message>
     <message>
         <source>25 %</source>
@@ -5984,7 +6272,7 @@ Koš:	%5
     </message>
     <message>
         <source>Smoothing</source>
-        <translation>Vyhlazování</translation>
+        <translation type="vanished">Vyhlazování</translation>
     </message>
     <message>
         <source>dB:	%1</source>
@@ -6074,6 +6362,18 @@ Důvodem pro to může být nedostatek paměti, nebo nedostatek místa na disku.
         <source>Normalization</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Col</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hybrid</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SpectrumLayer</name>
@@ -6083,7 +6383,7 @@ Důvodem pro to může být nedostatek paměti, nebo nedostatek místa na disku.
     </message>
     <message>
         <source>-Inf</source>
-        <translation>-Inf</translation>
+        <translation type="vanished">-Inf</translation>
     </message>
     <message>
         <source>25 %</source>
@@ -6748,6 +7048,10 @@ Hodnota:	%2%3
         <source>Effects Data</source>
         <translation>Efektová data</translation>
     </message>
+    <message>
+        <source>Failed to list Vamp plugins: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TransformFinder</name>
@@ -6958,6 +7262,10 @@ Hodnota:	%2%3
         <source>Alignment</source>
         <translation>Zarovnání</translation>
     </message>
+    <message>
+        <source>Exported image from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ViewManager</name>
@@ -7069,7 +7377,7 @@ Hodnota:	%2%3
     </message>
     <message>
         <source>-Inf</source>
-        <translation>-Inf</translation>
+        <translation type="vanished">-Inf</translation>
     </message>
     <message>
         <source>Gain</source>
