@@ -220,20 +220,29 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(m_audioRecordDeviceCombo, SIGNAL(currentIndexChanged(int)),
             this, SLOT(audioRecordDeviceChanged(int)));
 
-    vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
+    vector<string> implementationNames =
+        breakfastquay::AudioFactory::getImplementationNames();
+
     QString implementationName = settings.value("audio-target", "").toString();
     if (implementationName == "auto") implementationName = "";
+    if (implementationName == "" && implementationNames.size() == 1) {
+        // We won't be showing the implementations menu in this case
+        implementationName = implementationNames[0].c_str();
+    }
+
     audioImplementation->addItem(tr("(auto)"));
     m_audioImplementation = 0;
-    for (int i = 0; in_range_for(names, i); ++i) {
+
+    for (int i = 0; in_range_for(implementationNames, i); ++i) {
         audioImplementation->addItem
-            (breakfastquay::AudioFactory::getImplementationDescription(names[i]).
-             c_str());
-        if (implementationName.toStdString() == names[i]) {
+            (breakfastquay::AudioFactory::getImplementationDescription
+             (implementationNames[i]).c_str());
+        if (implementationName.toStdString() == implementationNames[i]) {
             audioImplementation->setCurrentIndex(i+1);
             m_audioImplementation = i+1;
         }
     }
+    
     settings.endGroup();
 
     rebuildDeviceCombos();
@@ -537,8 +546,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     frame->setLayout(subgrid);
     row = 0;
 
-    subgrid->addWidget(new QLabel(tr("Audio service:")), row, 0);
-    subgrid->addWidget(audioImplementation, row++, 1, 1, 2);
+    if (implementationNames.size() > 1) {
+        subgrid->addWidget(new QLabel(tr("Audio service:")), row, 0);
+        subgrid->addWidget(audioImplementation, row++, 1, 1, 2);
+    }
 
     subgrid->addWidget(new QLabel(tr("Audio playback device:")), row, 0);
     subgrid->addWidget(m_audioPlaybackDeviceCombo, row++, 1, 1, 2);
@@ -621,6 +632,7 @@ PreferencesDialog::rebuildDeviceCombos()
 
     vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
     string implementationName;
+    
     if (in_range_for(names, m_audioImplementation-1)) {
         implementationName = names[m_audioImplementation-1];
     }
