@@ -40,7 +40,7 @@ PKG_PROG_PKG_CONFIG
 SV_CHECK_QT
 
 SV_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
-SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DWANT_TIMING" # -DNO_TIMING"
+SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
 SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 
 # Now we have: USER_CXXFLAGS contains any flags the user set
@@ -55,7 +55,7 @@ CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 if test "x$GCC" = "xyes"; then
    	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
-   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O2"
+   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
 fi
 
