@@ -18,5 +18,5 @@ macx*:LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -fra
 
 LIBS += @LIBS@
 
-DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
+DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER HAVE_POSIX_MEMALIGN
 
