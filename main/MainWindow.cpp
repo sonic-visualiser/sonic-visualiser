@@ -353,6 +353,11 @@ MainWindow::setupMenus()
 {
     if (!m_mainMenusCreated) {
 
+#ifdef Q_OS_MAC
+        // Mac doesn't align menu labels when icons are shown: result is messy
+        QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
+#endif
+
 #ifdef Q_OS_LINUX
         // In Ubuntu 14.04 the window's menu bar goes missing entirely
         // if the user is running any desktop environment other than Unity
@@ -362,16 +367,15 @@ MainWindow::setupMenus()
         // the system menubar integration altogether. Like this:
 	menuBar()->setNativeMenuBar(false);  // fix #1039
 #endif
-
+        
         m_rightButtonMenu = new QMenu();
 
-        // No -- we don't want tear-off enabled on the right-button
-        // menu.  If it is enabled, then simply right-clicking and
-        // releasing will pop up the menu, activate the tear-off, and
-        // leave the torn-off menu window in front of the main window.
-        // That isn't desirable.  I'm not sure it ever would be, in a
-        // context menu -- perhaps technically a Qt bug?
-//        m_rightButtonMenu->setTearOffEnabled(true);
+        // We don't want tear-off enabled on the right-button menu.
+        // If it is enabled, then simply right-clicking and releasing
+        // will pop up the menu, activate the tear-off, and leave the
+        // torn-off menu window in front of the main window.  That
+        // isn't desirable.
+        m_rightButtonMenu->setTearOffEnabled(false);
     }
 
     if (m_rightButtonTransformsMenu) {
