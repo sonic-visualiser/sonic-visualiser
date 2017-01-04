@@ -59,7 +59,7 @@
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
 #include "audio/AudioCallbackPlaySource.h"
-#include "audio/AudioRecordTarget.h"
+#include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
@@ -4226,7 +4226,7 @@ MainWindow::updatePositionStatusDisplays() const
 }
 
 void
-MainWindow::outputLevelsChanged(float left, float right)
+MainWindow::monitoringLevelsChanged(float left, float right)
 {
     m_mainLevelPan->setMonitoringLevels(left, right);
 }
