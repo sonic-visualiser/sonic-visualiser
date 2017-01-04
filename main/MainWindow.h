@@ -133,7 +133,7 @@ protected slots:
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
 
-    virtual void outputLevelsChanged(float, float);
+    virtual void monitoringLevelsChanged(float, float);
 
     virtual void layerRemoved(Layer *);
     virtual void layerInAView(Layer *, bool);
