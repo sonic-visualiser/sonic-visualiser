@@ -28,4 +28,6 @@ include(svcore/base/test/files.pri)
 for (file, TEST_SOURCES) { SOURCES += $$sprintf("svcore/base/test/%1", $$file) }
 for (file, TEST_HEADERS) { HEADERS += $$sprintf("svcore/base/test/%1", $$file) }
 
-QMAKE_POST_LINK = ./$${TARGET}$${TARGET_EXT}
+!win32* {
+    QMAKE_POST_LINK = ./$${TARGET}
+}
