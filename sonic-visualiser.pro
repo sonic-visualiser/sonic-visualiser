@@ -1,15 +1,14 @@
 
 TEMPLATE = subdirs
 
-!win* {
-    # We should build and run the tests on any platform,
-    # but doing it automatically doesn't work so well from
-    # within an IDE on Windows, so remove that from here
-    SUBDIRS += \
-	sub_test_svcore_base \
+# We build the tests on every platform, though at the time of
+# writing they are only automatically run on non-Windows platforms
+# (because of the difficulty of getting them running nicely in the
+# IDE without causing great confusion if a test fails).
+SUBDIRS += \
+        sub_test_svcore_base \
         sub_test_svcore_data_fileio \
         sub_test_svcore_data_model
-}
 
 SUBDIRS += \
 	checker \
