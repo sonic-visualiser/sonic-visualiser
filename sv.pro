@@ -17,6 +17,12 @@ TARGET = "Sonic Visualiser"
 linux*:TARGET = sonic-visualiser
 solaris*:TARGET = sonic-visualiser
 
+linux* {
+    sv_bins.path = /usr/local/bin/
+    sv_bins.files = sonic-visualiser piper-vamp-simple-server checker/vamp-plugin-load-checker
+    INSTALLS += sv_bins
+}
+
 TRANSLATIONS += \
         i18n/sonic-visualiser_ru.ts \
 	i18n/sonic-visualiser_en_GB.ts \
