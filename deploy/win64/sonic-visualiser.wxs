@@ -140,15 +140,15 @@
                 Source="release\Qt5Svg.dll"/>
           </Component>
 
-<Component Win64="yes"
-    Id="Sndfile"
-    Guid="04533516-6460-4155-A0D4-E9BA4D31E95C">
-  <File
-      Id="libsndfile"
-      Name="libsndfile-1.dll"
-      Source="..\sonic-visualiser\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
-      KeyPath="yes"/>
-      </Component>
+          <Component Win64="yes"
+                     Id="Sndfile"
+                     Guid="04533516-6460-4155-A0D4-E9BA4D31E95C">
+            <File
+                Id="libsndfile"
+                Name="libsndfile-1.dll"
+                Source="..\sonic-visualiser\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
+                KeyPath="yes"/>
+          </Component>
 
           <Component Win64="yes"
                Id="VCRuntime"
