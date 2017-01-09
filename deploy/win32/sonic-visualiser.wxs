@@ -35,7 +35,7 @@
             <File
                 Id="VampREADME"
                 Name="README.txt"
-                Source="deploy\win32\README-Vamp.txt"/>
+                Source="..\sonic-visualiser\deploy\win32\README-Vamp.txt"/>
           </Component>
         </Directory>
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
@@ -72,20 +72,20 @@
             <File
                 Id="COPYING"
                 Name="COPYING.txt"
-                Source="COPYING"/>
+                Source="..\sonic-visualiser\COPYING"/>
             <File
                 Id="README"
                 Name="README.txt"
-                Source="README"/>
+                Source="..\sonic-visualiser\README"/>
             <File
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
-                Source="CHANGELOG"/>
+                Source="..\sonic-visualiser\CHANGELOG"/>
 
             <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
-                Source="icons/sv-winicon.ico"/>
+                Source="..\sonic-visualiser\icons/sv-winicon.ico"/>
           </Component>
           
           <Component
@@ -137,18 +137,6 @@
                 Id="QtSvg"
                 Name="Qt5Svg.dll"
                 Source="release\Qt5Svg.dll"/>
-            <File
-                Id="icudt53"
-                Name="icudt53.dll"
-                Source="release\icudt53.dll"/>
-            <File
-                Id="icuin53"
-                Name="icuin53.dll"
-                Source="release\icuin53.dll"/>
-            <File
-                Id="icuuc53"
-                Name="icuuc53.dll"
-                Source="release\icuuc53.dll"/>
             <File
                 Id="libgcc"
                 Name="libgcc_s_dw2-1.dll"
@@ -255,7 +243,7 @@
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     
-    <Icon Id="winicon.ico" SourceFile="icons/sv-winicon.ico"/>
+    <Icon Id="winicon.ico" SourceFile="..\sonic-visualiser\icons\sv-winicon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
     
   </Product>
