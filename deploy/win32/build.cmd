@@ -5,7 +5,7 @@ IF NOT EXIST %WIXPATH% (
 )
 DEL sonic-visualiser.msi
 %WIXPATH%\candle.exe -v sonic-visualiser.wxs
-%WIXPATH%\light.exe -b ..\.. -ext WixUIExtension -v sonic-visualiser.wixobj
+%WIXPATH%\light.exe -b ..\..\..\build-sonic-visualiser-Desktop_Qt_5_7_0_MinGW_32bit-Release -ext WixUIExtension -v sonic-visualiser.wixobj
 PAUSE
 DEL sonic-visualiser.wixobj
 DEL sonic-visualiser.wixpdb
