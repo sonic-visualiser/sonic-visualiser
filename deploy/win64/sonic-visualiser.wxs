@@ -225,16 +225,16 @@
                 Guid="19A400D9-D5B2-4CB5-AF84-7C1DEA11D7B5">
 	      <File
 		  Id="checker64"
-		  Name="plugin-checker-helper.exe"
-		  Source="release\plugin-checker-helper.exe"/>
+		  Name="vamp-plugin-load-checker.exe"
+		  Source="release\vamp-plugin-load-checker.exe"/>
 	    </Component>
             <Component
                 Id="Checker32"
                 Guid="4F3FDFEC-23BD-4F2F-9B8F-9C8387FDEC21">
 	      <File
 		  Id="checker32"
-		  Name="plugin-checker-helper-32.exe"
-		  Source="release\plugin-checker-helper-32.exe"/>
+		  Name="vamp-plugin-load-checker-32.exe"
+		  Source="release\vamp-plugin-load-checker-32.exe"/>
 	    </Component>
 	    
 	  </Directory> <!-- helpers -->

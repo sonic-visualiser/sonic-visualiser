@@ -45,8 +45,8 @@ echo "You probably want platforms/, accessible/ and imageformats/ subdirectories
 cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
-echo "Copying in plugin load checker helper."
-cp checker/plugin-checker-helper "$source"/Contents/MacOS/
+echo "Copying in plugin load checker."
+cp checker/vamp-plugin-load-checker "$source"/Contents/MacOS/
 
 echo
 echo "Copying in plugin server."
