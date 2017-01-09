@@ -12,7 +12,7 @@
     <Package
         Id="*"
         Keywords="Installer"
-        Description="Sonic Visualiser Installer" 
+        Description="Sonic Visualiser 32-bit Installer" 
         Comments="Copyright (c) 2017 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="100" 
@@ -26,174 +26,192 @@
     <Property Id="DiskPrompt" Value="Sonic Visualiser Installation [1]"/>
 
     <Directory Id="TARGETDIR" Name="SourceDir">
+
       <Directory Id="ProgramFilesFolder" Name="PFiles">
         <Directory Id="VampPlugins" Name="Vamp Plugins">
-            <Component
-                Id="VampPlugins"
-                Guid="E68E4E0B-3C63-49bd-AD2D-44431EABDA6A">
-                <File
-                    Id="VampREADME"
-                    Name="README.txt"
-                    DiskId="1"
-                    Source="deploy\win32\README-Vamp.txt"/>
-            </Component>
+          <Component
+              Id="VampPlugins"
+              Guid="E68E4E0B-3C63-49bd-AD2D-44431EABDA6A">
+            <File
+                Id="VampREADME"
+                Name="README.txt"
+                Source="deploy\win32\README-Vamp.txt"/>
+          </Component>
         </Directory>
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
-            
-            <Component
-                Id="MainExecutable"
-                Guid="2C02DFB7-3CDF-4F73-B9D1-846326EE417D">
+          
+          <Component
+              Id="MainExecutable"
+              Guid="2C02DFB7-3CDF-4F73-B9D1-846326EE417D">
 
-              <File
-                  Id="SVExecutable"
-                  Name="Sonic Visualiser.exe"
-                  DiskId="1"
-                  Source="release\Sonic Visualiser.exe"
-                  KeyPath="yes">
+            <File
+                Id="SVExecutable"
+                Name="Sonic Visualiser.exe"
+                Source="release\Sonic Visualiser.exe"
+                KeyPath="yes">
 
-                <Shortcut
-                    Id="SVStartEntry"
-                    Directory="ProgramMenuDir"
-                    Name="Sonic Visualiser"
-                    WorkingDirectory="APPLICATIONFOLDER"
-                    Icon="winicon.ico"
-                    IconIndex="0"
-                    Advertise="yes"/>
+              <Shortcut
+                  Id="SVStartEntry"
+                  Directory="ProgramMenuDir"
+                  Name="Sonic Visualiser"
+                  WorkingDirectory="APPLICATIONFOLDER"
+                  Icon="winicon.ico"
+                  IconIndex="0"
+                  Advertise="yes"/>
 
-                <Shortcut
-                    Id="SVDesktop"
-                    Directory="DesktopFolder"
-                    Name="Sonic Visualiser"
-                    WorkingDirectory="APPLICATIONFOLDER"
-                    Icon="winicon.ico"
-                    IconIndex="0"
-                    Advertise="yes"/>
-              </File>
+              <Shortcut
+                  Id="SVDesktop"
+                  Directory="DesktopFolder"
+                  Name="Sonic Visualiser"
+                  WorkingDirectory="APPLICATIONFOLDER"
+                  Icon="winicon.ico"
+                  IconIndex="0"
+                  Advertise="yes"/>
+            </File>
 
-              <File
-                  Id="COPYING"
-                  Name="COPYING"
-                  DiskId="1"
-                  Source="COPYING"/>
-              <File
-                  Id="README"
-                  Name="README"
-                  DiskId="1"
-                  Source="README"/>
-              <File
-                  Id="CHANGELOG"
-                  Name="CHANGELOG"
-                  DiskId="1"
-                  Source="CHANGELOG"/>
+            <File
+                Id="COPYING"
+                Name="COPYING.txt"
+                Source="COPYING"/>
+            <File
+                Id="README"
+                Name="README.txt"
+                Source="README"/>
+            <File
+                Id="CHANGELOG"
+                Name="CHANGELOG.txt"
+                Source="CHANGELOG"/>
 
-              <File
-                  Id="winicon.ico"
-                  Name="sv-winicon.ico"
-                  DiskId="1"
-                  Source="icons/sv-winicon.ico"/>
-            </Component>
-            
-            <Component
+            <File
+                Id="winicon.ico"
+                Name="sv-winicon.ico"
+                Source="icons/sv-winicon.ico"/>
+          </Component>
+          
+          <Component
               Id="SVFileAssociation"
               Guid="DC6B3DD1-46DE-47FC-90FB-D8ACD5D1A88A">
-              
-              <ProgId 
+            
+            <ProgId 
                 Id='SonicVisualiser.svfile' 
                 Description='Sonic Visualiser project file'
                 Icon="SVExecutable">
-                <Extension 
+              <Extension 
                   Id='sv' 
                   ContentType='application/sonicvisualiser'>
-                  <Verb 
+                <Verb 
                     Id='open' 
                     Command='Open' 
                     TargetFile='SVExecutable' 
                     Argument='"%1"' />
-                </Extension>
-              </ProgId>
-              
-            </Component>
+              </Extension>
+            </ProgId>
             
+          </Component>
+          
+          <Component
+              Id="Qt5"
+              Guid="316341D4-B7B2-411D-BCCE-879A11D5709F">
+            <File
+                Id="QtCore"
+                Name="Qt5Core.dll"
+                Source="release\Qt5Core.dll"
+		KeyPath="yes"/>
+            <File
+                Id="QtGui"
+                Name="Qt5Gui.dll"
+                Source="release\Qt5Gui.dll"/>
+            <File
+                Id="QtNetwork"
+                Name="Qt5Network.dll"
+                Source="release\Qt5Network.dll"/>
+            <File
+                Id="QtWidgets"
+                Name="Qt5Widgets.dll"
+                Source="release\Qt5Widgets.dll"/>
+            <File
+                Id="QtXml"
+                Name="Qt5Xml.dll"
+                Source="release\Qt5Xml.dll"/>
+            <File
+                Id="QtSvg"
+                Name="Qt5Svg.dll"
+                Source="release\Qt5Svg.dll"/>
+            <File
+                Id="icudt53"
+                Name="icudt53.dll"
+                Source="release\icudt53.dll"/>
+            <File
+                Id="icuin53"
+                Name="icuin53.dll"
+                Source="release\icuin53.dll"/>
+            <File
+                Id="icuuc53"
+                Name="icuuc53.dll"
+                Source="release\icuuc53.dll"/>
+            <File
+                Id="libgcc"
+                Name="libgcc_s_dw2-1.dll"
+                Source="release\libgcc_s_dw2-1.dll"/>
+            <File
+                Id="libstdcplusplus"
+                Name="libstdc++-6.dll"
+                Source="release\libstdc++-6.dll"/>
+            <File
+                Id="libwinpthread"
+                Name="libwinpthread-1.dll"
+                Source="release\libwinpthread-1.dll"/>
+          </Component>
+	  
+	  <Directory Id="Platforms" Name="platforms">
             <Component
-                Id="Qt5"
-                Guid="316341D4-B7B2-411D-BCCE-879A11D5709F">
-              <File
-                  Id="QtCore"
-                  Name="Qt5Core.dll"
-                  DiskId="1"
-                  Source="release\Qt5Core.dll"
-		  KeyPath="yes"/>
-              <File
-                  Id="QtGui"
-                  Name="Qt5Gui.dll"
-                  DiskId="1"
-                  Source="release\Qt5Gui.dll"/>
-              <File
-                  Id="QtNetwork"
-                  Name="Qt5Network.dll"
-                  DiskId="1"
-                  Source="release\Qt5Network.dll"/>
-              <File
-                  Id="QtWidgets"
-                  Name="Qt5Widgets.dll"
-                  DiskId="1"
-                  Source="release\Qt5Widgets.dll"/>
-              <File
-                  Id="QtXml"
-                  Name="Qt5Xml.dll"
-                  DiskId="1"
-                  Source="release\Qt5Xml.dll"/>
-              <File
-                  Id="icudt53"
-                  Name="icudt53.dll"
-                  DiskId="1"
-                  Source="release\icudt53.dll"/>
-              <File
-                  Id="icuin53"
-                  Name="icuin53.dll"
-                  DiskId="1"
-                  Source="release\icuin53.dll"/>
-              <File
-                  Id="icuuc53"
-                  Name="icuuc53.dll"
-                  DiskId="1"
-                  Source="release\icuuc53.dll"/>
-              <File
-                  Id="libgcc"
-                  Name="libgcc_s_dw2-1.dll"
-                  DiskId="1"
-                  Source="release\libgcc_s_dw2-1.dll"/>
-              <File
-                  Id="libstdcplusplus"
-                  Name="libstdc++-6.dll"
-                  DiskId="1"
-                  Source="release\libstdc++-6.dll"/>
-              <File
-                  Id="libwinpthread"
-                  Name="libwinpthread-1.dll"
-                  DiskId="1"
-                  Source="release\libwinpthread-1.dll"/>
+                Id="Qt5PlatformPlugins"
+                Guid="1EDCEA4B-C83F-430B-B09D-CB113DFD4E77">
+	      <File
+                  Id="qminimal"
+                  Name="qminimal.dll"
+                  Source="release\qminimal.dll"/>
+	      <File
+                  Id="qwindows"
+                  Name="qwindows.dll"
+                  Source="release\qwindows.dll"/>
             </Component>
-	    
-	    <Directory Id="Platforms" Name="platforms">
-              <Component
-                  Id="Qt5PlatformPlugins"
-                  Guid="1EDCEA4B-C83F-430B-B09D-CB113DFD4E77">
-		<File
-                    Id="qminimal"
-                    Name="qminimal.dll"
-                    DiskId="1"
-                    Source="release\qminimal.dll"/>
-		<File
-                    Id="qwindows"
-                    Name="qwindows.dll"
-                    DiskId="1"
-                    Source="release\qwindows.dll"/>
-              </Component>
-	    </Directory>
+	  </Directory>
 
-        </Directory>
-      </Directory>
+	  <Directory Id="Helpers" Name="helpers">
+            <Component Id="Piper"
+                       Guid="17F2AAFF-7B7B-4F20-B345-DEF0A54A84B1">
+	      <File
+		  Id="piperconv"
+		  Name="piper-convert.exe"
+		  Source="release\piper-convert.exe"/>
+	      <File
+		  Id="piper"
+		  Name="piper-vamp-simple-server.exe"
+		  Source="release\piper-vamp-simple-server.exe"/>
+	      <File
+                  Id="libgcc32"
+                  Name="libgcc_s_dw2-1.dll"
+                  Source="release\libgcc_s_dw2-1.dll"/>
+	      <File
+                  Id="libstdcplusplus32"
+                  Name="libstdc++-6.dll"
+                  Source="release\libstdc++-6.dll"/>
+	      <File
+                  Id="libwinpthread32"
+                  Name="libwinpthread-1.dll"
+                  Source="release\libwinpthread-1.dll"/>
+	    </Component>
+            <Component Id="Checker"
+                       Guid="DB09B035-0594-4876-B494-4D25CED43601">
+	      <File
+		  Id="checker"
+		  Name="vamp-plugin-load-checker.exe"
+		  Source="release\vamp-plugin-load-checker.exe"/>
+	    </Component>
+	  </Directory> <!-- helpers -->
+        </Directory> <!-- sv --> 
+      </Directory> <!-- pfiles -->
       
       <Directory Id="ProgramMenuFolder" Name="Programs">
         <Directory Id="ProgramMenuDir" Name="Sonic Visualiser">
@@ -209,18 +227,20 @@
     </Directory>
 
     <Feature 
-      Id="Complete"
-      Title="Required files"
-      Description="Installs the required files for running Sonic Visualiser."
-      AllowAdvertise="no"
-      Absent="disallow"
-      ConfigurableDirectory="APPLICATIONFOLDER"
-      Level="1">
+        Id="Complete"
+        Title="Required files"
+        Description="Installs the required files for running Sonic Visualiser."
+        AllowAdvertise="no"
+        Absent="disallow"
+        ConfigurableDirectory="APPLICATIONFOLDER"
+        Level="1">
       <ComponentRef Id="VampPlugins"/>
       <ComponentRef Id="MainExecutable"/>
       <ComponentRef Id="SVFileAssociation"/>
       <ComponentRef Id="Qt5"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
+      <ComponentRef Id="Piper"/>
+      <ComponentRef Id="Checker"/>
       <ComponentRef Id="ProgramMenuDir"/>
     </Feature>
 
@@ -237,7 +257,7 @@
     
     <Icon Id="winicon.ico" SourceFile="icons/sv-winicon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
-        
+    
   </Product>
 </Wix>
 
