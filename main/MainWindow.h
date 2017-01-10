@@ -163,12 +163,12 @@ protected slots:
     virtual void website();
     virtual void help();
     virtual void about();
+    virtual void whatsNew();
     virtual void keyReference();
     virtual void newerVersionAvailable(QString);
 
 protected:
     Overview                *m_overview;
-//!!!    Fader                   *m_fader;
     LevelPanToolButton      *m_mainLevelPan;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
@@ -230,6 +230,7 @@ protected:
 
     Surveyer                *m_surveyer;
     VersionTester           *m_versionTester;
+    QString                  m_newerVersionIs;
 
     struct LayerConfiguration {
 	LayerConfiguration(LayerFactory::LayerType _layer

@@ -1,8 +1,8 @@
 
 Changes in Sonic Visualiser 3.0 since the previous release 2.5:
 
- - Add the ability to record audio, and the ability to change the
-   audio device for playback or recording in the preferences
+ - Add ability to record audio, and ability to change the audio device
+   for playback or recording in the preferences
 
  - Add complete support for high-resolution (Hi-DPI or retina)
    displays, including for layer data rendering as well as UI controls
@@ -45,6 +45,9 @@ Changes in Sonic Visualiser 3.0 since the previous release 2.5:
 
  - Switch to using combined level/pan controls in layer property boxes
    and for the main volume control
+
+ - Fix a number of problems on Windows with loading and saving some
+   file formats to filenames not representable in system codepage
 
  - Finally switch the Windows built to 64-bit by default (with
    adapters to run either 32- or 64-bit plugins)
@@ -306,7 +309,7 @@ Changes in Sonic Visualiser 1.6 since the previous release 1.5:
  - Various other bug fixes.
 
 
-Changes in Sonic Visualiser 1.5 since the previous version 1.4:
+Changes in Sonic Visualiser 1.5 since the previous release 1.4:
 
  - You can now insert time instants, time values, and notes using
  a MIDI device during playback.  If a time value or note layer is
@@ -347,7 +350,7 @@ Changes in Sonic Visualiser 1.5 since the previous version 1.4:
  been fixed.
 
 
-New features in Sonic Visualiser 1.4 since the previous version 1.3:
+Changes in Sonic Visualiser 1.4 since the previous release 1.3:
 
  - SV now has a Region layer type, used for display of features with
  durations.  It also supports Vamp v2.0 plugins that provide durations
@@ -377,7 +380,7 @@ New features in Sonic Visualiser 1.4 since the previous version 1.3:
  - Several crashes and other bugs have been fixed.
 
 
-Changes in Sonic Visualiser 1.3 since the previous version 1.2:
+Changes in Sonic Visualiser 1.3 since the previous release 1.2:
 
  - There is a new spreadsheet-style data viewer and editor for
  viewing and editing the data in some types of annotation layer.
@@ -396,7 +399,7 @@ Changes in Sonic Visualiser 1.3 since the previous version 1.2:
  - Several other bug fixes.
 
 
-New features in Sonic Visualiser 1.2, since the previous version 1.0:
+Changes in Sonic Visualiser 1.2, since the previous release 1.0:
 
  - SV now supports time-alignment of multiple performances of a work
  loaded at the same time.  This option is enabled when the MATCH Vamp
