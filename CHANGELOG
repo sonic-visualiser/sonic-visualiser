@@ -11,9 +11,6 @@ Changes in Sonic Visualiser 3.0 (Jan 2017) since the previous release 2.5:
    resolution, but it also improves scaling and rendering of UI
    elements on Hi-DPI displays on Windows and Linux
 
- - Add ability to open, display, and analyse very long audio files (of
-   more than 2^32 sample frames)
-
  - Add ability to export scalable (SVG) image files
 
  - Run plugins in a separate process, so that if a plugin crashes, it
@@ -22,6 +19,9 @@ Changes in Sonic Visualiser 3.0 (Jan 2017) since the previous release 2.5:
 
  - Scan plugins on startup in a separate process, and report on any
    that crash or won't load
+
+ - Add ability to open, display, and analyse very long audio files (of
+   more than 2^32 sample frames)
 
  - Change mp3 file loading so as to compensate for encoder/decoder
    delay and padding (using "gapless playback" logic). While this is a
@@ -54,7 +54,7 @@ Changes in Sonic Visualiser 3.0 (Jan 2017) since the previous release 2.5:
 
  - Add "What's New" dialog
 
- - Finally switch the Windows built to 64-bit by default (with
+ - Finally switch the Windows build to 64-bit by default (with
    adapters to run either 32- or 64-bit plugins)
 
 
