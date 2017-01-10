@@ -1788,7 +1788,7 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
-    action = new QAction(tr("What's &New?").arg(name), this); 
+    action = new QAction(tr("What's &New?"), this); 
     action->setStatusTip(tr("Show changes in this release of %1").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
     menu->addAction(action);
