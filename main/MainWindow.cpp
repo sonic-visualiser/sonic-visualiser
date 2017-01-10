@@ -124,6 +124,7 @@
 #include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QFileSystemWatcher>
+#include <QTextEdit>
 
 #include <iostream>
 #include <cstdio>
@@ -1785,6 +1786,11 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
+    action = new QAction(tr("What's &New?").arg(name), this); 
+    action->setStatusTip(tr("Show changes in this release of %1").arg(name)); 
+    connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
+    menu->addAction(action);
+    
     action = new QAction(tr("&About %1").arg(name), this); 
     action->setStatusTip(tr("Show information about %1").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
@@ -3277,6 +3283,7 @@ MainWindow::saveSessionAsTemplate()
                                      tr("<b>Template file exists</b><p>The template \"%1\" already exists.<br>Overwrite it?").arg(name),
                                      QMessageBox::Ok | QMessageBox::Cancel,
                                      QMessageBox::Cancel) != QMessageBox::Ok) {
+                delete d;
                 return;
             }
         }
@@ -3287,6 +3294,8 @@ MainWindow::saveSessionAsTemplate()
             }
         }
     }
+
+    delete d;
 }
 
 void
@@ -4744,6 +4753,61 @@ MainWindow::help()
 }
 
 void
+MainWindow::whatsNew()
+{
+    QFile changelog(":CHANGELOG");
+    changelog.open(QFile::ReadOnly);
+    QByteArray content = changelog.readAll();
+    QString text = QString::fromUtf8(content);
+
+    QDialog *d = new QDialog(this);
+    d->setWindowTitle(tr("What's New"));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
+    
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0);
+    
+    layout->addWidget
+        (new QLabel(tr("<h3>What's New in %1</h3>")
+                    .arg(QApplication::applicationName())),
+         row++, 1);
+    layout->setColumnStretch(2, 10);
+
+    QTextEdit *textEdit = new QTextEdit;
+    layout->addWidget(textEdit, row++, 1, 1, 2);
+
+    if (m_newerVersionIs != "") {
+        layout->addWidget(new QLabel(tr("<b>Note:</b> A newer version of Sonic Visualiser is available.<br>(Version %1 is available; you are using version %2)").arg(m_newerVersionIs).arg(SV_VERSION)), row++, 1, 1, 2);
+    }
+    
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+    text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
+    text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
+    text.replace(QRegExp(": *\n"), ":\n<ul>\n");
+    text.replace(QRegExp("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
+    text.replace(QRegExp("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
+//    text.replace(QRegExp("<li>([^,.\n]+)([,.] +\\w)"), "<li><b>\\1</b>\\2");
+    
+    textEdit->setHtml(text);
+    textEdit->setReadOnly(true);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(420),
+                      m_viewManager->scalePixelSize(400));
+    
+    d->exec();
+
+    delete d;
+}
+
+void
 MainWindow::about()
 {
     bool debug = false;
@@ -4773,9 +4837,15 @@ MainWindow::about()
         .arg(debug ? tr("Debug") : tr("Release"))
         .arg(sizeof(void *) * 8);
 
-    aboutText += "<small>";
+    if (m_oscQueue && m_oscQueue->isOK()) {
+        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
+    }
+
+    aboutText += "</small><p><small>";
 
     aboutText += tr("With Qt v%1 &copy; The Qt Company").arg(QT_VERSION_STR);
+
+    aboutText += "</small><small>";
 
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION
@@ -4856,16 +4926,8 @@ MainWindow::about()
     aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris");
 #endif // LIBLO_VERSION
 
-    if (m_oscQueue && m_oscQueue->isOK()) {
-        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
-    }
-
     aboutText += "</small></p>";
 #endif // HAVE_LIBLO
-
-#ifndef BUILD_STATIC
-    aboutText.replace(tr("With "), tr("Using "));
-#endif
 
     aboutText += 
         "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2017 Chris Cannam and "
@@ -4875,8 +4937,62 @@ MainWindow::about()
         "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</small></p>";
+
+    // use our own dialog so we can influence the size
+
+    QDialog *d = new QDialog(this);
+
+    d->setWindowTitle(tr("About %1").arg(QApplication::applicationName()));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
     
-    QMessageBox::about(this, tr("About Sonic Visualiser"), aboutText);
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0, Qt::AlignTop);
+
+    QLabel *mainText = new QLabel();
+    layout->addWidget(mainText, row, 1, 1, 2);
+
+    layout->setRowStretch(row, 10);
+    layout->setColumnStretch(1, 10);
+
+    ++row;
+
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+//    mainText->setHtml(aboutText);
+//    mainText->setReadOnly(true);
+    mainText->setWordWrap(true);
+    mainText->setOpenExternalLinks(true);
+    mainText->setText(aboutText);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(420),
+                      m_viewManager->scalePixelSize(200));
+    
+    d->exec();
+
+    delete d;
+    /*
+    QMessageBox about(QMessageBox::Information, 
+                      tr("About Sonic Visualiser"),
+                      aboutText,
+                      QMessageBox::StandardButtons(QMessageBox::Ok),
+                      this);
+
+    QIcon icon = QApplication::windowIcon();
+    QSize size = icon.actualSize(QSize(64, 64));
+    about.setIconPixmap(icon.pixmap(size));
+
+    about.setMinimumSize(m_viewManager->scalePixelSize(400),
+                         m_viewManager->scalePixelSize(400));
+
+    about.exec();
+    */
 }
 
 void
@@ -4888,6 +5004,8 @@ MainWindow::keyReference()
 void
 MainWindow::newerVersionAvailable(QString version)
 {
+    m_newerVersionIs = version;
+    
     QSettings settings;
     settings.beginGroup("NewerVersionWarning");
     QString tag = QString("version-%1-available-show").arg(version);
