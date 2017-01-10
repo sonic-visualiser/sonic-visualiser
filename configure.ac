@@ -40,7 +40,7 @@ PKG_PROG_PKG_CONFIG
 SV_CHECK_QT
 
 SV_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
-SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
+SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING -DNO_HIT_COUNTS"
 SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 
 # Now we have: USER_CXXFLAGS contains any flags the user set
@@ -55,7 +55,7 @@ CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 if test "x$GCC" = "xyes"; then
    	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
-   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O2"
+   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
 fi
 
@@ -82,15 +82,15 @@ SV_MODULE_REQUIRED([bz2],[],[bzlib.h],[bz2],[BZ2_bzReadOpen])
 SV_MODULE_REQUIRED([fftw3],[fftw3 >= 3.0.0],[fftw3.h],[fftw3],[fftw_execute])
 SV_MODULE_REQUIRED([fftw3f],[fftw3f >= 3.0.0],[fftw3.h],[fftw3f],[fftwf_execute])
 SV_MODULE_REQUIRED([sndfile],[sndfile >= 1.0.16],[sndfile.h],[sndfile],[sf_open])
-SV_MODULE_REQUIRED([samplerate],[samplerate >= 0.1.2],[samplerate.h],[samplerate],[src_new])
-SV_MODULE_REQUIRED([vamp],[vamp >= 2.1],[vamp/vamp.h],[],[])
-SV_MODULE_REQUIRED([vamphostsdk],[vamp-hostsdk >= 2.5],[vamp-hostsdk/PluginLoader.h],[vamp-hostsdk],[libvamphostsdk_v_2_5_present])
+SV_MODULE_REQUIRED([libsamplerate],[samplerate >= 0.1.2],[samplerate.h],[samplerate],[src_new])
 SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],[rubberband],[rubberband_new])
 SV_MODULE_REQUIRED([sord],[sord-0 >= 0.5],[sord/sord.h],[sord-0],[sord_world_new])
 SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_read_file])
+SV_MODULE_REQUIRED([capnp],[capnp >= 0.6],[capnp/common.h],[capnp],[])
+SV_MODULE_REQUIRED([kj],[kj >= 0.6],[kj/common.h],[kj],[])
 
 SV_MODULE_OPTIONAL([liblo],[],[lo/lo.h],[lo],[lo_address_new])
-SV_MODULE_OPTIONAL([portaudio_2_0],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
+SV_MODULE_OPTIONAL([portaudio],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
 SV_MODULE_OPTIONAL([JACK],[jack >= 0.100],[jack/jack.h],[jack],[jack_client_open])
 SV_MODULE_OPTIONAL([libpulse],[libpulse >= 0.9],[pulse/pulseaudio.h],[pulse],[pa_stream_new])
 SV_MODULE_OPTIONAL([lrdf],[lrdf >= 0.2],[lrdf.h],[lrdf],[lrdf_init])
@@ -120,7 +120,6 @@ AC_SUBST(CXX)
 
 AC_SUBST(QMAKE_CONFIG)
 
-AC_CONFIG_SUBDIRS([svcore svgui svapp])
 AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT

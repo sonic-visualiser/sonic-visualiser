@@ -21,10 +21,11 @@ app=`basename "$source" .app`
 set -u
 
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
-case "$version" in
+stem=${version%%-*}
+case "$stem" in
     [0-9].[0-9]) bundleVersion="$version".0 ;;
     [0-9].[0-9].[0-9]) bundleVersion="$version" ;;
-    *) echo "Error: Version $version is neither two- nor three-part number" ;;
+    *) echo "Error: Version stem $stem (of version $version) is neither two- nor three-part number" ;;
 esac
 
 echo
@@ -42,6 +43,14 @@ echo "Copying in qt.conf to set local-only plugin paths."
 echo "Make sure all necessary Qt plugins are in $source/Contents/plugins/*"
 echo "You probably want platforms/, accessible/ and imageformats/ subdirectories."
 cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
+
+echo
+echo "Copying in plugin load checker."
+cp checker/vamp-plugin-load-checker "$source"/Contents/MacOS/
+
+echo
+echo "Copying in plugin server."
+cp piper-vamp-simple-server "$source"/Contents/MacOS/
 
 echo
 echo "Writing version $bundleVersion in to bundle."
@@ -67,7 +76,12 @@ cp -rp "$source" "$target"
 
 echo "Done"
 
+echo
+echo "Code-signing volume..."
+
 deploy/osx/sign.sh "$volume" || exit 1
+
+echo "Done"
 
 echo
 echo "Making dmg..."

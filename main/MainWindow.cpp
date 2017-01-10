@@ -42,11 +42,12 @@
 #include "layer/SliceableLayer.h"
 #include "layer/ImageLayer.h"
 #include "layer/RegionLayer.h"
-#include "widgets/Fader.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
+#include "widgets/LevelPanWidget.h"
+#include "widgets/LevelPanToolButton.h"
 #include "widgets/IconLoader.h"
 #include "widgets/LayerTreeDialog.h"
 #include "widgets/ListInputDialog.h"
@@ -57,10 +58,9 @@
 #include "widgets/LabelCounterInputDialog.h"
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
-#include "audioio/AudioCallbackPlaySource.h"
-#include "audioio/AudioCallbackPlayTarget.h"
-#include "audioio/AudioTargetFactory.h"
-#include "audioio/PlaySpeedRangeMapper.h"
+#include "audio/AudioCallbackPlaySource.h"
+#include "audio/AudioCallbackRecordTarget.h"
+#include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
 #include "data/fileio/WavFileWriter.h"
@@ -68,9 +68,9 @@
 #include "data/fileio/MIDIFileWriter.h"
 #include "data/fileio/BZipFileDevice.h"
 #include "data/fileio/FileSource.h"
-#include "data/fft/FFTDataServer.h"
 #include "data/midi/MIDIInput.h"
 #include "base/RecentFiles.h"
+#include "plugin/PluginScan.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
 #include "base/PlayParameterRepository.h"
@@ -93,6 +93,9 @@
 #include <vamp-hostsdk/PluginBase.h>
 #include "plugin/api/ladspa.h"
 #include "plugin/api/dssi.h"
+
+#include <bqaudioio/SystemPlaybackTarget.h>
+#include <bqaudioio/SystemAudioIO.h>
 
 #include <QApplication>
 #include <QMessageBox>
@@ -117,9 +120,11 @@
 #include <QCheckBox>
 #include <QRegExp>
 #include <QScrollArea>
+#include <QCloseEvent>
 #include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QFileSystemWatcher>
+#include <QTextEdit>
 
 #include <iostream>
 #include <cstdio>
@@ -130,8 +135,8 @@ using std::map;
 using std::set;
 
 
-MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
-    MainWindowBase(withAudioOutput, true),
+MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
+    MainWindowBase(options),
     m_overview(0),
     m_mainMenusCreated(false),
     m_paneMenu(0),
@@ -155,6 +160,7 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_ffwdSimilarAction(0),
     m_ffwdEndAction(0),
     m_playAction(0),
+    m_recordAction(0),
     m_playSelectionAction(0),
     m_playLoopAction(0),
     m_soloModified(false),
@@ -207,7 +213,9 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
-    m_overview->setFixedHeight(40);
+    int overviewHeight = m_viewManager->scalePixelSize(35);
+    if (overviewHeight < 40) overviewHeight = 40;
+    m_overview->setFixedHeight(overviewHeight);
 #ifndef _WIN32
     // For some reason, the contents of the overview never appear if we
     // make this setting on Windows.  I have no inclination at the moment
@@ -222,24 +230,14 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     m_panLayer->setAggressiveCacheing(true);
     m_overview->addLayer(m_panLayer);
 
-    if (m_viewManager->getGlobalDarkBackground()) {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-    } else {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-    }
-
-    m_fader = new Fader(frame, false);
-    connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_fader, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+    coloursChanged(); // sets pan layer colour from preferences
 
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(32);
-    m_playSpeed->setFixedHeight(32);
+    m_playSpeed->setFixedWidth(overviewHeight);
+    m_playSpeed->setFixedHeight(overviewHeight);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -251,33 +249,42 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    IconLoader il;
+    m_mainLevelPan = new LevelPanToolButton(frame);
+    connect(m_mainLevelPan, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_mainLevelPan, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+    m_mainLevelPan->setFixedHeight(overviewHeight);
+    m_mainLevelPan->setFixedWidth(overviewHeight);
+    m_mainLevelPan->setImageSize((overviewHeight * 3) / 4);
+    m_mainLevelPan->setBigImageSize(overviewHeight * 3);
 
     m_playControlsSpacer = new QFrame;
 
-    layout->setSpacing(4);
-    layout->addWidget(m_mainScroll, 0, 0, 1, 5);
-    layout->addWidget(m_overview, 1, 1);
+    layout->setSpacing(m_viewManager->scalePixelSize(4));
+    layout->addWidget(m_mainScroll, 0, 0, 1, 4);
+    layout->addWidget(m_overview, 1, 0);
+    layout->addWidget(m_playSpeed, 1, 1);
     layout->addWidget(m_playControlsSpacer, 1, 2);
-    layout->addWidget(m_playSpeed, 1, 3);
-    layout->addWidget(m_fader, 1, 4);
+    layout->addWidget(m_mainLevelPan, 1, 3);
 
     m_playControlsWidth = 
-        m_fader->width() + m_playSpeed->width() + layout->spacing() * 2;
-
-    layout->setColumnMinimumWidth(0, 14);
-    layout->setColumnStretch(0, 0);
+        m_mainLevelPan->width() + m_playSpeed->width() + layout->spacing() * 2;
 
     m_paneStack->setPropertyStackMinWidth(m_playControlsWidth
                                           + 2 + layout->spacing());
     m_playControlsSpacer->setFixedSize(QSize(2, 2));
 
-    layout->setColumnStretch(1, 10);
+    layout->setColumnStretch(0, 10);
 
     connect(m_paneStack, SIGNAL(propertyStacksResized(int)),
             this, SLOT(propertyStacksResized(int)));
 
     frame->setLayout(layout);
+
+#ifdef Q_OS_MAC
+    // Mac doesn't align menu labels when icons are shown: result is messy
+    QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
+    setIconsVisibleInMenus(false);
+#endif
 
     setupMenus();
     setupToolbars();
@@ -298,9 +305,12 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     connect(this, SIGNAL(activity(QString)),
             m_activityLog, SLOT(activityHappened(QString)));
     connect(this, SIGNAL(replacedDocument()), this, SLOT(documentReplaced()));
+
     m_activityLog->hide();
 
     m_unitConverter->hide();
+
+    setAudioRecordMode(RecordCreateAdditionalModel);
     
     newSession();
 
@@ -323,6 +333,13 @@ MainWindow::MainWindow(bool withAudioOutput, bool withOSCSupport) :
     } else {
         m_surveyer = 0;
         m_versionTester = 0;
+    }
+
+    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+    
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
+    if (warning != "") {
+        QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
     }
 }
 
@@ -354,16 +371,15 @@ MainWindow::setupMenus()
         // the system menubar integration altogether. Like this:
 	menuBar()->setNativeMenuBar(false);  // fix #1039
 #endif
-
+        
         m_rightButtonMenu = new QMenu();
 
-        // No -- we don't want tear-off enabled on the right-button
-        // menu.  If it is enabled, then simply right-clicking and
-        // releasing will pop up the menu, activate the tear-off, and
-        // leave the torn-off menu window in front of the main window.
-        // That isn't desirable.  I'm not sure it ever would be, in a
-        // context menu -- perhaps technically a Qt bug?
-//        m_rightButtonMenu->setTearOffEnabled(true);
+        // We don't want tear-off enabled on the right-button menu.
+        // If it is enabled, then simply right-clicking and releasing
+        // will pop up the menu, activate the tear-off, and leave the
+        // torn-off menu window in front of the main window.  That
+        // isn't desirable.
+        m_rightButtonMenu->setTearOffEnabled(false);
     }
 
     if (m_rightButtonTransformsMenu) {
@@ -459,7 +475,6 @@ MainWindow::setupFileMenu()
     IconLoader il;
 
     QIcon icon = il.load("filenew");
-    icon.addPixmap(il.loadPixmap("filenew-22"));
     QAction *action = new QAction(icon, tr("&New Session"), this);
     action->setShortcut(tr("Ctrl+N"));
     action->setStatusTip(tr("Abandon the current %1 session and start a new one").arg(QApplication::applicationName()));
@@ -469,7 +484,6 @@ MainWindow::setupFileMenu()
     toolbar->addAction(action);
 
     icon = il.load("fileopen");
-    icon.addPixmap(il.loadPixmap("fileopen-22"));
     action = new QAction(icon, tr("&Open..."), this);
     action->setShortcut(tr("Ctrl+O"));
     action->setStatusTip(tr("Open a session file, audio file, or layer"));
@@ -510,7 +524,6 @@ MainWindow::setupFileMenu()
     menu->addSeparator();
 
     icon = il.load("filesave");
-    icon.addPixmap(il.loadPixmap("filesave-22"));
     action = new QAction(icon, tr("&Save Session"), this);
     action->setShortcut(tr("Ctrl+S"));
     action->setStatusTip(tr("Save the current session into a %1 session file").arg(QApplication::applicationName()));
@@ -521,7 +534,6 @@ MainWindow::setupFileMenu()
     toolbar->addAction(action);
 	
     icon = il.load("filesaveas");
-    icon.addPixmap(il.loadPixmap("filesaveas-22"));
     action = new QAction(icon, tr("Save Session &As..."), this);
     action->setShortcut(tr("Ctrl+Shift+S"));
     action->setStatusTip(tr("Save the current session into a new %1 session file").arg(QApplication::applicationName()));
@@ -583,6 +595,19 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Export a single pane to an image file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportImage()));
     connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    action = new QAction(tr("Export SVG File..."), this);
+    action->setStatusTip(tr("Export a single pane to a scalable SVG image file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportSVG()));
+    connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu->addSeparator();
+
+    action = new QAction(tr("Browse Recorded Audio Folder"), this);
+    action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
+    connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
     menu->addAction(action);
 
     menu->addSeparator();
@@ -828,6 +853,20 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canRenumberInstants(bool)), action, SLOT(setEnabled(bool)));
 //    m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+    menu->addSeparator();
+    
+    action = new QAction(tr("Subdivide Selected Instants..."), this);
+    action->setStatusTip(tr("Add new instants at regular intervals between the selected instants"));
+    connect(action, SIGNAL(triggered()), this, SLOT(subdivideInstants()));
+    connect(this, SIGNAL(canSubdivideInstants(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+            
+    action = new QAction(tr("Winnow Selected Instants..."), this);
+    action->setStatusTip(tr("Remove subdivisions, leaving only every Nth instant"));
+    connect(action, SIGNAL(triggered()), this, SLOT(winnowInstants()));
+    connect(this, SIGNAL(canWinnowInstants(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
 }
 
 void
@@ -1041,12 +1080,16 @@ MainWindow::setupViewMenu()
 
     menu->addSeparator();
 
+#ifndef Q_OS_MAC
+    // Only on non-Mac platforms -- on the Mac this interacts very
+    // badly with the "native" full-screen mode
     action = new QAction(tr("Go Full-Screen"), this);
     action->setShortcut(tr("F11"));
     action->setStatusTip(tr("Expand the pane area to the whole screen"));
     connect(action, SIGNAL(triggered()), this, SLOT(goFullScreen()));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+#endif
 }
 
 void
@@ -1166,7 +1209,9 @@ MainWindow::setupPaneAndLayerMenus()
 // Avoid warnings/errors with -Wextra because we aren't explicitly
 // handling all layer types (-Wall is OK with this because of the
 // default but the stricter level insists)
+#ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
             
             switch (type) {
                     
@@ -1480,6 +1525,11 @@ MainWindow::setupTransformsMenu()
     TransformFactory *factory = TransformFactory::getInstance();
 
     TransformList transforms = factory->getAllTransformDescriptions();
+
+    if (factory->getStartupFailureReport() != "") {
+        pluginPopulationWarning();
+    }
+    
     vector<TransformDescription::Type> types = factory->getAllTransformTypes();
 
     map<TransformDescription::Type, map<QString, SubdividingMenu *> > categoryMenus;
@@ -1738,6 +1788,11 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
+    action = new QAction(tr("What's &New?").arg(name), this); 
+    action->setStatusTip(tr("Show changes in this release of %1").arg(name)); 
+    connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
+    menu->addAction(action);
+    
     action = new QAction(tr("&About %1").arg(name), this); 
     action->setStatusTip(tr("Show information about %1").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
@@ -1750,8 +1805,11 @@ MainWindow::setupRecentFilesMenu()
     m_recentFilesMenu->clear();
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
-	QAction *action = new QAction(files[i], this);
-	connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
+        /* F. Nicol patch 13 Aug. 2016 */
+        const QString& path = files[i];
+        QAction *action = new QAction(path, this);
+        connect(action, &QAction::triggered, [this, path] { openRecentFile(path);});
+        /* end of patch */
         if (i == 0) {
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
@@ -1985,6 +2043,17 @@ MainWindow::setupToolbars()
     connect(m_ffwdEndAction, SIGNAL(triggered()), this, SLOT(ffwdEnd()));
     connect(this, SIGNAL(canPlay(bool)), m_ffwdEndAction, SLOT(setEnabled(bool)));
 
+    m_recordAction = toolbar->addAction(il.load("record"),
+                                        tr("Record"));
+    m_recordAction->setCheckable(true);
+    m_recordAction->setShortcut(tr("Ctrl+Space"));
+    m_recordAction->setStatusTip(tr("Record a new audio file"));
+    connect(m_recordAction, SIGNAL(triggered()), this, SLOT(record()));
+    connect(m_recordTarget, SIGNAL(recordStatusChanged(bool)),
+	    m_recordAction, SLOT(setChecked(bool)));
+    connect(this, SIGNAL(canRecord(bool)),
+            m_recordAction, SLOT(setEnabled(bool)));
+
     toolbar = addToolBar(tr("Play Mode Toolbar"));
 
     m_playSelectionAction = toolbar->addAction(il.load("playselection"),
@@ -2035,6 +2104,7 @@ MainWindow::setupToolbars()
     }
 
     m_keyReference->registerShortcut(m_playAction);
+    m_keyReference->registerShortcut(m_recordAction);
     m_keyReference->registerShortcut(m_playSelectionAction);
     m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
@@ -2047,6 +2117,7 @@ MainWindow::setupToolbars()
     m_keyReference->registerShortcut(m_ffwdEndAction);
 
     menu->addAction(m_playAction);
+    menu->addAction(m_recordAction);
     menu->addAction(m_playSelectionAction);
     menu->addAction(m_playLoopAction);
     menu->addAction(m_soloAction);
@@ -2061,8 +2132,11 @@ MainWindow::setupToolbars()
     menu->addAction(m_rwdStartAction);
     menu->addAction(m_ffwdEndAction);
     menu->addSeparator();
+    menu->addAction(m_recordAction);
+    menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(m_playAction);
+    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
@@ -2073,6 +2147,8 @@ MainWindow::setupToolbars()
     m_rightButtonPlaybackMenu->addSeparator();
     m_rightButtonPlaybackMenu->addAction(m_rwdStartAction);
     m_rightButtonPlaybackMenu->addAction(m_ffwdEndAction);
+    m_rightButtonPlaybackMenu->addSeparator();
+    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addSeparator();
 
     QAction *fastAction = menu->addAction(tr("Speed Up"));
@@ -2280,7 +2356,7 @@ MainWindow::updateMenuStates()
         (haveCurrentPane &&
          (currentLayer != 0));
     bool havePlayTarget =
-	(m_playTarget != 0);
+	(m_playTarget != 0 || m_audioIO != 0);
     bool haveSelection = 
 	(m_viewManager &&
 	 !m_viewManager->getSelections().empty());
@@ -2344,9 +2420,11 @@ MainWindow::updateDescriptionLabel()
 
     QString description;
 
+//!!!???
+    
     sv_samplerate_t ssr = getMainModel()->getSampleRate();
     sv_samplerate_t tsr = ssr;
-    if (m_playSource) tsr = m_playSource->getTargetSampleRate();
+    if (m_playSource) tsr = m_playSource->getDeviceSampleRate();
 
     if (ssr != tsr) {
 	description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
@@ -2798,17 +2876,15 @@ MainWindow::exportImage()
     if (!pane) return;
     
     QString path = getSaveFileName(FileFinder::ImageFile);
-
     if (path == "") return;
-
     if (QFileInfo(path).suffix() == "") path += ".png";
-
+    
     bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
 
     QSize total, visible, selected;
-    total = pane->getImageSize();
-    visible = pane->getImageSize(pane->getFirstVisibleFrame(),
-                                 pane->getLastVisibleFrame());
+    total = pane->getRenderedImageSize();
+    visible = pane->getRenderedPartImageSize(pane->getFirstVisibleFrame(),
+                                             pane->getLastVisibleFrame());
 
     sv_frame_t sf0 = 0, sf1 = 0;
  
@@ -2818,7 +2894,7 @@ MainWindow::exportImage()
         MultiSelection::SelectionList::iterator e = selections.end();
         --e;
         sf1 = e->getEndFrame();
-        selected = pane->getImageSize(sf0, sf1);
+        selected = pane->getRenderedPartImageSize(sf0, sf1);
     }
 
     QStringList items;
@@ -2847,7 +2923,7 @@ MainWindow::exportImage()
     if (!haveSelection) {
         lid->setItemAvailability(2, false);
     }
-    if (total.width() > 32767) { // appears to be the limit of a QImage
+    if (total.width() > 32767) { // appears to be limit of a QImage
         lid->setItemAvailability(0, false);
         lid->setFootnote(tr("Note: the whole pane is too wide to be exported as a single image."));
     }
@@ -2861,24 +2937,103 @@ MainWindow::exportImage()
     settings.setValue("lastimageexportregion", deflt);
 
     QImage *image = 0;
-
+    
     if (item == items[0]) {
-        image = pane->toNewImage();
+        image = pane->renderToNewImage();
     } else if (item == items[1]) {
-        image = pane->toNewImage(pane->getFirstVisibleFrame(),
-                                 pane->getLastVisibleFrame());
+        image = pane->renderPartToNewImage(pane->getFirstVisibleFrame(),
+                                           pane->getLastVisibleFrame());
     } else if (haveSelection) {
-        image = pane->toNewImage(sf0, sf1);
+        image = pane->renderPartToNewImage(sf0, sf1);
     }
-
+    
     if (!image) return;
-
+    
     if (!image->save(path, "PNG")) {
         QMessageBox::critical(this, tr("Failed to save image file"),
                               tr("Failed to save image file %1").arg(path));
     }
     
     delete image;
+}
+
+void
+MainWindow::exportSVG()
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (!pane) return;
+    
+    QString path = getSaveFileName(FileFinder::SVGFile);
+    if (path == "") return;
+    if (QFileInfo(path).suffix() == "") path += ".svg";
+
+    bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
+
+    sv_frame_t sf0 = 0, sf1 = 0;
+ 
+    if (haveSelection) {
+        MultiSelection::SelectionList selections = m_viewManager->getSelections();
+        sf0 = selections.begin()->getStartFrame();
+        MultiSelection::SelectionList::iterator e = selections.end();
+        --e;
+        sf1 = e->getEndFrame();
+    }
+
+    QStringList items;
+    items << tr("Export the whole pane");
+    items << tr("Export the visible area only");
+    items << tr("Export the selection extent");
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int deflt = settings.value("lastsvgexportregion", 0).toInt();
+    if (deflt == 2 && !haveSelection) deflt = 1;
+
+    ListInputDialog *lid = new ListInputDialog
+        (this, tr("Select region to export"),
+         tr("Which region of the current pane do you want to export as a scalable SVG image?"),
+         items, deflt);
+
+    if (!haveSelection) {
+        lid->setItemAvailability(2, false);
+    }
+
+    bool ok = lid->exec();
+    QString item = lid->getCurrentString();
+    delete lid;
+	    
+    if (!ok || item.isEmpty()) return;
+
+    settings.setValue("lastsvgexportregion", deflt);
+
+    bool result = false;
+        
+    if (item == items[0]) {
+        result = pane->renderToSvgFile(path );
+    } else if (item == items[1]) {
+        result = pane->renderPartToSvgFile(path,
+                                           pane->getFirstVisibleFrame(),
+                                           pane->getLastVisibleFrame());
+    } else if (haveSelection) {
+        result = pane->renderPartToSvgFile(path, sf0, sf1);
+    }
+    
+    if (!result) {
+        QMessageBox::critical(this, tr("Failed to save SVG file"),
+                              tr("Failed to save SVG file %1").arg(path));
+    }
+}
+
+void
+MainWindow::browseRecordedAudio()
+{
+    if (!m_recordTarget) return;
+
+    QString path = m_recordTarget->getRecordContainerFolder();
+    if (path == "") path = m_recordTarget->getRecordFolder();
+    if (path == "") return;
+
+    openLocalFolder(path);
 }
 
 void
@@ -3030,8 +3185,10 @@ MainWindow::openLocation()
 }
 
 void
-MainWindow::openRecentFile()
+MainWindow::openRecentFile(const QString& path)
 {
+   /* F. Nicol patch 13 Aug. 2016 */
+#if 0
     QObject *obj = sender();
     QAction *action = dynamic_cast<QAction *>(obj);
     
@@ -3042,6 +3199,9 @@ MainWindow::openRecentFile()
     }
 
     QString path = action->text();
+#endif
+   /* End of F. Nicol patch 13 Aug. 2016 */
+
     if (path == "") return;
 
     FileOpenStatus status = openPath(path, ReplaceSession);
@@ -3125,6 +3285,7 @@ MainWindow::saveSessionAsTemplate()
                                      tr("<b>Template file exists</b><p>The template \"%1\" already exists.<br>Overwrite it?").arg(name),
                                      QMessageBox::Ok | QMessageBox::Cancel,
                                      QMessageBox::Cancel) != QMessageBox::Ok) {
+                delete d;
                 return;
             }
         }
@@ -3135,6 +3296,8 @@ MainWindow::saveSessionAsTemplate()
             }
         }
     }
+
+    delete d;
 }
 
 void
@@ -3241,7 +3404,7 @@ MainWindow::closeEvent(QCloseEvent *e)
     if (m_preferencesDialog &&
         m_preferencesDialog->isVisible()) {
         closeSession(); // otherwise we'll have to wait for prefs changes
-        m_preferencesDialog->applicationClosing(false);
+        m_preferencesDialog->applicationClosing(true);
     }
 
     closeSession();
@@ -3420,15 +3583,30 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 {
     MainWindowBase::preferenceChanged(name);
 
-    if (name == "Background Mode" && m_viewManager) {
-        if (m_viewManager->getGlobalDarkBackground()) {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-        } else {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-        }      
+    if (name == "Background Mode") {
+        coloursChanged();
     }     
+}
+
+void
+MainWindow::coloursChanged()
+{
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    QString defaultColourName(tr("Green"));
+    if (m_viewManager && m_viewManager->getGlobalDarkBackground()) {
+        defaultColourName = tr("Bright Green");
+    }
+    ColourDatabase *cdb = ColourDatabase::getInstance();
+    QColor colour = QColor
+        (settings.value("overview-colour",
+                        cdb->getColour(defaultColourName).name()).toString());
+    settings.endGroup();
+
+    int index = cdb->getColourIndex(colour);
+    if (index >= 0) {
+        m_panLayer->setBaseColour(index);
+    }
 }
 
 void
@@ -4059,10 +4237,9 @@ MainWindow::updatePositionStatusDisplays() const
 }
 
 void
-MainWindow::outputLevelsChanged(float left, float right)
+MainWindow::monitoringLevelsChanged(float left, float right)
 {
-    m_fader->setPeakLeft(left);
-    m_fader->setPeakRight(right);
+    m_mainLevelPan->setMonitoringLevels(left, right);
 }
 
 void
@@ -4098,6 +4275,34 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
         (this, tr("Audio processing overload"),
          tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
     shownOnce = true;
+}
+
+void
+MainWindow::betaReleaseWarning()
+{
+    QMessageBox::information
+        (this, tr("Beta release"),
+         tr("<b>This is a beta release of Sonic Visualiser</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>"));
+}
+
+void
+MainWindow::pluginPopulationWarning()
+{
+    QString scanWarning = PluginScan::getInstance()->getStartupFailureReport();
+    QString factWarning = TransformFactory::getInstance()->getStartupFailureReport();
+    QString warning;
+    if (factWarning != "") {
+        // The order of events on startup implies that, if scanWarning
+        // and factWarning are both present, then we have already been
+        // called once for scanWarning so don't want to report it again
+        warning = factWarning;
+    } else if (scanWarning != "") {
+        warning = scanWarning;
+    }
+    if (warning != "") {
+        emit hideSplash();
+        QMessageBox::warning(this, tr("Problems loading plugins"), warning);
+    }
 }
 
 void
@@ -4237,9 +4442,32 @@ MainWindow::mainModelChanged(WaveFileModel *model)
 
     MainWindowBase::mainModelChanged(model);
 
+    if (m_playTarget || m_audioIO) {
+        connect(m_mainLevelPan, SIGNAL(levelChanged(float)),
+                this, SLOT(mainModelGainChanged(float)));
+        connect(m_mainLevelPan, SIGNAL(panChanged(float)),
+                this, SLOT(mainModelPanChanged(float)));
+    }
+}
+
+void
+MainWindow::mainModelGainChanged(float gain)
+{
     if (m_playTarget) {
-        connect(m_fader, SIGNAL(valueChanged(float)),
-                m_playTarget, SLOT(setOutputGain(float)));
+        m_playTarget->setOutputGain(gain);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputGain(gain);
+    }
+}
+
+void
+MainWindow::mainModelPanChanged(float balance)
+{
+    // this is indeed stereo balance rather than pan
+    if (m_playTarget) {
+        m_playTarget->setOutputBalance(balance);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputBalance(balance);
     }
 }
 
@@ -4301,6 +4529,50 @@ void
 MainWindow::resetInstantsCounters()
 {
     if (m_labeller) m_labeller->resetCounters();
+}
+
+void
+MainWindow::subdivideInstants()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int n = settings.value("subdivisions", 4).toInt();
+    
+    bool ok;
+
+    n = QInputDialog::getInt(this,
+                             tr("Subdivide instants"),
+                             tr("Number of subdivisions:"),
+                             n, 2, 96, 1, &ok);
+
+    if (ok) {
+        settings.setValue("subdivisions", n);
+        subdivideInstantsBy(n);
+    }
+
+    settings.endGroup();
+}
+
+void
+MainWindow::winnowInstants()
+{
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int n = settings.value("winnow-subdivisions", 4).toInt();
+    
+    bool ok;
+
+    n = QInputDialog::getInt(this,
+                             tr("Winnow instants"),
+                             tr("Remove all instants apart from multiples of:"),
+                             n, 2, 96, 1, &ok);
+
+    if (ok) {
+        settings.setValue("winnow-subdivisions", n);
+        winnowInstantsBy(n);
+    }
+
+    settings.endGroup();
 }
 
 void
@@ -4376,15 +4648,13 @@ MainWindow::modelRegenerationWarning(QString layerName,
 }
 
 void
-MainWindow::alignmentFailed(QString transformName, QString message)
+MainWindow::alignmentFailed(QString message)
 {
-    emit hideSplash();
-
     QMessageBox::warning
         (this,
          tr("Failed to calculate alignment"),
-         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment using transform \"%1\":<p>%2")
-         .arg(transformName).arg(message),
+         tr("<b>Alignment calculation failed</b><p>Failed to calculate an audio alignment:<p>%1")
+         .arg(message),
          QMessageBox::Ok);
 }
 
@@ -4442,6 +4712,11 @@ MainWindow::preferences()
 
     m_preferencesDialog = new PreferencesDialog(this);
 
+    connect(m_preferencesDialog, SIGNAL(audioDeviceChanged()),
+            this, SLOT(recreateAudioIO()));
+    connect(m_preferencesDialog, SIGNAL(coloursChanged()),
+            this, SLOT(coloursChanged()));
+    
     // DeleteOnClose is safe here, because m_preferencesDialog is a
     // QPointer that will be zeroed when the dialog is deleted.  We
     // use it in preference to leaving the dialog lying around because
@@ -4462,8 +4737,8 @@ MainWindow::mouseEnteredWidget()
     QWidget *w = dynamic_cast<QWidget *>(sender());
     if (!w) return;
 
-    if (w == m_fader) {
-        contextHelpChanged(tr("Adjust the master playback level"));
+    if (w == m_mainLevelPan) {
+        contextHelpChanged(tr("Adjust the master playback level and pan"));
     } else if (w == m_playSpeed) {
         contextHelpChanged(tr("Adjust the master playback speed"));
     }
@@ -4485,6 +4760,61 @@ void
 MainWindow::help()
 {
     openHelpUrl(tr("http://www.sonicvisualiser.org/doc/reference/%1/en/").arg(SV_VERSION));
+}
+
+void
+MainWindow::whatsNew()
+{
+    QFile changelog(":CHANGELOG");
+    changelog.open(QFile::ReadOnly);
+    QByteArray content = changelog.readAll();
+    QString text = QString::fromUtf8(content);
+
+    QDialog *d = new QDialog(this);
+    d->setWindowTitle(tr("What's New"));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
+    
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0);
+    
+    layout->addWidget
+        (new QLabel(tr("<h3>What's New in %1</h3>")
+                    .arg(QApplication::applicationName())),
+         row++, 1);
+    layout->setColumnStretch(2, 10);
+
+    QTextEdit *textEdit = new QTextEdit;
+    layout->addWidget(textEdit, row++, 1, 1, 2);
+
+    if (m_newerVersionIs != "") {
+        layout->addWidget(new QLabel(tr("<b>Note:</b> A newer version of Sonic Visualiser is available.<br>(Version %1 is available; you are using version %2)").arg(m_newerVersionIs).arg(SV_VERSION)), row++, 1, 1, 2);
+    }
+    
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+    text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
+    text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
+    text.replace(QRegExp(": *\n"), ":\n<ul>\n");
+    text.replace(QRegExp("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
+    text.replace(QRegExp("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
+//    text.replace(QRegExp("<li>([^,.\n]+)([,.] +\\w)"), "<li><b>\\1</b>\\2");
+    
+    textEdit->setHtml(text);
+    textEdit->setReadOnly(true);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(520),
+                      m_viewManager->scalePixelSize(450));
+    
+    d->exec();
+
+    delete d;
 }
 
 void
@@ -4512,13 +4842,20 @@ MainWindow::about()
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
     aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.<br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
-    aboutText += tr("<p><small>%1 : %2 configuration</small></p>")
+    aboutText += tr("<p><small>%1 : %2 configuration, %3-bit build</small></p>")
         .arg(version)
-        .arg(debug ? tr("Debug") : tr("Release"));
+        .arg(debug ? tr("Debug") : tr("Release"))
+        .arg(sizeof(void *) * 8);
 
-    aboutText += "<small>";
+    if (m_oscQueue && m_oscQueue->isOK()) {
+        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
+    }
 
-    aboutText += tr("With Qt v%1 &copy; Nokia Corporation").arg(QT_VERSION_STR);
+    aboutText += "</small><p><small>";
+
+    aboutText += tr("With Qt v%1 &copy; The Qt Company").arg(QT_VERSION_STR);
+
+    aboutText += "</small><small>";
 
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION
@@ -4574,14 +4911,12 @@ MainWindow::about()
 #endif // HAVE_FFTW3F
 #ifdef HAVE_RUBBERBAND
 #ifdef RUBBERBAND_VERSION
-    aboutText += tr("<br>With Rubber Band v%1 &copy; Chris Cannam").arg(RUBBERBAND_VERSION);
+    aboutText += tr("<br>With Rubber Band Library v%1 &copy; Particular Programs Ltd").arg(RUBBERBAND_VERSION);
 #else // !RUBBERBAND_VERSION
-    aboutText += tr("<br>With Rubber Band &copy; Chris Cannam");
+    aboutText += tr("<br>With Rubber Band Library &copy; Particular Programs Ltd");
 #endif // RUBBERBAND_VERSION
 #endif // HAVE_RUBBERBAND
-#ifdef HAVE_VAMP
-    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
-#endif // !HAVE_VAMP
+    aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam and QMUL").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
 #ifdef REDLAND_VERSION
@@ -4590,8 +4925,8 @@ MainWindow::about()
     aboutText += tr("<br>With Redland RDF datastore &copy; Dave Beckett and the University of Bristol");
 #endif // REDLAND_VERSION
     aboutText += tr("<br>With Serd and Sord RDF parser and store &copy; David Robillard");
-    aboutText += tr("<br>With Dataquay Qt/RDF library &copy; Chris Cannam");
-
+    aboutText += tr("<br>With Dataquay Qt/RDF library &copy; Particular Programs Ltd");
+    aboutText += tr("<br>With Cap'n Proto serialisation &copy; Sandstorm Development Group");
     aboutText += tr("<br>With RtMidi &copy; Gary P. Scavone");
 
 #ifdef HAVE_LIBLO
@@ -4601,27 +4936,73 @@ MainWindow::about()
     aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris");
 #endif // LIBLO_VERSION
 
-    if (m_oscQueue && m_oscQueue->isOK()) {
-        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
-    }
-
     aboutText += "</small></p>";
 #endif // HAVE_LIBLO
 
-#ifndef BUILD_STATIC
-    aboutText.replace(tr("With "), tr("Using "));
-#endif
-
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2015 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2017 Chris Cannam and "
         "Queen Mary, University of London.</small></p>"
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "
         "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</small></p>";
+
+    // use our own dialog so we can influence the size
+
+    QDialog *d = new QDialog(this);
+
+    d->setWindowTitle(tr("About %1").arg(QApplication::applicationName()));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
     
-    QMessageBox::about(this, tr("About Sonic Visualiser"), aboutText);
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0, Qt::AlignTop);
+
+    QLabel *mainText = new QLabel();
+    layout->addWidget(mainText, row, 1, 1, 2);
+
+    layout->setRowStretch(row, 10);
+    layout->setColumnStretch(1, 10);
+
+    ++row;
+
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+//    mainText->setHtml(aboutText);
+//    mainText->setReadOnly(true);
+    mainText->setWordWrap(true);
+    mainText->setOpenExternalLinks(true);
+    mainText->setText(aboutText);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(420),
+                      m_viewManager->scalePixelSize(200));
+    
+    d->exec();
+
+    delete d;
+    /*
+    QMessageBox about(QMessageBox::Information, 
+                      tr("About Sonic Visualiser"),
+                      aboutText,
+                      QMessageBox::StandardButtons(QMessageBox::Ok),
+                      this);
+
+    QIcon icon = QApplication::windowIcon();
+    QSize size = icon.actualSize(QSize(64, 64));
+    about.setIconPixmap(icon.pixmap(size));
+
+    about.setMinimumSize(m_viewManager->scalePixelSize(400),
+                         m_viewManager->scalePixelSize(400));
+
+    about.exec();
+    */
 }
 
 void
@@ -4633,6 +5014,8 @@ MainWindow::keyReference()
 void
 MainWindow::newerVersionAvailable(QString version)
 {
+    m_newerVersionIs = version;
+    
     QSettings settings;
     settings.beginGroup("NewerVersionWarning");
     QString tag = QString("version-%1-available-show").arg(version);

@@ -1,1 +1,1 @@
-#define SV_VERSION "2.5"
+#define SV_VERSION "3.0-beta1"

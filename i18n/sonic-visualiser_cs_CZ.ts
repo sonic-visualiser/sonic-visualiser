@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="cs_CZ">
+<TS version="2.1" language="cs_CZ">
 <context>
     <name>ActivityLog</name>
     <message>
@@ -35,6 +35,13 @@
     <message>
         <source>Alignment</source>
         <translation>Zarovnání</translation>
+    </message>
+</context>
+<context>
+    <name>AlignmentView</name>
+    <message>
+        <source>AlignmentView</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -82,28 +89,32 @@
         <source>New value for %1, from %2 to %3 %4:</source>
         <translation>Nová hodnota pro %1, od %2 do %3 %4:</translation>
     </message>
+    <message>
+        <source>%1: %2</source>
+        <translation type="unfinished">%1: %2</translation>
+    </message>
 </context>
 <context>
     <name>AudioTargetFactory</name>
     <message>
         <source>Core Audio Device</source>
-        <translation>Jaderné zvukové zařízení</translation>
+        <translation type="vanished">Jaderné zvukové zařízení</translation>
     </message>
     <message>
         <source>(auto)</source>
-        <translation>(auto)</translation>
+        <translation type="vanished">(auto)</translation>
     </message>
     <message>
         <source>Default Soundcard Device</source>
-        <translation>Výchozí zařízení zvukové karty</translation>
+        <translation type="vanished">Výchozí zařízení zvukové karty</translation>
     </message>
     <message>
         <source>PulseAudio Server</source>
-        <translation>Server PulseAudio</translation>
+        <translation type="vanished">Server PulseAudio</translation>
     </message>
     <message>
         <source>JACK Audio Connection Kit</source>
-        <translation>Spojovací sada pro zvuk JACK</translation>
+        <translation type="vanished">Spojovací sada pro zvuk JACK</translation>
     </message>
 </context>
 <context>
@@ -253,6 +264,14 @@
         <source>&lt;ignore&gt;</source>
         <translation>&lt;nevšímat si&gt;</translation>
     </message>
+    <message>
+        <source>Pitch</source>
+        <translation type="unfinished">Výška tónu</translation>
+    </message>
+    <message>
+        <source>Explicitly, in milliseconds</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Colour3DPlotLayer</name>
@@ -286,11 +305,11 @@
     </message>
     <message>
         <source>Normalize Columns</source>
-        <translation>Normalizovat sloupce</translation>
+        <translation type="vanished">Normalizovat sloupce</translation>
     </message>
     <message>
         <source>Normalize Visible Area</source>
-        <translation>Normalizovat viditelnou oblast</translation>
+        <translation type="vanished">Normalizovat viditelnou oblast</translation>
     </message>
     <message>
         <source>Colour</source>
@@ -328,60 +347,103 @@ Hodnota:	%4</translation>
         <source>Invert Vertical Scale</source>
         <translation>Obrátit svislou stupnici</translation>
     </message>
+    <message>
+        <source>Normalization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Col</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hybrid</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ColourComboBox</name>
+    <message>
+        <source>Name New Colour</source>
+        <translation type="unfinished">Pojmenovat novou barvu</translation>
+    </message>
+    <message>
+        <source>Enter a name for the new colour:</source>
+        <translation type="unfinished">Zadejte název pro novou barvu:</translation>
+    </message>
+    <message>
+        <source>Prefer black background for this colour</source>
+        <translation type="unfinished">Upřednostňovat černé pozadí pro tuto barvu</translation>
+    </message>
+    <message>
+        <source>Add New Colour...</source>
+        <translation type="unfinished">Přidat novou barvu...</translation>
+    </message>
 </context>
 <context>
     <name>ColourMapper</name>
     <message>
         <source>Black on White</source>
-        <translation>Černá na bílé</translation>
+        <translation type="vanished">Černá na bílé</translation>
     </message>
     <message>
         <source>Yellow on Black</source>
-        <translation>Žlutá na černé</translation>
+        <translation type="vanished">Žlutá na černé</translation>
     </message>
     <message>
         <source>Banded</source>
-        <translation>Pruhovaný</translation>
+        <translation type="vanished">Pruhovaný</translation>
     </message>
     <message>
         <source>&lt;unknown&gt;</source>
-        <translation>&lt;neznámý&gt;</translation>
+        <translation type="vanished">&lt;neznámý&gt;</translation>
     </message>
     <message>
         <source>Sunset</source>
-        <translation>Západ slunce</translation>
+        <translation type="vanished">Západ slunce</translation>
     </message>
     <message>
         <source>Fruit Salad</source>
-        <translation>Ovocný salát</translation>
+        <translation type="vanished">Ovocný salát</translation>
     </message>
     <message>
         <source>Red on Blue</source>
-        <translation>Červená na modré</translation>
+        <translation type="vanished">Červená na modré</translation>
     </message>
     <message>
         <source>Printer</source>
-        <translation>Tiskárna</translation>
+        <translation type="vanished">Tiskárna</translation>
     </message>
     <message>
         <source>Blue on Black</source>
-        <translation>Modrá na černé</translation>
+        <translation type="vanished">Modrá na černé</translation>
     </message>
     <message>
         <source>Default</source>
-        <translation>Výchozí</translation>
+        <translation type="vanished">Výchozí</translation>
     </message>
     <message>
         <source>High Gain</source>
-        <translation>Zesílení výšek</translation>
+        <translation type="vanished">Zesílení výšek</translation>
     </message>
     <message>
         <source>Highlight</source>
-        <translation>Zvýraznění</translation>
+        <translation type="vanished">Zvýraznění</translation>
     </message>
     <message>
         <source>White on Black</source>
-        <translation>Bílá na černé</translation>
+        <translation type="vanished">Bílá na černé</translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="obsolete">Zelená</translation>
     </message>
 </context>
 <context>
@@ -440,6 +502,13 @@ Hodnota:	%4</translation>
     <message>
         <source>Decoding %1...</source>
         <translation>Dekóduje se %1...</translation>
+    </message>
+</context>
+<context>
+    <name>DecodingWavFileReader</name>
+    <message>
+        <source>Decoding %1...</source>
+        <translation type="unfinished">Dekóduje se %1...</translation>
     </message>
 </context>
 <context>
@@ -557,6 +626,10 @@ Hodnota:	%4</translation>
         <source>Transform was configured for version %1 of plugin &quot;%2&quot;, but the plugin being used is version %3</source>
         <translation>Proměna byla nastavena pro verzi %1 přídavného modulu &quot;%2&quot;, ale používaný přídavný modul je ve verzi %3</translation>
     </message>
+    <message>
+        <source>Transforms supplied to a single FeatureExtractionModelTransformer instance must be similar in every respect except plugin output</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FileSource</name>
@@ -566,7 +639,7 @@ Hodnota:	%4</translation>
     </message>
     <message>
         <source>Login failed</source>
-        <translation>Přihlášení se nezdařilo</translation>
+        <translation type="vanished">Přihlášení se nezdařilo</translation>
     </message>
     <message>
         <source>Download cancelled</source>
@@ -582,7 +655,7 @@ Hodnota:	%4</translation>
     </message>
     <message>
         <source>FTP download aborted</source>
-        <translation>FTP stahování zrušeno</translation>
+        <translation type="vanished">FTP stahování zrušeno</translation>
     </message>
     <message>
         <source>Downloading %1...</source>
@@ -590,11 +663,189 @@ Hodnota:	%4</translation>
     </message>
     <message>
         <source>Failed to connect to FTP server</source>
-        <translation>Připojení k FTP serveru se nezdařilo</translation>
+        <translation type="vanished">Připojení k FTP serveru se nezdařilo</translation>
     </message>
     <message>
         <source>Failed to change to correct directory</source>
-        <translation>Změna na správný adresář se nepodařila</translation>
+        <translation type="vanished">Změna na správný adresář se nepodařila</translation>
+    </message>
+</context>
+<context>
+    <name>FlexiNoteLayer</name>
+    <message>
+        <source>New Point</source>
+        <translation type="unfinished">Nový bod</translation>
+    </message>
+    <message>
+        <source>Vertical Scale</source>
+        <translation type="unfinished">Svislá stupnice</translation>
+    </message>
+    <message>
+        <source>Scale Units</source>
+        <translation type="unfinished">Jednotky stupnice</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished">Stupnice</translation>
+    </message>
+    <message>
+        <source>Auto-Align</source>
+        <translation type="unfinished">Automatické zarovnání</translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log</source>
+        <translation type="unfinished">Zápis</translation>
+    </message>
+    <message>
+        <source>MIDI Notes</source>
+        <translation type="unfinished">Noty MIDI</translation>
+    </message>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished">Probíhá</translation>
+    </message>
+    <message>
+        <source>No local points</source>
+        <translation type="unfinished">Žádné místní body</translation>
+    </message>
+    <message>
+        <source>%1 (%2, %3 Hz)</source>
+        <translation type="unfinished">%1 (%2, %3 Hz)</translation>
+    </message>
+    <message>
+        <source>%1 Hz (%2, %3)</source>
+        <translation type="unfinished">%1 Hz (%2, %3)</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <source>Time:	%1
+Pitch:	%2
+Duration:	%3
+No label</source>
+        <translation type="unfinished">Čas:	%1
+Výška:	%2
+Doba trvání:	%3
+Žádný štítek</translation>
+    </message>
+    <message>
+        <source>Time:	%1
+Pitch:	%2
+Duration:	%3
+Label:	%4</source>
+        <translation type="unfinished">Čas:	%1
+Výška:	%2
+Doba trvání:	%3
+Štítek:	%4</translation>
+    </message>
+    <message>
+        <source>Draw Point</source>
+        <translation type="unfinished">Nakreslit bod</translation>
+    </message>
+    <message>
+        <source>Erase Point</source>
+        <translation type="unfinished">Vymazat bod</translation>
+    </message>
+    <message>
+        <source>Drag Point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Point</source>
+        <translation type="unfinished">Upravit bod</translation>
+    </message>
+    <message>
+        <source>Relocate Point</source>
+        <translation type="unfinished">Přemístit bod</translation>
+    </message>
+    <message>
+        <source>Change Point Value</source>
+        <translation type="unfinished">Změnit hodnotu bodu</translation>
+    </message>
+    <message>
+        <source>Add Point</source>
+        <translation type="unfinished">Přidat bod</translation>
+    </message>
+    <message>
+        <source>Snap Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Merge Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drag Selection</source>
+        <translation type="unfinished">Táhnout výběr</translation>
+    </message>
+    <message>
+        <source>Resize Selection</source>
+        <translation type="unfinished">Změnit velikost výběru</translation>
+    </message>
+    <message>
+        <source>Delete Selected Points</source>
+        <translation type="unfinished">Smazat vybrané body</translation>
+    </message>
+    <message>
+        <source>Re-align pasted items?</source>
+        <translation type="unfinished">Zarovnat vložené položky znovu?</translation>
+    </message>
+    <message>
+        <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
+        <translation type="unfinished">Položky, které vkládáte, přišly z vrstvy s odlišným zdrojovým materiálem, než má tento. Chcete je zarovnat znovu v čase, aby se hodily ke zdrojovému materiálu pro tuto vrstvu?</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished">Vložit</translation>
+    </message>
+    <message>
+        <source>Record FlexiNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FlexiNoteModel</name>
+    <message>
+        <source>FlexiNote</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Čas</translation>
+    </message>
+    <message>
+        <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pitch</source>
+        <translation type="unfinished">Výška tónu</translation>
+    </message>
+    <message>
+        <source>Duration</source>
+        <translation type="unfinished">Doba trvání</translation>
+    </message>
+    <message>
+        <source>Level</source>
+        <translation type="unfinished">Úroveň</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation type="unfinished">Štítek</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Neznámý</translation>
+    </message>
+    <message>
+        <source>Edit Data</source>
+        <translation type="unfinished">Upravit data</translation>
     </message>
 </context>
 <context>
@@ -799,7 +1050,7 @@ Všechny soubory (*.*)</translation>
         <source>Sonic Visualiser session files (*.sv)
 RDF files (%1)
 All files (*.*)</source>
-        <translation>Soubory se sezením programu Sonic Visualiser (*.sv)
+        <translation type="vanished">Soubory se sezením programu Sonic Visualiser (*.sv)
 Soubory RDF (%1)
 Všechny soubory (*.*)</translation>
     </message>
@@ -834,7 +1085,7 @@ Audio files (%1)
 Layer files (%2)
 RDF files (%3)
 All files (*.*)</source>
-        <translation>Všechny podporované soubory (*.sv %1 %2 %3)
+        <translation type="vanished">Všechny podporované soubory (*.sv %1 %2 %3)
 Soubory XML Sonic Visualiser Layer (*.svl)
 Zvukové soubory (%1)
 Soubory Layer (%2)
@@ -913,7 +1164,7 @@ Sonic Visualiser session files (*.sv)
 Audio files (%2)
 RDF files (%1)
 All files (*.*)</source>
-        <translation>Všechny podporované soubory (%1 %2)
+        <translation type="vanished">Všechny podporované soubory (%1 %2)
 Soubory XML Sonic Visualiser Layer (*.svl)
 Zvukové soubory (%2)
 Soubory RDF (%1)
@@ -948,7 +1199,7 @@ Všechny soubory (*.*)</translation>
     <message>
         <source>Sonic Visualiser session files (*.sv)
 All files (*.*)</source>
-        <translation>Soubory se sezením programu Sonic Visualiser (*.sv)
+        <translation type="vanished">Soubory se sezením programu Sonic Visualiser (*.sv)
 Všechny soubory (*.*)</translation>
     </message>
     <message>
@@ -960,6 +1211,90 @@ Všechny soubory (*.*)</translation>
 All files (*.*)</source>
         <translation>Zvukové soubory WAV (*.wav)
 Všechny soubory (*.*)</translation>
+    </message>
+    <message>
+        <source>%1 session files (*.%1)
+RDF files (%3)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All supported files (%1 %2)
+Comma-separated data files (*.csv)
+Sonic Visualiser Layer XML files (*.svl)
+Space-separated .lab files (*.lab)
+RDF files (%2)
+MIDI files (*.mid)
+Text files (*.txt)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All supported files (%1 %2)
+Comma-separated data files (*.csv)
+Sonic Visualiser Layer XML files (*.svl)
+Space-separated .lab files (*.lab)
+RDF files (%2)
+Text files (*.txt)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All supported files (*.sv %1 %2)
+%3 session files (*.%4)
+Audio files (%2)
+RDF files (%1)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comma-separated data files (*.csv)
+Space-separated .lab files (*.lab)
+Text files (*.txt)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All supported files (*.sv %1 %2 %3)
+%4 session files (*.%5)
+Audio files (%1)
+Layer files (%2)
+RDF files (%3)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 session files (*.%2)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comma-separated data files (*.csv)
+Sonic Visualiser Layer XML files (*.svl)
+RDF/Turtle files (%1)
+MIDI files (*.mid)
+Text files (*.txt)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comma-separated data files (*.csv)
+Sonic Visualiser Layer XML files (*.svl)
+RDF/Turtle files (%1)
+Text files (*.txt)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comma-separated data files (*.csv)
+Text files (*.txt)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scalable Vector Graphics files (*.svg)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1029,7 +1364,11 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Sonic Visualiser: Key and Mouse Reference</source>
-        <translation>Sonic Visualiser: Odkaz na klávesy a myš</translation>
+        <translation type="vanished">Sonic Visualiser: Odkaz na klávesy a myš</translation>
+    </message>
+    <message>
+        <source>%1: Key and Mouse Reference</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1109,6 +1448,14 @@ Všechny soubory (*.*)</translation>
         <source>Cyclical counter</source>
         <translation>Cyklické počítadlo</translation>
     </message>
+    <message>
+        <source>Subdivide Points</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winnow Points</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Layer</name>
@@ -1118,7 +1465,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Layer</source>
-        <translation>Vrstva</translation>
+        <translation type="vanished">Vrstva</translation>
     </message>
     <message>
         <source>Notes</source>
@@ -1172,6 +1519,14 @@ Všechny soubory (*.*)</translation>
         <source>Delete Measurement</source>
         <translation>Smazat měření</translation>
     </message>
+    <message>
+        <source>Flexible Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LayerTreeDialog</name>
@@ -1205,6 +1560,20 @@ Všechny soubory (*.*)</translation>
     <message>
         <source>Played</source>
         <translation>Přehrávaná</translation>
+    </message>
+</context>
+<context>
+    <name>LevelPanToolButton</name>
+    <message>
+        <source>Click to adjust level and pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>LevelPanWidget</name>
+    <message>
+        <source>Drag vertically to adjust level, horizontally to adjust pan</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1783,7 +2152,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Gumička (Rubber Band) &amp;copy; Chris Cannam</translation>
+        <translation type="vanished">&lt;br&gt;Gumička (Rubber Band) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Erase items from layer</source>
@@ -1819,7 +2188,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment using transform &quot;%1&quot;:&lt;p&gt;%2</source>
-        <translation>&lt;b&gt;Spočítání zarovnání se nezdařilo&lt;/b&gt;&lt;p&gt;Zarovnání zvuku se spočítat s pomocí &quot;%1&quot; nepodařilo:&lt;p&gt;%2</translation>
+        <translation type="vanished">&lt;b&gt;Spočítání zarovnání se nezdařilo&lt;/b&gt;&lt;p&gt;Zarovnání zvuku se spočítat s pomocí &quot;%1&quot; nepodařilo:&lt;p&gt;%2</translation>
     </message>
     <message>
         <source>Show Acti&amp;vity Log</source>
@@ -1907,7 +2276,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Playback speed: %1%2%</source>
-        <translation>Rychlost přehrávání: %1%2%</translation>
+        <translation type="vanished">Rychlost přehrávání: %1%2%</translation>
     </message>
     <message>
         <source>Restore &amp;Default Zoom</source>
@@ -2079,7 +2448,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Adjust the master playback level</source>
-        <translation>Přizpůsobit hlavní úroveň přehrávání</translation>
+        <translation type="vanished">Přizpůsobit hlavní úroveň přehrávání</translation>
     </message>
     <message>
         <source>&lt;p&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;br&gt;&lt;a href=&quot;http://www.sonicvisualiser.org/&quot;&gt;http://www.sonicvisualiser.org/&lt;/a&gt;&lt;/p&gt;</source>
@@ -2115,7 +2484,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate derived layer.&lt;p&gt;The layer transform &quot;%1&quot; failed:&lt;p&gt;%2</source>
-        <translation>&lt;b&gt;Vytvoření vrstvy se nezdařilo&lt;/b&gt;&lt;p&gt;Nepodařilo se vytvořit odvozenou vrstvu.&lt;p&gt;Proměna vrstvy &quot;%1&quot; se nezdařila:&lt;p&gt;%2</translation>
+        <translation type="vanished">&lt;b&gt;Vytvoření vrstvy se nezdařilo&lt;/b&gt;&lt;p&gt;Nepodařilo se vytvořit odvozenou vrstvu.&lt;p&gt;Proměna vrstvy &quot;%1&quot; se nezdařila:&lt;p&gt;%2</translation>
     </message>
     <message>
         <source>&lt;br&gt;With MAD mp3 decoder &amp;copy; Underbit Technologies Inc</source>
@@ -2171,11 +2540,11 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Session file &quot;%1&quot; could not be opened</source>
-        <translation>&lt;b&gt;Soubor se nepodařilo otevřít&lt;/b&gt;&lt;p&gt;Soubor se sezením &quot;%1&quot; se nepodařilo otevřít</translation>
+        <translation type="vanished">&lt;b&gt;Soubor se nepodařilo otevřít&lt;/b&gt;&lt;p&gt;Soubor se sezením &quot;%1&quot; se nepodařilo otevřít</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band v%1 &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Gumička (Rubber Band) v%1 &amp;copy; Chris Cannam</translation>
+        <translation type="vanished">&lt;br&gt;Gumička (Rubber Band) v%1 &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Show centre indicator, frame times and scale</source>
@@ -2199,7 +2568,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Playback Speedup</source>
-        <translation>Zvýšení rychlosti přehrávání</translation>
+        <translation type="vanished">Zvýšení rychlosti přehrávání</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
@@ -2343,7 +2712,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>With Qt v%1 &amp;copy; Nokia Corporation</source>
-        <translation>S Qt v%1 &amp;copy; Nokia Corporation</translation>
+        <translation type="vanished">S Qt v%1 &amp;copy; Nokia Corporation</translation>
     </message>
     <message>
         <source>Add a new layer showing a time ruler</source>
@@ -2615,7 +2984,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Ctrl+Shift+Enter</source>
-        <translation>Ctrl+Shift+Enter</translation>
+        <translation type="vanished">Ctrl+Shift+Enter</translation>
     </message>
     <message>
         <source>Audio processing overload</source>
@@ -2703,7 +3072,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Export Annotation Layer...</source>
-        <translation>Vyvést poznámkovou vrstvu...</translation>
+        <translation type="vanished">Vyvést poznámkovou vrstvu...</translation>
     </message>
     <message>
         <source>&amp;Export Audio File...</source>
@@ -2755,7 +3124,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate a derived layer.&lt;p&gt;The layer transform &quot;%1&quot; failed.&lt;p&gt;No error information is available.</source>
-        <translation>&lt;b&gt;Vytvoření vrstvy se nezdařilo&lt;/b&gt;&lt;p&gt;Nepodařilo se vytvořit odvozenou vrstvu.&lt;p&gt;Proměna vrstvy &quot;%1&quot; se nezdařila.&lt;p&gt;Nejsou dostupné žádné informace o chybě.</translation>
+        <translation type="vanished">&lt;b&gt;Vytvoření vrstvy se nezdařilo&lt;/b&gt;&lt;p&gt;Nepodařilo se vytvořit odvozenou vrstvu.&lt;p&gt;Proměna vrstvy &quot;%1&quot; se nezdařila.&lt;p&gt;Nejsou dostupné žádné informace o chybě.</translation>
     </message>
     <message>
         <source>Editing</source>
@@ -3035,7 +3404,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;p&gt;&lt;small&gt;%1 : %2 configuration&lt;/small&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;small&gt;%1 : %2 nastavení&lt;/small&gt;&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;&lt;small&gt;%1 : %2 nastavení&lt;/small&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Template file exists&lt;/b&gt;&lt;p&gt;The template &quot;%1&quot; already exists.&lt;br&gt;Overwrite it?</source>
@@ -3103,7 +3472,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Podpora pro přídavné moduly Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
+        <translation type="vanished">&lt;br&gt;Podpora pro přídavné moduly Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Unclassified</source>
@@ -3151,7 +3520,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %3 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Je dostupná novější verze&lt;/h3&gt;&lt;p&gt;Používáte verzi %1 programu Sonic Visualiser, ale nyní je dostupná verze %3.&lt;/p&gt;&lt;p&gt;Podívejte se, prosím, na stránky &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;projektu Sonic Visualiser&lt;/a&gt;, abyste získal více informací.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;h3&gt;Je dostupná novější verze&lt;/h3&gt;&lt;p&gt;Používáte verzi %1 programu Sonic Visualiser, ale nyní je dostupná verze %3.&lt;/p&gt;&lt;p&gt;Podívejte se, prosím, na stránky &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;projektu Sonic Visualiser&lt;/a&gt;, abyste získal více informací.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Edit Toolbar</source>
@@ -3263,7 +3632,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>%1: %1</source>
-        <translation>%1: %1</translation>
+        <translation type="vanished">%1: %1</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
@@ -3271,11 +3640,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Chris Cannam</source>
-        <translation>&lt;br&gt;Knihovna Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
-    </message>
-    <message>
-        <source>&amp;Export Audio Data...</source>
-        <translation>&amp;Vyvést zvuková data...</translation>
+        <translation type="vanished">&lt;br&gt;Knihovna Dataquay Qt/RDF &amp;copy; Chris Cannam</translation>
     </message>
     <message>
         <source>Export audio from selection into a data file</source>
@@ -3288,6 +3653,318 @@ Co chcete vyvést?</translation>
     <message>
         <source>Export the whole file</source>
         <translation>Vyvést celý soubor</translation>
+    </message>
+    <message>
+        <source>Playback Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Audio Data...</source>
+        <translation>&amp;Vyvést zvuková data...</translation>
+    </message>
+    <message>
+        <source>Export Annotation La&amp;yer...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse Recorded Audio Folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the Recorded Audio folder in the system file browser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+Return</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;Unit Converter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a window of pitch and timing conversion utilities</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to Previous Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>{</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make the previous layer in the pane current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to Next Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>}</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make the next layer in the pane current</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record a new audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Navigate Tool Mouse Actions</source>
+        <translation type="unfinished">Činnosti nástroje pro navádění prováděné myší</translation>
+    </message>
+    <message>
+        <source>Click left button and drag to move around</source>
+        <translation type="unfinished">Klepněte levým tlačítkem a táhněte pro přesouvání se</translation>
+    </message>
+    <message>
+        <source>Zoom to Area</source>
+        <translation type="unfinished">Přiblížit oblast</translation>
+    </message>
+    <message>
+        <source>Shift-click left button and drag to zoom to a rectangular area</source>
+        <translation type="unfinished">Shift-klepněte levým tlačítkem a táhněte pro přiblížení obdélníkové oblasti</translation>
+    </message>
+    <message>
+        <source>Relocate</source>
+        <translation type="unfinished">Přemístit</translation>
+    </message>
+    <message>
+        <source>Double-Click Left</source>
+        <translation type="unfinished">Dvakrát klepněte levým</translation>
+    </message>
+    <message>
+        <source>Double-click left button to jump to clicked location</source>
+        <translation type="unfinished">Dvakrát klepněte levým tlačítkem pro skok na klepnuté místo</translation>
+    </message>
+    <message>
+        <source>Double-click left button on an item to edit it</source>
+        <translation type="unfinished">Dvakrát klepněte levým tlačítkem na položce pro její upravení</translation>
+    </message>
+    <message>
+        <source>Select Tool Mouse Actions</source>
+        <translation type="unfinished">Činnosti nástroje výběru prováděné myší</translation>
+    </message>
+    <message>
+        <source>Click left button and drag to select region; drag region edge to resize</source>
+        <translation type="unfinished">Klepněte levým tlačítkem a táhněte pro výběr oblasti; táhněte za okraj oblasti pro změnu její velikosti</translation>
+    </message>
+    <message>
+        <source>Multi Select</source>
+        <translation type="unfinished">Vícenásobný výběr</translation>
+    </message>
+    <message>
+        <source>Cmd-click left button and drag to select an additional region</source>
+        <translation type="unfinished">Ctrl-klepněte levým tlačítkem a táhněte pro výběr další oblasti</translation>
+    </message>
+    <message>
+        <source>Ctrl-click left button and drag to select an additional region</source>
+        <translation type="unfinished">Ctrl-klepněte levým tlačítkem a táhněte pro výběr další oblasti</translation>
+    </message>
+    <message>
+        <source>Fine Select</source>
+        <translation type="unfinished">Citlivý výběr</translation>
+    </message>
+    <message>
+        <source>Shift-click left button and drag to select without snapping to items or grid</source>
+        <translation type="unfinished">Shift-klepněte levým tlačítkem a táhněte pro výběr bez zapadávání k položkám nebo mřížce</translation>
+    </message>
+    <message>
+        <source>Edit Tool Mouse Actions</source>
+        <translation type="unfinished">Činnosti nástroje úprav prováděné myší</translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation type="unfinished">Posunout</translation>
+    </message>
+    <message>
+        <source>Click left button on an item or selected region and drag to move</source>
+        <translation type="unfinished">Klepněte levým tlačítkem na položku nebo vybranou oblast a táhněte pro její přesun</translation>
+    </message>
+    <message>
+        <source>Draw Tool Mouse Actions</source>
+        <translation type="unfinished">Činnosti nástroje kreslení prováděné myší</translation>
+    </message>
+    <message>
+        <source>Click left button and drag to create new item</source>
+        <translation type="unfinished">Klepněte levým tlačítkem a táhněte pro vytvoření nové položky</translation>
+    </message>
+    <message>
+        <source>Erase Tool Mouse Actions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click left button on an item to remove it from the layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measure Tool Mouse Actions</source>
+        <translation type="unfinished">Činnosti nástroje měření prováděné myší</translation>
+    </message>
+    <message>
+        <source>Measure Area</source>
+        <translation type="unfinished">Oblast měření</translation>
+    </message>
+    <message>
+        <source>Click left button and drag to measure a rectangular area</source>
+        <translation type="unfinished">Klepněte levým tlačítkem a táhněte pro změření obdélníkové oblasti</translation>
+    </message>
+    <message>
+        <source>Measure Item</source>
+        <translation type="unfinished">Položka měření</translation>
+    </message>
+    <message>
+        <source>Click left button and drag to measure extents of an item or shape</source>
+        <translation type="unfinished">Klepněte levým tlačítkem a táhněte pro změření rozsahu položky nebo tvaru</translation>
+    </message>
+    <message>
+        <source>1. %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1. %2</source>
+        <translation type="unfinished">%1: %2 {1.?}</translation>
+    </message>
+    <message>
+        <source>Multiplex all of the above</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Playback speed: %1% (%2x slower)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Playback speed: %1% (%2x faster)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Problems loading plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate derived layer.&lt;p&gt;The layer transform %1failed:&lt;p&gt;%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate a derived layer.&lt;p&gt;The layer transform %1failed.&lt;p&gt;No error information is available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %2 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;h3&gt;Je dostupná novější verze&lt;/h3&gt;&lt;p&gt;Používáte verzi %1 programu Sonic Visualiser, ale nyní je dostupná verze %3.&lt;/p&gt;&lt;p&gt;Podívejte se, prosím, na stránky &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;projektu Sonic Visualiser&lt;/a&gt;, abyste získal více informací.&lt;/p&gt; {3&gt;?} {3&gt;?} {1 ?} {2 ?}</translation>
+    </message>
+    <message>
+        <source>Export SVG File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export a single pane to a scalable SVG image file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subdivide Selected Instants...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add new instants at regular intervals between the selected instants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winnow Selected Instants...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove subdivisions, leaving only every Nth instant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the whole pane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the visible area only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Which region of the current pane do you want to export as a scalable SVG image?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SVG file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save SVG file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Subdivide instants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Number of subdivisions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winnow instants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove all instants apart from multiples of:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment:&lt;p&gt;%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust the master playback level and pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;small&gt;%1 : %2 configuration, %3-bit build&lt;/small&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>With Qt v%1 &amp;copy; The Qt Company</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Rubber Band Library v%1 &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Rubber Band Library &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam and QMUL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Particular Programs Ltd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Cap&apos;n Proto serialisation &amp;copy; Sandstorm Development Group</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3446,6 +4123,14 @@ Co chcete vyvést?</translation>
         <source>&lt;b&gt;Failed to import RDF&lt;/b&gt;&lt;p&gt;Importing data from RDF document at &quot;%1&quot; failed: %2&lt;/p&gt;</source>
         <translation>&lt;b&gt;Nepodařilo se zavést RDF&lt;/b&gt;&lt;p&gt;Zavedení dat z dokumentu RDF na &quot;%1&quot; se nepodařilo: %2&lt;/p&gt;</translation>
     </message>
+    <message>
+        <source>Import Recorded Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recording: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModelDataTableDialog</name>
@@ -3538,6 +4223,21 @@ Co chcete vyvést?</translation>
     <message>
         <source>%1 &lt;%2&gt;</source>
         <translation>%1 &lt;%2&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>NetworkPermissionTester</name>
+    <message>
+        <source>Welcome to Sonic Visualiser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;Welcome to Sonic Visualiser!&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;:icons/qm-logo-smaller.png&quot; style=&quot;float:right&quot;&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;/p&gt;&lt;p&gt;Developed in the Centre for Digital Music at Queen Mary, University of London, Sonic Visualiser is provided free as open source software under the GNU General Public License.&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Before we go on...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Visualiser would like to make networking connections and open a network port.&lt;/p&gt;&lt;p&gt;This is to:&lt;/p&gt;&lt;ul&gt;&lt;li&gt; Find information about available and installed plugins;&lt;/li&gt;&lt;li&gt; Support the use of Open Sound Control, where configured; and&lt;/li&gt;&lt;li&gt; Tell you when updates are available.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;No personal information will be sent, no tracking is carried out, and all requests happen in the background without interrupting your work.&lt;/p&gt;&lt;p&gt;We recommend that you allow this, because it makes Sonic Visualiser more useful. But if you do not wish to do so, please un-check the box below.&lt;br&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow this</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3740,15 +4440,15 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Draw</source>
-        <translation>Nakreslit</translation>
+        <translation type="vanished">Nakreslit</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Upravit</translation>
+        <translation type="vanished">Upravit</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation>Levé</translation>
+        <translation type="vanished">Levé</translation>
     </message>
     <message>
         <source>Menu</source>
@@ -3756,7 +4456,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Move</source>
-        <translation>Posunout</translation>
+        <translation type="vanished">Posunout</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -3764,7 +4464,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Click left button and drag to measure a rectangular area</source>
-        <translation>Klepněte levým tlačítkem a táhněte pro změření obdélníkové oblasti</translation>
+        <translation type="vanished">Klepněte levým tlačítkem a táhněte pro změření obdélníkové oblasti</translation>
     </message>
     <message>
         <source>Double-Click Middle</source>
@@ -3772,11 +4472,11 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Edit Tool Mouse Actions</source>
-        <translation>Činnosti nástroje úprav prováděné myší</translation>
+        <translation type="vanished">Činnosti nástroje úprav prováděné myší</translation>
     </message>
     <message>
         <source>Draw Tool Mouse Actions</source>
-        <translation>Činnosti nástroje kreslení prováděné myší</translation>
+        <translation type="vanished">Činnosti nástroje kreslení prováděné myší</translation>
     </message>
     <message>
         <source>Right</source>
@@ -3792,7 +4492,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Multi Select</source>
-        <translation>Vícenásobný výběr</translation>
+        <translation type="vanished">Vícenásobný výběr</translation>
     </message>
     <message>
         <source>Zoom In</source>
@@ -3804,7 +4504,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Shift-click left button and drag to zoom to a rectangular area</source>
-        <translation>Shift-klepněte levým tlačítkem a táhněte pro přiblížení obdélníkové oblasti</translation>
+        <translation type="vanished">Shift-klepněte levým tlačítkem a táhněte pro přiblížení obdélníkové oblasti</translation>
     </message>
     <message>
         <source>%1 / %2Hz%3</source>
@@ -3832,7 +4532,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Double-click left button on an item to edit it</source>
-        <translation>Dvakrát klepněte levým tlačítkem na položce pro její upravení</translation>
+        <translation type="vanished">Dvakrát klepněte levým tlačítkem na položce pro její upravení</translation>
     </message>
     <message>
         <source>Scroll rapidly left or right in time axis</source>
@@ -3852,11 +4552,11 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Select</source>
-        <translation>Vybrat</translation>
+        <translation type="vanished">Vybrat</translation>
     </message>
     <message>
         <source>Fine Select</source>
-        <translation>Citlivý výběr</translation>
+        <translation type="vanished">Citlivý výběr</translation>
     </message>
     <message>
         <source>Zoom in or out in time axis</source>
@@ -3864,7 +4564,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Click left button and drag to measure extents of an item or shape</source>
-        <translation>Klepněte levým tlačítkem a táhněte pro změření rozsahu položky nebo tvaru</translation>
+        <translation type="vanished">Klepněte levým tlačítkem a táhněte pro změření rozsahu položky nebo tvaru</translation>
     </message>
     <message>
         <source>Zoom Out</source>
@@ -3892,7 +4592,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Click left button on an item or selected region and drag to move</source>
-        <translation>Klepněte levým tlačítkem na položku nebo vybranou oblast a táhněte pro její přesun</translation>
+        <translation type="vanished">Klepněte levým tlačítkem na položku nebo vybranou oblast a táhněte pro její přesun</translation>
     </message>
     <message>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Ctrl for multi-select; middle-click and drag to navigate</source>
@@ -3912,11 +4612,11 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Click left button and drag to move around</source>
-        <translation>Klepněte levým tlačítkem a táhněte pro přesouvání se</translation>
+        <translation type="vanished">Klepněte levým tlačítkem a táhněte pro přesouvání se</translation>
     </message>
     <message>
         <source>Select Tool Mouse Actions</source>
-        <translation>Činnosti nástroje výběru prováděné myší</translation>
+        <translation type="vanished">Činnosti nástroje výběru prováděné myší</translation>
     </message>
     <message>
         <source>Unaligned</source>
@@ -3944,7 +4644,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Ctrl+Left</source>
-        <translation>Ctrl+šipka vlevo</translation>
+        <translation type="vanished">Ctrl+šipka vlevo</translation>
     </message>
     <message>
         <source>Click and drag to move the selection boundary</source>
@@ -3952,11 +4652,11 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Measure Tool Mouse Actions</source>
-        <translation>Činnosti nástroje měření prováděné myší</translation>
+        <translation type="vanished">Činnosti nástroje měření prováděné myší</translation>
     </message>
     <message>
         <source>Ctrl-click left button and drag to select an additional region</source>
-        <translation>Ctrl-klepněte levým tlačítkem a táhněte pro výběr další oblasti</translation>
+        <translation type="vanished">Ctrl-klepněte levým tlačítkem a táhněte pro výběr další oblasti</translation>
     </message>
     <message>
         <source>Zoom in or out in the vertical axis</source>
@@ -3980,7 +4680,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Double-Click Left</source>
-        <translation>Dvakrát klepněte levým</translation>
+        <translation type="vanished">Dvakrát klepněte levým</translation>
     </message>
     <message>
         <source>Wheel Down</source>
@@ -3988,7 +4688,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Shift-click left button and drag to select without snapping to items or grid</source>
-        <translation>Shift-klepněte levým tlačítkem a táhněte pro výběr bez zapadávání k položkám nebo mřížce</translation>
+        <translation type="vanished">Shift-klepněte levým tlačítkem a táhněte pro výběr bez zapadávání k položkám nebo mřížce</translation>
     </message>
     <message>
         <source>Relocate</source>
@@ -4000,7 +4700,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Navigate Tool Mouse Actions</source>
-        <translation>Činnosti nástroje pro navádění prováděné myší</translation>
+        <translation type="vanished">Činnosti nástroje pro navádění prováděné myší</translation>
     </message>
     <message>
         <source>Reference</source>
@@ -4012,19 +4712,19 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Zoom to Area</source>
-        <translation>Přiblížit oblast</translation>
+        <translation type="vanished">Přiblížit oblast</translation>
     </message>
     <message>
         <source>Measure Area</source>
-        <translation>Oblast měření</translation>
+        <translation type="vanished">Oblast měření</translation>
     </message>
     <message>
         <source>Measure Item</source>
-        <translation>Položka měření</translation>
+        <translation type="vanished">Položka měření</translation>
     </message>
     <message>
         <source>Shift+Left</source>
-        <translation>Shift+šipka vlevo</translation>
+        <translation type="vanished">Shift+šipka vlevo</translation>
     </message>
     <message>
         <source>Click and drag to adjust the horizontal zoom level</source>
@@ -4032,7 +4732,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Click left button and drag to select region; drag region edge to resize</source>
-        <translation>Klepněte levým tlačítkem a táhněte pro výběr oblasti; táhněte za okraj oblasti pro změnu její velikosti</translation>
+        <translation type="vanished">Klepněte levým tlačítkem a táhněte pro výběr oblasti; táhněte za okraj oblasti pro změnu její velikosti</translation>
     </message>
     <message>
         <source>Wheel Up</source>
@@ -4060,11 +4760,11 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Double-click left button to jump to clicked location</source>
-        <translation>Dvakrát klepněte levým tlačítkem pro skok na klepnuté místo</translation>
+        <translation type="vanished">Dvakrát klepněte levým tlačítkem pro skok na klepnuté místo</translation>
     </message>
     <message>
         <source>Click left button and drag to create new item</source>
-        <translation>Klepněte levým tlačítkem a táhněte pro vytvoření nové položky</translation>
+        <translation type="vanished">Klepněte levým tlačítkem a táhněte pro vytvoření nové položky</translation>
     </message>
     <message>
         <source>New vertical display range, from %1 to %2 %4:</source>
@@ -4072,7 +4772,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Cmd-click left button and drag to select an additional region</source>
-        <translation>Ctrl-klepněte levým tlačítkem a táhněte pro výběr další oblasti</translation>
+        <translation type="vanished">Ctrl-klepněte levým tlačítkem a táhněte pro výběr další oblasti</translation>
     </message>
     <message>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Cmd for multi-select; middle-click and drag to navigate</source>
@@ -4099,7 +4799,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Change Playback Plugin</source>
-        <translation>Změnit přídavný modul přehrávání</translation>
+        <translation type="vanished">Změnit přídavný modul přehrávání</translation>
     </message>
     <message>
         <source>Change Playback Pan</source>
@@ -4107,7 +4807,11 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Configure Playback Plugin</source>
-        <translation>Nastavit přídavný modul přehrávání</translation>
+        <translation type="vanished">Nastavit přídavný modul přehrávání</translation>
+    </message>
+    <message>
+        <source>Change Playback Sample</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4371,7 +5075,7 @@ ale dostupné jsou %2. Použije se pouze první %3.
     </message>
     <message>
         <source>Time display format</source>
-        <translation>Formát zobrazení času</translation>
+        <translation type="vanished">Formát zobrazení času</translation>
     </message>
     <message>
         <source>Show boxes for all panes</source>
@@ -4396,6 +5100,46 @@ ale dostupné jsou %2. Použije se pouze první %3.
     <message>
         <source>4 x Oversampling with interpolation</source>
         <translation>4 x převzorkování s interpolací</translation>
+    </message>
+    <message>
+        <source>Normalise audio signal when reading from audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Single fixed sample rate to resample all files to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time display precision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use hours:minutes:seconds format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Label middle C as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C0 - middle of octave scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C3 - common MIDI sequencer convention</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C4 - ASA American standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>C5 - used in Cakewalk and others</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load mp3 files in gapless mode</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4440,7 +5184,7 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Default session template for audio files:</source>
-        <translation>Výchozí předloha sezení pro zvukové soubory:</translation>
+        <translation type="vanished">Výchozí předloha sezení pro zvukové soubory:</translation>
     </message>
     <message>
         <source>Anal&amp;ysis</source>
@@ -4468,11 +5212,11 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>&amp;General</source>
-        <translation>&amp;Obecné</translation>
+        <translation type="vanished">&amp;Obecné</translation>
     </message>
     <message>
         <source>Playback audio device:</source>
-        <translation>Zvukové zařízení pro přehrávání:</translation>
+        <translation type="vanished">Zvukové zařízení pro přehrávání:</translation>
     </message>
     <message>
         <source>Follow system locale</source>
@@ -4498,6 +5242,74 @@ Použít je před zavřením?</translation>
         <source>User interface language</source>
         <translation>Jazyk uživatelského rozhraní</translation>
     </message>
+    <message>
+        <source>Allow network usage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Draw layers at Retina resolution:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default spectrogram colour:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default melodic spectrogram colour:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default colour 3D plot colour:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished">Zelená</translation>
+    </message>
+    <message>
+        <source>(auto)</source>
+        <translation type="unfinished">(auto)</translation>
+    </message>
+    <message>
+        <source>Overview waveform colour:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Run Vamp plugins in separate process:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default session template when loading audio files:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(Use &quot;%1&quot; in the File menu to add to these.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Session as Template...</source>
+        <translation type="unfinished">Vyvést předlohu jako sezení...</translation>
+    </message>
+    <message>
+        <source>Audio service:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio playback device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio record device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A&amp;udio I/O</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Other</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ProgressDialog</name>
@@ -4510,11 +5322,11 @@ Použít je před zavřením?</translation>
     <name>PropertyBox</name>
     <message>
         <source>dB</source>
-        <translation>dB</translation>
+        <translation type="vanished">dB</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Přehrát</translation>
+        <translation type="vanished">Přehrát</translation>
     </message>
     <message>
         <source>Show</source>
@@ -4538,11 +5350,11 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Playback Pan / Balance</source>
-        <translation>Vyvážení přehrávání/rovnováha</translation>
+        <translation type="vanished">Vyvážení přehrávání/rovnováha</translation>
     </message>
     <message>
         <source>Prefer black background for this colour</source>
-        <translation>Upřednostňovat černé pozadí pro tuto barvu</translation>
+        <translation type="vanished">Upřednostňovat černé pozadí pro tuto barvu</translation>
     </message>
     <message>
         <source>Toggle Visibility of %1</source>
@@ -4554,19 +5366,35 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Add New Colour...</source>
-        <translation>Přidat novou barvu...</translation>
+        <translation type="vanished">Přidat novou barvu...</translation>
     </message>
     <message>
         <source>Name New Colour</source>
-        <translation>Pojmenovat novou barvu</translation>
+        <translation type="vanished">Pojmenovat novou barvu</translation>
     </message>
     <message>
         <source>Enter a name for the new colour:</source>
-        <translation>Zadejte název pro novou barvu:</translation>
+        <translation type="vanished">Zadejte název pro novou barvu:</translation>
     </message>
     <message>
         <source>Playback Gain</source>
-        <translation>Zesílení přehrávání</translation>
+        <translation type="vanished">Zesílení přehrávání</translation>
+    </message>
+    <message>
+        <source>Set playback clip:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to toggle playback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust playback level and pan of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change sound used for playback (currently &quot;%1&quot;)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4675,10 +5503,97 @@ Použití:
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>External plugin host executable does not appear to be installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not start external plugin host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External plugin host exited unexpectedly while listing plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>External plugin host invocation failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Failed to scan for plugins&lt;/b&gt;&lt;p&gt;Failed to scan for plugins at startup. Possibly the plugin checker helper program was not correctly installed alongside %1?&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Did not scan for plugins&lt;/b&gt;&lt;p&gt;Apparently no scan for plugins was attempted (internal error?)&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;These plugins may be incompatible with the system, and will be ignored during this run of %1.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;unknown&gt;</source>
+        <translation type="unfinished">&lt;neznámý&gt;</translation>
+    </message>
+    <message>
+        <source>Green</source>
+        <translation type="unfinished">Zelená</translation>
+    </message>
+    <message>
+        <source>White on Black</source>
+        <translation type="unfinished">Bílá na černé</translation>
+    </message>
+    <message>
+        <source>Black on White</source>
+        <translation type="unfinished">Černá na bílé</translation>
+    </message>
+    <message>
+        <source>Cherry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wasp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sunset</source>
+        <translation type="unfinished">Západ slunce</translation>
+    </message>
+    <message>
+        <source>Fruit Salad</source>
+        <translation type="unfinished">Ovocný salát</translation>
+    </message>
+    <message>
+        <source>Banded</source>
+        <translation type="unfinished">Pruhovaný</translation>
+    </message>
+    <message>
+        <source>Highlight</source>
+        <translation type="unfinished">Zvýraznění</translation>
+    </message>
+    <message>
+        <source>Printer</source>
+        <translation type="unfinished">Tiskárna</translation>
+    </message>
+    <message>
+        <source>High Gain</source>
+        <translation type="unfinished">Zesílení výšek</translation>
+    </message>
+</context>
+<context>
     <name>QuickTimeFileReader</name>
     <message>
         <source>Decoding %1...</source>
-        <translation>Dekóduje se %1...</translation>
+        <translation type="vanished">Dekóduje se %1...</translation>
     </message>
 </context>
 <context>
@@ -4708,6 +5623,13 @@ Použití:
     <message>
         <source>Range-Summarisable Time-Value</source>
         <translation>Rozsahově shrnutelná časová hodnota</translation>
+    </message>
+</context>
+<context>
+    <name>ReadOnlyWaveFileModel</name>
+    <message>
+        <source>Wave File</source>
+        <translation type="unfinished">Soubor Wave</translation>
     </message>
 </context>
 <context>
@@ -4883,7 +5805,7 @@ Doba trvání:	%3
     <name>ResamplingWavFileReader</name>
     <message>
         <source>Resampling %1...</source>
-        <translation>Převzorkovává se %1...</translation>
+        <translation type="vanished">Převzorkovává se %1...</translation>
     </message>
 </context>
 <context>
@@ -5156,7 +6078,7 @@ Koš:	%5
     </message>
     <message>
         <source>-Inf</source>
-        <translation>-Inf</translation>
+        <translation type="vanished">-Inf</translation>
     </message>
     <message>
         <source>25 %</source>
@@ -5248,7 +6170,7 @@ Koš:	%5
     </message>
     <message>
         <source>Normalize Columns</source>
-        <translation>Normalizovat sloupce</translation>
+        <translation type="vanished">Normalizovat sloupce</translation>
     </message>
     <message>
         <source>Time:	%1 - %2
@@ -5304,7 +6226,7 @@ Koš:	%5
     </message>
     <message>
         <source>Normalize Visible Area</source>
-        <translation>Normalizovat viditelnou oblast</translation>
+        <translation type="vanished">Normalizovat viditelnou oblast</translation>
     </message>
     <message>
         <source>Colour</source>
@@ -5350,7 +6272,7 @@ Koš:	%5
     </message>
     <message>
         <source>Smoothing</source>
-        <translation>Vyhlazování</translation>
+        <translation type="vanished">Vyhlazování</translation>
     </message>
     <message>
         <source>dB:	%1</source>
@@ -5436,6 +6358,22 @@ Důvodem pro to může být nedostatek paměti, nebo nedostatek místa na disku.
         <source>Max Frequency</source>
         <translation>Největší kmitočet</translation>
     </message>
+    <message>
+        <source>Normalization</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Col</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hybrid</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SpectrumLayer</name>
@@ -5445,7 +6383,7 @@ Důvodem pro to může být nedostatek paměti, nebo nedostatek místa na disku.
     </message>
     <message>
         <source>-Inf</source>
-        <translation>-Inf</translation>
+        <translation type="vanished">-Inf</translation>
     </message>
     <message>
         <source>25 %</source>
@@ -5547,11 +6485,11 @@ dB:	%5</translation>
     <name>Surveyer</name>
     <message>
         <source>No, thanks</source>
-        <translation type="obsolete">Ne, děkuji</translation>
+        <translation type="unfinished">Ne, děkuji</translation>
     </message>
     <message>
         <source>Yes! Take me to the survey</source>
-        <translation type="obsolete">Ano! Vezmi mě do průzkumu</translation>
+        <translation type="unfinished">Ano! Vezmi mě do průzkumu</translation>
     </message>
 </context>
 <context>
@@ -5838,7 +6776,7 @@ Jaké hodnoty chcete pro tyto položky použít?</translation>
         <source>Time:	%1
 Value:	%2%3
 Label:	%4</source>
-        <translation>Čas:	%1
+        <translation type="vanished">Čas:	%1
 Hodnota:	%2%3
 Štítek:	%4</translation>
     </message>
@@ -5908,7 +6846,7 @@ Jaké hodnoty chcete pro tyto položky použít?</translation>
         <source>Time:	%1
 Value:	%2%3
 No label</source>
-        <translation>Čas:	%1
+        <translation type="vanished">Čas:	%1
 Hodnota:	%2%3
 Žádný štítek</translation>
     </message>
@@ -5951,6 +6889,42 @@ Hodnota:	%2%3
     <message>
         <source>Draw Segment Division Lines</source>
         <translation>Kreslit čáry rozdělující části</translation>
+    </message>
+    <message>
+        <source>Discrete Curves</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 Hz (%2, %3)</source>
+        <translation type="unfinished">%1 Hz (%2, %3)</translation>
+    </message>
+    <message>
+        <source>%1 %2</source>
+        <translation type="unfinished">%1 %2</translation>
+    </message>
+    <message>
+        <source>%1</source>
+        <translation type="unfinished">%1</translation>
+    </message>
+    <message>
+        <source>Time:	%1
+Value:	%2
+No label</source>
+        <translation type="unfinished">Čas:	%1
+Hodnota:	%2%3
+Žádný štítek {1
+?} {2
+?}</translation>
+    </message>
+    <message>
+        <source>Time:	%1
+Value:	%2
+Label:	%4</source>
+        <translation type="unfinished">Čas:	%1
+Hodnota:	%2%3
+Štítek:	%4 {1
+?} {2
+?}</translation>
     </message>
 </context>
 <context>
@@ -6074,6 +7048,10 @@ Hodnota:	%2%3
         <source>Effects Data</source>
         <translation>Efektová data</translation>
     </message>
+    <message>
+        <source>Failed to list Vamp plugins: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TransformFinder</name>
@@ -6179,6 +7157,62 @@ Hodnota:	%2%3
     </message>
 </context>
 <context>
+    <name>UnitConverter</name>
+    <message>
+        <source>Pitch</source>
+        <translation type="unfinished">Výška tónu</translation>
+    </message>
+    <message>
+        <source> cents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In 12-tone Equal Temperament:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>=</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Piano note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>in octave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MIDI pitch</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note that only pitches in the range 0 to 127 are valid in the MIDI protocol.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tempo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beat period</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>With concert-A tuning frequency at %1 Hz, and middle C residing in octave %2.
+(These can be changed in the application preferences.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>View</name>
     <message>
         <source>Off</source>
@@ -6227,6 +7261,10 @@ Hodnota:	%2%3
     <message>
         <source>Alignment</source>
         <translation>Zarovnání</translation>
+    </message>
+    <message>
+        <source>Exported image from %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6315,12 +7353,16 @@ Hodnota:	%2%3
             <numerusform>Zvětšení na %n vzorků na pixel</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Enter NoteEdit mode</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WaveFileModel</name>
     <message>
         <source>Wave File</source>
-        <translation>Soubor Wave</translation>
+        <translation type="vanished">Soubor Wave</translation>
     </message>
 </context>
 <context>
@@ -6335,7 +7377,7 @@ Hodnota:	%2%3
     </message>
     <message>
         <source>-Inf</source>
-        <translation>-Inf</translation>
+        <translation type="vanished">-Inf</translation>
     </message>
     <message>
         <source>Gain</source>

@@ -22,13 +22,15 @@
 #include "view/PaneStack.h"
 #include "data/model/WaveFileModel.h"
 #include "widgets/CommandHistory.h"
-#include "audioio/AudioCallbackPlaySource.h"
-#include "audioio/AudioCallbackPlayTarget.h"
+#include "audio/AudioCallbackPlaySource.h"
 #include "framework/Document.h"
 #include "data/fileio/WavFileWriter.h"
 #include "transform/TransformFactory.h"
-#include "widgets/Fader.h"
+#include "widgets/LevelPanWidget.h"
+#include "widgets/LevelPanToolButton.h"
 #include "widgets/AudioDial.h"
+
+#include <bqaudioio/SystemPlaybackTarget.h>
 
 #include <QFileInfo>
 
@@ -341,7 +343,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             if (property == "gain") {
                 if (value < 0.0) value = 0.0;
-                m_fader->setValue(value);
+                m_mainLevelPan->setLevel(value);
                 if (m_playTarget) m_playTarget->setOutputGain(value);
             } else if (property == "speedup") {
                 m_playSpeed->setMappedValue(value);
