@@ -4799,8 +4799,8 @@ MainWindow::whatsNew()
     textEdit->setHtml(text);
     textEdit->setReadOnly(true);
 
-    d->setMinimumSize(m_viewManager->scalePixelSize(420),
-                      m_viewManager->scalePixelSize(400));
+    d->setMinimumSize(m_viewManager->scalePixelSize(520),
+                      m_viewManager->scalePixelSize(450));
     
     d->exec();
 
