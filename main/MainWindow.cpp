@@ -335,6 +335,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = 0;
     }
 
+    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+    
     QString warning = PluginScan::getInstance()->getStartupFailureReport();
     if (warning != "") {
         QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
@@ -4273,6 +4275,14 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
         (this, tr("Audio processing overload"),
          tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
     shownOnce = true;
+}
+
+void
+MainWindow::betaReleaseWarning()
+{
+    QMessageBox::information
+        (this, tr("Beta release"),
+         tr("<b>This is a beta release of Sonic Visualiser</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>"));
 }
 
 void
