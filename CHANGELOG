@@ -1,13 +1,13 @@
 
 Changes in Sonic Visualiser 3.0 since the previous release 2.5:
 
- - Add ability to record audio, and ability to change audio device for
-   playback or recording in the preferences
+ - Add the ability to record audio, and the ability to change the
+   audio device for playback or recording in the preferences
 
  - Add complete support for high-resolution (Hi-DPI or retina)
-   displays, spanning layer data rendering and UI controls and
-   icons. This makes the biggest difference when using a retina Mac,
-   on which previous versions did not render layer data at retina
+   displays, including for layer data rendering as well as UI controls
+   and icons. This makes the biggest difference when using a retina
+   Mac, on which previous versions did not render layer data at retina
    resolution, but it also improves scaling and rendering of UI
    elements on Hi-DPI displays on Windows and Linux
 
