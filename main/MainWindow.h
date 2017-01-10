@@ -32,8 +32,7 @@ class MainWindow : public MainWindowBase
     Q_OBJECT
 
 public:
-    MainWindow(bool withAudioOutput = true,
-               bool withOSCSupport = true);
+    MainWindow(SoundOptions options, bool withOSCSupport = true);
     virtual ~MainWindow();
 
 signals:
@@ -42,6 +41,8 @@ signals:
 
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
+    virtual void coloursChanged();
+
     virtual bool commitData(bool mayAskUser);
 
     void goFullScreen();
@@ -53,13 +54,17 @@ protected slots:
     virtual void replaceMainAudio();
     virtual void openSomething();
     virtual void openLocation();
-    virtual void openRecentFile();
+       /* F. Nicol patch 13 Aug. 2016 */
+    virtual void openRecentFile(const QString& );
+       /* End of F. Nicol patch 13 Aug. 2016 */
     virtual void applyTemplate();
     virtual void exportAudio();
     virtual void exportAudioData();
     virtual void importLayer();
     virtual void exportLayer();
     virtual void exportImage();
+    virtual void exportSVG();
+    virtual void browseRecordedAudio();
     virtual void saveSession();
     virtual void saveSessionAs();
     virtual void newSession();
@@ -88,12 +93,14 @@ protected slots:
     virtual void setInstantsCounterCycle();
     virtual void setInstantsCounters();
     virtual void resetInstantsCounters();
+    virtual void subdivideInstants();
+    virtual void winnowInstants();
 
     virtual void modelGenerationFailed(QString, QString);
     virtual void modelGenerationWarning(QString, QString);
     virtual void modelRegenerationFailed(QString, QString, QString);
     virtual void modelRegenerationWarning(QString, QString, QString);
-    virtual void alignmentFailed(QString, QString);
+    virtual void alignmentFailed(QString);
 
     virtual void rightButtonMenuRequested(Pane *, QPoint point);
 
@@ -126,12 +133,14 @@ protected slots:
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
 
-    virtual void outputLevelsChanged(float, float);
+    virtual void monitoringLevelsChanged(float, float);
 
     virtual void layerRemoved(Layer *);
     virtual void layerInAView(Layer *, bool);
 
     virtual void mainModelChanged(WaveFileModel *);
+    virtual void mainModelGainChanged(float);
+    virtual void mainModelPanChanged(float);
     virtual void modelAdded(Model *);
     virtual void modelAboutToBeDeleted(Model *);
 
@@ -146,18 +155,22 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
+    virtual void betaReleaseWarning();
+    virtual void pluginPopulationWarning();
+
     virtual void saveSessionAsTemplate();
     virtual void manageSavedTemplates();
 
     virtual void website();
     virtual void help();
     virtual void about();
+    virtual void whatsNew();
     virtual void keyReference();
     virtual void newerVersionAvailable(QString);
 
 protected:
     Overview                *m_overview;
-    Fader                   *m_fader;
+    LevelPanToolButton      *m_mainLevelPan;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
     
@@ -187,6 +200,7 @@ protected:
     QAction                 *m_ffwdSimilarAction;
     QAction                 *m_ffwdEndAction;
     QAction                 *m_playAction;
+    QAction                 *m_recordAction;
     QAction                 *m_playSelectionAction;
     QAction                 *m_playLoopAction;
     QAction                 *m_manageTemplatesAction;
@@ -217,6 +231,7 @@ protected:
 
     Surveyer                *m_surveyer;
     VersionTester           *m_versionTester;
+    QString                  m_newerVersionIs;
 
     struct LayerConfiguration {
 	LayerConfiguration(LayerFactory::LayerType _layer

@@ -12,12 +12,13 @@
     <Package
         Id="*"
         Keywords="Installer"
-        Description="Sonic Visualiser 32-bit Installer" 
+        Description="Sonic Visualiser 64-bit Installer" 
         Comments="Copyright (c) 2017 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
-        InstallerVersion="100" 
+        InstallerVersion="200"
         Languages="1033" 
         Compressed="yes" 
+        Platform="x64"
         SummaryCodepage="1252"/>
 
     <MajorUpgrade DowngradeErrorMessage="A later version of Sonic Visualiser is already installed. Setup will now exit."/>
@@ -27,22 +28,22 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
 
-      <Directory Id="ProgramFilesFolder" Name="PFiles">
+      <Directory Id="ProgramFiles64Folder" Name="PFiles64">
         <Directory Id="VampPlugins" Name="Vamp Plugins">
-          <Component
+          <Component Win64="yes"
               Id="VampPlugins"
-              Guid="E68E4E0B-3C63-49bd-AD2D-44431EABDA6A">
+              Guid="528C7D7E-5A06-4E7D-89BB-7C16431DF82F">
             <File
                 Id="VampREADME"
                 Name="README.txt"
-                Source="..\sonic-visualiser\deploy\win32\README-Vamp.txt"/>
+                Source="..\sonic-visualiser\deploy\win64\README-Vamp.txt"/>
           </Component>
         </Directory>
+
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
-          
-          <Component
+          <Component Win64="yes"
               Id="MainExecutable"
-              Guid="2C02DFB7-3CDF-4F73-B9D1-846326EE417D">
+              Guid="65E1EBDF-4C8F-47B8-BCD6-981667F5946D">
 
             <File
                 Id="SVExecutable"
@@ -85,12 +86,12 @@
             <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
-                Source="..\sonic-visualiser\icons/sv-winicon.ico"/>
+                Source="..\sonic-visualiser\icons\sv-winicon.ico"/>
           </Component>
           
-          <Component
-              Id="SVFileAssociation"
-              Guid="DC6B3DD1-46DE-47FC-90FB-D8ACD5D1A88A">
+          <Component Win64="yes"
+	      Id="SVFileAssociation"
+	      Guid="F07C5CC1-0209-4C1A-8D52-C40B50A2B964">
             
             <ProgId 
                 Id='SonicVisualiser.svfile' 
@@ -109,9 +110,9 @@
             
           </Component>
           
-          <Component
+          <Component Win64="yes"
               Id="Qt5"
-              Guid="316341D4-B7B2-411D-BCCE-879A11D5709F">
+              Guid="5495ED5E-939A-4BE8-9000-D55F2A7A2E90">
             <File
                 Id="QtCore"
                 Name="Qt5Core.dll"
@@ -137,24 +138,44 @@
                 Id="QtSvg"
                 Name="Qt5Svg.dll"
                 Source="release\Qt5Svg.dll"/>
-            <File
-                Id="libgcc"
-                Name="libgcc_s_dw2-1.dll"
-                Source="release\libgcc_s_dw2-1.dll"/>
-            <File
-                Id="libstdcplusplus"
-                Name="libstdc++-6.dll"
-                Source="release\libstdc++-6.dll"/>
-            <File
-                Id="libwinpthread"
-                Name="libwinpthread-1.dll"
-                Source="release\libwinpthread-1.dll"/>
           </Component>
-	  
+
+          <Component Win64="yes"
+                     Id="Sndfile"
+                     Guid="04533516-6460-4155-A0D4-E9BA4D31E95C">
+            <File
+                Id="libsndfile"
+                Name="libsndfile-1.dll"
+                Source="..\sonic-visualiser\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
+                KeyPath="yes"/>
+          </Component>
+
+          <Component Win64="yes"
+               Id="VCRuntime"
+               Guid="251D9513-BBD2-47CF-BE78-EF79446F7683">
+               <File
+                   Id="concrt140"
+                   Name="concrt140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\concrt140.DLL"
+                   KeyPath="yes"/>
+               <File
+                   Id="msvcp140"
+                   Name="msvcp140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.DLL"/>
+               <File
+                   Id="vccorlib140"
+                   Name="vccorlib140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vccorlib140.DLL"/>
+               <File
+                   Id="vcruntime140"
+                   Name="vcruntime140.dll"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.DLL"/>
+          </Component>
+
 	  <Directory Id="Platforms" Name="platforms">
-            <Component
+            <Component Win64="yes"
                 Id="Qt5PlatformPlugins"
-                Guid="1EDCEA4B-C83F-430B-B09D-CB113DFD4E77">
+                Guid="1FFB773E-6D6D-4C0E-832B-F0FFEA959CA5">
 	      <File
                   Id="qminimal"
                   Name="qminimal.dll"
@@ -167,16 +188,25 @@
 	  </Directory>
 
 	  <Directory Id="Helpers" Name="helpers">
-            <Component Id="Piper"
-                       Guid="17F2AAFF-7B7B-4F20-B345-DEF0A54A84B1">
+            <Component Win64="yes"
+                Id="Piper64"
+                Guid="6385BD86-A5D3-4C77-AD41-B2DCA5B34E48">
 	      <File
-		  Id="piperconv"
+		  Id="piperconv64"
 		  Name="piper-convert.exe"
 		  Source="release\piper-convert.exe"/>
 	      <File
-		  Id="piper"
+		  Id="piper64"
 		  Name="piper-vamp-simple-server.exe"
 		  Source="release\piper-vamp-simple-server.exe"/>
+	    </Component>
+            <Component
+                Id="Piper32"
+                Guid="F27A00A8-DD03-45B0-A13C-8CD8CC6F7386">
+	      <File
+		  Id="piper32"
+		  Name="piper-vamp-simple-server-32.exe"
+		  Source="release\piper-vamp-simple-server-32.exe"/>
 	      <File
                   Id="libgcc32"
                   Name="libgcc_s_dw2-1.dll"
@@ -190,17 +220,27 @@
                   Name="libwinpthread-1.dll"
                   Source="release\libwinpthread-1.dll"/>
 	    </Component>
-            <Component Id="Checker"
-                       Guid="DB09B035-0594-4876-B494-4D25CED43601">
+            <Component Win64="yes"
+                Id="Checker64"
+                Guid="19A400D9-D5B2-4CB5-AF84-7C1DEA11D7B5">
 	      <File
-		  Id="checker"
+		  Id="checker64"
 		  Name="vamp-plugin-load-checker.exe"
 		  Source="release\vamp-plugin-load-checker.exe"/>
 	    </Component>
+            <Component
+                Id="Checker32"
+                Guid="4F3FDFEC-23BD-4F2F-9B8F-9C8387FDEC21">
+	      <File
+		  Id="checker32"
+		  Name="vamp-plugin-load-checker-32.exe"
+		  Source="release\vamp-plugin-load-checker-32.exe"/>
+	    </Component>
+	    
 	  </Directory> <!-- helpers -->
-        </Directory> <!-- sv --> 
-      </Directory> <!-- pfiles -->
-      
+	</Directory> <!-- sv -->
+      </Directory> <!-- pfiles64 -->
+
       <Directory Id="ProgramMenuFolder" Name="Programs">
         <Directory Id="ProgramMenuDir" Name="Sonic Visualiser">
           <Component Id="ProgramMenuDir" Guid="C1980FF3-D135-46F8-8542-F937748721E6">
@@ -215,20 +255,24 @@
     </Directory>
 
     <Feature 
-        Id="Complete"
-        Title="Required files"
-        Description="Installs the required files for running Sonic Visualiser."
-        AllowAdvertise="no"
-        Absent="disallow"
-        ConfigurableDirectory="APPLICATIONFOLDER"
-        Level="1">
+	Id="Complete"
+	Title="Required files"
+	Description="Installs the required files for running Sonic Visualiser."
+	AllowAdvertise="no"
+	Absent="disallow"
+	ConfigurableDirectory="APPLICATIONFOLDER"
+	Level="1">
       <ComponentRef Id="VampPlugins"/>
       <ComponentRef Id="MainExecutable"/>
       <ComponentRef Id="SVFileAssociation"/>
+      <ComponentRef Id="Sndfile"/>
       <ComponentRef Id="Qt5"/>
+      <ComponentRef Id="VCRuntime"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
-      <ComponentRef Id="Piper"/>
-      <ComponentRef Id="Checker"/>
+      <ComponentRef Id="Piper64"/>
+      <ComponentRef Id="Piper32"/>
+      <ComponentRef Id="Checker64"/>
+      <ComponentRef Id="Checker32"/>
       <ComponentRef Id="ProgramMenuDir"/>
     </Feature>
 
