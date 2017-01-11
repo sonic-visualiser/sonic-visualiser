@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# Run this from the build root
+# Run this from the build root (with sudo, I think)
 
 usage() {
     echo
@@ -20,7 +20,11 @@ if [ -z "$version" ] || [ -z "$arch" ]; then
     usage
 fi
 
+set -eu
+
 program=sonic-visualiser
+checker=vamp-plugin-load-checker
+piper=piper-vamp-simple-server
 depdir=deploy/linux
 
 targetdir="${program}_${version}_${arch}"
@@ -38,7 +42,7 @@ cp -r "$depdir"/deb-skeleton/* "$targetdir"/
 
 mkdir -p "$targetdir"/usr/bin "$targetdir"/usr/share/pixmaps
 
-cp "$program" "$targetdir"/usr/bin/
+cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
 
 cp icons/sv-icon*.svg "$targetdir"/usr/share/pixmaps/
 cp "$program".desktop "$targetdir"/usr/share/applications/
@@ -56,5 +60,5 @@ perl -i -p -e "s/Version: .*/Version: $control_ver/" "$targetdir"/DEBIAN/control
 
 bash "$depdir"/fix-lintian-bits.sh "$targetdir"
 
-sudo dpkg-deb --build "$targetdir" && lintian "$targetdir".deb
+dpkg-deb --build "$targetdir" && lintian "$targetdir".deb
 
