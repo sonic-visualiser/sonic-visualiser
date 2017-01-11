@@ -22,7 +22,8 @@ RUN apt-get install -y \
     librubberband-dev \
     git \
     mercurial \
-    autoconf automake libtool
+    curl wget \
+    autoconf automake libtool lintian
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8  
@@ -36,5 +37,9 @@ RUN make && make install
 WORKDIR ../..
 RUN hg clone https://code.soundsoftware.ac.uk/hg/sonic-visualiser
 WORKDIR sonic-visualiser
+RUN hg update -r9b59deb4a854
 RUN ./configure
 RUN make -j3
+RUN cp checker/vamp-plugin-load-checker .
+RUN deploy/linux/deploy-deb.sh 3.0.0beta1 amd64
+RUN ls -l
