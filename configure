@@ -5688,11 +5688,18 @@ fi
 fi
 
 
+# Cap'n Proto 0.5.3 is the latest release at the time of writing, but
+# it lacks the expectedSizeInWordsFromPrefix function which exists in
+# the git repo. Check for a newer release or, if that's not found with
+# pkg-config, check for that specific symbol (mangled).
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking specifically for a newer Cap'n Proto than the 0.5.3 release" >&5
+$as_echo "$as_me: checking specifically for a newer Cap'n Proto than the 0.5.3 release" >&6;}
+
 SV_MODULE_MODULE=capnp
-SV_MODULE_VERSION_TEST="capnp >= 0.6"
+SV_MODULE_VERSION_TEST="capnp >= 0.5.4"
 SV_MODULE_HEADER=capnp/common.h
 SV_MODULE_LIB=capnp
-SV_MODULE_FUNC=
+SV_MODULE_FUNC=_ZN5capnp29expectedSizeInWordsFromPrefixEN2kj8ArrayPtrIKNS_4wordEEE
 SV_MODULE_HAVE=HAVE_$(echo capnp | tr 'a-z' 'A-Z')
 SV_MODULE_FAILED=1
 if test -n "$capnp_LIBS" ; then
@@ -5840,10 +5847,10 @@ fi
 
 
 SV_MODULE_MODULE=kj
-SV_MODULE_VERSION_TEST="kj >= 0.6"
+SV_MODULE_VERSION_TEST="kj >= 0.5.4"
 SV_MODULE_HEADER=kj/common.h
 SV_MODULE_LIB=kj
-SV_MODULE_FUNC=
+SV_MODULE_FUNC=_ZN2kj20BufferedOutputStreamD0Ev
 SV_MODULE_HAVE=HAVE_$(echo kj | tr 'a-z' 'A-Z')
 SV_MODULE_FAILED=1
 if test -n "$kj_LIBS" ; then

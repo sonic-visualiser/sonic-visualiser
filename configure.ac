@@ -86,8 +86,14 @@ SV_MODULE_REQUIRED([libsamplerate],[samplerate >= 0.1.2],[samplerate.h],[sampler
 SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],[rubberband],[rubberband_new])
 SV_MODULE_REQUIRED([sord],[sord-0 >= 0.5],[sord/sord.h],[sord-0],[sord_world_new])
 SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_read_file])
-SV_MODULE_REQUIRED([capnp],[capnp >= 0.6],[capnp/common.h],[capnp],[])
-SV_MODULE_REQUIRED([kj],[kj >= 0.6],[kj/common.h],[kj],[])
+
+# Cap'n Proto 0.5.3 is the latest release at the time of writing, but
+# it lacks the expectedSizeInWordsFromPrefix function which exists in
+# the git repo. Check for a newer release or, if that's not found with
+# pkg-config, check for that specific symbol (mangled).
+AC_MSG_NOTICE([checking specifically for a newer Cap'n Proto than the 0.5.3 release])
+SV_MODULE_REQUIRED([capnp],[capnp >= 0.5.4],[capnp/common.h],[capnp],[_ZN5capnp29expectedSizeInWordsFromPrefixEN2kj8ArrayPtrIKNS_4wordEEE])
+SV_MODULE_REQUIRED([kj],[kj >= 0.5.4],[kj/common.h],[kj],[_ZN2kj20BufferedOutputStreamD0Ev])
 
 SV_MODULE_OPTIONAL([liblo],[],[lo/lo.h],[lo],[lo_address_new])
 SV_MODULE_OPTIONAL([portaudio],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
