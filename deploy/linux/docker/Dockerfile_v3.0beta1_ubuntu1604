@@ -41,5 +41,5 @@ RUN hg update -r9b59deb4a854
 RUN ./configure
 RUN make -j3
 RUN cp checker/vamp-plugin-load-checker .
-RUN deploy/linux/deploy-deb.sh 3.0.0beta1 amd64
-RUN ls -l
+RUN deploy/linux/deploy-deb.sh 3.0beta1-1 amd64
+RUN tar cvf output.tar *.deb && cp output.tar ..
