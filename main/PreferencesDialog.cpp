@@ -47,7 +47,7 @@
 
 #include "bqaudioio/AudioFactory.h"
 
-#include "version.h"
+#include "../version.h"
 
 using namespace std;
 
