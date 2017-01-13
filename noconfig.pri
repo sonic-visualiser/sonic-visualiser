@@ -58,7 +58,7 @@ win32-g++ {
 
     LIBS += -Lrelease -Lsv-dependency-builds/win32-mingw/lib -L../sonic-visualiser/sv-dependency-builds/win32-mingw/lib
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES USE_OWN_ALIGNED_MALLOC CAPNP_LITE
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
 
     QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
@@ -89,7 +89,7 @@ win32-msvc* {
             -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
     }
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES USE_OWN_ALIGNED_MALLOC CAPNP_LITE
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
 
     QMAKE_CXXFLAGS_RELEASE += -fp:fast
 
@@ -116,7 +116,7 @@ macx* {
 
     QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
-    DEFINES += HAVE_COREAUDIO MALLOC_IS_ALIGNED HAVE_VDSP
+    DEFINES += HAVE_COREAUDIO HAVE_VDSP
     LIBS += \
         -framework CoreAudio \
 	-framework CoreMidi \
