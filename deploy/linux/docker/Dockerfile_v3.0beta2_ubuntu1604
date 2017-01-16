@@ -35,7 +35,7 @@ RUN ./setup-autotools.sh && autoreconf -i
 RUN ./configure --enable-static --disable-shared
 RUN make && make install
 WORKDIR ../..
-RUN hg clone -rsv_3.0beta2 https://code.soundsoftware.ac.uk/hg/sonic-visualiser
+RUN hg clone -rsv_v3.0beta2 https://code.soundsoftware.ac.uk/hg/sonic-visualiser
 WORKDIR sonic-visualiser
 RUN ./configure
 RUN make -j3
