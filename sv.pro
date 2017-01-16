@@ -17,9 +17,13 @@ TARGET = "Sonic Visualiser"
 linux*:TARGET = sonic-visualiser
 solaris*:TARGET = sonic-visualiser
 
+!win32 {
+    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker .
+}
+
 linux* {
     sv_bins.path = /usr/local/bin/
-    sv_bins.files = sonic-visualiser piper-vamp-simple-server checker/vamp-plugin-load-checker
+    sv_bins.files = sonic-visualiser piper-vamp-simple-server vamp-plugin-load-checker
     INSTALLS += sv_bins
 }
 
