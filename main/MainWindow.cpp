@@ -3881,8 +3881,17 @@ MainWindow::addLayer(QString transformId)
 	return;
     }
 
-    Transform transform = TransformFactory::getInstance()->
-        getDefaultTransformFor(transformId);
+    Transform transform;
+    try {
+        transform = TransformFactory::getInstance()->
+            getDefaultTransformFor(transformId);
+    } catch (std::exception &e) { // e.g. Piper server failure
+        QMessageBox::critical
+            (this, tr("Failed to query transform attributes"),
+             tr("<b>Failed to query transform attributes</b><p>Plugin or server error: %1</p>")
+             .arg(e.what()));
+        return;
+    }
 
     std::vector<Model *> candidateInputModels =
         m_document->getTransformInputModels();
@@ -3951,15 +3960,22 @@ MainWindow::addLayer(QString transformId)
 
 //    SVDEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
 
-    Layer *newLayer = m_document->createDerivedLayer(transform, input);
-
-    if (newLayer) {
-        m_document->addLayerToView(pane, newLayer);
-        m_document->setChannel(newLayer, input.getChannel());
-        m_recentTransforms.add(transformId);
-        m_paneStack->setCurrentLayer(pane, newLayer);
+    try {
+        Layer *newLayer = m_document->createDerivedLayer(transform, input);
+        if (newLayer) {
+            m_document->addLayerToView(pane, newLayer);
+            m_document->setChannel(newLayer, input.getChannel());
+            m_recentTransforms.add(transformId);
+            m_paneStack->setCurrentLayer(pane, newLayer);
+        }
+    } catch (std::exception &e) { // e.g. Piper server failure
+        QMessageBox::critical
+            (this, tr("Transform failed"),
+             tr("<b>Failed to run transform</b><p>Plugin or server error: %1</p>")
+             .arg(e.what()));
+        return;
     }
-
+    
     updateMenuStates();
 }
 
