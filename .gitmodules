@@ -1,4 +1,0 @@
-[submodule "piper-cpp"]
-	path = piper-cpp
-	url = :https://github.com/piper-audio/piper-cpp
-
