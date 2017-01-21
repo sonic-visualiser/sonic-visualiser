@@ -10,4 +10,4 @@ bqaudioio = https://bitbucket.org/breakfastquay/bqaudioio
 sv-dependency-builds = https://code.soundsoftware.ac.uk/hg/sv-dependency-builds
 icons/scalable = https://code.soundsoftware.ac.uk/hg/sv-iconset
 checker = https://code.soundsoftware.ac.uk/hg/vamp-plugin-load-checker
-piper-cpp = [git]:https://github.com/piper-audio/piper-cpp
+piper-cpp = https://code.soundsoftware.ac.uk/hg/piper-cpp
