@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser 3.0 (Jan 2017) since the previous release 2.5:
+Changes in Sonic Visualiser 3.0 (Feb 2017) since the previous release 2.5:
 
  - Add ability to record audio, and ability to change the audio device
    for playback or recording in the preferences
@@ -43,6 +43,8 @@ Changes in Sonic Visualiser 3.0 (Jan 2017) since the previous release 2.5:
 
  - Add new preference for default colour scales
 
+ - Add a basic ability to zoom (in the frequency axis) to the spectrum
+	
  - Switch to using combined level/pan controls in layer property boxes
    and for the main volume control
 
