@@ -245,7 +245,14 @@
     
     <Icon Id="winicon.ico" SourceFile="..\sonic-visualiser\icons\sv-winicon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
-    
+<!--
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Sonic Visualiser now"/>
+    <Property Id="WixShellExecTarget" Value="[#SVExecutable]"/>
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes"/>
+-->
+    <WixVariable Id="WixUIBannerBmp" Value="..\sonic-visualiser\deploy\win32\top.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="..\sonic-visualiser\deploy\win32\main.bmp"/>
+
   </Product>
 </Wix>
 
