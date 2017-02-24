@@ -176,6 +176,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 {
     Profiler profiler("MainWindow::MainWindow");
 
+    SVDEBUG << "MainWindow: " << getReleaseText() << endl;
+
     setWindowTitle(QApplication::applicationName());
 
     UnitDatabase *udb = UnitDatabase::getInstance();
@@ -4833,8 +4835,8 @@ MainWindow::whatsNew()
     delete d;
 }
 
-void
-MainWindow::about()
+QString
+MainWindow::getReleaseText() const
 {
     bool debug = false;
     QString version = "(unknown version)";
@@ -4854,14 +4856,20 @@ MainWindow::about()
 #endif // SVNREV
 #endif // SV_VERSION
 
+    return tr("%1 : %2 configuration, %3-bit build")
+        .arg(version)
+        .arg(debug ? tr("Debug") : tr("Release"))
+        .arg(sizeof(void *) * 8);
+}
+
+void
+MainWindow::about()
+{
     QString aboutText;
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
     aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.<br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
-    aboutText += tr("<p><small>%1 : %2 configuration, %3-bit build</small></p>")
-        .arg(version)
-        .arg(debug ? tr("Debug") : tr("Release"))
-        .arg(sizeof(void *) * 8);
+    aboutText += QString("<p><small>%1</small></p>").arg(getReleaseText());
 
     if (m_oscQueue && m_oscQueue->isOK()) {
         aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
