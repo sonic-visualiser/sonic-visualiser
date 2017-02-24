@@ -266,6 +266,8 @@ protected:
     typedef std::map<QAction *, int> NumberingActionMap;
     NumberingActionMap m_numberingActions;
 
+    QString getReleaseText() const;
+    
     virtual void setupMenus();
     virtual void setupFileMenu();
     virtual void setupEditMenu();
