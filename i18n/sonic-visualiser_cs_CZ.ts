@@ -60,6 +60,17 @@
     </message>
 </context>
 <context>
+    <name>AudioCallbackRecordTarget</name>
+    <message>
+        <source>recorded-%1.wav</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recorded %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AudioDial</name>
     <message>
         <source>%2%3</source>
@@ -174,6 +185,14 @@
     <message>
         <source>Failed to open file for reading</source>
         <translation>Otevření souboru pro čtení se nezdařilo</translation>
+    </message>
+    <message>
+        <source>Failed to open file handle for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to open file handle for reading</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1972,7 +1991,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>With </source>
-        <translation>S</translation>
+        <translation type="vanished">S</translation>
     </message>
     <message>
         <source>Scroll the current pane to the left without moving the playback cursor or other panes</source>
@@ -2556,7 +2575,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Using </source>
-        <translation> </translation>
+        <translation type="vanished"> </translation>
     </message>
     <message>
         <source>Find a Transform...</source>
@@ -2764,7 +2783,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>About Sonic Visualiser</source>
-        <translation>O programu Sonic Visualiser</translation>
+        <translation type="vanished">O programu Sonic Visualiser</translation>
     </message>
     <message>
         <source>Restore non-time-stretched playback</source>
@@ -3939,10 +3958,6 @@ Co chcete vyvést?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;p&gt;&lt;small&gt;%1 : %2 configuration, %3-bit build&lt;/small&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>With Qt v%1 &amp;copy; The Qt Company</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3964,6 +3979,58 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Cap&apos;n Proto serialisation &amp;copy; Sandstorm Development Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>What&apos;s &amp;New?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show changes in this release of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to query transform attributes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Failed to query transform attributes&lt;/b&gt;&lt;p&gt;Plugin or server error: %1&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Transform failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Failed to run transform&lt;/b&gt;&lt;p&gt;Plugin or server error: %1&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta release</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;This is a beta release of Sonic Visualiser&lt;/b&gt;&lt;p&gt;Please see the &quot;What&apos;s New&quot; option in the Help menu for a list of changes since the last proper release.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>What&apos;s New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;h3&gt;What&apos;s New in %1&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Note:&lt;/b&gt; A newer version of Sonic Visualiser is available.&lt;br&gt;(Version %1 is available; you are using version %2)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 : %2 configuration, %3-bit build</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3995,7 +4062,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open an audio device for playback.&lt;p&gt;Automatic audio device detection failed. Audio playback will not be available during this session.&lt;/p&gt;</source>
-        <translation>&lt;b&gt;Žádný zvuk není dostupný&lt;/b&gt;&lt;p&gt; Zvukové zařízení se nepodařilo otevřít pro přehrávání.&lt;p&gt;Automatické určení zvukového zařízení se nezdařilo. Přehrávání zvuku během tohoto sezení nebude dostupné.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;b&gt;Žádný zvuk není dostupný&lt;/b&gt;&lt;p&gt; Zvukové zařízení se nepodařilo otevřít pro přehrávání.&lt;p&gt;Automatické určení zvukového zařízení se nezdařilo. Přehrávání zvuku během tohoto sezení nebude dostupné.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Add Point</source>
@@ -4053,7 +4120,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio device (&quot;%1&quot;).&lt;p&gt;Audio playback will not be available during this session.&lt;/p&gt;</source>
-        <translation>&lt;b&gt;Žádný zvuk není dostupný&lt;/b&gt;&lt;p&gt; Vámi upřednostňované zvukové zařízení se nepodařilo otevřít (&quot;%1&quot;).&lt;p&gt;Přehrávání zvuku během tohoto sezení nebude dostupné.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;b&gt;Žádný zvuk není dostupný&lt;/b&gt;&lt;p&gt; Vámi upřednostňované zvukové zařízení se nepodařilo otevřít (&quot;%1&quot;).&lt;p&gt;Přehrávání zvuku během tohoto sezení nebude dostupné.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Delete Pane</source>
@@ -4129,6 +4196,62 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Recording: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not enough disc space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Not enough disc space&lt;/b&gt;&lt;p&gt;There doesn&apos;t appear to be enough spare disc space to accommodate any necessary temporary files.&lt;/p&gt;&lt;p&gt;Please clear some space and try again.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open an audio device.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open audio device: %1&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Automatic audio device detection failed. Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Automatic audio device detection failed. Audio playback will not be available during this session.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;).&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;): %2.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Audio playback will not be available during this session.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No record device available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;No record device available&lt;/b&gt;&lt;p&gt;Failed to find or open an audio device for recording. Only playback will be available.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recording failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Recording failed&lt;/b&gt;&lt;p&gt;Failed to switch to record mode (some internal problem?)&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5521,10 +5644,6 @@ Použití:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;b&gt;Failed to scan for plugins&lt;/b&gt;&lt;p&gt;Failed to scan for plugins at startup. Possibly the plugin checker helper program was not correctly installed alongside %1?&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;b&gt;Did not scan for plugins&lt;/b&gt;&lt;p&gt;Apparently no scan for plugins was attempted (internal error?)&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5587,6 +5706,10 @@ Použití:
     <message>
         <source>High Gain</source>
         <translation type="unfinished">Zesílení výšek</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Failed to scan for plugins&lt;/b&gt;&lt;p&gt;Failed to scan for plugins at startup. Possibly the plugin checker program was not correctly installed alongside %1?&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
