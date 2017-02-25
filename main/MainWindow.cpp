@@ -319,7 +319,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
 
-    NetworkPermissionTester tester;
+    NetworkPermissionTester tester(withOSCSupport);
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
         if (withOSCSupport) {
