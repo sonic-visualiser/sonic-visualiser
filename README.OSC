@@ -167,11 +167,10 @@ Main window methods
 	 gain
            whose values are linear multipliers (i.e. 1.0 == unity gain).
 
-	 speedup
-           takes a value of a percentage increase in playback
-           speed, so 0 is the default playback speed, 100 sets double
-           the default speed, and -100 sets half the default speed 
-           (yes, I know, it's nonsense, sorry).
+	 speed
+           takes a value of a percentage change in playback
+           speed, so 100 is the default playback speed, 200 sets
+           double the default speed, and 50 sets half the default.
 
 	 overlays
            controls the verbosity level of the text overlays on

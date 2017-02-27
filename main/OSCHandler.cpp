@@ -37,8 +37,8 @@
 void
 MainWindow::handleOSCMessage(const OSCMessage &message)
 {
-    SVDEBUG << "MainWindow::handleOSCMessage: thread id = " 
-              << QThread::currentThreadId() << endl;
+    SVDEBUG << "OSCHandler: method = \""
+            << message.getMethod() << "\"" << endl;
 
     // This large function should really be abstracted out.
 
@@ -48,7 +48,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
             if (open(path, ReplaceMainModel) != FileOpenSucceeded) {
-                cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                cerr << "OSCHandler: File open failed for path \""
                           << path << "\"" << endl;
             }
             //!!! we really need to spin here and not return until the
@@ -61,7 +61,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
             if (open(path, CreateAdditionalModel) != FileOpenSucceeded) {
-                cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                cerr << "OSCHandler: File open failed for path \""
                           << path << "\"" << endl;
             }
         }
@@ -78,7 +78,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         std::vector<QString> recent = m_recentFiles.getRecent();
         if (n >= 0 && n < int(recent.size())) {
             if (open(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
-                cerr << "MainWindow::handleOSCMessage: File open failed for path \""
+                cerr << "OSCHandler: File open failed for path \""
                           << recent[n] << "\"" << endl;
             }
         }
@@ -90,7 +90,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
-                SVDEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in save" << endl;
+                SVDEBUG << "OSCHandler: Refusing to overwrite existing file in save" << endl;
             } else {
                 saveSessionFile(path);
             }
@@ -104,7 +104,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 message.getArg(0).canConvert(QVariant::String)) {
                 path = message.getArg(0).toString();
                 if (QFileInfo(path).exists()) {
-                    SVDEBUG << "MainWindow::handleOSCMessage: Refusing to overwrite existing file in export" << endl;
+                    SVDEBUG << "OSCHandler: Refusing to overwrite existing file in export" << endl;
                 } else {
                     WavFileWriter writer(path,
                                          getMainModel()->getSampleRate(),
@@ -165,10 +165,21 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 }
             }
 
+            SVDEBUG << "OSCHandler: Setting playback frame to " << frame << endl;
+
             m_viewManager->setPlaybackFrame(frame);
 
-            if (play && !m_playSource->isPlaying()) {
-                m_playSource->play(frame);
+            if (play) {
+                if (!m_playSource->isPlaying()) {
+                    SVDEBUG << "OSCHandler: Play source is not yet playing, calling play()" << endl;
+                    // handles audio device suspend/resume etc, as
+                    // well as calling m_playSource->play(frame)
+                    MainWindow::play();
+                } else {
+                    SVDEBUG << "OSCHandler: Play source is already playing, not starting it" << endl;
+                }
+            } else {
+                SVDEBUG << "OSCHandler: Jump only requested, not starting playback" << endl;
             }
         }
 
@@ -202,7 +213,13 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
     } else if (message.getMethod() == "stop") {
             
-        if (m_playSource->isPlaying()) m_playSource->stop();
+            if (m_playSource->isPlaying()) {
+                // As with play, we want to use the MainWindow
+                // function rather than call m_playSource directly
+                // because that way the audio driver suspend/resume
+                // etc is handled properly
+                MainWindow::stop();
+            }
 
     } else if (message.getMethod() == "loop") {
 
@@ -296,7 +313,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     channel = message.getArg(0).toInt();
                     if (channel < -1 ||
                         channel > int(getMainModel()->getChannelCount())) {
-                        cerr << "WARNING: MainWindow::handleOSCMessage: channel "
+                        cerr << "WARNING: OSCHandler: channel "
                                   << channel << " out of range" << endl;
                         channel = -1;
                     }
@@ -308,7 +325,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     LayerFactory::getInstance()->getLayerTypeForName(str);
 
                 if (type == LayerFactory::UnknownLayer) {
-                    cerr << "WARNING: MainWindow::handleOSCMessage: unknown layer "
+                    cerr << "WARNING: OSCHandler: unknown layer "
                               << "type " << str << endl;
                 } else {
 
@@ -345,8 +362,35 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 if (value < 0.0) value = 0.0;
                 m_mainLevelPan->setLevel(value);
                 if (m_playTarget) m_playTarget->setOutputGain(value);
-            } else if (property == "speedup") {
+            } else if (property == "speed") {
                 m_playSpeed->setMappedValue(value);
+            } else if (property == "speedup") {
+                
+                // The speedup method existed before the speed method
+                // and is a bit weirder.
+                //
+                // For speed(x), x is a percentage of normal speed, so
+                // x=100 means play at the normal speed, x=50 means
+                // half speed, x=200 double speed etc.
+                //
+                // For speedup(x), x was some sort of modifier of
+                // percentage thing, so x=0 meant play at the normal
+                // speed, x=50 meant play at 150% of normal speed,
+                // x=100 meant play at double speed, and x=-100 rather
+                // bizarrely meant play at half speed. We handle this
+                // now by converting to speed percentage as follows:
+                
+                double percentage = 100.0;
+                if (value > 0.f) {
+                    percentage = percentage + value;
+                } else {
+                    percentage = 10000.0 / (percentage - value);
+                }
+                SVDEBUG << "OSCHandler: converted speedup(" << value
+                        << ") into speed(" << percentage << ")" << endl;
+                    
+                m_playSpeed->setMappedValue(percentage);
+                
             } else if (property == "overlays") {
                 if (value < 0.5) {
                     m_viewManager->setOverlayMode(ViewManager::NoOverlays);
@@ -431,7 +475,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             } else {
                 
-                cerr << "WARNING: MainWindow::handleOSCMessage: Unknown delete target " << target << endl;
+                cerr << "WARNING: OSCHandler: Unknown delete target " << target << endl;
             }
         }
 
@@ -546,9 +590,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
 
     } else {
-        cerr << "WARNING: MainWindow::handleOSCMessage: Unknown or unsupported "
+        cerr << "WARNING: OSCHandler: Unknown or unsupported "
                   << "method \"" << message.getMethod()
                   << "\"" << endl;
     }
-            
 }
