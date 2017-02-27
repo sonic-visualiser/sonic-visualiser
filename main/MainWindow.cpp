@@ -3960,6 +3960,7 @@ MainWindow::addLayer(QString transformId)
          &configurator);
 
     if (input.getModel() == aggregate) {
+        aggregate->setObjectName(tr("Multiplexed audio"));
         m_document->addAggregateModel(aggregate);
     } else {
         aggregate->aboutToDelete();
