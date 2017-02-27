@@ -4424,7 +4424,7 @@ CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 
 if test "x$GCC" = "xyes"; then
-   	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+   	CXXFLAGS_ANY="-std=c++11 -fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
@@ -5685,7 +5685,7 @@ fi
 # Cap'n Proto 0.5.3 is the latest release at the time of writing, but
 # it lacks the expectedSizeInWordsFromPrefix function which exists in
 # the git repo. Our check is for that specific symbol, which would
-# indicate a git checkout, or release 0.5.4 or later.
+# indicate a git clone, or for release 0.5.4 or later via pkg-config.
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for capnp" >&5
@@ -5695,12 +5695,12 @@ if test -n "$capnp_CFLAGS"; then
     pkg_cv_capnp_CFLAGS="$capnp_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"capnp => 0.5.4\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "capnp => 0.5.4") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"capnp >= 0.5.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "capnp >= 0.5.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_capnp_CFLAGS=`$PKG_CONFIG --cflags "capnp => 0.5.4" 2>/dev/null`
+  pkg_cv_capnp_CFLAGS=`$PKG_CONFIG --cflags "capnp >= 0.5.4" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5712,12 +5712,12 @@ if test -n "$capnp_LIBS"; then
     pkg_cv_capnp_LIBS="$capnp_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"capnp => 0.5.4\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "capnp => 0.5.4") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"capnp >= 0.5.4\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "capnp >= 0.5.4") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_capnp_LIBS=`$PKG_CONFIG --libs "capnp => 0.5.4" 2>/dev/null`
+  pkg_cv_capnp_LIBS=`$PKG_CONFIG --libs "capnp >= 0.5.4" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5738,9 +5738,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        capnp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "capnp => 0.5.4" 2>&1`
+	        capnp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "capnp >= 0.5.4" 2>&1`
         else
-	        capnp_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "capnp => 0.5.4" 2>&1`
+	        capnp_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "capnp >= 0.5.4" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$capnp_PKG_ERRORS" >&5
