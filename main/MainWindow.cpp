@@ -3922,6 +3922,8 @@ MainWindow::addLayer(QString transformId)
         if (defaultInputModel) break;
     }
 
+    AggregateWaveModel *aggregate = 0;
+    
     if (candidateInputModels.size() > 1) {
         // Add an aggregate model as another option
         AggregateWaveModel::ChannelSpecList sl;
@@ -3933,10 +3935,9 @@ MainWindow::addLayer(QString transformId)
             }
         }
         if (!sl.empty()) {
-            AggregateWaveModel *aggregate = new AggregateWaveModel(sl);
+            aggregate = new AggregateWaveModel(sl);
             aggregate->setObjectName(tr("Multiplex all of the above"));
             candidateInputModels.push_back(aggregate);
-            //!!! but it leaks
         }
     }
     
@@ -3958,6 +3959,13 @@ MainWindow::addLayer(QString transformId)
          duration,
          &configurator);
 
+    if (input.getModel() == aggregate) {
+        m_document->addAggregateModel(aggregate);
+    } else {
+        aggregate->aboutToDelete();
+        delete aggregate;
+    }
+    
     if (!input.getModel()) return;
 
 //    SVDEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
