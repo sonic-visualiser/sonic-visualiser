@@ -53,7 +53,7 @@ CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 
 if test "x$GCC" = "xyes"; then
-   	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+   	CXXFLAGS_ANY="-std=c++11 -fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
@@ -91,7 +91,7 @@ SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_re
 # it lacks the expectedSizeInWordsFromPrefix function which exists in
 # the git repo. Our check is for that specific symbol, which would
 # indicate a git clone, or for release 0.5.4 or later via pkg-config.
-PKG_CHECK_MODULES([capnp],[capnp => 0.5.4],[HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"],[AC_MSG_NOTICE([Failed to find required module capnp using pkg-config, trying again by old-fashioned means])])
+PKG_CHECK_MODULES([capnp],[capnp >= 0.5.4],[HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"],[AC_MSG_NOTICE([Failed to find required module capnp using pkg-config, trying again by old-fashioned means])])
 if test -z "$capnp_LIBS" ; then
     AC_COMPILE_IFELSE([
         AC_LANG_SOURCE([[
