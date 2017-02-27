@@ -89,11 +89,21 @@ SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_re
 
 # Cap'n Proto 0.5.3 is the latest release at the time of writing, but
 # it lacks the expectedSizeInWordsFromPrefix function which exists in
-# the git repo. Check for a newer release or, if that's not found with
-# pkg-config, check for that specific symbol (mangled).
-AC_MSG_NOTICE([checking specifically for a newer Cap'n Proto than the 0.5.3 release])
-SV_MODULE_REQUIRED([capnp],[capnp >= 0.5.4],[capnp/common.h],[capnp],[_ZN5capnp29expectedSizeInWordsFromPrefixEN2kj8ArrayPtrIKNS_4wordEEE])
-SV_MODULE_REQUIRED([kj],[kj >= 0.5.4],[kj/common.h],[kj],[_ZN2kj20BufferedOutputStreamD0Ev])
+# the git repo. Our check is for that specific symbol, which would
+# indicate a git clone, or for release 0.5.4 or later via pkg-config.
+PKG_CHECK_MODULES([capnp],[capnp => 0.5.4],[HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"],[AC_MSG_NOTICE([Failed to find required module capnp using pkg-config, trying again by old-fashioned means])])
+if test -z "$capnp_LIBS" ; then
+    AC_COMPILE_IFELSE([
+        AC_LANG_SOURCE([[
+        #include <capnp/serialize.h>
+        int main() {
+            kj::Array<capnp::word> prefix;
+            return capnp::expectedSizeInWordsFromPrefix(prefix.asPtr());
+        }]])],
+        [HAVES="$HAVES HAVE_CAPNP";LIBS="$LIBS -lcapnp -lkj"],
+        [AC_MSG_ERROR([Failed to find appropriate capnp library])]
+    )
+fi
 
 SV_MODULE_OPTIONAL([liblo],[],[lo/lo.h],[lo],[lo_address_new])
 SV_MODULE_OPTIONAL([portaudio],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
