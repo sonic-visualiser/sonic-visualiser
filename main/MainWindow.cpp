@@ -3959,12 +3959,14 @@ MainWindow::addLayer(QString transformId)
          duration,
          &configurator);
 
-    if (input.getModel() == aggregate) {
-        aggregate->setObjectName(tr("Multiplexed audio"));
-        m_document->addAggregateModel(aggregate);
-    } else {
-        aggregate->aboutToDelete();
-        delete aggregate;
+    if (aggregate) {
+        if (input.getModel() == aggregate) {
+            aggregate->setObjectName(tr("Multiplexed audio"));
+            m_document->addAggregateModel(aggregate);
+        } else {
+            aggregate->aboutToDelete();
+            delete aggregate;
+        }
     }
     
     if (!input.getModel()) return;
