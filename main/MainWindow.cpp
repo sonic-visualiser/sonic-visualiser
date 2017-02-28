@@ -337,7 +337,9 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = 0;
     }
 
+/*
     QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+*/
     
     QString warning = PluginScan::getInstance()->getStartupFailureReport();
     if (warning != "") {
@@ -4306,6 +4308,7 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
     shownOnce = true;
 }
 
+/*
 void
 MainWindow::betaReleaseWarning()
 {
@@ -4313,6 +4316,7 @@ MainWindow::betaReleaseWarning()
         (this, tr("Beta release"),
          tr("<b>This is a beta release of Sonic Visualiser</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>"));
 }
+*/
 
 void
 MainWindow::pluginPopulationWarning()
