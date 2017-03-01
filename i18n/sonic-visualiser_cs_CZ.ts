@@ -4029,6 +4029,10 @@ Co chcete vyvést?</translation>
         <source>Multiplexed audio</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;br&gt;With Piper Vamp protocol bridge &amp;copy; QMUL</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>

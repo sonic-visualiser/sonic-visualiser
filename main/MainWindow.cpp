@@ -4956,6 +4956,7 @@ MainWindow::about()
 #endif // RUBBERBAND_VERSION
 #endif // HAVE_RUBBERBAND
     aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam and QMUL").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
+    aboutText += tr("<br>With Piper Vamp protocol bridge &copy; QMUL");
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
 #ifdef REDLAND_VERSION
