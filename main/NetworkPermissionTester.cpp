@@ -16,6 +16,8 @@
 
 #include "../version.h"
 
+#include "base/Debug.h"
+
 #include <QWidget>
 #include <QString>
 #include <QSettings>
@@ -37,10 +39,12 @@ NetworkPermissionTester::havePermission()
     bool permish = false;
 
     if (settings.contains(tag)) {
-	permish = settings.value(tag, false).toBool();
+        permish = settings.value(tag, false).toBool();
+        SVDEBUG << "NetworkPermissionTester: Asked already, result was " << permish << endl;
     } else {
+        SVDEBUG << "NetworkPermissionTester: Asking for permission" << endl;
 
-	QDialog d;
+    QDialog d;
 	d.setWindowTitle(QCoreApplication::translate("NetworkPermissionTester", "Welcome to Sonic Visualiser"));
 
 	QGridLayout *layout = new QGridLayout;
@@ -97,6 +101,8 @@ NetworkPermissionTester::havePermission()
 
         permish = cb->isChecked();
 	settings.setValue(tag, permish);
+
+        SVDEBUG << "NetworkPermissionTester: asked, answer was " << permish << endl;
     }
 
     settings.endGroup();
