@@ -199,6 +199,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
 
+    SVDEBUG << "MainWindow: Creating main user interface layout" << endl;
+
     QFrame *frame = new QFrame;
     setCentralWidget(frame);
 
@@ -282,6 +284,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 
     frame->setLayout(layout);
 
+    SVDEBUG << "MainWindow: Creating menus and toolbars" << endl;
+
 #ifdef Q_OS_MAC
     // Mac doesn't align menu labels when icons are shown: result is messy
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
@@ -313,21 +317,32 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_unitConverter->hide();
 
     setAudioRecordMode(RecordCreateAdditionalModel);
-    
+
+    SVDEBUG << "MainWindow: Creating new session" << endl;
+
     newSession();
 
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
 
+    SVDEBUG << "MainWindow: Creating network permission tester" << endl;
+
     NetworkPermissionTester tester(withOSCSupport);
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
         if (withOSCSupport) {
+            SVDEBUG << "MainWindow: Creating OSC queue" << endl;
             startOSCQueue();
         }
+
+        SVDEBUG << "MainWindow: Starting transform population thread" << endl;
         TransformFactory::getInstance()->startPopulationThread();
+
+        SVDEBUG << "MainWindow: Creating surveyer" << endl;
         m_surveyer = new Surveyer
             ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
+
+        SVDEBUG << "MainWindow: Creating version tester" << endl;
         m_versionTester = new VersionTester
             ("sonicvisualiser.org", "latest-version.txt", SV_VERSION);
         connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
@@ -345,6 +360,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     if (warning != "") {
         QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
     }
+
+    SVDEBUG << "MainWindow: Constructor done" << endl;
 }
 
 MainWindow::~MainWindow()
