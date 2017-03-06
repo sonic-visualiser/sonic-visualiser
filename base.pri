@@ -23,7 +23,7 @@ DEPENDPATH += $$SV_INCLUDEPATH
 INCLUDEPATH += $$SV_INCLUDEPATH
 
 # Platform defines for RtMidi
-linux*:   DEFINES += __LINUX_ALSASEQ__
+linux*:   DEFINES += __LINUX_ALSASEQ__ __LINUX_ALSA__
 macx*:    DEFINES += __MACOSX_CORE__
 win*:     DEFINES += __WINDOWS_MM__
 solaris*: DEFINES += __RTMIDI_DUMMY_ONLY__
