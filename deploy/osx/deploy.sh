@@ -22,9 +22,10 @@ set -u
 
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
 stem=${version%%-*}
+stem=${stem%%pre*}
 case "$stem" in
-    [0-9].[0-9]) bundleVersion="$version".0 ;;
-    [0-9].[0-9].[0-9]) bundleVersion="$version" ;;
+    [0-9].[0-9]) bundleVersion="$stem".0 ;;
+    [0-9].[0-9].[0-9]) bundleVersion="$stem" ;;
     *) echo "Error: Version stem $stem (of version $version) is neither two- nor three-part number" ;;
 esac
 
