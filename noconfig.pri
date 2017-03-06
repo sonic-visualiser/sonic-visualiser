@@ -114,7 +114,7 @@ macx* {
     INCLUDEPATH += sv-dependency-builds/osx/include
     LIBS += -Lsv-dependency-builds/osx/lib
 
-    QMAKE_CXXFLAGS_RELEASE += -ffast-math
+    QMAKE_CXXFLAGS_RELEASE += -O3 -ffast-math
 
     DEFINES += HAVE_COREAUDIO HAVE_VDSP
     LIBS += \
