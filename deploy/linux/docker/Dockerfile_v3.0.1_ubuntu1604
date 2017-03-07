@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
-RUN apt-get update
-RUN apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y \
     build-essential \
     libbz2-dev \
     libfftw3-dev \
@@ -35,9 +35,9 @@ RUN ./setup-autotools.sh && autoreconf -i
 RUN ./configure --enable-static --disable-shared
 RUN make && make install
 WORKDIR ../..
-RUN hg clone -rsv_v3.0beta3 https://code.soundsoftware.ac.uk/hg/sonic-visualiser
+RUN hg clone -rsv_v3.0.1 https://code.soundsoftware.ac.uk/hg/sonic-visualiser
 WORKDIR sonic-visualiser
 RUN ./configure
 RUN make -j3
-RUN deploy/linux/deploy-deb.sh 3.0beta3-1 amd64
+RUN deploy/linux/deploy-deb.sh 3.0.1 amd64
 RUN tar cvf output.tar *.deb && cp output.tar ..
