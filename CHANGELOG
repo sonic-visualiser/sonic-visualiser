@@ -1,4 +1,9 @@
 
+Changes in Sonic Visualiser 3.0.1 (Mar 2017) since the previous release 3.0:
+
+ - Fix crashes with MIDI devices and speedup/slowdown control on Windows
+ - Update MIDI input driver layer
+
 Changes in Sonic Visualiser 3.0 (Mar 2017) since the previous release 2.5:
 
  - Add ability to record audio, and ability to change the audio device
