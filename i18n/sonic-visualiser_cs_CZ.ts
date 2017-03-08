@@ -4033,6 +4033,14 @@ Co chcete vyvést?</translation>
         <source>&lt;br&gt;With Piper Vamp protocol bridge &amp;copy; QMUL</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Czech UI translation contributed by Pavel Fric.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>
