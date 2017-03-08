@@ -4619,7 +4619,17 @@ What do you want to export?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5081"/>
+        <location filename="../main/MainWindow.cpp" line="5000"/>
+        <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="5002"/>
+        <source>Czech UI translation contributed by Pavel Fric.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="5089"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %2 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Доступна новая версия программы&lt;/h3&gt;&lt;p&gt;Вы используетее Sonic Visualiser версии %1, но уже доступна версия %2.&lt;/p&gt;&lt;p&gt;Загляните на &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;сайт Sonic Visualiser&lt;/a&gt;, чтобы узнать подробности.&lt;/p&gt; {3&gt;?} {3&gt;?} {1 ?} {2 ?}</translation>
     </message>
@@ -5073,12 +5083,12 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation>Какой звуковой файл вы хотите экспортировать?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5012"/>
+        <location filename="../main/MainWindow.cpp" line="5020"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5080"/>
+        <location filename="../main/MainWindow.cpp" line="5088"/>
         <source>Newer version available</source>
         <translation>Доступна более новая версия</translation>
     </message>

@@ -4996,9 +4996,17 @@ MainWindow::about()
     aboutText += "</small></p>";
 #endif // HAVE_LIBLO
 
+    aboutText += "<p><small>";
+    aboutText += tr("Russian UI translation contributed by Alexandre Prokoudine.");
+    aboutText += "<br>";
+    aboutText += tr("Czech UI translation contributed by Pavel Fric.");
+    aboutText += "</small></p>";
+
     aboutText += 
         "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2017 Chris Cannam and "
-        "Queen Mary, University of London.</small></p>"
+        "Queen Mary, University of London.</small></p>";
+
+    aboutText +=
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "
         "published by the Free Software Foundation; either version 2 of the "
