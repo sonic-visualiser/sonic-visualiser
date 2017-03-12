@@ -1,4 +1,14 @@
 
+Changes in Sonic Visualiser 3.0.2 (Mar 2017) since the previous release 3.0.1:
+
+ - Fix crash when changing parameters for spectrum view
+
+ - Fix incorrect measure tool crosshairs in spectrum view
+
+ - Update Russian and Czech UI translations (thanks to Alexandre Prokoudine
+   and Pavel Fric respectively)
+ 
+
 Changes in Sonic Visualiser 3.0.1 (Mar 2017) since the previous release 3.0:
 
  - Fix crashes with MIDI devices and speedup/slowdown control on Windows
