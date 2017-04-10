@@ -1,13 +1,31 @@
 
-To compile from source
-----------------------
+To compile Sonic Visualiser from source
+=======================================
 
-To build on a Unix-like system, run
+Windows
+-------
 
-$ ./configure && make
+Use the Qt Creator IDE with either the MinGW compiler (for 32-bit
+builds) or Visual C++ (for 64-bit builds).
 
-The following additional libraries are required or optional when
-building the SV core libraries:
+For details, see the wiki page at
+
+https://code.soundsoftware.ac.uk/projects/sonic-visualiser/wiki/WindowsBuild30
+
+
+MacOS
+-----
+
+Build from the command line, but don't use the configure script.
+Instead install Qt v5.x and run the Qt "qmake" command, then "make".
+
+
+Linux
+-----
+
+$ ./configure && make && make install
+
+The following additional libraries are required or optional:
 
 REQUIRED	Qt v5			http://qt-project.org/
 REQUIRED	Vamp Plugin SDK	v2.x	http://www.vamp-plugins.org/
@@ -17,29 +35,40 @@ REQUIRED	libsamplerate		http://www.mega-nerd.com/SRC/
 REQUIRED	FFTW3 			http://www.fftw.org/
 REQUIRED	bzip2 library		http://www.bzip.org/
 REQUIRED	Sord and Serd libraries	http://drobilla.net/software/
+REQUIRED	Cap'n Proto             http://capnproto.org/
 
 Optional	MAD mp3 decoder		http://www.underbit.com/products/mad/
 Optional	Oggz and fishsound	http://xiph.org/oggz/
 Optional        liblo OSC library	http://www.plugin.org.uk/liblo/
-
-If you are going to build the rest of the SV libraries and the Sonic
-Visualiser application, you will also need one or more of:
 
 Optional	JACK			http://www.jackaudio.org/
 Optional	PortAudio v19		http://www.portaudio.com/
 Optional	PulseAudio    	 	http://www.pulseaudio.org/
 
 Although JACK, PortAudio, and PulseAudio are individually optional,
-you will need to have one or the other of them in order to get any
-audio playback.  Usually JACK is preferred on Linux, with PulseAudio
-as a backup, and PortAudio is used elsewhere.
+you will need to have at least one of them in order to get any audio
+playback.  Usually JACK is preferred on Linux, with PulseAudio as a
+backup, and PortAudio is used elsewhere.
 
 On Linux, you will need the ALSA libraries (used for MIDI).
 
-If you happen to be using a Debian-based Linux, you probably want to
-apt-get install something like the following packages: qtbase5-dev
-qt5-default libsndfile1-dev libsamplerate0-dev libfftw3-dev libbz2-dev
-libjack-dev libjack0 libpulse-dev libmad0-dev libid3tag0-dev
-liboggz2-dev libfishsound1-dev libasound2-dev liblo-dev liblrdf0-dev
-libsord-dev libserd-dev vamp-plugin-sdk librubberband-dev.
+Cap'n Proto is a tricky dependency at the time of writing, as the
+version needed is more recent than the last official release (which is
+0.5.3 as I write -- hopefully this instruction will rapidly become
+obsolete). You can install a git checkout of Cap'n Proto like this:
+
+$ git clone https://github.com/sandstorm-io/capnproto
+$ cd capnproto/c++
+$ ./setup-autotools.sh && autoreconf -i 
+$ ./configure --enable-static --disable-shared
+$ make && make install
+
+For the rest, if you happen to be using a Debian-based Linux, you
+probably want to apt install something like the following packages:
+
+build-essential libbz2-dev libfftw3-dev libfishsound1-dev
+libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev
+libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev
+libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils
+librubberband-dev git mercurial autoconf automake libtool
 
