@@ -5,87 +5,61 @@
     "libs": {
         "vamp-plugin-sdk": {
             "vcs": "git",
-            "provider": {
-                "service": "github",
-                "owner": "c4dm"
-            }
+            "service": "github",
+            "owner": "c4dm"
         },
         "svcore": {
             "vcs": "hg",
-            "provider": {
-                "url": "https://code.soundsoftware.ac.uk/hg/svcore"
-            }
+            "url": "https://code.soundsoftware.ac.uk/hg/svcore"
         },
         "svgui": {
             "vcs": "hg",
-            "provider": {
-                "url": "https://code.soundsoftware.ac.uk/hg/svgui"
-            }
+            "url": "https://code.soundsoftware.ac.uk/hg/svgui"
         },
         "svapp": {
             "vcs": "hg",
-            "provider": {
-                "url": "https://code.soundsoftware.ac.uk/hg/svapp"
-            }
+            "url": "https://code.soundsoftware.ac.uk/hg/svapp"
         },
         "dataquay": {
             "vcs": "hg",
-            "provider": {
-                "service": "bitbucket",
-                "owner": "breakfastquay"
-            }
+            "service": "bitbucket",
+            "owner": "breakfastquay"
         },
         "bqvec": {
             "vcs": "hg",
-            "provider": {
-                "service": "bitbucket",
-                "owner": "breakfastquay"
-            }
+            "service": "bitbucket",
+            "owner": "breakfastquay"
         },
         "bqfft": {
             "vcs": "hg",
-            "provider": {
-                "service": "bitbucket",
-                "owner": "breakfastquay"
-            }
+            "service": "bitbucket",
+            "owner": "breakfastquay"
         },
         "bqresample": {
             "vcs": "hg",
-            "provider": {
-                "service": "bitbucket",
-                "owner": "breakfastquay"
-            }
+            "service": "bitbucket",
+            "owner": "breakfastquay"
         },
         "bqaudioio": {
             "vcs": "hg",
-            "provider": {
-                "service": "bitbucket",
-                "owner": "breakfastquay"
-            }
+            "service": "bitbucket",
+            "owner": "breakfastquay"
         },
         "sv-dependency-builds": {
             "vcs": "hg",
-            "provider": {
-                "url": "https://code.soundsoftware.ac.uk/hg/sv-dependency-builds"
-            }
+            "url": "https://code.soundsoftware.ac.uk/hg/sv-dependency-builds"
         },
         "icons/scalable": {
             "vcs": "hg",
-            "provider": {
-                "url": "https://code.soundsoftware.ac.uk/hg/sv-iconset"
-            }
+            "url": "https://code.soundsoftware.ac.uk/hg/sv-iconset"
         },
         "checker": {
             "vcs": "hg",
-            "provider": {
-                "url": "https://code.soundsoftware.ac.uk/hg/vamp-plugin-load-checker"
-            }
+            "url": "https://code.soundsoftware.ac.uk/hg/vamp-plugin-load-checker"
         },
         "piper-cpp": {
             "vcs": "git",
-            "provider": {
-                "url": "https://github.com/piper-audio/piper-cpp"
-            }
+            "url": "https://github.com/piper-audio/piper-cpp"
         }
     }
 }
