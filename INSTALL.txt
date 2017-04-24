@@ -27,23 +27,22 @@ $ ./configure && make && make install
 
 The following additional libraries are required or optional:
 
-REQUIRED	Qt v5			http://qt-project.org/
-REQUIRED	Vamp Plugin SDK	v2.x	http://www.vamp-plugins.org/
-REQUIRED	Rubber Band Library	http://www.breakfastquay.com/rubberband/
-REQUIRED	libsndfile		http://www.mega-nerd.com/libsndfile/
-REQUIRED	libsamplerate		http://www.mega-nerd.com/SRC/
-REQUIRED	FFTW3 			http://www.fftw.org/
-REQUIRED	bzip2 library		http://www.bzip.org/
-REQUIRED	Sord and Serd libraries	http://drobilla.net/software/
-REQUIRED	Cap'n Proto             http://capnproto.org/
+REQUIRED        Qt v5                   http://qt-project.org/
+REQUIRED        Vamp Plugin SDK v2.x    http://www.vamp-plugins.org/
+REQUIRED        Rubber Band Library     http://www.breakfastquay.com/rubberband/
+REQUIRED        libsndfile              http://www.mega-nerd.com/libsndfile/
+REQUIRED        libsamplerate           http://www.mega-nerd.com/SRC/
+REQUIRED        FFTW3                   http://www.fftw.org/
+REQUIRED        bzip2 library           http://www.bzip.org/
+REQUIRED        Sord and Serd libraries http://drobilla.net/software/
+REQUIRED        Cap'n Proto             http://capnproto.org/
 
-Optional	MAD mp3 decoder		http://www.underbit.com/products/mad/
-Optional	Oggz and fishsound	http://xiph.org/oggz/
-Optional        liblo OSC library	http://www.plugin.org.uk/liblo/
-
-Optional	JACK			http://www.jackaudio.org/
-Optional	PortAudio v19		http://www.portaudio.com/
-Optional	PulseAudio    	 	http://www.pulseaudio.org/
+Optional        MAD mp3 decoder         http://www.underbit.com/products/mad/
+Optional        Oggz and fishsound      http://xiph.org/oggz/
+Optional        liblo OSC library       http://www.plugin.org.uk/liblo/
+Optional        JACK                    http://www.jackaudio.org/
+Optional        PortAudio v19           http://www.portaudio.com/
+Optional        PulseAudio              http://www.pulseaudio.org/
 
 Although JACK, PortAudio, and PulseAudio are individually optional,
 you will need to have at least one of them in order to get any audio
