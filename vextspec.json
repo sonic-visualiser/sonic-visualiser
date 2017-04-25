@@ -2,6 +2,12 @@
     "config": {
         "extdir": "src"
     },
+    "providers": {
+	"soundsoftware": {
+	    "anon": "https://code.soundsoftware.ac.uk/{vcs}/{repo}",
+	    "auth": "https://{account}@code.soundsoftware.ac.uk/{vcs}/{repo}"
+	}
+    },
     "libs": {
         "vamp-plugin-sdk": {
             "vcs": "git",
@@ -10,15 +16,15 @@
         },
         "svcore": {
             "vcs": "hg",
-            "url": "https://code.soundsoftware.ac.uk/hg/svcore"
+	    "service": "soundsoftware"
         },
         "svgui": {
             "vcs": "hg",
-            "url": "https://code.soundsoftware.ac.uk/hg/svgui"
+	    "service": "soundsoftware"
         },
         "svapp": {
             "vcs": "hg",
-            "url": "https://code.soundsoftware.ac.uk/hg/svapp"
+	    "service": "soundsoftware"
         },
         "dataquay": {
             "vcs": "hg",
@@ -47,19 +53,22 @@
         },
         "sv-dependency-builds": {
             "vcs": "hg",
-            "url": "https://code.soundsoftware.ac.uk/hg/sv-dependency-builds"
+	    "service": "soundsoftware"
         },
         "icons/scalable": {
             "vcs": "hg",
-            "url": "https://code.soundsoftware.ac.uk/hg/sv-iconset"
+	    "service": "soundsoftware",
+	    "repo": "sv-iconset"
         },
         "checker": {
             "vcs": "hg",
-            "url": "https://code.soundsoftware.ac.uk/hg/vamp-plugin-load-checker"
+	    "service": "soundsoftware",
+	    "repo": "vamp-plugin-load-checker"
         },
         "piper-cpp": {
             "vcs": "git",
-            "url": "https://github.com/piper-audio/piper-cpp"
+	    "service": "github",
+	    "owner": "piper-audio"
         }
     }
 }
