@@ -87,11 +87,10 @@ SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],
 SV_MODULE_REQUIRED([sord],[sord-0 >= 0.5],[sord/sord.h],[sord-0],[sord_world_new])
 SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_read_file])
 
-# Cap'n Proto 0.5.3 is the latest release at the time of writing, but
-# it lacks the expectedSizeInWordsFromPrefix function which exists in
-# the git repo. Our check is for that specific symbol, which would
-# indicate a git clone, or for a newer release via pkg-config.
-PKG_CHECK_MODULES([capnp],[capnp > 0.5.3],[HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"],[AC_MSG_NOTICE([Failed to find required module capnp using pkg-config, trying again by old-fashioned means])])
+# We need a Cap'n Proto version with the expectedSizeInWordsFromPrefix
+# function, which appeared in v0.6. If we can't find at least that
+# version with pkg-config, we check for the symbol with the compiler.
+PKG_CHECK_MODULES([capnp],[capnp >= 0.6],[HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"],[AC_MSG_NOTICE([Failed to find required module capnp using pkg-config, trying again by old-fashioned means])])
 if test -z "$capnp_LIBS" ; then
     AC_COMPILE_IFELSE([
         AC_LANG_SOURCE([[
