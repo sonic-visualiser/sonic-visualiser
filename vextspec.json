@@ -59,12 +59,12 @@
         "icons/scalable": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-	    "repo": "sv-iconset"
+	    "repository": "sv-iconset"
         },
         "checker": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-	    "repo": "vamp-plugin-load-checker"
+	    "repository": "vamp-plugin-load-checker"
         },
         "piper-cpp": {
             "vcs": "git",
