@@ -51,14 +51,14 @@ backup, and PortAudio is used elsewhere.
 
 On Linux, you will need the ALSA libraries (used for MIDI).
 
-Cap'n Proto is a tricky dependency at the time of writing, as the
-version needed is more recent than the last official release (which is
-0.5.3 as I write -- hopefully this instruction will rapidly become
-obsolete). You can install a git checkout of Cap'n Proto like this:
+For Cap'n Proto, currently you will need the v0.6 release which (if
+not available as a package) can be obtained from the releases page on
+Github. To build it, you might do something like
 
-$ git clone https://github.com/sandstorm-io/capnproto
-$ cd capnproto/c++
-$ ./setup-autotools.sh && autoreconf -i 
+$ curl -L -o capnproto-v0.6.0.tar.gz https://github.com/sandstorm-io/capnproto/archive/v0.6.0.tar.gz
+$ tar xf capnproto-v0.6.0.tar.gz
+$ cd capnproto-0.6.0/c++
+$ autoreconf -i 
 $ ./configure --enable-static --disable-shared
 $ make && make install
 
