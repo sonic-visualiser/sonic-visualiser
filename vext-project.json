@@ -11,9 +11,8 @@
     },
     "libs": {
         "vamp-plugin-sdk": {
-            "vcs": "git",
-            "service": "github",
-            "owner": "c4dm"
+            "vcs": "hg",
+            "service": "soundsoftware"
         },
         "svcore": {
             "vcs": "hg",
@@ -26,6 +25,17 @@
         "svapp": {
             "vcs": "hg",
 	    "service": "soundsoftware"
+        },
+        "checker": {
+            "vcs": "hg",
+	    "service": "soundsoftware",
+	    "repository": "vamp-plugin-load-checker"
+        },
+        "piper-cpp": {
+            "vcs": "git",
+	    "service": "github",
+	    "owner": "piper-audio",
+            "repository": "piper-vamp-cpp"
         },
         "dataquay": {
             "vcs": "hg",
@@ -60,16 +70,6 @@
             "vcs": "hg",
 	    "service": "soundsoftware",
 	    "repository": "sv-iconset"
-        },
-        "checker": {
-            "vcs": "hg",
-	    "service": "soundsoftware",
-	    "repository": "vamp-plugin-load-checker"
-        },
-        "piper-cpp": {
-            "vcs": "git",
-	    "service": "github",
-	    "owner": "piper-audio"
         }
     }
 }
