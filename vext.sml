@@ -297,7 +297,7 @@ end = struct
         in
             print ("\r " ^
                    Vector.sub(tick_chars, !tick_cycle) ^ " " ^
-                   pad_to 50 name);
+                   pad_to 24 name);
             tick_cycle := (if !tick_cycle = n - 1 then 0 else 1 + !tick_cycle)
         end
             
@@ -1557,30 +1557,42 @@ fun act_and_print action print_header print_line (libs : libspec list) =
         app print_line lines;
         lines
     end
+
+fun return_code_for outcomes =
+    foldl (fn ((_, result), acc) =>
+              case result of
+                  ERROR _ => OS.Process.failure
+                | _ => acc)
+          OS.Process.success
+          outcomes
         
 fun status_of_project ({ context, libs } : project) =
-    ignore (act_and_print (AnyLibControl.status context)
-                          print_status_header (print_status false) libs)
+    return_code_for (act_and_print (AnyLibControl.status context)
+                                   print_status_header (print_status false)
+                                   libs)
                                              
 fun review_project ({ context, libs } : project) =
-    ignore (act_and_print (AnyLibControl.review context)
-                          print_status_header (print_status true) libs)
+    return_code_for (act_and_print (AnyLibControl.review context)
+                                   print_status_header (print_status true)
+                                   libs)
 
 fun update_project ({ context, libs } : project) =
     let val outcomes = act_and_print
                            (AnyLibControl.update context)
                            print_outcome_header print_update_outcome libs
-        val locks = List.concat
-                        (map (fn (libname, result) =>
-                                 case result of
-                                     ERROR _ => []
-                                   | OK id => [{ libname = libname,
-                                                 id_or_tag = id
-                                              }]
-                             )
-                             outcomes)
+        val locks =
+            List.concat
+                (map (fn (libname, result) =>
+                         case result of
+                             ERROR _ => []
+                           | OK id => [{ libname = libname, id_or_tag = id }])
+                     outcomes)
+        val return_code = return_code_for outcomes
     in
-        save_lock_file (#rootpath context) locks
+        if OS.Process.isSuccess return_code
+        then save_lock_file (#rootpath context) locks
+        else ();
+        return_code
     end
 
 fun load_local_project use_locks =
@@ -1591,9 +1603,15 @@ fun load_local_project use_locks =
     end    
 
 fun with_local_project use_locks f =
-    (f (load_local_project use_locks); print "\n")
-    handle Fail err => print ("ERROR: " ^ err ^ "\n")
-         | e => print ("Failed with exception: " ^ (exnMessage e) ^ "\n")
+    let val return_code = f (load_local_project use_locks)
+                          handle e =>
+                                 (print ("Failed with exception: " ^
+                                         (exnMessage e) ^ "\n");
+                                  OS.Process.failure)
+        val _ = print "\n";
+    in
+        return_code
+    end
         
 fun review () = with_local_project false review_project
 fun status () = with_local_project false status_of_project
@@ -1601,7 +1619,8 @@ fun update () = with_local_project false update_project
 fun install () = with_local_project true update_project
 
 fun version () =
-    print ("v" ^ vext_version ^ "\n");
+    (print ("v" ^ vext_version ^ "\n");
+     OS.Process.success)
                       
 fun usage () =
     (print "\nVext ";
@@ -1614,16 +1633,22 @@ fun usage () =
             ^ "  status   print quick report on local status only, without using network\n"
             ^ "  install  update configured libraries according to project specs and lock file\n"
             ^ "  update   update configured libraries and lock file according to project specs\n"
-            ^ "  version  print the Vext version number and exit\n\n"))
+            ^ "  version  print the Vext version number and exit\n\n");
+    OS.Process.failure)
 
 fun vext args =
-    case args of
-        ["review"] => review ()
-      | ["status"] => status ()
-      | ["install"] => install ()
-      | ["update"] => update ()
-      | ["version"] => version ()
-      | _ => usage ()
+    let val return_code = 
+            case args of
+                ["review"] => review ()
+              | ["status"] => status ()
+              | ["install"] => install ()
+              | ["update"] => update ()
+              | ["version"] => version ()
+              | _ => usage ()
+    in
+        OS.Process.exit return_code;
+        ()
+    end
         
 fun main () =
     vext (CommandLine.arguments ())
