@@ -8521,6 +8521,10 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+if ! ./vext install; then
+   as_fn_error $? "vext failed to run" "$LINENO" 5
+fi
+
 if ! $QMAKE -r sonic-visualiser.pro; then
    as_fn_error $? "qmake failed: Command was \"$QMAKE -r\"" "$LINENO" 5
 fi
