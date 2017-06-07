@@ -139,6 +139,10 @@ AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT
 
+if ! ./vext install; then
+   AC_MSG_ERROR([vext failed to run])
+fi
+
 if ! $QMAKE -r sonic-visualiser.pro; then
    AC_MSG_ERROR([qmake failed: Command was "$QMAKE -r"])
 fi

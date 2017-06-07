@@ -1,6 +1,6 @@
 {
     "config": {
-        "extdir": "src"
+        "extdir": "."
     },
     "providers": {
 	"soundsoftware": {
