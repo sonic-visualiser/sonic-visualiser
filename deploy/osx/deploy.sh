@@ -75,6 +75,9 @@ ln -s /Applications "$volume"/Applications
 cp README README.OSC COPYING CHANGELOG "$volume/"
 cp -rp "$source" "$target"
 
+# update file timestamps so as to make the build date apparent
+find "$volume" -exec touch \{\} \;
+
 echo "Done"
 
 echo
