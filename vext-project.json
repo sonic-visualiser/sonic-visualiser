@@ -35,8 +35,7 @@
             "vcs": "git",
 	    "service": "github",
 	    "owner": "piper-audio",
-            "repository": "piper-vamp-cpp",
-            "branch": "output-type-uri"
+            "repository": "piper-vamp-cpp"
         },
         "dataquay": {
             "vcs": "hg",

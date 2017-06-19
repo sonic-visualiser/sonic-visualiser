@@ -16,22 +16,22 @@
       "pin": "cf18645ff411"
     },
     "piper-cpp": {
-      "pin": "9157a1d96024dc5de599ce60fffc5eb7cb2e0b10"
+      "pin": "878fec0491e31f37e02438c1e152df30e61c7fc4"
     },
     "dataquay": {
-      "pin": "3768bdde6fdf"
+      "pin": "807b55408d9e"
     },
     "bqvec": {
-      "pin": "ddbf6d836efb"
+      "pin": "e345a5e32c53"
     },
     "bqfft": {
-      "pin": "fb508f7cdcdc"
+      "pin": "81b50ec12d9a"
     },
     "bqresample": {
-      "pin": "a867fff0963d"
+      "pin": "39a30cdbb421"
     },
     "bqaudioio": {
-      "pin": "692c02f29c99"
+      "pin": "d90244c003be"
     },
     "sv-dependency-builds": {
       "pin": "eccd51b72864"
