@@ -33,7 +33,7 @@
     Software without prior written authorization.
 *)
 
-val vext_version = "0.0.1"
+val vext_version = "0.9.0"
 
 
 datatype vcs =
@@ -289,15 +289,19 @@ end = struct
     val tick_cycle = ref 0
     val tick_chars = Vector.fromList (map String.str (explode "|/-\\"))
 
-    fun tick name =
+    fun tick libname cmdlist =
         let val n = Vector.length tick_chars
             fun pad_to n str =
-              if n <= String.size str then str
-              else pad_to n (str ^ " ")
+                if n <= String.size str then str
+                else pad_to n (str ^ " ")
+            val name = if libname <> "" then libname
+                       else if cmdlist = nil then ""
+                       else hd (rev cmdlist)
         in
-            print ("\r " ^
+            print ("  " ^
                    Vector.sub(tick_chars, !tick_cycle) ^ " " ^
-                   pad_to 24 name);
+                   pad_to 24 name ^
+                   "\r");
             tick_cycle := (if !tick_cycle = n - 1 then 0 else 1 + !tick_cycle)
         end
             
@@ -308,7 +312,7 @@ end = struct
             val _ = if verbose ()
                     then print ("Running: " ^ cmd ^
                                 " (in dir " ^ dir ^ ")...\n")
-                    else tick libname
+                    else tick libname cmdlist
             val _ = FileSys.chDir dir
             val status = case redirect of
                              NONE => Process.system cmd
@@ -1629,8 +1633,8 @@ fun usage () =
             ^ "Usage:\n\n"
             ^ "  vext <command>\n\n"
             ^ "where <command> is one of:\n\n"
-            ^ "  review   check configured libraries against their providers, and report\n"
             ^ "  status   print quick report on local status only, without using network\n"
+            ^ "  review   check configured libraries against their providers, and report\n"
             ^ "  install  update configured libraries according to project specs and lock file\n"
             ^ "  update   update configured libraries and lock file according to project specs\n"
             ^ "  version  print the Vext version number and exit\n\n");
