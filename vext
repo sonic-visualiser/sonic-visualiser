@@ -16,13 +16,13 @@ program="$mydir/vext.sml"
 # preference is based on startup speed.
 
 if [ -z "$sml" ]; then
+    if sml -h 2>&1 | grep -q 'Standard ML of New Jersey'; then
+	sml="smlnj"
     # I think there may be a race condition in the poly interpreter's
     # tests for open or closed I/O streams - without the "echo" here,
     # or with stderr redirection, this pipeline will sometimes hang
-    if echo | poly -v 2>/dev/null | grep -q 'Poly/ML'; then
+    elif echo | poly -v 2>/dev/null | grep -q 'Poly/ML'; then
 	sml="poly"
-    elif sml -h 2>&1 | grep -q 'Standard ML of New Jersey'; then
-	sml="smlnj"
     elif mlton 2>&1 | grep -q 'MLton'; then
 	sml="mlton"
     else cat 1>&2 <<EOF
@@ -35,16 +35,15 @@ EOF
   compiler or interpreter to run.
 
   Please ensure you have one of the following SML implementations
-  installed and present in your PATH, and try again. These are listed
-  approximately in order of preference for this task.
+  installed and present in your PATH, and try again.
 
-    1. Poly/ML
-       - often found in a distribution package called: polyml
-       - executable name: poly
-
-    2. Standard ML of New Jersey
+    1. Standard ML of New Jersey
        - often found in a distribution package called: smlnj
        - executable name: sml
+
+    2. Poly/ML
+       - often found in a distribution package called: polyml
+       - executable name: poly
 
     3. MLton
        - often found in a distribution package called: mlton
