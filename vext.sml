@@ -33,7 +33,7 @@
     Software without prior written authorization.
 *)
 
-val vext_version = "0.9.0"
+val vext_version = "0.9.1"
 
 
 datatype vcs =
@@ -1271,10 +1271,10 @@ structure GitControl :> VCS_CONTROL = struct
             else 
                 case git_command_output context libname
                                         ["rev-list", "-1", id_or_tag] of
-                    ERROR e => ERROR e
-                  | OK tid =>
-                    OK (tid = id andalso
-                        tid <> id_or_tag) (* else id_or_tag was id not tag *)
+                    ERROR e => OK false (* id_or_tag is not an id or tag, but
+                                           that could just mean it hasn't been
+                                           fetched *)
+                  | OK tid => OK (tid = id)
 
     fun branch_tip context (libname, branch) =
         git_command_output context libname
