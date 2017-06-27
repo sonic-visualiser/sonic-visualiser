@@ -15,6 +15,9 @@
     "checker": {
       "pin": "cf18645ff411"
     },
+    "piper": {
+      "pin": "169626171d22e6c49c6bc4759283406f4336a5cb"
+    },
     "piper-cpp": {
       "pin": "878fec0491e31f37e02438c1e152df30e61c7fc4"
     },
