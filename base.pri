@@ -63,5 +63,12 @@ for (file, SVCORE_HEADERS)   { HEADERS += $$sprintf("svcore/%1", $$file) }
 for (file, CLIENT_HEADERS) {
     HEADERS += $$sprintf("piper-cpp/vamp-client/qt/%1",  $$file)
 }
-    
+
 SOURCES += piper-cpp/vamp-capnp/piper-capnp.cpp
+
+capnpc.target = piper-cpp/vamp-capnp/piper-capnp.h
+capnpc.depends = piper/capnp/piper.capnp
+capnpc.commands = capnpc --src-prefix=piper/capnp -oc++:piper-cpp/vamp-capnp $$capnpc.depends
+
+QMAKE_EXTRA_TARGETS += capnpc
+PRE_TARGETDEPS += $$capnpc.target
