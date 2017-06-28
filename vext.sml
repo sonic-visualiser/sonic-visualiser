@@ -33,7 +33,7 @@
     Software without prior written authorization.
 *)
 
-val vext_version = "0.9.1"
+val vext_version = "0.9.2"
 
 
 datatype vcs =
@@ -41,8 +41,8 @@ datatype vcs =
          GIT
 
 datatype source =
-         URL of string |
-         PROVIDER of {
+         URL_SOURCE of string |
+         SERVICE_SOURCE of {
              service : string,
              owner : string option,
              repo : string option
@@ -986,10 +986,10 @@ end = struct
                   }
                 }
             val loaded = 
-                case lookup_optional json ["providers"] of
+                case lookup_optional json ["services"] of
                     NONE => []
                   | SOME (Json.OBJECT pl) => map (fn (k, v) => load v k) pl
-                  | _ => raise Fail "Object expected for providers in config"
+                  | _ => raise Fail "Object expected for services in config"
             val newly_loaded =
                 List.filter (fn p => not (List.exists (fn pp => #service p =
                                                                 #service pp)
@@ -1069,8 +1069,8 @@ end = struct
                                           
     fun remote_url (context : context) vcs source libname =
         case source of
-            URL u => u
-          | PROVIDER { service, owner, repo } =>
+            URL_SOURCE u => u
+          | SERVICE_SOURCE { service, owner, repo } =>
             provider_url { vcs = vcs,
                            service = service,
                            owner = owner,
@@ -1387,9 +1387,9 @@ fun load_libspec spec_json lock_json libname : libspec =
                   | other => raise Fail ("Unknown version-control system \"" ^
                                          other ^ "\""),
           source = case (url, service, owner, repo) of
-                       (SOME u, NONE, _, _) => URL u
+                       (SOME u, NONE, _, _) => URL_SOURCE u
                      | (NONE, SOME ss, owner, repo) =>
-                       PROVIDER { service = ss, owner = owner, repo = repo }
+                       SERVICE_SOURCE { service = ss, owner = owner, repo = repo }
                      | _ => raise Fail ("Must have exactly one of service " ^
                                         "or url string"),
           pin = case lock_pin of
