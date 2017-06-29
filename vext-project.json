@@ -5,11 +5,11 @@
     "services": {
 	"soundsoftware": {
 	    "vcs": ["hg", "git"],
-	    "anon": "https://code.soundsoftware.ac.uk/{vcs}/{repo}",
-	    "auth": "https://{account}@code.soundsoftware.ac.uk/{vcs}/{repo}"
+	    "anonymous": "https://code.soundsoftware.ac.uk/{vcs}/{repository}",
+	    "authenticated": "https://{account}@code.soundsoftware.ac.uk/{vcs}/{repository}"
 	}
     },
-    "libs": {
+    "libraries": {
         "vamp-plugin-sdk": {
             "vcs": "hg",
             "service": "soundsoftware"

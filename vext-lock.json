@@ -1,5 +1,5 @@
 {
-  "libs": {
+  "libraries": {
     "vamp-plugin-sdk": {
       "pin": "5d9af3140f05"
     },
