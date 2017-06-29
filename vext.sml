@@ -33,7 +33,7 @@
     Software without prior written authorization.
 *)
 
-val vext_version = "0.9.2"
+val vext_version = "0.9.3"
 
 
 datatype vcs =
@@ -1206,15 +1206,15 @@ structure HgControl :> VCS_CONTROL = struct
     fun update_to context (libname, "") =
         ERROR "Non-empty id (tag or revision id) required for update_to"
       | update_to context (libname, id) = 
-        case hg_command context libname ["update", "-r" ^ id] of
-            OK () => id_of context libname
-          | ERROR _ => 
-            case pull context libname of
-                ERROR e => ERROR e
-              | _ =>
-                case hg_command context libname ["update", "-r" ^ id] of
-                    ERROR e => ERROR e
-                  | _ => id_of context libname
+        let val pull_result = pull context libname
+        in
+            case hg_command context libname ["update", "-r", id] of
+                OK _ => id_of context libname
+              | ERROR e =>
+                case pull_result of
+                    ERROR e' => ERROR e' (* this was the ur-error *)
+                  | _ => ERROR e
+        end
                   
 end
 
@@ -1270,11 +1270,11 @@ structure GitControl :> VCS_CONTROL = struct
             then OK true
             else 
                 case git_command_output context libname
-                                        ["rev-list", "-1", id_or_tag] of
-                    ERROR e => OK false (* id_or_tag is not an id or tag, but
-                                           that could just mean it hasn't been
-                                           fetched *)
-                  | OK tid => OK (tid = id)
+                                        ["show-ref",
+                                         "refs/tags/" ^ id_or_tag] of
+                    OK "" => OK false
+                  | ERROR _ => OK false
+                  | OK s => OK (id = hd (String.tokens (fn c => c = #" ") s))
 
     fun branch_tip context (libname, branch) =
         git_command_output context libname
@@ -1332,21 +1332,26 @@ structure GitControl :> VCS_CONTROL = struct
               | _ => id_of context libname
 
     (* This function is dealing with a specific id or tag, so if we
-       can successfully check it out (detached) then that's all we need
-       to do. Otherwise we need to fetch and try again *)
+       can successfully check it out (detached) then that's all we
+       need to do, regardless of whether fetch succeeded or not. We do
+       attempt the fetch first, though, purely in order to avoid ugly
+       error messages in the common case where we're being asked to
+       update to a new pin (from the lock file) that hasn't been
+       fetched yet. *)
 
     fun update_to context (libname, "") = 
         ERROR "Non-empty id (tag or revision id) required for update_to"
       | update_to context (libname, id) =
-        case git_command context libname ["checkout", "--detach", id] of
-            OK () => id_of context libname
-          | ERROR _ => 
-            case git_command context libname ["fetch"] of
-                ERROR e => ERROR e
-              | _ =>
-                case git_command context libname ["checkout", "--detach", id] of
-                    ERROR e => ERROR e
-                  | _ => id_of context libname
+        let val fetch_result = git_command context libname ["fetch"]
+        in
+            case git_command context libname ["checkout", "--detach", id] of
+                OK _ => id_of context libname
+              | ERROR e =>
+                case fetch_result of
+                    ERROR e' => ERROR e' (* this was the ur-error *)
+                  | _ => ERROR e
+        end
+            
 end
 
 structure AnyLibControl :> LIB_CONTROL = struct
