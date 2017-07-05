@@ -68,7 +68,12 @@ SOURCES += piper-cpp/vamp-capnp/piper-capnp.cpp
 
 capnpc.target = piper-cpp/vamp-capnp/piper-capnp.h
 capnpc.depends = piper/capnp/piper.capnp
-capnpc.commands = capnpc --src-prefix=piper/capnp -oc++:piper-cpp/vamp-capnp $$capnpc.depends
+
+capnpc.commands = capnp compile --src-prefix=piper/capnp -oc++:piper-cpp/vamp-capnp $$capnpc.depends
+
+macx* {
+    capnpc.commands=./sv-dependency-builds/osx/bin/capnp -Isv-dependency-builds/osx/include compile --src-prefix=piper/capnp -osv-dependency-builds/osx/bin/capnpc-c++:piper-cpp/vamp-capnp $$capnpc.depends
+}
 
 QMAKE_EXTRA_TARGETS += capnpc
 PRE_TARGETDEPS += $$capnpc.target
