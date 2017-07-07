@@ -75,5 +75,9 @@ macx* {
     capnpc.commands=./sv-dependency-builds/osx/bin/capnp -Isv-dependency-builds/osx/include compile --src-prefix=piper/capnp -osv-dependency-builds/osx/bin/capnpc-c++:piper-cpp/vamp-capnp $$capnpc.depends
 }
 
+win* {
+    capnpc.commands=./sv-dependency-builds/win64-msvc/bin/capnp -Isv-dependency-builds/win64-msvc/include compile --src-prefix=piper/capnp -osv-dependency-builds/win64-msvc/bin/capnpc-c++:piper-cpp/vamp-capnp $$capnpc.depends
+}
+
 QMAKE_EXTRA_TARGETS += capnpc
 PRE_TARGETDEPS += $$capnpc.target
