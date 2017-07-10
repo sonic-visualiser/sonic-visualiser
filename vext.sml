@@ -889,11 +889,12 @@ end = struct
           | Json.ERROR e => raise Fail ("Failed to parse file: " ^ e)
 
     fun save_json_to filename json =
+        (* using binary I/O to avoid ever writing CR/LF line endings *)
         let val jstr = Json.serialiseIndented json
-            val stream = TextIO.openOut filename
+            val stream = BinIO.openOut filename
         in
-            TextIO.output (stream, jstr);
-            TextIO.closeOut stream
+            BinIO.output (stream, Byte.stringToBytes jstr);
+            BinIO.closeOut stream
         end
                                   
     fun lookup_optional json kk =
@@ -1435,7 +1436,11 @@ fun load_userconfig () : userconfig =
         }
     end
 
-fun load_project (userconfig : userconfig) rootpath use_locks : project =
+datatype pintype =
+         NO_LOCKFILE |
+         USE_LOCKFILE
+        
+fun load_project (userconfig : userconfig) rootpath pintype : project =
     let val spec_file = FileBits.project_spec_path rootpath
         val lock_file = FileBits.project_lock_path rootpath
         val _ = if OS.FileSys.access (spec_file, [OS.FileSys.A_READ])
@@ -1447,7 +1452,7 @@ fun load_project (userconfig : userconfig) rootpath use_locks : project =
                                  ".\nPlease ensure the spec file is in the " ^
                                  "project root and run this from there.")
         val spec_json = JsonBits.load_json_from spec_file
-        val lock_json = if use_locks
+        val lock_json = if pintype = USE_LOCKFILE
                         then JsonBits.load_json_from lock_file
                              handle IO.Io _ => Json.OBJECT []
                         else Json.OBJECT []
@@ -1607,15 +1612,15 @@ fun update_project ({ context, libs } : project) =
         return_code
     end
 
-fun load_local_project use_locks =
+fun load_local_project pintype =
     let val userconfig = load_userconfig ()
         val rootpath = OS.FileSys.getDir ()
     in
-        load_project userconfig rootpath use_locks
+        load_project userconfig rootpath pintype
     end    
 
-fun with_local_project use_locks f =
-    let val return_code = f (load_local_project use_locks)
+fun with_local_project pintype f =
+    let val return_code = f (load_local_project pintype)
                           handle e =>
                                  (print ("Failed with exception: " ^
                                          (exnMessage e) ^ "\n");
@@ -1625,10 +1630,10 @@ fun with_local_project use_locks f =
         return_code
     end
         
-fun review () = with_local_project false review_project
-fun status () = with_local_project false status_of_project
-fun update () = with_local_project false update_project
-fun install () = with_local_project true update_project
+fun review () = with_local_project NO_LOCKFILE review_project
+fun status () = with_local_project NO_LOCKFILE status_of_project
+fun update () = with_local_project NO_LOCKFILE update_project
+fun install () = with_local_project USE_LOCKFILE update_project
 
 fun version () =
     (print ("v" ^ vext_version ^ "\n");
