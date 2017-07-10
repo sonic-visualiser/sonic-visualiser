@@ -1,0 +1,111 @@
+#!/bin/bash
+
+# Disable shellcheck warnings for useless-use-of-cat. UUOC is good
+# practice, not bad: clearer, safer, less error-prone.
+# shellcheck disable=SC2002
+
+sml="$VEXT_SML"
+
+set -eu
+
+mydir=$(dirname "$0")
+program="$mydir/vext.sml"
+
+# We need one of Poly/ML, SML/NJ, or MLton. Since we're running a
+# single-file SML program as if it were a script, our order of
+# preference is based on startup speed.
+
+if [ -z "$sml" ]; then
+    if sml -h 2>&1 | grep -q 'Standard ML of New Jersey'; then
+	sml="smlnj"
+    # We would prefer Poly/ML to SML/NJ, except that Poly v5.7 has a
+    # nasty bug that occasionally causes it to deadlock on startup.
+    # That appears to be fixed in their repo, so we could promote it
+    # up the order again at some point in future
+    elif echo | poly -v 2>/dev/null | grep -q 'Poly/ML'; then
+	sml="poly"
+    elif mlton 2>&1 | grep -q 'MLton'; then
+	sml="mlton"
+    else cat 1>&2 <<EOF
+
+ERROR: No supported SML compiler or interpreter found       
+EOF
+	cat <<EOF
+
+  The Vext external source code manager needs a Standard ML (SML)
+  compiler or interpreter to run.
+
+  Please ensure you have one of the following SML implementations
+  installed and present in your PATH, and try again.
+
+    1. Standard ML of New Jersey
+       - often found in a distribution package called: smlnj
+       - executable name: sml
+
+    2. Poly/ML
+       - often found in a distribution package called: polyml
+       - executable name: poly
+
+    3. MLton
+       - often found in a distribution package called: mlton
+       - executable name: mlton
+
+EOF
+	exit 2
+    fi
+fi
+
+tmp_sml=$(mktemp /tmp/vext-XXXXXXXX.sml)
+tmp_out=$(mktemp /tmp/vext-XXXXXXXX.bin)
+
+trap 'rm -f $tmp_sml $tmp_out' 0
+
+arglist=""
+for arg in "$@"; do
+    if [ -n "$arglist" ]; then arglist="$arglist,"; fi
+    if echo "$arg" | grep -q '[^a-z]' ; then
+	arglist="$arglist\"usage\""
+    else
+	arglist="$arglist\"$arg\""
+    fi
+done
+
+case "$sml" in
+    poly) echo 'use "'"$program"'"; vext ['"$arglist"'];' |
+		poly -q --error-exit ;;
+    mlton)
+	cat "$program" > "$tmp_sml"
+	echo 'val _ = main ()' >> "$tmp_sml"
+	mlton -output "$tmp_out" "$tmp_sml"
+	"$tmp_out" "$@" ;;
+    smlnj)
+	cat "$program" | (
+	    cat <<EOF
+val smlrun__cp = 
+    let val x = !Control.Print.out in
+        Control.Print.out := { say = fn _ => (), flush = fn () => () };
+        x
+    end;
+val smlrun__prev = ref "";
+Control.Print.out := { 
+    say = fn s => 
+        (if String.isSubstring " Error" s
+         then (Control.Print.out := smlrun__cp;
+               (#say smlrun__cp) (!smlrun__prev);
+               (#say smlrun__cp) s)
+         else (smlrun__prev := s; ())),
+    flush = fn s => ()
+};
+EOF
+	    cat -
+	    cat <<EOF
+val _ = vext [$arglist];
+val _ = OS.Process.exit (OS.Process.success);
+EOF
+            ) > "$tmp_sml"
+	CM_VERBOSE=false sml "$tmp_sml" ;;
+    *)
+	echo "Unknown SML implementation name: $sml";
+	exit 2 ;;
+esac
+       

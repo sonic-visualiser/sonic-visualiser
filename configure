@@ -8521,6 +8521,28 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+if test -x vext ; then
+   if test -d .hg -o -d .git ; then
+      if ! ./vext install; then
+         as_fn_error $? "Vext failed; please fix any reported errors and try again" "$LINENO" 5
+      fi
+   else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: Vext executable found but not in an Hg or Git working-copy: not running it" >&5
+$as_echo "$as_me: Vext executable found but not in an Hg or Git working-copy: not running it" >&6;}
+      if ! test -d vamp-plugin-sdk ; then
+          { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&5
+$as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&2;}
+      fi
+   fi
+else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: No Vext executable found: assuming external libraries are already here" >&5
+$as_echo "$as_me: No Vext executable found: assuming external libraries are already here" >&6;}
+   if ! test -d vamp-plugin-sdk ; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&5
+$as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&2;}
+   fi
+fi
+
 if ! $QMAKE -r sonic-visualiser.pro; then
    as_fn_error $? "qmake failed: Command was \"$QMAKE -r\"" "$LINENO" 5
 fi

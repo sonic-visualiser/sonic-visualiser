@@ -36,6 +36,7 @@ CONFIG += qt thread warn_on stl rtti exceptions c++11
 include(bq-files.pri)
 include(vamp-plugin-sdk-files.pri)
 include(svcore/files.pri)
+include(capnp-regen.pri)
 
 DATAQUAY_SOURCES=$$fromfile(dataquay/lib.pro, SOURCES)
 DATAQUAY_HEADERS=$$fromfile(dataquay/lib.pro, HEADERS)
@@ -63,5 +64,6 @@ for (file, SVCORE_HEADERS)   { HEADERS += $$sprintf("svcore/%1", $$file) }
 for (file, CLIENT_HEADERS) {
     HEADERS += $$sprintf("piper-cpp/vamp-client/qt/%1",  $$file)
 }
-    
+
 SOURCES += piper-cpp/vamp-capnp/piper-capnp.cpp
+
