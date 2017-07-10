@@ -23,8 +23,10 @@ before_install:
   - ( cd ../ ; git clone https://github.com/sandstorm-io/capnproto )
   - ( cd ../capnproto/c++ ; ./setup-autotools.sh && autoreconf -i )
   - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
-      
+
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./configure ; else ./vext install && qmake -r sonic-visualiser.pro ; fi
+
 script:
-  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./configure ; else ./vext install && qmake -r ; fi
-  - make
+  - make -j3
 
