@@ -3,6 +3,9 @@ branches:
   only:
   - vext
 
+configuration:
+  - Release
+
 install:
   - cinst --allow-empty-checksums smlnj
   - ps: '"[hostfingerprints]" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
