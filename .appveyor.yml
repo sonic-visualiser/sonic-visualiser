@@ -15,7 +15,8 @@ before_build:
   - set QTDIR=C:\Qt\5.8\msvc2015_64
   - set PATH=%PATH%;%QTDIR%\bin;C:\Program Files (x86)\SMLNJ\bin
   - vext install
-  - qmake -r -tp vc
+  - qmake -r -tp vc sonic-visualiser.pro
+  - sv-dependency-builds\win64-msvc\bin\capnp -Isv-dependency-builds/win64-msvc/include compile --src-prefix=piper/capnp -osv-dependency-builds/win64-msvc/bin/capnpc-c++:piper-cpp/vamp-capnp piper/capnp/piper.capnp
   - dir
 
 build:
