@@ -1,0 +1,32 @@
+dist:
+  - trusty
+
+language:
+  - cpp
+
+sudo:
+  - false
+
+os:
+  - linux
+  - osx
+
+addons:
+  apt:
+    packages:
+     - libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils librubberband-dev mlton
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew install polyml ; fi
+  - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew install qt5 ; fi
+  - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then export PATH=$PATH:/usr/local/opt/qt5/bin ; fi
+  - ( cd ../ ; git clone https://github.com/sandstorm-io/capnproto )
+  - ( cd ../capnproto/c++ ; ./setup-autotools.sh && autoreconf -i )
+  - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
+
+before_script:
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./configure ; else ./vext install && qmake -r sonic-visualiser.pro ; fi
+
+script:
+  - make -j3
+

@@ -1,0 +1,81 @@
+{
+    "config": {
+        "extdir": "."
+    },
+    "services": {
+	"soundsoftware": {
+	    "vcs": ["hg", "git"],
+	    "anonymous": "https://code.soundsoftware.ac.uk/{vcs}/{repository}",
+	    "authenticated": "https://{account}@code.soundsoftware.ac.uk/{vcs}/{repository}"
+	}
+    },
+    "libraries": {
+        "vamp-plugin-sdk": {
+            "vcs": "hg",
+            "service": "soundsoftware"
+        },
+        "svcore": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
+        "svgui": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
+        "svapp": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
+        "checker": {
+            "vcs": "hg",
+	    "service": "soundsoftware",
+	    "repository": "vamp-plugin-load-checker"
+        },
+        "piper": {
+            "vcs": "git",
+	    "service": "github",
+	    "owner": "piper-audio"
+        },
+        "piper-cpp": {
+            "vcs": "git",
+	    "service": "github",
+	    "owner": "piper-audio",
+            "repository": "piper-vamp-cpp"
+        },
+        "dataquay": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
+        "bqvec": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
+        "bqfft": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
+        "bqresample": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
+        "bqaudioio": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
+        "sv-dependency-builds": {
+            "vcs": "hg",
+	    "service": "soundsoftware"
+        },
+        "icons/scalable": {
+            "vcs": "hg",
+	    "service": "soundsoftware",
+	    "repository": "sv-iconset"
+        }
+    }
+}
+
