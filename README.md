@@ -2,8 +2,8 @@
 Sonic Visualiser
 ================
 
-Sonic Visualiser is a program for viewing and analysing the contents
-of music audio files.
+A program for viewing and analysing the contents of music audio files
+---------------------------------------------------------------------
 
 With Sonic Visualiser you can:
 
@@ -103,6 +103,9 @@ Compiling Sonic Visualiser
 
 If you are planning to compile Sonic Visualiser from source code,
 please read the file INSTALL.txt.
+
+| Linux and macOS CI Build Status | [![Build Status](https://travis-ci.org/sonic-visualiser/sonic-visualiser.svg?branch=master)](https://travis-ci.org/sonic-visualiser/sonic-visualiser) |
+| Windows CI Build Status | [![Build status](https://ci.appveyor.com/api/projects/status/26pygienkigw39p7?svg=true)](https://ci.appveyor.com/project/cannam/sonic-visualiser) |
 
 
 More information
