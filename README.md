@@ -2,8 +2,12 @@
 Sonic Visualiser
 ================
 
-A program for viewing and analysing the contents of music audio files
----------------------------------------------------------------------
+#### A program for viewing and analysing the contents of music audio files
+
+![Sonic Visualiser small screenshot](http://sonicvisualiser.org/images/sv-3.0-win-thumb.png)
+
+* Home page and downloads: http://sonicvisualiser.org/
+* Code project: https://code.soundsoftware.ac.uk/projects/sonic-visualiser
 
 With Sonic Visualiser you can:
 
