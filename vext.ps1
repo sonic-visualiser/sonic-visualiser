@@ -14,10 +14,10 @@ $program = "$mydir/vext.sml"
 # We need either Poly/ML or SML/NJ. No great preference as to which.
 
 if (!$sml) {
-    if (Get-Command "polyml" -ErrorAction SilentlyContinue) {
-       $sml = "poly"
-    } elseif (Get-Command "sml" -ErrorAction SilentlyContinue) {
+    if (Get-Command "sml" -ErrorAction SilentlyContinue) {
        $sml = "smlnj"
+    } elseif (Get-Command "polyml" -ErrorAction SilentlyContinue) {
+       $sml = "poly"
     } else {
        echo @"
 
@@ -29,11 +29,11 @@ ERROR: No supported SML compiler or interpreter found
   Please ensure you have one of the following SML implementations
   installed and present in your PATH, and try again.
 
-    1. Poly/ML
-       - executable name: polyml
-
-    2. Standard ML of New Jersey
+    1. Standard ML of New Jersey
        - executable name: sml
+
+    2. Poly/ML
+       - executable name: polyml
 
 "@
        exit 1

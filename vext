@@ -11,12 +11,44 @@ set -eu
 mydir=$(dirname "$0")
 program="$mydir/vext.sml"
 
+hasher=
+local_install=
+if [ -w "$mydir" ]; then
+    if echo | sha256sum >/dev/null 2>&1 ; then
+	hasher=sha256sum
+        local_install=true
+    elif echo | shasum >/dev/null 2>&1 ; then
+	hasher=shasum
+	local_install=true
+    else
+        echo "WARNING: sha256sum or shasum program not found" 1>&2
+    fi
+fi
+
+if [ -n "$local_install" ]; then
+    hash=$(echo "$sml" | cat "$program" - | $hasher | cut -c1-16)
+    gen_sml=$mydir/.vext-$hash.sml
+    gen_out=$mydir/.vext-$hash.bin
+    trap 'rm -f $gen_sml' 0
+else
+    gen_sml=$(mktemp /tmp/vext-XXXXXXXX.sml)
+    gen_out=$(mktemp /tmp/vext-XXXXXXXX.bin)
+    trap 'rm -f $gen_sml $gen_out' 0
+fi
+
+if [ -x "$gen_out" ]; then
+    exec "$gen_out" "$@"
+fi
+
 # We need one of Poly/ML, SML/NJ, or MLton. Since we're running a
 # single-file SML program as if it were a script, our order of
-# preference is based on startup speed.
+# preference is based on startup speed, except in the local_install
+# case where we retain a persistent binary.
 
 if [ -z "$sml" ]; then
-    if sml -h 2>&1 | grep -q 'Standard ML of New Jersey'; then
+    if [ -n "$local_install" ] && mlton 2>&1 | grep -q 'MLton'; then
+	sml="mlton"
+    elif sml -h 2>&1 | grep -q 'Standard ML of New Jersey'; then
 	sml="smlnj"
     # We would prefer Poly/ML to SML/NJ, except that Poly v5.7 has a
     # nasty bug that occasionally causes it to deadlock on startup.
@@ -55,11 +87,6 @@ EOF
     fi
 fi
 
-tmp_sml=$(mktemp /tmp/vext-XXXXXXXX.sml)
-tmp_out=$(mktemp /tmp/vext-XXXXXXXX.bin)
-
-trap 'rm -f $tmp_sml $tmp_out' 0
-
 arglist=""
 for arg in "$@"; do
     if [ -n "$arglist" ]; then arglist="$arglist,"; fi
@@ -71,13 +98,22 @@ for arg in "$@"; do
 done
 
 case "$sml" in
-    poly) echo 'use "'"$program"'"; vext ['"$arglist"'];' |
-		poly -q --error-exit ;;
+    poly)
+        if [ -n "$local_install" ] && polyc --help >/dev/null 2>&1 ; then
+            if [ ! -x "$gen_out" ]; then
+                polyc -o "$gen_out" "$program"
+            fi
+	    "$gen_out" "$@"
+        else
+            echo 'use "'"$program"'"; vext ['"$arglist"'];' |
+                poly -q --error-exit
+        fi ;;
     mlton)
-	cat "$program" > "$tmp_sml"
-	echo 'val _ = main ()' >> "$tmp_sml"
-	mlton -output "$tmp_out" "$tmp_sml"
-	"$tmp_out" "$@" ;;
+        if [ ! -x "$gen_out" ]; then
+	    echo "val _ = main ()" | cat "$program" - > "$gen_sml"
+	    mlton -output "$gen_out" "$gen_sml"
+        fi
+	"$gen_out" "$@" ;;
     smlnj)
 	cat "$program" | (
 	    cat <<EOF
@@ -102,8 +138,8 @@ EOF
 val _ = vext [$arglist];
 val _ = OS.Process.exit (OS.Process.success);
 EOF
-            ) > "$tmp_sml"
-	CM_VERBOSE=false sml "$tmp_sml" ;;
+            ) > "$gen_sml"
+	CM_VERBOSE=false sml "$gen_sml" ;;
     *)
 	echo "Unknown SML implementation name: $sml";
 	exit 2 ;;
