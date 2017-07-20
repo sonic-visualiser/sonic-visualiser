@@ -27,6 +27,9 @@ Sonic Visualiser*
 *.stash
 cov-int/*
 *.deb
+test-svcore-base
+test-svcore-data-fileio
+test-svcore-data-model
 vamp-plugin-sdk
 svcore
 svgui
