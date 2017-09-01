@@ -9,6 +9,8 @@ macx* {
 }
 
 win32-msvc* {
+    # This config is actually for 64-bit Windows builds -- see
+    # comments in noconfig.pri
     capnpc.commands=$$PWD/sv-dependency-builds/win64-msvc/bin/capnp -I$$PWD/sv-dependency-builds/win64-msvc/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/win64-msvc/bin/capnpc-c++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
 }
 
