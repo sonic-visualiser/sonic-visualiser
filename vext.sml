@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val vext_version = "0.9.8"
+val vext_version = "0.9.9"
 
 
 datatype vcs =
@@ -368,21 +368,27 @@ end = struct
           | (NONE, NONE) =>
             raise Fail "Failed to look up home directory from environment"
 
-    fun mkpath path =
+    fun mkpath' path =
         if OS.FileSys.isDir path handle _ => false
         then OK ()
         else case OS.Path.fromString path of
                  { arcs = nil, ... } => OK ()
                | { isAbs = false, ... } => ERROR "mkpath requires absolute path"
                | { isAbs, vol, arcs } => 
-                 case mkpath (OS.Path.toString {      (* parent *)
-                                   isAbs = isAbs,
-                                   vol = vol,
-                                   arcs = rev (tl (rev arcs)) }) of
+                 case mkpath' (OS.Path.toString {      (* parent *)
+                                    isAbs = isAbs,
+                                    vol = vol,
+                                    arcs = rev (tl (rev arcs)) }) of
                      ERROR e => ERROR e
                    | OK () => ((OS.FileSys.mkDir path; OK ())
                                handle OS.SysErr (e, _) =>
                                       ERROR ("Directory creation failed: " ^ e))
+
+    fun mkpath path =
+        (* strip any trailing '/', something isDir doesn't always handle *)
+        case rev (explode path) of
+            #"/"::rest => mkpath (implode (rev rest))
+          | _ => mkpath' path
 
     fun rmpath path =
         let open OS
@@ -1129,7 +1135,12 @@ end = struct
         case List.find (fn a => service = #service a) accounts of
             SOME { login, ... } => SOME login
           | NONE => NONE
-                                          
+
+    fun reponame_for path =
+        case String.tokens (fn c => c = #"/") path of
+            [] => raise Fail "Non-empty library path required"
+          | toks => hd (rev toks)
+                        
     fun remote_url (context : context) vcs source libname =
         case source of
             URL_SOURCE u => u
@@ -1139,7 +1150,7 @@ end = struct
                            owner = owner,
                            repo = case repo of
                                       SOME r => r
-                                    | NONE => libname }
+                                    | NONE => reponame_for libname }
                          (login_for context service)
                          (#providers context)
 end
@@ -1248,7 +1259,10 @@ structure HgControl :> VCS_CONTROL = struct
     fun checkout context (libname, source, branch) =
         let val url = remote_for context (libname, source)
         in
-            case FileBits.mkpath (FileBits.extpath context) of
+            (* make the lib dir rather than just the ext dir, since
+               the lib dir might be nested and hg will happily check
+               out into an existing empty dir anyway *)
+            case FileBits.mkpath (FileBits.libpath context libname) of
                 ERROR e => ERROR e
               | _ => hg_command context ""
                                 ["clone", "-u", branch_name branch,
@@ -1310,7 +1324,10 @@ structure GitControl :> VCS_CONTROL = struct
     fun checkout context (libname, source, branch) =
         let val url = remote_for context (libname, source)
         in
-            case FileBits.mkpath (FileBits.extpath context) of
+            (* make the lib dir rather than just the ext dir, since
+               the lib dir might be nested and git will happily check
+               out into an existing empty dir anyway *)
+            case FileBits.mkpath (FileBits.libpath context libname) of
                 OK () => git_command context ""
                                      ["clone", "-b",
                                       branch_name branch,
