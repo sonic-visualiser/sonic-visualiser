@@ -1,18 +1,13 @@
-dist:
-  - trusty
-
 language:
   - cpp
 
-sudo:
-  - false
-
-os:
-  - linux
-  - osx
-
-osx_image:
-  - xcode9
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: false
+    - os: osx
+      osx_image: xcode9
 
 addons:
   apt:
