@@ -1,7 +1,7 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "5d9af3140f05"
+      "pin": "a87e1bcce7b0"
     },
     "svcore": {
       "pin": "bd73a689c8af"
@@ -19,7 +19,7 @@
       "pin": "1beb47e41a2a02d75d0fb9204e1b7b95440f3ceb"
     },
     "piper-cpp": {
-      "pin": "85394095a5b04f99a0785ccd32a5a98c90d984b2"
+      "pin": "96fdf75e4dab5c2841db79886190768a30204e99"
     },
     "dataquay": {
       "pin": "807b55408d9e"
@@ -31,7 +31,7 @@
       "pin": "81b50ec12d9a"
     },
     "bqresample": {
-      "pin": "9f533e0c9b6d"
+      "pin": "5466df7d0d27"
     },
     "bqaudioio": {
       "pin": "d90244c003be"
