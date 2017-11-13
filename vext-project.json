@@ -15,12 +15,18 @@
             "service": "soundsoftware"
         },
         "svcore": {
-            "vcs": "hg",
-	    "service": "soundsoftware"
+            "vcs": "git",
+            "service": "github",
+            "owner": "LucasThompson",
+            "repository": "svcore",
+            "branch": "dev/streaming-csv-writer"
         },
         "svgui": {
-            "vcs": "hg",
-	    "service": "soundsoftware"
+            "vcs": "git",
+            "service": "github",
+            "owner": "LucasThompson",
+            "repository": "svgui",
+            "branch": "dev/modal-progress-dialog"
         },
         "svapp": {
             "vcs": "hg",
