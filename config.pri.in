@@ -1,6 +1,8 @@
 
 CONFIG += @QMAKE_CONFIG@
 
+PREFIX_PATH = @prefix@
+
 DEFINES += @HAVES@
 
 QMAKE_CC = @CC@
@@ -19,4 +21,3 @@ macx*:LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -fra
 LIBS += @LIBS@
 
 DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
-

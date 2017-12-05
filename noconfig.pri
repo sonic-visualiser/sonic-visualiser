@@ -4,6 +4,8 @@ CONFIG += release
 #CONFIG -= release
 #CONFIG += debug
 
+PREFIX_PATH = /usr/local
+
 DEFINES += NDEBUG BUILD_RELEASE
 DEFINES += NO_TIMING NO_HIT_COUNTS
 
