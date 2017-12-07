@@ -1,5 +1,5 @@
 
-capnpc.target = piper-cpp/vamp-capnp/piper-capnp.h
+capnpc.target = piper-cpp/vamp-capnp/piper.capnp.h
 capnpc.depends = $$PWD/piper/capnp/piper.capnp
 
 capnpc.commands = capnp compile --src-prefix=$$PWD/piper/capnp -oc++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
