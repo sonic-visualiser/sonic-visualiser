@@ -54,9 +54,10 @@ CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
 
 if test "x$GCC" = "xyes"; then
    	CXXFLAGS_ANY="-std=c++11 -fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
-        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
+        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror -fsanitize=undefined"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
+        LIBS_DEBUG="$LIBS -lubsan"
 fi
 
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
@@ -67,7 +68,8 @@ QMAKE_CONFIG="release"
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug],[enable debug support [default=no]])],[AC_MSG_NOTICE([enabling debug build])
 QMAKE_CONFIG="debug"
 CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
-SV_DEFINES_BUILD="$SV_DEFINES_DEBUG"])
+SV_DEFINES_BUILD="$SV_DEFINES_DEBUG"
+LIBS="$LIBS_DEBUG"])
 
 if test x"$USER_CXXFLAGS" != x; then
    	AC_MSG_NOTICE([The CXXFLAGS environment variable is set to "$USER_CXXFLAGS".])
