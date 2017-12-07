@@ -4427,7 +4427,9 @@ MainWindow::midiEventsAvailable()
             SparseTimeValueModel *tvm =
                 dynamic_cast<SparseTimeValueModel *>(model);
             if (tvm) {
-                SparseTimeValueModel::Point point(frame, ev.getPitch() % 12, "");
+                SparseTimeValueModel::Point point(frame,
+                                                  float(ev.getPitch() % 12),
+                                                  "");
                 SparseTimeValueModel::AddPointCommand *command =
                     new SparseTimeValueModel::AddPointCommand
                     (tvm, point, tr("Add Point"));
