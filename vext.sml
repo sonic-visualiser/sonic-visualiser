@@ -176,11 +176,11 @@ signature VCS_CONTROL = sig
     val checkout : context -> libname * source * branch -> unit result
 
     (** Update the library to the given branch tip. Assumes that a
-        local copy of the library already exists. Return the new id *)
-    val update : context -> libname * source * branch -> id_or_tag result
+        local copy of the library already exists *)
+    val update : context -> libname * source * branch -> unit result
 
     (** Update the library to the given specific id or tag *)
-    val update_to : context -> libname * source * id_or_tag -> id_or_tag result
+    val update_to : context -> libname * source * id_or_tag -> unit result
 
     (** Return a URL from which the library can be cloned, given that
         the local copy already exists. For a DVCS this can be the
@@ -192,7 +192,7 @@ end
 signature LIB_CONTROL = sig
     val review : context -> libspec -> (libstate * localstate) result
     val status : context -> libspec -> (libstate * localstate) result
-    val update : context -> libspec -> id_or_tag result
+    val update : context -> libspec -> unit result
     val id_of : context -> libspec -> id_or_tag result
 end
 
@@ -554,12 +554,12 @@ functor LibControlFn (V: VCS_CONTROL) :> LIB_CONTROL = struct
         let fun update_unpinned () =
                 case V.is_newest context (libname, source, branch) of
                     ERROR e => ERROR e
-                  | OK true => V.id_of context libname
+                  | OK true => OK ()
                   | OK false => V.update context (libname, source, branch)
             fun update_pinned target =
                 case V.is_at context (libname, target) of
                     ERROR e => ERROR e
-                  | OK true => OK target
+                  | OK true => OK ()
                   | OK false => V.update_to context (libname, source, target)
             fun update' () =
                 case lock_pin of
@@ -1336,7 +1336,7 @@ structure HgControl :> VCS_CONTROL = struct
               | _ =>
                 case pull_result of
                     ERROR e => ERROR e
-                  | _ => id_of context libname
+                  | _ => OK ()
         end
 
     fun update_to context (libname, _, "") =
@@ -1345,7 +1345,7 @@ structure HgControl :> VCS_CONTROL = struct
         let val pull_result = pull context (libname, source)
         in
             case hg_command context libname ["update", "-r", id] of
-                OK _ => id_of context libname
+                OK _ => OK ()
               | ERROR e =>
                 case pull_result of
                     ERROR e' => ERROR e' (* this was the ur-error *)
@@ -1507,7 +1507,7 @@ structure GitControl :> VCS_CONTROL = struct
             case git_command context libname ["checkout", "--detach",
                                               remote_branch_name branch] of
                 ERROR e => ERROR e
-              | _ => id_of context libname
+              | _ => OK ()
 
     (* This function is dealing with a specific id or tag, so if we
        can successfully check it out (detached) then that's all we
@@ -1523,7 +1523,7 @@ structure GitControl :> VCS_CONTROL = struct
         let val fetch_result = fetch context (libname, source)
         in
             case git_command context libname ["checkout", "--detach", id] of
-                OK _ => id_of context libname
+                OK _ => OK ()
               | ERROR e =>
                 case fetch_result of
                     ERROR e' => ERROR e' (* this was the ur-error *)
@@ -1630,7 +1630,7 @@ structure SvnControl :> VCS_CONTROL = struct
         case svn_command context libname
                          ["update", "--accept", "postpone"] of
             ERROR e => ERROR e
-          | _ => id_of context libname
+          | _ => OK ()
 
     fun update_to context (libname, _, "") =
         ERROR "Non-empty id (tag or revision id) required for update_to"
@@ -1638,7 +1638,7 @@ structure SvnControl :> VCS_CONTROL = struct
         case svn_command context libname
                          ["update", "-r", id, "--accept", "postpone"] of
             ERROR e => ERROR e
-          | OK _ => id_of context libname
+          | OK _ => OK ()
 
     fun copy_url_for context libname =
         svn_info_item context libname "URL"
@@ -1814,8 +1814,8 @@ end = struct
             foldl (fn (lib, acc) =>
                       case acc of
                           ERROR e => ERROR e
-                        | OK _ => AnyLibControl.update synthetic_context lib)
-                  (OK "")
+                        | OK () => AnyLibControl.update synthetic_context lib)
+                  (OK ())
                   (#libs project)
         end
 
