@@ -9,7 +9,7 @@
 
     A simple manager for third-party source code dependencies
 
-    Copyright 2017 Chris Cannam, Particular Programs Ltd,
+    Copyright 2018 Chris Cannam, Particular Programs Ltd,
     and Queen Mary, University of London
 
     Permission is hereby granted, free of charge, to any person
@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val vext_version = "0.9.92"
+val vext_version = "0.9.94"
 
 
 datatype vcs =
@@ -309,11 +309,12 @@ end = struct
                 then arg
                 else "\"" ^ arg ^ "\""
             fun check arg =
-                let val valid = explode " /#:;?,._-{}@="
+                let val valid = explode " /#:;?,._-{}@=+"
                 in
                     app (fn c =>
                             if isAlphaNum c orelse
-                               List.exists (fn v => v = c) valid
+                               List.exists (fn v => v = c) valid orelse
+                               c > chr 127
                             then ()
                             else raise Fail ("Invalid character '" ^
                                              (Char.toString c) ^
@@ -584,62 +585,9 @@ functor LibControlFn (V: VCS_CONTROL) :> LIB_CONTROL = struct
 end
 
 (* Simple Standard ML JSON parser
-   ==============================
-
    https://bitbucket.org/cannam/sml-simplejson
-
-   An RFC-compliant JSON parser in one SML file with no dependency 
-   on anything outside the Basis library. Also includes a simple
-   serialiser.
-
-   Tested with MLton, Poly/ML, and SML/NJ compilers.
-
-   Parser notes:
-
-   * Complies with RFC 7159, The JavaScript Object Notation (JSON)
-     Data Interchange Format
-
-   * Passes all of the JSONTestSuite parser accept/reject tests that
-     exist at the time of writing, as listed in "Parsing JSON is a
-     Minefield" (http://seriot.ch/parsing_json.php)
- 
-   * Two-pass parser using naive exploded strings, therefore not
-     particularly fast and not suitable for large input files
-
-   * Only supports UTF-8 input, not UTF-16 or UTF-32. Doesn't check
-     that JSON strings are valid UTF-8 -- the caller must do that --
-     but does handle \u escapes
-
-   * Converts all numbers to type "real". If that is a 64-bit IEEE
-     float type (common but not guaranteed in SML) then we're pretty
-     standard for a JSON parser
-
-   Copyright 2017 Chris Cannam.
+   Copyright 2017 Chris Cannam. BSD licence.
    Parts based on the JSON parser in the Ponyo library by Phil Eaton.
-
-   Permission is hereby granted, free of charge, to any person
-   obtaining a copy of this software and associated documentation
-   files (the "Software"), to deal in the Software without
-   restriction, including without limitation the rights to use, copy,
-   modify, merge, publish, distribute, sublicense, and/or sell copies
-   of the Software, and to permit persons to whom the Software is
-   furnished to do so, subject to the following conditions:
-
-   The above copyright notice and this permission notice shall be
-   included in all copies or substantial portions of the Software.
-
-   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-   NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR
-   ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-   CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-   Except as contained in this notice, the names of Chris Cannam and
-   Particular Programs Ltd shall not be used in advertising or
-   otherwise to promote the sale, use or other dealings in this
-   Software without prior written authorization.
 *)
 
 signature JSON = sig
@@ -1535,6 +1483,342 @@ structure GitControl :> VCS_CONTROL = struct
             
 end
 
+(* SubXml - A parser for a subset of XML
+   https://bitbucket.org/cannam/sml-simplexml
+   Copyright 2018 Chris Cannam. BSD licence.
+*)
+
+signature SUBXML = sig
+
+    datatype node = ELEMENT of { name : string, children : node list }
+                  | ATTRIBUTE of { name : string, value : string }
+                  | TEXT of string
+                  | CDATA of string
+                  | COMMENT of string
+
+    datatype document = DOCUMENT of { name : string, children : node list }
+
+    datatype 'a result = OK of 'a
+                       | ERROR of string
+
+    val parse : string -> document result
+    val serialise : document -> string
+                                  
+end
+
+structure SubXml :> SUBXML = struct
+
+    datatype node = ELEMENT of { name : string, children : node list }
+                  | ATTRIBUTE of { name : string, value : string }
+                  | TEXT of string
+                  | CDATA of string
+                  | COMMENT of string
+
+    datatype document = DOCUMENT of { name : string, children : node list }
+
+    datatype 'a result = OK of 'a
+                       | ERROR of string
+
+    structure T = struct
+        datatype token = ANGLE_L
+                       | ANGLE_R
+                       | ANGLE_SLASH_L
+                       | SLASH_ANGLE_R
+                       | EQUAL
+                       | NAME of string
+                       | TEXT of string
+                       | CDATA of string
+                       | COMMENT of string
+
+        fun name t =
+            case t of ANGLE_L => "<"
+                    | ANGLE_R => ">"
+                    | ANGLE_SLASH_L => "</"
+                    | SLASH_ANGLE_R => "/>"
+                    | EQUAL => "="
+                    | NAME s => "name \"" ^ s ^ "\""
+                    | TEXT s => "text"
+                    | CDATA _ => "CDATA section"
+                    | COMMENT _ => "comment"
+    end
+
+    structure Lex :> sig
+                  val lex : string -> T.token list result
+              end = struct
+                      
+        fun error pos text =
+            ERROR (text ^ " at character position " ^ Int.toString (pos-1))
+        fun tokenError pos token =
+            error pos ("Unexpected token '" ^ Char.toString token ^ "'")
+
+        val nameEnd = explode " \t\n\r\"'</>!=?"
+                              
+        fun quoted quote pos acc cc =
+            let fun quoted' pos text [] =
+                    error pos "Document ends during quoted string"
+                  | quoted' pos text (x::xs) =
+                    if x = quote
+                    then OK (rev text, xs, pos+1)
+                    else quoted' (pos+1) (x::text) xs
+            in
+                case quoted' pos [] cc of
+                    ERROR e => ERROR e
+                  | OK (text, rest, newpos) =>
+                    inside newpos (T.TEXT (implode text) :: acc) rest
+            end
+
+        and name first pos acc cc =
+            let fun name' pos text [] =
+                    error pos "Document ends during name"
+                  | name' pos text (x::xs) =
+                    if List.find (fn c => c = x) nameEnd <> NONE
+                    then OK (rev text, (x::xs), pos)
+                    else name' (pos+1) (x::text) xs
+            in
+                case name' (pos-1) [] (first::cc) of
+                    ERROR e => ERROR e
+                  | OK ([], [], pos) => error pos "Document ends before name"
+                  | OK ([], (x::xs), pos) => tokenError pos x
+                  | OK (text, rest, pos) =>
+                    inside pos (T.NAME (implode text) :: acc) rest
+            end
+
+        and comment pos acc cc =
+            let fun comment' pos text cc =
+                    case cc of
+                        #"-" :: #"-" :: #">" :: xs => OK (rev text, xs, pos+3)
+                      | x :: xs => comment' (pos+1) (x::text) xs
+                      | [] => error pos "Document ends during comment"
+            in
+                case comment' pos [] cc of
+                    ERROR e => ERROR e
+                  | OK (text, rest, pos) => 
+                    outside pos (T.COMMENT (implode text) :: acc) rest
+            end
+
+        and instruction pos acc cc =
+            case cc of
+                #"?" :: #">" :: xs => outside (pos+2) acc xs
+              | #">" :: _ => tokenError pos #">"
+              | x :: xs => instruction (pos+1) acc xs
+              | [] => error pos "Document ends during processing instruction"
+
+        and cdata pos acc cc =
+            let fun cdata' pos text cc =
+                    case cc of
+                        #"]" :: #"]" :: #">" :: xs => OK (rev text, xs, pos+3)
+                      | x :: xs => cdata' (pos+1) (x::text) xs
+                      | [] => error pos "Document ends during CDATA section"
+            in
+                case cdata' pos [] cc of
+                    ERROR e => ERROR e
+                  | OK (text, rest, pos) =>
+                    outside pos (T.CDATA (implode text) :: acc) rest
+            end
+                
+        and doctype pos acc cc =
+            case cc of
+                #">" :: xs => outside (pos+1) acc xs
+              | x :: xs => doctype (pos+1) acc xs
+              | [] => error pos "Document ends during DOCTYPE"
+
+        and declaration pos acc cc =
+            case cc of
+                #"-" :: #"-" :: xs =>
+                comment (pos+2) acc xs
+              | #"[" :: #"C" :: #"D" :: #"A" :: #"T" :: #"A" :: #"[" :: xs =>
+                cdata (pos+7) acc xs
+              | #"D" :: #"O" :: #"C" :: #"T" :: #"Y" :: #"P" :: #"E" :: xs =>
+                doctype (pos+7) acc xs
+              | [] => error pos "Document ends during declaration"
+              | _ => error pos "Unsupported declaration type"
+
+        and left pos acc cc =
+            case cc of
+                #"/" :: xs => inside (pos+1) (T.ANGLE_SLASH_L :: acc) xs
+              | #"!" :: xs => declaration (pos+1) acc xs
+              | #"?" :: xs => instruction (pos+1) acc xs
+              | xs => inside pos (T.ANGLE_L :: acc) xs
+
+        and slash pos acc cc =
+            case cc of
+                #">" :: xs => outside (pos+1) (T.SLASH_ANGLE_R :: acc) xs
+              | x :: _ => tokenError pos x
+              | [] => error pos "Document ends before element closed"
+
+        and close pos acc xs = outside pos (T.ANGLE_R :: acc) xs
+
+        and equal pos acc xs = inside pos (T.EQUAL :: acc) xs
+
+        and outside pos acc [] = OK acc
+          | outside pos acc cc =
+            let fun textOf text = T.TEXT (implode (rev text))
+                fun outside' pos [] acc [] = OK acc
+                  | outside' pos text acc [] = OK (textOf text :: acc)
+                  | outside' pos text acc (x::xs) =
+                    case x of
+                        #"<" => if text = []
+                                then left (pos+1) acc xs
+                                else left (pos+1) (textOf text :: acc) xs
+                      | x => outside' (pos+1) (x::text) acc xs
+            in
+                outside' pos [] acc cc
+            end
+                
+        and inside pos acc [] = error pos "Document ends within tag"
+          | inside pos acc (#"<"::_) = tokenError pos #"<"
+          | inside pos acc (x::xs) =
+            (case x of
+                 #" " => inside | #"\t" => inside
+               | #"\n" => inside | #"\r" => inside
+               | #"\"" => quoted x | #"'" => quoted x
+               | #"/" => slash | #">" => close | #"=" => equal
+               | x => name x) (pos+1) acc xs
+
+        fun lex str =
+            case outside 1 [] (explode str) of
+                ERROR e => ERROR e
+              | OK tokens => OK (rev tokens)
+    end
+
+    structure Parse :> sig
+                  val parse : string -> document result
+              end = struct                            
+                  
+        fun show [] = "end of input"
+          | show (tok :: _) = T.name tok
+
+        fun error toks text = ERROR (text ^ " before " ^ show toks)
+
+        fun attribute elt name toks =
+            case toks of
+                T.EQUAL :: T.TEXT value :: xs =>
+                namedElement {
+                    name = #name elt,
+                    children = ATTRIBUTE { name = name, value = value } ::
+                               #children elt
+                } xs
+              | T.EQUAL :: xs => error xs "Expected attribute value"
+              | toks => error toks "Expected attribute assignment"
+
+        and content elt toks =
+            case toks of
+                T.ANGLE_SLASH_L :: T.NAME n :: T.ANGLE_R :: xs =>
+                if n = #name elt
+                then OK (elt, xs)
+                else ERROR ("Closing tag </" ^ n ^ "> " ^
+                            "does not match opening <" ^ #name elt ^ ">")
+              | T.TEXT text :: xs =>
+                content {
+                    name = #name elt,
+                    children = TEXT text :: #children elt
+                } xs
+              | T.CDATA text :: xs =>
+                content {
+                    name = #name elt,
+                    children = CDATA text :: #children elt
+                } xs
+              | T.COMMENT text :: xs =>
+                content {
+                    name = #name elt,
+                    children = COMMENT text :: #children elt
+                } xs
+              | T.ANGLE_L :: xs =>
+                (case element xs of
+                     ERROR e => ERROR e
+                   | OK (child, xs) =>
+                     content {
+                         name = #name elt,
+                         children = ELEMENT child :: #children elt
+                     } xs)
+              | tok :: xs =>
+                error xs ("Unexpected token " ^ T.name tok)
+              | [] =>
+                ERROR ("Document ends within element \"" ^ #name elt ^ "\"")
+                       
+        and namedElement elt toks =
+            case toks of
+                T.SLASH_ANGLE_R :: xs => OK (elt, xs)
+              | T.NAME name :: xs => attribute elt name xs
+              | T.ANGLE_R :: xs => content elt xs
+              | x :: xs => error xs ("Unexpected token " ^ T.name x)
+              | [] => ERROR "Document ends within opening tag"
+                       
+        and element toks =
+            case toks of
+                T.NAME name :: xs =>
+                (case namedElement { name = name, children = [] } xs of
+                     ERROR e => ERROR e 
+                   | OK ({ name, children }, xs) =>
+                     OK ({ name = name, children = rev children }, xs))
+              | toks => error toks "Expected element name"
+
+        and document [] = ERROR "Empty document"
+          | document (tok :: xs) =
+            case tok of
+                T.TEXT _ => document xs
+              | T.COMMENT _ => document xs
+              | T.ANGLE_L =>
+                (case element xs of
+                     ERROR e => ERROR e
+                   | OK (elt, []) => OK (DOCUMENT elt)
+                   | OK (elt, (T.TEXT _ :: xs)) => OK (DOCUMENT elt)
+                   | OK (elt, xs) => error xs "Extra data after document")
+              | _ => error xs ("Unexpected token " ^ T.name tok)
+
+        fun parse str =
+            case Lex.lex str of
+                ERROR e => ERROR e
+              | OK tokens => document tokens
+    end
+
+    structure Serialise :> sig
+                  val serialise : document -> string
+              end = struct
+
+        fun attributes nodes =
+            String.concatWith
+                " "
+                (map node (List.filter
+                               (fn ATTRIBUTE _ => true | _ => false)
+                               nodes))
+
+        and nonAttributes nodes =
+            String.concat
+                (map node (List.filter
+                               (fn ATTRIBUTE _ => false | _ => true)
+                               nodes))
+                
+        and node n =
+            case n of
+                TEXT string =>
+                string
+              | CDATA string =>
+                "<![CDATA[" ^ string ^ "]]>"
+              | COMMENT string =>
+                "<!-- " ^ string ^ "-->"
+              | ATTRIBUTE { name, value } =>
+                name ^ "=" ^ "\"" ^ value ^ "\"" (*!!!*)
+              | ELEMENT { name, children } =>
+                "<" ^ name ^
+                (case (attributes children) of
+                     "" => ""
+                   | s => " " ^ s) ^
+                (case (nonAttributes children) of
+                     "" => "/>"
+                   | s => ">" ^ s ^ "</" ^ name ^ ">")
+                              
+        fun serialise (DOCUMENT { name, children }) =
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" ^
+            node (ELEMENT { name = name, children = children })
+    end
+
+    val parse = Parse.parse
+    val serialise = Serialise.serialise
+                        
+end
+
+
 structure SvnControl :> VCS_CONTROL = struct
 
     fun svn_command context libname args =
@@ -1558,17 +1842,33 @@ structure SvnControl :> VCS_CONTROL = struct
               | first::rest =>
                 (first, strip_leading_ws (String.concatWith ":" rest))
         end
-            
-    fun svn_info_item context libname key =
-        (* SVN 1.9 has info --show-item which is what we need, but at
-           this point we still have 1.8 on the CI boxes so we might as 
-           well aim to support it *)
-        case svn_command_lines context libname ["info"] of
-            ERROR e => ERROR e
-          | OK lines =>
-            case List.find (fn (k, v) => k = key) (map split_line_pair lines) of
-                NONE => ERROR ("Key \"" ^ key ^ "\" not found in output")
-              | SOME (_, v) => OK v
+
+    structure X = SubXml
+                      
+    fun svn_info context libname route =
+        (* SVN 1.9 has info --show-item which is just what we need,
+           but at this point we still have 1.8 on the CI boxes so we
+           might as well aim to support it. For that we really have to
+           use the XML output format, since the default info output is
+           localised. This is the only thing our mini-XML parser is
+           used for though, so it would be good to trim it at some
+           point *)
+        let fun find elt [] = OK elt
+              | find { children, ... } (first :: rest) =
+                case List.find (fn (X.ELEMENT { name, ... }) => name = first
+                               | _ => false)
+                               children of
+                    NONE => ERROR ("No element \"" ^ first ^ "\" in SVN XML")
+                  | SOME (X.ELEMENT e) => find e rest
+                  | SOME _ => ERROR "Internal error"
+        in
+            case svn_command_output context libname ["info", "--xml"] of
+                ERROR e => ERROR e
+              | OK xml =>
+                case X.parse xml of
+                    X.ERROR e => ERROR e
+                  | X.OK (X.DOCUMENT doc) => find doc route
+        end
             
     fun exists context libname =
         OK (OS.FileSys.isDir (FileBits.subpath context libname ".svn"))
@@ -1577,8 +1877,27 @@ structure SvnControl :> VCS_CONTROL = struct
     fun remote_for context (libname, source) =
         Provider.remote_url context SVN source libname
 
+    (* Remote the checkout came from, not necessarily the one we want *)
+    fun actual_remote_for context libname =
+        case svn_info context libname ["entry", "url"] of
+            ERROR e => ERROR e
+          | OK { children, ... } =>
+            case List.find (fn (X.TEXT _) => true | _ => false) children of
+                NONE => ERROR "No content for URL in SVN info XML"
+              | SOME (X.TEXT url) => OK url
+              | SOME _ => ERROR "Internal error"
+
     fun id_of context libname =
-        svn_info_item context libname "Revision" (*!!! check: does svn localise this? should we ensure C locale? *)
+        case svn_info context libname ["entry"] of
+            ERROR e => ERROR e
+          | OK { children, ... } => 
+            case List.find
+                     (fn (X.ATTRIBUTE { name = "revision", ... }) => true
+                     | _ => false)
+                     children of
+                NONE => ERROR "No revision for entry in SVN info XML"
+              | SOME (X.ATTRIBUTE { value, ... }) => OK value
+              | SOME _ => ERROR "Internal error"
 
     fun is_at context (libname, id_or_tag) =
         case id_of context libname of
@@ -1587,17 +1906,30 @@ structure SvnControl :> VCS_CONTROL = struct
 
     fun is_on_branch context (libname, b) =
         OK (b = DEFAULT_BRANCH)
+
+    fun check_remote context (libname, source) =
+      case (remote_for context (libname, source),
+            actual_remote_for context libname) of
+          (_, ERROR e) => ERROR e
+        | (url, OK actual) => 
+          if actual = url
+          then OK ()
+          else svn_command context libname ["relocate", url]
                
     fun is_newest context (libname, source, branch) =
-        case svn_command_lines context libname ["status", "--show-updates"] of 
+        case check_remote context (libname, source) of
             ERROR e => ERROR e
-          | OK lines =>
-            case rev lines of
-                [] => ERROR "No result returned for server status"
-              | last_line::_ =>
-                case rev (String.tokens (fn c => c = #" ") last_line) of
-                    [] => ERROR "No revision field found in server status"
-                  | server_id::_ => is_at context (libname, server_id)
+          | OK () => 
+            case svn_command_lines context libname
+                                   ["status", "--show-updates"] of
+                ERROR e => ERROR e
+              | OK lines =>
+                case rev lines of
+                    [] => ERROR "No result returned for server status"
+                  | last_line::_ =>
+                    case rev (String.tokens (fn c => c = #" ") last_line) of
+                        [] => ERROR "No revision field found in server status"
+                      | server_id::_ => is_at context (libname, server_id)
 
     fun is_newest_locally context (libname, branch) =
         OK true (* no local history *)
@@ -1627,21 +1959,27 @@ structure SvnControl :> VCS_CONTROL = struct
         end
                                                     
     fun update context (libname, source, branch) =
-        case svn_command context libname
-                         ["update", "--accept", "postpone"] of
+        case check_remote context (libname, source) of
             ERROR e => ERROR e
-          | _ => OK ()
+          | OK () => 
+            case svn_command context libname
+                             ["update", "--accept", "postpone"] of
+                ERROR e => ERROR e
+              | _ => OK ()
 
     fun update_to context (libname, _, "") =
         ERROR "Non-empty id (tag or revision id) required for update_to"
       | update_to context (libname, source, id) = 
-        case svn_command context libname
-                         ["update", "-r", id, "--accept", "postpone"] of
+        case check_remote context (libname, source) of
             ERROR e => ERROR e
-          | OK _ => OK ()
+          | OK () => 
+            case svn_command context libname
+                             ["update", "-r", id, "--accept", "postpone"] of
+                ERROR e => ERROR e
+              | OK _ => OK ()
 
     fun copy_url_for context libname =
-        svn_info_item context libname "URL"
+        actual_remote_for context libname
 
 end
 
