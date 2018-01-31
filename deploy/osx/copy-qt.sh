@@ -11,7 +11,7 @@ fi
 
 frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtWidgets QtPrintSupport QtDBus"
 
-plugins="dds gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen"
+plugins="gif icns ico jpeg tga tiff wbmp webp cocoa macstyle minimal offscreen"
 
 qtdir=$(grep "Command:" Makefile | head -1 | awk '{ print $3; }' | sed s,/bin/.*,,)
 

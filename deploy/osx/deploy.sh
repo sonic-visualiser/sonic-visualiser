@@ -72,7 +72,11 @@ dmg="$dmg"-"$version".dmg
 mkdir "$volume" || exit 1
 
 ln -s /Applications "$volume"/Applications
-cp README README.OSC COPYING CHANGELOG "$volume/"
+cp README.md "$volume/README.txt"
+cp README.OSC "$volume/README-OSC.txt"
+cp COPYING "$volume/COPYING.txt"
+cp CHANGELOG "$volume/CHANGELOG.txt"
+cp CITATION "$volume/CITATION.txt"
 cp -rp "$source" "$target"
 
 # update file timestamps so as to make the build date apparent
