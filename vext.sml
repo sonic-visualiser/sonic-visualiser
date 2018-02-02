@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val vext_version = "0.9.94"
+val vext_version = "0.9.95"
 
 
 datatype vcs =
@@ -342,7 +342,7 @@ end = struct
         in
             print ("  " ^
                    Vector.sub(tick_chars, !tick_cycle) ^ " " ^
-                   pad_to 24 name ^
+                   pad_to 70 name ^
                    "\r");
             tick_cycle := (if !tick_cycle = n - 1 then 0 else 1 + !tick_cycle)
         end
@@ -352,8 +352,7 @@ end = struct
             val dir = libpath context libname
             val cmd = expand_commandline cmdlist
             val _ = if verbose ()
-                    then print ("Running: " ^ cmd ^
-                                " (in dir " ^ dir ^ ")...\n")
+                    then print ("\n=== " ^ dir ^ "\n<<< " ^ cmd ^ "\n")
                     else tick libname cmdlist
             val _ = FileSys.chDir dir
             val status = case redirect of
@@ -375,7 +374,7 @@ end = struct
             val result = run_command context libname cmdlist (SOME tmpFile)
             val contents = file_contents tmpFile
             val _ = if verbose ()
-                    then print ("Output was:\n\"" ^ contents ^ "\"\n")
+                    then print (">>> \"" ^ contents ^ "\"\n")
                     else ()
         in
             FileSys.remove tmpFile handle _ => ();
@@ -1378,15 +1377,29 @@ structure GitControl :> VCS_CONTROL = struct
             if String.isPrefix id_or_tag id orelse
                String.isPrefix id id_or_tag
             then OK true
-            else 
-                case git_command_output context libname
-                                        ["show-ref",
-                                         "refs/tags/" ^ id_or_tag,
-                                         "--"] of
-                    OK "" => OK false
-                  | ERROR _ => OK false
-                  | OK s => OK (id = hd (String.tokens (fn c => c = #" ") s))
+            else is_at_tag context (libname, id, id_or_tag)
 
+    and is_at_tag context (libname, id, tag) =
+        (* For annotated tags (with message) show-ref returns the tag
+           object ref rather than that of the revision being tagged;
+           we need the subsequent rev-list to chase that up. In fact
+           the rev-list on its own is enough to get us the id direct
+           from the tag name, but it fails with an error if the tag
+           doesn't exist, whereas we want to handle that quietly in
+           case the tag simply hasn't been pulled yet *)
+        case git_command_output context libname
+                                ["show-ref", "refs/tags/" ^ tag, "--"] of
+            OK "" => OK false (* Not a tag *)
+          | ERROR _ => OK false
+          | OK s =>
+            let val tag_ref = hd (String.tokens (fn c => c = #" ") s)
+            in
+                case git_command_output context libname
+                                        ["rev-list", "-1", tag_ref] of
+                    OK tagged => OK (id = tagged)
+                  | ERROR _ => OK false
+            end
+                           
     fun branch_tip context (libname, branch) =
         (* We don't have access to the source info or the network
            here, as this is used by status (e.g. via is_on_branch) as
@@ -2377,7 +2390,7 @@ fun pad_to n str =
 fun hline_to 0 = ""
   | hline_to n = "-" ^ hline_to (n-1)
 
-val libname_width = 25
+val libname_width = 28
 val libstate_width = 11
 val localstate_width = 17
 val notes_width = 5
