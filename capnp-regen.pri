@@ -14,10 +14,21 @@ win32-g++ {
 
 win32-msvc* {
     # This config is actually for 64-bit Windows builds -- see
-    # comments in noconfig.pri
+    # comments in noconfig.pri.
+
+    # With MSVC2017 we have a problem that the header dependency is
+    # written out with the relative path from the build dir to the
+    # source dir (e.g. ..\sonic-visualiser\...) so if the header
+    # target path doesn't match that, the build fails before
+    # regenerating it. Not a problem with VC2015 for some reason.
+    # I hope using the relative path as target should fix it without
+    # breaking the VC2015 build.
+
+    capnpc.target = ../$$basename(PWD)/piper-cpp/vamp-capnp/piper.capnp.h
     capnpc.commands=$$PWD/sv-dependency-builds/win64-msvc/bin/capnp -I$$PWD/sv-dependency-builds/win64-msvc/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/win64-msvc/bin/capnpc-c++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
 }
 
 QMAKE_EXTRA_TARGETS += capnpc
 PRE_TARGETDEPS += $$capnpc.target
+QMAKE_CLEAN += $$capnpc.target
 
