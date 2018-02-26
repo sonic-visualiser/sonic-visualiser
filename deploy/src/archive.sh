@@ -23,5 +23,7 @@ if [ "$doc_status" = "404" ]; then
     echo "*** WARNING: Documentation URL returns a 404:"
     echo "***          $doc_url"
     echo "***          Please fix this before release!"
+    echo "***          And remember to update the link from"
+    echo "             http://www.sonicvisualiser.org/documentation.html !"
     echo
 fi
