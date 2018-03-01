@@ -236,14 +236,14 @@ protected:
     QString                  m_newerVersionIs;
 
     struct LayerConfiguration {
-	LayerConfiguration(LayerFactory::LayerType _layer
-			                       = LayerFactory::TimeRuler,
+        LayerConfiguration(LayerFactory::LayerType _layer
+                                               = LayerFactory::TimeRuler,
                            Model *_source = 0,
                            int _channel = -1) :
-	    layer(_layer), sourceModel(_source), channel(_channel) { }
-	LayerFactory::LayerType layer;
+            layer(_layer), sourceModel(_source), channel(_channel) { }
+        LayerFactory::LayerType layer;
         Model *sourceModel;
-	int channel;
+        int channel;
     };
 
     typedef std::map<QAction *, LayerConfiguration> PaneActionMap;

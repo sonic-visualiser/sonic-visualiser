@@ -576,9 +576,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             TransformId transformId = message.getArg(0).toString();
 
-	    Transform transform = TransformFactory::getInstance()->
+            Transform transform = TransformFactory::getInstance()->
                 getDefaultTransformFor(transformId);
-	    
+            
             Layer *newLayer = m_document->createDerivedLayer
                 (transform, getMainModel());
 
