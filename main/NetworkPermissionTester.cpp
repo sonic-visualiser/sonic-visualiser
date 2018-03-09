@@ -45,10 +45,10 @@ NetworkPermissionTester::havePermission()
         SVDEBUG << "NetworkPermissionTester: Asking for permission" << endl;
 
     QDialog d;
-	d.setWindowTitle(QCoreApplication::translate("NetworkPermissionTester", "Welcome to Sonic Visualiser"));
+        d.setWindowTitle(QCoreApplication::translate("NetworkPermissionTester", "Welcome to Sonic Visualiser"));
 
-	QGridLayout *layout = new QGridLayout;
-	d.setLayout(layout);
+        QGridLayout *layout = new QGridLayout;
+        d.setLayout(layout);
 
         QString preamble;
         preamble = QCoreApplication::translate
@@ -84,23 +84,23 @@ NetworkPermissionTester::havePermission()
              "<p><b>No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.</b> We will however make aggregate counts of distinct requests for usage reporting.</p>"
              "<p>We recommend that you allow this, because it makes Sonic Visualiser more useful to you and supports the public funding of this work. But if you do not wish to allow it, please un-check the box below.<br></p>");
         
-	QLabel *label = new QLabel;
-	label->setWordWrap(true);
-	label->setText(preamble + bullets + postamble);
-	layout->addWidget(label, 0, 0);
+        QLabel *label = new QLabel;
+        label->setWordWrap(true);
+        label->setText(preamble + bullets + postamble);
+        layout->addWidget(label, 0, 0);
 
-	QCheckBox *cb = new QCheckBox(QCoreApplication::translate("NetworkPermissionTester", "Allow this"));
-	cb->setChecked(true);
-	layout->addWidget(cb, 1, 0);
-	
-	QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
-	QObject::connect(bb, SIGNAL(accepted()), &d, SLOT(accept()));
-	layout->addWidget(bb, 2, 0);
-	
-	d.exec();
+        QCheckBox *cb = new QCheckBox(QCoreApplication::translate("NetworkPermissionTester", "Allow this"));
+        cb->setChecked(true);
+        layout->addWidget(cb, 1, 0);
+        
+        QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+        QObject::connect(bb, SIGNAL(accepted()), &d, SLOT(accept()));
+        layout->addWidget(bb, 2, 0);
+        
+        d.exec();
 
         permish = cb->isChecked();
-	settings.setValue(tag, permish);
+        settings.setValue(tag, permish);
 
         SVDEBUG << "NetworkPermissionTester: asked, answer was " << permish << endl;
     }
