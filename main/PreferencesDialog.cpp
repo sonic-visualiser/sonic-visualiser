@@ -154,7 +154,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             settings.value("overview-colour", m_overviewColour.name())
             .toString();
         m_overviewColour.setNamedColor(qcolorName);
-        cerr << "loaded colour " << m_overviewColour.name() << " from settings" << endl;
+        SVCERR << "loaded colour " << m_overviewColour.name() << " from settings" << endl;
     }
     settings.endGroup();
 
@@ -171,7 +171,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     ColourComboBox *overviewColour = new ColourComboBox(false);
     int overviewColourIndex =
         ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
-    cerr << "index = " << overviewColourIndex << " for colour " << m_overviewColour.name() << endl;
+    SVCERR << "index = " << overviewColourIndex << " for colour " << m_overviewColour.name() << endl;
     if (overviewColourIndex >= 0) {
         overviewColour->setCurrentIndex(overviewColourIndex);
     }
@@ -328,7 +328,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
         QString f0 = f;
         f.replace("sonic-visualiser_", "").replace(".qm", "");
         if (f == f0) { // our expectations about filename format were not met
-            cerr << "INFO: Unexpected filename " << f << " in i18n resource directory" << endl;
+            SVCERR << "INFO: Unexpected filename " << f << " in i18n resource directory" << endl;
         } else {
             m_locales.push_back(f);
             QString displayText;
