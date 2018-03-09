@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val vext_version = "0.9.95"
+val vext_version = "0.9.97"
 
 
 datatype vcs =
@@ -142,6 +142,9 @@ end
                    
 signature VCS_CONTROL = sig
 
+    (** Check whether the given VCS is installed and working *)
+    val is_working : context -> bool result
+    
     (** Test whether the library is present locally at all *)
     val exists : context -> libname -> bool result
                                             
@@ -194,6 +197,7 @@ signature LIB_CONTROL = sig
     val status : context -> libspec -> (libstate * localstate) result
     val update : context -> libspec -> unit result
     val id_of : context -> libspec -> id_or_tag result
+    val is_working : context -> vcs -> bool result
 end
 
 structure FileBits :> sig
@@ -580,6 +584,9 @@ functor LibControlFn (V: VCS_CONTROL) :> LIB_CONTROL = struct
 
     fun id_of context ({ libname, ... } : libspec) =
         V.id_of context libname
+
+    fun is_working context vcs =
+        V.is_working context
                 
 end
 
@@ -1162,15 +1169,23 @@ structure HgControl :> VCS_CONTROL = struct
     type vcsstate = { id: string, modified: bool,
                       branch: string, tags: string list }
 
+    val hg_program = "hg"
+                        
     val hg_args = [ "--config", "ui.interactive=true",
                     "--config", "ui.merge=:merge" ]
                         
     fun hg_command context libname args =
-        FileBits.command context libname ("hg" :: hg_args @ args)
+        FileBits.command context libname (hg_program :: hg_args @ args)
 
     fun hg_command_output context libname args =
-        FileBits.command_output context libname ("hg" :: hg_args @ args)
-                        
+        FileBits.command_output context libname (hg_program :: hg_args @ args)
+
+    fun is_working context =
+        case hg_command_output context "" ["--version"] of
+            OK "" => OK false
+          | OK _ => OK true
+          | ERROR e => ERROR e
+
     fun exists context libname =
         OK (OS.FileSys.isDir (FileBits.subpath context libname ".hg"))
         handle _ => OK false
@@ -1313,11 +1328,19 @@ structure GitControl :> VCS_CONTROL = struct
        ensure we update properly if the location given in the project
        file changes. The origin remote is unused. *)
 
+    val git_program = "git"
+                      
     fun git_command context libname args =
-        FileBits.command context libname ("git" :: args)
+        FileBits.command context libname (git_program :: args)
 
     fun git_command_output context libname args =
-        FileBits.command_output context libname ("git" :: args)
+        FileBits.command_output context libname (git_program :: args)
+
+    fun is_working context =
+        case git_command_output context "" ["--version"] of
+            OK "" => OK false
+          | OK _ => OK true
+          | ERROR e => ERROR e
                             
     fun exists context libname =
         OK (OS.FileSys.isDir (FileBits.subpath context libname ".git"))
@@ -1497,7 +1520,7 @@ structure GitControl :> VCS_CONTROL = struct
 end
 
 (* SubXml - A parser for a subset of XML
-   https://bitbucket.org/cannam/sml-simplexml
+   https://bitbucket.org/cannam/sml-subxml
    Copyright 2018 Chris Cannam. BSD licence.
 *)
 
@@ -1834,11 +1857,13 @@ end
 
 structure SvnControl :> VCS_CONTROL = struct
 
+    val svn_program = "svn"
+
     fun svn_command context libname args =
-        FileBits.command context libname ("svn" :: args)
+        FileBits.command context libname (svn_program :: args)
 
     fun svn_command_output context libname args =
-        FileBits.command_output context libname ("svn" :: args)
+        FileBits.command_output context libname (svn_program :: args)
 
     fun svn_command_lines context libname args =
         case svn_command_output context libname args of
@@ -1855,6 +1880,12 @@ structure SvnControl :> VCS_CONTROL = struct
               | first::rest =>
                 (first, strip_leading_ws (String.concatWith ":" rest))
         end
+
+    fun is_working context =
+        case svn_command_output context "" ["--version"] of
+            OK "" => OK false
+          | OK _ => OK true
+          | ERROR e => ERROR e
 
     structure X = SubXml
                       
@@ -2013,6 +2044,10 @@ structure AnyLibControl :> LIB_CONTROL = struct
 
     fun id_of context (spec as { vcs, ... } : libspec) =
         (fn HG => H.id_of | GIT => G.id_of | SVN => S.id_of) vcs context spec
+
+    fun is_working context vcs =
+        (fn HG => H.is_working | GIT => G.is_working | SVN => S.is_working)
+            vcs context vcs
 
 end
 
@@ -2417,7 +2452,7 @@ fun print_outcome_header () =
            hline_to libstate_width ^ "-+-" ^
            hline_to notes_width ^ "\n")
                         
-fun print_status with_network (libname, status) =
+fun print_status with_network (lib : libspec, status) =
     let val libstate_str =
             case status of
                 OK (ABSENT, _) => "Absent"
@@ -2437,13 +2472,13 @@ fun print_status with_network (libname, status) =
               | _ => ""
     in
         print (" " ^
-               pad_to libname_width libname ^ divider ^
+               pad_to libname_width (#libname lib) ^ divider ^
                pad_to libstate_width libstate_str ^ divider ^
                pad_to localstate_width localstate_str ^ divider ^
                error_str ^ "\n")
     end
 
-fun print_update_outcome (libname, outcome) =
+fun print_update_outcome (lib : libspec, outcome) =
     let val outcome_str =
             case outcome of
                 OK id => "Ok"
@@ -2454,16 +2489,48 @@ fun print_update_outcome (libname, outcome) =
               | _ => ""
     in
         print (" " ^
-               pad_to libname_width libname ^ divider ^
+               pad_to libname_width (#libname lib) ^ divider ^
                pad_to libstate_width outcome_str ^ divider ^
                error_str ^ "\n")
     end
 
-fun act_and_print action print_header print_line (libs : libspec list) =
-    let val lines = map (fn lib => (#libname lib, action lib)) libs
+fun vcs_name HG = ("Mercurial", "hg")
+  | vcs_name GIT = ("Git", "git")
+  | vcs_name SVN = ("Subversion", "svn")
+        
+fun print_problem_summary context lines =
+    let val failed_vcs =
+            foldl (fn (({ vcs, ... } : libspec, ERROR _), acc) => vcs::acc
+                  | (_, acc) => acc) [] lines
+        fun report_nonworking vcs error =
+            print ((if error = "" then "" else error ^ "\n\n") ^
+                   "Error: The project uses the " ^ (#1 (vcs_name vcs)) ^
+                   " version control system, but its\n" ^
+                   "executable program (" ^ (#2 (vcs_name vcs)) ^
+                   ") does not appear to be installed in the program path\n\n")
+        fun check_working [] checked = ()
+          | check_working (vcs::rest) checked =
+            if List.exists (fn v => vcs = v) checked
+            then check_working rest checked
+            else
+                case AnyLibControl.is_working context vcs of
+                    OK true => check_working rest checked
+                  | OK false => (report_nonworking vcs "";
+                                 check_working rest (vcs::checked))
+                  | ERROR e => (report_nonworking vcs e;
+                                check_working rest (vcs::checked))
+    in
+        print "\nError: Some operations failed\n\n";
+        check_working failed_vcs []
+    end
+        
+fun act_and_print action print_header print_line context (libs : libspec list) =
+    let val lines = map (fn lib => (lib, action lib)) libs
+        val imperfect = List.exists (fn (_, ERROR _) => true | _ => false) lines
         val _ = print_header ()
     in
         app print_line lines;
+        if imperfect then print_problem_summary context lines else ();
         lines
     end
 
@@ -2478,26 +2545,26 @@ fun return_code_for outcomes =
 fun status_of_project ({ context, libs } : project) =
     return_code_for (act_and_print (AnyLibControl.status context)
                                    print_status_header (print_status false)
-                                   libs)
+                                   context libs)
                                              
 fun review_project ({ context, libs } : project) =
     return_code_for (act_and_print (AnyLibControl.review context)
                                    print_status_header (print_status true)
-                                   libs)
+                                   context libs)
 
 fun lock_project ({ context, libs } : project) =
     let val _ = if FileBits.verbose ()
                 then print ("Scanning IDs for lock file...\n")
                 else ()
-        val outcomes = map (fn lib =>
-                               (#libname lib, AnyLibControl.id_of context lib))
+        val outcomes = map (fn lib => (lib, AnyLibControl.id_of context lib))
                            libs
         val locks =
             List.concat
-                (map (fn (libname, result) =>
+                (map (fn (lib : libspec, result) =>
                          case result of
                              ERROR _ => []
-                           | OK id => [{ libname = libname, id_or_tag = id }])
+                           | OK id => [{ libname = #libname lib,
+                                         id_or_tag = id }])
                      outcomes)
         val return_code = return_code_for outcomes
         val _ = print clear_line
@@ -2511,7 +2578,8 @@ fun lock_project ({ context, libs } : project) =
 fun update_project (project as { context, libs }) =
     let val outcomes = act_and_print
                            (AnyLibControl.update context)
-                           print_outcome_header print_update_outcome libs
+                           print_outcome_header print_update_outcome
+                           context libs
         val _ = if List.exists (fn (_, OK _) => true | _ => false) outcomes
                 then lock_project project
                 else OS.Process.success
@@ -2528,6 +2596,8 @@ fun load_local_project pintype =
 
 fun with_local_project pintype f =
     let val return_code = f (load_local_project pintype)
+                          handle Fail msg => (print ("Error: " ^ msg);
+                                              OS.Process.failure)
                           handle e => (print ("Error: " ^ exnMessage e);
                                        OS.Process.failure)
         val _ = print "\n";
@@ -2580,6 +2650,8 @@ fun vext args =
               | ["lock"] => lock ()
               | ["version"] => version ()
               | "archive"::target::args => archive target args
+              | arg::_ => (print ("Error: unknown argument \"" ^ arg ^ "\"\n");
+                           usage ())
               | _ => usage ()
     in
         OS.Process.exit return_code;
