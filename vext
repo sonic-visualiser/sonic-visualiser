@@ -8,6 +8,9 @@ sml="$VEXT_SML"
 
 set -eu
 
+# avoid gussying up output
+export HGPLAIN=true
+
 mydir=$(dirname "$0")
 program="$mydir/vext.sml"
 
@@ -40,10 +43,10 @@ if [ -x "$gen_out" ]; then
     exec "$gen_out" "$@"
 fi
 
-# We need one of Poly/ML, SML/NJ, or MLton. Since we're running a
-# single-file SML program as if it were a script, our order of
-# preference is based on startup speed, except in the local_install
-# case where we retain a persistent binary.
+# We need one of Poly/ML, SML/NJ, MLton, or MLKit. Since we're running
+# a single-file SML program as if it were a script, our order of
+# preference is usually based on startup speed. An exception is the
+# local_install case, where we retain a persistent binary
 
 if [ -z "$sml" ]; then
     if [ -n "$local_install" ] && mlton 2>&1 | grep -q 'MLton'; then
@@ -52,12 +55,16 @@ if [ -z "$sml" ]; then
 	sml="smlnj"
     # We would prefer Poly/ML to SML/NJ, except that Poly v5.7 has a
     # nasty bug that occasionally causes it to deadlock on startup.
-    # That appears to be fixed in their repo, so we could promote it
-    # up the order again at some point in future
+    # That is fixed in v5.7.1, so we could promote it up the order
+    # again at some point in future
     elif echo | poly -v 2>/dev/null | grep -q 'Poly/ML'; then
 	sml="poly"
     elif mlton 2>&1 | grep -q 'MLton'; then
 	sml="mlton"
+    # MLKit is at the bottom because it leaves compiled files around
+    # in an MLB subdir in the current directory
+    elif mlkit 2>&1 | grep -q 'MLKit'; then
+	sml="mlkit"
     else cat 1>&2 <<EOF
 
 ERROR: No supported SML compiler or interpreter found       
@@ -71,16 +78,20 @@ EOF
   installed and present in your PATH, and try again.
 
     1. Standard ML of New Jersey
-       - often found in a distribution package called: smlnj
+       - may be found in a distribution package called: smlnj
        - executable name: sml
 
     2. Poly/ML
-       - often found in a distribution package called: polyml
+       - may be found in a distribution package called: polyml
        - executable name: poly
 
     3. MLton
-       - often found in a distribution package called: mlton
+       - may be found in a distribution package called: mlton
        - executable name: mlton
+
+    4. MLKit
+       - may be found in a distribution package called: mlkit
+       - executable name: mlkit
 
 EOF
 	exit 2
@@ -113,6 +124,13 @@ case "$sml" in
 	    echo "[Precompiling Vext binary...]" 1>&2
 	    echo "val _ = main ()" | cat "$program" - > "$gen_sml"
 	    mlton -output "$gen_out" "$gen_sml"
+        fi
+	"$gen_out" "$@" ;;
+    mlkit)
+        if [ ! -x "$gen_out" ]; then
+	    echo "[Precompiling Vext binary...]" 1>&2
+	    echo "val _ = main ()" | cat "$program" - > "$gen_sml"
+	    mlkit -output "$gen_out" "$gen_sml"
         fi
 	"$gen_out" "$@" ;;
     smlnj)
