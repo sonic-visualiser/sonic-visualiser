@@ -19,7 +19,7 @@
       "pin": "dde809643316e7bb606fc14d66e55f07059bcf36"
     },
     "piper-cpp": {
-      "pin": "545a33dcb08c51885b94be22860ef6e33b18a5a0"
+      "pin": "d81b56f1c7372ccf9d21f726d0fc122c2bf93484"
     },
     "dataquay": {
       "pin": "807b55408d9e"
@@ -31,7 +31,7 @@
       "pin": "81b50ec12d9a"
     },
     "bqresample": {
-      "pin": "5466df7d0d27"
+      "pin": "a9a5555d9b6d"
     },
     "bqaudioio": {
       "pin": "d90244c003be"
