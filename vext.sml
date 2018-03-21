@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val vext_version = "0.9.97"
+val vext_version = "0.9.98"
 
 
 datatype vcs =
@@ -945,6 +945,7 @@ end
 
 
 structure JsonBits :> sig
+    exception Config of string
     val load_json_from : string -> Json.json (* filename -> json *)
     val save_json_to : string -> Json.json -> unit
     val lookup_optional : Json.json -> string list -> Json.json option
@@ -953,10 +954,12 @@ structure JsonBits :> sig
     val lookup_mandatory_string : Json.json -> string list -> string
 end = struct
 
+    exception Config of string
+
     fun load_json_from filename =
         case Json.parse (FileBits.file_contents filename) of
             Json.OK json => json
-          | Json.ERROR e => raise Fail ("Failed to parse file: " ^ e)
+          | Json.ERROR e => raise Config ("Failed to parse file: " ^ e)
 
     fun save_json_to filename json =
         (* using binary I/O to avoid ever writing CR/LF line endings *)
@@ -971,10 +974,12 @@ end = struct
         let fun lookup key =
                 case json of
                     Json.OBJECT kvs =>
-                    (case List.find (fn (k, v) => k = key) kvs of
-                         SOME (k, v) => SOME v
-                       | NONE => NONE)
-                  | _ => raise Fail "Object expected"
+                    (case List.filter (fn (k, v) => k = key) kvs of
+                         [] => NONE
+                       | [(_,v)] => SOME v
+                       | _ => raise Config ("Duplicate key: " ^ 
+                                            (String.concatWith " -> " kk)))
+                  | _ => raise Config "Object expected"
         in
             case kk of
                 [] => NONE
@@ -987,22 +992,21 @@ end = struct
     fun lookup_optional_string json kk =
         case lookup_optional json kk of
             SOME (Json.STRING s) => SOME s
-          | SOME _ => raise Fail ("Value (if present) must be string: " ^
-                                  (String.concatWith " -> " kk))
+          | SOME _ => raise Config ("Value (if present) must be string: " ^
+                                    (String.concatWith " -> " kk))
           | NONE => NONE
 
     fun lookup_mandatory json kk =
         case lookup_optional json kk of
             SOME v => v
-          | NONE => raise Fail ("Value is mandatory: " ^
-                                (String.concatWith " -> " kk) ^ " in json: " ^
-                                (Json.serialise json))
+          | NONE => raise Config ("Value is mandatory: " ^
+                                  (String.concatWith " -> " kk))
                           
     fun lookup_mandatory_string json kk =
         case lookup_optional json kk of
             SOME (Json.STRING s) => s
-          | _ => raise Fail ("Value must be string: " ^
-                             (String.concatWith " -> " kk))
+          | _ => raise Config ("Value must be string: " ^
+                               (String.concatWith " -> " kk))
 end
 
 structure Provider :> sig
@@ -2595,11 +2599,15 @@ fun load_local_project pintype =
     end    
 
 fun with_local_project pintype f =
-    let val return_code = f (load_local_project pintype)
-                          handle Fail msg => (print ("Error: " ^ msg);
-                                              OS.Process.failure)
-                          handle e => (print ("Error: " ^ exnMessage e);
-                                       OS.Process.failure)
+  let open OS.Process
+      val return_code =
+          f (load_local_project pintype)
+          handle Fail msg =>
+                 failure before print ("Error: " ^ msg)
+               | JsonBits.Config msg =>
+                 failure before print ("Error in configuration: " ^ msg)
+               | e =>
+                 failure before print ("Error: " ^ exnMessage e)
         val _ = print "\n";
     in
         return_code
