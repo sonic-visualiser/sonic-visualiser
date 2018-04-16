@@ -58,6 +58,7 @@
 #include "widgets/LabelCounterInputDialog.h"
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
+#include "widgets/ProgressDialog.h"
 #include "audio/AudioCallbackPlaySource.h"
 #include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
@@ -2726,11 +2727,19 @@ MainWindow::exportAudio(bool asData)
 
     if (!multiple) {
         if (asData) {
-            CSVFileWriter writer(path, model,
+            stop();
+            ProgressDialog dialog {
+                QObject::tr("Exporting audio data..."),
+                true,
+                0,
+                this,
+                Qt::ApplicationModal
+            };
+            CSVFileWriter writer(path, model, &dialog,
                                  ((QFileInfo(path).suffix() == "csv") ?
                                   "," : "\t"));
             if (selectionToWrite) {
-                writer.writeSelection(selectionToWrite);
+                writer.writeSelection(*selectionToWrite);
             } else {
                 writer.write();
             }
