@@ -15,16 +15,12 @@
             "service": "soundsoftware"
         },
         "svcore": {
-            "vcs": "git",
-	    "service": "github",
-            "owner": "cannam",
-            "branch": "dev/streaming-csv-writer"
+            "vcs": "hg",
+            "service": "soundsoftware"
         },
         "svgui": {
-            "vcs": "git",
-	    "service": "github",
-            "owner": "cannam",
-            "branch": "dev/modal-progress-dialog"
+            "vcs": "hg",
+            "service": "soundsoftware"
         },
         "svapp": {
             "vcs": "hg",
