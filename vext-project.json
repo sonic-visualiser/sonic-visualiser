@@ -16,11 +16,11 @@
         },
         "svcore": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+            "service": "soundsoftware"
         },
         "svgui": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+            "service": "soundsoftware"
         },
         "svapp": {
             "vcs": "hg",
