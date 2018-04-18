@@ -786,34 +786,61 @@ MainWindow::setupEditMenu()
     m_keyReference->setCategory(tr("Tapping Time Instants"));
 
     action = new QAction(tr("&Insert Instant at Playback Position"), this);
-    action->setShortcut(tr("Enter"));
+    action->setShortcut(tr(";"));
     action->setStatusTip(tr("Insert a new time instant at the current playback position, in a new layer if necessary"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstant()));
     connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    // Laptop shortcut (no keypad Enter key)
-    QString shortcut(tr(";"));
+    // Historically this was the main shortcut for "Insert Instant at
+    // Playback Position". Note that Enter refers to the keypad key,
+    // rather than the Return key, so this doesn't actually exist on
+    // many keyboards now. Accordingly the alternative shortcut ";"
+    // has been promoted to primary, listed above. Same goes for the
+    // shifted version below
+    QString shortcut(tr("Enter"));
     connect(new QShortcut(shortcut, this), SIGNAL(activated()),
             this, SLOT(insertInstant()));
     m_keyReference->registerAlternativeShortcut(action, shortcut);
 
     action = new QAction(tr("Insert Instants at Selection &Boundaries"), this);
-    action->setShortcut(tr("Shift+Enter"));
+    action->setShortcut(tr("Shift+;"));
     action->setStatusTip(tr("Insert new time instants at the start and end of the current selected regions, in a new layer if necessary"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstantsAtBoundaries()));
     connect(this, SIGNAL(canInsertInstantsAtBoundaries(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
+    shortcut = QString(tr("Shift+Enter"));
+    connect(new QShortcut(shortcut, this), SIGNAL(activated()),
+            this, SLOT(insertInstantsAtBoundaries()));
+    m_keyReference->registerAlternativeShortcut(action, shortcut);
+
+    // The previous two actions used shortcuts with the (keypad) Enter
+    // key, while this one I (bizarrely) switched from Enter to Return
+    // in September 2014. Let's make it consistent with the above by
+    // making the primary shortcut for it Ctrl+Shift+; and keeping
+    // both Return and Enter as synonyms for ;
     action = new QAction(tr("Insert Item at Selection"), this);
-    action->setShortcut(tr("Ctrl+Shift+Return"));
+    action->setShortcut(tr("Ctrl+Shift+;"));
     action->setStatusTip(tr("Insert a new note or region item corresponding to the current selection"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertItemAtSelection()));
     connect(this, SIGNAL(canInsertItemAtSelection(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+    shortcut = QString(tr("Ctrl+Shift+Enter"));
+    connect(new QShortcut(shortcut, this), SIGNAL(activated()),
+            this, SLOT(insertItemAtSelection()));
+    m_keyReference->registerAlternativeShortcut(action, shortcut);
+
+    shortcut = QString(tr("Ctrl+Shift+Return"));
+    connect(new QShortcut(shortcut, this), SIGNAL(activated()),
+            this, SLOT(insertItemAtSelection()));
+    // we had that one for historical compatibility, but let's not
+    // register it publicly; having three shortcuts for such an
+    // obscure function is really over-egging it
 
     menu->addSeparator();
 
