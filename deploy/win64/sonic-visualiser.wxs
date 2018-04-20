@@ -1,11 +1,15 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
+  <!-- NB this is specific to a particular Qt and compiler version.
+       20th April 2018 - updated for Qt 5.10.1 and MSVC 2017
+   -->
+
   <Product
       Name="Sonic Visualiser" 
       Id="*"
       Language="1033"
       Codepage="1252" 
-      Version="3.0.3"
+      Version="3.1"
       UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
       Manufacturer="Queen Mary, University of London">
     
@@ -13,7 +17,7 @@
         Id="*"
         Keywords="Installer"
         Description="Sonic Visualiser 64-bit Installer" 
-        Comments="Copyright (c) 2017 Queen Mary, University of London and others."
+        Comments="Copyright (c) 2018 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="200"
         Languages="1033" 
@@ -77,7 +81,7 @@
             <File
                 Id="README"
                 Name="README.txt"
-                Source="..\sonic-visualiser\README"/>
+                Source="..\sonic-visualiser\README.md"/>
             <File
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
@@ -156,20 +160,20 @@
                <File
                    Id="concrt140"
                    Name="concrt140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\concrt140.DLL"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\concrt140.DLL"
                    KeyPath="yes"/>
                <File
                    Id="msvcp140"
                    Name="msvcp140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
                <File
                    Id="vccorlib140"
                    Name="vccorlib140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vccorlib140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
                <File
                    Id="vcruntime140"
                    Name="vcruntime140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
           </Component>
 
 	  <Directory Id="Platforms" Name="platforms">
@@ -241,6 +245,19 @@
 	</Directory> <!-- sv -->
       </Directory> <!-- pfiles64 -->
 
+      <Directory Id="ProgramFilesFolder" Name="PFiles">
+        <Directory Id="Vamp32Plugins" Name="Vamp Plugins">
+          <Component
+              Id="Vamp32Plugins"
+              Guid="62d23999-63ed-4937-b904-ec8e47a776d1">
+            <File
+                Id="Vamp32README"
+                Name="README.txt"
+                Source="..\sonic-visualiser\deploy\win64\README-Vamp32.txt"/>
+          </Component>
+        </Directory>
+      </Directory>
+
       <Directory Id="ProgramMenuFolder" Name="Programs">
         <Directory Id="ProgramMenuDir" Name="Sonic Visualiser">
           <Component Id="ProgramMenuDir" Guid="C1980FF3-D135-46F8-8542-F937748721E6">
@@ -273,6 +290,7 @@
       <ComponentRef Id="Piper32"/>
       <ComponentRef Id="Checker64"/>
       <ComponentRef Id="Checker32"/>
+      <ComponentRef Id="Vamp32Plugins"/>
       <ComponentRef Id="ProgramMenuDir"/>
     </Feature>
 
