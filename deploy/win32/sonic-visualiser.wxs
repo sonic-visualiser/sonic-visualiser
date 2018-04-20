@@ -5,7 +5,7 @@
       Id="*"
       Language="1033"
       Codepage="1252" 
-      Version="3.0.3"
+      Version="3.1"
       UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
       Manufacturer="Queen Mary, University of London">
     
@@ -13,7 +13,7 @@
         Id="*"
         Keywords="Installer"
         Description="Sonic Visualiser 32-bit Installer" 
-        Comments="Copyright (c) 2017 Queen Mary, University of London and others."
+        Comments="Copyright (c) 2018 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="100" 
         Languages="1033" 
@@ -76,7 +76,7 @@
             <File
                 Id="README"
                 Name="README.txt"
-                Source="..\sonic-visualiser\README"/>
+                Source="..\sonic-visualiser\README.md"/>
             <File
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"

@@ -49,3 +49,5 @@ piper-vamp-simple-server
 piper-convert
 .vext*
 glob:.vext-*.bin
+*.msi
+*.user
