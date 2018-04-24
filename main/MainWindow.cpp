@@ -2063,7 +2063,14 @@ MainWindow::setupToolbars()
     m_playAction = toolbar->addAction(il.load("playpause"),
                                       tr("Play / Pause"));
     m_playAction->setCheckable(true);
+
+    /*: This text is a shortcut label referring to the space-bar on
+        the keyboard. It probably should not be translated, and
+        certainly should not be translated as if referring to an empty
+        void or to the extra-terrestrial universe.
+     */
     m_playAction->setShortcut(tr("Space"));
+
     m_playAction->setStatusTip(tr("Start or stop playback from the current position"));
     connect(m_playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
