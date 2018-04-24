@@ -2019,7 +2019,8 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation>Mezerník</translation>
+        <extracomment>This text is a shortcut label referring to the space-bar on the keyboard. It probably should not be translated, and certainly should not be translated as if referring to an empty void or to the extra-terrestrial universe.</extracomment>
+        <translation></translation>
     </message>
     <message>
         <source>Add a new layer showing a waveform view</source>
@@ -3043,7 +3044,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Ctrl+Shift+Enter</source>
-        <translation type="vanished">Ctrl+Shift+Enter</translation>
+        <translation>Ctrl+Shift+Enter</translation>
     </message>
     <message>
         <source>Audio processing overload</source>
@@ -4079,6 +4080,14 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Czech UI translation contributed by Pavel Fric.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shift+;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ctrl+Shift+;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5778,6 +5787,10 @@ Použití:
     <message>
         <source>&lt;b&gt;Failed to scan for plugins&lt;/b&gt;&lt;p&gt;Failed to scan for plugins at startup. Possibly the plugin checker program was not correctly installed alongside %1?&lt;/p&gt;</source>
         <translation>&lt;b&gt;Nepodařilo se prohledat na přídavné moduly&lt;/b&gt;&lt;p&gt;Při spuštění se nepodařilo provést vyhledání přídavných modulů. Je možné, že kontrolor přídavných modulů nebyl zároveň s %1 správně nainstalován?&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Exporting audio data...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
