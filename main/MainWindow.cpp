@@ -1141,6 +1141,63 @@ MainWindow::setupViewMenu()
 #endif
 }
 
+QString
+MainWindow::shortcutFor(LayerFactory::LayerType layer, bool isPaneMenu)
+{
+    QString shortcutText;
+    
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
+    
+    switch (layer) {
+    case LayerFactory::Waveform:
+        if (isPaneMenu) {
+            shortcutText = tr("W");
+        } else {
+            shortcutText = tr("Shift+W");
+        }
+        break;
+                
+    case LayerFactory::Spectrogram:
+        if (isPaneMenu) {
+            shortcutText = tr("G");
+        } else {
+            shortcutText = tr("Shift+G");
+        }
+        break;
+                
+    case LayerFactory::MelodicRangeSpectrogram:
+        if (isPaneMenu) {
+            shortcutText = tr("M");
+        } else {
+            shortcutText = tr("Shift+M");
+        }
+        break;
+                
+    case LayerFactory::PeakFrequencySpectrogram:
+        if (isPaneMenu) {
+            shortcutText = tr("K");
+        } else {
+            shortcutText = tr("Shift+K");
+        }
+        break;
+                
+    case LayerFactory::Spectrum:
+        if (isPaneMenu) {
+            shortcutText = tr("U");
+        } else {
+            shortcutText = tr("Shift+U");
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    return shortcutText;
+}
+
 void
 MainWindow::setupPaneAndLayerMenus()
 {
@@ -1186,8 +1243,6 @@ MainWindow::setupPaneAndLayerMenus()
     menu->addSeparator();
 
     menu = m_layerMenu;
-
-//    menu->addSeparator();
 
     LayerFactory::LayerTypeSet emptyLayerTypes =
         LayerFactory::getInstance()->getValidEmptyLayerTypes();
@@ -1251,9 +1306,11 @@ MainWindow::setupPaneAndLayerMenus()
             QMenu *submenu = 0;
 
             QIcon icon;
-            QString mainText, shortcutText, tipText, channelText;
+            QString mainText, tipText, channelText;
             LayerFactory::LayerType type = backgroundTypes[i];
             bool mono = true;
+
+            QString shortcutText = shortcutFor(type, menuType == paneMenuType);
 
 // Avoid warnings/errors with -Wextra because we aren't explicitly
 // handling all layer types (-Wall is OK with this because of the
@@ -1268,10 +1325,8 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = il.load("waveform");
                 mainText = tr("Add &Waveform");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("W");
                     tipText = tr("Add a new pane showing a waveform view");
                 } else {
-                    shortcutText = tr("Shift+W");
                     tipText = tr("Add a new layer showing a waveform view");
                 }
                 mono = false;
@@ -1281,10 +1336,8 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = il.load("spectrogram");
                 mainText = tr("Add Spectro&gram");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("G");
                     tipText = tr("Add a new pane showing a spectrogram");
                 } else {
-                    shortcutText = tr("Shift+G");
                     tipText = tr("Add a new layer showing a spectrogram");
                 }
                 break;
@@ -1293,10 +1346,8 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = il.load("spectrogram");
                 mainText = tr("Add &Melodic Range Spectrogram");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("M");
                     tipText = tr("Add a new pane showing a spectrogram set up for an overview of note pitches");
                 } else {
-                    shortcutText = tr("Shift+M");
                     tipText = tr("Add a new layer showing a spectrogram set up for an overview of note pitches");
                 }
                 break;
@@ -1305,10 +1356,8 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = il.load("spectrogram");
                 mainText = tr("Add Pea&k Frequency Spectrogram");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("K");
                     tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
                 } else {
-                    shortcutText = tr("Shift+K");
                     tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
                 }
                 break;
@@ -1317,10 +1366,8 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = il.load("spectrum");
                 mainText = tr("Add Spectr&um");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("U");
                     tipText = tr("Add a new pane showing a frequency spectrum");
                 } else {
-                    shortcutText = tr("Shift+U");
                     tipText = tr("Add a new layer showing a frequency spectrum");
                 }
                 break;
@@ -1556,6 +1603,34 @@ MainWindow::setupPaneAndLayerMenus()
     m_keyReference->registerShortcut(eaction); // edit also after delete
 
     finaliseMenus();
+}
+
+void
+MainWindow::updateLayerShortcutsFor(Model *model)
+{
+    set<LayerFactory::LayerType> seen;
+    
+    for (auto &a : m_paneActions) {
+        auto type = a.second.layer;
+        if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
+            a.first->setShortcut(shortcutFor(type, true));
+            seen.insert(type);
+        } else {
+            a.first->setShortcut(QString());
+        }
+    }
+
+    seen.clear();
+    
+    for (auto &a : m_layerActions) {
+        auto type = a.second.layer;
+        if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
+            a.first->setShortcut(shortcutFor(type, false));
+            seen.insert(type);
+        } else {
+            a.first->setShortcut(QString());
+        }
+    }
 }
 
 void
@@ -4227,23 +4302,28 @@ MainWindow::currentPaneChanged(Pane *pane)
         }
     }
 
-    if (containsMainModel) {
-        m_panLayer->setModel(getMainModel());
-        return;
-    }
-
+    bool panLayerSet = false;
+    
     for (int i = pane->getLayerCount(); i > 0; ) {
         --i;
         Layer *layer = pane->getLayer(i);
-        if (LayerFactory::getInstance()->getLayerType(layer) ==
-            LayerFactory::Waveform) {
-            RangeSummarisableTimeValueModel *tvm = 
-                dynamic_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
-            if (tvm) {
+        RangeSummarisableTimeValueModel *tvm = 
+            qobject_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
+        if (tvm) {
+            auto type = LayerFactory::getInstance()->getLayerType(layer);
+            if (type != LayerFactory::TimeRuler) {
+                updateLayerShortcutsFor(tvm);
+            }
+            if (type == LayerFactory::Waveform) {
                 m_panLayer->setModel(tvm);
-                return;
+                panLayerSet = true;
+                break;
             }
         }
+    }
+
+    if (containsMainModel && !panLayerSet) {
+        m_panLayer->setModel(getMainModel());
     }
 }
 
