@@ -246,6 +246,9 @@ protected:
         int channel;
     };
 
+    QString shortcutFor(LayerFactory::LayerType, bool isPaneMenu);
+    void updateLayerShortcutsFor(Model *);
+    
     typedef std::map<QAction *, LayerConfiguration> PaneActionMap;
     PaneActionMap m_paneActions;
 
