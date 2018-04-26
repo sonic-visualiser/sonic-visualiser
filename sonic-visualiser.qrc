@@ -21,6 +21,7 @@
     <file>icons/scalable/ffwd.svg</file>
     <file>icons/scalable/ffwd-end.svg</file>
     <file>icons/scalable/help.svg</file>
+    <file>icons/scalable/info.svg</file>
     <file>icons/scalable/instants.svg</file>
     <file>icons/scalable/measure.svg</file>
     <file>icons/scalable/move.svg</file>
@@ -70,7 +71,6 @@
     <file>icons/measure2mask.xbm</file>
     <file>icons/new.png</file>
     <file>icons/annotation.png</file>
-    <file>icons/info.png</file>
     <file>icons/datainsert.png</file>
     <file>icons/mono.png</file>
     <file>icons/stereo.png</file>
