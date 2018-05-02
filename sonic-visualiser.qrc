@@ -42,6 +42,7 @@
     <file>icons/scalable/rewind-start.svg</file>
     <file>icons/scalable/rewind.svg</file>
     <file>icons/scalable/select.svg</file>
+    <file>icons/scalable/show-peaks.svg</file>
     <file>icons/scalable/solo.svg</file>
     <file>icons/scalable/speaker.svg</file>
     <file>icons/scalable/spectrogram.svg</file>
@@ -77,7 +78,6 @@
     <file>icons/sharpen.png</file>
     <file>icons/emptypage.png</file>
     <file>icons/invert-vertical.png</file>
-    <file>icons/show-peaks.png</file>
     <file>icons/opaque.png</file>
     <file>icons/smooth.png</file>
     <file>icons/lines.png</file>
