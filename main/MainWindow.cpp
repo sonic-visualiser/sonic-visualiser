@@ -1611,6 +1611,7 @@ MainWindow::updateLayerShortcutsFor(Model *model)
     set<LayerFactory::LayerType> seen;
     
     for (auto &a : m_paneActions) {
+        if (!a.second.sourceModel) continue; // empty pane/layer shortcut
         auto type = a.second.layer;
         if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
             a.first->setShortcut(shortcutFor(type, true));
@@ -1623,6 +1624,7 @@ MainWindow::updateLayerShortcutsFor(Model *model)
     seen.clear();
     
     for (auto &a : m_layerActions) {
+        if (!a.second.sourceModel) continue; // empty pane/layer shortcut
         auto type = a.second.layer;
         if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
             a.first->setShortcut(shortcutFor(type, false));
