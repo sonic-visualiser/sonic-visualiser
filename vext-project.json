@@ -16,13 +16,11 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware",
-            "branch": "horizontal-scale"
+            "service": "soundsoftware"
         },
         "svgui": {
             "vcs": "hg",
-            "service": "soundsoftware",
-            "branch": "horizontal-scale"
+            "service": "soundsoftware"
         },
         "svapp": {
             "vcs": "hg",
