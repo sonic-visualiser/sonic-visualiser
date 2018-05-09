@@ -19,7 +19,7 @@ MacOS
 Build from the command line, but don't use the configure script.
 Instead install Qt v5.x and run
 
-$ ./vext install
+$ ./repoint install
 $ qmake -r  # you may need to use the full path to your Qt qmake here
 $ make
 

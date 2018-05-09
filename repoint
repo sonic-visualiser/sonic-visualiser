@@ -4,7 +4,7 @@
 # practice, not bad: clearer, safer, less error-prone.
 # shellcheck disable=SC2002
 
-sml="$VEXT_SML"
+sml="$REPOINT_SML"
 
 set -eu
 
@@ -12,7 +12,7 @@ set -eu
 export HGPLAIN=true
 
 mydir=$(dirname "$0")
-program="$mydir/vext.sml"
+program="$mydir/repoint.sml"
 
 hasher=
 local_install=
@@ -30,12 +30,12 @@ fi
 
 if [ -n "$local_install" ]; then
     hash=$(echo "$sml" | cat "$program" - | $hasher | cut -c1-16)
-    gen_sml=$mydir/.vext-$hash.sml
-    gen_out=$mydir/.vext-$hash.bin
+    gen_sml=$mydir/.repoint-$hash.sml
+    gen_out=$mydir/.repoint-$hash.bin
     trap 'rm -f $gen_sml' 0
 else
-    gen_sml=$(mktemp /tmp/vext-XXXXXXXX.sml)
-    gen_out=$(mktemp /tmp/vext-XXXXXXXX.bin)
+    gen_sml=$(mktemp /tmp/repoint-XXXXXXXX.sml)
+    gen_out=$(mktemp /tmp/repoint-XXXXXXXX.bin)
     trap 'rm -f $gen_sml $gen_out' 0
 fi
 
@@ -71,7 +71,7 @@ ERROR: No supported SML compiler or interpreter found
 EOF
 	cat 1>&2 <<EOF
 
-  The Vext external source code manager needs a Standard ML (SML)
+  The Repoint external source code manager needs a Standard ML (SML)
   compiler or interpreter to run.
 
   Please ensure you have one of the following SML implementations
@@ -116,19 +116,19 @@ case "$sml" in
             fi
 	    "$gen_out" "$@"
         else
-            echo 'use "'"$program"'"; vext ['"$arglist"'];' |
+            echo 'use "'"$program"'"; repoint ['"$arglist"'];' |
                 poly -q --error-exit
         fi ;;
     mlton)
         if [ ! -x "$gen_out" ]; then
-	    echo "[Precompiling Vext binary...]" 1>&2
+	    echo "[Precompiling Repoint binary...]" 1>&2
 	    echo "val _ = main ()" | cat "$program" - > "$gen_sml"
 	    mlton -output "$gen_out" "$gen_sml"
         fi
 	"$gen_out" "$@" ;;
     mlkit)
         if [ ! -x "$gen_out" ]; then
-	    echo "[Precompiling Vext binary...]" 1>&2
+	    echo "[Precompiling Repoint binary...]" 1>&2
 	    echo "val _ = main ()" | cat "$program" - > "$gen_sml"
 	    mlkit -output "$gen_out" "$gen_sml"
         fi
@@ -154,7 +154,7 @@ Control.Print.out := {
 EOF
 	    cat -
 	    cat <<EOF
-val _ = vext [$arglist];
+val _ = repoint [$arglist];
 val _ = OS.Process.exit (OS.Process.success);
 EOF
             ) > "$gen_sml"
