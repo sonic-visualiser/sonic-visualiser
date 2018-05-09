@@ -143,19 +143,19 @@ AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT
 
-if test -x vext ; then
+if test -x repoint ; then
    if test -d .hg -o -d .git ; then 
-      if ! ./vext install; then
-         AC_MSG_ERROR([Vext failed; please fix any reported errors and try again])
+      if ! ./repoint install; then
+         AC_MSG_ERROR([Repoint failed; please fix any reported errors and try again])
       fi
    else
-      AC_MSG_NOTICE([Vext executable found but not in an Hg or Git working-copy: not running it])
+      AC_MSG_NOTICE([Repoint executable found but not in an Hg or Git working-copy: not running it])
       if ! test -d vamp-plugin-sdk ; then
           AC_MSG_WARN([No vamp-plugin-sdk directory present, so external libraries might not have been updated])
       fi
    fi
 else
-   AC_MSG_NOTICE([No Vext executable found: assuming external libraries are already here])
+   AC_MSG_NOTICE([No Repoint executable found: assuming external libraries are already here])
    if ! test -d vamp-plugin-sdk ; then
       AC_MSG_WARN([No vamp-plugin-sdk directory present, so external libraries might not have been updated])
    fi
