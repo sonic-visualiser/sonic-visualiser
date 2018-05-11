@@ -41,7 +41,8 @@ public:
         AudioIOTab,
         AppearanceTab,
         AnalysisTab,
-        TemplateTab
+        TemplateTab,
+        PluginTab
     };
     void switchToTab(Tab tab);
 

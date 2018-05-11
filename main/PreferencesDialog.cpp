@@ -40,6 +40,8 @@
 #include "widgets/IconLoader.h"
 #include "widgets/ColourMapComboBox.h"
 #include "widgets/ColourComboBox.h"
+#include "widgets/PluginPathConfigurator.h"
+#include "widgets/WidgetScale.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
 #include "layer/ColourMapper.h"
@@ -276,7 +278,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     tempDirButton->setIcon(IconLoader().load("fileopen"));
     connect(tempDirButton, SIGNAL(clicked()),
             this, SLOT(tempDirButtonClicked()));
-    tempDirButton->setFixedSize(QSize(24, 24));
+    tempDirButton->setFixedSize(WidgetScale::scaleQSize(QSize(24, 24)));
 
     QCheckBox *showSplash = new QCheckBox;
     m_showSplash = prefs->getShowSplash();
@@ -576,7 +578,27 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     
     m_tabOrdering[AudioIOTab] = m_tabs->count();
     m_tabs->addTab(frame, tr("A&udio I/O"));
- 
+
+    // Plugins tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+
+    PluginPathConfigurator *pathConfig = new PluginPathConfigurator(this);
+    QStringList path;
+    path << "/usr/lib/vamp";
+    path << "/usr/local/lib/vamp";
+    pathConfig->setPath(path, "VAMP_PATH");
+    
+    subgrid->addWidget(pathConfig, row++, 0, 1, 2);
+
+    subgrid->setRowStretch(row, 10);
+
+    m_tabOrdering[PluginTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("&Plugins"));
+    
     // General tab
 
     frame = new QFrame;
