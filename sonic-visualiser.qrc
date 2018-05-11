@@ -5,6 +5,7 @@
     <file>icons/scalable/cross.svg</file>
     <file>icons/scalable/datadelete.svg</file>
     <file>icons/scalable/dataedit.svg</file>
+    <file>icons/scalable/down.svg</file>
     <file>icons/scalable/draw.svg</file>
     <file>icons/scalable/editcopy.svg</file>
     <file>icons/scalable/editcut.svg</file>
@@ -50,6 +51,7 @@
     <file>icons/scalable/text.svg</file>
     <file>icons/scalable/timeruler.svg</file>
     <file>icons/scalable/undo.svg</file>
+    <file>icons/scalable/up.svg</file>
     <file>icons/scalable/values.svg</file>
     <file>icons/scalable/waveform.svg</file>
     <file>icons/scalable/zoom.svg</file>
