@@ -4,13 +4,13 @@
       "pin": "328cb056da44"
     },
     "svcore": {
-      "pin": "91bb68146dfc"
+      "pin": "cee1be4fb8c1"
     },
     "svgui": {
-      "pin": "abd52bd8d435"
+      "pin": "e327bbf4bf57"
     },
     "svapp": {
-      "pin": "f03bc1d38cac"
+      "pin": "7da68349a0c5"
     },
     "checker": {
       "pin": "cf18645ff411"
@@ -19,7 +19,7 @@
       "pin": "dde809643316e7bb606fc14d66e55f07059bcf36"
     },
     "piper-cpp": {
-      "pin": "cdd4160248d805872f99562ede541f3b2d175397"
+      "pin": "28a0ee2cc737a7b50ac62d5996191cd589c047c2"
     },
     "dataquay": {
       "pin": "807b55408d9e"
