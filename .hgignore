@@ -47,7 +47,6 @@ icons/scalable
 vamp-plugin-load-checker
 piper-vamp-simple-server
 piper-convert
-.vext*
-glob:.vext-*.bin
 *.msi
 *.user
+glob:.repoint-*.bin

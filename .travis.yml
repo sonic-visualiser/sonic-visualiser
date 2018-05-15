@@ -24,7 +24,7 @@ before_install:
   - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
 
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./configure ; else ./vext install && qmake -r sonic-visualiser.pro ; fi
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./configure ; else ./repoint install && qmake -r sonic-visualiser.pro ; fi
 
 script:
   - make -j3
