@@ -590,6 +590,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QStringList path;
     path << "/usr/lib/vamp";
     path << "/usr/local/lib/vamp";
+    path << "/home/user/.vamp";
     pathConfig->setPath(path, "VAMP_PATH");
     
     subgrid->addWidget(pathConfig, row++, 0, 1, 2);
