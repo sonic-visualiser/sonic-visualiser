@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val repoint_version = "0.9.98"
+val repoint_version = "1.0"
 
 
 datatype vcs =
@@ -2625,7 +2625,8 @@ fun version () =
 fun usage () =
     (print "\nRepoint ";
      version ();
-     print ("\nA simple manager for third-party source code dependencies.\n\n"
+     print ("\n  A simple manager for third-party source code dependencies.\n"
+            ^ "  http://all-day-breakfast.com/repoint/\n\n"
             ^ "Usage:\n\n"
             ^ "  repoint <command>\n\n"
             ^ "where <command> is one of:\n\n"
@@ -2633,9 +2634,9 @@ fun usage () =
             ^ "  review   check configured libraries against their providers, and report\n"
             ^ "  install  update configured libraries according to project specs and lock file\n"
             ^ "  update   update configured libraries and lock file according to project specs\n"
-            ^ "  lock     update lock file to match local library status\n"
-            ^ "  archive  pack up project and all libraries into an archive file\n"
-            ^ "           (invoke as 'repoint archive target-file.tar.gz')\n"
+            ^ "  lock     rewrite lock file to match local library status\n"
+            ^ "  archive  pack up project and all libraries into an archive file:\n"
+            ^ "           invoke as 'repoint archive targetfile.tar.gz --exclude unwanted.txt'\n"
             ^ "  version  print the Repoint version number and exit\n\n");
     OS.Process.failure)
 

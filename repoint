@@ -58,7 +58,7 @@ if [ -z "$sml" ]; then
     # That is fixed in v5.7.1, so we could promote it up the order
     # again at some point in future
     elif echo | poly -v 2>/dev/null | grep -q 'Poly/ML'; then
-	sml="poly"
+	sml="polyml"
     elif mlton 2>&1 | grep -q 'MLton'; then
 	sml="mlton"
     # MLKit is at the bottom because it leaves compiled files around
@@ -109,7 +109,7 @@ for arg in "$@"; do
 done
 
 case "$sml" in
-    poly)
+    polyml)
         if [ -n "$local_install" ] && polyc --help >/dev/null 2>&1 ; then
             if [ ! -x "$gen_out" ]; then
                 polyc -o "$gen_out" "$program"
