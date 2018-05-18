@@ -1,4 +1,7 @@
 
+image:
+  - Visual Studio 2017
+
 configuration:
   - Release
 
@@ -10,9 +13,10 @@ install:
   - ps: '"code.soundsoftware.ac.uk = code.soundsoftware.ac.uk:fingerprints=sha256:64:75:f6:47:15:de:b4:51:ea:96:e2:f4:8a:f5:53:a5:11:c8:dd:82:73:5d:bd:54:18:cb:c8:9d:10:37:28:85" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
 
 before_build:
-  - set QTDIR=C:\Qt\5.8\msvc2015_64
+  - set QTDIR=C:\Qt\5.10\msvc2017_64
   - set PATH=%PATH%;%QTDIR%\bin;C:\Program Files (x86)\SMLNJ\bin
   - repoint install
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
   - qmake -r -tp vc sonic-visualiser.pro
   - sv-dependency-builds\win64-msvc\bin\capnp -Isv-dependency-builds/win64-msvc/include compile --src-prefix=piper/capnp -osv-dependency-builds/win64-msvc/bin/capnpc-c++:piper-cpp/vamp-capnp piper/capnp/piper.capnp
 
