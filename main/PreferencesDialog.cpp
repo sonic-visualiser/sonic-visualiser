@@ -591,7 +591,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     path << "/usr/lib/vamp";
     path << "/usr/local/lib/vamp";
     path << "/home/user/.vamp";
-    pathConfig->setPath(path, "VAMP_PATH");
+    PluginPathConfigurator::Paths paths;
+    paths["Vamp"] = { path, "VAMP_PATH" };
+    path.clear();
+    path << "/usr/lib/ladspa";
+    path << "/usr/local/lib/ladspa";
+    path << "/home/user/.ladspa";
+    paths["LADSPA"] = { path, "LADSPA_PATH" };
+    pathConfig->setPaths(paths);
     
     subgrid->addWidget(pathConfig, row++, 0, 1, 2);
 
