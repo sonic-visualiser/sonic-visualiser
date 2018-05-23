@@ -581,31 +581,22 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     // Plugins tab
 
-    frame = new QFrame;
-    subgrid = new QGridLayout;
-    frame->setLayout(subgrid);
-    row = 0;
-
     PluginPathConfigurator *pathConfig = new PluginPathConfigurator(this);
     QStringList path;
     path << "/usr/lib/vamp";
     path << "/usr/local/lib/vamp";
     path << "/home/user/.vamp";
     PluginPathConfigurator::Paths paths;
-    paths["Vamp"] = { path, "VAMP_PATH" };
+    paths["Vamp"] = { path, "VAMP_PATH", true };
     path.clear();
     path << "/usr/lib/ladspa";
     path << "/usr/local/lib/ladspa";
     path << "/home/user/.ladspa";
-    paths["LADSPA"] = { path, "LADSPA_PATH" };
+    paths["LADSPA"] = { path, "LADSPA_PATH", true };
     pathConfig->setPaths(paths);
     
-    subgrid->addWidget(pathConfig, row++, 0, 1, 2);
-
-    subgrid->setRowStretch(row, 10);
-
     m_tabOrdering[PluginTab] = m_tabs->count();
-    m_tabs->addTab(frame, tr("&Plugins"));
+    m_tabs->addTab(pathConfig, tr("&Plugins"));
     
     // General tab
 
