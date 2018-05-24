@@ -35,7 +35,7 @@
             <File
                 Id="VampREADME"
                 Name="README.txt"
-                Source="..\sonic-visualiser\deploy\win32\README-Vamp.txt"/>
+                Source="..\deploy\win32\README-Vamp.txt"/>
           </Component>
         </Directory>
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
@@ -72,20 +72,20 @@
             <File
                 Id="COPYING"
                 Name="COPYING.txt"
-                Source="..\sonic-visualiser\COPYING"/>
+                Source="..\COPYING"/>
             <File
                 Id="README"
                 Name="README.txt"
-                Source="..\sonic-visualiser\README.md"/>
+                Source="..\README.md"/>
             <File
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
-                Source="..\sonic-visualiser\CHANGELOG"/>
+                Source="..\CHANGELOG"/>
 
             <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
-                Source="..\sonic-visualiser\icons/sv-winicon.ico"/>
+                Source="..\icons/sv-winicon.ico"/>
           </Component>
           
           <Component
@@ -241,17 +241,13 @@
     <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
     <Property Id="ApplicationFolderName" Value="Sonic Visualiser" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
-    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win32\License.rtf" />
     
-    <Icon Id="winicon.ico" SourceFile="..\sonic-visualiser\icons\sv-winicon.ico"/>
+    <Icon Id="winicon.ico" SourceFile="..\icons\sv-winicon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
-<!--
-    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Sonic Visualiser now"/>
-    <Property Id="WixShellExecTarget" Value="[#SVExecutable]"/>
-    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes"/>
--->
-    <WixVariable Id="WixUIBannerBmp" Value="..\sonic-visualiser\deploy\win32\top.bmp"/>
-    <WixVariable Id="WixUIDialogBmp" Value="..\sonic-visualiser\deploy\win32\main.bmp"/>
+
+    <WixVariable Id="WixUIBannerBmp" Value="..\deploy\win32\top.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="..\deploy\win32\main.bmp"/>
 
   </Product>
 </Wix>
