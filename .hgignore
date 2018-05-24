@@ -50,3 +50,5 @@ piper-convert
 *.msi
 *.user
 glob:.repoint-*.bin
+build_win32
+build_win64
