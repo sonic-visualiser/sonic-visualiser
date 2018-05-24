@@ -40,7 +40,7 @@
             <File
                 Id="VampREADME"
                 Name="README.txt"
-                Source="..\sonic-visualiser\deploy\win64\README-Vamp.txt"/>
+                Source="..\deploy\win64\README-Vamp.txt"/>
           </Component>
         </Directory>
 
@@ -77,20 +77,20 @@
             <File
                 Id="COPYING"
                 Name="COPYING.txt"
-                Source="..\sonic-visualiser\COPYING"/>
+                Source="..\COPYING"/>
             <File
                 Id="README"
                 Name="README.txt"
-                Source="..\sonic-visualiser\README.md"/>
+                Source="..\README.md"/>
             <File
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
-                Source="..\sonic-visualiser\CHANGELOG"/>
+                Source="..\CHANGELOG"/>
 
             <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
-                Source="..\sonic-visualiser\icons\sv-winicon.ico"/>
+                Source="..\icons\sv-winicon.ico"/>
           </Component>
           
           <Component Win64="yes"
@@ -150,7 +150,7 @@
             <File
                 Id="libsndfile"
                 Name="libsndfile-1.dll"
-                Source="..\sonic-visualiser\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
+                Source="..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
                 KeyPath="yes"/>
           </Component>
 
@@ -210,19 +210,19 @@
 	      <File
 		  Id="piper32"
 		  Name="piper-vamp-simple-server-32.exe"
-		  Source="release\piper-vamp-simple-server-32.exe"/>
+		  Source="..\build_win32\release\piper-vamp-simple-server.exe"/>
 	      <File
                   Id="libgcc32"
                   Name="libgcc_s_dw2-1.dll"
-                  Source="release\libgcc_s_dw2-1.dll"/>
+                  Source="..\build_win32\release\libgcc_s_dw2-1.dll"/>
 	      <File
                   Id="libstdcplusplus32"
                   Name="libstdc++-6.dll"
-                  Source="release\libstdc++-6.dll"/>
+                  Source="..\build_win32\release\libstdc++-6.dll"/>
 	      <File
                   Id="libwinpthread32"
                   Name="libwinpthread-1.dll"
-                  Source="release\libwinpthread-1.dll"/>
+                  Source="..\build_win32\release\libwinpthread-1.dll"/>
 	    </Component>
             <Component Win64="yes"
                 Id="Checker64"
@@ -238,7 +238,7 @@
 	      <File
 		  Id="checker32"
 		  Name="vamp-plugin-load-checker-32.exe"
-		  Source="release\vamp-plugin-load-checker-32.exe"/>
+		  Source="..\build_win32\release\vamp-plugin-load-checker.exe"/>
 	    </Component>
 	    
 	  </Directory> <!-- helpers -->
@@ -253,7 +253,7 @@
             <File
                 Id="Vamp32README"
                 Name="README.txt"
-                Source="..\sonic-visualiser\deploy\win64\README-Vamp32.txt"/>
+                Source="..\deploy\win64\README-Vamp32.txt"/>
           </Component>
         </Directory>
       </Directory>
@@ -303,13 +303,13 @@
     <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
     <Property Id="ApplicationFolderName" Value="Sonic Visualiser" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
-    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win64\License.rtf" />
     
-    <Icon Id="winicon.ico" SourceFile="..\sonic-visualiser\icons\sv-winicon.ico"/>
+    <Icon Id="winicon.ico" SourceFile="..\icons\sv-winicon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
 
-    <WixVariable Id="WixUIBannerBmp" Value="..\sonic-visualiser\deploy\win32\top.bmp"/>
-    <WixVariable Id="WixUIDialogBmp" Value="..\sonic-visualiser\deploy\win32\main.bmp"/>
+    <WixVariable Id="WixUIBannerBmp" Value="..\deploy\win32\top.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="..\deploy\win32\main.bmp"/>
 
   </Product>
 </Wix>
