@@ -16,7 +16,8 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "plugin-path-config"
         },
         "svgui": {
             "vcs": "hg",
