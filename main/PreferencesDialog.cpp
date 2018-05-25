@@ -581,22 +581,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     // Plugins tab
 
-    PluginPathConfigurator *pathConfig = new PluginPathConfigurator(this);
-    QStringList path;
-    path << "/usr/lib/vamp";
-    path << "/usr/local/lib/vamp";
-    path << "/home/user/.vamp";
-    PluginPathConfigurator::Paths paths;
-    paths["Vamp"] = { path, "VAMP_PATH", true };
-    path.clear();
-    path << "/usr/lib/ladspa";
-    path << "/usr/local/lib/ladspa";
-    path << "/home/user/.ladspa";
-    paths["LADSPA"] = { path, "LADSPA_PATH", true };
-    pathConfig->setPaths(paths);
+    m_pluginPathConfigurator = new PluginPathConfigurator(this);
+    m_pluginPathConfigurator->setPaths(PluginPathSetter::getPaths());
+    connect(m_pluginPathConfigurator, SIGNAL(pathsChanged()),
+            this, SLOT(pluginPathsChanged()));
     
     m_tabOrdering[PluginTab] = m_tabs->count();
-    m_tabs->addTab(pathConfig, tr("&Plugins"));
+    m_tabs->addTab(m_pluginPathConfigurator, tr("&Plugins"));
     
     // General tab
 
@@ -925,6 +916,13 @@ PreferencesDialog::viewFontSizeChanged(int sz)
 }
 
 void
+PreferencesDialog::pluginPathsChanged()
+{
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -1026,6 +1024,8 @@ PreferencesDialog::applyClicked()
         emit coloursChanged();
         m_coloursChanged = false;
     }
+
+    PluginPathSetter::savePathSettings(m_pluginPathConfigurator->getPaths());
 }    
 
 void
