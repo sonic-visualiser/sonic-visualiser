@@ -5,15 +5,15 @@ echo on
 
 set STARTPWD=%CD%
 
-set QTDIR=C:\Qt\5.10.1\msvc2017_64
+set QTDIR=C:\Qt\5.11.0\msvc2017_64
 if not exist %QTDIR% (
 @   echo Could not find 64-bit Qt
-@   exit /b
+@   exit /b 2
 )
 
 if not exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" (
 @   echo "Could not find MSVC vars batch file"
-@   exit /b
+@   exit /b 2
 )
 
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
