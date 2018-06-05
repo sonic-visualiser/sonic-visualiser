@@ -13,6 +13,6 @@ install:
   - ps: '"code.soundsoftware.ac.uk = code.soundsoftware.ac.uk:fingerprints=sha256:64:75:f6:47:15:de:b4:51:ea:96:e2:f4:8a:f5:53:a5:11:c8:dd:82:73:5d:bd:54:18:cb:c8:9d:10:37:28:85" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
 
 build_script:
-  - deploy\win64\complete-build.bat
+  - deploy\win64\build-and-package.bat
 
   

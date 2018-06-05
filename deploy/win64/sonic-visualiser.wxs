@@ -45,6 +45,7 @@
         </Directory>
 
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
+
           <Component Win64="yes"
               Id="MainExecutable"
               Guid="65E1EBDF-4C8F-47B8-BCD6-981667F5946D">
@@ -97,6 +98,8 @@
 	      Id="SVFileAssociation"
 	      Guid="F07C5CC1-0209-4C1A-8D52-C40B50A2B964">
             
+            <CreateFolder/>
+
             <ProgId 
                 Id='SonicVisualiser.svfile' 
                 Description='Sonic Visualiser project file'
@@ -204,7 +207,7 @@
 		  Name="piper-vamp-simple-server.exe"
 		  Source="release\piper-vamp-simple-server.exe"/>
 	    </Component>
-            <Component
+            <Component Win64="yes"
                 Id="Piper32"
                 Guid="F27A00A8-DD03-45B0-A13C-8CD8CC6F7386">
 	      <File
@@ -232,7 +235,7 @@
 		  Name="vamp-plugin-load-checker.exe"
 		  Source="release\vamp-plugin-load-checker.exe"/>
 	    </Component>
-            <Component
+            <Component Win64="yes"
                 Id="Checker32"
                 Guid="4F3FDFEC-23BD-4F2F-9B8F-9C8387FDEC21">
 	      <File
