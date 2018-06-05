@@ -39,7 +39,7 @@
           </Component>
         </Directory>
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
-          
+
           <Component
               Id="MainExecutable"
               Guid="2C02DFB7-3CDF-4F73-B9D1-846326EE417D">
@@ -92,6 +92,8 @@
               Id="SVFileAssociation"
               Guid="DC6B3DD1-46DE-47FC-90FB-D8ACD5D1A88A">
             
+            <CreateFolder/>
+
             <ProgId 
                 Id='SonicVisualiser.svfile' 
                 Description='Sonic Visualiser project file'
