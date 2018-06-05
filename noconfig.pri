@@ -94,7 +94,8 @@ win32-msvc* {
 
     DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
 
-    QMAKE_CXXFLAGS_RELEASE += -fp:fast
+    QMAKE_CXXFLAGS_RELEASE += -fp:fast -gl
+    QMAKE_LFLAGS_RELEASE += -ltcg
 
     # No Ogg/FLAC support in the sndfile build on this platform yet
     LIBS -= -lFLAC -logg -lvorbis -lvorbisenc -lvorbisfile
