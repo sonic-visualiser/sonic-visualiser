@@ -31,7 +31,8 @@
         "checker": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-	    "repository": "vamp-plugin-load-checker"
+	    "repository": "vamp-plugin-load-checker",
+            "branch": "plugin-path-config"
         },
         "piper": {
             "vcs": "git",
