@@ -23,7 +23,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 mkdir build_win32
 cd build_win32
 
-qmake -r ..\sonic-visualiser.pro
+qmake -spec win32-g++ -r ..\sonic-visualiser.pro
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 jom

@@ -32,7 +32,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 mkdir build_win64
 cd build_win64
 
-qmake -r -tp vc ..\sonic-visualiser.pro
+qmake -spec win32-msvc -r -tp vc ..\sonic-visualiser.pro
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 msbuild sonic-visualiser.sln /t:Build /p:Configuration=Release
