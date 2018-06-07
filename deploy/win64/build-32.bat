@@ -26,7 +26,7 @@ cd build_win32
 qmake -spec win32-g++ -r ..\sonic-visualiser.pro
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-jom
+mingw32-make
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 copy .\checker\release\vamp-plugin-load-checker.exe .\release
