@@ -163,20 +163,20 @@
                <File
                    Id="concrt140"
                    Name="concrt140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\concrt140.DLL"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\concrt140.DLL"
                    KeyPath="yes"/>
                <File
                    Id="msvcp140"
                    Name="msvcp140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
                <File
                    Id="vccorlib140"
                    Name="vccorlib140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
                <File
                    Id="vcruntime140"
                    Name="vcruntime140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.12.25810\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
           </Component>
 
 	  <Directory Id="Platforms" Name="platforms">
