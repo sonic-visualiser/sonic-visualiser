@@ -4,25 +4,25 @@ set STARTPWD=%CD%
 
 if not exist "C:\Program Files (x86)\SMLNJ\bin" (
 @   echo Could not find SML/NJ, required for Repoint
-@   exit /b
+@   exit /b 2
 )
 
 if not exist "C:\Program Files (x86)\WiX Toolset v3.11\bin" (
 @   echo Could not find WiX Toolset
-@   exit /b
+@   exit /b 2
 )
 
 @echo Rebuilding 32-bit
 
 cd %STARTPWD%
-rem del /q /s build_win32
+del /q /s build_win32
 call .\deploy\win64\build-32.bat
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 @echo Rebuilding 64-bit
 
 cd %STARTPWD%
-rem del /q /s build_win64
+del /q /s build_win64
 call .\deploy\win64\build-64.bat
 if %errorlevel% neq 0 exit /b %errorlevel%
 
