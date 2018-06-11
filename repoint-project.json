@@ -16,24 +16,20 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware",
-            "branch": "plugin-path-config"
+            "service": "soundsoftware"
         },
         "svgui": {
             "vcs": "hg",
-            "service": "soundsoftware",
-            "branch": "plugin-path-config"
+            "service": "soundsoftware"
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-            "branch": "plugin-path-config"
+	    "service": "soundsoftware"
         },
         "checker": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-	    "repository": "vamp-plugin-load-checker",
-            "branch": "plugin-path-config"
+	    "repository": "vamp-plugin-load-checker"
         },
         "piper": {
             "vcs": "git",
