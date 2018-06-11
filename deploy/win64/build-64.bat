@@ -46,8 +46,14 @@ copy %QTDIR%\bin\Qt5Widgets.dll .\release
 copy %QTDIR%\bin\Qt5Network.dll .\release
 copy %QTDIR%\bin\Qt5Xml.dll .\release
 copy %QTDIR%\bin\Qt5Svg.dll .\release
+copy %QTDIR%\bin\Qt5Test.dll .\release
 copy %QTDIR%\plugins\platforms\qminimal.dll .\release
 copy %QTDIR%\plugins\platforms\qwindows.dll .\release
 copy ..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll .\release
+
+.\release\test-svcore-base
+.\release\test-svcore-system
+.\release\test-svcore-data-fileio
+.\release\test-svcore-data-model
 
 set PATH=%ORIGINALPATH%

@@ -40,6 +40,8 @@
 #include "widgets/IconLoader.h"
 #include "widgets/ColourMapComboBox.h"
 #include "widgets/ColourComboBox.h"
+#include "widgets/PluginPathConfigurator.h"
+#include "widgets/WidgetScale.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
 #include "layer/ColourMapper.h"
@@ -276,7 +278,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     tempDirButton->setIcon(IconLoader().load("fileopen"));
     connect(tempDirButton, SIGNAL(clicked()),
             this, SLOT(tempDirButtonClicked()));
-    tempDirButton->setFixedSize(QSize(24, 24));
+    tempDirButton->setFixedSize(WidgetScale::scaleQSize(QSize(24, 24)));
 
     QCheckBox *showSplash = new QCheckBox;
     m_showSplash = prefs->getShowSplash();
@@ -576,7 +578,17 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     
     m_tabOrdering[AudioIOTab] = m_tabs->count();
     m_tabs->addTab(frame, tr("A&udio I/O"));
- 
+
+    // Plugins tab
+
+    m_pluginPathConfigurator = new PluginPathConfigurator(this);
+    m_pluginPathConfigurator->setPaths(PluginPathSetter::getPaths());
+    connect(m_pluginPathConfigurator, SIGNAL(pathsChanged()),
+            this, SLOT(pluginPathsChanged()));
+    
+    m_tabOrdering[PluginTab] = m_tabs->count();
+    m_tabs->addTab(m_pluginPathConfigurator, tr("&Plugins"));
+    
     // General tab
 
     frame = new QFrame;
@@ -904,6 +916,13 @@ PreferencesDialog::viewFontSizeChanged(int sz)
 }
 
 void
+PreferencesDialog::pluginPathsChanged()
+{
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -1005,6 +1024,8 @@ PreferencesDialog::applyClicked()
         emit coloursChanged();
         m_coloursChanged = false;
     }
+
+    PluginPathSetter::savePathSettings(m_pluginPathConfigurator->getPaths());
 }    
 
 void
