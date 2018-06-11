@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PREFERENCES_DIALOG_H_
-#define _PREFERENCES_DIALOG_H_
+#ifndef SV_PREFERENCES_DIALOG_H
+#define SV_PREFERENCES_DIALOG_H
 
 #include <QDialog>
 #include <QMap>
@@ -27,6 +27,7 @@ class QPushButton;
 class QLineEdit;
 class QTabWidget;
 class QComboBox;
+class PluginPathConfigurator;
 
 class PreferencesDialog : public QDialog
 {
@@ -41,7 +42,8 @@ public:
         AudioIOTab,
         AppearanceTab,
         AnalysisTab,
-        TemplateTab
+        TemplateTab,
+        PluginTab
     };
     void switchToTab(Tab tab);
 
@@ -79,6 +81,7 @@ protected slots:
     void localeChanged(int);
     void networkPermissionChanged(int state);
     void retinaChanged(int state);
+    void pluginPathsChanged();
 
     void tempDirButtonClicked();
 
@@ -98,6 +101,8 @@ protected:
     QComboBox *m_audioPlaybackDeviceCombo;
     QComboBox *m_audioRecordDeviceCombo;
     void rebuildDeviceCombos();
+
+    PluginPathConfigurator *m_pluginPathConfigurator;
     
     QString m_currentTemplate;
     QStringList m_templates;
