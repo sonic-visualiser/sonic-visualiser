@@ -1,8 +1,18 @@
 #!/bin/bash
 
-tag=`hg id | awk '{ print $1; }'`
+id=`hg id | awk '{ print $1; }'`
 
-echo "Packaging from tag $tag..."
+case "$id" in
+    *+) echo "ERROR: Current working copy has been modified - unmodified copy required"; exit 2;;
+    *);;
+esac
 
-hg archive -r"$tag" --subrepos --exclude sv-dependency-builds /tmp/sonic-visualiser-"$tag".tar.gz
+echo "Packaging from id $id..."
+
+hg update -r"$id"
+
+./repoint archive /tmp/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds repoint.pri
+
+echo Done
+echo
 
