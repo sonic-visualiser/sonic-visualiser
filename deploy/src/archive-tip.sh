@@ -11,7 +11,7 @@ echo "Packaging from id $id..."
 
 hg update -r"$id"
 
-./repoint archive /tmp/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds repoint.pri
+./repoint archive /tmp/sonic-visualiser-"$id".tar.gz --exclude sv-dependency-builds repoint.pri
 
 echo Done
 echo
