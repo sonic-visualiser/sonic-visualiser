@@ -29,7 +29,6 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QSpinBox>
 #include <QListWidget>
 #include <QSettings>
