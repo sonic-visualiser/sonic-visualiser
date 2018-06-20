@@ -1,4 +1,43 @@
 
+Changes in Sonic Visualiser 3.1 (July 2018) since the previous release 3.1:
+
+ - Properly chunk the export of audio data and other CSV data so that
+   very large exports don't hang the UI or run us out of memory
+   (thanks to Lucas Thompson)
+
+ - Add Plugins tab to Preferences dialog, from which you can review
+   the plugin load paths and see which plugins were loaded from which
+   locations, and also customise load paths (though the various path
+   environment variables are still supported)
+
+ - Fix another long-standing Windows-platform wide-char/utf8
+   conversion problem, with environment variable naming and contents
+
+ - Improve handling of incomplete session loads, i.e. situations where
+   the audio files referred to by a session could not be found -
+   previously the session could be re-saved immediately thus losing
+   the audio reference; now at least we disable Save (enabling only
+   Save As) and show a warning
+
+ - Update pane and layer menu shortcuts so that the
+   waveform/spectrogram/etc shortcuts (Shift+G etc) operate on the
+   source model in the currently-selected pane rather than the main
+   model. This is a backward-incompatible change but is a far more
+   intuitive way for the function to work
+
+ - Make "Select All" select the whole span of everything that exists,
+   not just the main model
+
+ - Add horizontal scale to Spectrum layer
+
+ - Improve spacing and labelling of vertical log scales
+
+ - Update build system for better Cap'n Proto version support and to
+   use Repoint for code management in the repository
+
+ - Various other bug fixes
+
+
 Changes in Sonic Visualiser 3.0.3 (May 2017) since the previous release 3.0.2:
 
  - Improve decisions about where and how to label vertical scales
