@@ -22,6 +22,8 @@ mkdir -p "$targetdir"/usr/lib
 
 cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
 
+ldd /usr/lib/x86_64-linux-gnu/libpulse.so.0 || true
+
 add_dependencies() {
     local binary="$1"
     for lib in $(ldd "$binary" | grep '=> /usr/lib/' | sed 's/^.*=> //' | sed 's/ .*$//' | grep -v 'libc.so' | grep -v 'libm.so'); do
