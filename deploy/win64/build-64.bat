@@ -49,6 +49,7 @@ copy %QTDIR%\bin\Qt5Svg.dll .\release
 copy %QTDIR%\bin\Qt5Test.dll .\release
 copy %QTDIR%\plugins\platforms\qminimal.dll .\release
 copy %QTDIR%\plugins\platforms\qwindows.dll .\release
+copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\release
 copy ..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll .\release
 
 .\release\test-svcore-base

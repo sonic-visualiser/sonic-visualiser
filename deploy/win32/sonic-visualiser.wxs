@@ -165,6 +165,10 @@
                   Id="qwindows"
                   Name="qwindows.dll"
                   Source="release\qwindows.dll"/>
+	      <File
+                  Id="qwindowsvistastyle"
+                  Name="qwindowsvistastyle.dll"
+                  Source="release\qwindowsvistastyle.dll"/>
             </Component>
 	  </Directory>
 

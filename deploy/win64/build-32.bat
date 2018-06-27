@@ -43,6 +43,7 @@ copy %QTDIR%\bin\"libstdc++-6.dll" .\release
 copy %QTDIR%\bin\libwinpthread-1.dll .\release
 copy %QTDIR%\plugins\platforms\qminimal.dll .\release
 copy %QTDIR%\plugins\platforms\qwindows.dll .\release
+copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\release
 
 .\release\test-svcore-base
 .\release\test-svcore-system
