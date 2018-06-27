@@ -30,3 +30,11 @@ script:
   - make -j3
   - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./deploy/linux/deploy-appimage.sh ; fi
   
+deploy:
+  provider: bintray
+  on: appimage
+  file: deploy/linux/bintray.json
+  user: cannam
+  skip_cleanup: true
+  key:
+    secure: WKfxOEdkLeD2wGnEiuh+M8bIcdCxigPW8yQjrMsgUrdUAYPpJeJCYpOd4KxpXp/KPKFBRHW7ZiaVO82eitviJOp4jPc3gYxkKMNWDEAiMGcfVjKm4SsHwzSsMVFfhukRl2CTnBJBkPqH1rCeSIrr2jbHud8sOdjj4VIB4/UoT8NLoJQBMoRSleYNaI+h8noIoL1f4RLh2PMx5ffyFB4mvzpKhon3poxDj0U00eMdSm9S456oz7PaZbyQfskVPtc9MsovMw3Gx4OBoC+99t3rjQNvaVrVz3q+lhOYZa7fl960HCY8ZJxXogMFZ5GtH/OUvDwlp/usgjx2CLGNfyFM8xgVGOzu5F0uXyKfnIdhkmSdqoVVcybEOVyTkTGWZNMpgWgSHWyc/SaRxqAQpl00z0q+hqaDeqr0iWs/M+tAjUXevCcWj3OgR70tlz7y807P6QMb9PVYk1pSaeiQ4Z3ooT4fs9U2g04m8o3n0/ksFey2ZXa5px+0Aqt5Yp8PGxOQF+HKXgzq1e8HGl+rvYMO6Zx6a9ape7SlqnFozDKiXezhM+ZxXdjsikh+bVZ1aLHrKSD6o3Us+QTeX6LaMs1dIxRiqs5ZnWWUsfKvFOhIt5kgSpZ/RHZqZwF7VUts+3xPAPfVZVwpKfPyT1+4cEFw1gFRxnoA2mi+IcviPZ69NZI=
