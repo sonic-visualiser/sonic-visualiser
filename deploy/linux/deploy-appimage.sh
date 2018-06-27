@@ -22,10 +22,19 @@ mkdir -p "$targetdir"/usr/lib
 
 cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
 
-for lib in $(ldd "$program" | grep '=> /usr/lib/' | sed 's/^.*=> //' | sed 's/ .*$//'); do
-    mkdir -p "$targetdir/$(dirname $lib)"
-    cp -L "$lib" "$targetdir/$lib"
-done
+add_dependencies() {
+    local binary="$1"
+    for lib in $(ldd "$binary" | grep '=> /usr/lib/' | sed 's/^.*=> //' | sed 's/ .*$//' | grep -v 'libc.so' | grep -v 'libm.so'); do
+        mkdir -p "$targetdir/$(dirname $lib)"
+        if [ ! -f "$targetdir/$lib" ]; then
+            cp -Lv "$lib" "$targetdir/$lib"
+            chmod +x "$targetdir/$lib"
+            add_dependencies "$lib"
+        fi
+    done
+}
+
+add_dependencies "$program"
 
 cp "$program.desktop" "$targetdir/"
 
