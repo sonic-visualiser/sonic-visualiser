@@ -17,7 +17,7 @@
 
     "files": [
         {
-            "includePattern": "Sonic_Visualiser-x86_64.AppImage",
+            "includePattern": "(Sonic_Visualiser-x86_64.AppImage)",
             "uploadPattern": "$1"
         }
     ],
