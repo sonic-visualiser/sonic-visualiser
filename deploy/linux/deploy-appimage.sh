@@ -56,6 +56,8 @@ add_dependencies() {
 
 add_dependencies "$program"
 
+cp -v "$targetdir/usr/local/lib/"* "$targetdir/usr/lib/"
+
 cp "$program.desktop" "$targetdir/"
 
 cp "icons/sv-icon.svg" "$targetdir/"
