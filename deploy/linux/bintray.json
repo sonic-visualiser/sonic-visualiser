@@ -12,7 +12,8 @@
     },
 
     "version": {
-        "name": "Continuous"
+        "name": "Continuous",
+        "desc": "Uploaded from continuous integration server"
     },
 
     "files": [
