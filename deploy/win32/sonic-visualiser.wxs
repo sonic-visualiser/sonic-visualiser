@@ -165,6 +165,13 @@
                   Id="qwindows"
                   Name="qwindows.dll"
                   Source="release\qwindows.dll"/>
+            </Component>
+	  </Directory>
+	  
+	  <Directory Id="Styles" Name="styles">
+            <Component
+                Id="Qt5StylePlugins"
+                Guid="049AD156-CBC3-457A-980F-3C01FF89C054">
 	      <File
                   Id="qwindowsvistastyle"
                   Name="qwindowsvistastyle.dll"
@@ -233,6 +240,7 @@
       <ComponentRef Id="SVFileAssociation"/>
       <ComponentRef Id="Qt5"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
+      <ComponentRef Id="Qt5StylePlugins"/>
       <ComponentRef Id="Piper"/>
       <ComponentRef Id="Checker"/>
       <ComponentRef Id="ProgramMenuDir"/>
