@@ -47,7 +47,7 @@ add_dependencies() {
         base=$(basename "$lib")
         if grep -v '^#' sv-dependency-builds/linux/appimage/excludelist |
                 grep -q "^$base$" ; then
-            echo "excluding: $lib"
+#            echo "excluding: $lib"
             continue
         fi
         
@@ -76,6 +76,24 @@ add_dependencies() {
 add_dependencies "$program"
 
 cp -v "$targetdir/usr/local/lib/"* "$targetdir/usr/lib/"
+
+qtplugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen xcb"
+qtlibdirs="/usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"
+
+for plug in $qtplugins; do
+    for libdir in $qtlibdirs; do
+        lib=$(find $libdir/plugins -name libq$plug.so -print 2>/dev/null || true)
+        if [ -n "$lib" ]; then
+            if [ -f "$lib" ]; then
+                mkdir -p "$targetdir/$(dirname $lib)"
+                cp -v "$lib" "$targetdir/$lib"
+                chmod +x "$targetdir/$lib"
+                add_dependencies "$lib"
+                break
+            fi
+        fi
+    done
+done
 
 cp "$program.desktop" "$targetdir/"
 
