@@ -587,8 +587,15 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
+    menu->addSeparator();
+    
+    action = new QAction(tr("Import Audio Data..."), this);
+    action->setStatusTip(tr("Import audio sample values from a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(importAudioData()));
+    menu->addAction(action);
+    
     action = new QAction(tr("Export Audio Data..."), this);
-    action->setStatusTip(tr("Export audio from selection into a data file"));
+    action->setStatusTip(tr("Export audio from selection into a CSV data file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
@@ -2876,6 +2883,48 @@ MainWindow::exportAudio(bool asData)
         }
     } else {
         QMessageBox::critical(this, tr("Failed to write file"), error);
+    }
+}
+
+void
+MainWindow::importAudioData()
+{
+    QString path = getOpenFileName(FileFinder::CSVFile);
+    if (path == "") return;
+
+    sv_samplerate_t rate = 44100; //!!!
+    
+    CSVFormat format(path);
+    format.setModelType(CSVFormat::WaveFileModel);
+    format.setSampleRate(rate);
+    format.setTimingType(CSVFormat::ImplicitTiming);
+    format.setTimeUnits(CSVFormat::TimeAudioFrames);
+
+    FileOpenStatus status = FileOpenSucceeded;
+    
+    WaveFileModel *model = qobject_cast<WaveFileModel *>
+        (DataFileReaderFactory::loadCSV
+         (path, format,
+          getMainModel() ? getMainModel()->getSampleRate() : rate));
+
+    if (!model || !model->isOK()) {
+
+        delete model;
+        status = FileOpenFailed;
+
+    } else {
+
+        status = addOpenedAudioModel(path,
+                                     model,
+                                     CreateAdditionalModel,
+                                     getDefaultSessionTemplate(),
+                                     false);
+    }
+
+    if (status == FileOpenFailed) {
+        emit hideSplash();
+        QMessageBox::critical(this, tr("Failed to open file"),
+                              tr("<b>File open failed</b><p>Audio data file %1 could not be opened.").arg(path));
     }
 }
 
