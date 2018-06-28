@@ -4,13 +4,13 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "53fa8d57b728"
+      "pin": "8d4f09552ba4"
     },
     "svgui": {
       "pin": "fcc1f45f7bd5"
     },
     "svapp": {
-      "pin": "d4c16eed673d"
+      "pin": "6cdf2afebfd7"
     },
     "checker": {
       "pin": "3ccc384c0161"
@@ -37,7 +37,7 @@
       "pin": "d90244c003be"
     },
     "sv-dependency-builds": {
-      "pin": "a9f5ce17330a"
+      "pin": "f1a9b270e043"
     },
     "icons/scalable": {
       "pin": "1c6516ba7fc1"
