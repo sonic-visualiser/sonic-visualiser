@@ -12,13 +12,14 @@
     },
 
     "version": {
-        "name": "3.1pre1"
+        "name": "Continuous"
     },
 
     "files": [
         {
             "includePattern": "\./(Sonic_Visualiser-x86_64.AppImage)",
-            "uploadPattern": "$1"
+            "uploadPattern": "$1",
+            "matrixParams": { "override": 1 }
         }
     ],
 
