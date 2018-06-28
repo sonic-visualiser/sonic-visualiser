@@ -4319,6 +4319,15 @@ Co chcete vyvést?</translation>
         <source>&lt;b&gt;Not enough memory&lt;/b&gt;&lt;p&gt;There doesn&apos;t appear to be enough memory to accommodate any necessary temporary data.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Incomplete session loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Some of the audio content referred to by the original session file could not be loaded.
+If you save this session, it will be saved without any reference to that audio, and information may be lost.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModelDataTableDialog</name>
@@ -5132,6 +5141,125 @@ ale dostupné jsou %2. Použije se pouze první %3.
     </message>
 </context>
 <context>
+    <name>PluginPathConfigurator</name>
+    <message>
+        <source>Move the selected location later in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move the selected location earlier in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a new location to the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove the selected location from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset the list for this plugin type to its default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Review plugins...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plugin locations for plugin type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LADSPA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DSSI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vamp (32-bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LADSPA (32-bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DSSI (32-bit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(Variable is currently unset)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(Current value begins: &quot;%1 ...&quot;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(Currently set to: &quot;%1&quot;)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow the %1 environment variable to take priority over this
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose directory to add</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PluginReviewDialog</name>
+    <message>
+        <source>Plugins Loaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Typ</translation>
+    </message>
+    <message>
+        <source>Library</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Identifier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Found in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Název</translation>
+    </message>
+    <message>
+        <source>Vamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DSSI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LADSPA</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Preferences</name>
     <message>
         <source>Hann</source>
@@ -5509,6 +5637,10 @@ Použít je před zavřením?</translation>
     <message>
         <source>&amp;Other</source>
         <translation>&amp;Jiné</translation>
+    </message>
+    <message>
+        <source>&amp;Plugins</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6676,6 +6808,10 @@ dB:	%5</translation>
     <message>
         <source>%1 - %2 Hz</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Hz</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
