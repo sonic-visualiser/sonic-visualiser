@@ -25,13 +25,31 @@ cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
 ldd /usr/lib/x86_64-linux-gnu/libpulse.so.0 || true
 
 add_dependencies() {
+
     local binary="$1"
-    for lib in $(ldd "$binary" | egrep '=> (/usr)?/lib/' | sed 's/^.*=> //' | sed 's/ .*$//' | grep -v 'libc.so' | grep -v 'libm.so'); do
+
+    for lib in $(ldd "$binary" | egrep '=> (/usr)?(/local)?/lib/' | \
+                     sed 's/^.*=> //' | sed 's/ .*$//' | \
+                     grep -v 'libc.so' | grep -v 'libm.so'); do
+
         mkdir -p "$targetdir/$(dirname $lib)"
+
         if [ ! -f "$targetdir/$lib" ]; then
+
             cp -Lv "$lib" "$targetdir/$lib"
             chmod +x "$targetdir/$lib"
+
+            # copy e.g. /usr/lib/pulseaudio/libpulsecommon-*.so up a
+            # level to something in the load path
+            last_element=$(basename $(dirname "$lib"))
+            case "$last_element" in
+                lib) ;;
+                *-gnu) ;;
+                *) cp -v "$targetdir/$lib" "$targetdir/$(dirname $(dirname $lib))"
+            esac
+            
             add_dependencies "$lib"
+            
         fi
     done
 }
