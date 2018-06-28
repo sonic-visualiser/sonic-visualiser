@@ -6,6 +6,19 @@ program=sonic-visualiser
 checker=vamp-plugin-load-checker
 piper=piper-vamp-simple-server
 
+get_id() {
+    if [ -d .hg ]; then
+        hg id | sed 's/[+ ].*$//'
+    elif [ -d .git ]; then
+        git rev-parse --short HEAD
+    else
+        echo "WARNING: can't figure out revision from VCS metadata" 1>&2
+        echo "unknown"
+    fi
+}
+
+version=$(get_id)
+
 targetdir="${program}.AppDir"
 
 echo "Target dir is $targetdir"
@@ -29,9 +42,15 @@ add_dependencies() {
     local binary="$1"
 
     for lib in $(ldd "$binary" | egrep '=> (/usr)?(/local)?/lib/' | \
-                     sed 's/^.*=> //' | sed 's/ .*$//' | \
-                     grep -v 'libc.so' | grep -v 'libm.so'); do
+                     sed 's/^.*=> //' | sed 's/ .*$//'); do
 
+        base=$(basename "$lib")
+        if grep -v '^#' sv-dependency-builds/linux/appimage/excludelist |
+                grep -q "^$base$" ; then
+            echo "excluding: $lib"
+            continue
+        fi
+        
         mkdir -p "$targetdir/$(dirname $lib)"
 
         if [ ! -f "$targetdir/$lib" ]; then
@@ -65,5 +84,5 @@ cp "icons/sv-icon.svg" "$targetdir/"
 cp sv-dependency-builds/linux/appimage/AppRun-x86_64 "$targetdir/AppRun"
 chmod +x "$targetdir/AppRun"
 
-ARCH=x86_64 sv-dependency-builds/linux/appimage/appimagetool-x86_64.AppImage "$targetdir"
+ARCH=x86_64 sv-dependency-builds/linux/appimage/appimagetool-x86_64.AppImage "$targetdir" "SonicVisualiser-$version-x86_64.AppImage"
 
