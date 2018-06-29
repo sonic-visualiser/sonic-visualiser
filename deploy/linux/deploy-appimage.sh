@@ -78,7 +78,12 @@ add_dependencies "$program"
 cp -v "$targetdir/usr/local/lib/"* "$targetdir/usr/lib/"
 
 qtplugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen xcb"
-qtlibdirs="$QTDIR /usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"
+qtlibdirs="/usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"
+
+QTDIR=${QTDIR:-}
+if [ -n "$QTDIR" ]; then
+    qtlibdirs="$QTDIR $qtlibdirs"
+fi
 
 for plug in $qtplugins; do
     for libdir in $qtlibdirs; do
@@ -102,5 +107,9 @@ cp "icons/sv-icon.svg" "$targetdir/"
 cp sv-dependency-builds/linux/appimage/AppRun-x86_64 "$targetdir/AppRun"
 chmod +x "$targetdir/AppRun"
 
-ARCH=x86_64 sv-dependency-builds/linux/appimage/appimagetool-x86_64.AppImage "$targetdir" "SonicVisualiser-$version-x86_64.AppImage"
+# Do this with a separate extraction step, so as to make it work even
+# in situations where FUSE is unavailable like in a Docker container
+export ARCH=x86_64
+sv-dependency-builds/linux/appimage/appimagetool-x86_64.AppImage --appimage-extract
+./squashfs-root/AppRun "$targetdir" "SonicVisualiser-$version-x86_64.AppImage"
 
