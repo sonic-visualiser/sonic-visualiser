@@ -588,19 +588,6 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
     menu->addSeparator();
-    
-    action = new QAction(tr("Import Audio Data..."), this);
-    action->setStatusTip(tr("Import audio sample values from a CSV data file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importAudioData()));
-    menu->addAction(action);
-    
-    action = new QAction(tr("Export Audio Data..."), this);
-    action->setStatusTip(tr("Export audio from selection into a CSV data file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
-    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
-
-    menu->addSeparator();
 
     action = new QAction(tr("Import Annotation &Layer..."), this);
     action->setShortcut(tr("Ctrl+L"));
@@ -616,6 +603,19 @@ MainWindow::setupFileMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(exportLayer()));
     connect(this, SIGNAL(canExportLayer(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
+    menu->addAction(action);
+
+    menu->addSeparator();
+    
+    action = new QAction(tr("Import Audio Data from CSV..."), this);
+    action->setStatusTip(tr("Import audio sample values from a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(importAudioData()));
+    menu->addAction(action);
+    
+    action = new QAction(tr("Export Audio Data to CSV..."), this);
+    action->setStatusTip(tr("Export audio from selection into a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
+    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
     menu->addSeparator();
