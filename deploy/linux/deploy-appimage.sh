@@ -78,7 +78,7 @@ add_dependencies "$program"
 cp -v "$targetdir/usr/local/lib/"* "$targetdir/usr/lib/"
 
 qtplugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen xcb"
-qtlibdirs="/usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"
+qtlibdirs="$QTDIR /usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"
 
 for plug in $qtplugins; do
     for libdir in $qtlibdirs; do
