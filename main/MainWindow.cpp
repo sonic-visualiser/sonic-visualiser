@@ -2901,13 +2901,23 @@ MainWindow::importAudioData()
     format.setTimeUnits(CSVFormat::TimeAudioFrames);
 
     FileOpenStatus status = FileOpenSucceeded;
+
+    ProgressDialog *dialog = new ProgressDialog(tr("Importing audio data..."),
+                                                true, 0, this,
+                                                Qt::ApplicationModal);
     
     WaveFileModel *model = qobject_cast<WaveFileModel *>
         (DataFileReaderFactory::loadCSV
          (path, format,
-          getMainModel() ? getMainModel()->getSampleRate() : rate));
+          getMainModel() ? getMainModel()->getSampleRate() : rate,
+          dialog));
 
-    if (!model || !model->isOK()) {
+    if (dialog->wasCancelled()) {
+
+        delete model;
+        status = FileOpenCancelled;
+
+    } else if (!model || !model->isOK()) {
 
         delete model;
         status = FileOpenFailed;
@@ -2921,6 +2931,8 @@ MainWindow::importAudioData()
                                      false);
     }
 
+    delete dialog;
+    
     if (status == FileOpenFailed) {
         emit hideSplash();
         QMessageBox::critical(this, tr("Failed to open file"),
