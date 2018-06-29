@@ -1,0 +1,54 @@
+# This pulls the latest versions of capnp & SV from repos - so you
+# will need to defeat the Docker cache by destroying the container
+# each time you want to update it
+#
+FROM ubuntu:14.04
+MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
+RUN apt-get update && \
+    apt-get install -y \
+    software-properties-common \
+    build-essential \
+    libbz2-dev \
+    libfftw3-dev \
+    libfishsound1-dev \
+    libid3tag0-dev \
+    liblo-dev \
+    liblrdf0-dev \
+    libmad0-dev \
+    liboggz2-dev \
+    libpulse-dev \
+    libsamplerate-dev \
+    libsndfile-dev \
+    libsord-dev \
+    libxml2-utils \
+    libgl1-mesa-dev \
+    portaudio19-dev \
+    raptor-utils \
+    librubberband-dev \
+    git \
+    mercurial \
+    curl wget \
+    mlton \
+    autoconf automake libtool lintian
+RUN apt-add-repository -y ppa:beineri/opt-qt-5.10.1-trusty
+RUN apt-get update && \
+    apt-get install -y \
+    qt510base \
+    qt510svg
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8
+RUN git clone https://github.com/sandstorm-io/capnproto
+WORKDIR capnproto/c++
+RUN ./setup-autotools.sh && autoreconf -i && ./configure && make && make install
+WORKDIR ../..
+RUN hg clone https://code.soundsoftware.ac.uk/hg/sonic-visualiser
+WORKDIR sonic-visualiser
+ENV QTDIR /opt/qt510
+ENV PATH /opt/qt510/bin:$PATH
+RUN ./configure
+RUN make -j3
+RUN deploy/linux/deploy-appimage.sh
+RUN tar cvf output.tar *.AppImage && cp output.tar ..
