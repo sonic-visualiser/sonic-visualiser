@@ -32,7 +32,7 @@ script:
   
 deploy:
   provider: bintray
-  on: appimage
+  on: master
   file: deploy/linux/bintray.json
   user: cannam
   skip_cleanup: true
