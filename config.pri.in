@@ -20,4 +20,6 @@ macx*:LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -fra
 
 LIBS += @LIBS@
 
-DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
+linux*:LIBS -= -ljack
+
+DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER DYNAMIC_JACK
