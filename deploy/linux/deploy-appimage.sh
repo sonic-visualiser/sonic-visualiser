@@ -41,31 +41,36 @@ add_dependencies() {
 
     local binary="$1"
 
-    for lib in $(ldd "$binary" | egrep '=> (/usr)?(/local)?/lib/' | \
+    echo "ldd $binary yields:"
+    ldd "$binary"
+    
+    for lib in $(ldd "$binary" | grep '=> [^ ]*/lib/' | \
                      sed 's/^.*=> //' | sed 's/ .*$//'); do
 
         base=$(basename "$lib")
         if grep -v '^#' sv-dependency-builds/linux/appimage/excludelist |
                 grep -q "^$base$" ; then
-#            echo "excluding: $lib"
+            echo "excluding: $lib"
             continue
         fi
+
+        target="$targetdir/usr/lib/$(basename $lib)"
         
-        mkdir -p "$targetdir/$(dirname $lib)"
+        mkdir -p "$(dirname $target)"
 
-        if [ ! -f "$targetdir/$lib" ]; then
+        if [ ! -f "$target" ]; then
 
-            cp -Lv "$lib" "$targetdir/$lib"
-            chmod +x "$targetdir/$lib"
+            cp -Lv "$lib" "$target"
+            chmod +x "$target"
 
-            # copy e.g. /usr/lib/pulseaudio/libpulsecommon-*.so up a
-            # level to something in the load path
-            last_element=$(basename $(dirname "$lib"))
-            case "$last_element" in
-                lib) ;;
-                *-gnu) ;;
-                *) cp -v "$targetdir/$lib" "$targetdir/$(dirname $(dirname $lib))"
-            esac
+#            # copy e.g. /usr/lib/pulseaudio/libpulsecommon-*.so up a
+#            # level to something in the load path
+#            last_element=$(basename $(dirname "$lib"))
+#            case "$last_element" in
+#                lib) ;;
+#                *-gnu) ;;
+#                *) cp -v "$targetdir/$lib" "$targetdir/$(dirname $(dirname $lib))"
+#            esac
             
             add_dependencies "$lib"
             
@@ -74,8 +79,10 @@ add_dependencies() {
 }
 
 add_dependencies "$program"
+add_dependencies "$checker"
+add_dependencies "$piper"
 
-cp -v "$targetdir/usr/local/lib/"* "$targetdir/usr/lib/"
+#cp -v "$targetdir/usr/local/lib/"* "$targetdir/usr/lib/"
 
 qtplugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen xcb"
 qtlibdirs="/usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"
@@ -90,9 +97,10 @@ for plug in $qtplugins; do
         lib=$(find $libdir/plugins -name libq$plug.so -print 2>/dev/null || true)
         if [ -n "$lib" ]; then
             if [ -f "$lib" ]; then
-                mkdir -p "$targetdir/$(dirname $lib)"
-                cp -v "$lib" "$targetdir/$lib"
-                chmod +x "$targetdir/$lib"
+                target="$targetdir/usr/lib/qt5/plugins/$(basename $lib)"
+                mkdir -p "$(dirname $target)"
+                cp -v "$lib" "$target"
+                chmod +x "$target"
                 add_dependencies "$lib"
                 break
             fi
