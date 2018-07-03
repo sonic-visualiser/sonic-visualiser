@@ -18,6 +18,7 @@ RUN apt-get update && \
     liboggz2-dev \
     libpulse-dev \
     libasound2-dev \
+    libjack-dev \
     libsamplerate-dev \
     libsndfile-dev \
     libsord-dev \
@@ -31,10 +32,12 @@ RUN apt-get update && \
     mlton \
     autoconf automake libtool lintian
 
-# NB we do not install portaudio because it comes with a dependency on
-# the JACK library which we don't want to bundle and can't assume
-# people will have. Instead we rely on Pulse and (dynamically-loaded)
-# JACK support
+# NB we do not install portaudio. We don't want to end up including it
+# in the bundle, because it comes with a dependency on the JACK
+# library which we don't want to bundle and can't assume people will
+# have. However, we do install JACK because the Dynamic JACK mechanism
+# should ensure we can detect, configure, and use that without
+# actually linking against it. We also have Pulse as the default I/O.
 
 RUN apt-add-repository -y ppa:beineri/opt-qt-5.10.1-trusty
 RUN apt-get update && \
