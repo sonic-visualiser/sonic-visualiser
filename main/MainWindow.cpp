@@ -122,7 +122,6 @@
 #include <QRegExp>
 #include <QScrollArea>
 #include <QCloseEvent>
-#include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QFileSystemWatcher>
 #include <QTextEdit>
@@ -3445,7 +3444,7 @@ void
 MainWindow::manageSavedTemplates()
 {
     ResourceFinder rf;
-    QDesktopServices::openUrl("file:" + rf.getResourceSaveDir("templates"));
+    openLocalFolder(rf.getResourceSaveDir("templates"));
 }
 
 void
