@@ -53,3 +53,5 @@ glob:.vext*
 glob:.repoint*
 build_win32
 build_win64
+*.AppImage
+*.AppDir
