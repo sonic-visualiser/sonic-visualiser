@@ -62,15 +62,6 @@ add_dependencies() {
 
             cp -Lv "$lib" "$target"
             chmod +x "$target"
-
-#            # copy e.g. /usr/lib/pulseaudio/libpulsecommon-*.so up a
-#            # level to something in the load path
-#            last_element=$(basename $(dirname "$lib"))
-#            case "$last_element" in
-#                lib) ;;
-#                *-gnu) ;;
-#                *) cp -v "$targetdir/$lib" "$targetdir/$(dirname $(dirname $lib))"
-#            esac
             
             add_dependencies "$lib"
             
@@ -81,8 +72,6 @@ add_dependencies() {
 add_dependencies "$program"
 add_dependencies "$checker"
 add_dependencies "$piper"
-
-#cp -v "$targetdir/usr/local/lib/"* "$targetdir/usr/lib/"
 
 qtplugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen xcb"
 qtlibdirs="/usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"
