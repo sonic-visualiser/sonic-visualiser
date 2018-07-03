@@ -22,7 +22,6 @@ RUN apt-get update && \
     libsord-dev \
     libxml2-utils \
     libgl1-mesa-dev \
-    portaudio19-dev \
     raptor-utils \
     librubberband-dev \
     git \
@@ -30,6 +29,12 @@ RUN apt-get update && \
     curl wget \
     mlton \
     autoconf automake libtool lintian
+
+# NB we do not install portaudio because it comes with a dependency on
+# the JACK library which we don't want to bundle and can't assume
+# people will have. Instead we rely on Pulse and (dynamically-loaded)
+# JACK support
+
 RUN apt-add-repository -y ppa:beineri/opt-qt-5.10.1-trusty
 RUN apt-get update && \
     apt-get install -y \
