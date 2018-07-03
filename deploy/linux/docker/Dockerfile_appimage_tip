@@ -17,6 +17,7 @@ RUN apt-get update && \
     libmad0-dev \
     liboggz2-dev \
     libpulse-dev \
+    libasound2-dev \
     libsamplerate-dev \
     libsndfile-dev \
     libsord-dev \
