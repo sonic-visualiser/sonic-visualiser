@@ -12,7 +12,7 @@ case "$current" in
 esac
 
 echo
-echo -n "Building appimage from revision $current..."
+echo "Building appimage from revision $current..."
 
 dockerdir=deploy/linux/docker
 
