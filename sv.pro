@@ -24,7 +24,8 @@ solaris*:TARGET = sonic-visualiser
 
 linux* {
     sv_bins.path = $$PREFIX_PATH/bin/
-    sv_bins.files = piper-vamp-simple-server checker/vamp-plugin-load-checker sonic-visualiser
+    sv_bins.files = checker/vamp-plugin-load-checker piper-vamp-simple-server sonic-visualiser
+    sv_bins.CONFIG = no_check_exist
     INSTALLS += sv_bins
 }
 
