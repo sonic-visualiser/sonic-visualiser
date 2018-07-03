@@ -97,7 +97,11 @@ for plug in $qtplugins; do
         lib=$(find $libdir/plugins -name libq$plug.so -print 2>/dev/null || true)
         if [ -n "$lib" ]; then
             if [ -f "$lib" ]; then
-                target="$targetdir/usr/lib/qt5/plugins/$(basename $lib)"
+                subdir=$(basename $(dirname $lib))
+                if [ t"$subdir" = t"plugins" ]; then
+                    subdir=""
+                fi
+                target="$targetdir/usr/lib/qt5/plugins/$subdir/$(basename $lib)"
                 mkdir -p "$(dirname $target)"
                 cp -v "$lib" "$target"
                 chmod +x "$target"
