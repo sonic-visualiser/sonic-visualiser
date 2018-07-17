@@ -5,7 +5,9 @@ capnpc.depends = $$PWD/piper/capnp/piper.capnp
 capnpc.commands = capnp compile --src-prefix=$$PWD/piper/capnp -oc++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
 
 macx* {
-    capnpc.commands=$$PWD/sv-dependency-builds/osx/bin/capnp -I$$PWD/sv-dependency-builds/osx/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/osx/bin/capnpc-c++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
+    exists(sv-dependency-builds) {
+        capnpc.commands=$$PWD/sv-dependency-builds/osx/bin/capnp -I$$PWD/sv-dependency-builds/osx/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/osx/bin/capnpc-c++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
+    }
 }
 
 win32-g++ {
