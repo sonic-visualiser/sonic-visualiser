@@ -2268,7 +2268,6 @@ MainWindow::setupToolbars()
     menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(m_playAction);
-    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
