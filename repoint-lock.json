@@ -4,7 +4,7 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "71202259002d"
+      "pin": "0d4f1fcad97a"
     },
     "svgui": {
       "pin": "c0d8356e274f"
@@ -16,10 +16,10 @@
       "pin": "3ccc384c0161"
     },
     "piper": {
-      "pin": "dde809643316e7bb606fc14d66e55f07059bcf36"
+      "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-cpp": {
-      "pin": "28a0ee2cc737a7b50ac62d5996191cd589c047c2"
+      "pin": "44cb74e186a703e7e6ce403aa295913a87b88d62"
     },
     "dataquay": {
       "pin": "807b55408d9e"
