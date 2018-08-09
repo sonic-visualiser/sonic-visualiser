@@ -51,7 +51,9 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 RUN hg clone -r[[REVISION]] https://code.soundsoftware.ac.uk/hg/sonic-visualiser
 RUN git clone https://github.com/sandstorm-io/capnproto
-WORKDIR capnproto/c++
+WORKDIR capnproto
+RUN git checkout v0.6.1
+WORKDIR c++
 RUN ./setup-autotools.sh && autoreconf -i && ./configure && make -j3 && make install
 WORKDIR ../../sonic-visualiser
 ENV QTDIR /opt/qt510
