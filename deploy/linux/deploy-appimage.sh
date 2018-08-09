@@ -104,6 +104,7 @@ done
 cp "$program.desktop" "$targetdir/"
 
 cp "icons/sv-icon.svg" "$targetdir/"
+cp "icons/sonic-visualiser.svg" "$targetdir/"
 
 cp sv-dependency-builds/linux/appimage/AppRun-x86_64 "$targetdir/AppRun"
 chmod +x "$targetdir/AppRun"
