@@ -4,6 +4,12 @@ Changes in Sonic Visualiser 3.1.1 (Aug 2018) since the previous release 3.1:
  - Fix failure to record correctly into an empty session with certain
    audio drivers
 
+ - Fix failure to run LADSPA plugins at all, except with some unusual
+   path layouts
+
+ - Fix failure to silence sonified notes when rewinding backwards or
+   jumping back from a loop endpoint
+
  - Fix macOS .dmg image so as to use older HFS+ filesystem for compatibility
 
 
