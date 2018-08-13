@@ -16,7 +16,8 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "avoid-pointer-keys"
         },
         "svgui": {
             "vcs": "hg",
@@ -24,7 +25,8 @@
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+	    "service": "soundsoftware",
+            "branch": "avoid-pointer-keys"
         },
         "checker": {
             "vcs": "hg",
