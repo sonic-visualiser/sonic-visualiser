@@ -4,7 +4,7 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "68a0abfe7263"
+      "pin": "0ee87bc10cdc"
     },
     "svgui": {
       "pin": "c0d8356e274f"
@@ -13,7 +13,7 @@
       "pin": "755fc02a1565"
     },
     "checker": {
-      "pin": "3ccc384c0161"
+      "pin": "7f5cf0fed473"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"

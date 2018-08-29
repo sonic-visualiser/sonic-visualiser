@@ -3,11 +3,11 @@
         "extdir": "."
     },
     "services": {
-	"soundsoftware": {
-	    "vcs": ["hg", "git"],
-	    "anonymous": "https://code.soundsoftware.ac.uk/{vcs}/{repository}",
-	    "authenticated": "https://{account}@code.soundsoftware.ac.uk/{vcs}/{repository}"
-	}
+        "soundsoftware": {
+            "vcs": ["hg", "git"],
+            "anonymous": "https://code.soundsoftware.ac.uk/{vcs}/{repository}",
+            "authenticated": "https://{account}@code.soundsoftware.ac.uk/{vcs}/{repository}"
+        }
     },
     "libraries": {
         "vamp-plugin-sdk": {
@@ -16,7 +16,8 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "checker_errorcode"
         },
         "svgui": {
             "vcs": "hg",
@@ -24,22 +25,23 @@
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+            "service": "soundsoftware"
         },
         "checker": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-	    "repository": "vamp-plugin-load-checker"
+            "service": "soundsoftware",
+            "repository": "vamp-plugin-load-checker",
+            "branch": "errorcode"
         },
         "piper": {
             "vcs": "git",
-	    "service": "github",
-	    "owner": "piper-audio"
+            "service": "github",
+            "owner": "piper-audio"
         },
         "piper-cpp": {
             "vcs": "git",
-	    "service": "github",
-	    "owner": "piper-audio",
+            "service": "github",
+            "owner": "piper-audio",
             "repository": "piper-vamp-cpp"
         },
         "dataquay": {
@@ -69,12 +71,12 @@
         },
         "sv-dependency-builds": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+            "service": "soundsoftware"
         },
         "icons/scalable": {
             "vcs": "hg",
-	    "service": "soundsoftware",
-	    "repository": "sv-iconset"
+            "service": "soundsoftware",
+            "repository": "sv-iconset"
         }
     }
 }
