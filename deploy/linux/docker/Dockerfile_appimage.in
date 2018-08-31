@@ -40,6 +40,7 @@ RUN apt-get update && \
 # actually linking against it. We also have Pulse as the default I/O.
 
 RUN apt-add-repository -y ppa:beineri/opt-qt-5.10.1-trusty
+RUN apt-add-repository -y ppa:ubuntu-toolchain-r/test
 RUN apt-get update && \
     apt-get install -y \
     g++-4.9 \
