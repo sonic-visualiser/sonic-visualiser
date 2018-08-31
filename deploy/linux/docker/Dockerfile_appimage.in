@@ -40,15 +40,11 @@ RUN apt-get update && \
 # actually linking against it. We also have Pulse as the default I/O.
 
 RUN apt-add-repository -y ppa:beineri/opt-qt-5.10.1-trusty
-RUN apt-add-repository -y ppa:ubuntu-toolchain-r/test
 RUN apt-get update && \
     apt-get install -y \
-    g++-4.9 \
     qt510base \
     qt510svg
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-RUN for x in g++ gcc gcc-ar gcc-nm gcc-ranlib ; do ln -sf /usr/bin/$x-4.9 /usr/bin/$x ; ln -sf /usr/bin/x86_64-linux-gnu-gcc-$x-4.9 /usr/bin/x86_64-linux-gnu-gcc-$x ; done
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8  
@@ -59,7 +55,7 @@ RUN hg clone -r[[REVISION]] https://code.soundsoftware.ac.uk/hg/sonic-visualiser
 
 RUN git clone https://github.com/sandstorm-io/capnproto
 WORKDIR capnproto
-RUN git checkout v0.7.0
+RUN git checkout v0.6.0
 WORKDIR c++
 RUN autoreconf -i && ./configure && make -j3 && make install
 
