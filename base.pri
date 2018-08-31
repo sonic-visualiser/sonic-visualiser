@@ -31,5 +31,5 @@ solaris*: DEFINES += __RTMIDI_DUMMY_ONLY__
 # Defines for Dataquay
 DEFINES += USE_SORD
 
-CONFIG += qt thread warn_on stl rtti exceptions c++11
+CONFIG += qt thread warn_on stl rtti exceptions c++14
 
