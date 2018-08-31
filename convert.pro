@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-CONFIG += stl exceptions console warn_on c++14
+CONFIG += stl exceptions console warn_on 
 
 CONFIG -= qt
 

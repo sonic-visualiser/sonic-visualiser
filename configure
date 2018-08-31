@@ -624,6 +624,7 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 QMAKE_CONFIG
 HAVES
+CXXSTANDARD
 CXXFLAGS_MINIMAL
 CUT
 SHA1SUM
@@ -4422,13 +4423,53 @@ SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 CXXFLAGS_DEBUG="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
+CXXSTANDARD=c++14
 
 if test "x$GCC" = "xyes"; then
    	CXXFLAGS_ANY="-fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -O2 -Werror"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
-        LIBS_DEBUG="$LIBS -lubsan"
+        LIBS_DEBUG="$LIBS"
+        as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__--std=$CXXSTANDARD" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts --std=$CXXSTANDARD" >&5
+$as_echo_n "checking whether C++ compiler accepts --std=$CXXSTANDARD... " >&6; }
+if eval \${$as_CACHEVAR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+  ax_check_save_flags=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS  --std=$CXXSTANDARD"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  eval "$as_CACHEVAR=yes"
+else
+  eval "$as_CACHEVAR=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CXXFLAGS=$ax_check_save_flags
+fi
+eval ac_res=\$$as_CACHEVAR
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_CACHEVAR"\" = x"yes"; then :
+  :
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: Compiler does not appear to support $CXXSTANDARD, falling back to c++11" >&5
+$as_echo "$as_me: Compiler does not appear to support $CXXSTANDARD, falling back to c++11" >&6;}
+        CXXSTANDARD=c++11
+fi
+
 fi
 
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
@@ -7331,6 +7372,7 @@ fi
       fi
    fi
 fi
+
 
 
 
