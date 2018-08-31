@@ -3,7 +3,7 @@ exists(config.pri) {
     include(./config.pri)
 }
 
-CONFIG += staticlib c++11
+CONFIG += staticlib c++14
 
 DEFINES -= USE_REDLAND
 QMAKE_CXXFLAGS -= -I/usr/include/rasqal -I/usr/include/raptor2
