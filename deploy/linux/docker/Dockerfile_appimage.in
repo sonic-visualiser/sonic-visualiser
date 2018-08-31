@@ -45,20 +45,25 @@ RUN apt-get update && \
     qt510base \
     qt510svg
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8  
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8
+
 RUN hg clone -r[[REVISION]] https://code.soundsoftware.ac.uk/hg/sonic-visualiser
+
 RUN git clone https://github.com/sandstorm-io/capnproto
 WORKDIR capnproto
 RUN git checkout v0.6.1
 WORKDIR c++
-RUN ./setup-autotools.sh && autoreconf -i && ./configure && make -j3 && make install
+RUN autoreconf -i && ./configure && make -j3 && make install
+
 WORKDIR ../../sonic-visualiser
 ENV QTDIR /opt/qt510
 ENV PATH /opt/qt510/bin:$PATH
 RUN ./configure
 RUN make -j3
+
 RUN deploy/linux/deploy-appimage.sh
 RUN tar cvf output.tar *.AppImage && cp output.tar ..
