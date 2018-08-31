@@ -14,15 +14,13 @@ matrix:
            - ubuntu-toolchain-r-test
           packages:
            - libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils librubberband-dev autoconf libtool git mlton g++-4.9
-      env:
-        - CC=gcc-4.9
-        - CXX=g++-4.9
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew update ; fi
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew install polyml ; fi
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew install qt5 ; fi
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then export PATH=$PATH:/usr/local/opt/qt5/bin ; fi
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]]; then for x in g++ gcc gcc-ar gcc-nm gcc-ranlib ; do sudo ln -sf /usr/bin/$x-4.9 /usr/bin/$x ; ln -sf /usr/bin/x86_64-linux-gnu-gcc-$x-4.9 /usr/bin/x86_64-linux-gnu-gcc-$x ; done; fi
   - ( cd ../ ; git clone https://github.com/sandstorm-io/capnproto )
   - ( cd ../capnproto/c++ ; autoreconf -i )
   - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
