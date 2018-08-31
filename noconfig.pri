@@ -1,5 +1,5 @@
 
-CONFIG += release
+CONFIG += release c++14
 
 #CONFIG -= release
 #CONFIG += debug
