@@ -21,7 +21,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew install qt5 ; fi
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then export PATH=$PATH:/usr/local/opt/qt5/bin ; fi
   - ( cd ../ ; git clone https://github.com/sandstorm-io/capnproto )
-  - ( cd ../capnproto/ ; git checkout v0.6.0 )
+  - ( cd ../capnproto/ ; git checkout v0.6.1 )
   - ( cd ../capnproto/c++ ; autoreconf -i )
   - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
 
