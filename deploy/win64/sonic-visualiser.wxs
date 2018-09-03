@@ -160,23 +160,33 @@
           <Component Win64="yes"
                Id="VCRuntime"
                Guid="251D9513-BBD2-47CF-BE78-EF79446F7683">
+
+            <!-- Redistributables are handled by the Visual Studio
+                 installer (a separate program from VS itself) and are
+                 installed into C:\Program Files (x86)\Microsoft
+                 Visual Studio\2017\Community\VC\Redist\MSVC\...  NB
+                 this is not the same thing as the Windows SDKs, which
+                 consist of build tools etc - they have their own
+                 installers and get installed by default to C:\Program
+                 Files (x86)\Windows Kits\... -->
+               
                <File
                    Id="concrt140"
                    Name="concrt140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\concrt140.DLL"
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.15.26706\x64\Microsoft.VC141.CRT\concrt140.DLL"
                    KeyPath="yes"/>
                <File
                    Id="msvcp140"
                    Name="msvcp140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.15.26706\x64\Microsoft.VC141.CRT\msvcp140.DLL"/>
                <File
                    Id="vccorlib140"
                    Name="vccorlib140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.15.26706\x64\Microsoft.VC141.CRT\vccorlib140.DLL"/>
                <File
                    Id="vcruntime140"
                    Name="vcruntime140.dll"
-                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.14.26405\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
+                   Source="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Redist\MSVC\14.15.26706\x64\Microsoft.VC141.CRT\vcruntime140.DLL"/>
           </Component>
 
 	  <Directory Id="Platforms" Name="platforms">
@@ -326,6 +336,4 @@
     <WixVariable Id="WixUIBannerBmp" Value="..\deploy\win32\top.bmp"/>
     <WixVariable Id="WixUIDialogBmp" Value="..\deploy\win32\main.bmp"/>
 
-  </Product>
-</Wix>
-
+  </Product> </Wix>
