@@ -1,8 +1,7 @@
 
 TEMPLATE = app
 
-CONFIG += stl c++11 exceptions console warn_on
-
+CONFIG += stl exceptions console warn_on
 CONFIG -= qt
 
 exists(config.pri) {

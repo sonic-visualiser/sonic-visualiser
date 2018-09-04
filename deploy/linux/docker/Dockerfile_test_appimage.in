@@ -1,0 +1,8 @@
+FROM centos:7
+RUN yum update
+RUN yum -y groupinstall "X Window System"
+RUN yum -y install wget
+ADD output/SonicVisualiser-[[REVISION]]-x86_64.AppImage SV.AppImage
+RUN chmod +x SV.AppImage
+RUN ./SV.AppImage --appimage-extract
+RUN ./squashfs-root/AppRun

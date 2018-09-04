@@ -1,7 +1,7 @@
 
-CONFIG += release
+CONFIG += c++14
 
-#CONFIG -= release
+CONFIG += release
 #CONFIG += debug
 
 PREFIX_PATH = /usr/local
@@ -81,11 +81,11 @@ win32-msvc* {
     
     INCLUDEPATH += $$PWD/sv-dependency-builds/win64-msvc/include
 
-## This seems to be intruding even when we're supposed to be release
+    # This seems to be intruding even when we're supposed to be release
 #    CONFIG(debug) {
 #        LIBS += -NODEFAULTLIB:MSVCRT -Ldebug \
-#            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib/debug \
-#            -L../sonic-visualiser/sv-dependency-builds/win64-msvc/lib
+#            -L$$PWD/sv-dependency-builds/win64-msvc/lib/debug \
+#            -L$$PWD/sv-dependency-builds/win64-msvc/lib
 #    }
     CONFIG(release) {
         LIBS += -Lrelease \
