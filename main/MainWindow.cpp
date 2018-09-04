@@ -122,7 +122,6 @@
 #include <QRegExp>
 #include <QScrollArea>
 #include <QCloseEvent>
-#include <QDesktopServices>
 #include <QDialogButtonBox>
 #include <QFileSystemWatcher>
 #include <QTextEdit>
@@ -2276,7 +2275,6 @@ MainWindow::setupToolbars()
     menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(m_playAction);
-    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
@@ -3506,7 +3504,7 @@ void
 MainWindow::manageSavedTemplates()
 {
     ResourceFinder rf;
-    QDesktopServices::openUrl("file:" + rf.getResourceSaveDir("templates"));
+    openLocalFolder(rf.getResourceSaveDir("templates"));
 }
 
 void
@@ -5190,7 +5188,7 @@ MainWindow::about()
     aboutText += "</small></p>";
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2017 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2018 Chris Cannam and "
         "Queen Mary, University of London.</small></p>";
 
     aboutText +=

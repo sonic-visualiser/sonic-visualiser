@@ -1,14 +1,31 @@
 
-Changes in Sonic Visualiser 3.1 (July 2018) since the previous release 3.1:
+Changes in Sonic Visualiser 3.1.1 (Aug 2018) since the previous release 3.1:
 
- - Properly chunk the export of audio data and other CSV data so that
-   very large exports don't hang the UI or run us out of memory
-   (thanks to Lucas Thompson)
+ - Fix failure to record correctly into an empty session with certain
+   audio drivers
+
+ - Fix failure to run LADSPA plugins at all, except with some unusual
+   path layouts
+
+ - Fix failure to silence sonified notes when rewinding backwards or
+   jumping back from a loop endpoint
+
+ - Fix macOS .dmg image so as to use older HFS+ filesystem for compatibility
+
+
+Changes in Sonic Visualiser 3.1 (July 2018) since the previous release 3.0.3:
 
  - Add Plugins tab to Preferences dialog, from which you can review
    the plugin load paths and see which plugins were loaded from which
    locations, and also customise load paths (though the various path
    environment variables are still supported)
+
+ - Stream the export of audio data and other CSV data so that
+   very large exports don't hang the UI or run us out of memory
+   (thanks to Lucas Thompson)
+
+ - Ensure vertical scale appears for auto-align layers when there is
+   nothing else to auto-align them to
 
  - Fix another long-standing Windows-platform wide-char/utf8
    conversion problem, with environment variable naming and contents
@@ -24,6 +41,10 @@ Changes in Sonic Visualiser 3.1 (July 2018) since the previous release 3.1:
    source model in the currently-selected pane rather than the main
    model. This is a backward-incompatible change but is a far more
    intuitive way for the function to work
+
+ - Use dark background for bright colours in time-value/note/etc
+   layers as well as e.g. waveforms - this is how it was always
+   "intended to" work, but it is a backward-incompatible change
 
  - Make "Select All" select the whole span of everything that exists,
    not just the main model

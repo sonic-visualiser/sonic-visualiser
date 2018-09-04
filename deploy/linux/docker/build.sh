@@ -22,8 +22,12 @@ echo "Building for version $version, platform $platform"
 dockerfile="Dockerfile_v${version}_${platform}"
 
 if [ ! -f "$dockerdir/$dockerfile" ]; then
-    echo "No matching docker file $dockerfile found in $dockerdir"
-    exit 1
+    echo "No matching docker file $dockerfile found in $dockerdir, trying again without version"
+    dockerfile="Dockerfile_${platform}"
+    if [ ! -f "$dockerdir/$dockerfile" ]; then
+        echo "No matching docker file $dockerfile found in $dockerdir either"
+        exit 1
+    fi
 fi
 
 dockertag="cannam/sonic-visualiser-$platform"

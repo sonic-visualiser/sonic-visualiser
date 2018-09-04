@@ -3,7 +3,7 @@ rem  To build from clean, delete the folder build_win32
 
 set STARTPWD=%CD%
 
-set QTDIR=C:\Qt\5.11.0\mingw53_32
+set QTDIR=C:\Qt\5.11.1\mingw53_32
 if not exist %QTDIR% (
 @   echo Could not find 32-bit Qt
 @   exit /b 2
@@ -45,9 +45,11 @@ copy %QTDIR%\plugins\platforms\qminimal.dll .\release
 copy %QTDIR%\plugins\platforms\qwindows.dll .\release
 copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\release
 
-.\release\test-svcore-base
-.\release\test-svcore-system
-.\release\test-svcore-data-fileio
-.\release\test-svcore-data-model
+rem some of these expect to be run from the project root
+cd ..
+build_win32\release\test-svcore-base
+build_win32\release\test-svcore-system
+build_win32\release\test-svcore-data-fileio
+build_win32\release\test-svcore-data-model
 
 set PATH=%ORIGINALPATH%

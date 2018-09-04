@@ -51,13 +51,16 @@ SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 CXXFLAGS_DEBUG="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
+CXXSTANDARD=c++14
 
 if test "x$GCC" = "xyes"; then
-   	CXXFLAGS_ANY="-std=c++11 -fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+   	CXXFLAGS_ANY="-fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -O2 -Werror"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
-        LIBS_DEBUG="$LIBS -lubsan"
+        LIBS_DEBUG="$LIBS"
+        AX_CHECK_COMPILE_FLAG(--std=$CXXSTANDARD, [], [AC_MSG_NOTICE([Compiler does not appear to support $CXXSTANDARD, falling back to c++11])
+        CXXSTANDARD=c++11])
 fi
 
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
@@ -128,6 +131,7 @@ AC_SUBST(CUT)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CXXFLAGS_MINIMAL)
+AC_SUBST(CXXSTANDARD)
 AC_SUBST(LDFLAGS)
 AC_SUBST(HAVES)
 AC_SUBST(LIBS)

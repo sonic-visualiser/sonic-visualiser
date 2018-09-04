@@ -1,0 +1,28 @@
+{
+    "package": {
+        "name": "sonic-visualiser",
+        "repo": "sonic-visualiser",
+        "subject": "sonic-visualiser",
+        "desc": "Sonic Visualiser",
+        "website_url": "https://sonicvisualiser.org/",
+        "vcs_url": "https://code.soundsoftware.ac.uk/hg/sonic-visualiser",
+        "licenses": ["GPL-2.0"],
+        "public_download_numbers": false,
+        "public_stats": false
+    },
+
+    "version": {
+        "name": "Continuous",
+        "desc": "Uploaded from continuous integration server"
+    },
+
+    "files": [
+        {
+            "includePattern": "\./(SonicVisualiser-.*-x86_64\\.AppImage)",
+            "uploadPattern": "$1",
+            "matrixParams": { "override": 1 }
+        }
+    ],
+
+    "publish": true
+}

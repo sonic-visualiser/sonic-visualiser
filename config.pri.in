@@ -13,6 +13,8 @@ QMAKE_CFLAGS += @CFLAGS@
 QMAKE_CXXFLAGS += @CXXFLAGS@
 QMAKE_LFLAGS += @LDFLAGS@
 
+CONFIG += @CXXSTANDARD@
+
 linux*:LIBS += -L$$PWD -lbase -lasound -ldl 
 
 macx*:DEFINES += HAVE_COREAUDIO
@@ -20,4 +22,6 @@ macx*:LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -fra
 
 LIBS += @LIBS@
 
-DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
+linux*:LIBS -= -ljack
+
+DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER DYNAMIC_JACK

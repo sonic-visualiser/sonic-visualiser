@@ -3,16 +3,17 @@ language:
 
 matrix:
   include:
-    - os: linux
-      dist: trusty
-      sudo: false
     - os: osx
       osx_image: xcode9
-
-addons:
-  apt:
-    packages:
-     - libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils librubberband-dev autoconf libtool git mlton
+    - os: linux
+      dist: trusty
+      sudo: required
+      addons:
+        apt:
+          sources:
+           - ubuntu-toolchain-r-test
+          packages:
+           - libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils librubberband-dev autoconf libtool git mlton
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew update ; fi
@@ -20,7 +21,8 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then brew install qt5 ; fi
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]] ; then export PATH=$PATH:/usr/local/opt/qt5/bin ; fi
   - ( cd ../ ; git clone https://github.com/sandstorm-io/capnproto )
-  - ( cd ../capnproto/c++ ; ./setup-autotools.sh && autoreconf -i )
+  - ( cd ../capnproto/ ; git checkout v0.6.1 )
+  - ( cd ../capnproto/c++ ; autoreconf -i )
   - ( cd ../capnproto/c++ ; ./configure && make && sudo make install )
 
 before_script:
@@ -28,4 +30,4 @@ before_script:
 
 script:
   - make -j3
-
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./deploy/linux/deploy-appimage.sh ; fi

@@ -5,7 +5,7 @@ echo on
 
 set STARTPWD=%CD%
 
-set QTDIR=C:\Qt\5.11.0\msvc2017_64
+set QTDIR=C:\Qt\5.11.1\msvc2017_64
 if not exist %QTDIR% (
 @   echo Could not find 64-bit Qt
 @   exit /b 2
@@ -52,9 +52,11 @@ copy %QTDIR%\plugins\platforms\qwindows.dll .\release
 copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\release
 copy ..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll .\release
 
-.\release\test-svcore-base
-.\release\test-svcore-system
-.\release\test-svcore-data-fileio
-.\release\test-svcore-data-model
+rem some of these expect to be run from the project root
+cd ..
+build_win64\release\test-svcore-base
+build_win64\release\test-svcore-system
+build_win64\release\test-svcore-data-fileio
+build_win64\release\test-svcore-data-model
 
 set PATH=%ORIGINALPATH%
