@@ -2897,6 +2897,11 @@ MainWindow::importAudioData()
     format.setSampleRate(rate);
     format.setTimingType(CSVFormat::ImplicitTiming);
     format.setTimeUnits(CSVFormat::TimeAudioFrames);
+    for (int i = 0; i < format.getColumnCount(); ++i) {
+        if (format.getColumnQualities()[i] & CSVFormat::ColumnNumeric) {
+            format.setColumnPurpose(i, CSVFormat::ColumnValue);
+        }
+    }
 
     FileOpenStatus status = FileOpenSucceeded;
 
