@@ -59,6 +59,7 @@
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
 #include "widgets/ProgressDialog.h"
+#include "widgets/CSVFormatDialog.h"
 #include "audio/AudioCallbackPlaySource.h"
 #include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
@@ -606,12 +607,12 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
     
-    action = new QAction(tr("Import Audio Data from CSV..."), this);
+    action = new QAction(tr("Import Audio from Data File..."), this);
     action->setStatusTip(tr("Import audio sample values from a CSV data file"));
     connect(action, SIGNAL(triggered()), this, SLOT(importAudioData()));
     menu->addAction(action);
     
-    action = new QAction(tr("Export Audio Data to CSV..."), this);
+    action = new QAction(tr("Export Audio to Data File..."), this);
     action->setStatusTip(tr("Export audio from selection into a CSV data file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
@@ -2898,24 +2899,33 @@ MainWindow::importAudioData()
     format.setTimingType(CSVFormat::ImplicitTiming);
     format.setTimeUnits(CSVFormat::TimeAudioFrames);
     for (int i = 0; i < format.getColumnCount(); ++i) {
-        if (format.getColumnQualities()[i] & CSVFormat::ColumnNumeric) {
+        if (format.isColumnNumeric(CSVFormat::ColumnNumeric)) {
             format.setColumnPurpose(i, CSVFormat::ColumnValue);
         }
     }
 
+    {
+        CSVFormatDialog *dialog = new CSVFormatDialog(this, format);
+        if (dialog->exec() != QDialog::Accepted) {
+            delete dialog;
+            return;
+        }
+        format = dialog->getFormat();
+        delete dialog;
+    }
+    
     FileOpenStatus status = FileOpenSucceeded;
 
-    ProgressDialog *dialog = new ProgressDialog(tr("Importing audio data..."),
-                                                true, 0, this,
-                                                Qt::ApplicationModal);
+    ProgressDialog *progress = new ProgressDialog
+        (tr("Importing audio data..."), true, 0, this, Qt::ApplicationModal);
     
     WaveFileModel *model = qobject_cast<WaveFileModel *>
         (DataFileReaderFactory::loadCSV
          (path, format,
           getMainModel() ? getMainModel()->getSampleRate() : rate,
-          dialog));
+          progress));
 
-    if (dialog->wasCancelled()) {
+    if (progress->wasCancelled()) {
 
         delete model;
         status = FileOpenCancelled;
@@ -2934,7 +2944,7 @@ MainWindow::importAudioData()
                                      false);
     }
 
-    delete dialog;
+    delete progress;
     
     if (status == FileOpenFailed) {
         emit hideSplash();
