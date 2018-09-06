@@ -59,7 +59,7 @@
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
 #include "widgets/ProgressDialog.h"
-#include "widgets/CSVFormatDialog.h"
+#include "widgets/CSVAudioFormatDialog.h"
 #include "audio/AudioCallbackPlaySource.h"
 #include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
@@ -2905,7 +2905,7 @@ MainWindow::importAudioData()
     }
 
     {
-        CSVFormatDialog *dialog = new CSVFormatDialog(this, format);
+        CSVAudioFormatDialog *dialog = new CSVAudioFormatDialog(this, format);
         if (dialog->exec() != QDialog::Accepted) {
             delete dialog;
             return;
