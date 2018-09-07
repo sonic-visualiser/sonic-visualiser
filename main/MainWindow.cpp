@@ -2904,8 +2904,6 @@ MainWindow::importAudioData()
         }
     }
 
-    CSVAudioFormatDialog::CSVSampleRange range;
-    
     {
         CSVAudioFormatDialog *dialog = new CSVAudioFormatDialog(this, format);
         if (dialog->exec() != QDialog::Accepted) {
@@ -2913,7 +2911,6 @@ MainWindow::importAudioData()
             return;
         }
         format = dialog->getFormat();
-        range = dialog->getSampleRange();
         delete dialog;
     }
     
@@ -2921,9 +2918,6 @@ MainWindow::importAudioData()
 
     ProgressDialog *progress = new ProgressDialog
         (tr("Importing audio data..."), true, 0, this, Qt::ApplicationModal);
-
-    //!!! + sample range / scaling
-    (void)range;
     
     WaveFileModel *model = qobject_cast<WaveFileModel *>
         (DataFileReaderFactory::loadCSV
