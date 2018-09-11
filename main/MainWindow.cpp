@@ -32,6 +32,7 @@
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
+#include "base/RecordDirectory.h"
 #include "layer/WaveformLayer.h"
 #include "layer/TimeRulerLayer.h"
 #include "layer/TimeInstantLayer.h"
@@ -565,16 +566,6 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-/*
-    icon = il.load("fileopenaudio");
-    action = new QAction(icon, tr("&Import Audio File..."), this);
-    action->setShortcut(tr("Ctrl+I"));
-    action->setStatusTip(tr("Import an existing audio file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-*/
-
     // the Replace action we made earlier
     menu->addAction(raction);
 
@@ -607,9 +598,9 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
     
-    action = new QAction(tr("Import Audio from Data File..."), this);
-    action->setStatusTip(tr("Import audio sample values from a CSV data file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importAudioData()));
+    action = new QAction(tr("Convert Audio from Data File..."), this);
+    action->setStatusTip(tr("Convert and import audio sample values from a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(convertAudio()));
     menu->addAction(action);
     
     action = new QAction(tr("Export Audio to Data File..."), this);
@@ -634,7 +625,7 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    action = new QAction(tr("Browse Recorded Audio Folder"), this);
+    action = new QAction(tr("Browse Recorded and Converted Audio"), this);
     action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
     connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
     menu->addAction(action);
@@ -2886,18 +2877,19 @@ MainWindow::exportAudio(bool asData)
 }
 
 void
-MainWindow::importAudioData()
+MainWindow::convertAudio()
 {
     QString path = getOpenFileName(FileFinder::CSVFile);
     if (path == "") return;
 
-    sv_samplerate_t rate = 44100; //!!!
+    sv_samplerate_t defaultRate = 44100;
     
     CSVFormat format(path);
     format.setModelType(CSVFormat::WaveFileModel);
-    format.setSampleRate(rate);
     format.setTimingType(CSVFormat::ImplicitTiming);
     format.setTimeUnits(CSVFormat::TimeAudioFrames);
+    format.setSampleRate(defaultRate); // as a default for the dialog
+
     for (int i = 0; i < format.getColumnCount(); ++i) {
         if (format.isColumnNumeric(CSVFormat::ColumnNumeric)) {
             format.setColumnPurpose(i, CSVFormat::ColumnValue);
@@ -2922,7 +2914,7 @@ MainWindow::importAudioData()
     WaveFileModel *model = qobject_cast<WaveFileModel *>
         (DataFileReaderFactory::loadCSV
          (path, format,
-          getMainModel() ? getMainModel()->getSampleRate() : rate,
+          getMainModel() ? getMainModel()->getSampleRate() : defaultRate,
           progress));
 
     if (progress->wasCancelled()) {
@@ -3244,8 +3236,8 @@ MainWindow::browseRecordedAudio()
 {
     if (!m_recordTarget) return;
 
-    QString path = m_recordTarget->getRecordContainerFolder();
-    if (path == "") path = m_recordTarget->getRecordFolder();
+    QString path = RecordDirectory::getRecordContainerDirectory();
+    if (path == "") path = RecordDirectory::getRecordDirectory();
     if (path == "") return;
 
     openLocalFolder(path);

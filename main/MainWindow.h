@@ -60,7 +60,7 @@ protected slots:
     virtual void applyTemplate();
     virtual void exportAudio();
     virtual void exportAudioData();
-    virtual void importAudioData();
+    virtual void convertAudio();
     virtual void importLayer();
     virtual void exportLayer();
     virtual void exportImage();
