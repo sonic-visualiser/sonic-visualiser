@@ -2890,12 +2890,6 @@ MainWindow::convertAudio()
     format.setTimeUnits(CSVFormat::TimeAudioFrames);
     format.setSampleRate(defaultRate); // as a default for the dialog
 
-    for (int i = 0; i < format.getColumnCount(); ++i) {
-        if (format.isColumnNumeric(CSVFormat::ColumnNumeric)) {
-            format.setColumnPurpose(i, CSVFormat::ColumnValue);
-        }
-    }
-
     {
         CSVAudioFormatDialog *dialog = new CSVAudioFormatDialog(this, format);
         if (dialog->exec() != QDialog::Accepted) {
