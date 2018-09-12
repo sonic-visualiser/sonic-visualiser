@@ -2903,7 +2903,7 @@ MainWindow::convertAudio()
     FileOpenStatus status = FileOpenSucceeded;
 
     ProgressDialog *progress = new ProgressDialog
-        (tr("Importing audio data..."), true, 0, this, Qt::ApplicationModal);
+        (tr("Converting audio data..."), true, 0, this, Qt::ApplicationModal);
     
     WaveFileModel *model = qobject_cast<WaveFileModel *>
         (DataFileReaderFactory::loadCSV
