@@ -1,4 +1,9 @@
 
+Changes in Sonic Visualiser 3.2 since the previous release 3.1.1:
+
+ - Add feature to convert and import audio from a CSV data file
+
+
 Changes in Sonic Visualiser 3.1.1 (Aug 2018) since the previous release 3.1:
 
  - Fix failure to record correctly into an empty session with certain
