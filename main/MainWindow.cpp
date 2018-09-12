@@ -32,6 +32,7 @@
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
+#include "base/RecordDirectory.h"
 #include "layer/WaveformLayer.h"
 #include "layer/TimeRulerLayer.h"
 #include "layer/TimeInstantLayer.h"
@@ -59,6 +60,7 @@
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
 #include "widgets/ProgressDialog.h"
+#include "widgets/CSVAudioFormatDialog.h"
 #include "audio/AudioCallbackPlaySource.h"
 #include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
@@ -564,16 +566,6 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-/*
-    icon = il.load("fileopenaudio");
-    action = new QAction(icon, tr("&Import Audio File..."), this);
-    action->setShortcut(tr("Ctrl+I"));
-    action->setStatusTip(tr("Import an existing audio file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-*/
-
     // the Replace action we made earlier
     menu->addAction(raction);
 
@@ -583,12 +575,6 @@ MainWindow::setupFileMenu()
     action = new QAction(tr("&Export Audio File..."), this);
     action->setStatusTip(tr("Export selection as an audio file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudio()));
-    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
-
-    action = new QAction(tr("Export Audio Data..."), this);
-    action->setStatusTip(tr("Export audio from selection into a data file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
@@ -611,6 +597,19 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
     menu->addSeparator();
+    
+    action = new QAction(tr("Convert Audio from Data File..."), this);
+    action->setStatusTip(tr("Convert and import audio sample values from a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(convertAudio()));
+    menu->addAction(action);
+    
+    action = new QAction(tr("Export Audio to Data File..."), this);
+    action->setStatusTip(tr("Export audio from selection into a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
+    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu->addSeparator();
 
     action = new QAction(tr("Export Image File..."), this);
     action->setStatusTip(tr("Export a single pane to an image file"));
@@ -626,7 +625,7 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-    action = new QAction(tr("Browse Recorded Audio Folder"), this);
+    action = new QAction(tr("Browse Recorded and Converted Audio"), this);
     action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
     connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
     menu->addAction(action);
@@ -2878,6 +2877,69 @@ MainWindow::exportAudio(bool asData)
 }
 
 void
+MainWindow::convertAudio()
+{
+    QString path = getOpenFileName(FileFinder::CSVFile);
+    if (path == "") return;
+
+    sv_samplerate_t defaultRate = 44100;
+    
+    CSVFormat format(path);
+    format.setModelType(CSVFormat::WaveFileModel);
+    format.setTimingType(CSVFormat::ImplicitTiming);
+    format.setTimeUnits(CSVFormat::TimeAudioFrames);
+    format.setSampleRate(defaultRate); // as a default for the dialog
+
+    {
+        CSVAudioFormatDialog *dialog = new CSVAudioFormatDialog(this, format);
+        if (dialog->exec() != QDialog::Accepted) {
+            delete dialog;
+            return;
+        }
+        format = dialog->getFormat();
+        delete dialog;
+    }
+    
+    FileOpenStatus status = FileOpenSucceeded;
+
+    ProgressDialog *progress = new ProgressDialog
+        (tr("Importing audio data..."), true, 0, this, Qt::ApplicationModal);
+    
+    WaveFileModel *model = qobject_cast<WaveFileModel *>
+        (DataFileReaderFactory::loadCSV
+         (path, format,
+          getMainModel() ? getMainModel()->getSampleRate() : defaultRate,
+          progress));
+
+    if (progress->wasCancelled()) {
+
+        delete model;
+        status = FileOpenCancelled;
+
+    } else if (!model || !model->isOK()) {
+
+        delete model;
+        status = FileOpenFailed;
+
+    } else {
+
+        status = addOpenedAudioModel(path,
+                                     model,
+                                     CreateAdditionalModel,
+                                     getDefaultSessionTemplate(),
+                                     false);
+    }
+
+    delete progress;
+    
+    if (status == FileOpenFailed) {
+        emit hideSplash();
+        QMessageBox::critical(this, tr("Failed to open file"),
+                              tr("<b>File open failed</b><p>Audio data file %1 could not be opened.").arg(path));
+    }
+}
+
+void
 MainWindow::importLayer()
 {
     Pane *pane = m_paneStack->getCurrentPane();
@@ -3168,8 +3230,8 @@ MainWindow::browseRecordedAudio()
 {
     if (!m_recordTarget) return;
 
-    QString path = m_recordTarget->getRecordContainerFolder();
-    if (path == "") path = m_recordTarget->getRecordFolder();
+    QString path = RecordDirectory::getRecordContainerDirectory();
+    if (path == "") path = RecordDirectory::getRecordDirectory();
     if (path == "") return;
 
     openLocalFolder(path);
