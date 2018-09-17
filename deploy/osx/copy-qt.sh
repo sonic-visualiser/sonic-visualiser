@@ -11,7 +11,7 @@ fi
 
 frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtWidgets QtPrintSupport QtDBus"
 
-plugins="dds gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen"
+plugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen macstyle"
 
 qtdir=$(grep "Command:" Makefile | head -1 | awk '{ print $3; }' | sed s,/bin/.*,,)
 
@@ -29,6 +29,12 @@ mkdir -p "$pdir"
 echo
 echo "Copying frameworks..."
 for fwk in $frameworks; do
+    if [ ! -d "$qtdir/lib/$fwk.framework" ]; then
+	if [ "$fwk" = "QtDBus" ]; then
+	    echo "QtDBus.framework not found, assuming Qt was built without DBus support"
+	    continue
+	fi
+    fi
     cp -v "$qtdir/lib/$fwk.framework/$fwk" "$fdir" || exit 2
 done
 

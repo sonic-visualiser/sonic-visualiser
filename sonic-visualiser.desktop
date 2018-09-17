@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=Sonic Visualiser
+Comment=Viewing and analysing the contents of music audio files
+Comment[fr]=Affichage et analyse des contenus des fichiers audio de musique
 Exec=sonic-visualiser %U
 Keywords=audio; sound; visualiser; sonic;
 Terminal=false
 Type=Application
-Icon=sv-icon
+Icon=sonic-visualiser
 Categories=Audio;AudioVideo;
 MimeType=application/x-sonicvisualiser;application/x-sonicvisualiser-layer;application/x-ogg;audio/mp3;audio/mpeg;audio/mpegurl;audio/x-flac;audio/x-mp3;audio/x-mpeg;audio/x-mpegurl;audio/x-wav;audio/wav;application/ogg;audio/x-vorbis+ogg;

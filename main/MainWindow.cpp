@@ -32,6 +32,7 @@
 #include "view/ViewManager.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
+#include "base/RecordDirectory.h"
 #include "layer/WaveformLayer.h"
 #include "layer/TimeRulerLayer.h"
 #include "layer/TimeInstantLayer.h"
@@ -42,11 +43,12 @@
 #include "layer/SliceableLayer.h"
 #include "layer/ImageLayer.h"
 #include "layer/RegionLayer.h"
-#include "widgets/Fader.h"
 #include "view/Overview.h"
 #include "widgets/PropertyBox.h"
 #include "widgets/PropertyStack.h"
 #include "widgets/AudioDial.h"
+#include "widgets/LevelPanWidget.h"
+#include "widgets/LevelPanToolButton.h"
 #include "widgets/IconLoader.h"
 #include "widgets/LayerTreeDialog.h"
 #include "widgets/ListInputDialog.h"
@@ -57,8 +59,10 @@
 #include "widgets/LabelCounterInputDialog.h"
 #include "widgets/ActivityLog.h"
 #include "widgets/UnitConverter.h"
+#include "widgets/ProgressDialog.h"
+#include "widgets/CSVAudioFormatDialog.h"
 #include "audio/AudioCallbackPlaySource.h"
-#include "audio/AudioRecordTarget.h"
+#include "audio/AudioCallbackRecordTarget.h"
 #include "audio/PlaySpeedRangeMapper.h"
 #include "data/fileio/DataFileReaderFactory.h"
 #include "data/fileio/PlaylistFileReader.h"
@@ -119,9 +123,10 @@
 #include <QCheckBox>
 #include <QRegExp>
 #include <QScrollArea>
-#include <QDesktopServices>
+#include <QCloseEvent>
 #include <QDialogButtonBox>
 #include <QFileSystemWatcher>
+#include <QTextEdit>
 
 #include <iostream>
 #include <cstdio>
@@ -173,6 +178,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 {
     Profiler profiler("MainWindow::MainWindow");
 
+    SVDEBUG << "MainWindow: " << getReleaseText() << endl;
+
     setWindowTitle(QApplication::applicationName());
 
     UnitDatabase *udb = UnitDatabase::getInstance();
@@ -194,6 +201,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
 
+    SVDEBUG << "MainWindow: Creating main user interface layout" << endl;
+
     QFrame *frame = new QFrame;
     setCentralWidget(frame);
 
@@ -210,7 +219,9 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
 
     m_overview = new Overview(frame);
     m_overview->setViewManager(m_viewManager);
-    m_overview->setFixedHeight(40);
+    int overviewHeight = m_viewManager->scalePixelSize(35);
+    if (overviewHeight < 40) overviewHeight = 40;
+    m_overview->setFixedHeight(overviewHeight);
 #ifndef _WIN32
     // For some reason, the contents of the overview never appear if we
     // make this setting on Windows.  I have no inclination at the moment
@@ -225,24 +236,14 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_panLayer->setAggressiveCacheing(true);
     m_overview->addLayer(m_panLayer);
 
-    if (m_viewManager->getGlobalDarkBackground()) {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-    } else {
-        m_panLayer->setBaseColour
-            (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-    }
-
-    m_fader = new Fader(frame, false);
-    connect(m_fader, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
-    connect(m_fader, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+    coloursChanged(); // sets pan layer colour from preferences
 
     m_playSpeed = new AudioDial(frame);
     m_playSpeed->setMinimum(0);
     m_playSpeed->setMaximum(120);
     m_playSpeed->setValue(60);
-    m_playSpeed->setFixedWidth(32);
-    m_playSpeed->setFixedHeight(32);
+    m_playSpeed->setFixedWidth(overviewHeight);
+    m_playSpeed->setFixedHeight(overviewHeight);
     m_playSpeed->setNotchesVisible(true);
     m_playSpeed->setPageStep(10);
     m_playSpeed->setObjectName(tr("Playback Speed"));
@@ -250,37 +251,48 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_playSpeed->setDefaultValue(60);
     m_playSpeed->setShowToolTip(true);
     connect(m_playSpeed, SIGNAL(valueChanged(int)),
-	    this, SLOT(playSpeedChanged(int)));
+            this, SLOT(playSpeedChanged(int)));
     connect(m_playSpeed, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
     connect(m_playSpeed, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
 
-    IconLoader il;
+    m_mainLevelPan = new LevelPanToolButton(frame);
+    connect(m_mainLevelPan, SIGNAL(mouseEntered()), this, SLOT(mouseEnteredWidget()));
+    connect(m_mainLevelPan, SIGNAL(mouseLeft()), this, SLOT(mouseLeftWidget()));
+    m_mainLevelPan->setFixedHeight(overviewHeight);
+    m_mainLevelPan->setFixedWidth(overviewHeight);
+    m_mainLevelPan->setImageSize((overviewHeight * 3) / 4);
+    m_mainLevelPan->setBigImageSize(overviewHeight * 3);
 
     m_playControlsSpacer = new QFrame;
 
-    layout->setSpacing(4);
-    layout->addWidget(m_mainScroll, 0, 0, 1, 5);
-    layout->addWidget(m_overview, 1, 1);
+    layout->setSpacing(m_viewManager->scalePixelSize(4));
+    layout->addWidget(m_mainScroll, 0, 0, 1, 4);
+    layout->addWidget(m_overview, 1, 0);
+    layout->addWidget(m_playSpeed, 1, 1);
     layout->addWidget(m_playControlsSpacer, 1, 2);
-    layout->addWidget(m_playSpeed, 1, 3);
-    layout->addWidget(m_fader, 1, 4);
+    layout->addWidget(m_mainLevelPan, 1, 3);
 
     m_playControlsWidth = 
-        m_fader->width() + m_playSpeed->width() + layout->spacing() * 2;
-
-    layout->setColumnMinimumWidth(0, 14);
-    layout->setColumnStretch(0, 0);
+        m_mainLevelPan->width() + m_playSpeed->width() + layout->spacing() * 2;
 
     m_paneStack->setPropertyStackMinWidth(m_playControlsWidth
                                           + 2 + layout->spacing());
     m_playControlsSpacer->setFixedSize(QSize(2, 2));
 
-    layout->setColumnStretch(1, 10);
+    layout->setColumnStretch(0, 10);
 
     connect(m_paneStack, SIGNAL(propertyStacksResized(int)),
             this, SLOT(propertyStacksResized(int)));
 
     frame->setLayout(layout);
+
+    SVDEBUG << "MainWindow: Creating menus and toolbars" << endl;
+
+#ifdef Q_OS_MAC
+    // Mac doesn't align menu labels when icons are shown: result is messy
+    QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
+    setIconsVisibleInMenus(false);
+#endif
 
     setupMenus();
     setupToolbars();
@@ -307,21 +319,32 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     m_unitConverter->hide();
 
     setAudioRecordMode(RecordCreateAdditionalModel);
-    
+
+    SVDEBUG << "MainWindow: Creating new session" << endl;
+
     newSession();
 
     connect(m_midiInput, SIGNAL(eventsAvailable()),
             this, SLOT(midiEventsAvailable()));
 
-    NetworkPermissionTester tester;
+    SVDEBUG << "MainWindow: Creating network permission tester" << endl;
+
+    NetworkPermissionTester tester(withOSCSupport);
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
         if (withOSCSupport) {
+            SVDEBUG << "MainWindow: Creating OSC queue" << endl;
             startOSCQueue();
         }
+
+        SVDEBUG << "MainWindow: Starting transform population thread" << endl;
         TransformFactory::getInstance()->startPopulationThread();
+
+        SVDEBUG << "MainWindow: Creating surveyer" << endl;
         m_surveyer = new Surveyer
             ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
+
+        SVDEBUG << "MainWindow: Creating version tester" << endl;
         m_versionTester = new VersionTester
             ("sonicvisualiser.org", "latest-version.txt", SV_VERSION);
         connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
@@ -331,10 +354,16 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = 0;
     }
 
+/*
+    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+*/
+    
     QString warning = PluginScan::getInstance()->getStartupFailureReport();
     if (warning != "") {
         QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
     }
+
+    SVDEBUG << "MainWindow: Constructor done" << endl;
 }
 
 MainWindow::~MainWindow()
@@ -363,18 +392,17 @@ MainWindow::setupMenus()
         // workaround, to remove the appmenu-qt5 package, but that is
         // awkward and the problem is so severe that it merits disabling
         // the system menubar integration altogether. Like this:
-	menuBar()->setNativeMenuBar(false);  // fix #1039
+        menuBar()->setNativeMenuBar(false);  // fix #1039
 #endif
-
+        
         m_rightButtonMenu = new QMenu();
 
-        // No -- we don't want tear-off enabled on the right-button
-        // menu.  If it is enabled, then simply right-clicking and
-        // releasing will pop up the menu, activate the tear-off, and
-        // leave the torn-off menu window in front of the main window.
-        // That isn't desirable.  I'm not sure it ever would be, in a
-        // context menu -- perhaps technically a Qt bug?
-//        m_rightButtonMenu->setTearOffEnabled(true);
+        // We don't want tear-off enabled on the right-button menu.
+        // If it is enabled, then simply right-clicking and releasing
+        // will pop up the menu, activate the tear-off, and leave the
+        // torn-off menu window in front of the main window.  That
+        // isn't desirable.
+        m_rightButtonMenu->setTearOffEnabled(false);
     }
 
     if (m_rightButtonTransformsMenu) {
@@ -527,7 +555,7 @@ MainWindow::setupFileMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     toolbar->addAction(action);
-	
+        
     icon = il.load("filesaveas");
     action = new QAction(icon, tr("Save Session &As..."), this);
     action->setShortcut(tr("Ctrl+Shift+S"));
@@ -538,16 +566,6 @@ MainWindow::setupFileMenu()
 
     menu->addSeparator();
 
-/*
-    icon = il.load("fileopenaudio");
-    action = new QAction(icon, tr("&Import Audio File..."), this);
-    action->setShortcut(tr("Ctrl+I"));
-    action->setStatusTip(tr("Import an existing audio file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(importAudio()));
-    m_keyReference->registerShortcut(action);
-    menu->addAction(action);
-*/
-
     // the Replace action we made earlier
     menu->addAction(raction);
 
@@ -557,12 +575,6 @@ MainWindow::setupFileMenu()
     action = new QAction(tr("&Export Audio File..."), this);
     action->setStatusTip(tr("Export selection as an audio file"));
     connect(action, SIGNAL(triggered()), this, SLOT(exportAudio()));
-    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
-    menu->addAction(action);
-
-    action = new QAction(tr("Export Audio Data..."), this);
-    action->setStatusTip(tr("Export audio from selection into a data file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
     connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
@@ -585,6 +597,19 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
 
     menu->addSeparator();
+    
+    action = new QAction(tr("Convert Audio from Data File..."), this);
+    action->setStatusTip(tr("Convert and import audio sample values from a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(convertAudio()));
+    menu->addAction(action);
+    
+    action = new QAction(tr("Export Audio to Data File..."), this);
+    action->setStatusTip(tr("Export audio from selection into a CSV data file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportAudioData()));
+    connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
+    menu->addSeparator();
 
     action = new QAction(tr("Export Image File..."), this);
     action->setStatusTip(tr("Export a single pane to an image file"));
@@ -592,9 +617,15 @@ MainWindow::setupFileMenu()
     connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
     menu->addAction(action);
 
+    action = new QAction(tr("Export SVG File..."), this);
+    action->setStatusTip(tr("Export a single pane to a scalable SVG image file"));
+    connect(action, SIGNAL(triggered()), this, SLOT(exportSVG()));
+    connect(this, SIGNAL(canExportImage(bool)), action, SLOT(setEnabled(bool)));
+    menu->addAction(action);
+
     menu->addSeparator();
 
-    action = new QAction(tr("Browse Recorded Audio Folder"), this);
+    action = new QAction(tr("Browse Recorded and Converted Audio"), this);
     action->setStatusTip(tr("Open the Recorded Audio folder in the system file browser"));
     connect(action, SIGNAL(triggered()), this, SLOT(browseRecordedAudio()));
     menu->addAction(action);
@@ -627,7 +658,7 @@ MainWindow::setupFileMenu()
     action->setStatusTip(tr("Adjust the application preferences"));
     connect(action, SIGNAL(triggered()), this, SLOT(preferences()));
     menu->addAction(action);
-	
+        
     menu->addSeparator();
     action = new QAction(il.load("exit"),
                          tr("&Quit"), this);
@@ -714,7 +745,7 @@ MainWindow::setupEditMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     m_rightButtonMenu->addAction(action);
-	
+        
     action = new QAction(tr("Select &Visible Range"), this);
     action->setShortcut(tr("Ctrl+Shift+A"));
     action->setStatusTip(tr("Select the time range corresponding to the current window width"));
@@ -722,7 +753,7 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+        
     action = new QAction(tr("Select to &Start"), this);
     action->setShortcut(tr("Shift+Left"));
     action->setStatusTip(tr("Select from the start of the session to the current playback position"));
@@ -730,7 +761,7 @@ MainWindow::setupEditMenu()
     connect(this, SIGNAL(canSelect(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+        
     action = new QAction(tr("Select to &End"), this);
     action->setShortcut(tr("Shift+Right"));
     action->setStatusTip(tr("Select from the current playback position to the end of the session"));
@@ -753,34 +784,61 @@ MainWindow::setupEditMenu()
     m_keyReference->setCategory(tr("Tapping Time Instants"));
 
     action = new QAction(tr("&Insert Instant at Playback Position"), this);
-    action->setShortcut(tr("Enter"));
+    action->setShortcut(tr(";"));
     action->setStatusTip(tr("Insert a new time instant at the current playback position, in a new layer if necessary"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstant()));
     connect(this, SIGNAL(canInsertInstant(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
-    // Laptop shortcut (no keypad Enter key)
-    QString shortcut(tr(";"));
+    // Historically this was the main shortcut for "Insert Instant at
+    // Playback Position". Note that Enter refers to the keypad key,
+    // rather than the Return key, so this doesn't actually exist on
+    // many keyboards now. Accordingly the alternative shortcut ";"
+    // has been promoted to primary, listed above. Same goes for the
+    // shifted version below
+    QString shortcut(tr("Enter"));
     connect(new QShortcut(shortcut, this), SIGNAL(activated()),
             this, SLOT(insertInstant()));
     m_keyReference->registerAlternativeShortcut(action, shortcut);
 
     action = new QAction(tr("Insert Instants at Selection &Boundaries"), this);
-    action->setShortcut(tr("Shift+Enter"));
+    action->setShortcut(tr("Shift+;"));
     action->setStatusTip(tr("Insert new time instants at the start and end of the current selected regions, in a new layer if necessary"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertInstantsAtBoundaries()));
     connect(this, SIGNAL(canInsertInstantsAtBoundaries(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
+    shortcut = QString(tr("Shift+Enter"));
+    connect(new QShortcut(shortcut, this), SIGNAL(activated()),
+            this, SLOT(insertInstantsAtBoundaries()));
+    m_keyReference->registerAlternativeShortcut(action, shortcut);
+
+    // The previous two actions used shortcuts with the (keypad) Enter
+    // key, while this one I (bizarrely) switched from Enter to Return
+    // in September 2014. Let's make it consistent with the above by
+    // making the primary shortcut for it Ctrl+Shift+; and keeping
+    // both Return and Enter as synonyms for ;
     action = new QAction(tr("Insert Item at Selection"), this);
-    action->setShortcut(tr("Ctrl+Shift+Return"));
+    action->setShortcut(tr("Ctrl+Shift+;"));
     action->setStatusTip(tr("Insert a new note or region item corresponding to the current selection"));
     connect(action, SIGNAL(triggered()), this, SLOT(insertItemAtSelection()));
     connect(this, SIGNAL(canInsertItemAtSelection(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
+
+    shortcut = QString(tr("Ctrl+Shift+Enter"));
+    connect(new QShortcut(shortcut, this), SIGNAL(activated()),
+            this, SLOT(insertItemAtSelection()));
+    m_keyReference->registerAlternativeShortcut(action, shortcut);
+
+    shortcut = QString(tr("Ctrl+Shift+Return"));
+    connect(new QShortcut(shortcut, this), SIGNAL(activated()),
+            this, SLOT(insertItemAtSelection()));
+    // we had that one for historical compatibility, but let's not
+    // register it publicly; having three shortcuts for such an
+    // obscure function is really over-egging it
 
     menu->addSeparator();
 
@@ -878,7 +936,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), m_scrollLeftAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_scrollLeftAction);
     menu->addAction(m_scrollLeftAction);
-	
+        
     m_scrollRightAction = new QAction(tr("Scroll &Right"), this);
     m_scrollRightAction->setShortcut(tr("Right"));
     m_scrollRightAction->setStatusTip(tr("Scroll the current pane to the right"));
@@ -886,7 +944,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), m_scrollRightAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_scrollRightAction);
     menu->addAction(m_scrollRightAction);
-	
+        
     action = new QAction(tr("&Jump Left"), this);
     action->setShortcut(tr("Ctrl+Left"));
     action->setStatusTip(tr("Scroll the current pane a big step to the left"));
@@ -894,7 +952,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+        
     action = new QAction(tr("J&ump Right"), this);
     action->setShortcut(tr("Ctrl+Right"));
     action->setStatusTip(tr("Scroll the current pane a big step to the right"));
@@ -910,7 +968,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canScroll(bool)), action, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
-	
+        
     action = new QAction(tr("Peek Right"), this);
     action->setShortcut(tr("Alt+Right"));
     action->setStatusTip(tr("Scroll the current pane to the right without moving the playback cursor or other panes"));
@@ -931,7 +989,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), m_zoomInAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_zoomInAction);
     menu->addAction(m_zoomInAction);
-	
+        
     m_zoomOutAction = new QAction(il.load("zoom-out"),
                                   tr("Zoom &Out"), this);
     m_zoomOutAction->setShortcut(tr("Down"));
@@ -940,7 +998,7 @@ MainWindow::setupViewMenu()
     connect(this, SIGNAL(canZoom(bool)), m_zoomOutAction, SLOT(setEnabled(bool)));
     m_keyReference->registerShortcut(m_zoomOutAction);
     menu->addAction(m_zoomOutAction);
-	
+        
     action = new QAction(tr("Restore &Default Zoom"), this);
     action->setStatusTip(tr("Restore the zoom level to the default"));
     connect(action, SIGNAL(triggered()), this, SLOT(zoomDefault()));
@@ -1081,22 +1139,79 @@ MainWindow::setupViewMenu()
 #endif
 }
 
+QString
+MainWindow::shortcutFor(LayerFactory::LayerType layer, bool isPaneMenu)
+{
+    QString shortcutText;
+    
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+#endif
+    
+    switch (layer) {
+    case LayerFactory::Waveform:
+        if (isPaneMenu) {
+            shortcutText = tr("W");
+        } else {
+            shortcutText = tr("Shift+W");
+        }
+        break;
+                
+    case LayerFactory::Spectrogram:
+        if (isPaneMenu) {
+            shortcutText = tr("G");
+        } else {
+            shortcutText = tr("Shift+G");
+        }
+        break;
+                
+    case LayerFactory::MelodicRangeSpectrogram:
+        if (isPaneMenu) {
+            shortcutText = tr("M");
+        } else {
+            shortcutText = tr("Shift+M");
+        }
+        break;
+                
+    case LayerFactory::PeakFrequencySpectrogram:
+        if (isPaneMenu) {
+            shortcutText = tr("K");
+        } else {
+            shortcutText = tr("Shift+K");
+        }
+        break;
+                
+    case LayerFactory::Spectrum:
+        if (isPaneMenu) {
+            shortcutText = tr("U");
+        } else {
+            shortcutText = tr("Shift+U");
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    return shortcutText;
+}
+
 void
 MainWindow::setupPaneAndLayerMenus()
 {
     if (m_paneMenu) {
-	m_paneActions.clear();
-	m_paneMenu->clear();
+        m_paneActions.clear();
+        m_paneMenu->clear();
     } else {
-	m_paneMenu = menuBar()->addMenu(tr("&Pane"));
+        m_paneMenu = menuBar()->addMenu(tr("&Pane"));
         m_paneMenu->setTearOffEnabled(true);
     }
 
     if (m_layerMenu) {
-	m_layerActions.clear();
-	m_layerMenu->clear();
+        m_layerActions.clear();
+        m_layerMenu->clear();
     } else {
-	m_layerMenu = menuBar()->addMenu(tr("&Layer"));
+        m_layerMenu = menuBar()->addMenu(tr("&Layer"));
         m_layerMenu->setTearOffEnabled(true);
     }
 
@@ -1127,36 +1242,34 @@ MainWindow::setupPaneAndLayerMenus()
 
     menu = m_layerMenu;
 
-//    menu->addSeparator();
-
     LayerFactory::LayerTypeSet emptyLayerTypes =
-	LayerFactory::getInstance()->getValidEmptyLayerTypes();
+        LayerFactory::getInstance()->getValidEmptyLayerTypes();
 
     for (LayerFactory::LayerTypeSet::iterator i = emptyLayerTypes.begin();
-	 i != emptyLayerTypes.end(); ++i) {
-	
-	QIcon icon;
-	QString mainText, tipText, channelText;
-	LayerFactory::LayerType type = *i;
-	QString name = LayerFactory::getInstance()->getLayerPresentationName(type);
-	
-	icon = il.load(LayerFactory::getInstance()->getLayerIconName(type));
+         i != emptyLayerTypes.end(); ++i) {
+        
+        QIcon icon;
+        QString mainText, tipText, channelText;
+        LayerFactory::LayerType type = *i;
+        QString name = LayerFactory::getInstance()->getLayerPresentationName(type);
+        
+        icon = il.load(LayerFactory::getInstance()->getLayerIconName(type));
 
-	mainText = tr("Add New %1 Layer").arg(name);
-	tipText = tr("Add a new empty layer of type %1").arg(name);
+        mainText = tr("Add New %1 Layer").arg(name);
+        tipText = tr("Add a new empty layer of type %1").arg(name);
 
-	action = new QAction(icon, mainText, this);
-	action->setStatusTip(tipText);
+        action = new QAction(icon, mainText, this);
+        action->setStatusTip(tipText);
 
-	if (type == LayerFactory::Text) {
-	    action->setShortcut(tr("T"));
+        if (type == LayerFactory::Text) {
+            action->setShortcut(tr("T"));
             m_keyReference->registerShortcut(action);
-	}
+        }
 
-	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_layerActions[action] = LayerConfiguration(type);
-	menu->addAction(action);
+        connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+        connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+        m_layerActions[action] = LayerConfiguration(type);
+        menu->addAction(action);
         m_rightButtonLayerMenu->addAction(action);
     }
     
@@ -1164,10 +1277,10 @@ MainWindow::setupPaneAndLayerMenus()
     menu->addSeparator();
 
     LayerFactory::LayerType backgroundTypes[] = {
-	LayerFactory::Waveform,
-	LayerFactory::Spectrogram,
-	LayerFactory::MelodicRangeSpectrogram,
-	LayerFactory::PeakFrequencySpectrogram,
+        LayerFactory::Waveform,
+        LayerFactory::Spectrogram,
+        LayerFactory::MelodicRangeSpectrogram,
+        LayerFactory::PeakFrequencySpectrogram,
         LayerFactory::Spectrum
     };
 
@@ -1179,21 +1292,23 @@ MainWindow::setupPaneAndLayerMenus()
     }
 
     for (unsigned int i = 0;
-	 i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
+         i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
 
         const int paneMenuType = 0, layerMenuType = 1;
 
-	for (int menuType = paneMenuType; menuType <= layerMenuType; ++menuType) {
+        for (int menuType = paneMenuType; menuType <= layerMenuType; ++menuType) {
 
-	    if (menuType == paneMenuType) menu = m_paneMenu;
-	    else menu = m_layerMenu;
+            if (menuType == paneMenuType) menu = m_paneMenu;
+            else menu = m_layerMenu;
 
-	    QMenu *submenu = 0;
+            QMenu *submenu = 0;
 
             QIcon icon;
-            QString mainText, shortcutText, tipText, channelText;
+            QString mainText, tipText, channelText;
             LayerFactory::LayerType type = backgroundTypes[i];
             bool mono = true;
+
+            QString shortcutText = shortcutFor(type, menuType == paneMenuType);
 
 // Avoid warnings/errors with -Wextra because we aren't explicitly
 // handling all layer types (-Wall is OK with this because of the
@@ -1208,47 +1323,39 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = il.load("waveform");
                 mainText = tr("Add &Waveform");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("W");
                     tipText = tr("Add a new pane showing a waveform view");
                 } else {
-                    shortcutText = tr("Shift+W");
                     tipText = tr("Add a new layer showing a waveform view");
                 }
                 mono = false;
                 break;
-		
+                
             case LayerFactory::Spectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Spectro&gram");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("G");
                     tipText = tr("Add a new pane showing a spectrogram");
                 } else {
-                    shortcutText = tr("Shift+G");
                     tipText = tr("Add a new layer showing a spectrogram");
                 }
                 break;
-		
+                
             case LayerFactory::MelodicRangeSpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add &Melodic Range Spectrogram");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("M");
                     tipText = tr("Add a new pane showing a spectrogram set up for an overview of note pitches");
                 } else {
-                    shortcutText = tr("Shift+M");
                     tipText = tr("Add a new layer showing a spectrogram set up for an overview of note pitches");
                 }
                 break;
-		
+                
             case LayerFactory::PeakFrequencySpectrogram:
                 icon = il.load("spectrogram");
                 mainText = tr("Add Pea&k Frequency Spectrogram");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("K");
                     tipText = tr("Add a new pane showing a spectrogram set up for tracking frequencies");
                 } else {
-                    shortcutText = tr("Shift+K");
                     tipText = tr("Add a new layer showing a spectrogram set up for tracking frequencies");
                 }
                 break;
@@ -1257,10 +1364,8 @@ MainWindow::setupPaneAndLayerMenus()
                 icon = il.load("spectrum");
                 mainText = tr("Add Spectr&um");
                 if (menuType == paneMenuType) {
-                    shortcutText = tr("U");
                     tipText = tr("Add a new pane showing a frequency spectrum");
                 } else {
-                    shortcutText = tr("Shift+U");
                     tipText = tr("Add a new layer showing a frequency spectrum");
                 }
                 break;
@@ -1389,9 +1494,9 @@ MainWindow::setupPaneAndLayerMenus()
                         m_layerActions[action] = LayerConfiguration(type, 0, 0);
                         m_rightButtonLayerMenu->addAction(action);
                     }
-		}
-	    }
-	}
+                }
+            }
+        }
     }
 
     m_rightButtonLayerMenu->addSeparator();
@@ -1499,6 +1604,36 @@ MainWindow::setupPaneAndLayerMenus()
 }
 
 void
+MainWindow::updateLayerShortcutsFor(Model *model)
+{
+    set<LayerFactory::LayerType> seen;
+    
+    for (auto &a : m_paneActions) {
+        if (!a.second.sourceModel) continue; // empty pane/layer shortcut
+        auto type = a.second.layer;
+        if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
+            a.first->setShortcut(shortcutFor(type, true));
+            seen.insert(type);
+        } else {
+            a.first->setShortcut(QString());
+        }
+    }
+
+    seen.clear();
+    
+    for (auto &a : m_layerActions) {
+        if (!a.second.sourceModel) continue; // empty pane/layer shortcut
+        auto type = a.second.layer;
+        if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
+            a.first->setShortcut(shortcutFor(type, false));
+            seen.insert(type);
+        } else {
+            a.first->setShortcut(QString());
+        }
+    }
+}
+
+void
 MainWindow::setupTransformsMenu()
 {
     if (m_transformsMenu) {
@@ -1506,7 +1641,7 @@ MainWindow::setupTransformsMenu()
         m_transformActionsReverse.clear();
         m_transformsMenu->clear();
     } else {
-	m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
+        m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
         m_transformsMenu->setTearOffEnabled(true);
         m_transformsMenu->setSeparatorsCollapsible(true);
     }
@@ -1639,9 +1774,9 @@ MainWindow::setupTransformsMenu()
     }
 
     for (unsigned int i = 0; i < transforms.size(); ++i) {
-	
-	QString name = transforms[i].name;
-	if (name == "") name = transforms[i].identifier;
+        
+        QString name = transforms[i].name;
+        if (name == "") name = transforms[i].identifier;
 
 //        cerr << "Plugin Name: " << name << endl;
 
@@ -1668,11 +1803,11 @@ MainWindow::setupTransformsMenu()
                 .arg(output);
         }
 
-	QAction *action = new QAction(tr("%1...").arg(name), this);
-	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	m_transformActions[action] = transforms[i].identifier;
+        QAction *action = new QAction(tr("%1...").arg(name), this);
+        connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+        m_transformActions[action] = transforms[i].identifier;
         m_transformActionsReverse[transforms[i].identifier] = action;
-	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+        connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
         action->setStatusTip(transforms[i].longDescription);
 
@@ -1777,6 +1912,11 @@ MainWindow::setupHelpMenu()
     connect(action, SIGNAL(triggered()), this, SLOT(website()));
     menu->addAction(action);
     
+    action = new QAction(tr("What's &New?"), this); 
+    action->setStatusTip(tr("Show changes in this release of %1").arg(name)); 
+    connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
+    menu->addAction(action);
+    
     action = new QAction(tr("&About %1").arg(name), this); 
     action->setStatusTip(tr("Show information about %1").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(about()));
@@ -1801,7 +1941,7 @@ MainWindow::setupRecentFilesMenu()
                  action->shortcut().toString(),
                  tr("Re-open the current or most recently opened file"));
         }
-	m_recentFilesMenu->addAction(action);
+        m_recentFilesMenu->addAction(action);
     }
 }
 
@@ -1879,7 +2019,7 @@ MainWindow::setupRecentTransformsMenu()
         } else {
             ti->second->setShortcut(QString(""));
         }
-	m_recentTransformsMenu->addAction(ti->second);
+        m_recentTransformsMenu->addAction(ti->second);
     }
 }
 
@@ -1906,49 +2046,49 @@ MainWindow::setupExistingLayersMenus()
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
-	Pane *pane = m_paneStack->getPane(i);
-	if (!pane) continue;
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
 
-	for (int j = 0; j < pane->getLayerCount(); ++j) {
+        for (int j = 0; j < pane->getLayerCount(); ++j) {
 
-	    Layer *layer = pane->getLayer(j);
-	    if (!layer) continue;
-	    if (observedLayers.find(layer) != observedLayers.end()) {
-//		cerr << "found duplicate layer " << layer << endl;
-		continue;
-	    }
+            Layer *layer = pane->getLayer(j);
+            if (!layer) continue;
+            if (observedLayers.find(layer) != observedLayers.end()) {
+//                cerr << "found duplicate layer " << layer << endl;
+                continue;
+            }
 
-//	    cerr << "found new layer " << layer << " (name = " 
-//		      << layer->getLayerPresentationName() << ")" << endl;
+//            cerr << "found new layer " << layer << " (name = " 
+//                      << layer->getLayerPresentationName() << ")" << endl;
 
-	    orderedLayers.push_back(layer);
-	    observedLayers.insert(layer);
+            orderedLayers.push_back(layer);
+            observedLayers.insert(layer);
 
             if (factory->isLayerSliceable(layer)) {
                 sliceableLayers.insert(layer);
             }
-	}
+        }
     }
 
     map<QString, int> observedNames;
 
     for (size_t i = 0; i < orderedLayers.size(); ++i) {
-	
+        
         Layer *layer = orderedLayers[i];
 
-	QString name = layer->getLayerPresentationName();
-	int n = ++observedNames[name];
-	if (n > 1) name = QString("%1 <%2>").arg(name).arg(n);
+        QString name = layer->getLayerPresentationName();
+        int n = ++observedNames[name];
+        if (n > 1) name = QString("%1 <%2>").arg(name).arg(n);
 
-	QIcon icon = il.load(factory->getLayerIconName
+        QIcon icon = il.load(factory->getLayerIconName
                              (factory->getLayerType(layer)));
 
-	QAction *action = new QAction(icon, name, this);
-	connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-	connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-	m_existingLayerActions[action] = layer;
+        QAction *action = new QAction(icon, name, this);
+        connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
+        connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
+        m_existingLayerActions[action] = layer;
 
-	m_existingLayersMenu->addAction(action);
+        m_existingLayersMenu->addAction(action);
 
         if (sliceableLayers.find(layer) != sliceableLayers.end()) {
             action = new QAction(icon, name, this);
@@ -1998,11 +2138,18 @@ MainWindow::setupToolbars()
     m_playAction = toolbar->addAction(il.load("playpause"),
                                       tr("Play / Pause"));
     m_playAction->setCheckable(true);
+
+    /*: This text is a shortcut label referring to the space-bar on
+        the keyboard. It probably should not be translated, and
+        certainly should not be translated as if referring to an empty
+        void or to the extra-terrestrial universe.
+     */
     m_playAction->setShortcut(tr("Space"));
+
     m_playAction->setStatusTip(tr("Start or stop playback from the current position"));
     connect(m_playAction, SIGNAL(triggered()), this, SLOT(play()));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
-	    m_playAction, SLOT(setChecked(bool)));
+            m_playAction, SLOT(setChecked(bool)));
     connect(m_playSource, SIGNAL(playStatusChanged(bool)),
             this, SLOT(playStatusChanged(bool)));
     connect(this, SIGNAL(canPlay(bool)), m_playAction, SLOT(setEnabled(bool)));
@@ -2034,7 +2181,7 @@ MainWindow::setupToolbars()
     m_recordAction->setStatusTip(tr("Record a new audio file"));
     connect(m_recordAction, SIGNAL(triggered()), this, SLOT(record()));
     connect(m_recordTarget, SIGNAL(recordStatusChanged(bool)),
-	    m_recordAction, SLOT(setChecked(bool)));
+            m_recordAction, SLOT(setChecked(bool)));
     connect(this, SIGNAL(canRecord(bool)),
             m_recordAction, SLOT(setEnabled(bool)));
 
@@ -2120,7 +2267,6 @@ MainWindow::setupToolbars()
     menu->addSeparator();
 
     m_rightButtonPlaybackMenu->addAction(m_playAction);
-    m_rightButtonPlaybackMenu->addAction(m_recordAction);
     m_rightButtonPlaybackMenu->addAction(m_playSelectionAction);
     m_rightButtonPlaybackMenu->addAction(m_playLoopAction);
     m_rightButtonPlaybackMenu->addAction(m_soloAction);
@@ -2197,7 +2343,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("select"),
-				tr("Select"));
+                                tr("Select"));
     action->setCheckable(true);
     action->setShortcut(tr("2"));
     action->setStatusTip(tr("Select ranges"));
@@ -2226,7 +2372,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("move"),
-				tr("Edit"));
+                                tr("Edit"));
     action->setCheckable(true);
     action->setShortcut(tr("3"));
     action->setStatusTip(tr("Edit items in layer"));
@@ -2247,7 +2393,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("draw"),
-				tr("Draw"));
+                                tr("Draw"));
     action->setCheckable(true);
     action->setShortcut(tr("4"));
     action->setStatusTip(tr("Draw new items in layer"));
@@ -2265,7 +2411,7 @@ MainWindow::setupToolbars()
 
     m_keyReference->setCategory(tr("Tool Selection"));
     action = toolbar->addAction(il.load("erase"),
-				tr("Erase"));
+                                tr("Erase"));
     action->setCheckable(true);
     action->setShortcut(tr("5"));
     action->setStatusTip(tr("Erase items from layer"));
@@ -2340,19 +2486,19 @@ MainWindow::updateMenuStates()
         (haveCurrentPane &&
          (currentLayer != 0));
     bool havePlayTarget =
-	(m_playTarget != 0 || m_audioIO != 0);
+        (m_playTarget != 0 || m_audioIO != 0);
     bool haveSelection = 
-	(m_viewManager &&
-	 !m_viewManager->getSelections().empty());
+        (m_viewManager &&
+         !m_viewManager->getSelections().empty());
     bool haveCurrentEditableLayer =
-	(haveCurrentLayer &&
-	 currentLayer->isLayerEditable());
+        (haveCurrentLayer &&
+         currentLayer->isLayerEditable());
     bool haveCurrentTimeInstantsLayer = 
-	(haveCurrentLayer &&
-	 dynamic_cast<TimeInstantLayer *>(currentLayer));
+        (haveCurrentLayer &&
+         dynamic_cast<TimeInstantLayer *>(currentLayer));
     bool haveCurrentTimeValueLayer = 
-	(haveCurrentLayer &&
-	 dynamic_cast<TimeValueLayer *>(currentLayer));
+        (haveCurrentLayer &&
+         dynamic_cast<TimeValueLayer *>(currentLayer));
     
     bool alignMode = m_viewManager && m_viewManager->getAlignMode();
     emit canChangeSolo(havePlayTarget && !alignMode);
@@ -2398,8 +2544,8 @@ void
 MainWindow::updateDescriptionLabel()
 {
     if (!getMainModel()) {
-	m_descriptionLabel->setText(tr("No audio file loaded."));
-	return;
+        m_descriptionLabel->setText(tr("No audio file loaded."));
+        return;
     }
 
     QString description;
@@ -2411,15 +2557,15 @@ MainWindow::updateDescriptionLabel()
     if (m_playSource) tsr = m_playSource->getDeviceSampleRate();
 
     if (ssr != tsr) {
-	description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
+        description = tr("%1Hz (resampling to %2Hz)").arg(ssr).arg(tsr);
     } else {
-	description = QString("%1Hz").arg(ssr);
+        description = QString("%1Hz").arg(ssr);
     }
 
     description = QString("%1 - %2")
-	.arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
-	     .toText(false).c_str())
-	.arg(description);
+        .arg(RealTime::frame2RealTime(getMainModel()->getEndFrame(), ssr)
+             .toText(false).c_str())
+        .arg(description);
 
     m_descriptionLabel->setText(description);
 }
@@ -2480,11 +2626,11 @@ MainWindow::importAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, ReplaceSession) == FileOpenFailed) {
+        if (openAudio(path, ReplaceSession) == FileOpenFailed) {
             emit hideSplash();
-	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-	}
+            QMessageBox::critical(this, tr("Failed to open file"),
+                                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+        }
     }
 }
 
@@ -2494,11 +2640,11 @@ MainWindow::importMoreAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
+        if (openAudio(path, CreateAdditionalModel) == FileOpenFailed) {
             emit hideSplash();
-	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-	}
+            QMessageBox::critical(this, tr("Failed to open file"),
+                                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+        }
     }
 }
 
@@ -2508,11 +2654,11 @@ MainWindow::replaceMainAudio()
     QString path = getOpenFileName(FileFinder::AudioFile);
 
     if (path != "") {
-	if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
+        if (openAudio(path, ReplaceMainModel) == FileOpenFailed) {
             emit hideSplash();
-	    QMessageBox::critical(this, tr("Failed to open file"),
-				  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
-	}
+            QMessageBox::critical(this, tr("Failed to open file"),
+                                  tr("<b>File open failed</b><p>Audio file \"%1\" could not be opened").arg(path));
+        }
     }
 }
 
@@ -2612,19 +2758,19 @@ MainWindow::exportAudio(bool asData)
 
     if (selections.size() == 1) {
 
-	QStringList items;
-	items << tr("Export the selected region only")
-	      << tr("Export the whole audio file");
-	
-	bool ok = false;
-	QString item = ListInputDialog::getItem
-	    (this, tr("Select region to export"),
-	     tr("Which region from the original audio file do you want to export?"),
-	     items, 0, &ok);
-	
-	if (!ok || item.isEmpty()) return;
-	
-	if (item == items[0]) selectionToWrite = &ms;
+        QStringList items;
+        items << tr("Export the selected region only")
+              << tr("Export the whole audio file");
+        
+        bool ok = false;
+        QString item = ListInputDialog::getItem
+            (this, tr("Select region to export"),
+             tr("Which region from the original audio file do you want to export?"),
+             items, 0, &ok);
+        
+        if (!ok || item.isEmpty()) return;
+        
+        if (item == items[0]) selectionToWrite = &ms;
 
     } else if (selections.size() > 1) {
 
@@ -2639,7 +2785,7 @@ MainWindow::exportAudio(bool asData)
                 (this, tr("Select region to export"),
                  tr("Multiple regions of the original audio file are selected.\nWhat do you want to export?"),
                  items, 0, &ok);
-	    
+            
             if (!ok || item.isEmpty()) return;
             
             if (item == items[0]) {
@@ -2654,46 +2800,54 @@ MainWindow::exportAudio(bool asData)
 
         if (multiple) { // Can only happen when asData false
 
-	    int n = 1;
-	    QString base = path;
-	    base.replace(".wav", "");
+            int n = 1;
+            QString base = path;
+            base.replace(".wav", "");
 
-	    for (MultiSelection::SelectionList::iterator i = selections.begin();
-		 i != selections.end(); ++i) {
+            for (MultiSelection::SelectionList::iterator i = selections.begin();
+                 i != selections.end(); ++i) {
 
-		MultiSelection subms;
-		subms.setSelection(*i);
+                MultiSelection subms;
+                subms.setSelection(*i);
 
-		QString subpath = QString("%1.%2.wav").arg(base).arg(n);
-		++n;
+                QString subpath = QString("%1.%2.wav").arg(base).arg(n);
+                ++n;
 
-		if (QFileInfo(subpath).exists()) {
-		    error = tr("Fragment file %1 already exists, aborting").arg(subpath);
-		    break;
-		}
+                if (QFileInfo(subpath).exists()) {
+                    error = tr("Fragment file %1 already exists, aborting").arg(subpath);
+                    break;
+                }
 
-		WavFileWriter subwriter(subpath,
+                WavFileWriter subwriter(subpath,
                                         model->getSampleRate(),
                                         model->getChannelCount(),
                                         WavFileWriter::WriteToTemporary);
                 subwriter.writeModel(model, &subms);
-		ok = subwriter.isOK();
+                ok = subwriter.isOK();
 
-		if (!ok) {
-		    error = subwriter.getError();
-		    break;
-		}
-	    }
-	}
+                if (!ok) {
+                    error = subwriter.getError();
+                    break;
+                }
+            }
+        }
     }
 
     if (!multiple) {
         if (asData) {
-            CSVFileWriter writer(path, model,
+            stop();
+            ProgressDialog dialog {
+                QObject::tr("Exporting audio data..."),
+                true,
+                0,
+                this,
+                Qt::ApplicationModal
+            };
+            CSVFileWriter writer(path, model, &dialog,
                                  ((QFileInfo(path).suffix() == "csv") ?
                                   "," : "\t"));
             if (selectionToWrite) {
-                writer.writeSelection(selectionToWrite);
+                writer.writeSelection(*selectionToWrite);
             } else {
                 writer.write();
             }
@@ -2718,7 +2872,70 @@ MainWindow::exportAudio(bool asData)
             m_recentFiles.addFile(path);
         }
     } else {
-	QMessageBox::critical(this, tr("Failed to write file"), error);
+        QMessageBox::critical(this, tr("Failed to write file"), error);
+    }
+}
+
+void
+MainWindow::convertAudio()
+{
+    QString path = getOpenFileName(FileFinder::CSVFile);
+    if (path == "") return;
+
+    sv_samplerate_t defaultRate = 44100;
+    
+    CSVFormat format(path);
+    format.setModelType(CSVFormat::WaveFileModel);
+    format.setTimingType(CSVFormat::ImplicitTiming);
+    format.setTimeUnits(CSVFormat::TimeAudioFrames);
+    format.setSampleRate(defaultRate); // as a default for the dialog
+
+    {
+        CSVAudioFormatDialog *dialog = new CSVAudioFormatDialog(this, format);
+        if (dialog->exec() != QDialog::Accepted) {
+            delete dialog;
+            return;
+        }
+        format = dialog->getFormat();
+        delete dialog;
+    }
+    
+    FileOpenStatus status = FileOpenSucceeded;
+
+    ProgressDialog *progress = new ProgressDialog
+        (tr("Converting audio data..."), true, 0, this, Qt::ApplicationModal);
+    
+    WaveFileModel *model = qobject_cast<WaveFileModel *>
+        (DataFileReaderFactory::loadCSV
+         (path, format,
+          getMainModel() ? getMainModel()->getSampleRate() : defaultRate,
+          progress));
+
+    if (progress->wasCancelled()) {
+
+        delete model;
+        status = FileOpenCancelled;
+
+    } else if (!model || !model->isOK()) {
+
+        delete model;
+        status = FileOpenFailed;
+
+    } else {
+
+        status = addOpenedAudioModel(path,
+                                     model,
+                                     CreateAdditionalModel,
+                                     getDefaultSessionTemplate(),
+                                     false);
+    }
+
+    delete progress;
+    
+    if (status == FileOpenFailed) {
+        emit hideSplash();
+        QMessageBox::critical(this, tr("Failed to open file"),
+                              tr("<b>File open failed</b><p>Audio data file %1 could not be opened.").arg(path));
     }
 }
 
@@ -2728,15 +2945,15 @@ MainWindow::importLayer()
     Pane *pane = m_paneStack->getCurrentPane();
     
     if (!pane) {
-	// shouldn't happen, as the menu action should have been disabled
-	cerr << "WARNING: MainWindow::importLayer: no current pane" << endl;
-	return;
+        // shouldn't happen, as the menu action should have been disabled
+        cerr << "WARNING: MainWindow::importLayer: no current pane" << endl;
+        return;
     }
 
     if (!getMainModel()) {
-	// shouldn't happen, as the menu action should have been disabled
-	cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
-	return;
+        // shouldn't happen, as the menu action should have been disabled
+        cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
+        return;
     }
 
     QString path = getOpenFileName(FileFinder::LayerFile);
@@ -2860,17 +3077,15 @@ MainWindow::exportImage()
     if (!pane) return;
     
     QString path = getSaveFileName(FileFinder::ImageFile);
-
     if (path == "") return;
-
     if (QFileInfo(path).suffix() == "") path += ".png";
-
+    
     bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
 
     QSize total, visible, selected;
-    total = pane->getImageSize();
-    visible = pane->getImageSize(pane->getFirstVisibleFrame(),
-                                 pane->getLastVisibleFrame());
+    total = pane->getRenderedImageSize();
+    visible = pane->getRenderedPartImageSize(pane->getFirstVisibleFrame(),
+                                             pane->getLastVisibleFrame());
 
     sv_frame_t sf0 = 0, sf1 = 0;
  
@@ -2880,7 +3095,7 @@ MainWindow::exportImage()
         MultiSelection::SelectionList::iterator e = selections.end();
         --e;
         sf1 = e->getEndFrame();
-        selected = pane->getImageSize(sf0, sf1);
+        selected = pane->getRenderedPartImageSize(sf0, sf1);
     }
 
     QStringList items;
@@ -2909,7 +3124,7 @@ MainWindow::exportImage()
     if (!haveSelection) {
         lid->setItemAvailability(2, false);
     }
-    if (total.width() > 32767) { // appears to be the limit of a QImage
+    if (total.width() > 32767) { // appears to be limit of a QImage
         lid->setItemAvailability(0, false);
         lid->setFootnote(tr("Note: the whole pane is too wide to be exported as a single image."));
     }
@@ -2917,24 +3132,24 @@ MainWindow::exportImage()
     bool ok = lid->exec();
     QString item = lid->getCurrentString();
     delete lid;
-	    
+            
     if (!ok || item.isEmpty()) return;
 
     settings.setValue("lastimageexportregion", deflt);
 
     QImage *image = 0;
-
+    
     if (item == items[0]) {
-        image = pane->toNewImage();
+        image = pane->renderToNewImage();
     } else if (item == items[1]) {
-        image = pane->toNewImage(pane->getFirstVisibleFrame(),
-                                 pane->getLastVisibleFrame());
+        image = pane->renderPartToNewImage(pane->getFirstVisibleFrame(),
+                                           pane->getLastVisibleFrame());
     } else if (haveSelection) {
-        image = pane->toNewImage(sf0, sf1);
+        image = pane->renderPartToNewImage(sf0, sf1);
     }
-
+    
     if (!image) return;
-
+    
     if (!image->save(path, "PNG")) {
         QMessageBox::critical(this, tr("Failed to save image file"),
                               tr("Failed to save image file %1").arg(path));
@@ -2944,11 +3159,79 @@ MainWindow::exportImage()
 }
 
 void
+MainWindow::exportSVG()
+{
+    Pane *pane = m_paneStack->getCurrentPane();
+    if (!pane) return;
+    
+    QString path = getSaveFileName(FileFinder::SVGFile);
+    if (path == "") return;
+    if (QFileInfo(path).suffix() == "") path += ".svg";
+
+    bool haveSelection = m_viewManager && !m_viewManager->getSelections().empty();
+
+    sv_frame_t sf0 = 0, sf1 = 0;
+ 
+    if (haveSelection) {
+        MultiSelection::SelectionList selections = m_viewManager->getSelections();
+        sf0 = selections.begin()->getStartFrame();
+        MultiSelection::SelectionList::iterator e = selections.end();
+        --e;
+        sf1 = e->getEndFrame();
+    }
+
+    QStringList items;
+    items << tr("Export the whole pane");
+    items << tr("Export the visible area only");
+    items << tr("Export the selection extent");
+
+    QSettings settings;
+    settings.beginGroup("MainWindow");
+    int deflt = settings.value("lastsvgexportregion", 0).toInt();
+    if (deflt == 2 && !haveSelection) deflt = 1;
+
+    ListInputDialog *lid = new ListInputDialog
+        (this, tr("Select region to export"),
+         tr("Which region of the current pane do you want to export as a scalable SVG image?"),
+         items, deflt);
+
+    if (!haveSelection) {
+        lid->setItemAvailability(2, false);
+    }
+
+    bool ok = lid->exec();
+    QString item = lid->getCurrentString();
+    delete lid;
+            
+    if (!ok || item.isEmpty()) return;
+
+    settings.setValue("lastsvgexportregion", deflt);
+
+    bool result = false;
+        
+    if (item == items[0]) {
+        result = pane->renderToSvgFile(path );
+    } else if (item == items[1]) {
+        result = pane->renderPartToSvgFile(path,
+                                           pane->getFirstVisibleFrame(),
+                                           pane->getLastVisibleFrame());
+    } else if (haveSelection) {
+        result = pane->renderPartToSvgFile(path, sf0, sf1);
+    }
+    
+    if (!result) {
+        QMessageBox::critical(this, tr("Failed to save SVG file"),
+                              tr("Failed to save SVG file %1").arg(path));
+    }
+}
+
+void
 MainWindow::browseRecordedAudio()
 {
     if (!m_recordTarget) return;
 
-    QString path = m_recordTarget->getRecordFolder();
+    QString path = RecordDirectory::getRecordContainerDirectory();
+    if (path == "") path = RecordDirectory::getRecordDirectory();
     if (path == "") return;
 
     openLocalFolder(path);
@@ -2968,8 +3251,8 @@ MainWindow::newSession()
             this, SLOT(contextHelpChanged(const QString &)));
 
     if (!m_timeRulerLayer) {
-	m_timeRulerLayer = m_document->createMainModelLayer
-	    (LayerFactory::TimeRuler);
+        m_timeRulerLayer = m_document->createMainModelLayer
+            (LayerFactory::TimeRuler);
     }
 
     m_document->addLayerToView(pane, m_timeRulerLayer);
@@ -3001,29 +3284,29 @@ MainWindow::closeSession()
 
     while (m_paneStack->getPaneCount() > 0) {
 
-	Pane *pane = m_paneStack->getPane(m_paneStack->getPaneCount() - 1);
+        Pane *pane = m_paneStack->getPane(m_paneStack->getPaneCount() - 1);
 
-	while (pane->getLayerCount() > 0) {
-	    m_document->removeLayerFromView
-		(pane, pane->getLayer(pane->getLayerCount() - 1));
-	}
+        while (pane->getLayerCount() > 0) {
+            m_document->removeLayerFromView
+                (pane, pane->getLayer(pane->getLayerCount() - 1));
+        }
 
-	m_overview->unregisterView(pane);
-	m_paneStack->deletePane(pane);
+        m_overview->unregisterView(pane);
+        m_paneStack->deletePane(pane);
     }
 
     while (m_paneStack->getHiddenPaneCount() > 0) {
 
-	Pane *pane = m_paneStack->getHiddenPane
-	    (m_paneStack->getHiddenPaneCount() - 1);
+        Pane *pane = m_paneStack->getHiddenPane
+            (m_paneStack->getHiddenPaneCount() - 1);
 
-	while (pane->getLayerCount() > 0) {
-	    m_document->removeLayerFromView
-		(pane, pane->getLayer(pane->getLayerCount() - 1));
-	}
+        while (pane->getLayerCount() > 0) {
+            m_document->removeLayerFromView
+                (pane, pane->getLayer(pane->getLayerCount() - 1));
+        }
 
-	m_overview->unregisterView(pane);
-	m_paneStack->deletePane(pane);
+        m_overview->unregisterView(pane);
+        m_paneStack->deletePane(pane);
     }
 
     delete m_layerTreeDialog.data();
@@ -3111,9 +3394,9 @@ MainWindow::openRecentFile(const QString& path)
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
-	cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
-		  << endl;
-	return;
+        cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
+                  << endl;
+        return;
     }
 
     QString path = action->text();
@@ -3142,9 +3425,9 @@ MainWindow::applyTemplate()
     QAction *action = qobject_cast<QAction *>(s);
 
     if (!action) {
-	cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
-		  << endl;
-	return;
+        cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
+                  << endl;
+        return;
     }
 
     QString n = action->objectName();
@@ -3203,6 +3486,7 @@ MainWindow::saveSessionAsTemplate()
                                      tr("<b>Template file exists</b><p>The template \"%1\" already exists.<br>Overwrite it?").arg(name),
                                      QMessageBox::Ok | QMessageBox::Cancel,
                                      QMessageBox::Cancel) != QMessageBox::Ok) {
+                delete d;
                 return;
             }
         }
@@ -3213,13 +3497,15 @@ MainWindow::saveSessionAsTemplate()
             }
         }
     }
+
+    delete d;
 }
 
 void
 MainWindow::manageSavedTemplates()
 {
     ResourceFinder rf;
-    QDesktopServices::openUrl("file:" + rf.getResourceSaveDir("templates"));
+    openLocalFolder(rf.getResourceSaveDir("templates"));
 }
 
 void
@@ -3297,14 +3583,14 @@ MainWindow::closeEvent(QCloseEvent *e)
 
     if (m_openingAudioFile) {
 //        cerr << "Busy - ignoring close event" << endl;
-	e->ignore();
-	return;
+        e->ignore();
+        return;
     }
 
     if (!m_abandoning && !checkSaveModified()) {
 //        cerr << "Close refused by user - ignoring close event" << endl;
-	e->ignore();
-	return;
+        e->ignore();
+        return;
     }
 
     QSettings settings;
@@ -3318,8 +3604,7 @@ MainWindow::closeEvent(QCloseEvent *e)
 
     if (m_preferencesDialog &&
         m_preferencesDialog->isVisible()) {
-        closeSession(); // otherwise we'll have to wait for prefs changes
-        m_preferencesDialog->applicationClosing(false);
+        m_preferencesDialog->applicationClosing(true);
     }
 
     closeSession();
@@ -3393,22 +3678,22 @@ MainWindow::checkSaveModified()
     emit hideSplash();
 
     int button = 
-	QMessageBox::warning(this,
-			     tr("Session modified"),
-			     tr("<b>Session modified</b><p>The current session has been modified.<br>Do you want to save it?"),
-			     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+        QMessageBox::warning(this,
+                             tr("Session modified"),
+                             tr("<b>Session modified</b><p>The current session has been modified.<br>Do you want to save it?"),
+                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                              QMessageBox::Yes);
 
     if (button == QMessageBox::Yes) {
-	saveSession();
-	if (m_documentModified) { // save failed -- don't proceed!
-	    return false;
-	} else {
+        saveSession();
+        if (m_documentModified) { // save failed -- don't proceed!
+            return false;
+        } else {
             return true; // saved, so it's safe to continue now
         }
     } else if (button == QMessageBox::No) {
-	m_documentModified = false; // so we know to abandon it
-	return true;
+        m_documentModified = false; // so we know to abandon it
+        return true;
     }
 
     // else cancel
@@ -3455,15 +3740,15 @@ void
 MainWindow::saveSession()
 {
     if (m_sessionFile != "") {
-	if (!saveSessionFile(m_sessionFile)) {
-	    QMessageBox::critical(this, tr("Failed to save file"),
-				  tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(m_sessionFile));
-	} else {
-	    CommandHistory::getInstance()->documentSaved();
-	    documentRestored();
-	}
+        if (!saveSessionFile(m_sessionFile)) {
+            QMessageBox::critical(this, tr("Failed to save file"),
+                                  tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(m_sessionFile));
+        } else {
+            CommandHistory::getInstance()->documentSaved();
+            documentRestored();
+        }
     } else {
-	saveSessionAs();
+        saveSessionAs();
     }
 }
 
@@ -3479,15 +3764,15 @@ MainWindow::saveSessionAs()
     if (path == "") return;
 
     if (!saveSessionFile(path)) {
-	QMessageBox::critical(this, tr("Failed to save file"),
-			      tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
+        QMessageBox::critical(this, tr("Failed to save file"),
+                              tr("<b>Save failed</b><p>Session file \"%1\" could not be saved.").arg(path));
     } else {
-	setWindowTitle(tr("%1: %2")
+        setWindowTitle(tr("%1: %2")
                        .arg(QApplication::applicationName())
-		       .arg(QFileInfo(path).fileName()));
-	m_sessionFile = path;
-	CommandHistory::getInstance()->documentSaved();
-	documentRestored();
+                       .arg(QFileInfo(path).fileName()));
+        m_sessionFile = path;
+        CommandHistory::getInstance()->documentSaved();
+        documentRestored();
         m_recentFiles.addFile(path);
         emit activity(tr("Save session as \"%1\"").arg(path));
     }
@@ -3498,15 +3783,30 @@ MainWindow::preferenceChanged(PropertyContainer::PropertyName name)
 {
     MainWindowBase::preferenceChanged(name);
 
-    if (name == "Background Mode" && m_viewManager) {
-        if (m_viewManager->getGlobalDarkBackground()) {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Bright Green")));
-        } else {
-            m_panLayer->setBaseColour
-                (ColourDatabase::getInstance()->getColourIndex(tr("Green")));
-        }      
+    if (name == "Background Mode") {
+        coloursChanged();
     }     
+}
+
+void
+MainWindow::coloursChanged()
+{
+    QSettings settings;
+    settings.beginGroup("Preferences");
+    QString defaultColourName(tr("Green"));
+    if (m_viewManager && m_viewManager->getGlobalDarkBackground()) {
+        defaultColourName = tr("Bright Green");
+    }
+    ColourDatabase *cdb = ColourDatabase::getInstance();
+    QColor colour = QColor
+        (settings.value("overview-colour",
+                        cdb->getColour(defaultColourName).name()).toString());
+    settings.endGroup();
+
+    int index = cdb->getColourIndex(colour);
+    if (index >= 0) {
+        m_panLayer->setBaseColour(index);
+    }
 }
 
 void
@@ -3532,22 +3832,22 @@ MainWindow::addPane()
     cerr << "addPane: sender is " << s << ", action is " << action << ", name " << action->text() << endl;
     
     if (!action) {
-	cerr << "WARNING: MainWindow::addPane: sender is not an action"
-		  << endl;
-	return;
+        cerr << "WARNING: MainWindow::addPane: sender is not an action"
+                  << endl;
+        return;
     }
 
     PaneActionMap::iterator i = m_paneActions.find(action);
 
     if (i == m_paneActions.end()) {
-	cerr << "WARNING: MainWindow::addPane: unknown action "
-		  << action->objectName() << endl;
+        cerr << "WARNING: MainWindow::addPane: unknown action "
+                  << action->objectName() << endl;
         cerr << "known actions are:" << endl;
         for (PaneActionMap::const_iterator i = m_paneActions.begin();
              i != m_paneActions.end(); ++i) {
             cerr << i->first << ", name " << i->first->text() << endl;
         }
-	return;
+        return;
     }
 
     addPane(i->second, action->text());
@@ -3572,15 +3872,15 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
     if (configuration.layer != LayerFactory::TimeRuler &&
         configuration.layer != LayerFactory::Spectrum) {
 
-	if (!m_timeRulerLayer) {
-//	    cerr << "no time ruler layer, creating one" << endl;
-	    m_timeRulerLayer = m_document->createMainModelLayer
-		(LayerFactory::TimeRuler);
-	}
+        if (!m_timeRulerLayer) {
+//            cerr << "no time ruler layer, creating one" << endl;
+            m_timeRulerLayer = m_document->createMainModelLayer
+                (LayerFactory::TimeRuler);
+        }
 
-//	SVDEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
+//        SVDEBUG << "adding time ruler layer " << m_timeRulerLayer << endl;
 
-	m_document->addLayerToView(pane, m_timeRulerLayer);
+        m_document->addLayerToView(pane, m_timeRulerLayer);
     }
 
     Layer *newLayer = m_document->createLayer(configuration.layer);
@@ -3634,25 +3934,25 @@ MainWindow::addLayer()
     QAction *action = dynamic_cast<QAction *>(s);
     
     if (!action) {
-	cerr << "WARNING: MainWindow::addLayer: sender is not an action"
-		  << endl;
-	return;
+        cerr << "WARNING: MainWindow::addLayer: sender is not an action"
+                  << endl;
+        return;
     }
 
     Pane *pane = m_paneStack->getCurrentPane();
     
     if (!pane) {
-	cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
-	return;
+        cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+        return;
     }
 
     ExistingLayerActionMap::iterator ei = m_existingLayerActions.find(action);
 
     if (ei != m_existingLayerActions.end()) {
-	Layer *newLayer = ei->second;
-	m_document->addLayerToView(pane, newLayer);
-	m_paneStack->setCurrentLayer(pane, newLayer);
-	return;
+        Layer *newLayer = ei->second;
+        m_document->addLayerToView(pane, newLayer);
+        m_paneStack->setCurrentLayer(pane, newLayer);
+        return;
     }
 
     ei = m_sliceActions.find(action);
@@ -3670,38 +3970,38 @@ MainWindow::addLayer()
             connect(m_document, SIGNAL(modelAboutToBeDeleted(Model *)),
                     dest, SLOT(modelAboutToBeDeleted(Model *)));
         }
-	m_document->addLayerToView(pane, newLayer);
-	m_paneStack->setCurrentLayer(pane, newLayer);
-	return;
+        m_document->addLayerToView(pane, newLayer);
+        m_paneStack->setCurrentLayer(pane, newLayer);
+        return;
     }
 
     TransformActionMap::iterator i = m_transformActions.find(action);
 
     if (i == m_transformActions.end()) {
 
-	LayerActionMap::iterator i = m_layerActions.find(action);
-	
-	if (i == m_layerActions.end()) {
-	    cerr << "WARNING: MainWindow::addLayer: unknown action "
-		      << action->objectName() << endl;
-	    return;
-	}
+        LayerActionMap::iterator i = m_layerActions.find(action);
+        
+        if (i == m_layerActions.end()) {
+            cerr << "WARNING: MainWindow::addLayer: unknown action "
+                      << action->objectName() << endl;
+            return;
+        }
 
-	LayerFactory::LayerType type = i->second.layer;
-	
-	LayerFactory::LayerTypeSet emptyTypes =
-	    LayerFactory::getInstance()->getValidEmptyLayerTypes();
+        LayerFactory::LayerType type = i->second.layer;
+        
+        LayerFactory::LayerTypeSet emptyTypes =
+            LayerFactory::getInstance()->getValidEmptyLayerTypes();
 
-	Layer *newLayer = 0;
+        Layer *newLayer = 0;
 
-	if (emptyTypes.find(type) != emptyTypes.end()) {
+        if (emptyTypes.find(type) != emptyTypes.end()) {
 
-	    newLayer = m_document->createEmptyLayer(type);
+            newLayer = m_document->createEmptyLayer(type);
             if (newLayer) {
                 m_toolActions[ViewManager::DrawMode]->trigger();
             }
 
-	} else {
+        } else {
 
             Model *model = i->second.sourceModel;
 
@@ -3746,7 +4046,7 @@ MainWindow::addLayer()
             m_paneStack->setCurrentLayer(pane, newLayer);
         }
 
-	return;
+        return;
     }
 
     //!!! want to do something like this, but it's not supported in
@@ -3755,11 +4055,11 @@ MainWindow::addLayer()
     int channel = -1;
     // pick up the default channel from any existing layers on the same pane
     for (int j = 0; j < pane->getLayerCount(); ++j) {
-	int c = LayerFactory::getInstance()->getChannel(pane->getLayer(j));
-	if (c != -1) {
-	    channel = c;
-	    break;
-	}
+        int c = LayerFactory::getInstance()->getChannel(pane->getLayer(j));
+        if (c != -1) {
+            channel = c;
+            break;
+        }
     }
     */
 
@@ -3777,12 +4077,21 @@ MainWindow::addLayer(QString transformId)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) {
-	cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
-	return;
+        cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+        return;
     }
 
-    Transform transform = TransformFactory::getInstance()->
-        getDefaultTransformFor(transformId);
+    Transform transform;
+    try {
+        transform = TransformFactory::getInstance()->
+            getDefaultTransformFor(transformId);
+    } catch (std::exception &e) { // e.g. Piper server failure
+        QMessageBox::critical
+            (this, tr("Failed to query transform attributes"),
+             tr("<b>Failed to query transform attributes</b><p>Plugin or server error: %1</p>")
+             .arg(e.what()));
+        return;
+    }
 
     std::vector<Model *> candidateInputModels =
         m_document->getTransformInputModels();
@@ -3811,6 +4120,8 @@ MainWindow::addLayer(QString transformId)
         if (defaultInputModel) break;
     }
 
+    AggregateWaveModel *aggregate = 0;
+    
     if (candidateInputModels.size() > 1) {
         // Add an aggregate model as another option
         AggregateWaveModel::ChannelSpecList sl;
@@ -3822,10 +4133,9 @@ MainWindow::addLayer(QString transformId)
             }
         }
         if (!sl.empty()) {
-            AggregateWaveModel *aggregate = new AggregateWaveModel(sl);
+            aggregate = new AggregateWaveModel(sl);
             aggregate->setObjectName(tr("Multiplex all of the above"));
             candidateInputModels.push_back(aggregate);
-            //!!! but it leaks
         }
     }
     
@@ -3847,19 +4157,36 @@ MainWindow::addLayer(QString transformId)
          duration,
          &configurator);
 
+    if (aggregate) {
+        if (input.getModel() == aggregate) {
+            aggregate->setObjectName(tr("Multiplexed audio"));
+            m_document->addAggregateModel(aggregate);
+        } else {
+            aggregate->aboutToDelete();
+            delete aggregate;
+        }
+    }
+    
     if (!input.getModel()) return;
 
 //    SVDEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
 
-    Layer *newLayer = m_document->createDerivedLayer(transform, input);
-
-    if (newLayer) {
-        m_document->addLayerToView(pane, newLayer);
-        m_document->setChannel(newLayer, input.getChannel());
-        m_recentTransforms.add(transformId);
-        m_paneStack->setCurrentLayer(pane, newLayer);
+    try {
+        Layer *newLayer = m_document->createDerivedLayer(transform, input);
+        if (newLayer) {
+            m_document->addLayerToView(pane, newLayer);
+            m_document->setChannel(newLayer, input.getChannel());
+            m_recentTransforms.add(transformId);
+            m_paneStack->setCurrentLayer(pane, newLayer);
+        }
+    } catch (std::exception &e) { // e.g. Piper server failure
+        QMessageBox::critical
+            (this, tr("Transform failed"),
+             tr("<b>Failed to run transform</b><p>Plugin or server error: %1</p>")
+             .arg(e.what()));
+        return;
     }
-
+    
     updateMenuStates();
 }
 
@@ -3868,18 +4195,18 @@ MainWindow::renameCurrentLayer()
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (pane) {
-	Layer *layer = pane->getSelectedLayer();
-	if (layer) {
-	    bool ok = false;
-	    QString newName = QInputDialog::getText
-		(this, tr("Rename Layer"),
-		 tr("New name for this layer:"),
-		 QLineEdit::Normal, layer->objectName(), &ok);
-	    if (ok) {
-		layer->setPresentationName(newName);
-		setupExistingLayersMenus();
-	    }
-	}
+        Layer *layer = pane->getSelectedLayer();
+        if (layer) {
+            bool ok = false;
+            QString newName = QInputDialog::getText
+                (this, tr("Rename Layer"),
+                 tr("New name for this layer:"),
+                 QLineEdit::Normal, layer->objectName(), &ok);
+            if (ok) {
+                layer->setPresentationName(newName);
+                setupExistingLayersMenus();
+            }
+        }
     }
 }
 
@@ -3914,9 +4241,9 @@ MainWindow::alignToggled()
     if (!m_viewManager) return;
 
     if (action) {
-	m_viewManager->setAlignMode(action->isChecked());
+        m_viewManager->setAlignMode(action->isChecked());
     } else {
-	m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
+        m_viewManager->setAlignMode(!m_viewManager->getAlignMode());
     }
 
     if (m_viewManager->getAlignMode()) {
@@ -3942,8 +4269,8 @@ MainWindow::alignToggled()
 
     for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
 
-	Pane *pane = m_paneStack->getPane(i);
-	if (!pane) continue;
+        Pane *pane = m_paneStack->getPane(i);
+        if (!pane) continue;
 
         pane->update();
     }
@@ -4036,23 +4363,28 @@ MainWindow::currentPaneChanged(Pane *pane)
         }
     }
 
-    if (containsMainModel) {
-        m_panLayer->setModel(getMainModel());
-        return;
-    }
-
+    bool panLayerSet = false;
+    
     for (int i = pane->getLayerCount(); i > 0; ) {
         --i;
         Layer *layer = pane->getLayer(i);
-        if (LayerFactory::getInstance()->getLayerType(layer) ==
-            LayerFactory::Waveform) {
-            RangeSummarisableTimeValueModel *tvm = 
-                dynamic_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
-            if (tvm) {
+        RangeSummarisableTimeValueModel *tvm = 
+            qobject_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
+        if (tvm) {
+            auto type = LayerFactory::getInstance()->getLayerType(layer);
+            if (type != LayerFactory::TimeRuler) {
+                updateLayerShortcutsFor(tvm);
+            }
+            if (type == LayerFactory::Waveform) {
                 m_panLayer->setModel(tvm);
-                return;
+                panLayerSet = true;
+                break;
             }
         }
+    }
+
+    if (containsMainModel && !panLayerSet) {
+        m_panLayer->setModel(getMainModel());
     }
 }
 
@@ -4137,10 +4469,9 @@ MainWindow::updatePositionStatusDisplays() const
 }
 
 void
-MainWindow::outputLevelsChanged(float left, float right)
+MainWindow::monitoringLevelsChanged(float left, float right)
 {
-    m_fader->setPeakLeft(left);
-    m_fader->setPeakRight(right);
+    m_mainLevelPan->setMonitoringLevels(left, right);
 }
 
 void
@@ -4177,6 +4508,16 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
          tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
     shownOnce = true;
 }
+
+/*
+void
+MainWindow::betaReleaseWarning()
+{
+    QMessageBox::information
+        (this, tr("Beta release"),
+         tr("<b>This is a beta release of Sonic Visualiser</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>"));
+}
+*/
 
 void
 MainWindow::pluginPopulationWarning()
@@ -4270,7 +4611,9 @@ MainWindow::midiEventsAvailable()
             SparseTimeValueModel *tvm =
                 dynamic_cast<SparseTimeValueModel *>(model);
             if (tvm) {
-                SparseTimeValueModel::Point point(frame, ev.getPitch() % 12, "");
+                SparseTimeValueModel::Point point(frame,
+                                                  float(ev.getPitch() % 12),
+                                                  "");
                 SparseTimeValueModel::AddPointCommand *command =
                     new SparseTimeValueModel::AddPointCommand
                     (tvm, point, tr("Add Point"));
@@ -4336,8 +4679,10 @@ MainWindow::mainModelChanged(WaveFileModel *model)
     MainWindowBase::mainModelChanged(model);
 
     if (m_playTarget || m_audioIO) {
-        connect(m_fader, SIGNAL(valueChanged(float)),
+        connect(m_mainLevelPan, SIGNAL(levelChanged(float)),
                 this, SLOT(mainModelGainChanged(float)));
+        connect(m_mainLevelPan, SIGNAL(panChanged(float)),
+                this, SLOT(mainModelPanChanged(float)));
     }
 }
 
@@ -4348,6 +4693,17 @@ MainWindow::mainModelGainChanged(float gain)
         m_playTarget->setOutputGain(gain);
     } else if (m_audioIO) {
         m_audioIO->setOutputGain(gain);
+    }
+}
+
+void
+MainWindow::mainModelPanChanged(float balance)
+{
+    // this is indeed stereo balance rather than pan
+    if (m_playTarget) {
+        m_playTarget->setOutputBalance(balance);
+    } else if (m_audioIO) {
+        m_audioIO->setOutputBalance(balance);
     }
 }
 
@@ -4592,6 +4948,11 @@ MainWindow::preferences()
 
     m_preferencesDialog = new PreferencesDialog(this);
 
+    connect(m_preferencesDialog, SIGNAL(audioDeviceChanged()),
+            this, SLOT(recreateAudioIO()));
+    connect(m_preferencesDialog, SIGNAL(coloursChanged()),
+            this, SLOT(coloursChanged()));
+    
     // DeleteOnClose is safe here, because m_preferencesDialog is a
     // QPointer that will be zeroed when the dialog is deleted.  We
     // use it in preference to leaving the dialog lying around because
@@ -4612,8 +4973,8 @@ MainWindow::mouseEnteredWidget()
     QWidget *w = dynamic_cast<QWidget *>(sender());
     if (!w) return;
 
-    if (w == m_fader) {
-        contextHelpChanged(tr("Adjust the master playback level"));
+    if (w == m_mainLevelPan) {
+        contextHelpChanged(tr("Adjust the master playback level and pan"));
     } else if (w == m_playSpeed) {
         contextHelpChanged(tr("Adjust the master playback speed"));
     }
@@ -4638,7 +4999,62 @@ MainWindow::help()
 }
 
 void
-MainWindow::about()
+MainWindow::whatsNew()
+{
+    QFile changelog(":CHANGELOG");
+    changelog.open(QFile::ReadOnly);
+    QByteArray content = changelog.readAll();
+    QString text = QString::fromUtf8(content);
+
+    QDialog *d = new QDialog(this);
+    d->setWindowTitle(tr("What's New"));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
+    
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0);
+    
+    layout->addWidget
+        (new QLabel(tr("<h3>What's New in %1</h3>")
+                    .arg(QApplication::applicationName())),
+         row++, 1);
+    layout->setColumnStretch(2, 10);
+
+    QTextEdit *textEdit = new QTextEdit;
+    layout->addWidget(textEdit, row++, 1, 1, 2);
+
+    if (m_newerVersionIs != "") {
+        layout->addWidget(new QLabel(tr("<b>Note:</b> A newer version of Sonic Visualiser is available.<br>(Version %1 is available; you are using version %2)").arg(m_newerVersionIs).arg(SV_VERSION)), row++, 1, 1, 2);
+    }
+    
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+    text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
+    text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
+    text.replace(QRegExp(": *\n"), ":\n<ul>\n");
+    text.replace(QRegExp("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
+    text.replace(QRegExp("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
+//    text.replace(QRegExp("<li>([^,.\n]+)([,.] +\\w)"), "<li><b>\\1</b>\\2");
+    
+    textEdit->setHtml(text);
+    textEdit->setReadOnly(true);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(520),
+                      m_viewManager->scalePixelSize(450));
+    
+    d->exec();
+
+    delete d;
+}
+
+QString
+MainWindow::getReleaseText() const
 {
     bool debug = false;
     QString version = "(unknown version)";
@@ -4658,18 +5074,30 @@ MainWindow::about()
 #endif // SVNREV
 #endif // SV_VERSION
 
+    return tr("%1 : %2 configuration, %3-bit build")
+        .arg(version)
+        .arg(debug ? tr("Debug") : tr("Release"))
+        .arg(sizeof(void *) * 8);
+}
+
+void
+MainWindow::about()
+{
     QString aboutText;
 
     aboutText += tr("<h3>About Sonic Visualiser</h3>");
     aboutText += tr("<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.<br><a href=\"http://www.sonicvisualiser.org/\">http://www.sonicvisualiser.org/</a></p>");
-    aboutText += tr("<p><small>%1 : %2 configuration, %3-bit build</small></p>")
-        .arg(version)
-        .arg(debug ? tr("Debug") : tr("Release"))
-        .arg(sizeof(void *) * 8);
+    aboutText += QString("<p><small>%1</small></p>").arg(getReleaseText());
 
-    aboutText += "<small>";
+    if (m_oscQueue && m_oscQueue->isOK()) {
+        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
+    }
+
+    aboutText += "</small><p><small>";
 
     aboutText += tr("With Qt v%1 &copy; The Qt Company").arg(QT_VERSION_STR);
+
+    aboutText += "</small><small>";
 
 #ifdef HAVE_JACK
 #ifdef JACK_VERSION
@@ -4731,6 +5159,7 @@ MainWindow::about()
 #endif // RUBBERBAND_VERSION
 #endif // HAVE_RUBBERBAND
     aboutText += tr("<br>With Vamp plugin support (API v%1, host SDK v%2) &copy; Chris Cannam and QMUL").arg(VAMP_API_VERSION).arg(VAMP_SDK_VERSION);
+    aboutText += tr("<br>With Piper Vamp protocol bridge &copy; QMUL");
     aboutText += tr("<br>With LADSPA plugin support (API v%1) &copy; Richard Furse, Paul Davis, Stefan Westerfeld").arg(LADSPA_VERSION);
     aboutText += tr("<br>With DSSI plugin support (API v%1) &copy; Chris Cannam, Steve Harris, Sean Bolton").arg(DSSI_VERSION);
 #ifdef REDLAND_VERSION
@@ -4750,27 +5179,81 @@ MainWindow::about()
     aboutText += tr("<br>With liblo Lite OSC library &copy; Steve Harris");
 #endif // LIBLO_VERSION
 
-    if (m_oscQueue && m_oscQueue->isOK()) {
-        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
-    }
-
     aboutText += "</small></p>";
 #endif // HAVE_LIBLO
 
-#ifndef BUILD_STATIC
-    aboutText.replace(tr("With "), tr("Using "));
-#endif
+    aboutText += "<p><small>";
+    aboutText += tr("Russian UI translation contributed by Alexandre Prokoudine.");
+    aboutText += "<br>";
+    aboutText += tr("Czech UI translation contributed by Pavel Fric.");
+    aboutText += "</small></p>";
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2016 Chris Cannam and "
-        "Queen Mary, University of London.</small></p>"
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2018 Chris Cannam and "
+        "Queen Mary, University of London.</small></p>";
+
+    aboutText +=
         "<p><small>This program is free software; you can redistribute it and/or "
         "modify it under the terms of the GNU General Public License as "
         "published by the Free Software Foundation; either version 2 of the "
         "License, or (at your option) any later version.<br>See the file "
         "COPYING included with this distribution for more information.</small></p>";
+
+    // use our own dialog so we can influence the size
+
+    QDialog *d = new QDialog(this);
+
+    d->setWindowTitle(tr("About %1").arg(QApplication::applicationName()));
+        
+    QGridLayout *layout = new QGridLayout;
+    d->setLayout(layout);
+
+    int row = 0;
     
-    QMessageBox::about(this, tr("About Sonic Visualiser"), aboutText);
+    QLabel *iconLabel = new QLabel;
+    iconLabel->setPixmap(QApplication::windowIcon().pixmap(64, 64));
+    layout->addWidget(iconLabel, row, 0, Qt::AlignTop);
+
+    QLabel *mainText = new QLabel();
+    layout->addWidget(mainText, row, 1, 1, 2);
+
+    layout->setRowStretch(row, 10);
+    layout->setColumnStretch(1, 10);
+
+    ++row;
+
+    QDialogButtonBox *bb = new QDialogButtonBox(QDialogButtonBox::Ok);
+    layout->addWidget(bb, row++, 0, 1, 3);
+    connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
+
+//    mainText->setHtml(aboutText);
+//    mainText->setReadOnly(true);
+    mainText->setWordWrap(true);
+    mainText->setOpenExternalLinks(true);
+    mainText->setText(aboutText);
+
+    d->setMinimumSize(m_viewManager->scalePixelSize(420),
+                      m_viewManager->scalePixelSize(200));
+    
+    d->exec();
+
+    delete d;
+    /*
+    QMessageBox about(QMessageBox::Information, 
+                      tr("About Sonic Visualiser"),
+                      aboutText,
+                      QMessageBox::StandardButtons(QMessageBox::Ok),
+                      this);
+
+    QIcon icon = QApplication::windowIcon();
+    QSize size = icon.actualSize(QSize(64, 64));
+    about.setIconPixmap(icon.pixmap(size));
+
+    about.setMinimumSize(m_viewManager->scalePixelSize(400),
+                         m_viewManager->scalePixelSize(400));
+
+    about.exec();
+    */
 }
 
 void
@@ -4782,6 +5265,8 @@ MainWindow::keyReference()
 void
 MainWindow::newerVersionAvailable(QString version)
 {
+    m_newerVersionIs = version;
+    
     QSettings settings;
     settings.beginGroup("NewerVersionWarning");
     QString tag = QString("version-%1-available-show").arg(version);

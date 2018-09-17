@@ -3,134 +3,84 @@
     <file>icons/scalable/align.svg</file>
     <file>icons/scalable/colour3d.svg</file>
     <file>icons/scalable/cross.svg</file>
+    <file>icons/scalable/datadelete.svg</file>
     <file>icons/scalable/dataedit.svg</file>
+    <file>icons/scalable/down.svg</file>
     <file>icons/scalable/draw.svg</file>
-    <file>icons/scalable/erase.svg</file>
     <file>icons/scalable/editcopy.svg</file>
     <file>icons/scalable/editcut.svg</file>
     <file>icons/scalable/editdelete.svg</file>
     <file>icons/scalable/editpaste.svg</file>
+    <file>icons/scalable/erase.svg</file>
     <file>icons/scalable/exit.svg</file>
+    <file>icons/scalable/faders.svg</file>
     <file>icons/scalable/filenew.svg</file>
     <file>icons/scalable/fileopen.svg</file>
-    <file>icons/scalable/filesaveas.svg</file>
     <file>icons/scalable/filesave.svg</file>
+    <file>icons/scalable/filesaveas.svg</file>
     <file>icons/scalable/filesavesv.svg</file>
-    <file>icons/scalable/ffwd-end.svg</file>
     <file>icons/scalable/ffwd.svg</file>
-    <file>icons/scalable/navigate.svg</file>
+    <file>icons/scalable/ffwd-end.svg</file>
+    <file>icons/scalable/help.svg</file>
+    <file>icons/scalable/info.svg</file>
+    <file>icons/scalable/instants.svg</file>
+    <file>icons/scalable/measure.svg</file>
     <file>icons/scalable/move.svg</file>
+    <file>icons/scalable/navigate.svg</file>
+    <file>icons/scalable/normalise.svg</file>
+    <file>icons/scalable/normalise-columns.svg</file>
+    <file>icons/scalable/notes.svg</file>
+    <file>icons/scalable/pane.svg</file>
     <file>icons/scalable/pause.svg</file>
     <file>icons/scalable/playloop.svg</file>
     <file>icons/scalable/playpause.svg</file>
     <file>icons/scalable/playselection.svg</file>
-    <file>icons/scalable/solo.svg</file>
+    <file>icons/scalable/playfollow.svg</file>
     <file>icons/scalable/play.svg</file>
+    <file>icons/scalable/plus.svg</file>
     <file>icons/scalable/record.svg</file>
+    <file>icons/scalable/redo.svg</file>
+    <file>icons/scalable/regions.svg</file>
     <file>icons/scalable/rewind-start.svg</file>
     <file>icons/scalable/rewind.svg</file>
-    <file>icons/scalable/undo.svg</file>
-    <file>icons/scalable/redo.svg</file>
     <file>icons/scalable/select.svg</file>
-    <file>icons/scalable/measure.svg</file>
+    <file>icons/scalable/show-peaks.svg</file>
+    <file>icons/scalable/solo.svg</file>
     <file>icons/scalable/speaker.svg</file>
-    <file>icons/scalable/instants.svg</file>
-    <file>icons/scalable/notes.svg</file>
-    <file>icons/scalable/values.svg</file>
-    <file>icons/scalable/regions.svg</file>
     <file>icons/scalable/spectrogram.svg</file>
     <file>icons/scalable/spectrum.svg</file>
     <file>icons/scalable/text.svg</file>
     <file>icons/scalable/timeruler.svg</file>
+    <file>icons/scalable/undo.svg</file>
+    <file>icons/scalable/up.svg</file>
+    <file>icons/scalable/values.svg</file>
+    <file>icons/scalable/waveform.svg</file>
     <file>icons/scalable/zoom.svg</file>
     <file>icons/scalable/zoom-in.svg</file>
     <file>icons/scalable/zoom-out.svg</file>
     <file>icons/scalable/zoom-fit.svg</file>
+    <file>icons/scalable/zoom-reset.svg</file>
     <file>icons/scalable/sv-icon-light.svg</file>
     <file>icons/scalable/sv-icon.svg</file>
     <file>icons/scalable/sv-splash.svg</file>
     <file>icons/scalable/sv-splash.png</file>
     <file>icons/scalable/sv-splash@2x.png</file>
-    <file>icons/scalable/waveform.svg</file>
-    <file>icons/waveform.png</file>
-    <file>icons/spectrum.png</file>
-    <file>icons/spectrogram.png</file>
-    <file>icons/pane.png</file>
-    <file>icons/instants.png</file>
-    <file>icons/notes.png</file>
+
     <file>icons/image.png</file>
-    <file>icons/values.png</file>
-    <file>icons/regions.png</file>
-    <file>icons/colour3d.png</file>
-    <file>icons/playpause.png</file>
-    <file>icons/playpause-on.png</file>
-    <file>icons/ffwd.png</file>
-    <file>icons/ffwd-end.png</file>
-    <file>icons/rewind.png</file>
-    <file>icons/rewind-start.png</file>
-    <file>icons/playselection.png</file>
-    <file>icons/playselection-on.png</file>
-    <file>icons/playloop.png</file>
-    <file>icons/playloop-on.png</file>
-    <file>icons/playfollow.png</file>
-    <file>icons/playfollow-on.png</file>
-    <file>icons/solo.png</file>
-    <file>icons/solo-on.png</file>
-    <file>icons/align.png</file>
-    <file>icons/align-on.png</file>
-    <file>icons/fader_background.png</file>
-    <file>icons/fader_knob.png</file>
-    <file>icons/fader_knob_red.png</file>
-    <file>icons/fader_leds.png</file>
-    <file>icons/faders.png</file>
-    <file>icons/select.png</file>
-    <file>icons/text.png</file>
-    <file>icons/draw.png</file>
     <file>icons/draw-curve.png</file>
-    <file>icons/erase.png</file>
     <file>icons/measure.png</file>
     <file>icons/measure1cursor.xbm</file>
     <file>icons/measure1mask.xbm</file>
     <file>icons/measure2cursor.xbm</file>
     <file>icons/measure2mask.xbm</file>
-    <file>icons/move.png</file>
-    <file>icons/navigate.png</file>
-    <file>icons/zoom-reset.png</file>
-    <file>icons/undo.png</file>
-    <file>icons/redo.png</file>
     <file>icons/new.png</file>
-    <file>icons/exit.png</file>
-    <file>icons/speaker.png</file>
     <file>icons/annotation.png</file>
-    <file>icons/info.png</file>
-    <file>icons/fileopen.png</file>
-    <file>icons/fileopensession.png</file>
-    <file>icons/fileopenaudio.png</file>
-    <file>icons/fileopen-22.png</file>
-    <file>icons/fileclose.png</file>
-    <file>icons/filenew.png</file>
-    <file>icons/filenew-22.png</file>
-    <file>icons/filesave.png</file>
-    <file>icons/filesave-22.png</file>
-    <file>icons/filesaveas.png</file>
-    <file>icons/filesaveas-22.png</file>
-    <file>icons/editdelete.png</file>
-    <file>icons/editcut.png</file>
-    <file>icons/editcopy.png</file>
-    <file>icons/editpaste.png</file>
-    <file>icons/datadelete.png</file>
-    <file>icons/dataedit.png</file>
     <file>icons/datainsert.png</file>
     <file>icons/mono.png</file>
     <file>icons/stereo.png</file>
     <file>icons/sharpen.png</file>
-    <file>icons/help.png</file>
     <file>icons/emptypage.png</file>
-    <file>icons/cross.png</file>
-    <file>icons/normalise.png</file>
-    <file>icons/normalise-columns.png</file>
     <file>icons/invert-vertical.png</file>
-    <file>icons/show-peaks.png</file>
     <file>icons/opaque.png</file>
     <file>icons/smooth.png</file>
     <file>icons/lines.png</file>
@@ -170,5 +120,10 @@
     <file>i18n/sonic-visualiser_en_US.qm</file>
     <file>i18n/sonic-visualiser_cs_CZ.qm</file>
     <file>i18n/tips_en.xml</file>
+    <file>README.md</file>
+    <file>README.OSC</file>
+    <file>CHANGELOG</file>
+    <file>COPYING</file>
+    <file>CITATION</file>
 </qresource>
 </RCC>

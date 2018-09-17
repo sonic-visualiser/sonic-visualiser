@@ -18,8 +18,11 @@
 class NetworkPermissionTester
 {
 public:
-    NetworkPermissionTester() { }
+    NetworkPermissionTester(bool withOSCSupport) : m_withOSC(withOSCSupport) { }
     bool havePermission();
+
+private:
+    bool m_withOSC;
 };
 
 #endif

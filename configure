@@ -624,6 +624,7 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 QMAKE_CONFIG
 HAVES
+CXXSTANDARD
 CXXFLAGS_MINIMAL
 CUT
 SHA1SUM
@@ -650,8 +651,6 @@ portaudio_LIBS
 portaudio_CFLAGS
 liblo_LIBS
 liblo_CFLAGS
-kj_LIBS
-kj_CFLAGS
 capnp_LIBS
 capnp_CFLAGS
 serd_LIBS
@@ -768,8 +767,6 @@ serd_CFLAGS
 serd_LIBS
 capnp_CFLAGS
 capnp_LIBS
-kj_CFLAGS
-kj_LIBS
 liblo_CFLAGS
 liblo_LIBS
 portaudio_CFLAGS
@@ -1442,8 +1439,6 @@ Some influential environment variables:
   capnp_CFLAGS
               C compiler flags for capnp, overriding pkg-config
   capnp_LIBS  linker flags for capnp, overriding pkg-config
-  kj_CFLAGS   C compiler flags for kj, overriding pkg-config
-  kj_LIBS     linker flags for kj, overriding pkg-config
   liblo_CFLAGS
               C compiler flags for liblo, overriding pkg-config
   liblo_LIBS  linker flags for liblo, overriding pkg-config
@@ -4417,7 +4412,7 @@ esac
 
 
 SV_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
-SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DWANT_TIMING" # -DNO_TIMING"
+SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING -DNO_HIT_COUNTS"
 SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 
 # Now we have: USER_CXXFLAGS contains any flags the user set
@@ -4428,12 +4423,53 @@ SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 CXXFLAGS_DEBUG="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
+CXXSTANDARD=c++14
 
 if test "x$GCC" = "xyes"; then
-   	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
-        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
-   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O2"
+   	CXXFLAGS_ANY="-fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -O2 -Werror"
+   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
+        LIBS_DEBUG="$LIBS"
+        as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__--std=$CXXSTANDARD" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts --std=$CXXSTANDARD" >&5
+$as_echo_n "checking whether C++ compiler accepts --std=$CXXSTANDARD... " >&6; }
+if eval \${$as_CACHEVAR+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+  ax_check_save_flags=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS  --std=$CXXSTANDARD"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  eval "$as_CACHEVAR=yes"
+else
+  eval "$as_CACHEVAR=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CXXFLAGS=$ax_check_save_flags
+fi
+eval ac_res=\$$as_CACHEVAR
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_CACHEVAR"\" = x"yes"; then :
+  :
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: Compiler does not appear to support $CXXSTANDARD, falling back to c++11" >&5
+$as_echo "$as_me: Compiler does not appear to support $CXXSTANDARD, falling back to c++11" >&6;}
+        CXXSTANDARD=c++11
+fi
+
 fi
 
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
@@ -4448,6 +4484,7 @@ $as_echo "$as_me: enabling debug build" >&6;}
 QMAKE_CONFIG="debug"
 CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
 SV_DEFINES_BUILD="$SV_DEFINES_DEBUG"
+LIBS="$LIBS_DEBUG"
 fi
 
 
@@ -5688,24 +5725,9 @@ fi
 fi
 
 
-SV_MODULE_MODULE=capnp
-SV_MODULE_VERSION_TEST="capnp >= 0.6"
-SV_MODULE_HEADER=capnp/common.h
-SV_MODULE_LIB=capnp
-SV_MODULE_FUNC=
-SV_MODULE_HAVE=HAVE_$(echo capnp | tr 'a-z' 'A-Z')
-SV_MODULE_FAILED=1
-if test -n "$capnp_LIBS" ; then
-   { $as_echo "$as_me:${as_lineno-$LINENO}: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&6;}
-   CXXFLAGS="$CXXFLAGS $capnp_CFLAGS"
-   LIBS="$LIBS $capnp_LIBS"
-   SV_MODULE_FAILED=""
-fi
-if test -z "$SV_MODULE_VERSION_TEST" ; then
-   SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
-fi
-if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
+# We need a Cap'n Proto version with the expectedSizeInWordsFromPrefix
+# function, which appeared in v0.6. If we can't find at least that
+# version with pkg-config, we check for the symbol with the compiler.
 
 pkg_failed=no
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for capnp" >&5
@@ -5715,12 +5737,12 @@ if test -n "$capnp_CFLAGS"; then
     pkg_cv_capnp_CFLAGS="$capnp_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"capnp >= 0.6\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "capnp >= 0.6") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_capnp_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+  pkg_cv_capnp_CFLAGS=`$PKG_CONFIG --cflags "capnp >= 0.6" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5732,12 +5754,12 @@ if test -n "$capnp_LIBS"; then
     pkg_cv_capnp_LIBS="$capnp_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"capnp >= 0.6\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "capnp >= 0.6") 2>&5
   ac_status=$?
   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_capnp_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+  pkg_cv_capnp_LIBS=`$PKG_CONFIG --libs "capnp >= 0.6" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes
 else
   pkg_failed=yes
@@ -5758,237 +5780,46 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        capnp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+	        capnp_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "capnp >= 0.6" 2>&1`
         else
-	        capnp_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+	        capnp_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "capnp >= 0.6" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$capnp_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module capnp using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module capnp using pkg-config, trying again by old-fashioned means" >&6;}
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module capnp using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module capnp using pkg-config, trying again by old-fashioned means" >&6;}
 else
 	capnp_CFLAGS=$pkg_cv_capnp_CFLAGS
 	capnp_LIBS=$pkg_cv_capnp_LIBS
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS";SV_MODULE_FAILED=""
+	HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"
 fi
-fi
-if test -n "$SV_MODULE_FAILED"; then
-   as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
-ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE"
-else
-  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
-fi
-
-
-   if test -n "$SV_MODULE_LIB"; then
-     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
-$as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
-if eval \${$as_ac_Lib+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-l$SV_MODULE_LIB  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+if test -z "$capnp_LIBS" ; then
+    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char $SV_MODULE_FUNC ();
-int
-main ()
-{
-return $SV_MODULE_FUNC ();
-  ;
-  return 0;
-}
+
+        #include <capnp/serialize.h>
+        int main() {
+            kj::Array<capnp::word> prefix;
+            return capnp::expectedSizeInWordsFromPrefix(prefix.asPtr());
+        }
 _ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  eval "$as_ac_Lib=yes"
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  HAVES="$HAVES HAVE_CAPNP";LIBS="$LIBS -lcapnp -lkj"
 else
-  eval "$as_ac_Lib=no"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-eval ac_res=\$$as_ac_Lib
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
-  LIBS="$LIBS -l$SV_MODULE_LIB"
-else
-  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
-fi
+  as_fn_error $? "Failed to find appropriate capnp library" "$LINENO" 5
 
-   fi
 fi
-
-
-SV_MODULE_MODULE=kj
-SV_MODULE_VERSION_TEST="kj >= 0.6"
-SV_MODULE_HEADER=kj/common.h
-SV_MODULE_LIB=kj
-SV_MODULE_FUNC=
-SV_MODULE_HAVE=HAVE_$(echo kj | tr 'a-z' 'A-Z')
-SV_MODULE_FAILED=1
-if test -n "$kj_LIBS" ; then
-   { $as_echo "$as_me:${as_lineno-$LINENO}: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&6;}
-   CXXFLAGS="$CXXFLAGS $kj_CFLAGS"
-   LIBS="$LIBS $kj_LIBS"
-   SV_MODULE_FAILED=""
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
-if test -z "$SV_MODULE_VERSION_TEST" ; then
-   SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
-fi
-if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
-
-pkg_failed=no
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for kj" >&5
-$as_echo_n "checking for kj... " >&6; }
-
-if test -n "$kj_CFLAGS"; then
-    pkg_cv_kj_CFLAGS="$kj_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_kj_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$kj_LIBS"; then
-    pkg_cv_kj_LIBS="$kj_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
-  ac_status=$?
-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_kj_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        kj_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
-        else
-	        kj_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$kj_PKG_ERRORS" >&5
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-elif test $pkg_failed = untried; then
-     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
-else
-	kj_CFLAGS=$pkg_cv_kj_CFLAGS
-	kj_LIBS=$pkg_cv_kj_LIBS
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $kj_CFLAGS";LIBS="$LIBS $kj_LIBS";SV_MODULE_FAILED=""
-fi
-fi
-if test -n "$SV_MODULE_FAILED"; then
-   as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
-ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE"
-else
-  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
-fi
-
-
-   if test -n "$SV_MODULE_LIB"; then
-     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
-$as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
-if eval \${$as_ac_Lib+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-l$SV_MODULE_LIB  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char $SV_MODULE_FUNC ();
-int
-main ()
-{
-return $SV_MODULE_FUNC ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  eval "$as_ac_Lib=yes"
-else
-  eval "$as_ac_Lib=no"
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-eval ac_res=\$$as_ac_Lib
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
-  LIBS="$LIBS -l$SV_MODULE_LIB"
-else
-  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
-fi
-
-   fi
-fi
-
 
 
 SV_MODULE_MODULE=liblo
@@ -7561,6 +7392,9 @@ fi
 
 
 
+
+
+
 ac_config_files="$ac_config_files config.pri"
 
 
@@ -8732,6 +8566,28 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
+
+if test -x repoint ; then
+   if test -d .hg -o -d .git ; then
+      if ! ./repoint install; then
+         as_fn_error $? "Repoint failed; please fix any reported errors and try again" "$LINENO" 5
+      fi
+   else
+      { $as_echo "$as_me:${as_lineno-$LINENO}: Repoint executable found but not in an Hg or Git working-copy: not running it" >&5
+$as_echo "$as_me: Repoint executable found but not in an Hg or Git working-copy: not running it" >&6;}
+      if ! test -d vamp-plugin-sdk ; then
+          { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&5
+$as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&2;}
+      fi
+   fi
+else
+   { $as_echo "$as_me:${as_lineno-$LINENO}: No Repoint executable found: assuming external libraries are already here" >&5
+$as_echo "$as_me: No Repoint executable found: assuming external libraries are already here" >&6;}
+   if ! test -d vamp-plugin-sdk ; then
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&5
+$as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&2;}
+   fi
+fi
 
 if ! $QMAKE -r sonic-visualiser.pro; then
    as_fn_error $? "qmake failed: Command was \"$QMAKE -r\"" "$LINENO" 5

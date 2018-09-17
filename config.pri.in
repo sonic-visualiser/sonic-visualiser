@@ -1,6 +1,8 @@
 
 CONFIG += @QMAKE_CONFIG@
 
+PREFIX_PATH = @prefix@
+
 DEFINES += @HAVES@
 
 QMAKE_CC = @CC@
@@ -11,12 +13,15 @@ QMAKE_CFLAGS += @CFLAGS@
 QMAKE_CXXFLAGS += @CXXFLAGS@
 QMAKE_LFLAGS += @LDFLAGS@
 
-linux*:LIBS += -lasound -ldl
+CONFIG += @CXXSTANDARD@
+
+linux*:LIBS += -L$$PWD -lbase -lasound -ldl 
 
 macx*:DEFINES += HAVE_COREAUDIO
 macx*:LIBS += -framework CoreAudio -framework CoreMidi -framework AudioUnit -framework AudioToolbox -framework CoreFoundation -framework CoreServices
 
 LIBS += @LIBS@
 
-DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
+linux*:LIBS -= -ljack
 
+DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER DYNAMIC_JACK

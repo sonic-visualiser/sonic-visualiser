@@ -17,6 +17,28 @@ TARGET = "Sonic Visualiser"
 linux*:TARGET = sonic-visualiser
 solaris*:TARGET = sonic-visualiser
 
+!win32 {
+    PRE_TARGETDEPS += $$PWD/libbase.a
+    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker .
+}
+
+linux* {
+
+    sv_bins.path = $$PREFIX_PATH/bin/
+    sv_bins.files = checker/vamp-plugin-load-checker piper-vamp-simple-server sonic-visualiser
+    sv_bins.CONFIG = no_check_exist
+
+    sv_desktop.path = $$PREFIX_PATH/share/applications/
+    sv_desktop.files = sonic-visualiser.desktop
+    sv_desktop.CONFIG = no_check_exist
+
+    sv_icon.path = $$PREFIX_PATH/share/icons/hicolor/scalable/apps/
+    sv_icon.files = icons/sonic-visualiser.svg
+    sv_icon.CONFIG = no_check_exist
+    
+    INSTALLS += sv_bins sv_desktop sv_icon
+}
+
 TRANSLATIONS += \
         i18n/sonic-visualiser_ru.ts \
 	i18n/sonic-visualiser_en_GB.ts \

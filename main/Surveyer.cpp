@@ -24,7 +24,7 @@
 #include <QPushButton>
 #include <QUrl>
 
-#include "version.h"
+#include "../version.h"
 
 #include "transform/TransformFactory.h"
 #include "plugin/PluginIdentifier.h"

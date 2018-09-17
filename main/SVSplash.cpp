@@ -42,37 +42,37 @@ SVSplash::SVSplash()
 
     if (widthMultiple > 2.5 || dpratio > 1.0) {
 
-	// Hi-dpi either via pixel doubling or simply via lots of
-	// pixels
+        // Hi-dpi either via pixel doubling or simply via lots of
+        // pixels
 
-	double factor = widthMultiple / 2.5;
-	if (factor < 1.0) factor = 1.0;
-	sw = int(floor(w * factor));
-	sh = int(floor(h * factor));
+        double factor = widthMultiple / 2.5;
+        if (factor < 1.0) factor = 1.0;
+        sw = int(floor(w * factor));
+        sh = int(floor(h * factor));
 
-	delete p1;
-	m_pixmap = new QPixmap(int(floor(sw * dpratio)),
-			       int(floor(sh * dpratio)));
+        delete p1;
+        m_pixmap = new QPixmap(int(floor(sw * dpratio)),
+                               int(floor(sh * dpratio)));
 
-//	cerr << "pixmap size = " << m_pixmap->width() << " * "
-//	     << m_pixmap->height() << endl;
-	
-	m_pixmap->fill(Qt::red);
-	QSvgRenderer renderer(QString(":icons/scalable/sv-splash.svg"));
-	QPainter painter(m_pixmap);
-	renderer.render(&painter);
-	painter.end();
+//        cerr << "pixmap size = " << m_pixmap->width() << " * "
+//             << m_pixmap->height() << endl;
+        
+        m_pixmap->fill(Qt::red);
+        QSvgRenderer renderer(QString(":icons/scalable/sv-splash.svg"));
+        QPainter painter(m_pixmap);
+        renderer.render(&painter);
+        painter.end();
 
     } else {
-	// The "low dpi" case
-	m_pixmap = p1;
+        // The "low dpi" case
+        m_pixmap = p1;
     }
     
     setFixedWidth(sw);
     setFixedHeight(sh);
     setGeometry(desk.x() + desk.width()/2 - sw/2,
-		desk.y() + desk.height()/2 - sh/2,
-		sw, sh);
+                desk.y() + desk.height()/2 - sh/2,
+                sw, sh);
 }
 
 SVSplash::~SVSplash()
@@ -92,9 +92,9 @@ SVSplash::drawContents(QPainter *painter)
     painter->drawPixmap(rect(), *m_pixmap, m_pixmap->rect());
     QString text = QString("v%1").arg(SV_VERSION);
     painter->drawText
-	(width() - painter->fontMetrics().width(text) - (width()/50),
-	 (width()/70) + painter->fontMetrics().ascent(),
-	 text);
+        (width() - painter->fontMetrics().width(text) - (width()/50),
+         (width()/70) + painter->fontMetrics().ascent(),
+         text);
 }
 
 

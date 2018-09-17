@@ -1,8 +1,7 @@
 
 TEMPLATE = app
 
-CONFIG += stl c++11 exceptions console warn_on
-
+CONFIG += stl exceptions console warn_on
 CONFIG -= qt
 
 exists(config.pri) {
@@ -31,7 +30,7 @@ TARGET = piper-vamp-simple-server
 OBJECTS_DIR = o
 MOC_DIR = o
 
-INCLUDEPATH += piper-cpp vamp-plugin-sdk
+INCLUDEPATH += piper-cpp piper-cpp/ext vamp-plugin-sdk
 
 include(vamp-plugin-sdk-files.pri)
 
@@ -44,5 +43,5 @@ HEADERS += \
 
 SOURCES += \
         piper-cpp/vamp-capnp/piper-capnp.cpp \
-        piper-cpp/json11/json11.cpp \
+        piper-cpp/ext/json11/json11.cpp \
         piper-cpp/vamp-server/simple-server.cpp
