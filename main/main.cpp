@@ -24,9 +24,10 @@
 #include "data/fileio/FileSource.h"
 #include "widgets/TipDialog.h"
 #include "widgets/InteractiveFileFinder.h"
-#include "svapp/framework/TransformUserConfigurator.h"
+#include "framework/TransformUserConfigurator.h"
 #include "transform/TransformFactory.h"
-#include "svcore/plugin/PluginScan.h"
+#include "plugin/PluginScan.h"
+#include "plugin/PluginPathSetter.h"
 
 #include <QMetaType>
 #include <QApplication>
@@ -279,7 +280,6 @@ main(int argc, char **argv)
     settings.beginGroup("Preferences");
     // Default to using Piper server; can change in preferences
     if (!settings.contains("run-vamp-plugins-in-process")) {
-        cerr << "setting does not exist yet" << endl;
         settings.setValue("run-vamp-plugins-in-process", false);
     }
     settings.endGroup();
@@ -301,6 +301,8 @@ main(int argc, char **argv)
     }
     settings.endGroup();
 
+    PluginPathSetter::initialiseEnvironmentVariables();
+    
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
     for (int i = 0; i < int(sizeof(sizes)/sizeof(sizes[0])); ++i) {
@@ -309,9 +311,11 @@ main(int argc, char **argv)
     QApplication::setWindowIcon(icon);
 
     QString language = QLocale::system().name();
+    SVDEBUG << "System language is: " << language << endl;
 
     settings.beginGroup("Preferences");
-    language = settings.value("locale", language).toString();
+    QString prefLanguage = settings.value("locale", language).toString();
+    if (prefLanguage != QString()) language = prefLanguage;
     settings.endGroup();
 
     QTranslator qtTranslator;

@@ -41,6 +41,8 @@ signals:
 
 public slots:
     virtual void preferenceChanged(PropertyContainer::PropertyName);
+    virtual void coloursChanged();
+
     virtual bool commitData(bool mayAskUser);
 
     void goFullScreen();
@@ -58,9 +60,11 @@ protected slots:
     virtual void applyTemplate();
     virtual void exportAudio();
     virtual void exportAudioData();
+    virtual void convertAudio();
     virtual void importLayer();
     virtual void exportLayer();
     virtual void exportImage();
+    virtual void exportSVG();
     virtual void browseRecordedAudio();
     virtual void saveSession();
     virtual void saveSessionAs();
@@ -130,13 +134,14 @@ protected slots:
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
 
-    virtual void outputLevelsChanged(float, float);
+    virtual void monitoringLevelsChanged(float, float);
 
     virtual void layerRemoved(Layer *);
     virtual void layerInAView(Layer *, bool);
 
     virtual void mainModelChanged(WaveFileModel *);
     virtual void mainModelGainChanged(float);
+    virtual void mainModelPanChanged(float);
     virtual void modelAdded(Model *);
     virtual void modelAboutToBeDeleted(Model *);
 
@@ -151,6 +156,9 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
+/*
+    virtual void betaReleaseWarning();
+*/
     virtual void pluginPopulationWarning();
 
     virtual void saveSessionAsTemplate();
@@ -159,12 +167,13 @@ protected slots:
     virtual void website();
     virtual void help();
     virtual void about();
+    virtual void whatsNew();
     virtual void keyReference();
     virtual void newerVersionAvailable(QString);
 
 protected:
     Overview                *m_overview;
-    Fader                   *m_fader;
+    LevelPanToolButton      *m_mainLevelPan;
     AudioDial               *m_playSpeed;
     WaveformLayer           *m_panLayer;
     
@@ -225,18 +234,22 @@ protected:
 
     Surveyer                *m_surveyer;
     VersionTester           *m_versionTester;
+    QString                  m_newerVersionIs;
 
     struct LayerConfiguration {
-	LayerConfiguration(LayerFactory::LayerType _layer
-			                       = LayerFactory::TimeRuler,
+        LayerConfiguration(LayerFactory::LayerType _layer
+                                               = LayerFactory::TimeRuler,
                            Model *_source = 0,
                            int _channel = -1) :
-	    layer(_layer), sourceModel(_source), channel(_channel) { }
-	LayerFactory::LayerType layer;
+            layer(_layer), sourceModel(_source), channel(_channel) { }
+        LayerFactory::LayerType layer;
         Model *sourceModel;
-	int channel;
+        int channel;
     };
 
+    QString shortcutFor(LayerFactory::LayerType, bool isPaneMenu);
+    void updateLayerShortcutsFor(Model *);
+    
     typedef std::map<QAction *, LayerConfiguration> PaneActionMap;
     PaneActionMap m_paneActions;
 
@@ -259,6 +272,8 @@ protected:
     typedef std::map<QAction *, int> NumberingActionMap;
     NumberingActionMap m_numberingActions;
 
+    QString getReleaseText() const;
+    
     virtual void setupMenus();
     virtual void setupFileMenu();
     virtual void setupEditMenu();

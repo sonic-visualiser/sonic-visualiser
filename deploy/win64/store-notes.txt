@@ -1,0 +1,62 @@
+
+Notes on the Desktop Bridge for Windows Store packaging
+=======================================================
+
+* Main page
+
+  https://developer.microsoft.com/en-us/windows/bridges/desktop
+
+* Introductory tutorial
+
+  https://docs.microsoft.com/en-us/windows/uwp/porting/desktop-to-uwp-run-desktop-app-converter
+
+* Desktop App Converter is the helper application that does the
+  conversion; Desktop Bridge is, apparently, the technology, which can
+  be used without using the Desktop App Converter. Here's a page about
+  doing the conversion manually:
+
+  https://docs.microsoft.com/en-us/windows/uwp/porting/desktop-to-uwp-manual-conversion
+
+* Note about C++ runtime dependency
+
+  https://support.microsoft.com/en-gb/help/3176696/c-runtime-framework-packages-for-desktop-bridge
+
+  but see also
+
+  https://social.msdn.microsoft.com/Forums/windowsapps/en-US/3f1d9bdd-2fa0-463f-b4f9-02e9bf33ed1a/uwp-desktop-bridge-cant-install-app-even-after-signing-the-certificates-with-signtool?forum=wpdevelop
+
+  "If you submit the app to the store, customers downloading it from the
+  store will automatically also download the framework package.
+
+  "If you want your customers to sideload the app, then yes, they'll
+  first have to install the framework package."
+
+
+Preparation
+-----------
+
+* Set up Desktop App Converter as described in https://docs.microsoft.com/en-us/windows/uwp/porting/desktop-to-uwp-run-desktop-app-converter
+* Install VC140 runtime dependency (for developer installation of package) from link at https://blogs.msdn.microsoft.com/vcblog/2016/07/07/using-visual-c-runtime-in-centennial-project/
+* Start PowerShell as administrator
+* cd C:\Program Files (x86)\Microsoft SDKs\Windows Kits\10\ExtensionSDKs\Microsoft.VCLibs.Desktop\14.0\Appx\Retail\x64
+* Run Add-AppxPackage on the one package in that dir
+
+Invocation
+----------
+
+* Start PowerShell as administrator
+* Run e.g.: DesktopAppConverter.exe -Installer C:\Users\Chris\Documents\sonic-visualiser\deploy\win64\sonic-visualiser.msi -Destination . -PackageName "SonicVisualiser" -Publisher CN="sonicvisualiser.org" -Version 3.0.3.0 -MakeAppx -Sign -Verify -Verbose
+* Locate the self-signed certificate file "auto-generated.cer" in Explorer, double-click, Install Certificate, pick Local Machine and the Trusted People store
+* Double click on SonicVisualiser.appx to install
+
+Command based on actual Store data:
+
+DesktopAppConverter.exe -Installer C:\Users\Chris\Documents\sonic-visualiser\deploy\win64\sonic-visualiser-3.0.3-win64.msi -Destination . -PackageName "27750sonicvisualiser.org.SonicVisualiser" -AppId "SonicVisualiser" -AppDisplayName "Sonic Visualiser" -PackageDisplayName "Sonic Visualiser" -Publisher CN="55F5913E-18B3-470B-9056-D601FF241EB2" -PackagePublisherDisplayName "sonicvisualiser.org" -Version 3.0.3.0 -AppFileTypes "'.sv','.svl','.wav'" -MakeAppx -Sign -Verify -Verbose
+
+NB the last digit (revision) of the version number must be 0 for store
+submission.
+
+Can't submit Desktop Bridge apps through just any store account -- it
+has to be approved first via form at
+https://developer.microsoft.com/en-us/windows/projects/campaigns/desktop-bridge
+-- still waiting for this.

@@ -29,7 +29,6 @@
 #include <QTabWidget>
 #include <QLineEdit>
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QSpinBox>
 #include <QListWidget>
 #include <QSettings>
@@ -38,13 +37,18 @@
 
 #include "widgets/WindowTypeSelector.h"
 #include "widgets/IconLoader.h"
+#include "widgets/ColourMapComboBox.h"
+#include "widgets/ColourComboBox.h"
+#include "widgets/PluginPathConfigurator.h"
+#include "widgets/WidgetScale.h"
 #include "base/Preferences.h"
 #include "base/ResourceFinder.h"
 #include "layer/ColourMapper.h"
+#include "layer/ColourDatabase.h"
 
 #include "bqaudioio/AudioFactory.h"
 
-#include "version.h"
+#include "../version.h"
 
 using namespace std;
 
@@ -53,6 +57,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     m_audioImplementation(0),
     m_audioPlaybackDevice(0),
     m_audioRecordDevice(0),
+    m_audioDeviceChanged(false),
+    m_coloursChanged(false),
     m_changesOnRestart(false)
 {
     setWindowTitle(tr("Sonic Visualiser: Application Preferences"));
@@ -143,24 +149,42 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                            int(ColourMapper::Sunset)).toInt());
     m_colour3DColour = (settings.value("colour-3d-plot-colour",
                                        int(ColourMapper::Green)).toInt());
-    settings.endGroup();
-    QComboBox *spectrogramGColour = new QComboBox;
-    QComboBox *spectrogramMColour = new QComboBox;
-    QComboBox *colour3DColour = new QComboBox;
-    for (i = 0; i < ColourMapper::getColourMapCount(); ++i) {
-        spectrogramGColour->addItem(ColourMapper::getColourMapName(i));
-        spectrogramMColour->addItem(ColourMapper::getColourMapName(i));
-        colour3DColour->addItem(ColourMapper::getColourMapName(i));
-        if (i == m_spectrogramGColour) spectrogramGColour->setCurrentIndex(i);
-        if (i == m_spectrogramMColour) spectrogramMColour->setCurrentIndex(i);
-        if (i == m_colour3DColour) colour3DColour->setCurrentIndex(i);
+    m_overviewColour = ColourDatabase::getInstance()->getColour(tr("Green"));
+    if (settings.contains("overview-colour")) {
+        QString qcolorName =
+            settings.value("overview-colour", m_overviewColour.name())
+            .toString();
+        m_overviewColour.setNamedColor(qcolorName);
+        SVCERR << "loaded colour " << m_overviewColour.name() << " from settings" << endl;
     }
-    connect(spectrogramGColour, SIGNAL(currentIndexChanged(int)),
+    settings.endGroup();
+
+    ColourMapComboBox *spectrogramGColour = new ColourMapComboBox(true);
+    spectrogramGColour->setCurrentIndex(m_spectrogramGColour);
+
+    ColourMapComboBox *spectrogramMColour = new ColourMapComboBox(true);
+    spectrogramMColour->setCurrentIndex(m_spectrogramMColour);
+
+    ColourMapComboBox *colour3DColour = new ColourMapComboBox(true);
+    colour3DColour->setCurrentIndex(m_colour3DColour);
+
+    // can't have "add new colour", as it gets saved in the session not in prefs
+    ColourComboBox *overviewColour = new ColourComboBox(false);
+    int overviewColourIndex =
+        ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
+    SVCERR << "index = " << overviewColourIndex << " for colour " << m_overviewColour.name() << endl;
+    if (overviewColourIndex >= 0) {
+        overviewColour->setCurrentIndex(overviewColourIndex);
+    }
+
+    connect(spectrogramGColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(spectrogramGColourChanged(int)));
-    connect(spectrogramMColour, SIGNAL(currentIndexChanged(int)),
+    connect(spectrogramMColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(spectrogramMColourChanged(int)));
-    connect(colour3DColour, SIGNAL(currentIndexChanged(int)),
+    connect(colour3DColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(colour3DColourChanged(int)));
+    connect(overviewColour, SIGNAL(colourChanged(int)),
+            this, SLOT(overviewColourChanged(int)));
 
     m_tuningFrequency = prefs->getTuningFrequency();
 
@@ -202,24 +226,33 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(m_audioRecordDeviceCombo, SIGNAL(currentIndexChanged(int)),
             this, SLOT(audioRecordDeviceChanged(int)));
 
-    vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
+    vector<string> implementationNames =
+        breakfastquay::AudioFactory::getImplementationNames();
+
     QString implementationName = settings.value("audio-target", "").toString();
     if (implementationName == "auto") implementationName = "";
+    if (implementationName == "" && implementationNames.size() == 1) {
+        // We won't be showing the implementations menu in this case
+        implementationName = implementationNames[0].c_str();
+    }
+
     audioImplementation->addItem(tr("(auto)"));
     m_audioImplementation = 0;
-    for (int i = 0; in_range_for(names, i); ++i) {
+
+    for (int i = 0; in_range_for(implementationNames, i); ++i) {
         audioImplementation->addItem
-            (breakfastquay::AudioFactory::getImplementationDescription(names[i]).
-             c_str());
-        if (implementationName.toStdString() == names[i]) {
+            (breakfastquay::AudioFactory::getImplementationDescription
+             (implementationNames[i]).c_str());
+        if (implementationName.toStdString() == implementationNames[i]) {
             audioImplementation->setCurrentIndex(i+1);
             m_audioImplementation = i+1;
         }
     }
+    
     settings.endGroup();
 
     rebuildDeviceCombos();
-    m_changesOnRestart = false; // the rebuild will have changed this
+    m_audioDeviceChanged = false; // the rebuild will have changed this
 
     QCheckBox *resampleOnLoad = new QCheckBox;
     m_resampleOnLoad = prefs->getResampleOnLoad();
@@ -244,7 +277,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     tempDirButton->setIcon(IconLoader().load("fileopen"));
     connect(tempDirButton, SIGNAL(clicked()),
             this, SLOT(tempDirButtonClicked()));
-    tempDirButton->setFixedSize(QSize(24, 24));
+    tempDirButton->setFixedSize(WidgetScale::scaleQSize(QSize(24, 24)));
 
     QCheckBox *showSplash = new QCheckBox;
     m_showSplash = prefs->getShowSplash();
@@ -296,7 +329,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
         QString f0 = f;
         f.replace("sonic-visualiser_", "").replace(".qm", "");
         if (f == f0) { // our expectations about filename format were not met
-            cerr << "INFO: Unexpected filename " << f << " in i18n resource directory" << endl;
+            SVCERR << "INFO: Unexpected filename " << f << " in i18n resource directory" << endl;
         } else {
             m_locales.push_back(f);
             QString displayText;
@@ -352,54 +385,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     hms->setCheckState(m_showHMS ? Qt::Checked : Qt::Unchecked);
     connect(hms, SIGNAL(stateChanged(int)),
             this, SLOT(showHMSChanged(int)));
-    
-    // General tab
 
-    QFrame *frame = new QFrame;
-    
-    QGridLayout *subgrid = new QGridLayout;
-    frame->setLayout(subgrid);
-
+    QFrame *frame = 0;
+    QGridLayout *subgrid = 0;
     int row = 0;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("User interface language"))),
-                       row, 0);
-    subgrid->addWidget(locale, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("Allow network usage"))),
-                       row, 0);
-    subgrid->addWidget(networkPermish, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Temporary Directory Root"))),
-                       row, 0);
-    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
-    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
-    row++;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Resample On Load"))),
-                       row, 0);
-    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Use Gapless Mode"))),
-                       row, 0);
-    subgrid->addWidget(gaplessMode, row++, 1, 1, 1);
-
-    subgrid->addWidget(new QLabel(tr("Audio service:")), row, 0);
-    subgrid->addWidget(audioImplementation, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("Audio playback device:")), row, 0);
-    subgrid->addWidget(m_audioPlaybackDeviceCombo, row++, 1, 1, 2);
-
-    subgrid->addWidget(new QLabel(tr("Audio record device:")), row, 0);
-    subgrid->addWidget(m_audioRecordDeviceCombo, row++, 1, 1, 2);
-
-    subgrid->setRowStretch(row, 10);
-    
-    m_tabOrdering[GeneralTab] = m_tabs->count();
-    m_tabs->addTab(frame, tr("&General"));
 
     // Appearance tab
 
@@ -407,11 +396,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid = new QGridLayout;
     frame->setLayout(subgrid);
     row = 0;
-
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Show Splash Screen"))),
-                       row, 0);
-    subgrid->addWidget(showSplash, row++, 1, 1, 1);
 
 #ifdef Q_OS_MAC
     if (devicePixelRatio() > 1) {
@@ -436,6 +420,10 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(new QLabel(tr("Default colour 3D plot colour:")),
                        row, 0);
     subgrid->addWidget(colour3DColour, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Overview waveform colour:")),
+                       row, 0);
+    subgrid->addWidget(overviewColour, row++, 1, 1, 2);
 
 #ifdef NOT_DEFINED // see earlier
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
@@ -515,12 +503,16 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     frame->setLayout(subgrid);
     row = 0;
     
-    subgrid->addWidget(new QLabel(tr("Default session template for audio files:")), row++, 0);
+    subgrid->addWidget(new QLabel(tr("Default session template when loading audio files:")), row++, 0);
 
     QListWidget *lw = new QListWidget();
     subgrid->addWidget(lw, row, 0);
     subgrid->setRowStretch(row, 10);
     row++;
+
+    subgrid->addWidget(new QLabel(tr("(Use \"%1\" in the File menu to add to these.)")
+                                  .arg(tr("Export Session as Template..."))),
+                       row++, 0);
 
     settings.beginGroup("MainWindow");
     m_currentTemplate = settings.value("sessiontemplate", "").toString();
@@ -553,6 +545,81 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     m_tabOrdering[TemplateTab] = m_tabs->count();
     m_tabs->addTab(frame, tr("Session &Template"));
 
+    // Audio IO tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+
+    if (implementationNames.size() > 1) {
+        subgrid->addWidget(new QLabel(tr("Audio service:")), row, 0);
+        subgrid->addWidget(audioImplementation, row++, 1, 1, 2);
+    }
+
+    subgrid->addWidget(new QLabel(tr("Audio playback device:")), row, 0);
+    subgrid->addWidget(m_audioPlaybackDeviceCombo, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("Audio record device:")), row, 0);
+    subgrid->addWidget(m_audioRecordDeviceCombo, row++, 1, 1, 2);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Use Gapless Mode"))),
+                       row, 0);
+    subgrid->addWidget(gaplessMode, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Resample On Load"))),
+                       row, 0);
+    subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
+
+    subgrid->setRowStretch(row, 10);
+    
+    m_tabOrdering[AudioIOTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("A&udio I/O"));
+
+    // Plugins tab
+
+    m_pluginPathConfigurator = new PluginPathConfigurator(this);
+    m_pluginPathConfigurator->setPaths(PluginPathSetter::getPaths());
+    connect(m_pluginPathConfigurator, SIGNAL(pathsChanged()),
+            this, SLOT(pluginPathsChanged()));
+    
+    m_tabOrdering[PluginTab] = m_tabs->count();
+    m_tabs->addTab(m_pluginPathConfigurator, tr("&Plugins"));
+    
+    // General tab
+
+    frame = new QFrame;
+    subgrid = new QGridLayout;
+    frame->setLayout(subgrid);
+    row = 0;
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("User interface language"))),
+                       row, 0);
+    subgrid->addWidget(locale, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(tr("Allow network usage"))),
+                       row, 0);
+    subgrid->addWidget(networkPermish, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Show Splash Screen"))),
+                       row, 0);
+    subgrid->addWidget(showSplash, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Temporary Directory Root"))),
+                       row, 0);
+    subgrid->addWidget(m_tempDirRootEdit, row, 1, 1, 1);
+    subgrid->addWidget(tempDirButton, row, 2, 1, 1);
+    row++;
+    
+    subgrid->setRowStretch(row, 10);
+    
+    m_tabOrdering[GeneralTab] = m_tabs->count();
+    m_tabs->addTab(frame, tr("&Other"));
+
     QDialogButtonBox *bb = new QDialogButtonBox(Qt::Horizontal);
     grid->addWidget(bb, 1, 0);
     
@@ -581,12 +648,10 @@ PreferencesDialog::rebuildDeviceCombos()
 
     vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
     string implementationName;
+    
     if (in_range_for(names, m_audioImplementation-1)) {
         implementationName = names[m_audioImplementation-1];
     }
-
-    m_audioPlaybackDeviceCombo->clear();
-    m_audioRecordDeviceCombo->clear();
 
     QString suffix;
     if (implementationName != "") {
@@ -596,6 +661,7 @@ PreferencesDialog::rebuildDeviceCombos()
     names = breakfastquay::AudioFactory::getPlaybackDeviceNames(implementationName);
     QString playbackDeviceName = settings.value
         ("audio-playback-device" + suffix, "").toString();
+    m_audioPlaybackDeviceCombo->clear();
     m_audioPlaybackDeviceCombo->addItem(tr("(auto)"));
     m_audioPlaybackDeviceCombo->setCurrentIndex(0);
     m_audioPlaybackDevice = 0;
@@ -610,6 +676,7 @@ PreferencesDialog::rebuildDeviceCombos()
     names = breakfastquay::AudioFactory::getRecordDeviceNames(implementationName);
     QString recordDeviceName = settings.value
         ("audio-record-device" + suffix, "").toString();
+    m_audioRecordDeviceCombo->clear();
     m_audioRecordDeviceCombo->addItem(tr("(auto)"));
     m_audioRecordDeviceCombo->setCurrentIndex(0);
     m_audioRecordDevice = 0;
@@ -657,6 +724,7 @@ void
 PreferencesDialog::spectrogramGColourChanged(int colour)
 {
     m_spectrogramGColour = colour;
+    m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
 
@@ -664,6 +732,7 @@ void
 PreferencesDialog::spectrogramMColourChanged(int colour)
 {
     m_spectrogramMColour = colour;
+    m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
 
@@ -671,6 +740,15 @@ void
 PreferencesDialog::colour3DColourChanged(int colour)
 {
     m_colour3DColour = colour;
+    m_coloursChanged = true;
+    m_applyButton->setEnabled(true);
+}
+
+void
+PreferencesDialog::overviewColourChanged(int colour)
+{
+    m_overviewColour = ColourDatabase::getInstance()->getColour(colour);
+    m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
 
@@ -695,7 +773,7 @@ PreferencesDialog::audioImplementationChanged(int s)
         m_audioImplementation = s;
         rebuildDeviceCombos();
         m_applyButton->setEnabled(true);
-        m_changesOnRestart = true;
+        m_audioDeviceChanged = true;
     }
 }
 
@@ -705,7 +783,7 @@ PreferencesDialog::audioPlaybackDeviceChanged(int s)
     if (m_audioPlaybackDevice != s) {
         m_audioPlaybackDevice = s;
         m_applyButton->setEnabled(true);
-        m_changesOnRestart = true;
+        m_audioDeviceChanged = true;
     }
 }
 
@@ -715,7 +793,7 @@ PreferencesDialog::audioRecordDeviceChanged(int s)
     if (m_audioRecordDevice != s) {
         m_audioRecordDevice = s;
         m_applyButton->setEnabled(true);
-        m_changesOnRestart = true;
+        m_audioDeviceChanged = true;
     }
 }
 
@@ -837,6 +915,13 @@ PreferencesDialog::viewFontSizeChanged(int sz)
 }
 
 void
+PreferencesDialog::pluginPathsChanged()
+{
+    m_applyButton->setEnabled(true);
+    m_changesOnRestart = true;
+}
+
+void
 PreferencesDialog::okClicked()
 {
     applyClicked();
@@ -874,6 +959,9 @@ PreferencesDialog::applyClicked()
 
     vector<string> names = breakfastquay::AudioFactory::getImplementationNames();
     string implementationName;
+    if (m_audioImplementation > int(names.size())) {
+        m_audioImplementation = 0;
+    }
     if (m_audioImplementation > 0) {
         implementationName = names[m_audioImplementation-1];
     }
@@ -886,6 +974,9 @@ PreferencesDialog::applyClicked()
     
     names = breakfastquay::AudioFactory::getPlaybackDeviceNames(implementationName);
     string deviceName;
+    if (m_audioPlaybackDevice > int(names.size())) {
+        m_audioPlaybackDevice = 0;
+    }
     if (m_audioPlaybackDevice > 0) {
         deviceName = names[m_audioPlaybackDevice-1];
     }
@@ -893,6 +984,9 @@ PreferencesDialog::applyClicked()
 
     names = breakfastquay::AudioFactory::getRecordDeviceNames(implementationName);
     deviceName = "";
+    if (m_audioRecordDevice > int(names.size())) {
+        m_audioRecordDevice = 0;
+    }
     if (m_audioRecordDevice > 0) {
         deviceName = names[m_audioRecordDevice-1];
     }
@@ -905,6 +999,7 @@ PreferencesDialog::applyClicked()
     settings.setValue("spectrogram-colour", m_spectrogramGColour);
     settings.setValue("spectrogram-melodic-colour", m_spectrogramMColour);
     settings.setValue("colour-3d-plot-colour", m_colour3DColour);
+    settings.setValue("overview-colour", m_overviewColour.name());
     settings.endGroup();
 
     settings.beginGroup("MainWindow");
@@ -918,6 +1013,18 @@ PreferencesDialog::applyClicked()
                                  tr("<b>Restart required</b><p>One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.</p><p>Please exit and restart the application now if you want these changes to take effect immediately.</p>"));
         m_changesOnRestart = false;
     }
+
+    if (m_audioDeviceChanged) {
+        emit audioDeviceChanged();
+        m_audioDeviceChanged = false;
+    }
+
+    if (m_coloursChanged) {
+        emit coloursChanged();
+        m_coloursChanged = false;
+    }
+
+    PluginPathSetter::savePathSettings(m_pluginPathConfigurator->getPaths());
 }    
 
 void

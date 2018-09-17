@@ -40,7 +40,7 @@ PKG_PROG_PKG_CONFIG
 SV_CHECK_QT
 
 SV_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
-SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DWANT_TIMING" # -DNO_TIMING"
+SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING -DNO_HIT_COUNTS"
 SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 
 # Now we have: USER_CXXFLAGS contains any flags the user set
@@ -51,12 +51,16 @@ SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 CXXFLAGS_DEBUG="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
 CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
+CXXSTANDARD=c++14
 
 if test "x$GCC" = "xyes"; then
-   	CXXFLAGS_ANY="-Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
-        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
-   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O2"
+   	CXXFLAGS_ANY="-fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
+        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -O2 -Werror"
+   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
    	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
+        LIBS_DEBUG="$LIBS"
+        AX_CHECK_COMPILE_FLAG(--std=$CXXSTANDARD, [], [AC_MSG_NOTICE([Compiler does not appear to support $CXXSTANDARD, falling back to c++11])
+        CXXSTANDARD=c++11])
 fi
 
 CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
@@ -67,7 +71,8 @@ QMAKE_CONFIG="release"
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug],[enable debug support [default=no]])],[AC_MSG_NOTICE([enabling debug build])
 QMAKE_CONFIG="debug"
 CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
-SV_DEFINES_BUILD="$SV_DEFINES_DEBUG"])
+SV_DEFINES_BUILD="$SV_DEFINES_DEBUG"
+LIBS="$LIBS_DEBUG"])
 
 if test x"$USER_CXXFLAGS" != x; then
    	AC_MSG_NOTICE([The CXXFLAGS environment variable is set to "$USER_CXXFLAGS".])
@@ -86,8 +91,23 @@ SV_MODULE_REQUIRED([libsamplerate],[samplerate >= 0.1.2],[samplerate.h],[sampler
 SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],[rubberband],[rubberband_new])
 SV_MODULE_REQUIRED([sord],[sord-0 >= 0.5],[sord/sord.h],[sord-0],[sord_world_new])
 SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_read_file])
-SV_MODULE_REQUIRED([capnp],[capnp >= 0.6],[capnp/common.h],[capnp],[])
-SV_MODULE_REQUIRED([kj],[kj >= 0.6],[kj/common.h],[kj],[])
+
+# We need a Cap'n Proto version with the expectedSizeInWordsFromPrefix
+# function, which appeared in v0.6. If we can't find at least that
+# version with pkg-config, we check for the symbol with the compiler.
+PKG_CHECK_MODULES([capnp],[capnp >= 0.6],[HAVES="$HAVES HAVE_CAPNP";CXXFLAGS="$CXXFLAGS $capnp_CFLAGS";LIBS="$LIBS $capnp_LIBS"],[AC_MSG_NOTICE([Failed to find required module capnp using pkg-config, trying again by old-fashioned means])])
+if test -z "$capnp_LIBS" ; then
+    AC_COMPILE_IFELSE([
+        AC_LANG_SOURCE([[
+        #include <capnp/serialize.h>
+        int main() {
+            kj::Array<capnp::word> prefix;
+            return capnp::expectedSizeInWordsFromPrefix(prefix.asPtr());
+        }]])],
+        [HAVES="$HAVES HAVE_CAPNP";LIBS="$LIBS -lcapnp -lkj"],
+        [AC_MSG_ERROR([Failed to find appropriate capnp library])]
+    )
+fi
 
 SV_MODULE_OPTIONAL([liblo],[],[lo/lo.h],[lo],[lo_address_new])
 SV_MODULE_OPTIONAL([portaudio],[portaudio-2.0 >= 19],[portaudio.h],[portaudio],[Pa_IsFormatSupported])
@@ -111,6 +131,7 @@ AC_SUBST(CUT)
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
 AC_SUBST(CXXFLAGS_MINIMAL)
+AC_SUBST(CXXSTANDARD)
 AC_SUBST(LDFLAGS)
 AC_SUBST(HAVES)
 AC_SUBST(LIBS)
@@ -118,11 +139,31 @@ AC_SUBST(LIBS)
 AC_SUBST(CC)
 AC_SUBST(CXX)
 
+AC_SUBST(prefix)
+
 AC_SUBST(QMAKE_CONFIG)
 
 AC_CONFIG_FILES([config.pri])
 
 AC_OUTPUT
+
+if test -x repoint ; then
+   if test -d .hg -o -d .git ; then 
+      if ! ./repoint install; then
+         AC_MSG_ERROR([Repoint failed; please fix any reported errors and try again])
+      fi
+   else
+      AC_MSG_NOTICE([Repoint executable found but not in an Hg or Git working-copy: not running it])
+      if ! test -d vamp-plugin-sdk ; then
+          AC_MSG_WARN([No vamp-plugin-sdk directory present, so external libraries might not have been updated])
+      fi
+   fi
+else
+   AC_MSG_NOTICE([No Repoint executable found: assuming external libraries are already here])
+   if ! test -d vamp-plugin-sdk ; then
+      AC_MSG_WARN([No vamp-plugin-sdk directory present, so external libraries might not have been updated])
+   fi
+fi
 
 if ! $QMAKE -r sonic-visualiser.pro; then
    AC_MSG_ERROR([qmake failed: Command was "$QMAKE -r"])

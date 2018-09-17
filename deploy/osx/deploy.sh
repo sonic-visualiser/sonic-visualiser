@@ -22,9 +22,10 @@ set -u
 
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
 stem=${version%%-*}
+stem=${stem%%pre*}
 case "$stem" in
-    [0-9].[0-9]) bundleVersion="$version".0 ;;
-    [0-9].[0-9].[0-9]) bundleVersion="$version" ;;
+    [0-9].[0-9]) bundleVersion="$stem".0 ;;
+    [0-9].[0-9].[0-9]) bundleVersion="$stem" ;;
     *) echo "Error: Version stem $stem (of version $version) is neither two- nor three-part number" ;;
 esac
 
@@ -45,8 +46,8 @@ echo "You probably want platforms/, accessible/ and imageformats/ subdirectories
 cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
-echo "Copying in plugin load checker helper."
-cp checker/plugin-checker-helper "$source"/Contents/MacOS/
+echo "Copying in plugin load checker."
+cp checker/vamp-plugin-load-checker "$source"/Contents/MacOS/
 
 echo
 echo "Copying in plugin server."
@@ -71,8 +72,15 @@ dmg="$dmg"-"$version".dmg
 mkdir "$volume" || exit 1
 
 ln -s /Applications "$volume"/Applications
-cp README README.OSC COPYING CHANGELOG "$volume/"
+cp README.md "$volume/README.txt"
+cp README.OSC "$volume/README-OSC.txt"
+cp COPYING "$volume/COPYING.txt"
+cp CHANGELOG "$volume/CHANGELOG.txt"
+cp CITATION "$volume/CITATION.txt"
 cp -rp "$source" "$target"
+
+# update file timestamps so as to make the build date apparent
+find "$volume" -exec touch \{\} \;
 
 echo "Done"
 
@@ -86,7 +94,7 @@ echo "Done"
 echo
 echo "Making dmg..."
 
-hdiutil create -srcfolder "$volume" "$dmg" -volname "$volume" && 
+hdiutil create -srcfolder "$volume" "$dmg" -volname "$volume" -fs HFS+ && 
 	rm -r "$volume"
 
 echo "Done"

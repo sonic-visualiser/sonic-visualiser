@@ -13,11 +13,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _PREFERENCES_DIALOG_H_
-#define _PREFERENCES_DIALOG_H_
+#ifndef SV_PREFERENCES_DIALOG_H
+#define SV_PREFERENCES_DIALOG_H
 
 #include <QDialog>
 #include <QMap>
+#include <QColor>
 
 #include "base/Window.h"
 
@@ -26,6 +27,7 @@ class QPushButton;
 class QLineEdit;
 class QTabWidget;
 class QComboBox;
+class PluginPathConfigurator;
 
 class PreferencesDialog : public QDialog
 {
@@ -37,12 +39,18 @@ public:
 
     enum Tab {
         GeneralTab,
+        AudioIOTab,
         AppearanceTab,
         AnalysisTab,
-        TemplateTab
+        TemplateTab,
+        PluginTab
     };
     void switchToTab(Tab tab);
 
+signals:
+    void audioDeviceChanged();
+    void coloursChanged();
+                             
 public slots:
     void applicationClosing(bool quickly);
 
@@ -53,6 +61,7 @@ protected slots:
     void spectrogramGColourChanged(int state);
     void spectrogramMColourChanged(int state);
     void colour3DColourChanged(int state);
+    void overviewColourChanged(int state);
     void propertyLayoutChanged(int layout);
     void tuningFrequencyChanged(double freq);
     void audioImplementationChanged(int impl);
@@ -72,6 +81,7 @@ protected slots:
     void localeChanged(int);
     void networkPermissionChanged(int state);
     void retinaChanged(int state);
+    void pluginPathsChanged();
 
     void tempDirButtonClicked();
 
@@ -91,6 +101,8 @@ protected:
     QComboBox *m_audioPlaybackDeviceCombo;
     QComboBox *m_audioRecordDeviceCombo;
     void rebuildDeviceCombos();
+
+    PluginPathConfigurator *m_pluginPathConfigurator;
     
     QString m_currentTemplate;
     QStringList m_templates;
@@ -104,6 +116,7 @@ protected:
     int m_spectrogramGColour;
     int m_spectrogramMColour;
     int m_colour3DColour;
+    QColor m_overviewColour;
     int m_propertyLayout;
     double m_tuningFrequency;
     int m_audioImplementation;
@@ -122,6 +135,8 @@ protected:
     int m_viewFontSize;
     bool m_showSplash;
 
+    bool m_audioDeviceChanged;
+    bool m_coloursChanged;
     bool m_changesOnRestart;
 };
 
