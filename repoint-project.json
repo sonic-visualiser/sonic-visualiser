@@ -26,7 +26,8 @@
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+	    "service": "soundsoftware",
+	    "branch": "zoom"
         },
         "checker": {
             "vcs": "hg",
