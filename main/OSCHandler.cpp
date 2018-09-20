@@ -497,8 +497,17 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             } else if (message.getArg(0).canConvert(QVariant::Double)) {
                 double level = message.getArg(0).toDouble();
                 Pane *currentPane = m_paneStack->getCurrentPane();
-                if (level < 1.0) level = 1.0;
-                if (currentPane) currentPane->setZoomLevel(int(lrint(level)));
+                ZoomLevel zoomLevel;
+                if (level >= 0.66) {
+                    zoomLevel = ZoomLevel(ZoomLevel::FramesPerPixel,
+                                          int(round(level)));
+                } else {
+                    zoomLevel = ZoomLevel(ZoomLevel::PixelsPerFrame,
+                                          int(round(1.0 / level)));
+                }
+                if (currentPane) {
+                    currentPane->setZoomLevel(zoomLevel);
+                }
             }
         }
 
