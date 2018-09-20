@@ -3866,7 +3866,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
     if (configuration.layer == LayerFactory::Spectrum) {
         pane->setPlaybackFollow(PlaybackScrollContinuous);
         pane->setFollowGlobalZoom(false);
-        pane->setZoomLevel(512);
+        pane->setZoomLevel(ZoomLevel(ZoomLevel::FramesPerPixel, 512));
     }
 
     if (configuration.layer != LayerFactory::TimeRuler &&
