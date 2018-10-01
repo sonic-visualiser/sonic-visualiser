@@ -1283,6 +1283,8 @@ MainWindow::setupPaneAndLayerMenus()
         LayerFactory::PeakFrequencySpectrogram,
         LayerFactory::Spectrum
     };
+    int backgroundTypeCount = int(sizeof(backgroundTypes) /
+                                  sizeof(backgroundTypes[0]));
 
     std::vector<Model *> models;
     if (m_document) models = m_document->getTransformInputModels();
@@ -1291,8 +1293,7 @@ MainWindow::setupPaneAndLayerMenus()
         models.push_back(getMainModel()); // probably 0
     }
 
-    for (unsigned int i = 0;
-         i < sizeof(backgroundTypes)/sizeof(backgroundTypes[0]); ++i) {
+    for (int i = 0; i < backgroundTypeCount; ++i) {
 
         const int paneMenuType = 0, layerMenuType = 1;
 
@@ -1764,7 +1765,7 @@ MainWindow::setupTransformsMenu()
     // .so names -- that won't happen often I hope
     std::map<QString, QString> idNameSonameMap;
     std::set<QString> seenNames, duplicateNames;
-    for (unsigned int i = 0; i < transforms.size(); ++i) {
+    for (int i = 0; in_range_for(transforms, i); ++i) {
         QString name = transforms[i].name;
         if (seenNames.find(name) != seenNames.end()) {
             duplicateNames.insert(name);
@@ -1773,7 +1774,7 @@ MainWindow::setupTransformsMenu()
         }
     }
 
-    for (unsigned int i = 0; i < transforms.size(); ++i) {
+    for (int i = 0; in_range_for(transforms, i); ++i) {
         
         QString name = transforms[i].name;
         if (name == "") name = transforms[i].identifier;
