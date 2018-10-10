@@ -4,13 +4,13 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "51d6551d5244"
+      "pin": "4de4284d0596"
     },
     "svgui": {
-      "pin": "9fb7133dd818"
+      "pin": "86429ff00f05"
     },
     "svapp": {
-      "pin": "9e15607531b2"
+      "pin": "b936872faff2"
     },
     "checker": {
       "pin": "51a8fe0a03cf"
@@ -31,10 +31,10 @@
       "pin": "a766fe47501b"
     },
     "bqresample": {
-      "pin": "a9a5555d9b6d"
+      "pin": "f5dee7d40378"
     },
     "bqaudioio": {
-      "pin": "138a7a8b546b"
+      "pin": "b5e34fdc1716"
     },
     "sv-dependency-builds": {
       "pin": "f1a9b270e043"
