@@ -4,22 +4,22 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "32400727bcbd"
+      "pin": "2fec0d9bd7ac"
     },
     "svgui": {
-      "pin": "615eb28768ca"
+      "pin": "e848ea0850fe"
     },
     "svapp": {
       "pin": "15a566f26114"
     },
     "checker": {
-      "pin": "2e8a5f665a07"
+      "pin": "51a8fe0a03cf"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-cpp": {
-      "pin": "44cb74e186a703e7e6ce403aa295913a87b88d62"
+      "pin": "d95826b8f0a6022f50ec18a06d642dd25f76ee8c"
     },
     "dataquay": {
       "pin": "807b55408d9e"
@@ -40,7 +40,7 @@
       "pin": "f1a9b270e043"
     },
     "icons/scalable": {
-      "pin": "1c6516ba7fc1"
+      "pin": "6ef774507a98"
     }
   }
 }
