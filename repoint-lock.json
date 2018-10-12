@@ -10,7 +10,7 @@
       "pin": "e848ea0850fe"
     },
     "svapp": {
-      "pin": "15a566f26114"
+      "pin": "7eafe977a1fc"
     },
     "checker": {
       "pin": "51a8fe0a03cf"
@@ -31,10 +31,10 @@
       "pin": "a766fe47501b"
     },
     "bqresample": {
-      "pin": "a9a5555d9b6d"
+      "pin": "f5dee7d40378"
     },
     "bqaudioio": {
-      "pin": "138a7a8b546b"
+      "pin": "b5e34fdc1716"
     },
     "sv-dependency-builds": {
       "pin": "f1a9b270e043"
