@@ -3580,16 +3580,16 @@ MainWindow::paneDropAccepted(Pane *pane, QString text)
 void
 MainWindow::closeEvent(QCloseEvent *e)
 {
-//    cerr << "MainWindow::closeEvent" << endl;
+    SVDEBUG << "MainWindow::closeEvent" << endl;
 
     if (m_openingAudioFile) {
-//        cerr << "Busy - ignoring close event" << endl;
+        SVCERR << "Busy - ignoring close event" << endl;
         e->ignore();
         return;
     }
 
     if (!m_abandoning && !checkSaveModified()) {
-//        cerr << "Close refused by user - ignoring close event" << endl;
+        SVCERR << "Close refused by user - ignoring close event" << endl;
         e->ignore();
         return;
     }
