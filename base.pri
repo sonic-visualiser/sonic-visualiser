@@ -7,7 +7,7 @@ SV_INCLUDEPATH = \
 	bqresample \
 	bqaudioio \
 	bqaudioio/bqaudioio \
-	piper-cpp \
+	piper-vamp-cpp \
 	checker \
 	checker/checker \
 	dataquay \
