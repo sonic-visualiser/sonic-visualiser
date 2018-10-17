@@ -36,11 +36,10 @@
             "service": "github",
             "owner": "piper-audio"
         },
-        "piper-cpp": {
+        "piper-vamp-cpp": {
             "vcs": "git",
             "service": "github",
-            "owner": "piper-audio",
-            "repository": "piper-vamp-cpp"
+            "owner": "piper-audio"
         },
         "dataquay": {
             "vcs": "hg",

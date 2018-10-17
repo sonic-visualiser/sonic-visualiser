@@ -31,7 +31,7 @@ TARGET = piper-convert
 OBJECTS_DIR = o
 MOC_DIR = o
 
-INCLUDEPATH += piper-cpp piper-cpp/ext vamp-plugin-sdk
+INCLUDEPATH += piper-vamp-cpp piper-vamp-cpp/ext vamp-plugin-sdk
 
 include(vamp-plugin-sdk-files.pri)
 
@@ -39,10 +39,10 @@ for (file, VAMP_SOURCES) { SOURCES += $$file }
 for (file, VAMP_HEADERS) { HEADERS += $$file }
 
 HEADERS += \
-        piper-cpp/vamp-capnp/piper.capnp.h \
-        piper-cpp/vamp-capnp/VampnProto.h
+        piper-vamp-cpp/vamp-capnp/piper.capnp.h \
+        piper-vamp-cpp/vamp-capnp/VampnProto.h
 
 SOURCES += \
-        piper-cpp/vamp-capnp/piper-capnp.cpp \
-        piper-cpp/ext/json11/json11.cpp \
-        piper-cpp/vamp-server/convert.cpp
+        piper-vamp-cpp/vamp-capnp/piper-capnp.cpp \
+        piper-vamp-cpp/ext/json11/json11.cpp \
+        piper-vamp-cpp/vamp-server/convert.cpp
