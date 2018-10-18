@@ -1,7 +1,15 @@
 
 Changes in Sonic Visualiser 3.2 since the previous release 3.1.1:
 
+ - Add ability to zoom closer than one sample per pixel, so as to see
+   the interpolated signal level between samples
+
  - Add feature to convert and import audio from a CSV data file
+
+ - Add some new colour maps, and restore the old Blue on Black one
+
+ - Fix failure to pass Nyquist bins correctly to
+   frequency-domain-input Vamp plugins in some circumstances
 
 
 Changes in Sonic Visualiser 3.1.1 (Aug 2018) since the previous release 3.1:
