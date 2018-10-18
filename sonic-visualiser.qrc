@@ -54,6 +54,10 @@
     <file>icons/scalable/timeruler.svg</file>
     <file>icons/scalable/undo.svg</file>
     <file>icons/scalable/up.svg</file>
+    <file>icons/scalable/invert-vertical.svg</file>
+    <file>icons/scalable/opaque.svg</file>
+    <file>icons/scalable/smooth.svg</file>
+    <file>icons/scalable/invert-colour.svg</file>
     <file>icons/scalable/values.svg</file>
     <file>icons/scalable/waveform.svg</file>
     <file>icons/scalable/zoom.svg</file>
@@ -81,9 +85,6 @@
     <file>icons/stereo.png</file>
     <file>icons/sharpen.png</file>
     <file>icons/emptypage.png</file>
-    <file>icons/invert-vertical.png</file>
-    <file>icons/opaque.png</file>
-    <file>icons/smooth.png</file>
     <file>icons/lines.png</file>
     <file>icons/derivative.png</file>
     <file>icons/sv-16x16.png</file>
