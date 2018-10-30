@@ -7,7 +7,7 @@
       "pin": "73b3dd65e0b3"
     },
     "svgui": {
-      "pin": "bbeffb29bf09"
+      "pin": "a1393b4384a5"
     },
     "svapp": {
       "pin": "ca64cc9047d0"
@@ -40,7 +40,7 @@
       "pin": "f1a9b270e043"
     },
     "icons/scalable": {
-      "pin": "bfe104ab6f89"
+      "pin": "1c8844bfa946"
     }
   }
 }
