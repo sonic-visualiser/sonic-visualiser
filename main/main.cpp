@@ -46,6 +46,8 @@
 #include <iostream>
 #include <signal.h>
 
+#include "../version.h"
+
 #ifdef HAVE_FFTW3F
 #include <fftw3.h>
 #endif
@@ -264,6 +266,11 @@ main(int argc, char **argv)
         exit(2);
     }
 
+    if (args.contains("--version")) {
+        cerr << SV_VERSION << endl;
+        exit(0);
+    }
+        
     if (args.contains("--no-audio")) audioOutput = false;
     if (args.contains("--no-osc")) oscSupport = false;
 
