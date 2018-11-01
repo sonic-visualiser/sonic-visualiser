@@ -106,7 +106,8 @@ cp "$program.desktop" "$targetdir/"
 cp "icons/sv-icon.svg" "$targetdir/"
 cp "icons/sonic-visualiser.svg" "$targetdir/"
 
-cp sv-dependency-builds/linux/appimage/AppRun-x86_64 "$targetdir/AppRun"
+cp "deploy/linux/AppRun" "$targetdir/"
+
 chmod +x "$targetdir/AppRun"
 
 # Do this with a separate extraction step, so as to make it work even
