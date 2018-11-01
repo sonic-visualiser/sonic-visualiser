@@ -3239,6 +3239,7 @@ MainWindow::newSession()
     if (!checkSaveModified()) return;
 
     closeSession();
+    stop();
     createDocument();
 
     Pane *pane = m_paneStack->addPane();
