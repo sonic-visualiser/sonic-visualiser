@@ -230,6 +230,12 @@ protected:
 int
 main(int argc, char **argv)
 {
+    if (argc == 2 && (QString(argv[1]) == "--version" ||
+                      QString(argv[1]) == "-v")) {
+        cerr << SV_VERSION << endl;
+        exit(0);
+    }
+
     svSystemSpecificInitialisation();
 
 #ifdef Q_WS_X11
@@ -266,11 +272,6 @@ main(int argc, char **argv)
         exit(2);
     }
 
-    if (args.contains("--version") || args.contains("-v")) {
-        cerr << SV_VERSION << endl;
-        exit(0);
-    }
-        
     if (args.contains("--no-audio")) audioOutput = false;
     if (args.contains("--no-osc")) oscSupport = false;
 
