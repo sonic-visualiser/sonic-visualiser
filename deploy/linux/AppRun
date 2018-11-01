@@ -14,7 +14,7 @@ export PATH
 LD_LIBRARY_PATH="$mydir/usr/lib:$mydir/usr/lib/x86_64-linux-gnu:$mydir/usr/lib64:$LD_LIBRARY_PATH"
 export LD_LIBRARY_PATH
 
-QT_PLUGIN_PATH="$mydir/usr/lib/qt5/plugins/:$mydir/usr/lib/i386-linux-gnu/qt5/plugins/:$mydir/usr/lib/x86_64-linux-gnu/qt5/plugins/:$mydir/usr/lib32/qt5/plugins/:$mydir/usr/lib64/qt5/plugins/:$QT_PLUGIN_PATH"
+QT_PLUGIN_PATH="$mydir/usr/lib/qt5/plugins/:$mydir/usr/lib/i386-linux-gnu/qt5/plugins/:$mydir/usr/lib/x86_64-linux-gnu/qt5/plugins/:$mydir/usr/lib64/qt5/plugins/:$QT_PLUGIN_PATH"
 export QT_PLUGIN_PATH
 
 XDG_DATA_DIRS="$mydir/usr/share:$XDG_DATA_DIRS:/usr/local/share:/usr/share"
