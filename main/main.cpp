@@ -266,7 +266,7 @@ main(int argc, char **argv)
         exit(2);
     }
 
-    if (args.contains("--version")) {
+    if (args.contains("--version") || args.contains("-v")) {
         cerr << SV_VERSION << endl;
         exit(0);
     }
