@@ -4,7 +4,7 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "73b3dd65e0b3"
+      "pin": "c55de1488b93"
     },
     "svgui": {
       "pin": "f5566f7271fe"
@@ -19,7 +19,7 @@
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-vamp-cpp": {
-      "pin": "a8eeb547656279ad44901f4a71525b3913e91617"
+      "pin": "269b6c25dae4864515651790553dd8167e5831e4"
     },
     "dataquay": {
       "pin": "807b55408d9e"
