@@ -97,4 +97,9 @@ echo "Making dmg..."
 hdiutil create -srcfolder "$volume" "$dmg" -volname "$volume" -fs HFS+ && 
 	rm -r "$volume"
 
+echo
+echo "Signing dmg..."
+
+codesign -s "Developer ID Application: Chris Cannam" -fv "$dmg"
+
 echo "Done"
