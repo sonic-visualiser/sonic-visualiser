@@ -4531,7 +4531,13 @@ MainWindow::pluginPopulationWarning()
     }
     if (warning != "") {
         emit hideSplash();
-        QMessageBox::warning(this, tr("Problems loading plugins"), warning);
+        QMessageBox box;
+        box.setWindowTitle(tr("Problems loading plugins"));
+        box.setText(tr("<b>Failed to load plugins</b>"));
+        box.setInformativeText(warning);
+        box.setIcon(QMessageBox::Warning);
+        box.setStandardButtons(QMessageBox::Ok);
+        box.exec();
     }
 }
 
