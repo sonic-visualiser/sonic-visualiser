@@ -207,6 +207,57 @@
     </message>
 </context>
 <context>
+    <name>CSVAudioFormatDialog</name>
+    <message>
+        <source>Select Audio Data Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select the correct data format for this file.</source>
+        <translation type="unfinished">Vyberte, prosím, správný datový formát pro tento soubor.</translation>
+    </message>
+    <message>
+        <source>&lt;ignore&gt;</source>
+        <translation type="unfinished">&lt;nevšímat si&gt;</translation>
+    </message>
+    <message>
+        <source>Audio channels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(%1 more)</source>
+        <translation type="unfinished">%1 (více)</translation>
+    </message>
+    <message>
+        <source>Audio channel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio sample rate (Hz):</source>
+        <translation type="unfinished">Vzorkovací kmitočet zvuku (Hz):</translation>
+    </message>
+    <message>
+        <source>Sample values are:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Floating-point in range -1 to 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>8-bit in range 0 to 255</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>16-bit in range -32768 to 32767</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown range: normalise on load</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CSVFileWriter</name>
     <message>
         <source>Failed to open file %1 for writing</source>
@@ -550,6 +601,10 @@ Hodnota:	%4</translation>
     <message>
         <source>Dense 3-D</source>
         <translation>Hustý trojrozměrný</translation>
+    </message>
+    <message>
+        <source>(bin %1)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3668,11 +3723,11 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>%1 on the &amp;Web</source>
-        <translation>%1 na &amp;internetu</translation>
+        <translation type="vanished">%1 na &amp;internetu</translation>
     </message>
     <message>
         <source>Open the %1 website</source>
-        <translation>Otevřít internetové stránky programu %1</translation>
+        <translation type="vanished">Otevřít internetové stránky programu %1</translation>
     </message>
     <message>
         <source>&amp;About %1</source>
@@ -3704,7 +3759,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Export audio from selection into a data file</source>
-        <translation>Vyvést zvuk z výběru do datového souboru</translation>
+        <translation type="vanished">Vyvést zvuk z výběru do datového souboru</translation>
     </message>
     <message>
         <source>Export the selected regions into a single file</source>
@@ -3720,7 +3775,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Export Audio Data...</source>
-        <translation>Vyvést zvuková data...</translation>
+        <translation type="vanished">Vyvést zvuková data...</translation>
     </message>
     <message>
         <source>Export Annotation La&amp;yer...</source>
@@ -3732,7 +3787,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Browse Recorded Audio Folder</source>
-        <translation>Procházet složku s nahraným zvukem</translation>
+        <translation type="vanished">Procházet složku s nahraným zvukem</translation>
     </message>
     <message>
         <source>Open the Recorded Audio folder in the system file browser</source>
@@ -4024,11 +4079,11 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>What&apos;s &amp;New?</source>
-        <translation>Co je &amp;nového?</translation>
+        <translation type="vanished">Co je &amp;nového?</translation>
     </message>
     <message>
         <source>Show changes in this release of %1</source>
-        <translation>Ukázat změny v tomto vydání %1</translation>
+        <translation type="vanished">Ukázat změny v tomto vydání %1</translation>
     </message>
     <message>
         <source>Failed to query transform attributes</source>
@@ -4088,6 +4143,42 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Ctrl+Shift+;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convert Audio from Data File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convert and import audio sample values from a CSV data file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Audio to Data File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export audio from selection into a CSV data file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse Recorded and Converted Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>What&apos;s &amp;New In This Release?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List the changes in this release (and every previous release) of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Converting audio data...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Audio data file %1 could not be opened.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4990,6 +5081,10 @@ Doba trvání:	%3
     <message>
         <source>Click and drag to select a range; hold Cmd for multi-select; middle-click and drag to navigate</source>
         <translation>Klepněte a táhněte pro výběr rozsahu; držte klávesu Ctrl pro provedení vícenásobného výběru; klepněte prostředním tlačítkem a táhněte pro navedení</translation>
+    </message>
+    <message>
+        <source>Waiting to Align</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5922,6 +6017,58 @@ Použití:
     </message>
     <message>
         <source>Exporting audio data...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library file could not be opened</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library has wrong architecture - possibly a 32-bit plugin installed in a 64-bit plugin folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library has wrong architecture - possibly a 64-bit plugin installed in a 32-bit plugin folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library depends on another library that cannot be found: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library cannot be loaded: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not a valid plugin library (no descriptor found)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Library contains no plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>... and %n further failure(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Blue on Black</source>
+        <translation type="unfinished">Modrá na černé</translation>
+    </message>
+    <message>
+        <source>Cividis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Magma</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7693,6 +7840,14 @@ Hodnota:	%2
     <message>
         <source>Enter NoteEdit mode</source>
         <translation>Vstoupit do režimu úprav not</translation>
+    </message>
+    <message numerus="yes">
+        <source>Zoom to %n pixels per sample</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
