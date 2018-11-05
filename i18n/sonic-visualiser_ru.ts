@@ -3234,58 +3234,58 @@ What do you want to export?</source>
         <translation>Несоответствие частоты дискретизации</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4858"/>
-        <location filename="../main/MainWindow.cpp" line="4865"/>
+        <location filename="../main/MainWindow.cpp" line="4864"/>
+        <location filename="../main/MainWindow.cpp" line="4871"/>
         <source>Failed to regenerate layer</source>
         <translation>Не удалось повторно создать слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4989"/>
+        <location filename="../main/MainWindow.cpp" line="4995"/>
         <source>http://www.sonicvisualiser.org/</source>
         <translation>http://www.sonicvisualiser.org/</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5064"/>
+        <location filename="../main/MainWindow.cpp" line="5070"/>
         <source>Release %1 : Revision %2</source>
         <translation>Версия %1 : Редакция %2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5066"/>
+        <location filename="../main/MainWindow.cpp" line="5072"/>
         <source>Release %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5070"/>
+        <location filename="../main/MainWindow.cpp" line="5076"/>
         <source>Unreleased : Revision %1</source>
         <translation>Не выпущено : редакция %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5085"/>
+        <location filename="../main/MainWindow.cpp" line="5091"/>
         <source>&lt;h3&gt;About Sonic Visualiser&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;О программе Sonic Visualiser&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5076"/>
+        <location filename="../main/MainWindow.cpp" line="5082"/>
         <source>Debug</source>
         <translation>Отладка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5076"/>
+        <location filename="../main/MainWindow.cpp" line="5082"/>
         <source>Release</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5118"/>
+        <location filename="../main/MainWindow.cpp" line="5124"/>
         <source>&lt;br&gt;With Ogg file decoder (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</source>
         <translation>&lt;br&gt;С декодером Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5160"/>
+        <location filename="../main/MainWindow.cpp" line="5166"/>
         <source>&lt;br&gt;With LADSPA plugin support (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</source>
         <translation>&lt;br&gt;С поддержкой плагинов LADSPA (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5161"/>
+        <location filename="../main/MainWindow.cpp" line="5167"/>
         <source>&lt;br&gt;With DSSI plugin support (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</source>
         <translation>&lt;br&gt;С поддержкой плагинов DSSI (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</translation>
     </message>
@@ -3294,8 +3294,8 @@ What do you want to export?</source>
         <translation type="vanished">О программе Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4825"/>
-        <location filename="../main/MainWindow.cpp" line="4832"/>
+        <location filename="../main/MainWindow.cpp" line="4831"/>
+        <location filename="../main/MainWindow.cpp" line="4838"/>
         <source>Failed to generate layer</source>
         <translation>Не удалось создать слой</translation>
     </message>
@@ -3668,17 +3668,17 @@ What do you want to export?</source>
         <translation>Видимая область: от %1 до %2 (длительность %3)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4535"/>
+        <location filename="../main/MainWindow.cpp" line="4536"/>
         <source>Problems loading plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4826"/>
+        <location filename="../main/MainWindow.cpp" line="4832"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate derived layer.&lt;p&gt;The layer transform %1failed:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4833"/>
+        <location filename="../main/MainWindow.cpp" line="4839"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate a derived layer.&lt;p&gt;The layer transform %1failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3687,32 +3687,32 @@ What do you want to export?</source>
         <translation type="vanished">Изменить общую громкость воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4976"/>
+        <location filename="../main/MainWindow.cpp" line="4982"/>
         <source>Adjust the master playback speed</source>
         <translation>Изменить общую скорость воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5120"/>
+        <location filename="../main/MainWindow.cpp" line="5126"/>
         <source>&lt;br&gt;With Ogg file decoder &amp;copy; CSIRO Australia</source>
         <translation>&lt;br&gt;С декодером Ogg &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5127"/>
+        <location filename="../main/MainWindow.cpp" line="5133"/>
         <source>&lt;br&gt;With MAD mp3 decoder &amp;copy; Underbit Technologies Inc</source>
         <translation>&lt;br&gt;С декодером MAD mp3 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5134"/>
+        <location filename="../main/MainWindow.cpp" line="5140"/>
         <source>&lt;br&gt;With libsamplerate &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsamplerate &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5141"/>
+        <location filename="../main/MainWindow.cpp" line="5147"/>
         <source>&lt;br&gt;With libsndfile &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsndfile &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5148"/>
+        <location filename="../main/MainWindow.cpp" line="5154"/>
         <source>&lt;br&gt;With FFTW3 &amp;copy; Matteo Frigo and MIT</source>
         <translation>&lt;br&gt;С FFTW3 &amp;copy; Matteo Frigo и MIT</translation>
     </message>
@@ -3721,12 +3721,12 @@ What do you want to export?</source>
         <translation type="vanished">&lt;br&gt;С поддержкой расширений Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5167"/>
+        <location filename="../main/MainWindow.cpp" line="5173"/>
         <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5176"/>
+        <location filename="../main/MainWindow.cpp" line="5182"/>
         <source>&lt;br&gt;With liblo Lite OSC library &amp;copy; Steve Harris</source>
         <translation>&lt;br&gt;С liblo Lite OSC library &amp;copy; Steve Harris</translation>
     </message>
@@ -4654,82 +4654,87 @@ What do you want to export?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4777"/>
+        <location filename="../main/MainWindow.cpp" line="4537"/>
+        <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="4783"/>
         <source>Subdivide instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4778"/>
+        <location filename="../main/MainWindow.cpp" line="4784"/>
         <source>Number of subdivisions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4799"/>
+        <location filename="../main/MainWindow.cpp" line="4805"/>
         <source>Winnow instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4800"/>
+        <location filename="../main/MainWindow.cpp" line="4806"/>
         <source>Remove all instants apart from multiples of:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4889"/>
+        <location filename="../main/MainWindow.cpp" line="4895"/>
         <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment:&lt;p&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4974"/>
+        <location filename="../main/MainWindow.cpp" line="4980"/>
         <source>Adjust the master playback level and pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5095"/>
+        <location filename="../main/MainWindow.cpp" line="5101"/>
         <source>With Qt v%1 &amp;copy; The Qt Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5153"/>
+        <location filename="../main/MainWindow.cpp" line="5159"/>
         <source>&lt;br&gt;With Rubber Band Library v%1 &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5155"/>
+        <location filename="../main/MainWindow.cpp" line="5161"/>
         <source>&lt;br&gt;With Rubber Band Library &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5158"/>
+        <location filename="../main/MainWindow.cpp" line="5164"/>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam and QMUL</source>
         <translation>&lt;br&gt;С поддержкой плагинов Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam и QMUL</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5159"/>
+        <location filename="../main/MainWindow.cpp" line="5165"/>
         <source>&lt;br&gt;With Piper Vamp protocol bridge &amp;copy; QMUL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5168"/>
+        <location filename="../main/MainWindow.cpp" line="5174"/>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5169"/>
+        <location filename="../main/MainWindow.cpp" line="5175"/>
         <source>&lt;br&gt;With Cap&apos;n Proto serialisation &amp;copy; Sandstorm Development Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5183"/>
+        <location filename="../main/MainWindow.cpp" line="5189"/>
         <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5185"/>
+        <location filename="../main/MainWindow.cpp" line="5191"/>
         <source>Czech UI translation contributed by Pavel Fric.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5272"/>
+        <location filename="../main/MainWindow.cpp" line="5278"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %2 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Доступна новая версия программы&lt;/h3&gt;&lt;p&gt;Вы используетее Sonic Visualiser версии %1, но уже доступна версия %2.&lt;/p&gt;&lt;p&gt;Загляните на &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;сайт Sonic Visualiser&lt;/a&gt;, чтобы узнать подробности.&lt;/p&gt; {3&gt;?} {3&gt;?} {1 ?} {2 ?}</translation>
     </message>
@@ -4824,48 +4829,48 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4757"/>
+        <location filename="../main/MainWindow.cpp" line="4763"/>
         <source>Reset Counters</source>
         <translation>Обнуление счетчиков</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4845"/>
-        <location filename="../main/MainWindow.cpp" line="4880"/>
+        <location filename="../main/MainWindow.cpp" line="4851"/>
+        <location filename="../main/MainWindow.cpp" line="4886"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4859"/>
+        <location filename="../main/MainWindow.cpp" line="4865"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed:&lt;p&gt;%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4866"/>
+        <location filename="../main/MainWindow.cpp" line="4872"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4880"/>
+        <location filename="../main/MainWindow.cpp" line="4886"/>
         <source>&lt;b&gt;Warning when regenerating layer&lt;/b&gt;&lt;p&gt;When regenerating the derived layer &quot;%1&quot; using new data model as input:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4888"/>
+        <location filename="../main/MainWindow.cpp" line="4894"/>
         <source>Failed to calculate alignment</source>
         <translation>Не удалось рассчитать выравнивание</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5103"/>
+        <location filename="../main/MainWindow.cpp" line="5109"/>
         <source>&lt;br&gt;With JACK audio output library &amp;copy; Paul Davis and Jack O&apos;Quin</source>
         <translation>&lt;br&gt;С библиотекой JACK &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5107"/>
+        <location filename="../main/MainWindow.cpp" line="5113"/>
         <source>&lt;br&gt;With PortAudio audio output library &amp;copy; Ross Bencina and Phil Burk</source>
         <translation>&lt;br&gt;С библиотекой PortAudio &amp;copy; Ross Bencina и Phil Burk</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5113"/>
+        <location filename="../main/MainWindow.cpp" line="5119"/>
         <source>&lt;br&gt;With PulseAudio audio output library &amp;copy; Lennart Poettering and Pierre Ossman</source>
         <translation>&lt;br&gt;С библиотекой PulseAudio &amp;copy; Lennart Poettering и Pierre Ossman</translation>
     </message>
@@ -4894,7 +4899,7 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5086"/>
+        <location filename="../main/MainWindow.cpp" line="5092"/>
         <source>&lt;p&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;br&gt;&lt;a href=&quot;http://www.sonicvisualiser.org/&quot;&gt;http://www.sonicvisualiser.org/&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;Sonic Visualiser — программа для просмотра и исследования звукозаписей с целью семантического анализа и аннотации музыки.&lt;br&gt;&lt;a href=&quot;http://www.sonicvisualiser.org/&quot;&gt;http://www.sonicvisualiser.org/&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
@@ -4907,32 +4912,32 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="vanished">С использованием Qt v%1 &amp;copy; Nokia Corporation</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5101"/>
+        <location filename="../main/MainWindow.cpp" line="5107"/>
         <source>&lt;br&gt;With JACK audio output library v%1 &amp;copy; Paul Davis and Jack O&apos;Quin</source>
         <translation>&lt;br&gt;С библиотекой JACK v%1 &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5111"/>
+        <location filename="../main/MainWindow.cpp" line="5117"/>
         <source>&lt;br&gt;With PulseAudio audio output library v%1 &amp;copy; Lennart Poettering and Pierre Ossman</source>
         <translation>&lt;br&gt;С библиотекой PulseAudio v%1 &amp;copy; Lennart Poettering и Pierre Ossman</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5125"/>
+        <location filename="../main/MainWindow.cpp" line="5131"/>
         <source>&lt;br&gt;With MAD mp3 decoder v%1 &amp;copy; Underbit Technologies Inc</source>
         <translation>&lt;br&gt;С декодером mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5132"/>
+        <location filename="../main/MainWindow.cpp" line="5138"/>
         <source>&lt;br&gt;With libsamplerate v%1 &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5139"/>
+        <location filename="../main/MainWindow.cpp" line="5145"/>
         <source>&lt;br&gt;With libsndfile v%1 &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5146"/>
+        <location filename="../main/MainWindow.cpp" line="5152"/>
         <source>&lt;br&gt;With FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</source>
         <translation>&lt;br&gt;С FFTW3 v%1 &amp;copy; Matteo Frigo и MIT</translation>
     </message>
@@ -4957,22 +4962,22 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="obsolete">&lt;br&gt;С движком запросов RDF  Rasqal &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5163"/>
+        <location filename="../main/MainWindow.cpp" line="5169"/>
         <source>&lt;br&gt;With Redland RDF datastore v%1 &amp;copy; Dave Beckett and the University of Bristol</source>
         <translation>&lt;br&gt;C хранилищем данных RDF Redland v%1 &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5165"/>
+        <location filename="../main/MainWindow.cpp" line="5171"/>
         <source>&lt;br&gt;With Redland RDF datastore &amp;copy; Dave Beckett and the University of Bristol</source>
         <translation>&lt;br&gt;C хранилищем данных RDF Redland &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5174"/>
+        <location filename="../main/MainWindow.cpp" line="5180"/>
         <source>&lt;br&gt;With liblo Lite OSC library v%1 &amp;copy; Steve Harris</source>
         <translation>&lt;br&gt;С библиотекой OSC liblo v%1 &amp;copy; Steve Harris</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5090"/>
+        <location filename="../main/MainWindow.cpp" line="5096"/>
         <source>&lt;/small&gt;&lt;p&gt;&lt;small&gt;The OSC URL for this instance is: &quot;%1&quot;</source>
         <translation>&lt;/small&gt;&lt;p&gt;&lt;small&gt;Адрес OSC для этой сессии: &quot;%1&quot;</translation>
     </message>
@@ -5089,37 +5094,37 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation>Сохранение сессию как &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4616"/>
+        <location filename="../main/MainWindow.cpp" line="4622"/>
         <source>Add Point</source>
         <translation>Добавить точку</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4995"/>
+        <location filename="../main/MainWindow.cpp" line="5001"/>
         <source>http://www.sonicvisualiser.org/doc/reference/%1/en/</source>
         <translation>http://www.sonicvisualiser.org/doc/reference/%1/en/</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5007"/>
+        <location filename="../main/MainWindow.cpp" line="5013"/>
         <source>What&apos;s New</source>
         <translation>Что нового в программе</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5019"/>
+        <location filename="../main/MainWindow.cpp" line="5025"/>
         <source>&lt;h3&gt;What&apos;s New in %1&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Что нового в %1&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5028"/>
+        <location filename="../main/MainWindow.cpp" line="5034"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; A newer version of Sonic Visualiser is available.&lt;br&gt;(Version %1 is available; you are using version %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5074"/>
+        <location filename="../main/MainWindow.cpp" line="5080"/>
         <source>%1 : %2 configuration, %3-bit build</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5170"/>
+        <location filename="../main/MainWindow.cpp" line="5176"/>
         <source>&lt;br&gt;With RtMidi &amp;copy; Gary P. Scavone</source>
         <translation>&lt;br&gt;С RtMidi &amp;copy; Gary P. Scavone</translation>
     </message>
@@ -5194,12 +5199,12 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation>Какой звуковой файл вы хотите экспортировать?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5203"/>
+        <location filename="../main/MainWindow.cpp" line="5209"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5271"/>
+        <location filename="../main/MainWindow.cpp" line="5277"/>
         <source>Newer version available</source>
         <translation>Доступна более новая версия</translation>
     </message>
@@ -6049,12 +6054,8 @@ Label:	%4</source>
     </message>
     <message>
         <location filename="../svgui/view/Pane.cpp" line="801"/>
-        <source>Unaligned</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../svgui/view/Pane.cpp" line="805"/>
-        <source>Waiting to Align</source>
+        <source>Unaligned</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7154,7 +7155,7 @@ Apply them before closing?</source>
 <context>
     <name>PropertyBox</name>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="221"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="219"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
@@ -7180,47 +7181,47 @@ Apply them before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="748"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="746"/>
         <source>Set playback clip:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="809"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="807"/>
         <source>Adjust playback level and pan of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="819"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="817"/>
         <source>Change sound used for playback (currently &quot;%1&quot;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="833"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="831"/>
         <source> (current value: %1%2)</source>
         <translation> (текущее значение: %1%2)</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="835"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="833"/>
         <source> (current value: %1)</source>
         <translation> (текущее значение: %1)</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="840"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="838"/>
         <source>Toggle Visibility of %1</source>
         <translation>Переключить видимость %1</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="842"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="840"/>
         <source>Toggle Playback of %1</source>
         <translation>Переключить воспроизведение %1</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="846"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="844"/>
         <source>Toggle %1 property of %2</source>
         <translation>Переключить %1 свойство %2</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="849"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="847"/>
         <source>Adjust %1 property of %2%3</source>
         <translation>Скорректировать %1 свойство %2%3</translation>
     </message>
@@ -7423,21 +7424,26 @@ Sonic Visualiser — программа для просмотра и иссле�
     </message>
     <message>
         <location filename="../svcore/plugin/PluginScan.cpp" line="230"/>
-        <source>Not a valid plugin library (no descriptor found)</source>
+        <source>Permission to load library was refused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../svcore/plugin/PluginScan.cpp" line="235"/>
+        <source>Not a valid plugin library (no descriptor found)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="240"/>
         <source>Library contains no plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="241"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="246"/>
         <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../svcore/plugin/PluginScan.cpp" line="256"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="261"/>
         <source>... and %n further failure(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7446,22 +7452,26 @@ Sonic Visualiser — программа для просмотра и иссле�
         </translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="278"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="283"/>
         <source>&lt;b&gt;Failed to scan for plugins&lt;/b&gt;&lt;p&gt;Failed to scan for plugins at startup. Possibly the plugin checker program was not correctly installed alongside %1?&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="285"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="290"/>
         <source>&lt;b&gt;Did not scan for plugins&lt;/b&gt;&lt;p&gt;Apparently no scan for plugins was attempted (internal error?)&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="301"/>
-        <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
-        <translation>&lt;b&gt;Не удалось загрузить плагины&lt;/b&gt;&lt;p&gt;Не удалось загрузить одну или больше библиотек плагинов:&lt;/p&gt;</translation>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="306"/>
+        <source>&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="304"/>
+        <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
+        <translation type="vanished">&lt;b&gt;Не удалось загрузить плагины&lt;/b&gt;&lt;p&gt;Не удалось загрузить одну или больше библиотек плагинов:&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="308"/>
         <source>&lt;p&gt;These plugins may be incompatible with the system, and will be ignored during this run of %1.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Эти плагины могут быть несовместимы с программой и будут проигнорированы при работе в %1.&lt;/p&gt;</translation>
     </message>
@@ -9856,53 +9866,53 @@ Label:	%4</source>
         <translation>V-образно</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1139"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1155"/>
         <source>Time:	%1 - %2</source>
         <translation>Время:	%1 - %2</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1143"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1159"/>
         <source>Time:	%1</source>
         <translation>Время:	%1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1163"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1179"/>
         <source>Level:</source>
         <translation>Уровень:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1165"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1181"/>
         <source>Left:</source>
         <translation>Левый:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1166"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1182"/>
         <source>Right:</source>
         <translation>Правый:</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1167"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1183"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1190"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1206"/>
         <source>
 %1	%2 - %3 (%4 dB peak)</source>
         <translation>
 %1	%2 - %3 (пик в %4 Дб)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1193"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1209"/>
         <source>
 %1	%2 (%3 dB peak)</source>
         <translation>
 %1	%2 (пик в %3 Дб)</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1360"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1413"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1423"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1376"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1429"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1439"/>
         <source>0dB</source>
         <translation>0 Дб</translation>
     </message>

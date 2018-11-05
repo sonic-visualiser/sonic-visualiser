@@ -4181,6 +4181,10 @@ Co chcete vyvést?</translation>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Audio data file %1 could not be opened.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>
@@ -5082,10 +5086,6 @@ Doba trvání:	%3
         <source>Click and drag to select a range; hold Cmd for multi-select; middle-click and drag to navigate</source>
         <translation>Klepněte a táhněte pro výběr rozsahu; držte klávesu Ctrl pro provedení vícenásobného výběru; klepněte prostředním tlačítkem a táhněte pro navedení</translation>
     </message>
-    <message>
-        <source>Waiting to Align</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PlayParameterRepository</name>
@@ -5953,7 +5953,7 @@ Použití:
     </message>
     <message>
         <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
-        <translation>&lt;b&gt;Nepodařilo se nahrát přídavné moduly&lt;/b&gt;&lt;p&gt;Nepodařilo se nahrát jednu nebo více knihoven s přídavnými moduly:&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;b&gt;Nepodařilo se nahrát přídavné moduly&lt;/b&gt;&lt;p&gt;Nepodařilo se nahrát jednu nebo více knihoven s přídavnými moduly:&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;These plugins may be incompatible with the system, and will be ignored during this run of %1.&lt;/p&gt;</source>
@@ -6069,6 +6069,14 @@ Použití:
     </message>
     <message>
         <source>Magma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Permission to load library was refused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
