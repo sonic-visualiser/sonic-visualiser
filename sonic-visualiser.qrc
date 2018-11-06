@@ -6,6 +6,7 @@
     <file>icons/scalable/cross.svg</file>
     <file>icons/scalable/datadelete.svg</file>
     <file>icons/scalable/dataedit.svg</file>
+    <file>icons/scalable/derivative.svg</file>
     <file>icons/scalable/down.svg</file>
     <file>icons/scalable/draw.svg</file>
     <file>icons/scalable/editcopy.svg</file>
@@ -25,6 +26,7 @@
     <file>icons/scalable/help.svg</file>
     <file>icons/scalable/info.svg</file>
     <file>icons/scalable/instants.svg</file>
+    <file>icons/scalable/lines.svg</file>
     <file>icons/scalable/measure.svg</file>
     <file>icons/scalable/move.svg</file>
     <file>icons/scalable/navigate.svg</file>
@@ -54,6 +56,10 @@
     <file>icons/scalable/timeruler.svg</file>
     <file>icons/scalable/undo.svg</file>
     <file>icons/scalable/up.svg</file>
+    <file>icons/scalable/invert-vertical.svg</file>
+    <file>icons/scalable/opaque.svg</file>
+    <file>icons/scalable/smooth.svg</file>
+    <file>icons/scalable/invert-colour.svg</file>
     <file>icons/scalable/values.svg</file>
     <file>icons/scalable/waveform.svg</file>
     <file>icons/scalable/zoom.svg</file>
@@ -81,11 +87,6 @@
     <file>icons/stereo.png</file>
     <file>icons/sharpen.png</file>
     <file>icons/emptypage.png</file>
-    <file>icons/invert-vertical.png</file>
-    <file>icons/opaque.png</file>
-    <file>icons/smooth.png</file>
-    <file>icons/lines.png</file>
-    <file>icons/derivative.png</file>
     <file>icons/sv-16x16.png</file>
     <file>icons/sv-22x22.png</file>
     <file>icons/sv-24x24.png</file>

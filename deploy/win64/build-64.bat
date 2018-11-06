@@ -26,7 +26,7 @@ cd %STARTPWD%
 call .\repoint install
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-sv-dependency-builds\win64-msvc\bin\capnp -Isv-dependency-builds/win64-msvc/include compile --src-prefix=piper/capnp -osv-dependency-builds/win64-msvc/bin/capnpc-c++:piper-cpp/vamp-capnp piper/capnp/piper.capnp
+sv-dependency-builds\win64-msvc\bin\capnp -Isv-dependency-builds/win64-msvc/include compile --src-prefix=piper/capnp -osv-dependency-builds/win64-msvc/bin/capnpc-c++:piper-vamp-cpp/vamp-capnp piper/capnp/piper.capnp
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 mkdir build_win64

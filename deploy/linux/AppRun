@@ -1,0 +1,26 @@
+#!/bin/sh
+
+mydir=$(dirname "$0")
+case "$mydir" in
+    /*) ;;
+    *) mydir="$PWD/$mydir";;
+esac
+
+echo "AppImage root is $mydir"
+
+PATH="$mydir/usr/bin:$mydir/bin:$PATH"
+export PATH
+
+LD_LIBRARY_PATH="$mydir/usr/lib:$mydir/usr/lib/x86_64-linux-gnu:$mydir/usr/lib64:$LD_LIBRARY_PATH"
+export LD_LIBRARY_PATH
+
+QT_PLUGIN_PATH="$mydir/usr/lib/qt5/plugins/:$mydir/usr/lib/x86_64-linux-gnu/qt5/plugins/:$mydir/usr/lib64/qt5/plugins/:$QT_PLUGIN_PATH"
+export QT_PLUGIN_PATH
+
+XDG_DATA_DIRS="$mydir/usr/share:$XDG_DATA_DIRS:/usr/local/share:/usr/share"
+export XDG_DATA_DIRS
+
+GSETTINGS_SCHEMA_DIR="$mydir/usr/share/glib-2.0/schemas:$GSETTINGS_SCHEMA_DIR"
+export GSETTINGS_SCHEMA_DIR
+
+exec "$mydir/usr/bin/sonic-visualiser" "$@"

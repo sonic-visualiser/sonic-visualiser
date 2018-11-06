@@ -17,17 +17,17 @@
         "svcore": {
             "vcs": "hg",
             "service": "soundsoftware",
-	    "branch": "zoom"
+            "branch": "zoom"
         },
         "svgui": {
             "vcs": "hg",
             "service": "soundsoftware",
-	    "branch": "zoom"
+            "branch": "zoom"
         },
         "svapp": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-	    "branch": "zoom"
+            "branch": "zoom"
         },
         "checker": {
             "vcs": "hg",
@@ -39,11 +39,10 @@
             "service": "github",
             "owner": "piper-audio"
         },
-        "piper-cpp": {
+        "piper-vamp-cpp": {
             "vcs": "git",
             "service": "github",
-            "owner": "piper-audio",
-            "repository": "piper-vamp-cpp"
+            "owner": "piper-audio"
         },
         "dataquay": {
             "vcs": "hg",

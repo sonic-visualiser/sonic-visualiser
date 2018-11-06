@@ -4,28 +4,28 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "2fec0d9bd7ac"
+      "pin": "5f9c9d8c3de6"
     },
     "svgui": {
-      "pin": "e848ea0850fe"
+      "pin": "631897ba9fca"
     },
     "svapp": {
-      "pin": "7eafe977a1fc"
+      "pin": "146dbfac36a3"
     },
     "checker": {
-      "pin": "51a8fe0a03cf"
+      "pin": "17fb9ff8e072"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
-    "piper-cpp": {
-      "pin": "d95826b8f0a6022f50ec18a06d642dd25f76ee8c"
+    "piper-vamp-cpp": {
+      "pin": "269b6c25dae4864515651790553dd8167e5831e4"
     },
     "dataquay": {
       "pin": "807b55408d9e"
     },
     "bqvec": {
-      "pin": "3c9de9e7f6e8"
+      "pin": "f7214ab46615"
     },
     "bqfft": {
       "pin": "a766fe47501b"
@@ -40,7 +40,7 @@
       "pin": "f1a9b270e043"
     },
     "icons/scalable": {
-      "pin": "6ef774507a98"
+      "pin": "1c8844bfa946"
     }
   }
 }

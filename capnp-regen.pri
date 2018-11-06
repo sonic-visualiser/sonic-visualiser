@@ -1,17 +1,17 @@
 
-capnpc.target = piper-cpp/vamp-capnp/piper.capnp.h
+capnpc.target = piper-vamp-cpp/vamp-capnp/piper.capnp.h
 capnpc.depends = $$PWD/piper/capnp/piper.capnp
 
-capnpc.commands = capnp compile --src-prefix=$$PWD/piper/capnp -oc++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
+capnpc.commands = capnp compile --src-prefix=$$PWD/piper/capnp -oc++:$$PWD/piper-vamp-cpp/vamp-capnp $$capnpc.depends
 
 macx* {
     exists(sv-dependency-builds) {
-        capnpc.commands=$$PWD/sv-dependency-builds/osx/bin/capnp -I$$PWD/sv-dependency-builds/osx/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/osx/bin/capnpc-c++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
+        capnpc.commands=$$PWD/sv-dependency-builds/osx/bin/capnp -I$$PWD/sv-dependency-builds/osx/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/osx/bin/capnpc-c++:$$PWD/piper-vamp-cpp/vamp-capnp $$capnpc.depends
     }
 }
 
 win32-g++ {
-    capnpc.commands=$$PWD/sv-dependency-builds/win32-mingw/bin/capnp -I$$PWD/sv-dependency-builds/win32-mingw/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/win32-mingw/bin/capnpc-c++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
+    capnpc.commands=$$PWD/sv-dependency-builds/win32-mingw/bin/capnp -I$$PWD/sv-dependency-builds/win32-mingw/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/win32-mingw/bin/capnpc-c++:$$PWD/piper-vamp-cpp/vamp-capnp $$capnpc.depends
 }
 
 win32-msvc* {
@@ -26,8 +26,8 @@ win32-msvc* {
     # I hope using the relative path as target should fix it without
     # breaking the VC2015 build.
 
-    capnpc.target = ../$$basename(PWD)/piper-cpp/vamp-capnp/piper.capnp.h
-    capnpc.commands=$$PWD/sv-dependency-builds/win64-msvc/bin/capnp -I$$PWD/sv-dependency-builds/win64-msvc/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/win64-msvc/bin/capnpc-c++:$$PWD/piper-cpp/vamp-capnp $$capnpc.depends
+    capnpc.target = ../$$basename(PWD)/piper-vamp-cpp/vamp-capnp/piper.capnp.h
+    capnpc.commands=$$PWD/sv-dependency-builds/win64-msvc/bin/capnp -I$$PWD/sv-dependency-builds/win64-msvc/include compile --src-prefix=$$PWD/piper/capnp -o$$PWD/sv-dependency-builds/win64-msvc/bin/capnpc-c++:$$PWD/piper-vamp-cpp/vamp-capnp $$capnpc.depends
 }
 
 QMAKE_EXTRA_TARGETS += capnpc

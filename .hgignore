@@ -36,7 +36,7 @@ svgui
 svapp
 checker
 piper
-piper-cpp
+piper-vamp-cpp
 dataquay
 bqvec
 bqfft

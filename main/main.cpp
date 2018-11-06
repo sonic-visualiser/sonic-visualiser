@@ -46,6 +46,8 @@
 #include <iostream>
 #include <signal.h>
 
+#include "../version.h"
+
 #ifdef HAVE_FFTW3F
 #include <fftw3.h>
 #endif
@@ -228,6 +230,12 @@ protected:
 int
 main(int argc, char **argv)
 {
+    if (argc == 2 && (QString(argv[1]) == "--version" ||
+                      QString(argv[1]) == "-v")) {
+        cerr << SV_VERSION << endl;
+        exit(0);
+    }
+
     svSystemSpecificInitialisation();
 
 #ifdef Q_WS_X11

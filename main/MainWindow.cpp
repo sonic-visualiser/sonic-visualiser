@@ -1908,13 +1908,8 @@ MainWindow::setupHelpMenu()
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
     
-    action = new QAction(tr("%1 on the &Web").arg(name), this); 
-    action->setStatusTip(tr("Open the %1 website").arg(name)); 
-    connect(action, SIGNAL(triggered()), this, SLOT(website()));
-    menu->addAction(action);
-    
-    action = new QAction(tr("What's &New?"), this); 
-    action->setStatusTip(tr("Show changes in this release of %1").arg(name)); 
+    action = new QAction(tr("What's &New In This Release?"), this); 
+    action->setStatusTip(tr("List the changes in this release (and every previous release) of %1").arg(name)); 
     connect(action, SIGNAL(triggered()), this, SLOT(whatsNew()));
     menu->addAction(action);
     
@@ -3244,6 +3239,7 @@ MainWindow::newSession()
     if (!checkSaveModified()) return;
 
     closeSession();
+    stop();
     createDocument();
 
     Pane *pane = m_paneStack->addPane();
@@ -4536,7 +4532,13 @@ MainWindow::pluginPopulationWarning()
     }
     if (warning != "") {
         emit hideSplash();
-        QMessageBox::warning(this, tr("Problems loading plugins"), warning);
+        QMessageBox box;
+        box.setWindowTitle(tr("Problems loading plugins"));
+        box.setText(tr("<b>Failed to load plugins</b>"));
+        box.setInformativeText(warning);
+        box.setIcon(QMessageBox::Warning);
+        box.setStandardButtons(QMessageBox::Ok);
+        box.exec();
     }
 }
 
