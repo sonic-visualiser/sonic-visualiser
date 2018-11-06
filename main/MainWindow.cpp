@@ -4976,10 +4976,18 @@ MainWindow::mouseEnteredWidget()
     QWidget *w = dynamic_cast<QWidget *>(sender());
     if (!w) return;
 
+    QString mainText, editText;
+
     if (w == m_mainLevelPan) {
-        contextHelpChanged(tr("Adjust the master playback level and pan"));
+        mainText = tr("Adjust the master playback level and pan");
+        editText = tr("click then drag to adjust, ctrl+click to reset");
     } else if (w == m_playSpeed) {
-        contextHelpChanged(tr("Adjust the master playback speed"));
+        mainText = tr("Adjust the master playback speed");
+        editText = tr("drag up/down to adjust, ctrl+click to reset");
+    }
+
+    if (mainText != "") {
+        contextHelpChanged(tr("%1: %2").arg(mainText).arg(editText));
     }
 }
 
