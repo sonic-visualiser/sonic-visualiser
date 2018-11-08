@@ -16,7 +16,8 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "spectrogramparam"
         },
         "svgui": {
             "vcs": "hg",
