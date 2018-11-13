@@ -249,28 +249,38 @@ protected:
 
     QString shortcutFor(LayerFactory::LayerType, bool isPaneMenu);
     void updateLayerShortcutsFor(Model *);
+
+    // Map from menu action to the resulting layer configurations
+    // etc. These all used to be std::maps, but we sometimes want to
+    // iterate through actions in order of creation, not in order of
+    // arbitrary QAction pointer. And speed of random lookup is not
+    // important.
+    //
+    // Some of these would still be fine as maps, but we might as well
+    // consistently use the same arrangement throughout.
     
-    typedef std::map<QAction *, LayerConfiguration> PaneActionMap;
-    PaneActionMap m_paneActions;
+    typedef std::vector<std::pair<QAction *, LayerConfiguration>> PaneActions;
+    PaneActions m_paneActions;
 
-    typedef std::map<QAction *, LayerConfiguration> LayerActionMap;
-    LayerActionMap m_layerActions;
+    typedef std::vector<std::pair<QAction *, LayerConfiguration>> LayerActions;
+    LayerActions m_layerActions;
 
-    typedef std::map<QAction *, TransformId> TransformActionMap;
-    TransformActionMap m_transformActions;
+    typedef std::vector<std::pair<QAction *, Layer *>> ExistingLayerActions;
+    ExistingLayerActions m_existingLayerActions;
+    ExistingLayerActions m_sliceActions;
 
+    typedef std::vector<std::pair<ViewManager::ToolMode, QAction *>> ToolActions;
+    ToolActions m_toolActions;
+
+    typedef std::vector<std::pair<QAction *, int>> NumberingActions;
+    NumberingActions m_numberingActions;
+
+    typedef std::vector<std::pair<QAction *, TransformId>> TransformActions;
+    TransformActions m_transformActions;
+
+    // This one only makes sense as a map though
     typedef std::map<TransformId, QAction *> TransformActionReverseMap;
     TransformActionReverseMap m_transformActionsReverse;
-
-    typedef std::map<QAction *, Layer *> ExistingLayerActionMap;
-    ExistingLayerActionMap m_existingLayerActions;
-    ExistingLayerActionMap m_sliceActions;
-
-    typedef std::map<ViewManager::ToolMode, QAction *> ToolActionMap;
-    ToolActionMap m_toolActions;
-
-    typedef std::map<QAction *, int> NumberingActionMap;
-    NumberingActionMap m_numberingActions;
 
     QString getReleaseText() const;
     
