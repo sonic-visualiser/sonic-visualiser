@@ -845,6 +845,7 @@ MainWindow::setupEditMenu()
     QMenu *numberingMenu = menu->addMenu(tr("Number New Instants with"));
     numberingMenu->setTearOffEnabled(true);
     QActionGroup *numberingGroup = new QActionGroup(this);
+    m_numberingActions.clear();
 
     Labeller::TypeNameMap types = m_labeller->getTypeNames();
     for (Labeller::TypeNameMap::iterator i = types.begin(); i != types.end(); ++i) {
@@ -858,7 +859,7 @@ MainWindow::setupEditMenu()
         action->setChecked(m_labeller->getType() == i->first);
         numberingGroup->addAction(action);
         numberingMenu->addAction(action);
-        m_numberingActions[action] = (int)i->first;
+        m_numberingActions.push_back({ action, (int)i->first });
 
         if (i->first == Labeller::ValueFromTwoLevelCounter) {
 
@@ -1229,12 +1230,15 @@ MainWindow::setupPaneAndLayerMenus()
 
     m_keyReference->setCategory(tr("Managing Panes and Layers"));
 
+    m_paneActions.clear();
+    m_layerActions.clear();
+    
     QAction *action = new QAction(il.load("pane"), tr("Add &New Pane"), this);
     action->setShortcut(tr("N"));
     action->setStatusTip(tr("Add a new pane containing only a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addPane()));
     connect(this, SIGNAL(canAddPane(bool)), action, SLOT(setEnabled(bool)));
-    m_paneActions[action] = LayerConfiguration(LayerFactory::TimeRuler);
+    m_paneActions.push_back({ action, LayerConfiguration(LayerFactory::TimeRuler) });
     m_keyReference->registerShortcut(action);
     menu->addAction(action);
 
@@ -1268,7 +1272,7 @@ MainWindow::setupPaneAndLayerMenus()
 
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-        m_layerActions[action] = LayerConfiguration(type);
+        m_layerActions.push_back({ action, LayerConfiguration(type) });
         menu->addAction(action);
         m_rightButtonLayerMenu->addAction(action);
     }
@@ -1410,15 +1414,15 @@ MainWindow::setupPaneAndLayerMenus()
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_paneActions[action] =
-                                LayerConfiguration(type, model);
+                            m_paneActions.push_back
+                                ({ action, LayerConfiguration(type, model) });
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_layerActions[action] =
-                                LayerConfiguration(type, model);
+                            m_layerActions.push_back
+                                ({ action, LayerConfiguration(type, model) });
                         }
                         if (shortcutText != "") {
                             m_keyReference->registerShortcut(action);
@@ -1454,6 +1458,12 @@ MainWindow::setupPaneAndLayerMenus()
                         if (isDefault) {
                             action = new QAction(icon, actionText, this);
                             if (!model || model == getMainModel()) {
+                                // Default for the shortcut is to
+                                // attach to an action that uses the
+                                // main model as input. But this may
+                                // change when the user selects a
+                                // different pane - see
+                                // updateLayerShortcutsFor() below.
                                 action->setShortcut(shortcutText); 
                             }
                         } else {
@@ -1467,15 +1477,15 @@ MainWindow::setupPaneAndLayerMenus()
                                     this, SLOT(addPane()));
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_paneActions[action] =
-                                LayerConfiguration(type, model, c - 1);
+                            m_paneActions.push_back
+                                ({ action, LayerConfiguration(type, model, c - 1) });
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
-                            m_layerActions[action] =
-                                LayerConfiguration(type, model, c - 1);
+                            m_layerActions.push_back
+                                ({ action, LayerConfiguration(type, model, c - 1) });
                         }
 
                         submenu->addAction(action);
@@ -1492,7 +1502,8 @@ MainWindow::setupPaneAndLayerMenus()
                                 this, SLOT(addLayer()));
                         connect(this, SIGNAL(canAddLayer(bool)),
                                 action, SLOT(setEnabled(bool)));
-                        m_layerActions[action] = LayerConfiguration(type, 0, 0);
+                        m_layerActions.push_back
+                            ({ action, LayerConfiguration(type, 0, 0) });
                         m_rightButtonLayerMenu->addAction(action);
                     }
                 }
@@ -1537,7 +1548,7 @@ MainWindow::setupPaneAndLayerMenus()
     action->setStatusTip(tr("Add a new layer showing a time ruler"));
     connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
     connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-    m_layerActions[action] = LayerConfiguration(LayerFactory::TimeRuler);
+    m_layerActions.push_back({ action, LayerConfiguration(LayerFactory::TimeRuler) });
     menu->addAction(action);
 
     menu->addSeparator();
@@ -1607,6 +1618,10 @@ MainWindow::setupPaneAndLayerMenus()
 void
 MainWindow::updateLayerShortcutsFor(Model *model)
 {
+    // Called when e.g. the current pane has changed, to ensure the
+    // various layer shortcuts select an action whose input model is
+    // the active one in this pane
+    
     set<LayerFactory::LayerType> seen;
     
     for (auto &a : m_paneActions) {
@@ -1774,6 +1789,9 @@ MainWindow::setupTransformsMenu()
         }
     }
 
+    m_transformActions.clear();
+    m_transformActionsReverse.clear();
+    
     for (int i = 0; in_range_for(transforms, i); ++i) {
         
         QString name = transforms[i].name;
@@ -1806,7 +1824,7 @@ MainWindow::setupTransformsMenu()
 
         QAction *action = new QAction(tr("%1...").arg(name), this);
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-        m_transformActions[action] = transforms[i].identifier;
+        m_transformActions.push_back({ action, transforms[i].identifier });
         m_transformActionsReverse[transforms[i].identifier] = action;
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
 
@@ -1832,7 +1850,7 @@ MainWindow::setupTransformsMenu()
 
         action = new QAction(tr("%1...").arg(output == "" ? pluginName : output), this);
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
-        m_transformActions[action] = transforms[i].identifier;
+        m_transformActions.push_back({ action, transforms[i].identifier });
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
         action->setStatusTip(transforms[i].longDescription);
 
@@ -2082,7 +2100,7 @@ MainWindow::setupExistingLayersMenus()
         QAction *action = new QAction(icon, name, this);
         connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-        m_existingLayerActions[action] = layer;
+        m_existingLayerActions.push_back({ action, layer });
 
         m_existingLayersMenu->addAction(action);
 
@@ -2090,7 +2108,7 @@ MainWindow::setupExistingLayersMenus()
             action = new QAction(icon, name, this);
             connect(action, SIGNAL(triggered()), this, SLOT(addLayer()));
             connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
-            m_sliceActions[action] = layer;
+            m_sliceActions.push_back({ action, layer });
             m_sliceMenu->addAction(action);
         }
     }
@@ -2308,10 +2326,10 @@ MainWindow::setupToolbars()
 
     toolbar = addToolBar(tr("Tools Toolbar"));
     QActionGroup *group = new QActionGroup(this);
-
+    m_toolActions.clear();
+    
     m_keyReference->setCategory(tr("Tool Selection"));
-    QAction *action = toolbar->addAction(il.load("navigate"),
-                                         tr("Navigate"));
+    QAction *action = toolbar->addAction(il.load("navigate"), tr("Navigate"));
     action->setCheckable(true);
     action->setChecked(true);
     action->setShortcut(tr("1"));
@@ -2320,7 +2338,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(replacedDocument()), action, SLOT(trigger()));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
-    m_toolActions[ViewManager::NavigateMode] = action;
+    m_toolActions.push_back({ ViewManager::NavigateMode, action });
     
     m_keyReference->setCategory
         (tr("Navigate Tool Mouse Actions"));
@@ -2338,15 +2356,14 @@ MainWindow::setupToolbars()
          tr("Double-click left button on an item to edit it"));
 
     m_keyReference->setCategory(tr("Tool Selection"));
-    action = toolbar->addAction(il.load("select"),
-                                tr("Select"));
+    action = toolbar->addAction(il.load("select"), tr("Select"));
     action->setCheckable(true);
     action->setShortcut(tr("2"));
     action->setStatusTip(tr("Select ranges"));
     connect(action, SIGNAL(triggered()), this, SLOT(toolSelectSelected()));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
-    m_toolActions[ViewManager::SelectMode] = action;
+    m_toolActions.push_back({ ViewManager::SelectMode, action });
         
     m_keyReference->setCategory
         (tr("Select Tool Mouse Actions"));
@@ -2367,8 +2384,7 @@ MainWindow::setupToolbars()
         tr("Shift-click left button and drag to select without snapping to items or grid"));
 
     m_keyReference->setCategory(tr("Tool Selection"));
-    action = toolbar->addAction(il.load("move"),
-                                tr("Edit"));
+    action = toolbar->addAction(il.load("move"), tr("Edit"));
     action->setCheckable(true);
     action->setShortcut(tr("3"));
     action->setStatusTip(tr("Edit items in layer"));
@@ -2376,7 +2392,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canEditLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
-    m_toolActions[ViewManager::EditMode] = action;
+    m_toolActions.push_back({ ViewManager::EditMode, action });
     
     m_keyReference->setCategory
         (tr("Edit Tool Mouse Actions"));
@@ -2388,8 +2404,7 @@ MainWindow::setupToolbars()
         tr("Double-click left button on an item to edit it"));
 
     m_keyReference->setCategory(tr("Tool Selection"));
-    action = toolbar->addAction(il.load("draw"),
-                                tr("Draw"));
+    action = toolbar->addAction(il.load("draw"), tr("Draw"));
     action->setCheckable(true);
     action->setShortcut(tr("4"));
     action->setStatusTip(tr("Draw new items in layer"));
@@ -2397,7 +2412,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canEditLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
-    m_toolActions[ViewManager::DrawMode] = action;
+    m_toolActions.push_back({ ViewManager::DrawMode, action });
 
     m_keyReference->setCategory
         (tr("Draw Tool Mouse Actions"));
@@ -2406,8 +2421,7 @@ MainWindow::setupToolbars()
         tr("Click left button and drag to create new item"));
 
     m_keyReference->setCategory(tr("Tool Selection"));
-    action = toolbar->addAction(il.load("erase"),
-                                tr("Erase"));
+    action = toolbar->addAction(il.load("erase"), tr("Erase"));
     action->setCheckable(true);
     action->setShortcut(tr("5"));
     action->setStatusTip(tr("Erase items from layer"));
@@ -2415,7 +2429,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canEditLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
-    m_toolActions[ViewManager::EraseMode] = action;
+    m_toolActions.push_back({ ViewManager::EraseMode, action });
 
     m_keyReference->setCategory
         (tr("Erase Tool Mouse Actions"));
@@ -2432,7 +2446,7 @@ MainWindow::setupToolbars()
     connect(this, SIGNAL(canMeasureLayer(bool)), action, SLOT(setEnabled(bool)));
     group->addAction(action);
     m_keyReference->registerShortcut(action);
-    m_toolActions[ViewManager::MeasureMode] = action;
+    m_toolActions.push_back({ ViewManager::MeasureMode, action });
 
     m_keyReference->setCategory
         (tr("Measure Tool Mouse Actions"));
@@ -3834,13 +3848,17 @@ MainWindow::addPane()
         return;
     }
 
-    PaneActionMap::iterator i = m_paneActions.find(action);
+    PaneActions::iterator i = m_paneActions.begin();
+    while (i != m_paneActions.end()) {
+        if (i->first == action) break;
+        ++i;
+    }
 
     if (i == m_paneActions.end()) {
         cerr << "WARNING: MainWindow::addPane: unknown action "
-                  << action->objectName() << endl;
+             << action->objectName() << endl;
         cerr << "known actions are:" << endl;
-        for (PaneActionMap::const_iterator i = m_paneActions.begin();
+        for (PaneActions::const_iterator i = m_paneActions.begin();
              i != m_paneActions.end(); ++i) {
             cerr << i->first << ", name " << i->first->text() << endl;
         }
@@ -3943,7 +3961,11 @@ MainWindow::addLayer()
         return;
     }
 
-    ExistingLayerActionMap::iterator ei = m_existingLayerActions.find(action);
+    ExistingLayerActions::iterator ei = m_existingLayerActions.begin();
+    while (ei != m_existingLayerActions.end()) {
+        if (ei->first == action) break;
+        ++ei;
+    }
 
     if (ei != m_existingLayerActions.end()) {
         Layer *newLayer = ei->second;
@@ -3952,7 +3974,11 @@ MainWindow::addLayer()
         return;
     }
 
-    ei = m_sliceActions.find(action);
+    ei = m_sliceActions.begin();
+    while (ei != m_sliceActions.end()) {
+        if (ei->first == action) break;
+        ++ei;
+    }
 
     if (ei != m_sliceActions.end()) {
         Layer *newLayer = m_document->createLayer(LayerFactory::Slice);
@@ -3972,11 +3998,19 @@ MainWindow::addLayer()
         return;
     }
 
-    TransformActionMap::iterator i = m_transformActions.find(action);
+    TransformActions::iterator i = m_transformActions.begin();
+    while (i != m_transformActions.end()) {
+        if (i->first == action) break;
+        ++i;
+    }
 
     if (i == m_transformActions.end()) {
 
-        LayerActionMap::iterator i = m_layerActions.find(action);
+        LayerActions::iterator i = m_layerActions.begin();
+        while (i != m_layerActions.end()) {
+            if (i->first == action) break;
+            ++i;
+        }
         
         if (i == m_layerActions.end()) {
             cerr << "WARNING: MainWindow::addLayer: unknown action "
@@ -3995,7 +4029,12 @@ MainWindow::addLayer()
 
             newLayer = m_document->createEmptyLayer(type);
             if (newLayer) {
-                m_toolActions[ViewManager::DrawMode]->trigger();
+                for (auto &a : m_toolActions) {
+                    if (a.first == ViewManager::DrawMode) {
+                        a.second->trigger();
+                        break;
+                    }
+                }
             }
 
         } else {
@@ -4729,7 +4768,10 @@ MainWindow::setInstantsNumbering()
     QAction *a = dynamic_cast<QAction *>(sender());
     if (!a) return;
 
-    int type = m_numberingActions[a];
+    int type = 0;
+    for (auto &ai : m_numberingActions) {
+        if (ai.first == a) type = ai.second;
+    }
     
     if (m_labeller) m_labeller->setType(Labeller::ValueType(type));
 
