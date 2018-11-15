@@ -625,7 +625,6 @@ LIBOBJS
 QMAKE_CONFIG
 HAVES
 CXXSTANDARD
-CXXFLAGS_MINIMAL
 CUT
 SHA1SUM
 MAKEDEPEND
@@ -4413,7 +4412,6 @@ esac
 
 SV_DEFINES_DEBUG="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
 SV_DEFINES_RELEASE="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING -DNO_HIT_COUNTS"
-SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 
 # Now we have: USER_CXXFLAGS contains any flags the user set
 # explicitly; AUTOCONF_CXXFLAGS contains flags that Autoconf thought
@@ -4421,15 +4419,20 @@ SV_DEFINES_MINIMAL="$SV_DEFINES_RELEASE"
 # allow ourselves to be overridden (later) by the former
 
 CXXFLAGS_DEBUG="$AUTOCONF_CXXFLAGS"
+OPTFLAGS_DEBUG="-O2"
+LDFLAGS_DEBUG=""
 CXXFLAGS_RELEASE="$AUTOCONF_CXXFLAGS"
-CXXFLAGS_MINIMAL="$AUTOCONF_CXXFLAGS"
+OPTFLAGS_RELEASE="-O2"
+LDFLAGS_RELEASE=""
 CXXSTANDARD=c++14
 
 if test "x$GCC" = "xyes"; then
    	CXXFLAGS_ANY="-fpic -Wall -Wextra -Woverloaded-virtual -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -Wconversion -pipe"
-        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -O2 -Werror"
-   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0 -O3 -ffast-math"
-   	CXXFLAGS_MINIMAL="$CXXFLAGS_ANY -g0 -O0"
+        CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
+        OPTFLAGS_DEBUG="-O2"
+   	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0"
+        LDFLAGS_RELEASE="-fuse-linker-plugin"
+        OPTFLAGS_RELEASE="-O3 -ffast-math -flto"
         LIBS_DEBUG="$LIBS"
         as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__--std=$CXXSTANDARD" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts --std=$CXXSTANDARD" >&5
@@ -4472,7 +4475,8 @@ fi
 
 fi
 
-CXXFLAGS_BUILD="$CXXFLAGS_RELEASE"
+CXXFLAGS_BUILD="$CXXFLAGS_RELEASE $OPTFLAGS_RELEASE"
+LDFLAGS_BUILD="$LDFLAGS_RELEASE $OPTFLAGS_RELEASE"
 SV_DEFINES_BUILD="$SV_DEFINES_RELEASE"
 
 QMAKE_CONFIG="release"
@@ -4482,7 +4486,8 @@ if test "${enable_debug+set}" = set; then :
   enableval=$enable_debug; { $as_echo "$as_me:${as_lineno-$LINENO}: enabling debug build" >&5
 $as_echo "$as_me: enabling debug build" >&6;}
 QMAKE_CONFIG="debug"
-CXXFLAGS_BUILD="$CXXFLAGS_DEBUG"
+CXXFLAGS_BUILD="$CXXFLAGS_DEBUG $OPTFLAGS_DEBUG"
+LDFLAGS_BUILD="$LDFLAGS_DEBUG"
 SV_DEFINES_BUILD="$SV_DEFINES_DEBUG"
 LIBS="$LIBS_DEBUG"
 fi
@@ -4494,10 +4499,11 @@ $as_echo "$as_me: The CXXFLAGS environment variable is set to \"$USER_CXXFLAGS\"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: Overriding default compiler flags with the above user setting." >&5
 $as_echo "$as_me: Overriding default compiler flags with the above user setting." >&6;}
 	CXXFLAGS_BUILD="$USER_CXXFLAGS"
-	CXXFLAGS_MINIMAL="$USER_CXXFLAGS"
+        LDFLAGS_BUILD=""
 fi
 
 CXXFLAGS="$CXXFLAGS_BUILD $SV_DEFINES_BUILD"
+LDFLAGS="$LDFLAGS_BUILD"
 
 # On IRIX 5.3, sys/types and inttypes.h are conflicting.
 for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
@@ -7372,7 +7378,6 @@ fi
       fi
    fi
 fi
-
 
 
 
