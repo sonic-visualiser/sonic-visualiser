@@ -4,12 +4,24 @@ Changes in Sonic Visualiser 3.2 since the previous release 3.1.1:
  - Add ability to zoom closer than one sample per pixel, so as to see
    the interpolated signal level between samples
 
+ - Add oversampling control to the spectrogram and spectrum layers
+
+ - Highlight and label frequency peaks in the spectrum as the mouse
+   rolls over them, when enabled in the parameter area
+
  - Add feature to convert and import audio from a CSV data file
 
  - Add some new colour maps, and restore the old Blue on Black one
 
+ - Speed up spectrum rendering at high resolutions
+
  - Fix failure to pass Nyquist bins correctly to
    frequency-domain-input Vamp plugins in some circumstances
+
+ - Fix sometimes incorrect shortcut associations for new-layer menu
+   items
+
+ - Various small rendering improvements and bug fixes
 
 
 Changes in Sonic Visualiser 3.1.1 (Aug 2018) since the previous release 3.1:
