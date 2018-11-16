@@ -24,9 +24,9 @@ if "%ARG%" == "sign" (
 @   echo NOTE: whether it'll work before doing the entire build
 copy sv-dependency-builds\win64-msvc\bin\capnp.exe signtest.exe
 signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 signtest.exe
-if %errorlevel% neq 0 exit /b %errorlevel%
+if errorlevel 1 exit /b %errorlevel%
 signtool verify /pa signtest.exe
-if %errorlevel% neq 0 exit /b %errorlevel%
+if errorlevel 1 exit /b %errorlevel%
 del signtest.exe
 @   echo NOTE: success
 ) else (
