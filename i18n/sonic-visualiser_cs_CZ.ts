@@ -4185,6 +4185,14 @@ Co chcete vyvést?</translation>
         <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>click then drag to adjust, ctrl+click to reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>drag up/down to adjust, ctrl+click to reset</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>
@@ -4908,7 +4916,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Click and drag to navigate</source>
-        <translation>Klepněte a táhněte pro navedení</translation>
+        <translation type="vanished">Klepněte a táhněte pro navedení</translation>
     </message>
     <message>
         <source>Shift+Wheel</source>
@@ -5085,6 +5093,10 @@ Doba trvání:	%3
     <message>
         <source>Click and drag to select a range; hold Cmd for multi-select; middle-click and drag to navigate</source>
         <translation>Klepněte a táhněte pro výběr rozsahu; držte klávesu Ctrl pro provedení vícenásobného výběru; klepněte prostředním tlačítkem a táhněte pro navedení</translation>
+    </message>
+    <message>
+        <source>Click and drag to navigate; use mouse-wheel or trackpad-scroll to zoom; hold Shift and drag to zoom to an area</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5378,7 +5390,7 @@ ale dostupné jsou %2. Použije se pouze první %3.
     </message>
     <message>
         <source>4 x Oversampling</source>
-        <translation>4 x převzorkování</translation>
+        <translation type="vanished">4 x převzorkování</translation>
     </message>
     <message>
         <source>24 FPS</source>
@@ -5522,7 +5534,7 @@ ale dostupné jsou %2. Použije se pouze první %3.
     </message>
     <message>
         <source>4 x Oversampling with interpolation</source>
-        <translation>4 x převzorkování s interpolací</translation>
+        <translation type="vanished">4 x převzorkování s interpolací</translation>
     </message>
     <message>
         <source>Normalise audio signal when reading from audio file</source>
@@ -5822,6 +5834,22 @@ Použít je před zavřením?</translation>
     <message>
         <source>Change sound used for playback (currently &quot;%1&quot;)</source>
         <translation>Změnit zvuk používaný pro přehrávání (nyní &quot;%1&quot;)</translation>
+    </message>
+    <message>
+        <source>click then drag to adjust, ctrl+click to reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>drag up/down to adjust, ctrl+click to reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1%2: %3</source>
+        <translation type="unfinished">%1: %3 {1%2:?}</translation>
+    </message>
+    <message>
+        <source>%1%2</source>
+        <translation type="unfinished">%1%2</translation>
     </message>
 </context>
 <context>
@@ -6865,6 +6893,26 @@ Důvodem pro to může být nedostatek paměti, nebo nedostatek místa na disku.
         <source>Hybrid</source>
         <translation>Smíšený</translation>
     </message>
+    <message>
+        <source>Oversampling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>1x</source>
+        <translation type="unfinished">1x</translation>
+    </message>
+    <message>
+        <source>2x</source>
+        <translation type="unfinished">2x</translation>
+    </message>
+    <message>
+        <source>4x</source>
+        <translation type="unfinished">4x</translation>
+    </message>
+    <message>
+        <source>8x</source>
+        <translation type="unfinished">8x</translation>
+    </message>
 </context>
 <context>
     <name>SpectrumLayer</name>
@@ -6967,6 +7015,26 @@ dB:	%5</translation>
     <message>
         <source>Hz</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Oversampling</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>1x</source>
+        <translation type="unfinished">1x</translation>
+    </message>
+    <message>
+        <source>2x</source>
+        <translation type="unfinished">2x</translation>
+    </message>
+    <message>
+        <source>4x</source>
+        <translation type="unfinished">4x</translation>
+    </message>
+    <message>
+        <source>8x</source>
+        <translation type="unfinished">8x</translation>
     </message>
 </context>
 <context>
