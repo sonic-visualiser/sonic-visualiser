@@ -46,7 +46,7 @@ cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
 
 cp icons/sv-icon*.svg "$targetdir"/usr/share/pixmaps/
 cp "$program".desktop "$targetdir"/usr/share/applications/
-cp README "$targetdir"/usr/share/doc/"$program"/
+cp README.md "$targetdir"/usr/share/doc/"$program"/
 
 perl -i -p -e "s/Architecture: .*/Architecture: $arch/" "$targetdir"/DEBIAN/control
 
