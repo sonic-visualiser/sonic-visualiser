@@ -33,9 +33,9 @@ mkdir -p "$outdir"
 
 container=$(sudo docker create "$dockertag")
 
-sudo docker cp "$container":output.tar "$outdir"
+sudo docker cp "$container":output-appimage.tar "$outdir"
 sudo docker rm "$container"
 
-( cd "$outdir" ; tar xf output.tar && rm -f output.tar )
+( cd "$outdir" ; tar xf output-appimage.tar && rm -f output-appimage.tar )
 
 sudo docker build -f "$dockerdir"/Dockerfile_test_appimage.gen "$dockerdir"
