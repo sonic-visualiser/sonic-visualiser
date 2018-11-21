@@ -1,0 +1,6 @@
+FROM ubuntu:18.04
+RUN apt-get update
+ADD output/sonic-visualiser_[[RELEASE]]_amd64.deb SV.AppImage
+RUN apt install sonic-visualiser*.deb
+RUN /usr/bin/sonic-visualiser --version
+
