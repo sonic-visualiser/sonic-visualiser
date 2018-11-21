@@ -53,5 +53,5 @@ WORKDIR ../../sonic-visualiser
 RUN ./configure
 RUN make -j3
 
-RUN deploy/linux/deploy-deb.sh [[RELEASE]]cc1-1 amd64
+RUN deploy/linux/deploy-deb.sh [[RELEASE]] amd64
 RUN tar cvf output-deb.tar *.deb && cp output-deb.tar ..
