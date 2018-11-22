@@ -204,7 +204,7 @@ public:
         m_mainWindow(0)
     {
     }
-    virtual ~SVApplication() { }
+    ~SVApplication() override { }
 
     void setMainWindow(MainWindow *mw) { m_mainWindow = mw; }
     void releaseMainWindow() { m_mainWindow = 0; }
@@ -224,7 +224,7 @@ public:
 
 protected:
     MainWindow *m_mainWindow;
-    bool event(QEvent *);
+    bool event(QEvent *) override;
 };
 
 int
