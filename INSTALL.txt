@@ -73,5 +73,13 @@ build-essential libbz2-dev libfftw3-dev libfishsound1-dev
 libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev
 libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev
 libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils
-librubberband-dev git mercurial autoconf automake libtool
+librubberband-dev git mercurial autoconf automake libtool mlton
+
+If you are building from a clone of the Sonic Visualiser developer
+repository, rather than from an official source code release package,
+then the configure script will use Repoint to obtain further checkouts
+of various modules. You will need to have a SML compiler installed for
+this to work, such as SML/NJ, MLton, or Poly/ML - hence the presence
+of mlton in the Debian package list above. This is not necessary when
+building from an official Sonic Visualiser source release.
 
