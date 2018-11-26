@@ -139,42 +139,42 @@ using std::set;
 
 MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     MainWindowBase(options),
-    m_overview(0),
+    m_overview(nullptr),
     m_mainMenusCreated(false),
-    m_paneMenu(0),
-    m_layerMenu(0),
-    m_transformsMenu(0),
-    m_playbackMenu(0),
-    m_existingLayersMenu(0),
-    m_sliceMenu(0),
-    m_recentFilesMenu(0),
-    m_recentTransformsMenu(0),
-    m_templatesMenu(0),
-    m_rightButtonMenu(0),
-    m_rightButtonLayerMenu(0),
-    m_rightButtonTransformsMenu(0),
-    m_rightButtonPlaybackMenu(0),
-    m_soloAction(0),
-    m_rwdStartAction(0),
-    m_rwdSimilarAction(0),
-    m_rwdAction(0),
-    m_ffwdAction(0),
-    m_ffwdSimilarAction(0),
-    m_ffwdEndAction(0),
-    m_playAction(0),
-    m_recordAction(0),
-    m_playSelectionAction(0),
-    m_playLoopAction(0),
+    m_paneMenu(nullptr),
+    m_layerMenu(nullptr),
+    m_transformsMenu(nullptr),
+    m_playbackMenu(nullptr),
+    m_existingLayersMenu(nullptr),
+    m_sliceMenu(nullptr),
+    m_recentFilesMenu(nullptr),
+    m_recentTransformsMenu(nullptr),
+    m_templatesMenu(nullptr),
+    m_rightButtonMenu(nullptr),
+    m_rightButtonLayerMenu(nullptr),
+    m_rightButtonTransformsMenu(nullptr),
+    m_rightButtonPlaybackMenu(nullptr),
+    m_soloAction(nullptr),
+    m_rwdStartAction(nullptr),
+    m_rwdSimilarAction(nullptr),
+    m_rwdAction(nullptr),
+    m_ffwdAction(nullptr),
+    m_ffwdSimilarAction(nullptr),
+    m_ffwdEndAction(nullptr),
+    m_playAction(nullptr),
+    m_recordAction(nullptr),
+    m_playSelectionAction(nullptr),
+    m_playLoopAction(nullptr),
     m_soloModified(false),
     m_prevSolo(false),
-    m_playControlsSpacer(0),
+    m_playControlsSpacer(nullptr),
     m_playControlsWidth(0),
-    m_preferencesDialog(0),
-    m_layerTreeDialog(0),
+    m_preferencesDialog(nullptr),
+    m_layerTreeDialog(nullptr),
     m_activityLog(new ActivityLog()),
     m_unitConverter(new UnitConverter()),
     m_keyReference(new KeyReference()),
-    m_templateWatcher(0)
+    m_templateWatcher(nullptr)
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -350,8 +350,8 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         connect(m_versionTester, SIGNAL(newerVersionAvailable(QString)),
                 this, SLOT(newerVersionAvailable(QString)));
     } else {
-        m_surveyer = 0;
-        m_versionTester = 0;
+        m_surveyer = nullptr;
+        m_versionTester = nullptr;
     }
 
 /*
@@ -447,7 +447,7 @@ MainWindow::goFullScreen()
     }
 
     QWidget *ps = m_mainScroll->takeWidget();
-    ps->setParent(0);
+    ps->setParent(nullptr);
 
     QShortcut *sc;
 
@@ -924,7 +924,7 @@ MainWindow::setupViewMenu()
 
     IconLoader il;
 
-    QAction *action = 0;
+    QAction *action = nullptr;
 
     m_keyReference->setCategory(tr("Panning and Navigation"));
 
@@ -1306,7 +1306,7 @@ MainWindow::setupPaneAndLayerMenus()
             if (menuType == paneMenuType) menu = m_paneMenu;
             else menu = m_layerMenu;
 
-            QMenu *submenu = 0;
+            QMenu *submenu = nullptr;
 
             QIcon icon;
             QString mainText, tipText, channelText;
@@ -1503,7 +1503,7 @@ MainWindow::setupPaneAndLayerMenus()
                         connect(this, SIGNAL(canAddLayer(bool)),
                                 action, SLOT(setEnabled(bool)));
                         m_layerActions.push_back
-                            ({ action, LayerConfiguration(type, 0, 0) });
+                            ({ action, LayerConfiguration(type, nullptr, 0) });
                         m_rightButtonLayerMenu->addAction(action);
                     }
                 }
@@ -1971,7 +1971,7 @@ MainWindow::setupTemplatesMenu()
 
     m_templatesMenu->addSeparator();
 
-    QAction *action = 0;
+    QAction *action = nullptr;
 
     QStringList templates = ResourceFinder().getResourceFiles("templates", "svt");
 
@@ -2235,7 +2235,7 @@ MainWindow::setupToolbars()
     connect(m_soloAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
     connect(this, SIGNAL(canChangeSolo(bool)), m_soloAction, SLOT(setEnabled(bool)));
 
-    QAction *alAction = 0;
+    QAction *alAction = nullptr;
     if (Document::canAlign()) {
         alAction = toolbar->addAction(il.load("align"),
                                       tr("Align File Timelines"));
@@ -2484,19 +2484,19 @@ MainWindow::updateMenuStates()
 {
     MainWindowBase::updateMenuStates();
 
-    Pane *currentPane = 0;
-    Layer *currentLayer = 0;
+    Pane *currentPane = nullptr;
+    Layer *currentLayer = nullptr;
 
     if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
     if (currentPane) currentLayer = currentPane->getSelectedLayer();
 
     bool haveCurrentPane =
-        (currentPane != 0);
+        (currentPane != nullptr);
     bool haveCurrentLayer =
         (haveCurrentPane &&
-         (currentLayer != 0));
+         (currentLayer != nullptr));
     bool havePlayTarget =
-        (m_playTarget != 0 || m_audioIO != 0);
+        (m_playTarget != nullptr || m_audioIO != nullptr);
     bool haveSelection = 
         (m_viewManager &&
          !m_viewManager->getSelections().empty());
@@ -2764,7 +2764,7 @@ MainWindow::exportAudio(bool asData)
 
     bool multiple = false;
 
-    MultiSelection *selectionToWrite = 0;
+    MultiSelection *selectionToWrite = nullptr;
 
     if (selections.size() == 1) {
 
@@ -3147,7 +3147,7 @@ MainWindow::exportImage()
 
     settings.setValue("lastimageexportregion", deflt);
 
-    QImage *image = 0;
+    QImage *image = nullptr;
     
     if (item == items[0]) {
         image = pane->renderToNewImage();
@@ -3328,9 +3328,9 @@ MainWindow::closeSession()
     m_keyReference->hide();
 
     delete m_document;
-    m_document = 0;
+    m_document = nullptr;
     m_viewManager->clearSelections();
-    m_timeRulerLayer = 0; // document owned this
+    m_timeRulerLayer = nullptr; // document owned this
 
     m_sessionFile = "";
     setWindowTitle(QApplication::applicationName());
@@ -3901,7 +3901,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
     Layer *newLayer = m_document->createLayer(configuration.layer);
 
     Model *suggestedModel = configuration.sourceModel;
-    Model *model = 0;
+    Model *model = nullptr;
 
     if (suggestedModel) {
 
@@ -4023,7 +4023,7 @@ MainWindow::addLayer()
         LayerFactory::LayerTypeSet emptyTypes =
             LayerFactory::getInstance()->getValidEmptyLayerTypes();
 
-        Layer *newLayer = 0;
+        Layer *newLayer = nullptr;
 
         if (emptyTypes.find(type) != emptyTypes.end()) {
 
@@ -4132,7 +4132,7 @@ MainWindow::addLayer(QString transformId)
     std::vector<Model *> candidateInputModels =
         m_document->getTransformInputModels();
 
-    Model *defaultInputModel = 0;
+    Model *defaultInputModel = nullptr;
 
     for (int j = 0; j < pane->getLayerCount(); ++j) {
 
@@ -4156,7 +4156,7 @@ MainWindow::addLayer(QString transformId)
         if (defaultInputModel) break;
     }
 
-    AggregateWaveModel *aggregate = 0;
+    AggregateWaveModel *aggregate = nullptr;
     
     if (candidateInputModels.size() > 1) {
         // Add an aggregate model as another option
@@ -4257,7 +4257,7 @@ MainWindow::findTransform()
     TransformId transform = finder->getTransform();
     delete finder;
     
-    if (getMainModel() != 0 && m_paneStack->getCurrentPane() != 0) {
+    if (getMainModel() != nullptr && m_paneStack->getCurrentPane() != nullptr) {
         addLayer(transform);
     }
 }
@@ -4484,7 +4484,7 @@ MainWindow::updatePositionStatusDisplays() const
 {
     if (!statusBar()->isVisible()) return;
 
-    Pane *pane = 0;
+    Pane *pane = nullptr;
     sv_frame_t frame = m_viewManager->getPlaybackFrame();
 
     if (m_paneStack) pane = m_paneStack->getCurrentPane();
@@ -4584,9 +4584,9 @@ MainWindow::pluginPopulationWarning()
 void
 MainWindow::midiEventsAvailable()
 {
-    Pane *currentPane = 0;
-    NoteLayer *currentNoteLayer = 0;
-    TimeValueLayer *currentTimeValueLayer = 0;
+    Pane *currentPane = nullptr;
+    NoteLayer *currentNoteLayer = nullptr;
+    TimeValueLayer *currentTimeValueLayer = nullptr;
 
     if (m_paneStack) {
         currentPane = m_paneStack->getCurrentPane();
@@ -4677,8 +4677,8 @@ MainWindow::midiEventsAvailable()
 void
 MainWindow::playStatusChanged(bool )
 {
-    Pane *currentPane = 0;
-    NoteLayer *currentNoteLayer = 0;
+    Pane *currentPane = nullptr;
+    NoteLayer *currentNoteLayer = nullptr;
 
     if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
     if (currentPane) {
@@ -4754,7 +4754,7 @@ MainWindow::modelAboutToBeDeleted(Model *model)
 {
     if (model == m_panLayer->getModel()) {
         if (model == getMainModel()) {
-            m_panLayer->setModel(0);
+            m_panLayer->setModel(nullptr);
         } else {
             m_panLayer->setModel(getMainModel());
         }

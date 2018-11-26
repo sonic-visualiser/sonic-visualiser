@@ -201,13 +201,13 @@ public:
         QApplication(argc, argv),
         m_readyForFiles(false),
         m_filepathQueue(QStringList()),
-        m_mainWindow(0)
+        m_mainWindow(nullptr)
     {
     }
     ~SVApplication() override { }
 
     void setMainWindow(MainWindow *mw) { m_mainWindow = mw; }
-    void releaseMainWindow() { m_mainWindow = 0; }
+    void releaseMainWindow() { m_mainWindow = nullptr; }
 
     virtual void commitData(QSessionManager &manager) {
         if (!m_mainWindow) return;
@@ -281,7 +281,7 @@ main(int argc, char **argv)
 
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    SVSplash *splash = 0;
+    SVSplash *splash = nullptr;
 
     QSettings settings;
 
@@ -492,7 +492,7 @@ bool SVApplication::event(QEvent *event){
     case QEvent::FileOpen:
         thePath = static_cast<QFileOpenEvent *>(event)->file();
         if(m_readyForFiles)
-            handleFilepathArgument(thePath, NULL);
+            handleFilepathArgument(thePath, nullptr);
         else
             m_filepathQueue.append(thePath);
         return true;
