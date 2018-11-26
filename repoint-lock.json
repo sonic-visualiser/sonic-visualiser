@@ -4,13 +4,13 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "232d6ddf257d"
+      "pin": "ad5f892c0c4d"
     },
     "svgui": {
-      "pin": "4c359c2b220c"
+      "pin": "05d614f6e46d"
     },
     "svapp": {
-      "pin": "4612d44ae753"
+      "pin": "26a0cb8335e3"
     },
     "checker": {
       "pin": "17fb9ff8e072"
@@ -19,7 +19,7 @@
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-vamp-cpp": {
-      "pin": "269b6c25dae4864515651790553dd8167e5831e4"
+      "pin": "1034a6c73c106d72fa7e85ae6cc00576515c6155"
     },
     "dataquay": {
       "pin": "807b55408d9e"
@@ -34,7 +34,7 @@
       "pin": "f5dee7d40378"
     },
     "bqaudioio": {
-      "pin": "b5e34fdc1716"
+      "pin": "8c4162878ae6"
     },
     "sv-dependency-builds": {
       "pin": "f1a9b270e043"
