@@ -66,6 +66,11 @@
             "service": "bitbucket",
             "owner": "breakfastquay"
         },
+        "rubberband": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
         "sv-dependency-builds": {
             "vcs": "hg",
             "service": "soundsoftware"
