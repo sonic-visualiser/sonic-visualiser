@@ -17,7 +17,9 @@ SV_INCLUDEPATH = \
 	svcore/plugin/api/alsa \
 	svgui \
 	svapp \
-	vamp-plugin-sdk
+	vamp-plugin-sdk \
+        rubberband \
+        rubberband/src
 
 DEPENDPATH += $$SV_INCLUDEPATH
 INCLUDEPATH += $$SV_INCLUDEPATH
@@ -30,6 +32,10 @@ solaris*: DEFINES += __RTMIDI_DUMMY_ONLY__
 
 # Defines for Dataquay
 DEFINES += USE_SORD
+
+# Defines for Rubber Band
+linux*:   DEFINES += USE_PTHREADS
+macx*:    DEFINES += USE_PTHREADS
 
 CONFIG += qt thread warn_on stl rtti exceptions
 
