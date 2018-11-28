@@ -13,13 +13,13 @@
       "pin": "29bef008588e"
     },
     "checker": {
-      "pin": "17fb9ff8e072"
+      "pin": "0d2d3c89fdf6"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-vamp-cpp": {
-      "pin": "269b6c25dae4864515651790553dd8167e5831e4"
+      "pin": "1034a6c73c106d72fa7e85ae6cc00576515c6155"
     },
     "dataquay": {
       "pin": "807b55408d9e"
@@ -34,7 +34,10 @@
       "pin": "f5dee7d40378"
     },
     "bqaudioio": {
-      "pin": "b5e34fdc1716"
+      "pin": "8c4162878ae6"
+    },
+    "rubberband": {
+      "pin": "2c525b771328"
     },
     "sv-dependency-builds": {
       "pin": "f1a9b270e043"
