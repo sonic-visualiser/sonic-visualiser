@@ -40,5 +40,5 @@ BQ_SOURCES += \
 	bqaudioio/src/ResamplerWrapper.cpp \
 	bqaudioio/src/SystemPlaybackTarget.cpp \
 	bqaudioio/src/SystemRecordSource.cpp \
-        rubberband/src/rubberband-everything.cpp
+        rubberband-all.cpp
         
