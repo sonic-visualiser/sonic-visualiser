@@ -2,7 +2,13 @@
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-value"
 
+#ifdef _WIN32
+#define USE_KISSFFT 1
+#define USE_SPEEX 1
+#endif
+ 
 #include "rubberband/src/rubberband-c.cpp"
 #include "rubberband/src/RubberBandStretcher.cpp"
 #include "rubberband/src/StretcherProcess.cpp"
