@@ -4,10 +4,8 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-value"
 
-#ifdef _WIN32
 #define USE_KISSFFT 1
 #define USE_SPEEX 1
-#endif
  
 #include "rubberband/src/rubberband-c.cpp"
 #include "rubberband/src/RubberBandStretcher.cpp"
