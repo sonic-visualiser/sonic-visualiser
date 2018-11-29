@@ -8,6 +8,10 @@
 
 #define USE_KISSFFT 1
 #define USE_SPEEX 1
+
+#ifdef _MSC_VER
+#define __MSVC__
+#endif
  
 #include "rubberband/src/rubberband-c.cpp"
 #include "rubberband/src/RubberBandStretcher.cpp"
