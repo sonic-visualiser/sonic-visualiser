@@ -210,51 +210,51 @@
     <name>CSVAudioFormatDialog</name>
     <message>
         <source>Select Audio Data Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat formát zvukových dat</translation>
     </message>
     <message>
         <source>Please select the correct data format for this file.</source>
-        <translation type="unfinished">Vyberte, prosím, správný datový formát pro tento soubor.</translation>
+        <translation>Vyberte, prosím, správný datový formát pro tento soubor.</translation>
     </message>
     <message>
         <source>&lt;ignore&gt;</source>
-        <translation type="unfinished">&lt;nevšímat si&gt;</translation>
+        <translation>&lt;nevšímat si&gt;</translation>
     </message>
     <message>
         <source>Audio channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvukové kanály</translation>
     </message>
     <message>
         <source>(%1 more)</source>
-        <translation type="unfinished">%1 (více)</translation>
+        <translation>%1 (více)</translation>
     </message>
     <message>
         <source>Audio channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Zvukový kanál</translation>
     </message>
     <message>
         <source>Audio sample rate (Hz):</source>
-        <translation type="unfinished">Vzorkovací kmitočet zvuku (Hz):</translation>
+        <translation>Vzorkovací kmitočet zvuku (Hz):</translation>
     </message>
     <message>
         <source>Sample values are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vzorkovací kmitočty jsou:</translation>
     </message>
     <message>
         <source>Floating-point in range -1 to 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Plovoucí bod v rozsahu -1 to 1</translation>
     </message>
     <message>
         <source>8-bit in range 0 to 255</source>
-        <translation type="unfinished"></translation>
+        <translation>8-bit v rozsahu 0 až 255</translation>
     </message>
     <message>
         <source>16-bit in range -32768 to 32767</source>
-        <translation type="unfinished"></translation>
+        <translation>16-bit v rozsahu -32768 až 32767</translation>
     </message>
     <message>
         <source>Unknown range: normalise on load</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámý rozsah: normalizovat při nahrání</translation>
     </message>
 </context>
 <context>
@@ -604,7 +604,7 @@ Hodnota:	%4</translation>
     </message>
     <message>
         <source>(bin %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>(koš %1)</translation>
     </message>
 </context>
 <context>
@@ -4131,67 +4131,67 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Překlad rozhraní do ruštiny poskytnut Alexandrem Prokoudinem.</translation>
     </message>
     <message>
         <source>Czech UI translation contributed by Pavel Fric.</source>
-        <translation type="unfinished"></translation>
+        <translation>Překlad rozhraní do češtiny poskytnut Pavlem Fricem.</translation>
     </message>
     <message>
         <source>Shift+;</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+;</translation>
     </message>
     <message>
         <source>Ctrl+Shift+;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+;</translation>
     </message>
     <message>
         <source>Convert Audio from Data File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Převést zvuk z datového souboru...</translation>
     </message>
     <message>
         <source>Convert and import audio sample values from a CSV data file</source>
-        <translation type="unfinished"></translation>
+        <translation>Převést a zavést hodnoty zvukových vzorků z datového souboru CSV</translation>
     </message>
     <message>
         <source>Export Audio to Data File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést zvuk do datového souboru...</translation>
     </message>
     <message>
         <source>Export audio from selection into a CSV data file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést zvuk z výběru do datového souboru CSV</translation>
     </message>
     <message>
         <source>Browse Recorded and Converted Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Procházet nahraný a převedený zvuk</translation>
     </message>
     <message>
         <source>What&apos;s &amp;New In This Release?</source>
-        <translation type="unfinished"></translation>
+        <translation>Co &amp;nového v tomto vydání?</translation>
     </message>
     <message>
         <source>List the changes in this release (and every previous release) of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Uvést změny v tomto vydání (a v každém z předchozích vydání) %1</translation>
     </message>
     <message>
         <source>Converting audio data...</source>
-        <translation type="unfinished"></translation>
+        <translation>Převádí se zvuková data...</translation>
     </message>
     <message>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Audio data file %1 could not be opened.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Soubor se nepodařilo otevřít&lt;/b&gt;&lt;p&gt;Ssoubor se zvukovými daty &quot;%1&quot; se nepodařilo otevřít.</translation>
     </message>
     <message>
         <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Nepodařilo se nahrát přídavné moduly&lt;/b&gt;</translation>
     </message>
     <message>
         <source>click then drag to adjust, ctrl+click to reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Klepněte a táhněte pro přizpůsobení, Ctrl+klepnutí pro vrácení do výchozího stavu</translation>
     </message>
     <message>
         <source>drag up/down to adjust, ctrl+click to reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Táhněte nahoru/dolů pro přizpůsobení, Ctrl+klepnutí pro vrácení do výchozího stavu</translation>
     </message>
 </context>
 <context>
@@ -4416,20 +4416,21 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Nedostatek paměti</translation>
     </message>
     <message>
         <source>&lt;b&gt;Not enough memory&lt;/b&gt;&lt;p&gt;There doesn&apos;t appear to be enough memory to accommodate any necessary temporary data.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Nedostatek paměti&lt;/b&gt;&lt;p&gt;&lt;/p&gt;Zdá se, že na disku není dostatek paměti na to, aby pojala všechna nezbytná dočasná data.&lt;p&gt;</translation>
     </message>
     <message>
         <source>Incomplete session loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Nahráno neúplné sezení</translation>
     </message>
     <message>
         <source>Some of the audio content referred to by the original session file could not be loaded.
 If you save this session, it will be saved without any reference to that audio, and information may be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Něco ze zvukového obsahu, na který odkazuje původní soubor se sezením se nepodařilo nahrát.
+Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk a může dojít ke ztrátě informací.</translation>
     </message>
 </context>
 <context>
@@ -5096,7 +5097,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Click and drag to navigate; use mouse-wheel or trackpad-scroll to zoom; hold Shift and drag to zoom to an area</source>
-        <translation type="unfinished"></translation>
+        <translation>Klepněte a táhněte pro pohyb; použijte kolečko myši nebo polohovací plošku počítače pro přibližování/oddalování; podržte Shift a táhněte pro přiblížení na oblast</translation>
     </message>
 </context>
 <context>
@@ -5251,119 +5252,120 @@ ale dostupné jsou %2. Použije se pouze první %3.
     <name>PluginPathConfigurator</name>
     <message>
         <source>Move the selected location later in the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Posunout vybrané umístění v seznamu dolů</translation>
     </message>
     <message>
         <source>Move the selected location earlier in the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Posunout vybrané umístění v seznamu nahoru</translation>
     </message>
     <message>
         <source>Add a new location to the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidat do seznamu nové umístění</translation>
     </message>
     <message>
         <source>Remove the selected location from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Odstranit vybrané umístění ze seznamu</translation>
     </message>
     <message>
         <source>Reset to Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit znovu na výchozí</translation>
     </message>
     <message>
         <source>Reset the list for this plugin type to its default</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit seznam pro tento typ přídavného modulu znovu na výchozí</translation>
     </message>
     <message>
         <source>Review plugins...</source>
-        <translation type="unfinished"></translation>
+        <translation>Přezkoumat přídavné moduly...</translation>
     </message>
     <message>
         <source>Plugin locations for plugin type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Umístění přídavných modulů pro typ přídavného modulu:</translation>
     </message>
     <message>
         <source>Vamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Vamp</translation>
     </message>
     <message>
         <source>LADSPA</source>
-        <translation type="unfinished"></translation>
+        <translation>LADSPA</translation>
     </message>
     <message>
         <source>DSSI</source>
-        <translation type="unfinished"></translation>
+        <translation>DSSI</translation>
     </message>
     <message>
         <source>Vamp (32-bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>Vamp (32-bitů)</translation>
     </message>
     <message>
         <source>LADSPA (32-bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>LADSPA (32-bitů)</translation>
     </message>
     <message>
         <source>DSSI (32-bit)</source>
-        <translation type="unfinished"></translation>
+        <translation>DSSI (32-bitů)</translation>
     </message>
     <message>
         <source>(Variable is currently unset)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Proměnná nyní není nastavena)</translation>
     </message>
     <message>
         <source>(Current value begins: &quot;%1 ...&quot;)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Nynější hodnota začíná: &quot;%1 ...&quot;)</translation>
     </message>
     <message>
         <source>(Currently set to: &quot;%1&quot;)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Nyní nastaveno na: &quot;%1&quot;)</translation>
     </message>
     <message>
         <source>Allow the %1 environment variable to take priority over this
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Povolit %1 proměnnou prostředí, aby dostala přednost před
+%2</translation>
     </message>
     <message>
         <source>Choose directory to add</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat adresář k přidání</translation>
     </message>
 </context>
 <context>
     <name>PluginReviewDialog</name>
     <message>
         <source>Plugins Loaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Přídavné moduly nahrány</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <source>Library</source>
-        <translation type="unfinished"></translation>
+        <translation>Knihovna</translation>
     </message>
     <message>
         <source>Identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifikátor</translation>
     </message>
     <message>
         <source>Found in</source>
-        <translation type="unfinished"></translation>
+        <translation>Nalezeno v</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <source>Vamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Vamp</translation>
     </message>
     <message>
         <source>DSSI</source>
-        <translation type="unfinished"></translation>
+        <translation>DSSI</translation>
     </message>
     <message>
         <source>LADSPA</source>
-        <translation type="unfinished"></translation>
+        <translation>LADSPA</translation>
     </message>
 </context>
 <context>
@@ -5747,7 +5749,7 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>&amp;Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Přídavné moduly</translation>
     </message>
 </context>
 <context>
@@ -5837,19 +5839,19 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>click then drag to adjust, ctrl+click to reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Klepněte a táhněte pro přizpůsobení, Ctrl+klepnutí pro vrácení do výchozího stavu</translation>
     </message>
     <message>
         <source>drag up/down to adjust, ctrl+click to reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Táhněte nahoru/dolů pro přizpůsobení, Ctrl+klepnutí pro vrácení do výchozího stavu</translation>
     </message>
     <message>
         <source>%1%2: %3</source>
-        <translation type="unfinished">%1: %3 {1%2:?}</translation>
+        <translation>%1%2: %3</translation>
     </message>
     <message>
         <source>%1%2</source>
-        <translation type="unfinished">%1%2</translation>
+        <translation>%1%2</translation>
     </message>
 </context>
 <context>
@@ -5981,7 +5983,7 @@ Použití:
     </message>
     <message>
         <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
-        <translation type="vanished">&lt;b&gt;Nepodařilo se nahrát přídavné moduly&lt;/b&gt;&lt;p&gt;Nepodařilo se nahrát jednu nebo více knihoven s přídavnými moduly:&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;b&gt;Nepodařilo se nahrát přídavné moduly&lt;/b&gt;&lt;p&gt;Nepodařilo se nahrát jednu nebo více knihoven přídavných modulů:&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;These plugins may be incompatible with the system, and will be ignored during this run of %1.&lt;/p&gt;</source>
@@ -6045,67 +6047,67 @@ Použití:
     </message>
     <message>
         <source>Exporting audio data...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvádí se zvuková data...</translation>
     </message>
     <message>
         <source>Library file could not be opened</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubor s knihovnou se nepodařilo otevřít</translation>
     </message>
     <message>
         <source>Library has wrong architecture - possibly a 32-bit plugin installed in a 64-bit plugin folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Knihovna má špatnou architekturu - možná 32-bitový přídavný modul nainstalovaný ve složce pro 64-bitové přídavné moduly</translation>
     </message>
     <message>
         <source>Library has wrong architecture - possibly a 64-bit plugin installed in a 32-bit plugin folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Knihovna má špatnou architekturu - možná 64-bitový přídavný modul nainstalovaný ve složce pro 32-bitové přídavné moduly</translation>
     </message>
     <message>
         <source>Library depends on another library that cannot be found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Knihovna závisí na jiné knihovně, kterou nelze najít: %1</translation>
     </message>
     <message>
         <source>Library cannot be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Knihovnu nelze nahrát: %1</translation>
     </message>
     <message>
         <source>Not a valid plugin library (no descriptor found)</source>
-        <translation type="unfinished"></translation>
+        <translation>Není platnou knihovnou přídavného modulu (nenalezen popisovač)</translation>
     </message>
     <message>
         <source>Library contains no plugins</source>
-        <translation type="unfinished"></translation>
+        <translation>Knihovna neobsahuje žádné přídavné moduly</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Neznámá chyba</translation>
     </message>
     <message numerus="yes">
         <source>... and %n further failure(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>... a %n další selhání</numerusform>
+            <numerusform>... a %n další selhání</numerusform>
+            <numerusform>... a %n další(ch) selhání</numerusform>
         </translation>
     </message>
     <message>
         <source>Blue on Black</source>
-        <translation type="unfinished">Modrá na černé</translation>
+        <translation>Modrá na černé</translation>
     </message>
     <message>
         <source>Cividis</source>
-        <translation type="unfinished"></translation>
+        <translation>Cividis</translation>
     </message>
     <message>
         <source>Magma</source>
-        <translation type="unfinished"></translation>
+        <translation>Láva</translation>
     </message>
     <message>
         <source>Permission to load library was refused</source>
-        <translation type="unfinished"></translation>
+        <translation>Oprávnění k nahrání knihovny bylo odmítnuto</translation>
     </message>
     <message>
         <source>&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Nepodařilo se nahrát jednu nebo více knihoven přídavných modulů:&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -6895,23 +6897,23 @@ Důvodem pro to může být nedostatek paměti, nebo nedostatek místa na disku.
     </message>
     <message>
         <source>Oversampling</source>
-        <translation type="unfinished"></translation>
+        <translation>Převzorkování</translation>
     </message>
     <message>
         <source>1x</source>
-        <translation type="unfinished">1x</translation>
+        <translation>1x</translation>
     </message>
     <message>
         <source>2x</source>
-        <translation type="unfinished">2x</translation>
+        <translation>2x</translation>
     </message>
     <message>
         <source>4x</source>
-        <translation type="unfinished">4x</translation>
+        <translation>4x</translation>
     </message>
     <message>
         <source>8x</source>
-        <translation type="unfinished">8x</translation>
+        <translation>8x</translation>
     </message>
 </context>
 <context>
@@ -7014,27 +7016,27 @@ dB:	%5</translation>
     </message>
     <message>
         <source>Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>Hz</translation>
     </message>
     <message>
         <source>Oversampling</source>
-        <translation type="unfinished"></translation>
+        <translation>Převzorkování</translation>
     </message>
     <message>
         <source>1x</source>
-        <translation type="unfinished">1x</translation>
+        <translation>1x</translation>
     </message>
     <message>
         <source>2x</source>
-        <translation type="unfinished">2x</translation>
+        <translation>2x</translation>
     </message>
     <message>
         <source>4x</source>
-        <translation type="unfinished">4x</translation>
+        <translation>4x</translation>
     </message>
     <message>
         <source>8x</source>
-        <translation type="unfinished">8x</translation>
+        <translation>8x</translation>
     </message>
 </context>
 <context>
@@ -7908,9 +7910,9 @@ Hodnota:	%2
     <message numerus="yes">
         <source>Zoom to %n sample(s) per pixel</source>
         <translation>
-            <numerusform>Zvětšení na jeden vzorek na pixel</numerusform>
-            <numerusform>Zvětšení na %n vzorky na pixel</numerusform>
-            <numerusform>Zvětšení na %n vzorků na pixel</numerusform>
+            <numerusform>Zvětšení na %n vzorek na obrazový bod</numerusform>
+            <numerusform>Zvětšení na %n vzorky na obrazový bod</numerusform>
+            <numerusform>Zvětšení na %n vzorků na obrazový bod</numerusform>
         </translation>
     </message>
     <message>
@@ -7919,10 +7921,10 @@ Hodnota:	%2
     </message>
     <message numerus="yes">
         <source>Zoom to %n pixels per sample</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Zvětšení %n obrazový bod na vzorek</numerusform>
+            <numerusform>Zvětšení %n obrazové body na vzorek</numerusform>
+            <numerusform>Zvětšení %n obrazových bodů na vzorek</numerusform>
         </translation>
     </message>
 </context>
