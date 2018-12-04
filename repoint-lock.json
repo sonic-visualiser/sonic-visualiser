@@ -36,6 +36,12 @@
     "bqaudioio": {
       "pin": "8c4162878ae6"
     },
+    "bqaudiostream": {
+      "pin": "5b66c6b42c30"
+    },
+    "bqthingfactory": {
+      "pin": "7686116dcdd5"
+    },
     "rubberband": {
       "pin": "6990f06c9f49"
     },

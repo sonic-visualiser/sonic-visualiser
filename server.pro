@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 
-CONFIG += stl exceptions console warn_on
+CONFIG += stl exceptions console warn_on object_parallel_to_source
 CONFIG -= qt
 
 exists(config.pri) {
