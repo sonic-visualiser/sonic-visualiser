@@ -7,10 +7,10 @@
       "pin": "70e172e6cc59"
     },
     "svgui": {
-      "pin": "c8a6fd3f9dff"
+      "pin": "d057dcc827e7"
     },
     "svapp": {
-      "pin": "e2715204feaa"
+      "pin": "8c5379570f36"
     },
     "checker": {
       "pin": "0d2d3c89fdf6"
@@ -36,8 +36,11 @@
     "bqaudioio": {
       "pin": "8c4162878ae6"
     },
+    "rubberband": {
+      "pin": "6990f06c9f49"
+    },
     "sv-dependency-builds": {
-      "pin": "f1a9b270e043"
+      "pin": "85d5306e114e"
     },
     "icons/scalable": {
       "pin": "1c8844bfa946"

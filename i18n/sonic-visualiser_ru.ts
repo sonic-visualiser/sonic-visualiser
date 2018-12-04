@@ -7735,37 +7735,37 @@ Label:	%4</source>
 Метка:	%4</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1309"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1330"/>
         <source>Change Point Value</source>
         <translation>Изменить значение точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1368"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1389"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1394"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1415"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1434"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1455"/>
         <source>Delete Selected Points</source>
         <translation>Удалить выбранные точки</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1481"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1502"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1482"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1503"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1496"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1517"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
@@ -7776,28 +7776,28 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1141"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1162"/>
         <source>Draw Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1223"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1244"/>
         <source>Erase Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1283"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1304"/>
         <source>Drag Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1304"/>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1351"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1325"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1372"/>
         <source>Edit Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1306"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1327"/>
         <source>Relocate Region</source>
         <translation type="unfinished"></translation>
     </message>

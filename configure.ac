@@ -95,7 +95,6 @@ SV_MODULE_REQUIRED([fftw3],[fftw3 >= 3.0.0],[fftw3.h],[fftw3],[fftw_execute])
 SV_MODULE_REQUIRED([fftw3f],[fftw3f >= 3.0.0],[fftw3.h],[fftw3f],[fftwf_execute])
 SV_MODULE_REQUIRED([sndfile],[sndfile >= 1.0.16],[sndfile.h],[sndfile],[sf_open])
 SV_MODULE_REQUIRED([libsamplerate],[samplerate >= 0.1.2],[samplerate.h],[samplerate],[src_new])
-SV_MODULE_REQUIRED([rubberband],[rubberband],[rubberband/RubberBandStretcher.h],[rubberband],[rubberband_new])
 SV_MODULE_REQUIRED([sord],[sord-0 >= 0.5],[sord/sord.h],[sord-0],[sord_world_new])
 SV_MODULE_REQUIRED([serd],[serd-0 >= 0.5],[serd/serd.h],[serd-0],[serd_reader_read_file])
 
