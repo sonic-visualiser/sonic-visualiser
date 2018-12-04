@@ -27,6 +27,11 @@ cat "$dockerdir"/Dockerfile_test_deb.in | \
     perl -p -e "s/\[\[RELEASE\]\]/$release/g" > \
          "$dockerdir"/Dockerfile_test_deb.gen
 
+grep '^bitbucket.org' ~/.ssh/known_hosts > "$dockerdir"/known_hosts
+cp ~/.ssh/id_dsa_build "$dockerdir"/id_dsa_build
+chmod 600 "$dockerdir"/known_hosts "$dockerdir"/id_dsa_build
+trap "rm $dockerdir/known_hosts $dockerdir/id_dsa_build" 0
+
 dockertag="cannam/sonic-visualiser-deb-$current"
 
 sudo docker build -t "$dockertag" -f "$dockerdir"/Dockerfile_deb.gen "$dockerdir"
