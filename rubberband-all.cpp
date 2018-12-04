@@ -9,6 +9,9 @@
 #define USE_KISSFFT 1
 #define USE_SPEEX 1
 
+#define SV_PROFILER_H 1 // Include guard - avoid reading two Profiler.h files.
+                        // Yes, it's gross
+
 #ifdef _MSC_VER
 #define __MSVC__
 #endif
