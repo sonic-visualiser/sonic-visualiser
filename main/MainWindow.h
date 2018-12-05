@@ -54,9 +54,7 @@ protected slots:
     virtual void replaceMainAudio();
     virtual void openSomething();
     virtual void openLocation();
-       /* F. Nicol patch 13 Aug. 2016 */
-    virtual void openRecentFile(const QString& );
-       /* End of F. Nicol patch 13 Aug. 2016 */
+    virtual void openRecentFile();
     virtual void applyTemplate();
     virtual void exportAudio();
     virtual void exportAudioData();
