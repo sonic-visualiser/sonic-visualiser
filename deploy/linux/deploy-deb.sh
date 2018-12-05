@@ -45,6 +45,7 @@ mkdir -p "$targetdir"/usr/bin "$targetdir"/usr/share/pixmaps
 cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
 
 cp icons/sv-icon*.svg "$targetdir"/usr/share/pixmaps/
+cp icons/sv-128x128.png "$targetdir"/usr/share/pixmaps/sv-icon.png
 cp "$program".desktop "$targetdir"/usr/share/applications/
 cp README.md "$targetdir"/usr/share/doc/"$program"/
 
