@@ -113,7 +113,7 @@
     </message>
     <message>
         <source>(auto)</source>
-        <translation type="vanished">(auto)</translation>
+        <translation type="vanished">(automaticky)</translation>
     </message>
     <message>
         <source>Default Soundcard Device</source>
@@ -1615,7 +1615,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Waveform</source>
-        <translation>Časový průběh vlny</translation>
+        <translation>Časový průběh signálu</translation>
     </message>
     <message>
         <source>Make Measurement</source>
@@ -2079,7 +2079,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Add a new layer showing a waveform view</source>
-        <translation>Přidat novou vrstvu ukazující pohled na časový průběh vlny</translation>
+        <translation>Přidat novou vrstvu ukazující pohled na časový průběh signálu</translation>
     </message>
     <message>
         <source>White</source>
@@ -2231,7 +2231,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Standard Waveform</source>
-        <translation>Obvyklý tvar vlny</translation>
+        <translation>Obvyklý tvar křivky</translation>
     </message>
     <message>
         <source>Switch to Previous Pane</source>
@@ -3123,7 +3123,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Reset Counters</source>
-        <translation>Nastavit znovu počítadla</translation>
+        <translation>Vrátit počítadla na výchozí</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
@@ -3155,7 +3155,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Add a new pane showing a waveform view</source>
-        <translation>Přidat novou tabulku ukazující pohled na časový průběh vlny</translation>
+        <translation>Přidat novou tabulku ukazující pohled na časový průběh signálu</translation>
     </message>
     <message>
         <source>Hide centre indicator, frame times, layer names and scale</source>
@@ -3599,7 +3599,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Add &amp;Waveform</source>
-        <translation>Přidat &amp;časový průběh vlny</translation>
+        <translation>Přidat &amp;časový průběh signálu</translation>
     </message>
     <message>
         <source>Open Lo&amp;cation...</source>
@@ -3611,7 +3611,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>&lt;b&gt;Select a target for import&lt;/b&gt;&lt;p&gt;This RDF document refers to one or more audio files.&lt;br&gt;You already have an audio waveform loaded.&lt;br&gt;What would you like to do with the new data?</source>
-        <translation>&lt;b&gt;Vybrat cíl pro zavedení&lt;/b&gt;&lt;p&gt; Tento dokument RDF odkazuje na jeden nebo více zvukových souborů.&lt;p&gt;Již jste nahrál jeden zvukový časový průběh vlny.&lt;br&gt;Co chcete udělat s novými daty?</translation>
+        <translation>&lt;b&gt;Vybrat cíl pro zavedení&lt;/b&gt;&lt;p&gt; Tento dokument RDF odkazuje na jeden nebo více zvukových souborů.&lt;p&gt;Již jste nahrál jeden zvukový časový průběh signálu.&lt;br&gt;Co chcete udělat s novými daty?</translation>
     </message>
     <message>
         <source>Scroll the current pane a big step to the right</source>
@@ -3667,7 +3667,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Reset Numbering Counters</source>
-        <translation>Nastavit číslovací počítadla znovu</translation>
+        <translation>Vrátit číslovací počítadla na výchozí</translation>
     </message>
     <message>
         <source>Reset to 1 all the counters used for counter-based labelling</source>
@@ -3703,7 +3703,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Go Full-Screen</source>
-        <translation>Jít na celou obrazovku</translation>
+        <translation>Na celou obrazovku</translation>
     </message>
     <message>
         <source>F11</source>
@@ -4597,7 +4597,7 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
     </message>
     <message>
         <source>Linear</source>
-        <translation>Přímočaré</translation>
+        <translation>Lineární</translation>
     </message>
     <message>
         <source>Change Point Value</source>
@@ -5321,7 +5321,7 @@ ale dostupné jsou %2. Použije se pouze první %3.
     <message>
         <source>Allow the %1 environment variable to take priority over this
 %2</source>
-        <translation>Povolit %1 proměnnou prostředí, aby dostala přednost před
+        <translation>Povolit proměnnou prostředí %1, aby dostala přednost před
 %2</translation>
     </message>
     <message>
@@ -5436,7 +5436,7 @@ ale dostupné jsou %2. Použije se pouze první %3.
     </message>
     <message>
         <source>Linear interpolation</source>
-        <translation>Přímočará interpolace</translation>
+        <translation>Lineární (přímočará) interpolace</translation>
     </message>
     <message>
         <source>Blackman-Harris</source>
@@ -5576,7 +5576,7 @@ ale dostupné jsou %2. Použije se pouze první %3.
     </message>
     <message>
         <source>Load mp3 files in gapless mode</source>
-        <translation>Nahrát soubory MP v bezmezerovém režimu</translation>
+        <translation>Nahrát soubory MP3 v bezmezerovém režimu</translation>
     </message>
 </context>
 <context>
@@ -5601,7 +5601,7 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>Standard Waveform</source>
-        <translation>Obvyklý tvar vlny</translation>
+        <translation>Obvyklý tvar křivky</translation>
     </message>
     <message>
         <source>&lt;b&gt;Restart required&lt;/b&gt;&lt;p&gt;One or more of the application preferences you have changed may not take full effect until Sonic Visualiser is restarted.&lt;/p&gt;&lt;p&gt;Please exit and restart the application now if you want these changes to take effect immediately.&lt;/p&gt;</source>
@@ -5705,11 +5705,11 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>(auto)</source>
-        <translation>(auto)</translation>
+        <translation>(automaticky)</translation>
     </message>
     <message>
         <source>Overview waveform colour:</source>
-        <translation>Barva tvaru vlny přehledu:</translation>
+        <translation>Barva tvaru křivky přehledu:</translation>
     </message>
     <message>
         <source>Run Vamp plugins in separate process:</source>
@@ -5721,7 +5721,7 @@ Použít je před zavřením?</translation>
     </message>
     <message>
         <source>(Use &quot;%1&quot; in the File menu to add to these.)</source>
-        <translation>Použít &quot;%1&quot; v nabídce Soubor pro přidání k těmto.)</translation>
+        <translation>Pro přidání k těmto použít &quot;%1&quot; v nabídce Soubor.</translation>
     </message>
     <message>
         <source>Export Session as Template...</source>
@@ -6209,7 +6209,7 @@ Použití:
     </message>
     <message>
         <source>Linear</source>
-        <translation>Přímočarý</translation>
+        <translation>Lineární</translation>
     </message>
     <message>
         <source>New Region</source>
@@ -6429,7 +6429,7 @@ Rozsah:	%3 vzorky (%4)</translation>
     </message>
     <message>
         <source>Linear</source>
-        <translation>Přímočarý</translation>
+        <translation>Lineární</translation>
     </message>
     <message>
         <source>Plot Type</source>
@@ -6773,7 +6773,7 @@ Koš:	%5
     </message>
     <message>
         <source>Linear</source>
-        <translation>Přímočarý</translation>
+        <translation>Lineární</translation>
     </message>
     <message>
         <source>No max</source>
@@ -7367,7 +7367,7 @@ Hodnota:	%2%3
     </message>
     <message>
         <source>Linear</source>
-        <translation>Přímočaré</translation>
+        <translation>Lineární</translation>
     </message>
     <message>
         <source>Points</source>
@@ -7993,7 +7993,7 @@ Hodnota:	%2
     </message>
     <message>
         <source>Linear</source>
-        <translation>Přímočarý</translation>
+        <translation>Lineární</translation>
     </message>
     <message>
         <source>Channel %1</source>
