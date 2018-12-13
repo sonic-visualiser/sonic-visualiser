@@ -1,6 +1,10 @@
 
-To compile Sonic Visualiser from source
-=======================================
+How to compile Sonic Visualiser from source
+===========================================
+
+(NOTE: Refer also to .travis.yml and .appveyor.yml to see what the
+continuous-integration processes do to run a build)
+
 
 Windows
 -------
@@ -16,12 +20,18 @@ https://code.soundsoftware.ac.uk/projects/sonic-visualiser/wiki/WindowsBuild30
 MacOS
 -----
 
-Build from the command line, but don't use the configure script.
-Instead install Qt v5.x and run
+Build from the command line, but do not use the configure script.
 
-$ ./repoint install
-$ qmake -r  # you may need to use the full path to your Qt qmake here
-$ make
+Install Qt5, either via Homebrew or from the official installer.
+
+If you are building Sonic Visualiser from a repository checkout,
+install Poly/ML via Homebrew (`brew install polyml`) and run
+`./repoint install` before proceeding. This isn't necessary when
+building from an official source release.
+
+Then run `qmake -r` and `make`. (You may need to provide the full path
+to the correct `qmake` executable for the version of Qt you want to
+build with.)
 
 
 Linux
@@ -75,10 +85,9 @@ libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev
 libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils
 librubberband-dev git mercurial autoconf automake libtool mlton
 
-If you are building from a clone of the Sonic Visualiser developer
-repository, rather than from an official source code release package,
-then the configure script will use Repoint to obtain further checkouts
-of various modules. You will need to have a SML compiler installed for
+If you are building Sonic Visualiser from a repository checkout, then
+the configure script will use Repoint to obtain further checkouts of
+various modules. You will need to have a SML compiler installed for
 this to work, such as SML/NJ, MLton, or Poly/ML - hence the presence
 of mlton in the Debian package list above. This is not necessary when
 building from an official Sonic Visualiser source release.
