@@ -98,7 +98,7 @@
     <message>
         <location filename="../svgui/widgets/AudioDial.cpp" line="419"/>
         <source>%1: %2</source>
-        <translation type="unfinished">%1: %2</translation>
+        <translation>%1: %2</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/AudioDial.cpp" line="431"/>
@@ -250,12 +250,12 @@
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="45"/>
         <source>Select Audio Data Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать формат звуковых данных</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="52"/>
         <source>Please select the correct data format for this file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите корректный формат данных для этого файла.</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="82"/>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="83"/>
         <source>Audio channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Звуковые каналы</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="89"/>
@@ -276,37 +276,37 @@
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="94"/>
         <source>Audio channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Звуковой канал</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="117"/>
         <source>Audio sample rate (Hz):</source>
-        <translation type="unfinished">Частота сэмплирования звука (Гц):</translation>
+        <translation>Частота сэмплирования (Гц):</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="139"/>
         <source>Sample values are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Значения выборок:</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="143"/>
         <source>Floating-point in range -1 to 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Плавающая точка в диапазоне от -1 до 1</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="144"/>
         <source>8-bit in range 0 to 255</source>
-        <translation type="unfinished"></translation>
+        <translation>8 бит в диапазоне от 0 до 255</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="145"/>
         <source>16-bit in range -32768 to 32767</source>
-        <translation type="unfinished"></translation>
+        <translation>16 бит в диапазоне от -32768 до 32767</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVAudioFormatDialog.cpp" line="146"/>
         <source>Unknown range: normalise on load</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный диапазон: нормировать при загрузке</translation>
     </message>
 </context>
 <context>
@@ -359,7 +359,7 @@
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="52"/>
         <source>Please select the correct data format for this file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите корректный формат данных для этого файла.</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="82"/>
@@ -370,7 +370,7 @@
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="83"/>
         <source>Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Значения</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="89"/>
@@ -380,57 +380,57 @@
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="95"/>
         <source>Time</source>
-        <translation type="unfinished">Время</translation>
+        <translation>Время</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="96"/>
         <source>End time</source>
-        <translation type="unfinished"></translation>
+        <translation>Время конца</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="97"/>
         <source>Duration</source>
-        <translation type="unfinished">Длительность</translation>
+        <translation>Длительность</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="98"/>
         <source>Value</source>
-        <translation type="unfinished">Значение</translation>
+        <translation>Значение</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="99"/>
         <source>Pitch</source>
-        <translation type="unfinished">Высота тона</translation>
+        <translation>Высота тона</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="100"/>
         <source>Label</source>
-        <translation type="unfinished">Метка</translation>
+        <translation>Метка</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="122"/>
         <source>Timing is specified:</source>
-        <translation type="unfinished"></translation>
+        <translation>Как определено время:</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="127"/>
         <source>Explicitly, in seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Явно, в секундах</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="128"/>
         <source>Explicitly, in milliseconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Явно, в миллисекундах</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="129"/>
         <source>Explicitly, in audio sample frames</source>
-        <translation type="unfinished"></translation>
+        <translation>Явно, в аудиовыборках</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="130"/>
         <source>Implicitly: rows are equally spaced in time</source>
-        <translation type="unfinished"></translation>
+        <translation>Неявно, строки равно расставлены во времени</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="157"/>
@@ -445,7 +445,7 @@
     <message>
         <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="257"/>
         <source>Data will be displayed in a %1 layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Данные будут показаны в слое %1.</translation>
     </message>
     <message>
         <source>
@@ -534,7 +534,7 @@ Bin:	%3
     <message>
         <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="272"/>
         <source>Normalization</source>
-        <translation type="unfinished"></translation>
+        <translation>Нормировка</translation>
     </message>
     <message>
         <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="276"/>
@@ -564,12 +564,12 @@ Bin:	%3
     <message>
         <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="426"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Вид</translation>
     </message>
     <message>
         <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="427"/>
         <source>Hybrid</source>
-        <translation type="unfinished"></translation>
+        <translation>Гибрид</translation>
     </message>
     <message>
         <location filename="../svgui/layer/Colour3DPlotLayer.cpp" line="461"/>
@@ -582,22 +582,22 @@ Bin:	%3
     <message>
         <location filename="../svgui/widgets/ColourComboBox.cpp" line="59"/>
         <source>Name New Colour</source>
-        <translation type="unfinished">Дайте цвету название</translation>
+        <translation>Дайте цвету название</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/ColourComboBox.cpp" line="60"/>
         <source>Enter a name for the new colour:</source>
-        <translation type="unfinished">Введите название нового цвета:</translation>
+        <translation>Введите название нового цвета:</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/ColourComboBox.cpp" line="62"/>
         <source>Prefer black background for this colour</source>
-        <translation type="unfinished">Предпочитать черный фон для этого цвета</translation>
+        <translation>Предпочитать черный фон для этого цвета</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/ColourComboBox.cpp" line="94"/>
         <source>Add New Colour...</source>
-        <translation type="unfinished">Добавить новый цвет...</translation>
+        <translation>Добавить новый цвет...</translation>
     </message>
 </context>
 <context>
@@ -728,7 +728,7 @@ Bin:	%3
     <message>
         <location filename="../svcore/data/fileio/CoreAudioFileReader.cpp" line="162"/>
         <source>Decoding %1...</source>
-        <translation type="unfinished">Декодируется %1...</translation>
+        <translation>Декодируется %1...</translation>
     </message>
 </context>
 <context>
@@ -736,7 +736,7 @@ Bin:	%3
     <message>
         <location filename="../svcore/data/fileio/DecodingWavFileReader.cpp" line="68"/>
         <source>Decoding %1...</source>
-        <translation type="unfinished">Декодируется %1...</translation>
+        <translation>Декодируется %1...</translation>
     </message>
 </context>
 <context>
@@ -947,7 +947,7 @@ Bin:	%3
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="110"/>
         <source>Vertical Scale</source>
-        <translation type="unfinished">Верт. масштаб</translation>
+        <translation>Верт. масштаб</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="111"/>
@@ -977,33 +977,33 @@ Bin:	%3
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="179"/>
         <source>MIDI Notes</source>
-        <translation type="unfinished">Ноты MIDI</translation>
+        <translation>Ноты MIDI</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="521"/>
         <source>In progress</source>
-        <translation type="unfinished">В процессе</translation>
+        <translation>В процессе</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="523"/>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="547"/>
         <source>No local points</source>
-        <translation type="unfinished">Нет локальных точек</translation>
+        <translation>Нет локальных точек</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="561"/>
         <source>%1 (%2, %3 Hz)</source>
-        <translation type="unfinished">%1 (%2, %3 Гц)</translation>
+        <translation>%1 (%2, %3 Гц)</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="568"/>
         <source>%1 Hz (%2, %3)</source>
-        <translation type="unfinished">%1Гц (%2, %3)</translation>
+        <translation>%1Гц (%2, %3)</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="574"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="581"/>
@@ -1011,7 +1011,7 @@ Bin:	%3
 Pitch:	%2
 Duration:	%3
 No label</source>
-        <translation type="unfinished">Время:	%1
+        <translation>Время:	%1
 Высота тона:	%2
 Длительность:	%3
 Без метки</translation>
@@ -1022,7 +1022,7 @@ No label</source>
 Pitch:	%2
 Duration:	%3
 Label:	%4</source>
-        <translation type="unfinished">Время:	%1
+        <translation>Время:	%1
 Высота тона:	%2
 Длительность:	%3
 Метка:	%4</translation>
@@ -1030,39 +1030,39 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="979"/>
         <source>Draw Point</source>
-        <translation type="unfinished">Нарисовать точку</translation>
+        <translation>Нарисовать точку</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1055"/>
         <source>Erase Point</source>
-        <translation type="unfinished"></translation>
+        <translation>Стереть точку</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1136"/>
         <source>Drag Point</source>
-        <translation type="unfinished">Перетащить точку</translation>
+        <translation>Перетащить точку</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1218"/>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1291"/>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1611"/>
         <source>Edit Point</source>
-        <translation type="unfinished">Изменить точку</translation>
+        <translation>Изменить точку</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1220"/>
         <source>Relocate Point</source>
-        <translation type="unfinished">Переместить точку</translation>
+        <translation>Переместить точку</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1223"/>
         <source>Change Point Value</source>
-        <translation type="unfinished">Изменить значение точки</translation>
+        <translation>Изменить значение точки</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1355"/>
         <source>Add Point</source>
-        <translation type="unfinished">Добавить точку</translation>
+        <translation>Добавить точку</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1395"/>
@@ -1072,28 +1072,28 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1444"/>
         <source>Merge Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Объединить ноты</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1627"/>
         <source>Drag Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Перетащить выделение</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1652"/>
         <source>Resize Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменить размер выделения</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1691"/>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1713"/>
         <source>Delete Selected Points</source>
-        <translation type="unfinished">Удалить выбранные точки</translation>
+        <translation>Удалить выбранные точки</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1762"/>
         <source>Re-align pasted items?</source>
-        <translation type="unfinished">Заново выровнять вставленные объекты?</translation>
+        <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1763"/>
@@ -1103,7 +1103,7 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1777"/>
         <source>Paste</source>
-        <translation type="unfinished">Вставить</translation>
+        <translation>Вставить</translation>
     </message>
     <message>
         <location filename="../svgui/layer/FlexiNoteLayer.cpp" line="1848"/>
@@ -1485,7 +1485,9 @@ All files (*.*)</source>
         <source>%1 session files (*.%1)
 RDF files (%3)
 All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы сессий %1 (*.%1)
+Файлы RDF (%3)
+Все файлы (*.*)</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/InteractiveFileFinder.cpp" line="103"/>
@@ -1547,13 +1549,19 @@ Audio files (%1)
 Layer files (%2)
 RDF files (%3)
 All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Все поддерживаемые файлы (*.sv %1 %2 %3)
+Файлы сессий %4 (*.%5)
+Звуковые файлы (%1)
+Файлы слоёв (%2)
+Файлы RDF (%3)
+Все файлы (*.*)</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/InteractiveFileFinder.cpp" line="249"/>
         <source>%1 session files (*.%2)
 All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы сессий %1 (*.%2)
+Все файлы (*.*)</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/InteractiveFileFinder.cpp" line="256"/>
@@ -1789,7 +1797,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../svgui/widgets/KeyReference.cpp" line="176"/>
         <source>%1: Key and Mouse Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: справка по клавиатурным комбинациям и мыши</translation>
     </message>
     <message>
         <source>Sonic Visualiser: Key and Mouse Reference</source>
@@ -1962,7 +1970,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../svgui/layer/LayerFactory.cpp" line="99"/>
         <source>Unknown Layer</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный слой</translation>
     </message>
     <message>
         <source>Layer</source>
@@ -2519,7 +2527,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="503"/>
         <source>Abandon the current %1 session and start a new one</source>
-        <translation type="unfinished"></translation>
+        <translation>Отказаться от текущей сессии %1 и начать новую</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="529"/>
@@ -2534,12 +2542,12 @@ Do you want to locate it?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="552"/>
         <source>Save the current session into a %1 session file</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить текущую сессию в файл сессии %1</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="562"/>
         <source>Save the current session into a new %1 session file</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить текущую сессию в новый файл сессии %1</translation>
     </message>
     <message>
         <source>Export Audio Data...</source>
@@ -2572,7 +2580,7 @@ Do you want to locate it?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="629"/>
         <source>Open the Recorded Audio folder in the system file browser</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть папку с записанным звуком в файловом менеджере</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="666"/>
@@ -2582,17 +2590,17 @@ Do you want to locate it?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="806"/>
         <source>Shift+;</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+;</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="824"/>
         <source>Ctrl+Shift+;</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+;</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="836"/>
         <source>Ctrl+Shift+Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+Return</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="887"/>
@@ -4023,7 +4031,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="1157"/>
         <source>Shift+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+W</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="1340"/>
@@ -4038,7 +4046,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="1165"/>
         <source>Shift+G</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+G</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="1171"/>
@@ -4048,7 +4056,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="1173"/>
         <source>Shift+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+M</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="1360"/>
@@ -4063,7 +4071,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="1181"/>
         <source>Shift+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+K</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="1187"/>
@@ -4073,7 +4081,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="1189"/>
         <source>Shift+U</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift+U</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="1519"/>
@@ -4148,7 +4156,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="1917"/>
         <source>Open the %1 reference manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть справочник по %1</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="1922"/>
@@ -4182,7 +4190,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="1966"/>
         <source>Standard Waveform</source>
-        <translation type="unfinished">Обычная волновая форма сигнала</translation>
+        <translation>Обычная волновая форма сигнала</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2002"/>
@@ -4252,12 +4260,12 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="2193"/>
         <source>Ctrl+Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Space</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2194"/>
         <source>Record a new audio file</source>
-        <translation type="unfinished"></translation>
+        <translation>Записать новый звуковой файл</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2208"/>
@@ -4500,7 +4508,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="2453"/>
         <source>Measure Area</source>
-        <translation type="unfinished">Измерить область</translation>
+        <translation>Измерить область</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2454"/>
@@ -4510,7 +4518,7 @@ What do you want to export?</source>
     <message>
         <location filename="../main/MainWindow.cpp" line="2456"/>
         <source>Measure Item</source>
-        <translation type="unfinished">Измерить объект</translation>
+        <translation>Измерить объект</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="2457"/>
@@ -5127,7 +5135,7 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
     <message>
         <location filename="../main/MainWindow.cpp" line="5083"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; A newer version of Sonic Visualiser is available.&lt;br&gt;(Version %1 is available; you are using version %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Примечание:&lt;/b&gt; доступна новая версия Sonic Visualiser.&lt;br&gt;(Доступна версия %1; вы пользуетесь версией %2)</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="5129"/>
@@ -5212,7 +5220,7 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
     <message>
         <location filename="../main/MainWindow.cpp" line="5258"/>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>О программе %1</translation>
     </message>
     <message>
         <location filename="../main/MainWindow.cpp" line="5326"/>
@@ -7251,12 +7259,12 @@ Apply them before closing?</source>
     <message>
         <location filename="../svgui/widgets/PropertyBox.cpp" line="870"/>
         <source>%1%2: %3</source>
-        <translation type="unfinished">%1: %3 {1%2:?}</translation>
+        <translation>%1%2: %3</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/PropertyBox.cpp" line="873"/>
         <source>%1%2</source>
-        <translation type="unfinished">%1%2</translation>
+        <translation>%1%2</translation>
     </message>
     <message>
         <source>Add New Colour...</source>
@@ -7898,7 +7906,7 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/layer/SliceLayer.cpp" line="183"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Первый</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SliceLayer.cpp" line="184"/>
@@ -8275,12 +8283,12 @@ Range:	%3 samples (%4)</source>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="259"/>
         <source>Oversampling</source>
-        <translation type="unfinished"></translation>
+        <translation>Оверсэмплинг</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="260"/>
         <source>Normalization</source>
-        <translation type="unfinished"></translation>
+        <translation>Нормировка</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="482"/>
@@ -8290,32 +8298,32 @@ Range:	%3 samples (%4)</source>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="483"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вид</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="484"/>
         <source>Hybrid</source>
-        <translation type="unfinished"></translation>
+        <translation>Гибридный</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="505"/>
         <source>1x</source>
-        <translation type="unfinished">1x</translation>
+        <translation>1x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="506"/>
         <source>2x</source>
-        <translation type="unfinished">2x</translation>
+        <translation>2x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="507"/>
         <source>4x</source>
-        <translation type="unfinished">4x</translation>
+        <translation>4x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="508"/>
         <source>8x</source>
-        <translation type="unfinished">8x</translation>
+        <translation>8x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrogramLayer.cpp" line="514"/>
@@ -8626,12 +8634,12 @@ There may be insufficient memory or disc space to continue.</source>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="163"/>
         <source>Oversampling</source>
-        <translation type="unfinished"></translation>
+        <translation>Оверсэмплинг</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="191"/>
         <source>Bins</source>
-        <translation type="unfinished">Бины</translation>
+        <translation>Бины</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="257"/>
@@ -8661,22 +8669,22 @@ There may be insufficient memory or disc space to continue.</source>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="267"/>
         <source>1x</source>
-        <translation type="unfinished">1x</translation>
+        <translation>1x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="268"/>
         <source>2x</source>
-        <translation type="unfinished">2x</translation>
+        <translation>2x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="269"/>
         <source>4x</source>
-        <translation type="unfinished">4x</translation>
+        <translation>4x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="270"/>
         <source>8x</source>
-        <translation type="unfinished">8x</translation>
+        <translation>8x</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="661"/>
@@ -8700,7 +8708,7 @@ There may be insufficient memory or disc space to continue.</source>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="912"/>
         <source>Hz</source>
-        <translation type="unfinished"></translation>
+        <translation>Гц</translation>
     </message>
     <message>
         <source>-Inf</source>
@@ -8725,7 +8733,7 @@ dB:	%6</source>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="706"/>
         <source>First</source>
-        <translation type="unfinished"></translation>
+        <translation>Первый</translation>
     </message>
     <message>
         <location filename="../svgui/layer/SpectrumLayer.cpp" line="707"/>
@@ -8766,12 +8774,12 @@ dB:	%5</source>
     <message>
         <location filename="../main/Surveyer.cpp" line="97"/>
         <source>Yes! Take me to the survey</source>
-        <translation type="unfinished">Да, я хочу заполнить отчёт</translation>
+        <translation>Да, я хочу заполнить отчёт</translation>
     </message>
     <message>
         <location filename="../main/Surveyer.cpp" line="98"/>
         <source>No, thanks</source>
-        <translation type="unfinished">Спасибо, нет</translation>
+        <translation>Спасибо, нет</translation>
     </message>
 </context>
 <context>
@@ -9249,39 +9257,35 @@ What values do you want to use for these items?</source>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="617"/>
         <source>%1 Hz (%2, %3)</source>
-        <translation type="unfinished">%1Гц (%2, %3)</translation>
+        <translation>%1Гц (%2, %3)</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="622"/>
         <source>%1 %2</source>
-        <translation type="unfinished">%1 %2</translation>
+        <translation>%1 %2</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="624"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="630"/>
         <source>Time:	%1
 Value:	%2
 No label</source>
-        <translation type="unfinished">Время:	%1
+        <translation>Время:	%1
 Значение:	%2%3
-Без метки {1
-?} {2
-?}</translation>
+Без метки</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="634"/>
         <source>Time:	%1
 Value:	%2
 Label:	%4</source>
-        <translation type="unfinished">Время:	%1
+        <translation>Время:	%1
 Значение:	%2%3
-Метка:	%4 {1
-?} {2
-?}</translation>
+Метка:	%4</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="1473"/>
@@ -9291,7 +9295,7 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="1715"/>
         <source>Re-align pasted items?</source>
-        <translation type="unfinished">Заново выровнять вставленные объекты?</translation>
+        <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="1716"/>
@@ -9301,12 +9305,12 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="1830"/>
         <source>Select cycle size</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите размер цикла</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="1831"/>
         <source>Cycle size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер цикла:</translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="117"/>
@@ -9619,28 +9623,28 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="50"/>
         <source>Pitch</source>
-        <translation type="unfinished">Высота тона</translation>
+        <translation>Высота тона</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="87"/>
         <source> cents</source>
-        <translation type="unfinished"></translation>
+        <translation> центов</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="96"/>
         <source>In 12-tone Equal Temperament:</source>
-        <translation type="unfinished"></translation>
+        <translation>В 12-ступенной равномерной темперации:</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="105"/>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="208"/>
         <source>=</source>
-        <translation type="unfinished"></translation>
+        <translation>=</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="107"/>
         <source>+</source>
-        <translation type="unfinished"></translation>
+        <translation>+</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="110"/>
@@ -9650,7 +9654,7 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="112"/>
         <source>in octave</source>
-        <translation type="unfinished"></translation>
+        <translation>в октаве</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="117"/>
@@ -9665,7 +9669,7 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="140"/>
         <source>Tempo</source>
-        <translation type="unfinished"></translation>
+        <translation>Темп</translation>
     </message>
     <message>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="206"/>
@@ -9681,7 +9685,8 @@ Label:	%4</source>
         <location filename="../svgui/widgets/UnitConverter.cpp" line="275"/>
         <source>With concert-A tuning frequency at %1 Hz, and middle C residing in octave %2.
 (These can be changed in the application preferences.)</source>
-        <translation type="unfinished"></translation>
+        <translation>С концертным строем Ля и частотой %1 Гц, средним До в %2.
+(Может меняться в настройках программы.)</translation>
     </message>
 </context>
 <context>
@@ -9758,52 +9763,52 @@ Label:	%4</source>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="388"/>
         <source>Clear Selection</source>
-        <translation type="unfinished">Снять выделение</translation>
+        <translation>Снять выделение</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="389"/>
         <source>Select Multiple Regions</source>
-        <translation type="unfinished">Выделить несколько областей</translation>
+        <translation>Выделить несколько областей</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="390"/>
         <source>Select Region</source>
-        <translation type="unfinished">Выделить область</translation>
+        <translation>Выделить область</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="407"/>
         <source>Enter Navigate mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти в режим навигации</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="408"/>
         <source>Enter Select mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти в режим выделения</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="409"/>
         <source>Enter Edit mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти в режим редактирования</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="410"/>
         <source>Enter Draw mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти в режим рисования</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="411"/>
         <source>Enter Erase mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти в режим стирания</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="412"/>
         <source>Enter Measure mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти в режим измерения</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="413"/>
         <source>Enter NoteEdit mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти в режим правки нот</translation>
     </message>
     <message>
         <location filename="../svgui/view/ViewManager.cpp" line="449"/>
