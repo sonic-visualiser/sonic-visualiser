@@ -21,6 +21,10 @@
 	<key>NSHighResolutionCapable</key>
 	<string>True</string>
 
+	<!-- enable microphone access -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Sonic Visualiser requires microphone access to enable recording functionality.</string>
+
 	<key>CFBundleDocumentTypes</key>
 
 	<array>
