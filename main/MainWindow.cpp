@@ -3617,6 +3617,7 @@ MainWindow::closeEvent(QCloseEvent *e)
         m_preferencesDialog->applicationClosing(true);
     }
 
+    stop();
     closeSession();
 
     e->accept();
