@@ -1943,11 +1943,10 @@ MainWindow::setupRecentFilesMenu()
     m_recentFilesMenu->clear();
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
-        /* F. Nicol patch 13 Aug. 2016 */
-        const QString& path = files[i];
+        QString path = files[i];
         QAction *action = new QAction(path, this);
-        connect(action, &QAction::triggered, [this, path] { openRecentFile(path);});
-        /* end of patch */
+        action->setObjectName(path);
+        connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
         if (i == 0) {
             action->setShortcut(tr("Ctrl+R"));
             m_keyReference->registerShortcut
@@ -3397,24 +3396,24 @@ MainWindow::openLocation()
 }
 
 void
-MainWindow::openRecentFile(const QString& path)
+MainWindow::openRecentFile()
 {
-   /* F. Nicol patch 13 Aug. 2016 */
-#if 0
     QObject *obj = sender();
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
         cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
-                  << endl;
+             << endl;
         return;
     }
 
-    QString path = action->text();
-#endif
-   /* End of F. Nicol patch 13 Aug. 2016 */
+    QString path = action->objectName();
 
-    if (path == "") return;
+    if (path == "") {
+        cerr << "WARNING: MainWindow::openRecentFile: action incorrectly named"
+             << endl;
+        return;
+    }
 
     FileOpenStatus status = openPath(path, ReplaceSession);
 
@@ -3618,6 +3617,7 @@ MainWindow::closeEvent(QCloseEvent *e)
         m_preferencesDialog->applicationClosing(true);
     }
 
+    stop();
     closeSession();
 
     e->accept();
@@ -5242,7 +5242,7 @@ MainWindow::about()
     aboutText += "</small></p>";
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2018 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2019 Chris Cannam and "
         "Queen Mary, University of London.</small></p>";
 
     aboutText +=

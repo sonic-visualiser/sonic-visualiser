@@ -4423,8 +4423,7 @@ if test "x$GCC" = "xyes"; then
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
         OPTFLAGS_DEBUG="-O2"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0"
-        LDFLAGS_RELEASE="-fuse-linker-plugin"
-        OPTFLAGS_RELEASE="-O3 -ffast-math -flto"
+        OPTFLAGS_RELEASE="-O3 -ffast-math"
         LIBS_DEBUG="$LIBS"
         as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__--std=$CXXSTANDARD" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts --std=$CXXSTANDARD" >&5

@@ -15,6 +15,12 @@
 	<key>CFBundleShortVersionString</key>
 	<string>SV_VERSION</string>
 
+	<!-- Provide an explanatory string for microphone usage so
+	     that access is requested. NB this is localised in
+	     the *.lproj/InfoPlist.strings files -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Sonic Visualiser needs to use the microphone for recording.</string>
+
 	<!-- enable HiDPI -->
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>

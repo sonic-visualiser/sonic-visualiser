@@ -50,14 +50,14 @@ Sonic Visualiser was written by Chris Cannam with contributions from
 Christian Landone, Mathieu Barthet, Dan Stowell, Jesus Corral Garcia,
 Matthias Mauch, and Craig Sapp.
 
-Code copyright 2005-2007 Chris Cannam and copyright 2006-2018 Queen
+Code copyright 2005-2007 Chris Cannam and copyright 2006-2019 Queen
 Mary, University of London, except where indicated in the individual
 source files.
 
 Russian translation provided by Alexandre Prokoudine, copyright
-2006-2018 Alexandre Prokoudine.
+2006-2019 Alexandre Prokoudine.
 
-Czech translation provided by Pavel Fric, copyright 2010-2018 Pavel
+Czech translation provided by Pavel Fric, copyright 2010-2019 Pavel
 Fric.
 
 This work was partially funded by the European Commission through the

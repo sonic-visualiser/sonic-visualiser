@@ -30,6 +30,7 @@ cov-int/*
 test-svcore-base
 test-svcore-data-fileio
 test-svcore-data-model
+test-svcore-system
 vamp-plugin-sdk
 svcore
 svgui
