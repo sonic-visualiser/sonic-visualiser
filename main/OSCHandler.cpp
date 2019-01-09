@@ -271,7 +271,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 f1 = lrint(t1 * getMainModel()->getSampleRate());
                 
                 Pane *pane = m_paneStack->getCurrentPane();
-                Layer *layer = 0;
+                Layer *layer = nullptr;
                 if (pane) layer = pane->getSelectedLayer();
                 if (layer) {
                     int resolution;
@@ -408,7 +408,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             }
                 
         } else {
-            PropertyContainer *container = 0;
+            PropertyContainer *container = nullptr;
             Pane *pane = m_paneStack->getCurrentPane();
             if (pane &&
                 message.getArgCount() == 3 &&
@@ -454,7 +454,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 Layer *layer = pane->getLayer(layerIndex);
                 m_paneStack->setCurrentLayer(pane, layer);
             } else if (wantLayer && layerIndex == -1) {
-                m_paneStack->setCurrentLayer(pane, 0);
+                m_paneStack->setCurrentLayer(pane, nullptr);
             }
         }
 
@@ -514,7 +514,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "zoomvertical") {
 
         Pane *pane = m_paneStack->getCurrentPane();
-        Layer *layer = 0;
+        Layer *layer = nullptr;
         if (pane && pane->getLayerCount() > 0) {
             layer = pane->getLayer(pane->getLayerCount() - 1);
         }
