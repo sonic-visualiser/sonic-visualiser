@@ -13,13 +13,13 @@
       "pin": "6fd0ebfd2bbe"
     },
     "checker": {
-      "pin": "bb3d59462052"
+      "pin": "81ce3ba92b16"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-vamp-cpp": {
-      "pin": "29e7bb6be50b8e4e6b673f6dbe131a54d388b4ba"
+      "pin": "0e3328c6091f59c912e25bc392a7dc75182be1c7"
     },
     "dataquay": {
       "pin": "807b55408d9e"
