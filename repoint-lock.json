@@ -4,7 +4,7 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "b67f5b6a7978"
+      "pin": "0773b34d987f"
     },
     "svgui": {
       "pin": "79032214f79d"
@@ -13,7 +13,7 @@
       "pin": "92ad94dee103"
     },
     "checker": {
-      "pin": "0d2d3c89fdf6"
+      "pin": "5c60e26e16ca"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
@@ -37,7 +37,7 @@
       "pin": "8c4162878ae6"
     },
     "bqaudiostream": {
-      "pin": "78e494fc4b05"
+      "pin": "37ea9d0d9df5"
     },
     "bqthingfactory": {
       "pin": "7686116dcdd5"

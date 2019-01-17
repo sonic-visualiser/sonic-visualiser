@@ -40,5 +40,4 @@ DEFINES += USE_SORD
 linux*:   DEFINES += USE_PTHREADS
 macx*:    DEFINES += USE_PTHREADS
 
-CONFIG += qt thread warn_on stl rtti exceptions object_parallel_to_source
-
+CONFIG += qt thread warn_on stl rtti exceptions

@@ -46,6 +46,6 @@ BQ_SOURCES += \
 	bqaudioio/src/SystemRecordSource.cpp \
         bqaudiostream/src/AudioReadStream.cpp \
         bqaudiostream/src/AudioReadStreamFactory.cpp \
-        bqaudiostream/src/Exceptions.cpp \
+        bqaudiostream/src/AudioStreamExceptions.cpp \
         rubberband-all.cpp
         

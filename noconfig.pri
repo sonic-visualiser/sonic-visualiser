@@ -60,7 +60,7 @@ win32-g++ {
 
     LIBS += -Lrelease -L$$PWD/sv-dependency-builds/win32-mingw/lib
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
 
     QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
@@ -68,7 +68,7 @@ win32-g++ {
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
     
-    LIBS += -lwinmm -lws2_32
+    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lwinmm -lws2_32 
 }
 
 win32-msvc* {
@@ -91,7 +91,7 @@ win32-msvc* {
             -L$$PWD/sv-dependency-builds/win64-msvc/lib
     }
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
 
     QMAKE_CXXFLAGS_RELEASE += -fp:fast -gl
     QMAKE_LFLAGS_RELEASE += -ltcg
@@ -107,7 +107,7 @@ win32-msvc* {
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
     
-    LIBS += -ladvapi32 -lwinmm -lws2_32
+    LIBS += -lmfplat -lmfreadwrite -lmfuuid -ladvapi32 -lwinmm -lws2_32
 }
 
 macx* {
