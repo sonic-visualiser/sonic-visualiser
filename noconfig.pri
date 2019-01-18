@@ -68,7 +68,7 @@ win32-g++ {
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
     
-    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lwinmm -lws2_32 
+    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lpropsys -lwinmm -lws2_32 
 }
 
 win32-msvc* {
@@ -107,7 +107,7 @@ win32-msvc* {
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
     
-    LIBS += -lmfplat -lmfreadwrite -lmfuuid -ladvapi32 -lwinmm -lws2_32
+    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lpropsys -ladvapi32 -lwinmm -lws2_32
 }
 
 macx* {
