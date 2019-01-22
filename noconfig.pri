@@ -1,8 +1,8 @@
 
 CONFIG += c++14
 
-CONFIG += release
-#CONFIG += debug
+#CONFIG += release
+CONFIG += debug
 
 PREFIX_PATH = /usr/local
 
