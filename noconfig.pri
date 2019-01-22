@@ -24,6 +24,7 @@ DEFINES += \
 	HAVE_LIBLO \
 	HAVE_MAD \
 	HAVE_ID3TAG \
+        HAVE_OPUS \
 	HAVE_PORTAUDIO
 
 # Default set of libs for the above. Config sections below may update
@@ -43,6 +44,7 @@ LIBS += \
 	-logg \
 	-lmad \
 	-lid3tag \
+        -lopusfile \
 	-lportaudio \
 	-lsamplerate \
 	-lz \

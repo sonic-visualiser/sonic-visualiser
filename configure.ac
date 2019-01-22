@@ -123,6 +123,7 @@ SV_MODULE_OPTIONAL([oggz],[oggz >= 1.0.0],[oggz/oggz.h],[oggz],[oggz_run])
 SV_MODULE_OPTIONAL([fishsound],[fishsound >= 1.0.0],[fishsound/fishsound.h],[fishsound],[fish_sound_new])
 SV_MODULE_OPTIONAL([mad],[mad >= 0.15.0],[mad.h],[mad],[mad_decoder_init])
 SV_MODULE_OPTIONAL([id3tag],[id3tag >= 0.15.0],[id3tag.h],[id3tag],[id3_tag_new])
+SV_MODULE_OPTIONAL([opus],[opusfile],[opus/opusfile.h],[opusfile],[op_read_float])
 
 # Link in -lX11 if it exists -- this is for the X error handler
 SV_MODULE_OPTIONAL([X11],[x11 >= 1.0.0],[X11/X.h],[x11],[XGetErrorText])
