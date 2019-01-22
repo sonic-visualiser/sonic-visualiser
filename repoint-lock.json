@@ -4,7 +4,7 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "afa75922fe0f"
+      "pin": "81989085997b"
     },
     "svgui": {
       "pin": "d794630429a7"
@@ -37,7 +37,7 @@
       "pin": "8c4162878ae6"
     },
     "bqaudiostream": {
-      "pin": "5f4437b35f30"
+      "pin": "4adf4d220f3c"
     },
     "bqthingfactory": {
       "pin": "7686116dcdd5"

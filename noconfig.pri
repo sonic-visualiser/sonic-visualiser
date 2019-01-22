@@ -64,6 +64,10 @@ win32-g++ {
 
     DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
 
+#!!! to add
+    DEFINES -= HAVE_OPUS
+    LIBS -= -lopusfile
+
     QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
     # Don't have liblo
@@ -94,6 +98,10 @@ win32-msvc* {
     }
 
     DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
+
+#!!! to add
+    DEFINES -= HAVE_OPUS
+    LIBS -= -lopusfile
 
     QMAKE_CXXFLAGS_RELEASE += -fp:fast -gl
     QMAKE_LFLAGS_RELEASE += -ltcg
