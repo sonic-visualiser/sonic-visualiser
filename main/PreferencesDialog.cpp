@@ -386,8 +386,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(hms, SIGNAL(stateChanged(int)),
             this, SLOT(showHMSChanged(int)));
 
-    QFrame *frame = 0;
-    QGridLayout *subgrid = 0;
+    QFrame *frame = nullptr;
+    QGridLayout *subgrid = nullptr;
     int row = 0;
 
     // Appearance tab

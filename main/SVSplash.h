@@ -31,7 +31,7 @@ public slots:
     void finishSplash(QWidget *);
     
 protected:
-    void drawContents(QPainter *);
+    void drawContents(QPainter *) override;
     QPixmap *m_pixmap;
 };
 
