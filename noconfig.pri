@@ -1,8 +1,8 @@
 
 CONFIG += c++14
 
-#CONFIG += release
-CONFIG += debug
+CONFIG += release
+#CONFIG += debug
 
 PREFIX_PATH = /usr/local
 
@@ -59,19 +59,21 @@ win32-g++ {
 
     # This config is currently used for 32-bit Windows builds.
 
-    INCLUDEPATH += $$PWD/sv-dependency-builds/win32-mingw/include
+    INCLUDEPATH += $$PWD/sv-dependency-builds/win32-mingw/include $$PWD/sv-dependency-builds/win32-mingw/include/opus
 
     LIBS += -Lrelease -L$$PWD/sv-dependency-builds/win32-mingw/lib
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE
 
     QMAKE_CXXFLAGS_RELEASE += -ffast-math
 
     # Don't have liblo
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
+
+    # (We don't have MediaFoundation support either, with this build sadly)
     
-    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lpropsys -lwinmm -lws2_32 
+    LIBS += -lwinmm -lws2_32 
 }
 
 win32-msvc* {
