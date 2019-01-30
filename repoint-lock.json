@@ -4,16 +4,16 @@
       "pin": "da86fb0bccb3"
     },
     "svcore": {
-      "pin": "841b2a3e606d"
+      "pin": "d83ab62cdc28"
     },
     "svgui": {
-      "pin": "fa986b91d77f"
+      "pin": "2487521e857b"
     },
     "svapp": {
       "pin": "6fd0ebfd2bbe"
     },
     "checker": {
-      "pin": "81ce3ba92b16"
+      "pin": "5c60e26e16ca"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
@@ -25,7 +25,7 @@
       "pin": "807b55408d9e"
     },
     "bqvec": {
-      "pin": "47a6794091d8"
+      "pin": "be1ce11183f4"
     },
     "bqfft": {
       "pin": "a766fe47501b"
@@ -36,11 +36,17 @@
     "bqaudioio": {
       "pin": "8c4162878ae6"
     },
+    "bqaudiostream": {
+      "pin": "65e940fb6436"
+    },
+    "bqthingfactory": {
+      "pin": "7686116dcdd5"
+    },
     "rubberband": {
       "pin": "6990f06c9f49"
     },
     "sv-dependency-builds": {
-      "pin": "85d5306e114e"
+      "pin": "2f2b27544483"
     },
     "icons/scalable": {
       "pin": "1c8844bfa946"

@@ -1,5 +1,8 @@
 rem  Run this from within the top-level SV dir: deploy\win64\build-64.bat
-rem  To build from clean, delete the folder build_win64 first
+rem  To build from clean, delete the folder build_win64_debug first
+
+rem  NB you will probably also have to change the CONFIG in noconfig.pri
+rem  from release to debug
 
 echo on
 
@@ -29,38 +32,38 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 sv-dependency-builds\win64-msvc\bin\capnp -Isv-dependency-builds/win64-msvc/include compile --src-prefix=piper/capnp -osv-dependency-builds/win64-msvc/bin/capnpc-c++:piper-vamp-cpp/vamp-capnp piper/capnp/piper.capnp
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-mkdir build_win64
-cd build_win64
+mkdir build_win64_debug
+cd build_win64_debug
 
 qmake -spec win32-msvc -r -tp vc ..\sonic-visualiser.pro
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-msbuild sonic-visualiser.sln /t:Build /p:Configuration=Release
+msbuild sonic-visualiser.sln /t:Build /p:Configuration=Debug
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-copy .\checker\release\vamp-plugin-load-checker.exe .\release
+copy .\checker\debug\vamp-plugin-load-checker.exe .\debug
 
-copy %QTDIR%\bin\Qt5Core.dll .\release
-copy %QTDIR%\bin\Qt5Gui.dll .\release
-copy %QTDIR%\bin\Qt5Widgets.dll .\release
-copy %QTDIR%\bin\Qt5Network.dll .\release
-copy %QTDIR%\bin\Qt5Xml.dll .\release
-copy %QTDIR%\bin\Qt5Svg.dll .\release
-copy %QTDIR%\bin\Qt5Test.dll .\release
-copy %QTDIR%\plugins\platforms\qminimal.dll .\release
-copy %QTDIR%\plugins\platforms\qwindows.dll .\release
-copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\release
-copy ..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll .\release
+copy %QTDIR%\bin\Qt5Cored.dll .\debug
+copy %QTDIR%\bin\Qt5Guid.dll .\debug
+copy %QTDIR%\bin\Qt5Widgetsd.dll .\debug
+copy %QTDIR%\bin\Qt5Networkd.dll .\debug
+copy %QTDIR%\bin\Qt5Xmld.dll .\debug
+copy %QTDIR%\bin\Qt5Svgd.dll .\debug
+copy %QTDIR%\bin\Qt5Testd.dll .\debug
+copy %QTDIR%\plugins\platforms\qminimald.dll .\debug
+copy %QTDIR%\plugins\platforms\qwindowsd.dll .\debug
+copy %QTDIR%\plugins\styles\qwindowsvistastyled.dll .\debug
+copy ..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll .\debug
 
 rem some of these expect to be run from the project root
 cd ..
-build_win64\release\test-svcore-base
+build_win64_debug\debug\test-svcore-base
 if %errorlevel% neq 0 exit /b %errorlevel%
-build_win64\release\test-svcore-system
+build_win64_debug\debug\test-svcore-system
 if %errorlevel% neq 0 exit /b %errorlevel%
-build_win64\release\test-svcore-data-fileio
+build_win64_debug\debug\test-svcore-data-fileio
 if %errorlevel% neq 0 exit /b %errorlevel%
-build_win64\release\test-svcore-data-model
+build_win64_debug\debug\test-svcore-data-model
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 set PATH=%ORIGINALPATH%

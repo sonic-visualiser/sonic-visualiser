@@ -7,6 +7,9 @@ SV_INCLUDEPATH = \
 	bqresample \
 	bqaudioio \
 	bqaudioio/bqaudioio \
+	bqaudiostream \
+	bqaudiostream/bqaudiostream \
+	bqthingfactory \
 	piper-vamp-cpp \
 	checker \
 	checker/checker \
@@ -38,4 +41,3 @@ linux*:   DEFINES += USE_PTHREADS
 macx*:    DEFINES += USE_PTHREADS
 
 CONFIG += qt thread warn_on stl rtti exceptions
-
