@@ -92,7 +92,7 @@ win32-msvc* {
 #            -L$$PWD/sv-dependency-builds/win64-msvc/lib
 #    }
     CONFIG(release) {
-        LIBS += -Lrelease \
+        LIBS += -NODEFAULTLIB:LIBCMT -Lrelease \
             -L$$PWD/sv-dependency-builds/win64-msvc/lib
     }
 
