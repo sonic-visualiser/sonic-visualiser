@@ -1,4 +1,14 @@
 
+Changes in Sonic Visualiser v3.3 since the previous release 3.2.1:
+
+ - Add support for reading the Opus audio codec on all platforms
+
+ - Add support for WMA and AAC formats on 64-bit Windows. (AAC was
+   already supported on macOS.) Note that AAC support on Windows does
+   not support "gapless" import, i.e. removing the encoder gaps at
+   start and end of the stream
+
+
 Changes in Sonic Visualiser 3.2.1 (Jan 2019) since the previous release 3.2:
 
  - Fix failure to record from built-in microphone on macOS 10.14
