@@ -27,8 +27,7 @@ BQ_HEADERS += \
         bqaudiostream/bqaudiostream/AudioReadStream.h \
         bqaudiostream/bqaudiostream/AudioReadStreamFactory.h \
         bqaudiostream/bqaudiostream/Exceptions.h \
-        bqthingfactory/bqthingfactory/ThingFactory.h \
-	rubberband/rubberband/RubberBandStretcher.h
+        bqthingfactory/bqthingfactory/ThingFactory.h
 
 BQ_SOURCES += \
 	bqvec/src/Allocators.cpp \
@@ -46,6 +45,5 @@ BQ_SOURCES += \
 	bqaudioio/src/SystemRecordSource.cpp \
         bqaudiostream/src/AudioReadStream.cpp \
         bqaudiostream/src/AudioReadStreamFactory.cpp \
-        bqaudiostream/src/AudioStreamExceptions.cpp \
-        rubberband-all.cpp
+        bqaudiostream/src/AudioStreamExceptions.cpp
         

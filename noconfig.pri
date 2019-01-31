@@ -33,6 +33,7 @@ DEFINES += \
 LIBS += \
         -lbase \
         -lbz2 \
+        -lrubberband \
 	-lfftw3 \
 	-lfftw3f \
 	-lsndfile \
