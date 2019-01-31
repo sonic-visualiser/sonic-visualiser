@@ -24,6 +24,11 @@ cat "$dockerdir"/Dockerfile_test_appimage.in | \
     perl -p -e "s/\[\[REVISION\]\]/$current/g" > \
          "$dockerdir"/Dockerfile_test_appimage.gen
 
+grep '^bitbucket.org' ~/.ssh/known_hosts > "$dockerdir"/known_hosts
+cp ~/.ssh/id_dsa_build "$dockerdir"/id_dsa_build
+chmod 600 "$dockerdir"/known_hosts "$dockerdir"/id_dsa_build
+trap "rm $dockerdir/known_hosts $dockerdir/id_dsa_build" 0
+
 dockertag="cannam/sonic-visualiser-appimage-$current"
 
 sudo docker build -t "$dockertag" -f "$dockerdir"/Dockerfile_appimage.gen "$dockerdir"

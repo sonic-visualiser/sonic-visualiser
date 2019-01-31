@@ -34,7 +34,7 @@ Surveyer::Surveyer(QString hostname, QString testPath, QString surveyPath) :
     m_hostname(hostname),
     m_testPath(testPath),
     m_surveyPath(surveyPath),
-    m_reply(0),
+    m_reply(nullptr),
     m_nm(new QNetworkAccessManager)
 {
     QSettings settings;

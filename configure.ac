@@ -60,8 +60,7 @@ if test "x$GCC" = "xyes"; then
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
         OPTFLAGS_DEBUG="-O2"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0"
-        LDFLAGS_RELEASE="-fuse-linker-plugin"
-        OPTFLAGS_RELEASE="-O3 -ffast-math -flto"
+        OPTFLAGS_RELEASE="-O3 -ffast-math"
         LIBS_DEBUG="$LIBS"
         AX_CHECK_COMPILE_FLAG(--std=$CXXSTANDARD, [], [AC_MSG_NOTICE([Compiler does not appear to support $CXXSTANDARD, falling back to c++11])
         CXXSTANDARD=c++11])
@@ -124,6 +123,7 @@ SV_MODULE_OPTIONAL([oggz],[oggz >= 1.0.0],[oggz/oggz.h],[oggz],[oggz_run])
 SV_MODULE_OPTIONAL([fishsound],[fishsound >= 1.0.0],[fishsound/fishsound.h],[fishsound],[fish_sound_new])
 SV_MODULE_OPTIONAL([mad],[mad >= 0.15.0],[mad.h],[mad],[mad_decoder_init])
 SV_MODULE_OPTIONAL([id3tag],[id3tag >= 0.15.0],[id3tag.h],[id3tag],[id3_tag_new])
+SV_MODULE_OPTIONAL([opus],[opusfile],[opus/opusfile.h],[opusfile],[op_read_float])
 
 # Link in -lX11 if it exists -- this is for the X error handler
 SV_MODULE_OPTIONAL([X11],[x11 >= 1.0.0],[X11/X.h],[x11],[XGetErrorText])

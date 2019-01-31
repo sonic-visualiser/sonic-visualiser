@@ -40,7 +40,7 @@ signals:
     void canAlign(bool);
 
 public slots:
-    virtual void preferenceChanged(PropertyContainer::PropertyName);
+    void preferenceChanged(PropertyContainer::PropertyName) override;
     virtual void coloursChanged();
 
     virtual bool commitData(bool mayAskUser);
@@ -54,9 +54,7 @@ protected slots:
     virtual void replaceMainAudio();
     virtual void openSomething();
     virtual void openLocation();
-       /* F. Nicol patch 13 Aug. 2016 */
-    virtual void openRecentFile(const QString& );
-       /* End of F. Nicol patch 13 Aug. 2016 */
+    virtual void openRecentFile();
     virtual void applyTemplate();
     virtual void exportAudio();
     virtual void exportAudioData();
@@ -69,12 +67,12 @@ protected slots:
     virtual void saveSession();
     virtual void saveSessionAs();
     virtual void newSession();
-    virtual void closeSession();
+    void closeSession() override;
     virtual void preferences();
 
-    virtual void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool);
-    virtual void audioOverloadPluginDisabled();
-    virtual void audioTimeStretchMultiChannelDisabled();
+    void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
+    void audioOverloadPluginDisabled() override;
+    void audioTimeStretchMultiChannelDisabled() override;
 
     virtual void toolNavigateSelected();
     virtual void toolSelectSelected();
@@ -83,12 +81,12 @@ protected slots:
     virtual void toolEraseSelected();
     virtual void toolMeasureSelected();
 
-    virtual void documentModified();
-    virtual void documentRestored();
+    void documentModified() override;
+    void documentRestored() override;
     virtual void documentReplaced();
 
-    virtual void updateMenuStates();
-    virtual void updateDescriptionLabel();
+    void updateMenuStates() override;
+    void updateDescriptionLabel() override;
 
     virtual void setInstantsNumbering();
     virtual void setInstantsCounterCycle();
@@ -97,13 +95,13 @@ protected slots:
     virtual void subdivideInstants();
     virtual void winnowInstants();
 
-    virtual void modelGenerationFailed(QString, QString);
-    virtual void modelGenerationWarning(QString, QString);
-    virtual void modelRegenerationFailed(QString, QString, QString);
-    virtual void modelRegenerationWarning(QString, QString, QString);
-    virtual void alignmentFailed(QString);
+    void modelGenerationFailed(QString, QString) override;
+    void modelGenerationWarning(QString, QString) override;
+    void modelRegenerationFailed(QString, QString, QString) override;
+    void modelRegenerationWarning(QString, QString, QString) override;
+    void alignmentFailed(QString) override;
 
-    virtual void rightButtonMenuRequested(Pane *, QPoint point);
+    void rightButtonMenuRequested(Pane *, QPoint point) override;
 
     virtual void propertyStacksResized(int);
 
@@ -114,36 +112,36 @@ protected slots:
 
     virtual void findTransform();
 
-    virtual void paneAdded(Pane *);
-    virtual void paneHidden(Pane *);
-    virtual void paneAboutToBeDeleted(Pane *);
-    virtual void paneDropAccepted(Pane *, QStringList);
-    virtual void paneDropAccepted(Pane *, QString);
+    void paneAdded(Pane *) override;
+    void paneHidden(Pane *) override;
+    void paneAboutToBeDeleted(Pane *) override;
+    void paneDropAccepted(Pane *, QStringList) override;
+    void paneDropAccepted(Pane *, QString) override;
 
     virtual void setupRecentFilesMenu();
     virtual void setupRecentTransformsMenu();
     virtual void setupTemplatesMenu();
 
     virtual void playSpeedChanged(int);
-    virtual void playSoloToggled();
+    void playSoloToggled() override;
     virtual void alignToggled();
 
-    virtual void currentPaneChanged(Pane *);
+    void currentPaneChanged(Pane *) override;
 
     virtual void speedUpPlayback();
     virtual void slowDownPlayback();
     virtual void restoreNormalPlayback();
 
-    virtual void monitoringLevelsChanged(float, float);
+    void monitoringLevelsChanged(float, float) override;
 
-    virtual void layerRemoved(Layer *);
-    virtual void layerInAView(Layer *, bool);
+    void layerRemoved(Layer *) override;
+    void layerInAView(Layer *, bool) override;
 
-    virtual void mainModelChanged(WaveFileModel *);
+    void mainModelChanged(WaveFileModel *) override;
     virtual void mainModelGainChanged(float);
     virtual void mainModelPanChanged(float);
-    virtual void modelAdded(Model *);
-    virtual void modelAboutToBeDeleted(Model *);
+    void modelAdded(Model *) override;
+    void modelAboutToBeDeleted(Model *) override;
 
     virtual void showLayerTree();
     virtual void showActivityLog();
@@ -152,7 +150,7 @@ protected slots:
     virtual void mouseEnteredWidget();
     virtual void mouseLeftWidget();
 
-    virtual void handleOSCMessage(const OSCMessage &);
+    void handleOSCMessage(const OSCMessage &) override;
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
@@ -169,7 +167,7 @@ protected slots:
     virtual void about();
     virtual void whatsNew();
     virtual void keyReference();
-    virtual void newerVersionAvailable(QString);
+    void newerVersionAvailable(QString) override;
 
 protected:
     Overview                *m_overview;
@@ -284,7 +282,7 @@ protected:
 
     QString getReleaseText() const;
     
-    virtual void setupMenus();
+    void setupMenus() override;
     virtual void setupFileMenu();
     virtual void setupEditMenu();
     virtual void setupViewMenu();
@@ -296,17 +294,17 @@ protected:
 
     virtual void addPane(const LayerConfiguration &configuration, QString text);
 
-    virtual void closeEvent(QCloseEvent *e);
-    virtual bool checkSaveModified();
+    void closeEvent(QCloseEvent *e) override;
+    bool checkSaveModified() override;
 
     virtual void exportAudio(bool asData);
 
-    virtual void updateVisibleRangeDisplay(Pane *p) const;
-    virtual void updatePositionStatusDisplays() const;
+    void updateVisibleRangeDisplay(Pane *p) const override;
+    void updatePositionStatusDisplays() const override;
 
-    virtual bool shouldCreateNewSessionForRDFAudio(bool *cancel);
+    bool shouldCreateNewSessionForRDFAudio(bool *cancel) override;
     
-    virtual void connectLayerEditDialog(ModelDataTableDialog *);
+    void connectLayerEditDialog(ModelDataTableDialog *) override;
 };
 
 

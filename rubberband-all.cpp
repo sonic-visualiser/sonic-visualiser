@@ -2,7 +2,20 @@
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma GCC diagnostic ignored "-Wunused-value"
+#pragma GCC diagnostic ignored "-Wsign-compare"
 
+#define USE_KISSFFT 1
+#define USE_SPEEX 1
+
+#define SV_PROFILER_H 1 // Include guard - avoid reading two Profiler.h files.
+                        // Yes, it's gross
+
+#ifdef _MSC_VER
+#define __MSVC__
+#endif
+ 
 #include "rubberband/src/rubberband-c.cpp"
 #include "rubberband/src/RubberBandStretcher.cpp"
 #include "rubberband/src/StretcherProcess.cpp"
@@ -22,5 +35,8 @@
 #include "rubberband/src/system/Thread.cpp"
 #include "rubberband/src/StretcherChannelData.cpp"
 #include "rubberband/src/StretcherImpl.cpp"
+#include "rubberband/src/kissfft/kiss_fft.c"
+#include "rubberband/src/kissfft/kiss_fftr.c"
+#include "rubberband/src/speex/resample.c"
 
         

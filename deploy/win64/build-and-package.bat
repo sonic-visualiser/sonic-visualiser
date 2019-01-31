@@ -38,7 +38,7 @@ del signtest.exe
 
 cd %STARTPWD%
 del /q /s build_win32
-call .\deploy\win64\build-32.bat
+call .\deploy\win32\build-32.bat
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%ARG%" == "sign" (

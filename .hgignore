@@ -30,6 +30,7 @@ cov-int/*
 test-svcore-base
 test-svcore-data-fileio
 test-svcore-data-model
+test-svcore-system
 vamp-plugin-sdk
 svcore
 svgui
@@ -53,6 +54,7 @@ glob:.vext*
 glob:.repoint*
 build_win32
 build_win64
+build_win64_debug
 *.AppImage
 *.AppDir
 Dockerfile*.gen

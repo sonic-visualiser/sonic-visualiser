@@ -632,6 +632,8 @@ XARGS
 PERL
 X11_LIBS
 X11_CFLAGS
+opus_LIBS
+opus_CFLAGS
 id3tag_LIBS
 id3tag_CFLAGS
 mad_LIBS
@@ -780,6 +782,8 @@ mad_CFLAGS
 mad_LIBS
 id3tag_CFLAGS
 id3tag_LIBS
+opus_CFLAGS
+opus_LIBS
 X11_CFLAGS
 X11_LIBS'
 
@@ -1456,6 +1460,8 @@ Some influential environment variables:
   id3tag_CFLAGS
               C compiler flags for id3tag, overriding pkg-config
   id3tag_LIBS linker flags for id3tag, overriding pkg-config
+  opus_CFLAGS C compiler flags for opus, overriding pkg-config
+  opus_LIBS   linker flags for opus, overriding pkg-config
   X11_CFLAGS  C compiler flags for X11, overriding pkg-config
   X11_LIBS    linker flags for X11, overriding pkg-config
 
@@ -4423,8 +4429,7 @@ if test "x$GCC" = "xyes"; then
         CXXFLAGS_DEBUG="$CXXFLAGS_ANY -g -Werror"
         OPTFLAGS_DEBUG="-O2"
    	CXXFLAGS_RELEASE="$CXXFLAGS_ANY -g0"
-        LDFLAGS_RELEASE="-fuse-linker-plugin"
-        OPTFLAGS_RELEASE="-O3 -ffast-math -flto"
+        OPTFLAGS_RELEASE="-O3 -ffast-math"
         LIBS_DEBUG="$LIBS"
         as_CACHEVAR=`$as_echo "ax_cv_check_cxxflags__--std=$CXXSTANDARD" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C++ compiler accepts --std=$CXXSTANDARD" >&5
@@ -6999,6 +7004,161 @@ else
         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $id3tag_CFLAGS";LIBS="$LIBS $id3tag_LIBS";SV_MODULE_FAILED=""
+fi
+fi
+if test -n "$SV_MODULE_FAILED"; then
+   as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
+ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
+$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+fi
+
+
+   if test -z "$SV_MODULE_FAILED"; then
+      if test -n "$SV_MODULE_LIB"; then
+           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
+$as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$SV_MODULE_LIB  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $SV_MODULE_FUNC ();
+int
+main ()
+{
+return $SV_MODULE_FUNC ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  eval "$as_ac_Lib=yes"
+else
+  eval "$as_ac_Lib=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+  LIBS="$LIBS -l$SV_MODULE_LIB"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
+$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+fi
+
+      fi
+   fi
+fi
+
+
+SV_MODULE_MODULE=opus
+SV_MODULE_VERSION_TEST="opusfile"
+SV_MODULE_HEADER=opus/opusfile.h
+SV_MODULE_LIB=opusfile
+SV_MODULE_FUNC=op_read_float
+SV_MODULE_HAVE=HAVE_$(echo opus | tr 'a-z' 'A-Z')
+SV_MODULE_FAILED=1
+if test -n "$opus_LIBS" ; then
+   { $as_echo "$as_me:${as_lineno-$LINENO}: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&5
+$as_echo "$as_me: User set ${SV_MODULE_MODULE}_LIBS explicitly, skipping test for $SV_MODULE_MODULE" >&6;}
+   CXXFLAGS="$CXXFLAGS $opus_CFLAGS"
+   LIBS="$LIBS $opus_LIBS"
+   SV_MODULE_FAILED=""
+fi
+if test -z "$SV_MODULE_VERSION_TEST" ; then
+   SV_MODULE_VERSION_TEST=$SV_MODULE_MODULE
+fi
+if test -n "$SV_MODULE_FAILED" && test -n "$PKG_CONFIG"; then
+
+pkg_failed=no
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for opus" >&5
+$as_echo_n "checking for opus... " >&6; }
+
+if test -n "$opus_CFLAGS"; then
+    pkg_cv_opus_CFLAGS="$opus_CFLAGS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_opus_CFLAGS=`$PKG_CONFIG --cflags "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+if test -n "$opus_LIBS"; then
+    pkg_cv_opus_LIBS="$opus_LIBS"
+ elif test -n "$PKG_CONFIG"; then
+    if test -n "$PKG_CONFIG" && \
+    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$SV_MODULE_VERSION_TEST\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$SV_MODULE_VERSION_TEST") 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  pkg_cv_opus_LIBS=`$PKG_CONFIG --libs "$SV_MODULE_VERSION_TEST" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes
+else
+  pkg_failed=yes
+fi
+ else
+    pkg_failed=untried
+fi
+
+
+
+if test $pkg_failed = yes; then
+   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+        _pkg_short_errors_supported=yes
+else
+        _pkg_short_errors_supported=no
+fi
+        if test $_pkg_short_errors_supported = yes; then
+	        opus_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+        else
+	        opus_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$SV_MODULE_VERSION_TEST" 2>&1`
+        fi
+	# Put the nasty error message in config.log where it belongs
+	echo "$opus_PKG_ERRORS" >&5
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+elif test $pkg_failed = untried; then
+     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+else
+	opus_CFLAGS=$pkg_cv_opus_CFLAGS
+	opus_LIBS=$pkg_cv_opus_LIBS
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+	HAVES="$HAVES $SV_MODULE_HAVE";CXXFLAGS="$CXXFLAGS $opus_CFLAGS";LIBS="$LIBS $opus_LIBS";SV_MODULE_FAILED=""
 fi
 fi
 if test -n "$SV_MODULE_FAILED"; then

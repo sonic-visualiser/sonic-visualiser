@@ -24,6 +24,10 @@ BQ_HEADERS += \
 	bqaudioio/src/Log.h \
 	bqaudioio/src/PortAudioIO.h \
 	bqaudioio/src/PulseAudioIO.h \
+        bqaudiostream/bqaudiostream/AudioReadStream.h \
+        bqaudiostream/bqaudiostream/AudioReadStreamFactory.h \
+        bqaudiostream/bqaudiostream/Exceptions.h \
+        bqthingfactory/bqthingfactory/ThingFactory.h \
 	rubberband/rubberband/RubberBandStretcher.h
 
 BQ_SOURCES += \
@@ -40,5 +44,8 @@ BQ_SOURCES += \
 	bqaudioio/src/ResamplerWrapper.cpp \
 	bqaudioio/src/SystemPlaybackTarget.cpp \
 	bqaudioio/src/SystemRecordSource.cpp \
+        bqaudiostream/src/AudioReadStream.cpp \
+        bqaudiostream/src/AudioReadStreamFactory.cpp \
+        bqaudiostream/src/AudioStreamExceptions.cpp \
         rubberband-all.cpp
         

@@ -1,7 +1,3 @@
-# This pulls the latest versions of capnp & SV from repos - so you
-# will need to defeat the Docker cache by destroying the container
-# each time you want to update it
-#
 FROM ubuntu:14.04
 MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
 RUN apt-get update && \
@@ -59,7 +55,15 @@ RUN git checkout v0.6.1
 WORKDIR c++
 RUN autoreconf -i && ./configure && make -j3 && make install
 
-WORKDIR ../../sonic-visualiser
+WORKDIR /root
+
+COPY id_dsa_build .ssh/id_dsa_build
+COPY known_hosts .ssh/known_hosts
+RUN chmod 600 .ssh/id_dsa_build .ssh/known_hosts
+RUN echo '{"accounts": {"bitbucket": "cannam"}}' > .repoint.json
+RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_dsa_build' ) > .hgrc
+
+WORKDIR /sonic-visualiser
 ENV QTDIR /opt/qt510
 ENV PATH /opt/qt510/bin:$PATH
 RUN ./configure

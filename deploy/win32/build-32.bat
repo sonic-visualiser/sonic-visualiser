@@ -48,8 +48,12 @@ copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\release
 rem some of these expect to be run from the project root
 cd ..
 build_win32\release\test-svcore-base
+if %errorlevel% neq 0 exit /b %errorlevel%
 build_win32\release\test-svcore-system
+if %errorlevel% neq 0 exit /b %errorlevel%
 build_win32\release\test-svcore-data-fileio
+if %errorlevel% neq 0 exit /b %errorlevel%
 build_win32\release\test-svcore-data-model
+if %errorlevel% neq 0 exit /b %errorlevel%
 
 set PATH=%ORIGINALPATH%

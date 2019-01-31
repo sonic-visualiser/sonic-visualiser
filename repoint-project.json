@@ -66,6 +66,16 @@
             "service": "bitbucket",
             "owner": "breakfastquay"
         },
+        "bqaudiostream": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
+        "bqthingfactory": {
+            "vcs": "hg",
+            "service": "bitbucket",
+            "owner": "breakfastquay"
+        },
         "rubberband": {
             "vcs": "hg",
             "service": "bitbucket",
