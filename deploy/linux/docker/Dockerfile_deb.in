@@ -53,6 +53,8 @@ RUN chmod 600 .ssh/id_dsa_build .ssh/known_hosts
 RUN echo '{"accounts": {"bitbucket": "cannam"}}' > .repoint.json
 RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_dsa_build' ) > .hgrc
 
+RUN rm -f /usr/lib/x86_64-linux-gnu/librubberband.so*
+
 WORKDIR /sonic-visualiser
 RUN ./configure
 RUN make -j3
