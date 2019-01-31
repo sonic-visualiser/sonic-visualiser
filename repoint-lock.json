@@ -42,9 +42,6 @@
     "bqthingfactory": {
       "pin": "7686116dcdd5"
     },
-    "rubberband": {
-      "pin": "6990f06c9f49"
-    },
     "sv-dependency-builds": {
       "pin": "2f2b27544483"
     },
