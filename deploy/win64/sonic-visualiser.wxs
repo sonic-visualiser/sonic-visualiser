@@ -1,9 +1,5 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
-  <!-- NB this is specific to a particular Qt and compiler version.
-       20th April 2018 - updated for Qt 5.10.1 and MSVC 2017
-   -->
-
   <Product
       Name="Sonic Visualiser" 
       Id="*"
@@ -87,6 +83,10 @@
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
                 Source="..\CHANGELOG"/>
+            <File
+                Id="CITATION"
+                Name="CITATION.txt"
+                Source="..\CITATION"/>
 
             <File
                 Id="winicon.ico"
