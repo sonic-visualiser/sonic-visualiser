@@ -81,6 +81,10 @@
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
                 Source="..\CHANGELOG"/>
+            <File
+                Id="CITATION"
+                Name="CITATION.txt"
+                Source="..\CITATION"/>
 
             <File
                 Id="winicon.ico"
