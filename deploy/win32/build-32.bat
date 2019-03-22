@@ -1,4 +1,4 @@
-rem  Run this from within the top-level SV dir: deploy\win64\build-32.bat
+rem  Run this from within the top-level SV dir: deploy\win32\build-32.bat
 rem  To build from clean, delete the folder build_win32
 
 set STARTPWD=%CD%
