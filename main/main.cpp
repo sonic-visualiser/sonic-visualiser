@@ -266,6 +266,8 @@ main(int argc, char **argv)
               ("Do not attempt to open an audio output device.") },
             { "no-osc", QApplication::tr
               ("Do not provide an Open Sound Control port for remote control.") },
+            { "no-splash", QApplication::tr
+              ("Do not show a splash screen.") },
             { "osc-script", QApplication::tr
               ("Batch run the OSC script found in the given file. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds."),
               "osc.txt" }
@@ -286,10 +288,11 @@ main(int argc, char **argv)
         
     parser.process(args);
 
-    args = parser.positionalArguments();
+    bool audioOutput = !(parser.isSet("no-audio"));
+    bool oscSupport = !(parser.isSet("no-osc"));
+    bool showSplash = !(parser.isSet("no-splash"));
 
-    bool audioOutput = true;
-    bool oscSupport = true;
+    args = parser.positionalArguments();
 
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
@@ -313,7 +316,7 @@ main(int argc, char **argv)
     settings.endGroup();
 
     settings.beginGroup("Preferences");
-    if (settings.value("show-splash", true).toBool()) {
+    if (showSplash && settings.value("show-splash", true).toBool()) {
         splash = new SVSplash();
         splash->show();
         QTimer::singleShot(5000, splash, SLOT(hide()));
