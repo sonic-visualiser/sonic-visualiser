@@ -17,7 +17,7 @@
         "svcore": {
             "vcs": "hg",
             "service": "soundsoftware",
-            "branch": "osc-script"
+            "branch": "single-point"
         },
         "svgui": {
             "vcs": "hg",
@@ -27,7 +27,7 @@
         "svapp": {
             "vcs": "hg",
 	    "service": "soundsoftware",
-            "branch": "osc-script"
+            "branch": "single-point"
         },
         "checker": {
             "vcs": "hg",
