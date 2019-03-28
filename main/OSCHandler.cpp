@@ -40,8 +40,6 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     SVDEBUG << "OSCHandler: method = \""
             << message.getMethod() << "\"" << endl;
 
-    // This large function should really be abstracted out.
-
     if (message.getMethod() == "open") {
 
         if (message.getArgCount() == 1 &&

@@ -42,6 +42,7 @@
 #include <QTimer>
 #include <QPainter>
 #include <QFileOpenEvent>
+#include <QCommandLineParser>
 
 #include <iostream>
 #include <signal.h>
@@ -89,6 +90,8 @@
  AudioCallbackPlayTarget and subclasses, AudioGenerator
 
 \section model Data sources: the Model hierarchy
+
+***!!! todo: update this
 
    A Model is something containing, or knowing how to obtain, data.
 
@@ -238,12 +241,6 @@ main(int argc, char **argv)
 
     svSystemSpecificInitialisation();
 
-#ifdef Q_WS_X11
-#if QT_VERSION >= 0x040500
-//    QApplication::setGraphicsSystem("raster");
-#endif
-#endif
-
 #ifdef Q_OS_MAC
     if (QSysInfo::MacintoshVersion > QSysInfo::MV_10_8) {
         // Fix for OS/X 10.9 font problem
@@ -253,7 +250,51 @@ main(int argc, char **argv)
 
     SVApplication application(argc, argv);
 
+    QApplication::setOrganizationName("sonic-visualiser");
+    QApplication::setOrganizationDomain("sonicvisualiser.org");
+    QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
+    QApplication::setApplicationVersion(SV_VERSION);
+
+    //!!! todo hand-update translations
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QApplication::tr("Sonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation."));
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    parser.addOptions({
+            { "no-audio", QApplication::tr
+              ("Do not attempt to open an audio output device.") },
+            { "no-osc", QApplication::tr
+              ("Do not provide an Open Sound Control port for remote control.") },
+            { "no-splash", QApplication::tr
+              ("Do not show a splash screen.") },
+            { "osc-script", QApplication::tr
+              ("Batch run the OSC script found in the given file. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds."),
+              "osc.txt" }
+        });
+
+    parser.addPositionalArgument
+        ("[<file> ...]", QApplication::tr("One or more Sonic Visualiser (.sv) and audio files may be provided."));
+    
     QStringList args = application.arguments();
+    if (!parser.parse(args)) {
+        if (parser.unknownOptionNames().contains("?")) {
+            // QCommandLineParser only understands -? for help on Windows,
+            // but we historically accepted it everywhere - provide this
+            // backward compatibility
+            parser.showHelp();
+        }
+    }        
+        
+    parser.process(args);
+
+    bool audioOutput = !(parser.isSet("no-audio"));
+    bool oscSupport = !(parser.isSet("no-osc"));
+    bool showSplash = !(parser.isSet("no-splash"));
+
+    args = parser.positionalArguments();
+
+    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     signal(SIGINT,  signalHandler);
     signal(SIGTERM, signalHandler);
@@ -262,24 +303,6 @@ main(int argc, char **argv)
     signal(SIGHUP,  signalHandler);
     signal(SIGQUIT, signalHandler);
 #endif
-
-    bool audioOutput = true;
-    bool oscSupport = true;
-
-    if (args.contains("--help") || args.contains("-h") || args.contains("-?")) {
-        cerr << QApplication::tr(
-            "\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation.\n\nUsage:\n\n  %1 [--no-audio] [--no-osc] [<file> ...]\n\n  --no-audio: Do not attempt to open an audio output device\n  --no-osc: Do not provide an Open Sound Control port for remote control\n  <file>: One or more Sonic Visualiser (.sv) and audio files may be provided.\n").arg(argv[0]) << endl;
-        exit(2);
-    }
-
-    if (args.contains("--no-audio")) audioOutput = false;
-    if (args.contains("--no-osc")) oscSupport = false;
-
-    QApplication::setOrganizationName("sonic-visualiser");
-    QApplication::setOrganizationDomain("sonicvisualiser.org");
-    QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
-
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     SVSplash *splash = nullptr;
 
@@ -293,7 +316,7 @@ main(int argc, char **argv)
     settings.endGroup();
 
     settings.beginGroup("Preferences");
-    if (settings.value("show-splash", true).toBool()) {
+    if (showSplash && settings.value("show-splash", true).toBool()) {
         splash = new SVSplash();
         splash->show();
         QTimer::singleShot(5000, splash, SLOT(hide()));
@@ -411,7 +434,11 @@ main(int argc, char **argv)
 
     for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
 
-        if (i == args.begin()) continue;
+        // Note QCommandLineParser has now pulled out argv[0] and all
+        // the options, so in theory everything here from the very
+        // first arg should be relevant. But let's reject names
+        // starting with "-" just in case.
+        
         if (i->startsWith('-')) continue;
 
         QString path = *i;
@@ -419,7 +446,8 @@ main(int argc, char **argv)
         application.handleFilepathArgument(path, splash);
     }
     
-    for (QStringList::iterator i = application.m_filepathQueue.begin(); i != application.m_filepathQueue.end(); ++i) {
+    for (QStringList::iterator i = application.m_filepathQueue.begin();
+         i != application.m_filepathQueue.end(); ++i) {
         QString path = *i;
         application.handleFilepathArgument(path, splash);
     }
@@ -439,6 +467,11 @@ main(int argc, char **argv)
     settings.endGroup();
 #endif
 
+    QString scriptFile = parser.value("osc-script");
+    if (scriptFile != "") {
+        gui->cueOSCScript(scriptFile);
+    }
+    
     int rv = application.exec();
 
     gui->hide();
