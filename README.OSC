@@ -86,6 +86,13 @@ Main window methods
      WAV file.  This action will try to fail rather than overwrite
      an existing file, but you probably shouldn't rely on that.
 
+  /exportlayer <filename>
+
+     Export the current layer to a file, of type determined from the
+     file's suffix. See /setcurrent for how to change which layer is
+     current. This action will try to fail rather than overwrite an
+     existing file, but you probably shouldn't rely on that.
+
   /jump <t>
   /jump end
   /jump selection
