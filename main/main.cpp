@@ -292,6 +292,13 @@ main(int argc, char **argv)
     bool oscSupport = !(parser.isSet("no-osc"));
     bool showSplash = !(parser.isSet("no-splash"));
 
+    if (!audioOutput) {
+        SVDEBUG << "Note: --no-audio flag set, will not use audio device" << endl;
+    }
+    if (!oscSupport) {
+        SVDEBUG << "Note: --no-osc flag set, will not open OSC port" << endl;
+    }
+    
     args = parser.positionalArguments();
 
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -469,6 +476,8 @@ main(int argc, char **argv)
 
     QString scriptFile = parser.value("osc-script");
     if (scriptFile != "") {
+        SVDEBUG << "Note: Cueing OSC script from filename \"" << scriptFile
+                << "\"" << endl;
         gui->cueOSCScript(scriptFile);
     }
     

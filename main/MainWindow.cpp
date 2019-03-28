@@ -332,11 +332,6 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     NetworkPermissionTester tester(withOSCSupport);
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
-        if (withOSCSupport) {
-            SVDEBUG << "MainWindow: Creating OSC queue" << endl;
-            startOSCQueue();
-        }
-
         SVDEBUG << "MainWindow: Starting transform population thread" << endl;
         TransformFactory::getInstance()->startPopulationThread();
 
@@ -354,6 +349,16 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = nullptr;
     }
 
+    if (withOSCSupport && networkPermission) {
+        SVDEBUG << "MainWindow: Creating OSC queue with network port"
+                << endl;
+        startOSCQueue(true);
+    } else {
+        SVDEBUG << "MainWindow: Creating internal-only OSC queue without port"
+                << endl;
+        startOSCQueue(false);
+    }
+    
 /*
     QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 */
