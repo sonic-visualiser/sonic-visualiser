@@ -257,7 +257,7 @@ main(int argc, char **argv)
 
     //!!! todo hand-update translations
     QCommandLineParser parser;
-    parser.setApplicationDescription(QApplication::tr("Sonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation."));
+    parser.setApplicationDescription(QApplication::tr("\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation."));
     parser.addHelpOption();
     parser.addVersionOption();
 
@@ -269,7 +269,7 @@ main(int argc, char **argv)
             { "no-splash", QApplication::tr
               ("Do not show a splash screen.") },
             { "osc-script", QApplication::tr
-              ("Batch run the OSC script found in the given file. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds."),
+              ("Batch run the Open Sound Control script found in the given file. Supply \"-\" as file to read from stdin. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds."),
               "osc.txt" }
         });
 
