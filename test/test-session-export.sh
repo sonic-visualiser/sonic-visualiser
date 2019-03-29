@@ -9,9 +9,9 @@ session="$1"
 
 set -u
 
-sv="./sonic-visualiser"
+sv="../sonic-visualiser"
 if [ ! -x "$sv" ]; then
-    echo "This script must be run from the directory containing the sonic-visualiser binary" 1>&2
+    echo "This script must be run from the sonic-visualiser/test directory" 1>&2
     exit 1
 fi
 
