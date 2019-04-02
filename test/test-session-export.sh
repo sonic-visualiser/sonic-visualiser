@@ -71,5 +71,5 @@ fi
 bunzip2 -c "$input" | xmllint --format - > "$inxml"
 bunzip2 -c "$output" | xmllint --format - > "$outxml"
 
-sdiff -w 140 "$inxml" "$outxml"
+diff -u "$inxml" "$outxml"
 
