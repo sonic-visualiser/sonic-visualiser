@@ -25,10 +25,10 @@
       "pin": "b82360a98f49"
     },
     "bqvec": {
-      "pin": "be1ce11183f4"
+      "pin": "c2d355c29372"
     },
     "bqfft": {
-      "pin": "7bf3b267b4a0"
+      "pin": "ff1d1bd48876"
     },
     "bqresample": {
       "pin": "f5dee7d40378"
