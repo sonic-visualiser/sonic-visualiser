@@ -4,13 +4,13 @@
       "pin": "b650289c47b4"
     },
     "svcore": {
-      "pin": "0e0947896fd3"
+      "pin": "901f37d32060"
     },
     "svgui": {
       "pin": "aa0616116537"
     },
     "svapp": {
-      "pin": "6fd0ebfd2bbe"
+      "pin": "e19c609a7bec"
     },
     "checker": {
       "pin": "5c60e26e16ca"
@@ -25,10 +25,10 @@
       "pin": "b82360a98f49"
     },
     "bqvec": {
-      "pin": "be1ce11183f4"
+      "pin": "c2d355c29372"
     },
     "bqfft": {
-      "pin": "9ffa0981f4d8"
+      "pin": "ff1d1bd48876"
     },
     "bqresample": {
       "pin": "f5dee7d40378"
@@ -37,7 +37,7 @@
       "pin": "8c4162878ae6"
     },
     "bqaudiostream": {
-      "pin": "87dac9687fa4"
+      "pin": "f6df3ce6f229"
     },
     "bqthingfactory": {
       "pin": "7686116dcdd5"
