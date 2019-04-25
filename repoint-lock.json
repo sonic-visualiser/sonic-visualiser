@@ -4,16 +4,16 @@
       "pin": "b650289c47b4"
     },
     "svcore": {
-      "pin": "d7b04b0ed056"
+      "pin": "a9d0b5a2c242"
     },
     "svgui": {
-      "pin": "b22a4df37095"
+      "pin": "089afbbe1253"
     },
     "svapp": {
-      "pin": "06db8f3ceb95"
+      "pin": "21673429dba5"
     },
     "checker": {
-      "pin": "5c60e26e16ca"
+      "pin": "c8c17e51aab0"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"

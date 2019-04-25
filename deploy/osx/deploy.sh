@@ -47,11 +47,11 @@ cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
 echo "Copying in plugin load checker."
-cp checker/vamp-plugin-load-checker "$source"/Contents/MacOS/
+cp checker/vamp-plugin-load-checker "$source"/Contents/Resources/
 
 echo
 echo "Copying in plugin server."
-cp piper-vamp-simple-server "$source"/Contents/MacOS/
+cp piper-vamp-simple-server "$source"/Contents/Resources/
 
 echo
 echo "Writing version $bundleVersion in to bundle."
@@ -104,6 +104,6 @@ hdiutil create -srcfolder "$volume" "$dmg" -volname "$volume" -fs HFS+ &&
 echo
 echo "Signing dmg..."
 
-codesign -s "Developer ID Application: Chris Cannam" -fv "$dmg"
+codesign -s "Developer ID Application: Chris Cannam" -fv "$dmg" -i "org.sonicvisualiser.SonicVisualiser"
 
 echo "Done"

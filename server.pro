@@ -45,3 +45,5 @@ SOURCES += \
         piper-vamp-cpp/vamp-capnp/piper-capnp.cpp \
         piper-vamp-cpp/ext/json11/json11.cpp \
         piper-vamp-cpp/vamp-server/simple-server.cpp
+
+include(platform-helpers.pri)

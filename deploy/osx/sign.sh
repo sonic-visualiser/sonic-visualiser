@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash -x
 
 set -eu
 
@@ -17,14 +17,17 @@ fi
 # in all of these codesign invocations, and figure out what to do
 # about signing plugins...
 
+id="Developer ID Application: Chris Cannam"
+opts="-fv --deep --options runtime -i org.sonicvisualiser.SonicVisualiser"
+eopts="--entitlements deploy/osx/Entitlements.plist"
+hopts="--entitlements deploy/osx/Entitlements-helpers.plist"
+
 for app in "$dir"/*.app; do
     find "$app" -name \*.dylib -print | while read fr; do
-	codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$fr"
+	codesign -s "$id" $opts "$fr"
     done
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app/Contents/MacOS/Sonic Visualiser"
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app"
-#    codesign -s "Developer ID Application: Chris Cannam" -fv --deep \
-#         --requirements '=designated =>  identifier "org.sonicvisualiser.SonicVisualiser" and ( (anchor apple generic and    certificate leaf[field.1.2.840.113635.100.6.1.9] ) or (anchor apple generic and    certificate 1[field.1.2.840.113635.100.6.2.6]  and    certificate leaf[field.1.2.840.113635.100.6.1.13] and    certificate leaf[subject.OU] = "M2H8666U82"))' \
-#         "$app"
+    codesign -s "$id" $opts $hopts "$app/Contents/Resources/vamp-plugin-load-checker"
+    codesign -s "$id" $opts $hopts "$app/Contents/Resources/piper-vamp-simple-server"
+    codesign -s "$id" $opts $eopts "$app/Contents/MacOS/Sonic Visualiser"
 done
 
