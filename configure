@@ -6453,6 +6453,7 @@ fi
 fi
 
 
+
 SV_MODULE_MODULE=lrdf
 SV_MODULE_VERSION_TEST="lrdf >= 0.2"
 SV_MODULE_HEADER=lrdf.h
@@ -6530,13 +6531,13 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$lrdf_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
 	lrdf_CFLAGS=$pkg_cv_lrdf_CFLAGS
 	lrdf_LIBS=$pkg_cv_lrdf_LIBS
@@ -6549,16 +6550,14 @@ if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
 ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+  HAVES="$HAVES $SV_MODULE_HAVE"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
 
-   if test -z "$SV_MODULE_FAILED"; then
-      if test -n "$SV_MODULE_LIB"; then
-           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+   if test -n "$SV_MODULE_LIB"; then
+     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
 $as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -6599,11 +6598,9 @@ $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
   LIBS="$LIBS -l$SV_MODULE_LIB"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
-      fi
    fi
 fi
 
@@ -6685,13 +6682,13 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$oggz_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
 	oggz_CFLAGS=$pkg_cv_oggz_CFLAGS
 	oggz_LIBS=$pkg_cv_oggz_LIBS
@@ -6704,16 +6701,14 @@ if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
 ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+  HAVES="$HAVES $SV_MODULE_HAVE"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
 
-   if test -z "$SV_MODULE_FAILED"; then
-      if test -n "$SV_MODULE_LIB"; then
-           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+   if test -n "$SV_MODULE_LIB"; then
+     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
 $as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -6754,11 +6749,9 @@ $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
   LIBS="$LIBS -l$SV_MODULE_LIB"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
-      fi
    fi
 fi
 
@@ -6840,13 +6833,13 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$fishsound_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
 	fishsound_CFLAGS=$pkg_cv_fishsound_CFLAGS
 	fishsound_LIBS=$pkg_cv_fishsound_LIBS
@@ -6859,16 +6852,14 @@ if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
 ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+  HAVES="$HAVES $SV_MODULE_HAVE"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
 
-   if test -z "$SV_MODULE_FAILED"; then
-      if test -n "$SV_MODULE_LIB"; then
-           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+   if test -n "$SV_MODULE_LIB"; then
+     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
 $as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -6909,11 +6900,9 @@ $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
   LIBS="$LIBS -l$SV_MODULE_LIB"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
-      fi
    fi
 fi
 
@@ -6995,13 +6984,13 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$mad_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
 	mad_CFLAGS=$pkg_cv_mad_CFLAGS
 	mad_LIBS=$pkg_cv_mad_LIBS
@@ -7014,16 +7003,14 @@ if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
 ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+  HAVES="$HAVES $SV_MODULE_HAVE"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
 
-   if test -z "$SV_MODULE_FAILED"; then
-      if test -n "$SV_MODULE_LIB"; then
-           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+   if test -n "$SV_MODULE_LIB"; then
+     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
 $as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -7064,11 +7051,9 @@ $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
   LIBS="$LIBS -l$SV_MODULE_LIB"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
-      fi
    fi
 fi
 
@@ -7150,13 +7135,13 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$id3tag_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
 	id3tag_CFLAGS=$pkg_cv_id3tag_CFLAGS
 	id3tag_LIBS=$pkg_cv_id3tag_LIBS
@@ -7169,16 +7154,14 @@ if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
 ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+  HAVES="$HAVES $SV_MODULE_HAVE"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
 
-   if test -z "$SV_MODULE_FAILED"; then
-      if test -n "$SV_MODULE_LIB"; then
-           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+   if test -n "$SV_MODULE_LIB"; then
+     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
 $as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -7219,11 +7202,9 @@ $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
   LIBS="$LIBS -l$SV_MODULE_LIB"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
-      fi
    fi
 fi
 
@@ -7305,13 +7286,13 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$opus_PKG_ERRORS" >&5
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 elif test $pkg_failed = untried; then
      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
-$as_echo "$as_me: Failed to find optional module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&5
+$as_echo "$as_me: Failed to find required module $SV_MODULE_MODULE using pkg-config, trying again by old-fashioned means" >&6;}
 else
 	opus_CFLAGS=$pkg_cv_opus_CFLAGS
 	opus_LIBS=$pkg_cv_opus_LIBS
@@ -7324,16 +7305,14 @@ if test -n "$SV_MODULE_FAILED"; then
    as_ac_Header=`$as_echo "ac_cv_header_$SV_MODULE_HEADER" | $as_tr_sh`
 ac_fn_cxx_check_header_mongrel "$LINENO" "$SV_MODULE_HEADER" "$as_ac_Header" "$ac_includes_default"
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
-  HAVES="$HAVES $SV_MODULE_HAVE";SV_MODULE_FAILED=""
+  HAVES="$HAVES $SV_MODULE_HAVE"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find header $SV_MODULE_HEADER for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find header $SV_MODULE_HEADER for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
 
-   if test -z "$SV_MODULE_FAILED"; then
-      if test -n "$SV_MODULE_LIB"; then
-           as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
+   if test -n "$SV_MODULE_LIB"; then
+     as_ac_Lib=`$as_echo "ac_cv_lib_$SV_MODULE_LIB''_$SV_MODULE_FUNC" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB" >&5
 $as_echo_n "checking for $SV_MODULE_FUNC in -l$SV_MODULE_LIB... " >&6; }
 if eval \${$as_ac_Lib+:} false; then :
@@ -7374,11 +7353,9 @@ $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
   LIBS="$LIBS -l$SV_MODULE_LIB"
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&5
-$as_echo "$as_me: Failed to find library $SV_MODULE_LIB for optional module $SV_MODULE_MODULE" >&6;}
+  as_fn_error $? "Failed to find library $SV_MODULE_LIB for required module $SV_MODULE_MODULE" "$LINENO" 5
 fi
 
-      fi
    fi
 fi
 

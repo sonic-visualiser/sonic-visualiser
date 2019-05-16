@@ -12,6 +12,8 @@ RUN apt-get update && \
     liblrdf0-dev \
     libmad0-dev \
     liboggz2-dev \
+    libopus-dev \
+    libopusfile-dev \
     libpulse-dev \
     libasound2-dev \
     libjack-dev \
