@@ -85,7 +85,6 @@
 #include "layer/ColourDatabase.h"
 #include "widgets/ModelDataTableDialog.h"
 #include "rdf/PluginRDFIndexer.h"
-#include "rdf/RDFExporter.h"
 
 #include "Surveyer.h"
 #include "NetworkPermissionTester.h"
@@ -332,11 +331,6 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
     NetworkPermissionTester tester(withOSCSupport);
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
-        if (withOSCSupport) {
-            SVDEBUG << "MainWindow: Creating OSC queue" << endl;
-            startOSCQueue();
-        }
-
         SVDEBUG << "MainWindow: Starting transform population thread" << endl;
         TransformFactory::getInstance()->startPopulationThread();
 
@@ -354,6 +348,16 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         m_versionTester = nullptr;
     }
 
+    if (withOSCSupport && networkPermission) {
+        SVDEBUG << "MainWindow: Creating OSC queue with network port"
+                << endl;
+        startOSCQueue(true);
+    } else {
+        SVDEBUG << "MainWindow: Creating internal-only OSC queue without port"
+                << endl;
+        startOSCQueue(false);
+    }
+    
 /*
     QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
 */
@@ -2997,81 +3001,14 @@ MainWindow::exportLayer()
     if (!model) return;
 
     FileFinder::FileType type = FileFinder::LayerFileNoMidi;
-
     if (dynamic_cast<NoteModel *>(model)) type = FileFinder::LayerFile;
-
     QString path = getSaveFileName(type);
 
     if (path == "") return;
 
-    if (QFileInfo(path).suffix() == "") path += ".svl";
-
-    QString suffix = QFileInfo(path).suffix().toLower();
-
     QString error;
 
-    if (suffix == "xml" || suffix == "svl") {
-
-        QFile file(path);
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            error = tr("Failed to open file %1 for writing").arg(path);
-        } else {
-            QTextStream out(&file);
-            out.setCodec(QTextCodec::codecForName("UTF-8"));
-            out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                << "<!DOCTYPE sonic-visualiser>\n"
-                << "<sv>\n"
-                << "  <data>\n";
-
-            model->toXml(out, "    ");
-
-            out << "  </data>\n"
-                << "  <display>\n";
-
-            layer->toXml(out, "    ");
-
-            out << "  </display>\n"
-                << "</sv>\n";
-        }
-
-    } else if (suffix == "mid" || suffix == "midi") {
-
-        NoteModel *nm = dynamic_cast<NoteModel *>(model);
-
-        if (!nm) {
-            error = tr("Can't export non-note layers to MIDI");
-        } else {
-            MIDIFileWriter writer(path, nm, nm->getSampleRate());
-            writer.write();
-            if (!writer.isOK()) {
-                error = writer.getError();
-            }
-        }
-
-    } else if (suffix == "ttl" || suffix == "n3") {
-
-        if (!RDFExporter::canExportModel(model)) {
-            error = tr("Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)");
-        } else {
-            RDFExporter exporter(path, model);
-            exporter.write();
-            if (!exporter.isOK()) {
-                error = exporter.getError();
-            }
-        }
-
-    } else {
-
-        CSVFileWriter writer(path, model,
-                             ((suffix == "csv") ? "," : "\t"));
-        writer.write();
-
-        if (!writer.isOK()) {
-            error = writer.getError();
-        }
-    }
-
-    if (error != "") {
+    if (!exportLayerTo(layer, path, error)) {
         QMessageBox::critical(this, tr("Failed to write file"), error);
     } else {
         m_recentFiles.addFile(path);
@@ -4653,11 +4590,8 @@ MainWindow::midiEventsAvailable()
             SparseTimeValueModel *tvm =
                 dynamic_cast<SparseTimeValueModel *>(model);
             if (tvm) {
-                SparseTimeValueModel::Point point(frame,
-                                                  float(ev.getPitch() % 12),
-                                                  "");
-                SparseTimeValueModel::AddPointCommand *command =
-                    new SparseTimeValueModel::AddPointCommand
+                Event point(frame, float(ev.getPitch() % 12), "");
+                AddEventCommand *command = new AddEventCommand
                     (tvm, point, tr("Add Point"));
                 CommandHistory::getInstance()->addCommand(command);
             }

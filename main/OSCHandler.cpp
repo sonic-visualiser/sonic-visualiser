@@ -40,8 +40,6 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     SVDEBUG << "OSCHandler: method = \""
             << message.getMethod() << "\"" << endl;
 
-    // This large function should really be abstracted out.
-
     if (message.getMethod() == "open") {
 
         if (message.getArgCount() == 1 &&
@@ -116,6 +114,30 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     } else {
                         writer.writeModel(getMainModel());
                     }
+                }
+            }
+        }
+
+    } else if (message.getMethod() == "exportlayer") {
+
+        QString path;
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+            path = message.getArg(0).toString();
+            if (QFileInfo(path).exists()) {
+                SVDEBUG << "OSCHandler: Refusing to overwrite existing file in layer export" << endl;
+            } else {
+                Pane *currentPane = nullptr;
+                Layer *currentLayer = nullptr;
+                if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+                if (currentPane) currentLayer = currentPane->getSelectedLayer();
+                if (currentLayer) {
+                    QString error;
+                    if (!exportLayerTo(currentLayer, path, error)) {
+                        SVCERR << "OSCHandler: Failed to export current layer to " << path << ": " << error << endl;
+                    }
+                } else {
+                    SVCERR << "OSCHandler: No current layer to export" << endl;
                 }
             }
         }

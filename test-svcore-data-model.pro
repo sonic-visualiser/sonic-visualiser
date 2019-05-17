@@ -29,5 +29,6 @@ for (file, TEST_SOURCES) { SOURCES += $$sprintf("svcore/data/model/test/%1", $$f
 for (file, TEST_HEADERS) { HEADERS += $$sprintf("svcore/data/model/test/%1", $$file) }
 
 !win32* {
+    POST_TARGETDEPS += $$PWD/libbase.a
     QMAKE_POST_LINK = ./$${TARGET}
 }
