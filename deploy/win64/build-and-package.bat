@@ -55,7 +55,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%ARG%" == "sign" (
 @echo Signing 64-bit executables and libraries
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 build_win32\release\*.exe build_win64\release\*.dll
+signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 build_win64\release\*.exe build_win64\release\*.dll
 )
 
 set PATH=%PATH%;"C:\Program Files (x86)\WiX Toolset v3.11\bin"
