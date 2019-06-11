@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val repoint_version = "1.1"
+val repoint_version = "1.1.1"
 
 
 datatype vcs =
@@ -279,6 +279,18 @@ end = struct
 
     fun trim str =
         hd (String.fields (fn x => x = #"\n" orelse x = #"\r") str)
+
+    fun make_canonical path =
+        (* SML/NJ doesn't properly handle "/" when splitting paths -
+           it should be a path separator even on Windows, but SML/NJ
+           treats it as a normal filename character there. So we must
+           convert these explicitly *)
+        OS.Path.mkCanonical
+            (if OS.Path.concat ("a", "b") = "a\\b"
+             then String.translate (fn #"/" => "\\" |
+                                    c => Char.toString c)
+                                   path
+             else path)
             
     fun file_url path =
         let val forward_path = 
@@ -427,7 +439,7 @@ end = struct
                                       ERROR ("Directory creation failed: " ^ e))
 
     fun mkpath path =
-        mkpath' (OS.Path.mkCanonical path)
+        mkpath' (make_canonical path)
 
     fun dir_contents dir =
         let open OS
@@ -463,7 +475,7 @@ end = struct
         end
 
     fun rmpath path =
-        rmpath' (OS.Path.mkCanonical path)
+        rmpath' (make_canonical path)
 
     fun nonempty_dir_exists path =
         let open OS.FileSys
