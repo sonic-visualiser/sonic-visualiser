@@ -4102,7 +4102,7 @@ MainWindow::addLayer(QString transformId)
             RangeSummarisableTimeValueModel *r =
                 qobject_cast<RangeSummarisableTimeValueModel *>(m);
             if (r) {
-                sl.push_back(AggregateWaveModel::ModelChannelSpec(r, -1));
+                sl.push_back(AggregateWaveModel::ModelChannelSpec(r->getId(), -1));
             }
         }
         if (!sl.empty()) {
