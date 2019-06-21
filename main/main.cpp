@@ -238,7 +238,7 @@ main(int argc, char **argv)
         cerr << SV_VERSION << endl;
         exit(0);
     }
-
+    
     svSystemSpecificInitialisation();
 
 #ifdef Q_OS_MAC

@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MAIN_WINDOW_H_
-#define _MAIN_WINDOW_H_
+#ifndef SV_MAIN_WINDOW_H
+#define SV_MAIN_WINDOW_H
 
 #include "framework/MainWindowBase.h"
 

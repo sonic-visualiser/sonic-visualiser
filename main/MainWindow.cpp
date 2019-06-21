@@ -3174,8 +3174,6 @@ MainWindow::exportSVG()
 void
 MainWindow::browseRecordedAudio()
 {
-    if (!m_recordTarget) return;
-
     QString path = RecordDirectory::getRecordContainerDirectory();
     if (path == "") path = RecordDirectory::getRecordDirectory();
     if (path == "") return;
