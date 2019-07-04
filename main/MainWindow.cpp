@@ -76,7 +76,6 @@
 #include "plugin/PluginScan.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
-#include "base/PlayParameterRepository.h"
 #include "base/XmlExportable.h"
 #include "widgets/CommandHistory.h"
 #include "base/Profiler.h"
