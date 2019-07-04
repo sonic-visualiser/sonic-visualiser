@@ -4,13 +4,13 @@
       "pin": "62987b6d6a3b"
     },
     "svcore": {
-      "pin": "c3b5564cfb78"
+      "pin": "d0ef65d8dd89"
     },
     "svgui": {
-      "pin": "de41a11cabc2"
+      "pin": "9bf8aa2916e9"
     },
     "svapp": {
-      "pin": "c7406ebcd51c"
+      "pin": "7540733f5480"
     },
     "checker": {
       "pin": "c8c17e51aab0"

@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _MAIN_WINDOW_H_
-#define _MAIN_WINDOW_H_
+#ifndef SV_MAIN_WINDOW_H
+#define SV_MAIN_WINDOW_H
 
 #include "framework/MainWindowBase.h"
 
@@ -137,11 +137,10 @@ protected slots:
     void layerRemoved(Layer *) override;
     void layerInAView(Layer *, bool) override;
 
-    void mainModelChanged(WaveFileModel *) override;
+    void mainModelChanged(ModelId) override;
     virtual void mainModelGainChanged(float);
     virtual void mainModelPanChanged(float);
-    void modelAdded(Model *) override;
-    void modelAboutToBeDeleted(Model *) override;
+    void modelAdded(ModelId) override;
 
     virtual void showLayerTree();
     virtual void showActivityLog();
@@ -237,16 +236,16 @@ protected:
     struct LayerConfiguration {
         LayerConfiguration(LayerFactory::LayerType _layer
                                                = LayerFactory::TimeRuler,
-                           Model *_source = 0,
+                           ModelId _source = ModelId(),
                            int _channel = -1) :
             layer(_layer), sourceModel(_source), channel(_channel) { }
         LayerFactory::LayerType layer;
-        Model *sourceModel;
+        ModelId sourceModel;
         int channel;
     };
 
     QString shortcutFor(LayerFactory::LayerType, bool isPaneMenu);
-    void updateLayerShortcutsFor(Model *);
+    void updateLayerShortcutsFor(ModelId);
 
     // Map from menu action to the resulting layer configurations
     // etc. These all used to be std::maps, but we sometimes want to

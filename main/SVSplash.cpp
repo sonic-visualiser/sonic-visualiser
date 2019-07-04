@@ -18,7 +18,7 @@
 
 #include <QPainter>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QSvgRenderer>
 
 #include <cmath>
@@ -33,7 +33,8 @@ SVSplash::SVSplash()
     QPixmap *p1 = new QPixmap(":icons/scalable/sv-splash.png");
 
     int w = p1->width(), h = p1->height();
-    QRect desk = QApplication::desktop()->availableGeometry();
+    QScreen *screen = QApplication::primaryScreen();
+    QRect desk = screen->availableGeometry();
 
     double dpratio = devicePixelRatio();
     double widthMultiple = double(desk.width()) / double(w);
@@ -89,6 +90,11 @@ SVSplash::finishSplash(QWidget *w)
 void
 SVSplash::drawContents(QPainter *painter)
 {
+    // Qt 5.13 deprecates QFontMetrics::width(), but its suggested
+    // replacement (horizontalAdvance) was only added in Qt 5.11
+    // which is too new for us
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
     painter->drawPixmap(rect(), *m_pixmap, m_pixmap->rect());
     QString text = QString("v%1").arg(SV_VERSION);
     painter->setPen(Qt::black);
