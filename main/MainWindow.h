@@ -118,6 +118,8 @@ protected slots:
     void paneDropAccepted(Pane *, QStringList) override;
     void paneDropAccepted(Pane *, QString) override;
 
+    void paneCancelButtonPressed(Layer *);
+
     virtual void setupRecentFilesMenu();
     virtual void setupRecentTransformsMenu();
     virtual void setupTemplatesMenu();

@@ -3475,6 +3475,10 @@ void
 MainWindow::paneAdded(Pane *pane)
 {
     if (m_overview) m_overview->registerView(pane);
+    if (pane) {
+        connect(pane, SIGNAL(cancelButtonPressed(Layer *)),
+                this, SLOT(paneCancelButtonPressed(Layer *)));
+    }
 }    
 
 void
@@ -3488,6 +3492,31 @@ MainWindow::paneAboutToBeDeleted(Pane *pane)
 {
     if (m_overview) m_overview->unregisterView(pane); 
 }    
+
+void
+MainWindow::paneCancelButtonPressed(Layer *layer)
+{
+    Pane *pane = qobject_cast<Pane *>(sender());
+    bool found = false;
+    if (pane && layer) {
+        for (int i = 0; i < pane->getLayerCount(); ++i) {
+            if (pane->getLayer(i) == layer) {
+                found = true;
+                break;
+            }
+        }
+    }
+    if (!found) {
+        SVDEBUG << "MainWindow::paneCancelButtonPressed: Unknown layer in pane"
+                << endl;
+        return;
+    }
+
+    SVDEBUG << "MainWindow::paneCancelButtonPressed: Layer " << layer << endl;
+
+    m_document->removeLayerFromView(pane, layer);
+    updateMenuStates();
+}
 
 void
 MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
@@ -4146,7 +4175,7 @@ MainWindow::addLayer(QString transformId)
             if (auto aggregateModel = ModelById::get(aggregate)) {
                 aggregateModel->setObjectName(tr("Multiplexed audio"));
             }
-            m_document->addAggregateModel(aggregate);
+            m_document->addNonDerivedModel(aggregate);
         } else {
             ModelById::release(aggregate);
         }
