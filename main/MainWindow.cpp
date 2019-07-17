@@ -76,7 +76,6 @@
 #include "plugin/PluginScan.h"
 #include "transform/TransformFactory.h"
 #include "transform/ModelTransformerFactory.h"
-#include "base/PlayParameterRepository.h"
 #include "base/XmlExportable.h"
 #include "widgets/CommandHistory.h"
 #include "base/Profiler.h"
@@ -1294,11 +1293,11 @@ MainWindow::setupPaneAndLayerMenus()
     int backgroundTypeCount = int(sizeof(backgroundTypes) /
                                   sizeof(backgroundTypes[0]));
 
-    std::vector<Model *> models;
+    std::vector<ModelId> models;
     if (m_document) models = m_document->getTransformInputModels();
     bool plural = (models.size() > 1);
     if (models.empty()) {
-        models.push_back(getMainModel()); // probably 0
+        models.push_back(getMainModelId()); // probably None at this point
     }
 
     for (int i = 0; i < backgroundTypeCount; ++i) {
@@ -1382,19 +1381,21 @@ MainWindow::setupPaneAndLayerMenus()
             default: break;
             }
 
-            std::vector<Model *> candidateModels = models;
+            std::vector<ModelId> candidateModels = models;
+            if (candidateModels.empty()) {
+                throw std::logic_error("candidateModels should not be empty");
+            }
             
-            for (std::vector<Model *>::iterator mi =
-                     candidateModels.begin();
-                 mi != candidateModels.end(); ++mi) {
-                
-                Model *model = *mi;
+            for (auto modelId: candidateModels) {
 
+                auto model = ModelById::get(modelId);
+                
                 int channels = 0;
                 if (model) {
-                    DenseTimeValueModel *dtvm =
-                        dynamic_cast<DenseTimeValueModel *>(model);
-                    if (dtvm) channels = dtvm->getChannelCount();
+                    if (auto dtvm = ModelById::getAs<DenseTimeValueModel>
+                        (modelId)) {
+                        channels = dtvm->getChannelCount();
+                    }
                 }
                 if (channels < 1 && getMainModel()) {
                     channels = getMainModel()->getChannelCount();
@@ -1419,14 +1420,14 @@ MainWindow::setupPaneAndLayerMenus()
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
                             m_paneActions.push_back
-                                ({ action, LayerConfiguration(type, model) });
+                                ({ action, LayerConfiguration(type, modelId) });
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
                             m_layerActions.push_back
-                                ({ action, LayerConfiguration(type, model) });
+                                ({ action, LayerConfiguration(type, modelId) });
                         }
                         if (shortcutText != "") {
                             m_keyReference->registerShortcut(action);
@@ -1461,7 +1462,7 @@ MainWindow::setupPaneAndLayerMenus()
 
                         if (isDefault) {
                             action = new QAction(icon, actionText, this);
-                            if (!model || model == getMainModel()) {
+                            if (!model || modelId == getMainModelId()) {
                                 // Default for the shortcut is to
                                 // attach to an action that uses the
                                 // main model as input. But this may
@@ -1482,21 +1483,21 @@ MainWindow::setupPaneAndLayerMenus()
                             connect(this, SIGNAL(canAddPane(bool)),
                                     action, SLOT(setEnabled(bool)));
                             m_paneActions.push_back
-                                ({ action, LayerConfiguration(type, model, c - 1) });
+                                ({ action, LayerConfiguration(type, modelId, c - 1) });
                         } else {
                             connect(action, SIGNAL(triggered()),
                                     this, SLOT(addLayer()));
                             connect(this, SIGNAL(canAddLayer(bool)),
                                     action, SLOT(setEnabled(bool)));
                             m_layerActions.push_back
-                                ({ action, LayerConfiguration(type, model, c - 1) });
+                                ({ action, LayerConfiguration(type, modelId, c - 1) });
                         }
 
                         submenu->addAction(action);
                     }
 
                     if (isDefault && menuType == layerMenuType &&
-                        mi == candidateModels.begin()) {
+                        modelId == *candidateModels.begin()) {
                         // only add for one model, one channel, one menu on
                         // right button -- the action itself will discover
                         // which model is the correct one (based on pane)
@@ -1507,7 +1508,7 @@ MainWindow::setupPaneAndLayerMenus()
                         connect(this, SIGNAL(canAddLayer(bool)),
                                 action, SLOT(setEnabled(bool)));
                         m_layerActions.push_back
-                            ({ action, LayerConfiguration(type, nullptr, 0) });
+                            ({ action, LayerConfiguration(type, ModelId(), 0) });
                         m_rightButtonLayerMenu->addAction(action);
                     }
                 }
@@ -1620,7 +1621,7 @@ MainWindow::setupPaneAndLayerMenus()
 }
 
 void
-MainWindow::updateLayerShortcutsFor(Model *model)
+MainWindow::updateLayerShortcutsFor(ModelId modelId)
 {
     // Called when e.g. the current pane has changed, to ensure the
     // various layer shortcuts select an action whose input model is
@@ -1629,9 +1630,11 @@ MainWindow::updateLayerShortcutsFor(Model *model)
     set<LayerFactory::LayerType> seen;
     
     for (auto &a : m_paneActions) {
-        if (!a.second.sourceModel) continue; // empty pane/layer shortcut
+        if (a.second.sourceModel.isNone()) {
+            continue; // empty pane/layer shortcut
+        }
         auto type = a.second.layer;
-        if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
+        if (a.second.sourceModel == modelId && seen.find(type) == seen.end()) {
             a.first->setShortcut(shortcutFor(type, true));
             seen.insert(type);
         } else {
@@ -1642,9 +1645,11 @@ MainWindow::updateLayerShortcutsFor(Model *model)
     seen.clear();
     
     for (auto &a : m_layerActions) {
-        if (!a.second.sourceModel) continue; // empty pane/layer shortcut
+        if (a.second.sourceModel.isNone()) {
+            continue; // empty pane/layer shortcut
+        }
         auto type = a.second.layer;
-        if (a.second.sourceModel == model && seen.find(type) == seen.end()) {
+        if (a.second.sourceModel == modelId && seen.find(type) == seen.end()) {
             a.first->setShortcut(shortcutFor(type, false));
             seen.insert(type);
         } else {
@@ -2690,11 +2695,12 @@ MainWindow::exportAudioData()
 void
 MainWindow::exportAudio(bool asData)
 {
-    if (!getMainModel()) return;
-
-    RangeSummarisableTimeValueModel *model = getMainModel();
-    std::set<RangeSummarisableTimeValueModel *> otherModels;
-    RangeSummarisableTimeValueModel *current = model;
+    auto modelId = getMainModelId();
+    if (modelId.isNone()) return;
+    
+    std::set<ModelId> otherModelIds;
+    ModelId current = modelId;
+    
     if (m_paneStack) {
         for (int i = 0; i < m_paneStack->getPaneCount(); ++i) {
             Pane *pane = m_paneStack->getPane(i);
@@ -2703,37 +2709,39 @@ MainWindow::exportAudio(bool asData)
                 Layer *layer = pane->getLayer(j);
                 if (!layer) continue;
                 cerr << "layer = " << layer->objectName() << endl;
-                Model *m = layer->getModel();
-                RangeSummarisableTimeValueModel *wm = 
-                    dynamic_cast<RangeSummarisableTimeValueModel *>(m);
-                if (wm) {
-                    cerr << "found: " << wm->objectName() << endl;
-                    otherModels.insert(wm);
+                ModelId m = layer->getModel();
+                if (ModelById::isa<RangeSummarisableTimeValueModel>(m)) {
+                    otherModelIds.insert(m);
                     if (pane == m_paneStack->getCurrentPane()) {
-                        current = wm;
+                        current = m;
                     }
                 }
             }
         }
     }
-    if (!otherModels.empty()) {
-        std::map<QString, RangeSummarisableTimeValueModel *> m;
-        m[tr("1. %2").arg(model->objectName())] = model;
+    if (!otherModelIds.empty()) {
+        std::map<QString, ModelId> m;
+        QString unnamed = tr("<unnamed>");
+        QString oname = unnamed;
+        if (auto mp = ModelById::get(modelId)) {
+            oname = mp->objectName();
+        }
+        m[tr("1. %2").arg(oname)] = modelId;
         int n = 2;
         int c = 0;
-        for (std::set<RangeSummarisableTimeValueModel *>::const_iterator i
-                 = otherModels.begin();
-             i != otherModels.end(); ++i) {
-            if (*i == model) continue;
-            m[tr("%1. %2").arg(n).arg((*i)->objectName())] = *i;
+        for (auto otherModelId: otherModelIds) {
+            if (otherModelId == modelId) continue;
+            oname = unnamed;
+            if (auto mp = ModelById::get(otherModelId)) {
+                oname = mp->objectName();
+            }
+            m[tr("%1. %2").arg(n).arg(oname)] = otherModelId;
             ++n;
-            if (*i == current) c = n-1;
+            if (otherModelId == current) c = n-1;
         }
         QStringList items;
-        for (std::map<QString, RangeSummarisableTimeValueModel *>
-                 ::const_iterator i = m.begin();
-             i != m.end(); ++i) {
-            items << i->first;
+        for (auto i: m) {
+            items << i.first;
         }
         if (items.size() > 1) {
             bool ok = false;
@@ -2743,14 +2751,20 @@ MainWindow::exportAudio(bool asData)
                  items, c, false, &ok);
             if (!ok || item.isEmpty()) return;
             if (m.find(item) == m.end()) {
-                cerr << "WARNING: Model " << item
-                     << " not found in list!" << endl;
+                SVCERR << "WARNING: Model " << item
+                       << " not found in list!" << endl;
             } else {
-                model = m[item];
+                modelId = m[item];
             }
         }
     }
 
+    auto model = ModelById::getAs<DenseTimeValueModel>(modelId);
+    if (!model) {
+        SVCERR << "ERROR: Chosen model is not a DenseTimeValueModel!" << endl;
+        return;
+    }
+    
     QString path;
     if (asData) {
         path = getSaveFileName(FileFinder::CSVFile);
@@ -2835,7 +2849,7 @@ MainWindow::exportAudio(bool asData)
                                         model->getSampleRate(),
                                         model->getChannelCount(),
                                         WavFileWriter::WriteToTemporary);
-                subwriter.writeModel(model, &subms);
+                subwriter.writeModel(model.get(), &subms);
                 ok = subwriter.isOK();
 
                 if (!ok) {
@@ -2856,7 +2870,7 @@ MainWindow::exportAudio(bool asData)
                 this,
                 Qt::ApplicationModal
             };
-            CSVFileWriter writer(path, model, &dialog,
+            CSVFileWriter writer(path, model.get(), &dialog,
                                  ((QFileInfo(path).suffix() == "csv") ?
                                   "," : "\t"));
             if (selectionToWrite) {
@@ -2871,7 +2885,7 @@ MainWindow::exportAudio(bool asData)
                                  model->getSampleRate(),
                                  model->getChannelCount(),
                                  WavFileWriter::WriteToTemporary);
-            writer.writeModel(model, selectionToWrite);
+            writer.writeModel(model.get(), selectionToWrite);
             ok = writer.isOK();
             error = writer.getError();
         }
@@ -2936,8 +2950,10 @@ MainWindow::convertAudio()
 
     } else {
 
+        auto modelId = ModelById::add(std::shared_ptr<Model>(model));
+        
         status = addOpenedAudioModel(path,
-                                     model,
+                                     modelId,
                                      CreateAdditionalModel,
                                      getDefaultSessionTemplate(),
                                      false);
@@ -2997,11 +3013,11 @@ MainWindow::exportLayer()
     Layer *layer = pane->getSelectedLayer();
     if (!layer) return;
 
-    Model *model = layer->getModel();
-    if (!model) return;
+    ModelId modelId = layer->getModel();
+    if (modelId.isNone()) return;
 
     FileFinder::FileType type = FileFinder::LayerFileNoMidi;
-    if (dynamic_cast<NoteModel *>(model)) type = FileFinder::LayerFile;
+    if (ModelById::isa<NoteModel>(modelId)) type = FileFinder::LayerFile;
     QString path = getSaveFileName(type);
 
     if (path == "") return;
@@ -3385,7 +3401,7 @@ MainWindow::applyTemplate()
     }
 
     QString mainModelLocation;
-    WaveFileModel *mm = getMainModel();
+    auto mm = getMainModel();
     if (mm) mainModelLocation = mm->getLocation();
     if (mainModelLocation != "") {
         openAudio(mainModelLocation, ReplaceSession, n);
@@ -3457,6 +3473,10 @@ void
 MainWindow::paneAdded(Pane *pane)
 {
     if (m_overview) m_overview->registerView(pane);
+    if (pane) {
+        connect(pane, SIGNAL(cancelButtonPressed(Layer *)),
+                this, SLOT(paneCancelButtonPressed(Layer *)));
+    }
 }    
 
 void
@@ -3470,6 +3490,49 @@ MainWindow::paneAboutToBeDeleted(Pane *pane)
 {
     if (m_overview) m_overview->unregisterView(pane); 
 }    
+
+void
+MainWindow::paneCancelButtonPressed(Layer *layer)
+{
+    Pane *pane = qobject_cast<Pane *>(sender());
+    bool found = false;
+    if (pane && layer) {
+        for (int i = 0; i < pane->getLayerCount(); ++i) {
+            if (pane->getLayer(i) == layer) {
+                found = true;
+                break;
+            }
+        }
+    }
+    if (!found) {
+        SVDEBUG << "MainWindow::paneCancelButtonPressed: Unknown layer in pane"
+                << endl;
+        return;
+    }
+
+    SVDEBUG << "MainWindow::paneCancelButtonPressed: Layer " << layer << endl;
+
+    // We need to ensure that the transform that is populating this
+    // layer's model is stopped - that is the main reason to use
+    // Cancel after all. It would also be a good idea to remove the
+    // incomplete layer from both the view and the undo/redo stack.
+
+    // Deleting the target model will ensure that the transform gets
+    // stopped, but removing the layer from the view is not enough to
+    // delete the model, because a reference to the layer remains on
+    // the undo/redo stack. If we also replace the model id with None
+    // in the layer, that does the trick.
+    
+    m_document->setModel(layer, {});
+    m_document->removeLayerFromView(pane, layer);
+
+    // We still have a layer with no model on the undo/redo stack,
+    // which is a pity. I'm not sure we can easily remove it, since
+    // other commands may have been pushed on the stack since, so
+    // let's just leave that for now.
+    
+    updateMenuStates();
+}
 
 void
 MainWindow::paneDropAccepted(Pane *pane, QStringList uriList)
@@ -3835,32 +3898,31 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
 
     Layer *newLayer = m_document->createLayer(configuration.layer);
 
-    Model *suggestedModel = configuration.sourceModel;
-    Model *model = nullptr;
+    ModelId suggestedModelId = configuration.sourceModel;
+    ModelId modelId;
 
-    if (suggestedModel) {
+    if (!suggestedModelId.isNone()) {
 
         // check its validity
-        std::vector<Model *> inputModels = m_document->getTransformInputModels();
-        for (size_t j = 0; j < inputModels.size(); ++j) {
-            if (inputModels[j] == suggestedModel) {
-                model = suggestedModel;
-                break;
+        std::vector<ModelId> inputModels = m_document->getTransformInputModels();
+        for (auto im: inputModels) {
+            if (im == suggestedModelId) {
+                modelId = suggestedModelId;
             }
         }
 
-        if (!model) {
-            cerr << "WARNING: Model " << (void *)suggestedModel
-                      << " appears in pane action map, but is not reported "
-                      << "by document as a valid transform source" << endl;
+        if (modelId.isNone()) {
+            cerr << "WARNING: Model " << modelId
+                 << " appears in pane action map, but is not reported "
+                 << "by document as a valid transform source" << endl;
         }
     }
 
-    if (!model) {
-        model = m_document->getMainModel();
+    if (modelId.isNone()) {
+        modelId = m_document->getMainModel();
     }
 
-    m_document->setModel(newLayer, model);
+    m_document->setModel(newLayer, modelId);
 
     m_document->setChannel(newLayer, configuration.channel);
     m_document->addLayerToView(pane, newLayer);
@@ -3974,11 +4036,9 @@ MainWindow::addLayer()
 
         } else {
 
-            Model *model = i->second.sourceModel;
+            ModelId modelId = i->second.sourceModel;
 
-            cerr << "model = "<< model << endl;
-
-            if (!model) {
+            if (modelId.isNone()) {
                 if (type == LayerFactory::TimeRuler) {
                     newLayer = m_document->createMainModelLayer(type);
                 } else {
@@ -3987,27 +4047,25 @@ MainWindow::addLayer()
                     // the current pane -- this is the case for
                     // right-button menu layer additions
                     Pane::ModelSet ms = pane->getModels();
-                    foreach (Model *m, ms) {
-                        RangeSummarisableTimeValueModel *r =
-                            dynamic_cast<RangeSummarisableTimeValueModel *>(m);
-                        if (r) model = m;
+                    for (ModelId m: ms) {
+                        if (ModelById::isa<RangeSummarisableTimeValueModel>(m)) {
+                            modelId = m;
+                        }
                     }
-                    if (!model) model = getMainModel();
+                    if (modelId.isNone()) {
+                        modelId = getMainModelId();
+                    }
                 }
             }
 
-            if (model) {
+            if (!modelId.isNone()) {
                 newLayer = m_document->createLayer(type);
-                if (m_document->isKnownModel(model)) {
+                if (m_document->isKnownModel(modelId)) {
                     m_document->setChannel(newLayer, i->second.channel);
-                    m_document->setModel(newLayer, model);
+                    m_document->setModel(newLayer, modelId);
                 } else {
-                    cerr << "WARNING: MainWindow::addLayer: unknown model "
-                              << model
-                              << " (\""
-                              << model->objectName()
-                              << "\") in layer action map"
-                              << endl;
+                    SVCERR << "WARNING: MainWindow::addLayer: unknown model "
+                           << modelId << " in layer action map" << endl;
                 }
             }
         }
@@ -4064,10 +4122,10 @@ MainWindow::addLayer(QString transformId)
         return;
     }
 
-    std::vector<Model *> candidateInputModels =
+    std::vector<ModelId> candidateInputModels =
         m_document->getTransformInputModels();
 
-    Model *defaultInputModel = nullptr;
+    ModelId defaultInputModelId;
 
     for (int j = 0; j < pane->getLayerCount(); ++j) {
 
@@ -4076,37 +4134,37 @@ MainWindow::addLayer(QString transformId)
 
         if (LayerFactory::getInstance()->getLayerType(layer) !=
             LayerFactory::Waveform &&
-            !layer->isLayerOpaque()) continue;
+            !layer->isLayerOpaque()) {
+            continue;
+        }
 
-        Model *model = layer->getModel();
-        if (!model) continue;
+        ModelId modelId = layer->getModel();
+        if (modelId.isNone()) continue;
 
-        for (size_t k = 0; k < candidateInputModels.size(); ++k) {
-            if (candidateInputModels[k] == model) {
-                defaultInputModel = model;
+        for (ModelId candidateId: candidateInputModels) {
+            if (candidateId == modelId) {
+                defaultInputModelId = modelId;
                 break;
             }
         }
 
-        if (defaultInputModel) break;
+        if (!defaultInputModelId.isNone()) break;
     }
 
-    AggregateWaveModel *aggregate = nullptr;
+    ModelId aggregate;
     
     if (candidateInputModels.size() > 1) {
         // Add an aggregate model as another option
         AggregateWaveModel::ChannelSpecList sl;
-        foreach (Model *m, candidateInputModels) {
-            RangeSummarisableTimeValueModel *r =
-                qobject_cast<RangeSummarisableTimeValueModel *>(m);
-            if (r) {
-                sl.push_back(AggregateWaveModel::ModelChannelSpec(r, -1));
+        for (ModelId mid: candidateInputModels) {
+            if (ModelById::isa<RangeSummarisableTimeValueModel>(mid)) {
+                sl.push_back(AggregateWaveModel::ModelChannelSpec(mid, -1));
             }
         }
         if (!sl.empty()) {
-            aggregate = new AggregateWaveModel(sl);
+            auto aggregate = std::make_shared<AggregateWaveModel>(sl);
             aggregate->setObjectName(tr("Multiplex all of the above"));
-            candidateInputModels.push_back(aggregate);
+            candidateInputModels.push_back(ModelById::add(aggregate));
         }
     }
     
@@ -4122,23 +4180,24 @@ MainWindow::addLayer(QString transformId)
         getConfigurationForTransform
         (transform,
          candidateInputModels,
-         defaultInputModel,
+         defaultInputModelId,
          m_playSource,
          startFrame,
          duration,
          &configurator);
 
-    if (aggregate) {
+    if (!aggregate.isNone()) {
         if (input.getModel() == aggregate) {
-            aggregate->setObjectName(tr("Multiplexed audio"));
-            m_document->addAggregateModel(aggregate);
+            if (auto aggregateModel = ModelById::get(aggregate)) {
+                aggregateModel->setObjectName(tr("Multiplexed audio"));
+            }
+            m_document->addNonDerivedModel(aggregate);
         } else {
-            aggregate->aboutToDelete();
-            delete aggregate;
+            ModelById::release(aggregate);
         }
     }
     
-    if (!input.getModel()) return;
+    if (input.getModel().isNone()) return;
 
 //    SVDEBUG << "MainWindow::addLayer: Input model is " << input.getModel() << " \"" << input.getModel()->objectName() << "\"" << endl << "transform:" << endl << transform.toXmlString() << endl;
 
@@ -4328,7 +4387,7 @@ MainWindow::currentPaneChanged(Pane *pane)
         if (layer &&
             LayerFactory::getInstance()->getLayerType(layer) ==
             LayerFactory::Waveform &&
-            layer->getModel() == getMainModel()) {
+            layer->getModel() == getMainModelId()) {
             containsMainModel = true;
             break;
         }
@@ -4339,15 +4398,14 @@ MainWindow::currentPaneChanged(Pane *pane)
     for (int i = pane->getLayerCount(); i > 0; ) {
         --i;
         Layer *layer = pane->getLayer(i);
-        RangeSummarisableTimeValueModel *tvm = 
-            qobject_cast<RangeSummarisableTimeValueModel *>(layer->getModel());
-        if (tvm) {
+        ModelId modelId = layer->getModel();
+        if (ModelById::isa<RangeSummarisableTimeValueModel>(modelId)) {
             auto type = LayerFactory::getInstance()->getLayerType(layer);
             if (type != LayerFactory::TimeRuler) {
-                updateLayerShortcutsFor(tvm);
+                updateLayerShortcutsFor(modelId);
             }
             if (type == LayerFactory::Waveform) {
-                m_panLayer->setModel(tvm);
+                m_panLayer->setModel(modelId);
                 panLayerSet = true;
                 break;
             }
@@ -4355,14 +4413,20 @@ MainWindow::currentPaneChanged(Pane *pane)
     }
 
     if (containsMainModel && !panLayerSet) {
-        m_panLayer->setModel(getMainModel());
+        m_panLayer->setModel(getMainModelId());
     }
 }
 
 void
 MainWindow::updateVisibleRangeDisplay(Pane *p) const
 {
-    if (!getMainModel() || !p) {
+    sv_samplerate_t sampleRate = 0;
+    if (auto mm = getMainModel()) {
+        sampleRate = mm->getSampleRate();
+    } else {
+        return;
+    }
+    if (!p) {
         return;
     }
 
@@ -4386,12 +4450,8 @@ MainWindow::updateVisibleRangeDisplay(Pane *p) const
         endFrame = p->getLastVisibleFrame();
     }
 
-    RealTime start = RealTime::frame2RealTime
-        (startFrame, getMainModel()->getSampleRate());
-
-    RealTime end = RealTime::frame2RealTime
-        (endFrame, getMainModel()->getSampleRate());
-
+    RealTime start = RealTime::frame2RealTime(startFrame, sampleRate);
+    RealTime end = RealTime::frame2RealTime(endFrame, sampleRate);
     RealTime duration = end - start;
 
     QString startStr, endStr, durationStr;
@@ -4584,13 +4644,11 @@ MainWindow::midiEventsAvailable()
 
             if (!m_playSource || !m_playSource->isPlaying()) continue;
 
-            Model *model = static_cast<Layer *>(currentTimeValueLayer)->getModel();
-            SparseTimeValueModel *tvm =
-                dynamic_cast<SparseTimeValueModel *>(model);
-            if (tvm) {
+            ModelId modelId = currentTimeValueLayer->getModel();
+            if (ModelById::isa<SparseTimeValueModel>(modelId)) {
                 Event point(frame, float(ev.getPitch() % 12), "");
                 AddEventCommand *command = new AddEventCommand
-                    (tvm, point, tr("Add Point"));
+                    (modelId.untyped, point, tr("Add Point"));
                 CommandHistory::getInstance()->addCommand(command);
             }
 
@@ -4637,20 +4695,20 @@ MainWindow::layerInAView(Layer *layer, bool inAView)
 }
 
 void
-MainWindow::modelAdded(Model *model)
+MainWindow::modelAdded(ModelId modelId)
 {
-    MainWindowBase::modelAdded(model);
-    if (dynamic_cast<DenseTimeValueModel *>(model)) {
+    MainWindowBase::modelAdded(modelId);
+    if (ModelById::isa<DenseTimeValueModel>(modelId)) {
         setupPaneAndLayerMenus();
     }
 }
 
 void
-MainWindow::mainModelChanged(WaveFileModel *model)
+MainWindow::mainModelChanged(ModelId modelId)
 {
-    m_panLayer->setModel(model);
+    m_panLayer->setModel(modelId);
 
-    MainWindowBase::mainModelChanged(model);
+    MainWindowBase::mainModelChanged(modelId);
 
     if (m_playTarget || m_audioIO) {
         connect(m_mainLevelPan, SIGNAL(levelChanged(float)),
@@ -4679,19 +4737,6 @@ MainWindow::mainModelPanChanged(float balance)
     } else if (m_audioIO) {
         m_audioIO->setOutputBalance(balance);
     }
-}
-
-void
-MainWindow::modelAboutToBeDeleted(Model *model)
-{
-    if (model == m_panLayer->getModel()) {
-        if (model == getMainModel()) {
-            m_panLayer->setModel(nullptr);
-        } else {
-            m_panLayer->setModel(getMainModel());
-        }
-    }
-    MainWindowBase::modelAboutToBeDeleted(model);
 }
 
 void

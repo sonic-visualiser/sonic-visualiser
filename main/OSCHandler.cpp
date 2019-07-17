@@ -110,9 +110,10 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                                          WavFileWriter::WriteToTemporary);
                     MultiSelection ms = m_viewManager->getSelection();
                     if (!ms.getSelections().empty()) {
-                        writer.writeModel(getMainModel(), &ms);
+                        //!!! todo: update WavFileWriter!
+                        writer.writeModel(getMainModel().get(), &ms);
                     } else {
-                        writer.writeModel(getMainModel());
+                        writer.writeModel(getMainModel().get());
                     }
                 }
             }
@@ -352,7 +353,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 } else {
 
                     LayerConfiguration configuration(type,
-                                                     getMainModel(),
+                                                     getMainModelId(),
                                                      channel);
                     
                     addPane(configuration,
@@ -611,7 +612,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 getDefaultTransformFor(transformId);
             
             Layer *newLayer = m_document->createDerivedLayer
-                (transform, getMainModel());
+                (transform, getMainModelId());
 
             if (newLayer) {
                 m_document->addLayerToView(pane, newLayer);
