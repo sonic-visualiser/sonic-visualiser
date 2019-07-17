@@ -3514,7 +3514,25 @@ MainWindow::paneCancelButtonPressed(Layer *layer)
 
     SVDEBUG << "MainWindow::paneCancelButtonPressed: Layer " << layer << endl;
 
+    // We need to ensure that the transform that is populating this
+    // layer's model is stopped - that is the main reason to use
+    // Cancel after all. It would also be a good idea to remove the
+    // incomplete layer from both the view and the undo/redo stack.
+
+    // Deleting the target model will ensure that the transform gets
+    // stopped, but removing the layer from the view is not enough to
+    // delete the model, because a reference to the layer remains on
+    // the undo/redo stack. If we also replace the model id with None
+    // in the layer, that does the trick.
+    
+    m_document->setModel(layer, {});
     m_document->removeLayerFromView(pane, layer);
+
+    // We still have a layer with no model on the undo/redo stack,
+    // which is a pity. I'm not sure we can easily remove it, since
+    // other commands may have been pushed on the stack since, so
+    // let's just leave that for now.
+    
     updateMenuStates();
 }
 
