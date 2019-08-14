@@ -8,9 +8,9 @@ configuration:
 install:
   - cinst --allow-empty-checksums smlnj
   - ps: '"[hostfingerprints]" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
-  - ps: '"code.soundsoftware.ac.uk = 66:ef:e2:0e:e3:55:93:9a:33:aa:2a:e9:fe:be:21:c2:a2:8d:4f:f1" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
+  - ps: '"code.soundsoftware.ac.uk = C7:27:7E:2C:1E:67:62:90:E9:8D:27:52:66:30:E6:FE:D4:2C:C5:30" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
   - ps: '"[hostsecurity]" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
-  - ps: '"code.soundsoftware.ac.uk = code.soundsoftware.ac.uk:fingerprints=sha256:64:75:f6:47:15:de:b4:51:ea:96:e2:f4:8a:f5:53:a5:11:c8:dd:82:73:5d:bd:54:18:cb:c8:9d:10:37:28:85" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
+  - ps: '"code.soundsoftware.ac.uk = code.soundsoftware.ac.uk:fingerprints=sha256:AF:67:D8:D6:D8:2F:28:FF:B9:1A:4D:CD:6A:93:25:EC:9E:47:9E:0E:E7:F1:FD:0B:97:B4:7C:D5:FA:2E:10:73" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
 
 build_script:
   - deploy\win64\build-and-package.bat
