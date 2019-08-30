@@ -43,37 +43,37 @@
         },
         "dataquay": {
             "vcs": "hg",
-            "service": "bitbucket",
+            "service": "sourcehut",
             "owner": "breakfastquay"
         },
         "bqvec": {
             "vcs": "hg",
-            "service": "bitbucket",
+            "service": "sourcehut",
             "owner": "breakfastquay"
         },
         "bqfft": {
             "vcs": "hg",
-            "service": "bitbucket",
+            "service": "sourcehut",
             "owner": "breakfastquay"
         },
         "bqresample": {
             "vcs": "hg",
-            "service": "bitbucket",
+            "service": "sourcehut",
             "owner": "breakfastquay"
         },
         "bqaudioio": {
             "vcs": "hg",
-            "service": "bitbucket",
+            "service": "sourcehut",
             "owner": "breakfastquay"
         },
         "bqaudiostream": {
             "vcs": "hg",
-            "service": "bitbucket",
+            "service": "sourcehut",
             "owner": "breakfastquay"
         },
         "bqthingfactory": {
             "vcs": "hg",
-            "service": "bitbucket",
+            "service": "sourcehut",
             "owner": "breakfastquay"
         },
         "sv-dependency-builds": {

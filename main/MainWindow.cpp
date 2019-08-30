@@ -5153,6 +5153,9 @@ MainWindow::about()
     aboutText += tr("<br>With Ogg file decoder &copy; CSIRO Australia");
 #endif // OGGZ_VERSION
 #endif // HAVE_OGGZ
+#ifdef HAVE_OPUS
+    aboutText += tr("<br>With Opus decoder &copy; Xiph.Org Foundation");
+#endif // HAVE_OPUS
 #ifdef HAVE_MAD
 #ifdef MAD_VERSION
     aboutText += tr("<br>With MAD mp3 decoder v%1 &copy; Underbit Technologies Inc").arg(MAD_VERSION);

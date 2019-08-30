@@ -1,16 +1,16 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "62987b6d6a3b"
+      "pin": "0b6802e3b755"
     },
     "svcore": {
-      "pin": "fadd9f8aaa27"
+      "pin": "f19711ab7074"
     },
     "svgui": {
-      "pin": "d09345e578a7"
+      "pin": "175770a13495"
     },
     "svapp": {
-      "pin": "e4d92aaa689c"
+      "pin": "162c3f4b870c"
     },
     "checker": {
       "pin": "c8c17e51aab0"
@@ -25,13 +25,13 @@
       "pin": "b82360a98f49"
     },
     "bqvec": {
-      "pin": "c2d355c29372"
+      "pin": "cd235ecbeb31"
     },
     "bqfft": {
-      "pin": "ff1d1bd48876"
+      "pin": "e1c392f85e97"
     },
     "bqresample": {
-      "pin": "f5dee7d40378"
+      "pin": "c2fb51b31fe4"
     },
     "bqaudioio": {
       "pin": "8c4162878ae6"

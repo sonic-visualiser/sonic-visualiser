@@ -38,7 +38,7 @@
     authorization.
 *)
 
-val repoint_version = "1.1.1"
+val repoint_version = "1.2"
 
 
 datatype vcs =
@@ -329,7 +329,7 @@ end = struct
                 then arg
                 else "\"" ^ arg ^ "\""
             fun check arg =
-                let val valid = explode " /#:;?,._-{}@=+"
+                let val valid = explode " /#:;?,._-{}@=+%"
                 in
                     app (fn c =>
                             if isAlphaNum c orelse
@@ -1046,6 +1046,13 @@ end = struct
             remote_spec = {
                 anon = SOME "https://github.com/{owner}/{repository}",
                 auth = SOME "ssh://{vcs}@github.com/{owner}/{repository}"
+            }
+          },
+          { service = "sourcehut",
+            supports = [HG, GIT],
+            remote_spec = {
+                anon = SOME "https://{vcs}.sr.ht/%7E{owner}/{repository}",
+                auth = SOME "ssh://{vcs}@{vcs}.sr.ht/%7E{owner}/{repository}"
             }
           }
         ]
