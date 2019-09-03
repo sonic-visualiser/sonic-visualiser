@@ -5065,6 +5065,7 @@ MainWindow::whatsNew()
     layout->addWidget(bb, row++, 0, 1, 3);
     connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
 
+    text.replace('\r', "");
     text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
     text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
     text.replace(QRegExp(": *\n"), ":\n<ul>\n");
