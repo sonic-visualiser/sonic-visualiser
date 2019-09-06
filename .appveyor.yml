@@ -7,6 +7,7 @@ configuration:
 
 install:
   - cinst --allow-empty-checksums smlnj
+  - cinst hg
   - ps: '"[hostfingerprints]" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
   - ps: '"code.soundsoftware.ac.uk = C7:27:7E:2C:1E:67:62:90:E9:8D:27:52:66:30:E6:FE:D4:2C:C5:30" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
   - ps: '"[hostsecurity]" | Out-File -Encoding "ASCII" -Append $env:USERPROFILE\mercurial.ini'
