@@ -8,4 +8,4 @@ Terminal=false
 Type=Application
 Icon=sonic-visualiser
 Categories=Audio;AudioVideo;
-MimeType=application/x-sonicvisualiser;application/x-sonicvisualiser-layer;application/x-ogg;audio/mp3;audio/mpeg;audio/mpegurl;audio/x-flac;audio/x-mp3;audio/x-mpeg;audio/x-mpegurl;audio/x-wav;audio/wav;application/ogg;audio/x-vorbis+ogg;
+MimeType=application/x-sonicvisualiser;application/x-sonicvisualiser-layer;application/x-ogg;audio/mp3;audio/ogg;audio/mpeg;audio/mpegurl;audio/x-flac;audio/x-mp3;audio/x-mpeg;audio/x-mpegurl;audio/x-wav;audio/wav;application/ogg;audio/x-vorbis+ogg;
