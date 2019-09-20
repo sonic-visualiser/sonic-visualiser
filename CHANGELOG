@@ -1,5 +1,14 @@
 
-Changes in Sonic Visualiser v3.3 (Apr 2019) since the previous release 3.2.1:
+Changes in Sonic Visualiser v4.0 since the previous release 3.3:
+
+ - Add Time-Frequency Box annotation layer type. Because this
+   introduces a new layer type into the session file format, the major
+   version number has been bumped to v4.0. (Sessions saved from v4.0
+   can be opened in earlier versions of Sonic Visualiser, but any
+   Time-Frequency Box layers will not be loaded.)
+ 
+
+Changes in Sonic Visualiser v3.3 (May 2019) since the previous release 3.2.1:
 
  - Add support for reading the Opus audio codec on all platforms
 
