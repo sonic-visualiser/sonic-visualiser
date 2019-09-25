@@ -4020,16 +4020,13 @@ MainWindow::addLayer()
 
         Layer *newLayer = nullptr;
 
+        bool isNewEmptyLayer = false;
+        
         if (emptyTypes.find(type) != emptyTypes.end()) {
 
             newLayer = m_document->createEmptyLayer(type);
             if (newLayer) {
-                for (auto &a : m_toolActions) {
-                    if (a.first == ViewManager::DrawMode) {
-                        a.second->trigger();
-                        break;
-                    }
-                }
+                isNewEmptyLayer = true;
             }
 
         } else {
@@ -4064,6 +4061,23 @@ MainWindow::addLayer()
                 } else {
                     SVCERR << "WARNING: MainWindow::addLayer: unknown model "
                            << modelId << " in layer action map" << endl;
+                }
+            }
+        }
+
+        if (isNewEmptyLayer) {
+
+            double vmin, vmax, dmin, dmax;
+            QString unit;
+            if (pane->getTopLayerDisplayExtents
+                (vmin, vmax, dmin, dmax, &unit)) {
+                newLayer->adoptExtents(vmin, vmax, unit);
+            }
+            
+            for (auto &a : m_toolActions) {
+                if (a.first == ViewManager::DrawMode) {
+                    a.second->trigger();
+                    break;
                 }
             }
         }
