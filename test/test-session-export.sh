@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Test that loading and re-saving a session does not change its contents
-# Must be run from same directory as the SV binary
+# Must be run from directory that contains this script
 
 set -e
 
@@ -10,7 +10,7 @@ session="$1"
 set -u
 
 sv="../sonic-visualiser"
-if [ ! -x "$sv" ]; then
+if [ ! -f "$sv" -o ! -x "$sv" ]; then
     echo "This script must be run from the sonic-visualiser/test directory" 1>&2
     exit 1
 fi

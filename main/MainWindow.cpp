@@ -357,9 +357,7 @@ MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
         startOSCQueue(false);
     }
     
-/*
     QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
-*/
     
     QString warning = PluginScan::getInstance()->getStartupFailureReport();
     if (warning != "") {
@@ -4022,16 +4020,13 @@ MainWindow::addLayer()
 
         Layer *newLayer = nullptr;
 
+        bool isNewEmptyLayer = false;
+        
         if (emptyTypes.find(type) != emptyTypes.end()) {
 
             newLayer = m_document->createEmptyLayer(type);
             if (newLayer) {
-                for (auto &a : m_toolActions) {
-                    if (a.first == ViewManager::DrawMode) {
-                        a.second->trigger();
-                        break;
-                    }
-                }
+                isNewEmptyLayer = true;
             }
 
         } else {
@@ -4066,6 +4061,23 @@ MainWindow::addLayer()
                 } else {
                     SVCERR << "WARNING: MainWindow::addLayer: unknown model "
                            << modelId << " in layer action map" << endl;
+                }
+            }
+        }
+
+        if (isNewEmptyLayer) {
+
+            double vmin, vmax, dmin, dmax;
+            QString unit;
+            if (pane->getTopLayerDisplayExtents
+                (vmin, vmax, dmin, dmax, &unit)) {
+                newLayer->adoptExtents(vmin, vmax, unit);
+            }
+            
+            for (auto &a : m_toolActions) {
+                if (a.first == ViewManager::DrawMode) {
+                    a.second->trigger();
+                    break;
                 }
             }
         }
@@ -4540,7 +4552,6 @@ MainWindow::audioTimeStretchMultiChannelDisabled()
     shownOnce = true;
 }
 
-/*
 void
 MainWindow::betaReleaseWarning()
 {
@@ -4548,7 +4559,6 @@ MainWindow::betaReleaseWarning()
         (this, tr("Beta release"),
          tr("<b>This is a beta release of Sonic Visualiser</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>"));
 }
-*/
 
 void
 MainWindow::pluginPopulationWarning()
