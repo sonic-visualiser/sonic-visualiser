@@ -426,7 +426,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 m_viewManager->setZoomWheelsEnabled(value > 0.5);
             } else if (property == "propertyboxes") {
                 bool toggle = ((value < 0.5) !=
-                               (m_paneStack->getLayoutStyle() == PaneStack::NoPropertyStacks));
+                               (m_paneStack->getLayoutStyle() ==
+                                PaneStack::HiddenPropertyStacksLayout));
                 if (toggle) togglePropertyBoxes();
             }
                 

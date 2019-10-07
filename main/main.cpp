@@ -188,12 +188,15 @@ signalHandler(int /* signal */)
     // Avoid this happening more than once across threads
 
     cerr << "signalHandler: cleaning up and exiting" << endl;
-    cleanupMutex.lock();
-    if (!cleanedUp) {
-        TempDirectory::getInstance()->cleanup();
-        cleanedUp = true;
+
+    if (cleanupMutex.tryLock(5000)) {
+        if (!cleanedUp) {
+            TempDirectory::getInstance()->cleanup();
+            cleanedUp = true;
+        }
+        cleanupMutex.unlock();
     }
-    cleanupMutex.unlock();
+    
     exit(0);
 }
 
