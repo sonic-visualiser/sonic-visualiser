@@ -5075,13 +5075,24 @@ MainWindow::whatsNew()
     layout->addWidget(bb, row++, 0, 1, 3);
     connect(bb, SIGNAL(accepted()), d, SLOT(accept()));
 
+    // Remove spurious linefeeds from DOS line endings
     text.replace('\r', "");
+
+    // Un-wrap indented paragraphs (assume they are always preceded by
+    // an empty line, so don't get merged into prior para)
     text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
+
+    // Rest of para following a " - " at start becomes bulleted entry
     text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
+
+    // Line-ending ":" introduces the bulleted list
     text.replace(QRegExp(": *\n"), ":\n<ul>\n");
+
+    // Blank line (after unwrapping) ends the bulleted list
     text.replace(QRegExp("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
+
+    // Text leading up to that line-ending ":" becomes bold heading
     text.replace(QRegExp("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
-//    text.replace(QRegExp("<li>([^,.\n]+)([,.] +\\w)"), "<li><b>\\1</b>\\2");
     
     textEdit->setHtml(text);
     textEdit->setReadOnly(true);
