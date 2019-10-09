@@ -3281,6 +3281,7 @@ MainWindow::closeSession()
     m_timeRulerLayer = nullptr; // document owned this
 
     m_sessionFile = "";
+    m_originalLocation = "";
     setWindowTitle(QApplication::applicationName());
 
     CommandHistory::getInstance()->clear();
