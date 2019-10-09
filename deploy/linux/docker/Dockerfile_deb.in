@@ -49,11 +49,11 @@ RUN autoreconf -i && ./configure --enable-shared=no --enable-static=yes && make 
 
 WORKDIR /root
 
-COPY id_dsa_build .ssh/id_dsa_build
+COPY id_rsa_build .ssh/id_rsa_build
 COPY known_hosts .ssh/known_hosts
-RUN chmod 600 .ssh/id_dsa_build .ssh/known_hosts
-RUN echo '{"accounts": {"bitbucket": "cannam"}}' > .repoint.json
-RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_dsa_build' ) > .hgrc
+RUN chmod 600 .ssh/id_rsa_build .ssh/known_hosts
+RUN echo '{"accounts": {"sourcehut": "~breakfastquay"}}' > .repoint.json
+RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 
 RUN rm -f /usr/lib/x86_64-linux-gnu/librubberband.so*
 
