@@ -4558,7 +4558,7 @@ MainWindow::betaReleaseWarning()
 {
     QMessageBox::information
         (this, tr("Beta release"),
-         tr("<b>This is a beta release of Sonic Visualiser</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>"));
+         tr("<b>This is a beta release of %1</b><p>Please see the \"What's New\" option in the Help menu for a list of changes since the last proper release.</p>").arg(QApplication::applicationName()));
 }
 
 void
