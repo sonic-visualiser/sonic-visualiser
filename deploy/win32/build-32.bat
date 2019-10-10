@@ -10,7 +10,7 @@ if not exist %QTDIR% (
 )
 
 set ORIGINALPATH=%PATH%
-set PATH=%PATH%;C:\Program Files (x86)\SMLNJ\bin;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;C:\Qt\Tools\mingw530_32\bin
+set PATH=C:\Program Files (x86)\SMLNJ\bin;%QTDIR%\bin;C:\Qt\Tools\QtCreator\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
 
 cd %STARTPWD%
 

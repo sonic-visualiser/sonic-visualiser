@@ -19,7 +19,7 @@ if not exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\A
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
 
 set ORIGINALPATH=%PATH%
-set PATH=%PATH%;C:\Program Files (x86)\SMLNJ\bin;%QTDIR%\bin
+set PATH=C:\Program Files (x86)\SMLNJ\bin;%QTDIR%\bin;%PATH%
 
 cd %STARTPWD%
 
