@@ -166,9 +166,9 @@ if test -x repoint ; then
       fi
    fi
 else
-   AC_MSG_NOTICE([No Repoint executable found: assuming external libraries are already here])
+   AC_MSG_NOTICE([No Repoint executable found: assuming external components are already here])
    if ! test -d vamp-plugin-sdk ; then
-      AC_MSG_WARN([No vamp-plugin-sdk directory present, so external libraries might not have been updated])
+      AC_MSG_WARN([No vamp-plugin-sdk directory present, so external components might not have been updated])
    fi
 fi
 

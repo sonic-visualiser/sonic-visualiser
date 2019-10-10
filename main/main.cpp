@@ -264,17 +264,19 @@ main(int argc, char **argv)
     parser.addHelpOption();
     parser.addVersionOption();
 
-    parser.addOptions({
-            { "no-audio", QApplication::tr
-              ("Do not attempt to open an audio output device.") },
-            { "no-osc", QApplication::tr
-              ("Do not provide an Open Sound Control port for remote control.") },
-            { "no-splash", QApplication::tr
-              ("Do not show a splash screen.") },
-            { "osc-script", QApplication::tr
-              ("Batch run the Open Sound Control script found in the given file. Supply \"-\" as file to read from stdin. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds."),
-              "osc.txt" }
-        });
+    parser.addOption(QCommandLineOption
+                     ("no-audio", QApplication::tr
+                      ("Do not attempt to open an audio output device.")));
+    parser.addOption(QCommandLineOption
+                     ("no-osc", QApplication::tr
+                      ("Do not provide an Open Sound Control port for remote control.")));
+    parser.addOption(QCommandLineOption
+                     ("no-splash", QApplication::tr
+                      ("Do not show a splash screen.")));
+    parser.addOption(QCommandLineOption
+                     ("osc-script", QApplication::tr
+                      ("Batch run the Open Sound Control script found in the given file. Supply \"-\" as file to read from stdin. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds."),
+                      "osc.txt"));
 
     parser.addPositionalArgument
         ("[<file> ...]", QApplication::tr("One or more Sonic Visualiser (.sv) and audio files may be provided."));

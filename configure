@@ -8723,11 +8723,11 @@ $as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external lib
       fi
    fi
 else
-   { $as_echo "$as_me:${as_lineno-$LINENO}: No Repoint executable found: assuming external libraries are already here" >&5
-$as_echo "$as_me: No Repoint executable found: assuming external libraries are already here" >&6;}
+   { $as_echo "$as_me:${as_lineno-$LINENO}: No Repoint executable found: assuming external components are already here" >&5
+$as_echo "$as_me: No Repoint executable found: assuming external components are already here" >&6;}
    if ! test -d vamp-plugin-sdk ; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&5
-$as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external libraries might not have been updated" >&2;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No vamp-plugin-sdk directory present, so external components might not have been updated" >&5
+$as_echo "$as_me: WARNING: No vamp-plugin-sdk directory present, so external components might not have been updated" >&2;}
    fi
 fi
 
