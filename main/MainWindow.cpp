@@ -4068,11 +4068,11 @@ MainWindow::addLayer()
 
         if (isNewEmptyLayer) {
 
-            double vmin, vmax, dmin, dmax;
+            double min, max;
+            bool log;
             QString unit;
-            if (pane->getTopLayerDisplayExtents
-                (vmin, vmax, dmin, dmax, &unit)) {
-                newLayer->adoptExtents(vmin, vmax, unit);
+            if (pane->getVisibleExtentsForAnyUnit(min, max, log, unit)) {
+                newLayer->adoptExtents(min, max, unit);
             }
             
             for (auto &a : m_toolActions) {
