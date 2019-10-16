@@ -23,8 +23,5 @@ for app in "$dir"/*.app; do
     done
     codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app/Contents/MacOS/Sonic Visualiser"
     codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app"
-#    codesign -s "Developer ID Application: Chris Cannam" -fv --deep \
-#         --requirements '=designated =>  identifier "org.sonicvisualiser.SonicVisualiser" and ( (anchor apple generic and    certificate leaf[field.1.2.840.113635.100.6.1.9] ) or (anchor apple generic and    certificate 1[field.1.2.840.113635.100.6.2.6]  and    certificate leaf[field.1.2.840.113635.100.6.1.13] and    certificate leaf[subject.OU] = "M2H8666U82"))' \
-#         "$app"
 done
 
