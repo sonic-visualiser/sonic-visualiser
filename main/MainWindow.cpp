@@ -135,8 +135,8 @@ using std::map;
 using std::set;
 
 
-MainWindow::MainWindow(SoundOptions options, bool withOSCSupport) :
-    MainWindowBase(options),
+MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSupport) :
+    MainWindowBase(audioMode, midiMode, int(PaneStack::Option::Default)),
     m_overview(nullptr),
     m_mainMenusCreated(false),
     m_paneMenu(nullptr),

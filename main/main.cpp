@@ -244,13 +244,6 @@ main(int argc, char **argv)
     
     svSystemSpecificInitialisation();
 
-#ifdef Q_OS_MAC
-    if (QSysInfo::MacintoshVersion > QSysInfo::MV_10_8) {
-        // Fix for OS/X 10.9 font problem
-        QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
-    }
-#endif
-
     SVApplication application(argc, argv);
 
     QApplication::setOrganizationName("sonic-visualiser");
@@ -277,6 +270,9 @@ main(int argc, char **argv)
                      ("osc-script", QApplication::tr
                       ("Batch run the Open Sound Control script found in the given file. Supply \"-\" as file to read from stdin. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds."),
                       "osc.txt"));
+    parser.addOption(QCommandLineOption
+                     ("first-run", QApplication::tr
+                      ("Clear any saved settings and reset to first-run behaviour.")));
 
     parser.addPositionalArgument
         ("[<file> ...]", QApplication::tr("One or more Sonic Visualiser (.sv) and audio files may be provided."));
@@ -292,6 +288,11 @@ main(int argc, char **argv)
     }        
         
     parser.process(args);
+
+    if (parser.isSet("first-run")) {
+        QSettings settings;
+        settings.clear();
+    }
 
     bool audioOutput = !(parser.isSet("no-audio"));
     bool oscSupport = !(parser.isSet("no-osc"));
@@ -396,11 +397,19 @@ main(int argc, char **argv)
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
     qRegisterMetaType<ZoomLevel>("ZoomLevel");
 
-    MainWindow::SoundOptions options = MainWindow::WithEverything;
-    if (!audioOutput) options = 0;
+    MainWindow::AudioMode audioMode = 
+        MainWindow::AUDIO_PLAYBACK_NOW_RECORD_LATER;
+    MainWindow::MIDIMode midiMode =
+        MainWindow::MIDI_LISTEN;
+
+    if (!audioOutput) {
+        audioMode = MainWindow::AUDIO_NONE;
+        midiMode = MainWindow::MIDI_NONE;
+    } 
     
-    MainWindow *gui = new MainWindow(options, oscSupport);
+    MainWindow *gui = new MainWindow(audioMode, midiMode, oscSupport);
     application.setMainWindow(gui);
+
     InteractiveFileFinder::setParentWidget(gui);
     TransformUserConfigurator::setParentWidget(gui);
     if (splash) {
