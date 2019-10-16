@@ -19,7 +19,6 @@ solaris*:TARGET = sonic-visualiser
 
 !win32 {
     PRE_TARGETDEPS += $$PWD/libbase.a
-    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker .
 }
 
 linux* {
@@ -81,3 +80,10 @@ SOURCES +=  \
         main/SVSplash.cpp \
         main/PreferencesDialog.cpp 
 
+macx* {
+    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker . && deploy/osx/deploy.sh $$shell_quote(Sonic Visualiser)
+}
+
+linux {
+    QMAKE_POST_LINK += cp checker/vamp-plugin-load-checker .
+}

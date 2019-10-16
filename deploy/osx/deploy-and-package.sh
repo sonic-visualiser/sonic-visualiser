@@ -1,6 +1,19 @@
 #!/bin/bash
 
-set -eu
+# Run this from the project root, without arguments, or with the
+# single argument --no-notarization to skip the notarize step
+
+set -e
+
+notarize=yes
+if [ "$1" = "--no-notarization" ]; then
+    notarize=no
+elif [ -n "$1" ]; then
+    echo "Usage: $0 [--no-notarization]"
+    exit 2
+fi
+
+set -u
 
 app="Sonic Visualiser"
 
@@ -9,7 +22,7 @@ version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
 source="$app.app"
 volume="$app"-"$version"
 target="$volume"/"$app".app
-dmg="$app"-"$version".dmg
+dmg="$volume".dmg
 
 if [ -d "$volume" ]; then
     echo "Target directory $volume already exists, not overwriting"
@@ -19,6 +32,11 @@ fi
 if [ -f "$dmg" ]; then
     echo "Target disc image $dmg already exists, not overwriting"
     exit 2
+fi
+
+if [ "$notarize" = no ]; then
+    echo
+    echo "Note: The --no-notarization flag is set: won't be submitting for notarization"
 fi
 
 echo
@@ -66,9 +84,14 @@ echo "Signing dmg..."
 
 codesign -s "Developer ID Application: Chris Cannam" -fv "$dmg"
 
-echo
-echo "Submitting dmg for notarization..."
+if [ "$notarize" = no ]; then
+    echo
+    echo "The --no-notarization flag was set: not submitting for notarization"
+else
+    echo
+    echo "Submitting dmg for notarization..."
 
-deploy/osx/notarize.sh "$dmg" || exit 1
+    deploy/osx/notarize.sh "$dmg" || exit 1
+fi
 
 echo "Done"
