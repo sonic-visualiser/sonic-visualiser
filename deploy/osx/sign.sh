@@ -13,15 +13,16 @@ if [ -z "$dir" ] || [ ! -d "$dir" ]; then
 	exit 2
 fi
 
-# NB at some point we are going to have to include "--options runtime"
-# in all of these codesign invocations, and figure out what to do
-# about signing plugins...
+entitlements=deploy/osx/Entitlements.plist
+helper_entitlements=deploy/osx/HelperEntitlements.plist
 
 for app in "$dir"/*.app; do
     find "$app" -name \*.dylib -print | while read fr; do
-	codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$fr"
+	codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime "$fr"
     done
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app/Contents/MacOS/Sonic Visualiser"
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep "$app"
+    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$entitlements" "$app/Contents/MacOS/Sonic Visualiser"
+    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app/Contents/MacOS/vamp-plugin-load-checker"
+    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app/Contents/MacOS/piper-vamp-simple-server"
+    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$entitlements" "$app"
 done
 
