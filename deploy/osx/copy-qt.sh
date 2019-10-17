@@ -54,6 +54,9 @@ for plug in $plugins; do
     cp -v "$pfile" "$target" || exit 2
 done
 
+# Sometimes the copied-in files are read-only: correct that
+chmod -R u+w "$app.app"
+
 echo "Done"
 
 
