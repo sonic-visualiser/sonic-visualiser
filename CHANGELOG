@@ -4,9 +4,18 @@ Changes in Sonic Visualiser v4.0 (Oct 2019) since the previous release 3.3:
  - Add Box annotation layer type, typically used for time-frequency
    boxes to be annotated over a spectrogram. Because this introduces a
    new layer type into the session file format, the major version
-   number has been bumped to v4.0. Sessions saved from v4.0 can be
-   opened in earlier versions of Sonic Visualiser, but any Box layers
-   will not be loaded.
+   number has been bumped to v4.0. Sessions saved from v4.0 can still
+   be opened in earlier versions of Sonic Visualiser, but any Box
+   layers will not be loaded
+
+ - Fix behaviour of auto-align layers on top of waveform: they can now
+   be aligned in the vertical scale, if they have a unit of V and the
+   waveform is of a single channel in linear or dB mode
+
+ - Make the UI more readable in macOS "dark mode"
+
+ - Fix sluggishness in starting and stopping playback when using
+   PulseAudio v13.0+
 
 
 Changes in Sonic Visualiser v3.3 (21 May 2019) since the previous release 3.2.1:
