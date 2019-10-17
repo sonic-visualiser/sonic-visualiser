@@ -299,9 +299,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 if (layer) {
                     int resolution;
                     layer->snapToFeatureFrame(pane, f0, resolution,
-                                              Layer::SnapLeft);
+                                              Layer::SnapLeft, -1);
                     layer->snapToFeatureFrame(pane, f1, resolution,
-                                              Layer::SnapRight);
+                                              Layer::SnapRight, -1);
                 }
 
             } else if (message.getArgCount() == 1 &&
