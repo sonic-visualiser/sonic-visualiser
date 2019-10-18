@@ -94,5 +94,6 @@ signtool verify /pa sonic-visualiser.msi
 
 set PATH=%ORIGINALPATH%
 
+cd %STARTPWD%
 @echo Done
 
