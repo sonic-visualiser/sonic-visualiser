@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -eu
+
+current=$(hg id | awk '{ print $1; }')
+
+case "$current" in
+    *+) echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
+    *);;
+esac
+
+version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
+
+echo -n "Proceed to rebuild and package version $version [Yn] ? "
+read yn
+
+if [ -z "$yn" ]; then
+    yn=y
+elif [ "$yn" = "Y" ]; then
+    yn=y
+fi
+
+if [ "$yn" != "y" ]; then
+    exit 3
+fi
+
+echo "Proceeding"
+
+mkdir -p packages
+
+./deploy/linux/build-and-test-appimage.sh
+
+squashedversion=$(echo "$version" | sed 's/_-//g')
+
+mv deploy/linux/docker/output/SonicVisualiser-"$current"-x86_64.AppImage \
+   packages/SonicVisualiser-"$squashedversion"-x86_64.AppImage
+
+./deploy/linux/build-and-test-deb.sh
+
+mv deploy/linux/docker/output/sonic-visualiser_"$version"_amd64.deb \
+   packages/
+
+echo "Done"
+
