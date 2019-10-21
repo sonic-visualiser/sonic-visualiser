@@ -59,3 +59,5 @@ build_win64_debug
 *.AppDir
 Dockerfile*.gen
 squashfs-root
+.notarization-uuid
+.notarization-status

@@ -28,7 +28,8 @@ echo
 echo "Uploading for notarization..."
 
 uuidfile=.notarization-uuid
-rm -f "$uuidfile"
+statfile=.notarization-status
+rm -f "$uuidfile" "$statfile"
 
 xcrun altool --notarize-app \
     -f "$dmg" \
@@ -51,21 +52,26 @@ echo "Waiting and checking for completion..."
 
 while true ; do
     sleep 30
-    status=$(xcrun altool --notarization-info "$uuid" -u "$user" -p @keychain:altool 2>&1)
-    if echo "$status" | grep -q 'Package Approved' ; then
+
+    xcrun altool --notarization-info \
+	"$uuid" \
+	-u "$user" \
+	-p @keychain:altool 2>&1 | tee "$statfile"
+
+    if grep -q 'Package Approved' "$statfile"; then
 	echo
 	echo "Approved! Status output is:"
-	echo "$status"
+	cat "$statfile"
 	break
-    elif echo "$status" | grep -q 'in progress' ; then
+    elif grep -q 'in progress' "$statfile" ; then
 	echo
 	echo "Still in progress... Status output is:"
-	echo "$status"
+	cat "$statfile"
 	echo "Waiting..."
     else 
 	echo
 	echo "Failure or unknown status in output:"
-	echo "$status"
+	cat "$statfile"
 	exit 2
     fi
 done

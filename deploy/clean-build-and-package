@@ -4,41 +4,62 @@ set -eu
 
 current=$(hg id | awk '{ print $1; }')
 
-case "$current" in
-    *+) echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
-    *);;
-esac
+#case "$current" in
+#    *+) echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
+#    *);;
+#esac
 
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
 
-echo -n "Proceed to rebuild and package version $version [Yn] ? "
-read yn
-
-if [ -z "$yn" ]; then
-    yn=y
-elif [ "$yn" = "Y" ]; then
-    yn=y
-fi
-
-if [ "$yn" != "y" ]; then
-    exit 3
-fi
-
-echo "Proceeding"
-
 mkdir -p packages
+echo
 
-./deploy/linux/build-and-test-appimage.sh
+if [ -d /Applications ]; then
 
-squashedversion=$(echo "$version" | sed 's/_-//g')
+    qmake=$(grep '^# Command: ' Makefile | awk '{ print $3; }')
 
-mv deploy/linux/docker/output/SonicVisualiser-"$current"-x86_64.AppImage \
-   packages/SonicVisualiser-"$squashedversion"-x86_64.AppImage
+    echo "Proceed to rebuild, package, and sign version $version using"
+    echo -n "qmake path \"$qmake\" [Yn] ? "
+    read yn
+    case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
+    echo "Proceeding"
 
-./deploy/linux/build-and-test-deb.sh
+    app="Sonic Visualiser"
+    volume="$app"-"$version"
+    dmg="$volume".dmg
 
-mv deploy/linux/docker/output/sonic-visualiser_"$version"_amd64.deb \
-   packages/
+    rm -rf "$app.app"
+    rm -f "$dmg"
+
+    ./repoint install
+
+    rm -rf .qmake.stash
+    "$qmake" -r
+    make clean
+    make -j3
+    deploy/osx/deploy-and-package.sh
+
+    mv "$dmg" packages/
+
+else
+
+    echo -n "Proceed to rebuild and package version $version [Yn] ? "
+    read yn
+    case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
+    echo "Proceeding"
+
+    ./deploy/linux/build-and-test-appimage.sh
+
+    squashedversion=$(echo "$version" | sed 's/_-//g')
+
+    mv deploy/linux/docker/output/SonicVisualiser-"$current"-x86_64.AppImage \
+	packages/SonicVisualiser-"$squashedversion"-x86_64.AppImage
+
+    ./deploy/linux/build-and-test-deb.sh
+
+    mv deploy/linux/docker/output/sonic-visualiser_"$version"_amd64.deb \
+	packages/
+fi
 
 echo "Done"
 
