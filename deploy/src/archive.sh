@@ -16,9 +16,11 @@ esac
 echo
 echo -n "Packaging up version $v from tag $tag... "
 
+mkdir -p packages
+
 hg update -r"$tag"
 
-./repoint archive /tmp/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds repoint.pri
+./repoint archive ./packages/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds repoint.pri
 
 hg update -r"$current"
 
