@@ -23,7 +23,7 @@ if "%ARG%" == "sign" (
 @   echo NOTE: starting by codesigning an unrelated executable, so we know
 @   echo NOTE: whether it'll work before doing the entire build
 copy sv-dependency-builds\win64-msvc\bin\capnp.exe signtest.exe
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 signtest.exe
+signtool sign /v /n /a "%NAME%" /t http://time.certum.pl /fd sha1 signtest.exe
 if errorlevel 1 exit /b %errorlevel%
 signtool verify /pa signtest.exe
 if errorlevel 1 exit /b %errorlevel%
@@ -43,7 +43,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%ARG%" == "sign" (
 @echo Signing 32-bit executables and libraries
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 build_win32\release\*.exe build_win32\release\*.dll
+signtool sign /v /n /a "%NAME%" /t http://time.certum.pl /fd sha1 build_win32\release\*.exe build_win32\release\*.dll
 )
 
 @echo Rebuilding 64-bit
@@ -55,7 +55,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%ARG%" == "sign" (
 @echo Signing 64-bit executables and libraries
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 build_win64\release\*.exe build_win64\release\*.dll
+signtool sign /v /n /a "%NAME%" /t http://time.certum.pl /fd sha1 build_win64\release\*.exe build_win64\release\*.dll
 )
 
 set PATH=%PATH%;"C:\Program Files (x86)\WiX Toolset v3.11\bin"
@@ -72,7 +72,7 @@ del sonic-visualiser.wixpdb
 
 if "%ARG%" == "sign" (
 @echo Signing 32-bit package
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 sonic-visualiser.msi
+signtool sign /v /n /a "%NAME%" /t http://time.certum.pl /fd sha1 sonic-visualiser.msi
 signtool verify /pa sonic-visualiser.msi
 )
 
@@ -88,7 +88,7 @@ del sonic-visualiser.wixpdb
 
 if "%ARG%" == "sign" (
 @echo Signing 64-bit package
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 sonic-visualiser.msi
+signtool sign /v /n /a "%NAME%" /t http://time.certum.pl /fd sha1 sonic-visualiser.msi
 signtool verify /pa sonic-visualiser.msi
 )
 
