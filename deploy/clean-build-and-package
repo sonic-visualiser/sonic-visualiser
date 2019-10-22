@@ -4,10 +4,10 @@ set -eu
 
 current=$(hg id | awk '{ print $1; }')
 
-#case "$current" in
-#    *+) echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
-#    *);;
-#esac
+case "$current" in
+    *+) echo "ERROR: Current working copy has been modified - not proceeding";exit 2;;
+    *);;
+esac
 
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
 
