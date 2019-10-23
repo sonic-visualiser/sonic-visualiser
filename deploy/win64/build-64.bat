@@ -5,18 +5,20 @@ echo on
 
 set STARTPWD=%CD%
 
-set QTDIR=C:\Qt\5.13.0\msvc2017_64
+set QTDIR=C:\Qt\5.13.1\msvc2017_64
 if not exist %QTDIR% (
-@   echo Could not find 64-bit Qt
+@   echo Could not find 64-bit Qt in %QTDIR%
 @   exit /b 2
 )
 
-if not exist "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" (
+set vcvarsall="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat"
+
+if not exist %vcvarsall% (
 @   echo "Could not find MSVC vars batch file"
 @   exit /b 2
 )
 
-call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
+call %vcvarsall% amd64
 
 set ORIGINALPATH=%PATH%
 set PATH=C:\Program Files (x86)\SMLNJ\bin;%QTDIR%\bin;%PATH%
