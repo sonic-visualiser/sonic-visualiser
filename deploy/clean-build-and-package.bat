@@ -5,7 +5,7 @@
 @set VERSION=%VERSION:#define SV_VERSION "=%
 set VERSION=%VERSION:"=%
 
-@echo ""
+@echo(
 @set YN=y
 @set /p YN="Proceed to clean, rebuild, package, and sign version %VERSION% [Yn] ?"
 
@@ -20,5 +20,5 @@ mkdir packages
 copy build_win32\sonic-visualiser.msi packages\sonic-visualiser-%VERSION%-win32.msi
 copy build_win64\sonic-visualiser.msi packages\sonic-visualiser-%VERSION%-win64.msi
 
-@echo ""
+@echo(
 @echo Done

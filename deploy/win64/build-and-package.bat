@@ -33,7 +33,7 @@ del signtest.exe
 @   echo NOTE: sign option not specified, will not codesign anything
 )
 
-@echo ""
+@echo(
 @echo Rebuilding 32-bit
 
 cd %STARTPWD%
