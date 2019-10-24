@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser v4.0 (Oct 2019) since the previous release 3.3:
+Changes in Sonic Visualiser v4.0 (25 Oct 2019) since the previous release 3.3:
 
  - Add Box annotation layer type, typically used for time-frequency
    boxes to be annotated over a spectrogram. Because this introduces a
