@@ -1,1 +1,1 @@
-#define SV_VERSION "4.0-pre4"
+#define SV_VERSION "4.0"
