@@ -29,6 +29,7 @@ if [ -d /Applications ]; then
     dmg="$volume".dmg
 
     rm -rf "$app.app"
+    rm -rf "$volume"
     rm -f "$dmg"
 
     ./repoint install
