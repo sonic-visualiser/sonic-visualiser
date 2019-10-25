@@ -187,6 +187,10 @@
                 Id="vcruntime140"
                 Name="vcruntime140.dll"
                 Source="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.22.27821\x64\Microsoft.VC142.CRT\vcruntime140.DLL"/>
+            <File
+                Id="vcruntime140_1"
+                Name="vcruntime140_1.dll"
+                Source="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.22.27821\x64\Microsoft.VC142.CRT\vcruntime140_1.DLL"/>
           </Component>
 
 	  <Directory Id="Platforms" Name="platforms">
