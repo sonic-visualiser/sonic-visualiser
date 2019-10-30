@@ -78,7 +78,8 @@
         },
         "sv-dependency-builds": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+	    "branch": "pa_catalina"
         },
         "icons/scalable": {
             "vcs": "hg",
