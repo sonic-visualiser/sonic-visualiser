@@ -25,7 +25,7 @@ linux* {
 
     sv_bins.path = $$PREFIX_PATH/bin/
     sv_bins.files = checker/vamp-plugin-load-checker piper-vamp-simple-server sonic-visualiser
-    sv_bins.CONFIG = no_check_exist
+    sv_bins.CONFIG = no_check_exist executable
 
     sv_desktop.path = $$PREFIX_PATH/share/applications/
     sv_desktop.files = sonic-visualiser.desktop
