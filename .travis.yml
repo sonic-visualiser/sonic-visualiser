@@ -29,8 +29,6 @@ before_script:
 
 script:
   - make -j3
-  - sudo make install
-  - /usr/local/bin/sonic-visualiser -v
-  - /usr/local/bin/piper-vamp-simple-server -v
-  - /usr/local/bin/vamp-plugin-load-checker -v
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then sudo make install ; fi
+  - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then /usr/local/bin/sonic-visualiser -v && /usr/local/bin/piper-vamp-simple-server -v && /usr/local/bin/vamp-plugin-load-checker -v ; fi
   - if [[ "$TRAVIS_OS_NAME" = "linux" ]] ; then ./deploy/linux/deploy-appimage.sh ; fi
