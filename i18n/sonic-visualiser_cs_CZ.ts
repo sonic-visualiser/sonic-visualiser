@@ -58,6 +58,10 @@
         <source>Change time-stretch factor to %1</source>
         <translation>Změnit násobek roztažení času na %1</translation>
     </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AudioCallbackRecordTarget</name>
@@ -129,6 +133,13 @@
     </message>
 </context>
 <context>
+    <name>BQAFileReader</name>
+    <message>
+        <source>Decoding %1...</source>
+        <translation type="unfinished">Dekóduje se %1...</translation>
+    </message>
+</context>
+<context>
     <name>BZipFileDevice</name>
     <message>
         <source>Failed to open bzip2 stream for writing</source>
@@ -193,6 +204,173 @@
     <message>
         <source>Failed to open file handle for reading</source>
         <translation>Otevření manipulátoru souboru pro čtení se nezdařilo</translation>
+    </message>
+</context>
+<context>
+    <name>BasicCompressedDenseThreeDimensionalModel</name>
+    <message>
+        <source>Editable Dense 3-D</source>
+        <translation type="unfinished">Upravovatelný hustý trojrozměrný</translation>
+    </message>
+</context>
+<context>
+    <name>BoxLayer</name>
+    <message>
+        <source>New Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical Scale</source>
+        <translation type="unfinished">Svislá stupnice</translation>
+    </message>
+    <message>
+        <source>Scale Units</source>
+        <translation type="unfinished">Jednotky stupnice</translation>
+    </message>
+    <message>
+        <source>Scale</source>
+        <translation type="unfinished">Stupnice</translation>
+    </message>
+    <message>
+        <source>Auto-Align</source>
+        <translation type="unfinished">Automatické zarovnání</translation>
+    </message>
+    <message>
+        <source>Linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished">Probíhá</translation>
+    </message>
+    <message>
+        <source>No local points</source>
+        <translation type="unfinished">Žádné místní body</translation>
+    </message>
+    <message>
+        <source>%1 %2 - %3 %4</source>
+        <translation type="unfinished">%1 - %3 %4 {1 %2 ?}</translation>
+    </message>
+    <message>
+        <source>Time:	%1
+Duration:	%2
+Value:	%3
+No label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time:	%1
+Duration:	%2
+Value:	%3
+Label:	%4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Draw Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Erase Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drag Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Relocate Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change Point Value</source>
+        <translation type="unfinished">Změnit hodnotu bodu</translation>
+    </message>
+    <message>
+        <source>Minimum Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Value Extent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drag Selection</source>
+        <translation type="unfinished">Táhnout výběr</translation>
+    </message>
+    <message>
+        <source>Resize Selection</source>
+        <translation type="unfinished">Změnit velikost výběru</translation>
+    </message>
+    <message>
+        <source>Delete Selected Points</source>
+        <translation type="unfinished">Smazat vybrané body</translation>
+    </message>
+    <message>
+        <source>Re-align pasted items?</source>
+        <translation type="unfinished">Zarovnat vložené položky znovu?</translation>
+    </message>
+    <message>
+        <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
+        <translation type="unfinished">Položky, které vkládáte, přišly z vrstvy s odlišným zdrojovým materiálem, než má tento. Chcete je zarovnat znovu v čase, aby se hodily ke zdrojovému materiálu pro tuto vrstvu?</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished">Vložit</translation>
+    </message>
+</context>
+<context>
+    <name>BoxModel</name>
+    <message>
+        <source>Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Time</source>
+        <translation type="unfinished">Čas</translation>
+    </message>
+    <message>
+        <source>Frame</source>
+        <translation type="unfinished">Snímek</translation>
+    </message>
+    <message>
+        <source>Duration</source>
+        <translation type="unfinished">Doba trvání</translation>
+    </message>
+    <message>
+        <source>Min Freq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Max Freq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation type="unfinished">Štítek</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation type="unfinished">Neznámý</translation>
+    </message>
+    <message>
+        <source>Edit Data</source>
+        <translation type="unfinished">Upravit data</translation>
+    </message>
+    <message>
+        <source>Add Box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Box</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -341,6 +519,10 @@
     <message>
         <source>Explicitly, in milliseconds</source>
         <translation>Otevřeně, v milisekundách</translation>
+    </message>
+    <message>
+        <source>Column separator:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -571,7 +753,7 @@ Hodnota:	%4</translation>
     <name>CoreAudioFileReader</name>
     <message>
         <source>Decoding %1...</source>
-        <translation>Dekóduje se %1...</translation>
+        <translation type="vanished">Dekóduje se %1...</translation>
     </message>
 </context>
 <context>
@@ -880,53 +1062,69 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Record FlexiNote</source>
-        <translation>Nahrát FlexiNote</translation>
+        <translation type="vanished">Nahrát FlexiNote</translation>
+    </message>
+    <message>
+        <source>freq: %1%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>dur: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>new note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record Note</source>
+        <translation type="unfinished">Nahrát notu</translation>
     </message>
 </context>
 <context>
     <name>FlexiNoteModel</name>
     <message>
         <source>FlexiNote</source>
-        <translation>FlexiNote</translation>
+        <translation type="vanished">FlexiNote</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation>Čas</translation>
+        <translation type="vanished">Čas</translation>
     </message>
     <message>
         <source>Frame</source>
-        <translation>Snímek</translation>
+        <translation type="vanished">Snímek</translation>
     </message>
     <message>
         <source>Pitch</source>
-        <translation>Výška tónu</translation>
+        <translation type="vanished">Výška tónu</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Doba trvání</translation>
+        <translation type="vanished">Doba trvání</translation>
     </message>
     <message>
         <source>Level</source>
-        <translation>Úroveň</translation>
+        <translation type="vanished">Úroveň</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation>Štítek</translation>
+        <translation type="vanished">Štítek</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Neznámý</translation>
+        <translation type="vanished">Neznámý</translation>
     </message>
     <message>
         <source>Edit Data</source>
-        <translation>Upravit data</translation>
+        <translation type="vanished">Upravit data</translation>
     </message>
 </context>
 <context>
     <name>I</name>
     <message>
         <source>Edit Data</source>
-        <translation>Upravit data</translation>
+        <translation type="vanished">Upravit data</translation>
     </message>
 </context>
 <context>
@@ -1018,6 +1216,10 @@ Doba trvání:	%3
         <source>Delete Selection</source>
         <translation>Smazat výběr</translation>
     </message>
+    <message>
+        <source>Edit Image</source>
+        <translation type="unfinished">Upravit obrázek</translation>
+    </message>
 </context>
 <context>
     <name>ImageModel</name>
@@ -1043,11 +1245,19 @@ Doba trvání:	%3
     </message>
     <message>
         <source>Edit Image</source>
-        <translation>Upravit obrázek</translation>
+        <translation type="vanished">Upravit obrázek</translation>
     </message>
     <message>
         <source>Unknown</source>
         <translation>Neznámý</translation>
+    </message>
+    <message>
+        <source>Add Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Image</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1290,7 +1500,7 @@ Všechny soubory (*.*)</translation>
         <source>%1 session files (*.%1)
 RDF files (%3)
 All files (*.*)</source>
-        <translation>%1 soubory sezení (*.%1)
+        <translation type="vanished">%1 soubory sezení (*.%1)
 Soubory RDF (%3)
 Všechny soubory (*.*)</translation>
     </message>
@@ -1334,7 +1544,7 @@ Všechny soubory (*.*)</translation>
 Audio files (%2)
 RDF files (%1)
 All files (*.*)</source>
-        <translation>Všechny podporované soubory (*.sv %1 %2)
+        <translation type="vanished">Všechny podporované soubory (*.sv %1 %2)
 %3 soubory sezení (*.%4)
 Zvukové soubory (%2)
 Soubory RDF (%1)
@@ -1357,7 +1567,7 @@ Audio files (%1)
 Layer files (%2)
 RDF files (%3)
 All files (*.*)</source>
-        <translation>Všechny podporované soubory (*.sv %1 %2 %3)
+        <translation type="vanished">Všechny podporované soubory (*.sv %1 %2 %3)
 %4 soubory sezení (*.%5)
 Zvukové soubory (%1)
 Soubory vrstev (%2)
@@ -1410,6 +1620,47 @@ All files (*.*)</source>
         <translation>Soubory SVG (Scalable Vector Graphics) (*.svg)
 Všechny soubory (*.*)</translation>
     </message>
+    <message>
+        <source>Select one or more files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select one or more session files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 session files (*.%2)
+RDF files (%3)
+All files (*.*)</source>
+        <translation type="unfinished">%1 soubory sezení (*.%1)
+Soubory RDF (%3)
+Všechny soubory (*.*) {1 ?} {2)?} {3)?}</translation>
+    </message>
+    <message>
+        <source>Select one or more audio files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select an audio file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All supported files (*.%1 %2 %3)
+%4 session files (*.%1)
+Audio files (%3)
+RDF files (%2)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All supported files (*.%1 %2 %3 %4)
+%5 session files (*.%1)
+Audio files (%2)
+Layer files (%3)
+RDF files (%4)
+All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ItemEditDialog</name>
@@ -1447,7 +1698,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Value:</source>
-        <translation>Hodnota:</translation>
+        <translation type="vanished">Hodnota:</translation>
     </message>
     <message>
         <source>Properties</source>
@@ -1460,6 +1711,18 @@ Všechny soubory (*.*)</translation>
     <message>
         <source>Duration:</source>
         <translation>Doba trvání:</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation type="unfinished">Hodnota</translation>
+    </message>
+    <message>
+        <source>Level</source>
+        <translation type="unfinished">Úroveň</translation>
+    </message>
+    <message>
+        <source>%1:</source>
+        <translation type="unfinished">%1:</translation>
     </message>
 </context>
 <context>
@@ -1640,6 +1903,10 @@ Všechny soubory (*.*)</translation>
     <message>
         <source>Unknown Layer</source>
         <translation>Neznámá vrstva</translation>
+    </message>
+    <message>
+        <source>Boxes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2559,7 +2826,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Can&apos;t export non-note layers to MIDI</source>
-        <translation>Ne-notové vrstvy nelze do MIDI vyvést</translation>
+        <translation type="vanished">Ne-notové vrstvy nelze do MIDI vyvést</translation>
     </message>
     <message>
         <source>Adjust the master playback level</source>
@@ -2575,7 +2842,7 @@ Všechny soubory (*.*)</translation>
     </message>
     <message>
         <source>Failed to open file %1 for writing</source>
-        <translation>Otevření souboru %1 pro zápis se nezdařilo</translation>
+        <translation type="vanished">Otevření souboru %1 pro zápis se nezdařilo</translation>
     </message>
     <message>
         <source>Channel &amp;%1</source>
@@ -3739,7 +4006,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)</source>
-        <translation>Promiňte, ale typ této vrstvu nelze vyvést do RDF (podporovanými typy jsou: oblast, poznámka, text, okamžiky času. hodnoty času)</translation>
+        <translation type="vanished">Promiňte, ale typ této vrstvu nelze vyvést do RDF (podporovanými typy jsou: oblast, poznámka, text, okamžiky času. hodnoty času)</translation>
     </message>
     <message>
         <source>Set as default template for future audio files</source>
@@ -4193,6 +4460,22 @@ Co chcete vyvést?</translation>
         <source>drag up/down to adjust, ctrl+click to reset</source>
         <translation>Táhněte nahoru/dolů pro přizpůsobení, Ctrl+klepnutí pro vrácení do výchozího stavu</translation>
     </message>
+    <message>
+        <source>&lt;unnamed&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Beta release</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;This is a beta release of %1&lt;/b&gt;&lt;p&gt;Please see the &quot;What&apos;s New&quot; option in the Help menu for a list of changes since the last proper release.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;With Opus decoder &amp;copy; Xiph.Org Foundation</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>
@@ -4300,7 +4583,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source> (modified)</source>
-        <translation> (upraveno)</translation>
+        <translation type="vanished"> (upraveno)</translation>
     </message>
     <message>
         <source>Close the current session and start a new one</source>
@@ -4431,6 +4714,22 @@ Co chcete vyvést?</translation>
 If you save this session, it will be saved without any reference to that audio, and information may be lost.</source>
         <translation>Něco ze zvukového obsahu, na který odkazuje původní soubor se sezením se nepodařilo nahrát.
 Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk a může dojít ke ztrátě informací.</translation>
+    </message>
+    <message>
+        <source>Internal error: unknown model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to open file %1 for writing</source>
+        <translation type="unfinished">Otevření souboru %1 pro zápis se nezdařilo</translation>
+    </message>
+    <message>
+        <source>Can&apos;t export non-note layers to MIDI</source>
+        <translation type="unfinished">Ne-notové vrstvy nelze do MIDI vyvést</translation>
+    </message>
+    <message>
+        <source>Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)</source>
+        <translation type="unfinished">Promiňte, ale typ této vrstvu nelze vyvést do RDF (podporovanými typy jsou: oblast, poznámka, text, okamžiky času. hodnoty času)</translation>
     </message>
 </context>
 <context>
@@ -4718,12 +5017,20 @@ Doba trvání:	%3
         <source>Duration</source>
         <translation>Doba trvání</translation>
     </message>
+    <message>
+        <source>Add Note</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Note</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OggVorbisFileReader</name>
     <message>
         <source>Decoding %1...</source>
-        <translation>Dekóduje se %1...</translation>
+        <translation type="vanished">Dekóduje se %1...</translation>
     </message>
 </context>
 <context>
@@ -5098,6 +5405,14 @@ Doba trvání:	%3
     <message>
         <source>Click and drag to navigate; use mouse-wheel or trackpad-scroll to zoom; hold Shift and drag to zoom to an area</source>
         <translation>Klepněte a táhněte pro pohyb; použijte kolečko myši nebo polohovací plošku počítače pro přibližování/oddalování; podržte Shift a táhněte pro přiblížení na oblast</translation>
+    </message>
+    <message>
+        <source>Aligned at -%1 cents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aligned at +%1 cents</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -5915,7 +6230,7 @@ Usage:
   --no-osc: Do not provide an Open Sound Control port for remote control
   &lt;file&gt;: One or more Sonic Visualiser (.sv) and audio files may be provided.
 </source>
-        <translation>
+        <translation type="vanished">
 Sonic Visualiser je programem určeným pro prohlížení a zkoumání zvukových dat, 
 pro významový hudební rozbor a připojování poznámek.
 
@@ -5927,6 +6242,36 @@ Použití:
   --no-osc: Neposkytovat přípojku Open Sound Control pro dálkové ovládání
   &lt;file&gt;: Lze poskytnout jeden nebo více souborů Sonic Visualiser (.sv) a zvukových souborů.
 </translation>
+    </message>
+    <message>
+        <source>
+Sonic Visualiser is a program for viewing and exploring audio data
+for semantic music analysis and annotation.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do not attempt to open an audio output device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do not provide an Open Sound Control port for remote control.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do not show a splash screen.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Batch run the Open Sound Control script found in the given file. Supply &quot;-&quot; as file to read from stdin. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear any saved settings and reset to first-run behaviour.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One or more Sonic Visualiser (.sv) and audio files may be provided.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6314,6 +6659,14 @@ Doba trvání:	%3
         <source>Duration</source>
         <translation>Doba trvání</translation>
     </message>
+    <message>
+        <source>Add Region</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Region</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RemoveLayerCommand</name>
@@ -6478,40 +6831,40 @@ Koš:	%5
     <name>SparseModel</name>
     <message>
         <source>Edit Data</source>
-        <translation>Upravit data</translation>
+        <translation type="vanished">Upravit data</translation>
     </message>
     <message>
         <source>Sparse</source>
-        <translation>Řídký</translation>
+        <translation type="vanished">Řídký</translation>
     </message>
     <message>
         <source>Delete Data Point</source>
-        <translation>Smazat datový bod</translation>
+        <translation type="vanished">Smazat datový bod</translation>
     </message>
     <message>
         <source>Insert Data Point</source>
-        <translation>Vložit datový bod</translation>
+        <translation type="vanished">Vložit datový bod</translation>
     </message>
 </context>
 <context>
     <name>SparseModel::AddPointCommand</name>
     <message>
         <source>Add Point</source>
-        <translation>Přidat bod</translation>
+        <translation type="vanished">Přidat bod</translation>
     </message>
 </context>
 <context>
     <name>SparseModel::DeletePointCommand</name>
     <message>
         <source>Delete Point</source>
-        <translation>Smazat bod</translation>
+        <translation type="vanished">Smazat bod</translation>
     </message>
 </context>
 <context>
     <name>SparseModel::RelabelCommand</name>
     <message>
         <source>Re-Label Point</source>
-        <translation>Opatřit bod znovu štítkem</translation>
+        <translation type="vanished">Opatřit bod znovu štítkem</translation>
     </message>
 </context>
 <context>
@@ -6539,6 +6892,14 @@ Koš:	%5
     <message>
         <source>Unknown</source>
         <translation>Neznámý</translation>
+    </message>
+    <message>
+        <source>Add Point</source>
+        <translation type="unfinished">Přidat bod</translation>
+    </message>
+    <message>
+        <source>Delete Point</source>
+        <translation type="unfinished">Smazat bod</translation>
     </message>
 </context>
 <context>
@@ -6571,12 +6932,20 @@ Koš:	%5
         <source>Sparse Time-Value</source>
         <translation>Řídká hodnota času</translation>
     </message>
+    <message>
+        <source>Add Point</source>
+        <translation type="unfinished">Přidat bod</translation>
+    </message>
+    <message>
+        <source>Delete Point</source>
+        <translation type="unfinished">Smazat bod</translation>
+    </message>
 </context>
 <context>
     <name>SparseValueModel</name>
     <message>
         <source>Sparse Value</source>
-        <translation>Řídká hodnota</translation>
+        <translation type="vanished">Řídká hodnota</translation>
     </message>
 </context>
 <context>
@@ -7135,6 +7504,10 @@ Výška:	%2
         <source>Delete Selection</source>
         <translation>Smazat výběr</translation>
     </message>
+    <message>
+        <source>Re-Label Point</source>
+        <translation type="unfinished">Opatřit bod znovu štítkem</translation>
+    </message>
 </context>
 <context>
     <name>TextModel</name>
@@ -7165,6 +7538,14 @@ Výška:	%2
     <message>
         <source>Unknown</source>
         <translation>Neznámý</translation>
+    </message>
+    <message>
+        <source>Add Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete Label</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7822,7 +8203,7 @@ Hodnota:	%2
     </message>
     <message>
         <source>Alignment</source>
-        <translation>Zarovnání</translation>
+        <translation type="vanished">Zarovnání</translation>
     </message>
     <message>
         <source>Exported image from %1</source>
