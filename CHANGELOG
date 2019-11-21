@@ -1,4 +1,17 @@
 
+Changes in Sonic Visualiser v4.1 (Nov 2019) since the previous release 4.0:
+
+ - Fix nonsense vertical scale in NoteLayer when displaying a model
+   with non-Hz scale (e.g. from an analysis plugin that outputs MIDI
+   note values)
+
+ - Fix failure to open playback device when using macOS Catalina with
+   certain audio devices
+
+ - Fix failure to make installed executables executable when
+   installing from the source package
+
+
 Changes in Sonic Visualiser v4.0 (25 Oct 2019) since the previous release 3.3:
 
  - Add Box annotation layer type, typically used for time-frequency
