@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser v4.0.1 (Dec 2019) since the previous release 4.0:
+Changes in Sonic Visualiser v4.0.1 (10 Dec 2019) since the previous release 4.0:
 
  - Fix nonsense vertical scale in NoteLayer when displaying a model
    with non-Hz scale (e.g. from an analysis plugin that outputs MIDI
