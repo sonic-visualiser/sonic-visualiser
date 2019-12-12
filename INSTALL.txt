@@ -5,6 +5,13 @@ How to compile Sonic Visualiser from source
 (NOTE: Refer also to .travis.yml and .appveyor.yml to see what the
 continuous-integration processes do to run a build)
 
+On Windows and Mac is it actually easier to build from a checkout of
+the Mercurial repository (be sure to update to the appropriate tag if
+you need a specific release) than it is to build from an official
+Sonic Visualiser source release package. This is because the
+repository checkout pulls in some required library builds, while the
+source package contains only Sonic Visualiser code.
+
 
 Windows
 -------
@@ -24,14 +31,27 @@ Build from the command line, but do not use the configure script.
 
 Install Qt5, either via Homebrew or from the official installer.
 
-If you are building Sonic Visualiser from a repository checkout,
-install Poly/ML via Homebrew (`brew install polyml`) and run
-`./repoint install` before proceeding. This isn't necessary when
-building from an official source release.
+ * If you are building from a repository checkout, install Poly/ML via
+Homebrew (`brew install polyml`) and run `./repoint install` before
+proceeding. This isn't necessary when building from an official source
+release.
 
-Then run `qmake -r` and `make`. (You may need to provide the full path
-to the correct `qmake` executable for the version of Qt you want to
-build with.)
+ * If you are building from an official source release, make sure the
+following required dependencies are available, whether installed using
+Homebrew or some other method: (This isn't necessary when building
+from a repository checkout)
+
+REQUIRED        Rubber Band Library     http://www.breakfastquay.com/rubberband/
+REQUIRED        libsndfile              http://www.mega-nerd.com/libsndfile/
+REQUIRED        libsamplerate           http://www.mega-nerd.com/SRC/
+REQUIRED        FFTW3                   http://www.fftw.org/
+REQUIRED        bzip2 library           http://www.bzip.org/
+REQUIRED        Sord and Serd libraries http://drobilla.net/software/
+REQUIRED        Cap'n Proto             http://capnproto.org/
+
+Then run `qmake -r sonic-visualiser.pro` and `make`. (You may need to
+provide the full path to the correct `qmake` executable for the
+version of Qt you want to build with.)
 
 
 Linux
@@ -41,8 +61,7 @@ $ ./configure && make && make install
 
 The following additional libraries are required or optional:
 
-REQUIRED        Qt v5                   http://qt-project.org/
-REQUIRED        Vamp Plugin SDK v2.x    http://www.vamp-plugins.org/
+REQUIRED        Qt v5                   http://www.qt.io/
 REQUIRED        Rubber Band Library     http://www.breakfastquay.com/rubberband/
 REQUIRED        libsndfile              http://www.mega-nerd.com/libsndfile/
 REQUIRED        libsamplerate           http://www.mega-nerd.com/SRC/
@@ -50,9 +69,10 @@ REQUIRED        FFTW3                   http://www.fftw.org/
 REQUIRED        bzip2 library           http://www.bzip.org/
 REQUIRED        Sord and Serd libraries http://drobilla.net/software/
 REQUIRED        Cap'n Proto             http://capnproto.org/
+REQUIRED        MAD mp3 decoder         http://www.underbit.com/products/mad/
+REQUIRED        Oggz and fishsound      http://xiph.org/oggz/
+REQUIRED        Opus                    http://www.opus-codec.org/
 
-Optional        MAD mp3 decoder         http://www.underbit.com/products/mad/
-Optional        Oggz and fishsound      http://xiph.org/oggz/
 Optional        liblo OSC library       http://www.plugin.org.uk/liblo/
 Optional        JACK                    http://www.jackaudio.org/
 Optional        PortAudio v19           http://www.portaudio.com/
@@ -65,25 +85,17 @@ backup, and PortAudio is used elsewhere.
 
 On Linux, you will need the ALSA libraries (used for MIDI).
 
-For Cap'n Proto, currently you will need the v0.6 release which (if
-not available as a package) can be obtained from the releases page on
-Github. To build it, you might do something like
-
-$ curl -L -o capnproto-v0.6.0.tar.gz https://github.com/sandstorm-io/capnproto/archive/v0.6.0.tar.gz
-$ tar xf capnproto-v0.6.0.tar.gz
-$ cd capnproto-0.6.0/c++
-$ autoreconf -i 
-$ ./configure --enable-static --disable-shared
-$ make && make install
+For Cap'n Proto you will need v0.6 or newer.
 
 For the rest, if you happen to be using a Debian-based Linux, you
 probably want to apt install something like the following packages:
 
 build-essential libbz2-dev libfftw3-dev libfishsound1-dev
 libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev
-libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev
-libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor-utils
-librubberband-dev git mercurial autoconf automake libtool mlton
+libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev
+libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default
+libqt5svg5-dev raptor-utils librubberband-dev git mercurial autoconf
+automake libtool mlton
 
 If you are building Sonic Visualiser from a repository checkout, then
 the configure script will use Repoint to obtain further checkouts of

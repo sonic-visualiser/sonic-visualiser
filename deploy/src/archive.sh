@@ -6,6 +6,11 @@ tag=`hg tags | grep '^sv_v' | head -1 | awk '{ print $1; }'`
 
 v=`echo "$tag" | sed 's/sv_v//' | sed 's/_.*$//'`
 
+echo -n "Package up source code for version $v from tag $tag [Yn] ? "
+read yn
+case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
+echo "Proceeding"
+
 current=$(hg id | awk '{ print $1; }')
 
 case "$current" in
