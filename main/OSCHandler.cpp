@@ -134,7 +134,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 if (currentPane) currentLayer = currentPane->getSelectedLayer();
                 if (currentLayer) {
                     QString error;
-                    if (!exportLayerTo(currentLayer, path, error)) {
+                    if (!exportLayerTo(currentLayer, currentPane, path, error)) {
                         SVCERR << "OSCHandler: Failed to export current layer to " << path << ": " << error << endl;
                     }
                 } else {

@@ -3022,7 +3022,7 @@ MainWindow::exportLayer()
 
     QString error;
 
-    if (!exportLayerTo(layer, path, error)) {
+    if (!exportLayerTo(layer, pane, path, error)) {
         QMessageBox::critical(this, tr("Failed to write file"), error);
     } else {
         m_recentFiles.addFile(path);
