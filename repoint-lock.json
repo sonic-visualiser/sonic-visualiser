@@ -7,22 +7,22 @@
       "pin": "ee3b248bda25"
     },
     "svgui": {
-      "pin": "a0b2f3b4dd2f"
+      "pin": "3607b0092019"
     },
     "svapp": {
-      "pin": "453029d6e9bf"
+      "pin": "b06b18c15fd4"
     },
     "checker": {
-      "pin": "87908a5d6c88"
+      "pin": "ef64b3f171d9"
     },
     "piper": {
       "pin": "f5a04ffe4d5a0ae01e77018a86a59b48a425e674"
     },
     "piper-vamp-cpp": {
-      "pin": "0e3328c6091f59c912e25bc392a7dc75182be1c7"
+      "pin": "f381235a4ba88eac2fa31fc1f7f613cca9707f63"
     },
     "dataquay": {
-      "pin": "b82360a98f49"
+      "pin": "c523464d1466"
     },
     "bqvec": {
       "pin": "cd235ecbeb31"
