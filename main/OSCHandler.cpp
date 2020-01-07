@@ -475,7 +475,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             Pane *pane = m_paneStack->getPane(paneIndex);
             m_paneStack->setCurrentPane(pane);
             if (layerIndex >= 0 && layerIndex < pane->getLayerCount()) {
-                Layer *layer = pane->getLayer(layerIndex);
+                Layer *layer = pane->getFixedOrderLayer(layerIndex);
                 m_paneStack->setCurrentLayer(pane, layer);
             } else if (wantLayer && layerIndex == -1) {
                 m_paneStack->setCurrentLayer(pane, nullptr);
