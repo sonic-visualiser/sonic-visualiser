@@ -570,8 +570,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
 
     } else if (message.getMethod() == "quit") {
-        
-        m_abandoning = true;
+
+        SVDEBUG << "OSCHandler: Exiting abruptly" << endl;
+        m_documentModified = false; // so we don't ask to save
         close();
 
     } else if (message.getMethod() == "resize") {

@@ -3594,7 +3594,7 @@ MainWindow::closeEvent(QCloseEvent *e)
         return;
     }
 
-    if (!m_abandoning && !checkSaveModified()) {
+    if (!checkSaveModified()) {
         SVCERR << "Close refused by user - ignoring close event" << endl;
         e->ignore();
         return;
