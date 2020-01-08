@@ -53,14 +53,17 @@ if [ ! -f "$session" ]; then
 fi
 
 tmpdir=$(mktemp -d)
-trap "rm -rf $tmpdir" 0
+#trap "rm -rf $tmpdir" 0
 
 input="$tmpdir/input.sv"
 
 cp "$session" "$input"
 
 cat > "$tmpdir/script" <<EOF
+# Load the session file
 /open "$input"
+
+# Select each exportable layer in turn and export to a CSV file
 /setcurrent 1 3
 /exportlayer "$tmpdir/instants.csv"
 /setcurrent 2 3
@@ -81,27 +84,94 @@ cat > "$tmpdir/script" <<EOF
 /exportlayer "$tmpdir/boxes.csv"
 /setcurrent 7 2
 /exportlayer "$tmpdir/peakfreq.csv"
+
+# Note layer can also be exported as MIDI
+/setcurrent 4 3
+/exportlayer "$tmpdir/notes.mid"
+
+# Now test exporting only the contents of a (multiple) selection.
+# First set waveform layer as current, to avoid snapping the selection
+# to the contents of an annotation layer.
+/setcurrent 1 2
+
+# Make a selection
+/select 8 10
+/addselect 14 16
+
+# And repeat all the previous exports
+/setcurrent 1 3
+/exportlayer "$tmpdir/selected-instants.csv"
+/setcurrent 2 3
+/exportlayer "$tmpdir/selected-values.csv"
+/setcurrent 3 2
+/exportlayer "$tmpdir/selected-image.csv"
+/setcurrent 3 3
+/exportlayer "$tmpdir/selected-regions.csv"
+/setcurrent 4 2
+/exportlayer "$tmpdir/selected-text.csv"
+/setcurrent 4 3
+/exportlayer "$tmpdir/selected-notes.csv"
+/setcurrent 5 2
+/exportlayer "$tmpdir/selected-3dplot.csv"
+/setcurrent 6 2
+/exportlayer "$tmpdir/selected-spectrogram.csv"
+/setcurrent 6 3
+/exportlayer "$tmpdir/selected-boxes.csv"
+/setcurrent 7 2
+/exportlayer "$tmpdir/selected-peakfreq.csv"
+
+/setcurrent 4 3
+/exportlayer "$tmpdir/selected-notes.mid"
+
 /quit
 EOF
 
 "$sv" --no-splash --osc-script "$tmpdir/script"
 
 for type in instants values image regions text notes 3dplot spectrogram boxes peakfreq ; do
-    actual="$tmpdir/$type.csv"
-    expected="layers-expected/$type.csv"
+    for pfx in "" "selected-"; do
+        actual="$tmpdir/$pfx$type.csv"
+        expected="layers-expected/$pfx$type.csv"
+        if ! cmp -s "$actual" "$expected" ; then
+            echo
+            if [ -z "$pfx" ]; then
+                echo "Test failed for layer type \"$type\"!"
+            else
+                echo "Test failed for selected regions in layer type \"$type\"!"
+            fi            
+            echo
+            echo "Actual:"
+            ls -l "$actual"
+            echo "Expected:"
+            ls -l "$expected"
+            echo
+            echo "Diff begins:"
+            diff -u1 "$actual" "$expected" | head 
+            echo
+        fi
+    done
+done
+
+for other in notes.mid selected-notes.mid ; do
+    actual="$tmpdir/$other"
+    expected="layers-expected/$other"
     if ! cmp -s "$actual" "$expected" ; then
         echo
-        echo "Test failed for layer type \"$type\"!"
+        if [ -z "$pfx" ]; then
+            echo "Test failed for \"$other\"!"
+        fi            
         echo
         echo "Actual:"
         ls -l "$actual"
-        echo "Expected"
+        echo "Expected:"
         ls -l "$expected"
         echo
-        echo "Diff begins:"
-        diff -u1 "$actual" "$expected" | head 
+        od -c "$actual" > "$actual".txt
+        od -c "$expected" > "$tmpdir/expected-$other".txt
+        echo
+        echo "Diff:"
+        diff -u1 "$actual".txt "$tmpdir/expected-$other".txt
         echo
     fi
 done
-
 
