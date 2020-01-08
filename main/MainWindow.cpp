@@ -3020,9 +3020,29 @@ MainWindow::exportLayer()
 
     if (path == "") return;
 
+    MultiSelection ms = m_viewManager->getSelection();
+    MultiSelection *selectionToWrite = nullptr;
+
+    if (!ms.getSelections().empty()) {
+
+        QStringList items;
+        items << tr("Export the content of the selected area")
+              << tr("Export the whole layer");
+        
+        bool ok = false;
+        QString item = ListInputDialog::getItem
+            (this, tr("Select region to export"),
+             tr("Which region of the layer do you want to export?"),
+             items, 0, &ok);
+        
+        if (!ok || item.isEmpty()) return;
+        
+        if (item == items[0]) selectionToWrite = &ms;
+    }
+    
     QString error;
 
-    if (!exportLayerTo(layer, pane, path, error)) {
+    if (!exportLayerTo(layer, pane, selectionToWrite, path, error)) {
         QMessageBox::critical(this, tr("Failed to write file"), error);
     } else {
         m_recentFiles.addFile(path);

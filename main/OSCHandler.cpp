@@ -156,10 +156,19 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 Layer *currentLayer = nullptr;
                 if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
                 if (currentPane) currentLayer = currentPane->getSelectedLayer();
+                MultiSelection ms = m_viewManager->getSelection();
                 if (currentLayer) {
                     QString error;
-                    if (!exportLayerTo(currentLayer, currentPane, path, error)) {
-                        SVCERR << "OSCHandler: Failed to export current layer to " << path << ": " << error << endl;
+                    if (exportLayerTo
+                        (currentLayer, currentPane,
+                         ms.getSelections().empty() ? nullptr : &ms,
+                         path, error)) {
+                        SVDEBUG << "OSCHandler: Exported layer \""
+                                << currentLayer->getLayerPresentationName()
+                                << "\" to path \"" << path << "\"" << endl;
+                    } else {
+                        SVCERR << "OSCHandler: Export failed to path \""
+                               << path << "\"" << endl;
                     }
                 } else {
                     SVCERR << "OSCHandler: No current layer to export" << endl;
