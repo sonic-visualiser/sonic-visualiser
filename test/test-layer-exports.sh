@@ -53,7 +53,7 @@ if [ ! -f "$session" ]; then
 fi
 
 tmpdir=$(mktemp -d)
-#trap "rm -rf $tmpdir" 0
+trap "rm -rf $tmpdir" 0
 
 input="$tmpdir/input.sv"
 
