@@ -3020,10 +3020,18 @@ MainWindow::exportLayer()
 
     if (path == "") return;
 
+    QString suffix = QFileInfo(path).suffix().toLower();
+    if (suffix == "") suffix = "svl"; // this is what exportLayerTo defaults to
+
+    bool canWriteSelection = ! (suffix == "xml" ||
+                                suffix == "svl" ||
+                                suffix == "n3" ||
+                                suffix == "ttl");
+    
     MultiSelection ms = m_viewManager->getSelection();
     MultiSelection *selectionToWrite = nullptr;
 
-    if (!ms.getSelections().empty()) {
+    if (canWriteSelection && !ms.getSelections().empty()) {
 
         QStringList items;
         items << tr("Export the content of the selected area")
