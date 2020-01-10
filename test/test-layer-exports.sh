@@ -123,6 +123,12 @@ cat > "$tmpdir/script" <<EOF
 /setcurrent 4 3
 /exportlayer "$tmpdir/selected-notes.mid"
 
+# If we also zoom in vertically in the 3d plot, our export should
+# include only the zoomed area - check this
+/setcurrent 5 2
+/zoomvertical 0 12
+/exportlayer "$tmpdir/selected-zoomed-3dplot.csv"
+
 /quit
 EOF
 
@@ -150,6 +156,24 @@ for type in instants values image regions text notes 3dplot spectrogram boxes pe
             echo
         fi
     done
+done
+
+for csv in selected-zoomed-3dplot.csv ; do
+    actual="$tmpdir/$csv"
+    expected="layers-expected/$csv"
+    if ! cmp -s "$actual" "$expected" ; then
+        echo
+        echo "Test failed for \"$csv\"!"
+        echo
+        echo "Actual:"
+        ls -l "$actual"
+        echo "Expected:"
+        ls -l "$expected"
+        echo
+        echo "Diff begins:"
+        diff -u1 "$actual" "$expected" | head 
+        echo
+    fi
 done
 
 for other in notes.mid selected-notes.mid ; do
