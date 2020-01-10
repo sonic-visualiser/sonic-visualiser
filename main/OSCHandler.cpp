@@ -33,21 +33,31 @@
 #include <bqaudioio/SystemPlaybackTarget.h>
 
 #include <QFileInfo>
+#include <QTime>
+#include <QElapsedTimer>
+
+#define NOW (QTime::currentTime().toString(Qt::ISODateWithMs))
 
 void
 MainWindow::handleOSCMessage(const OSCMessage &message)
 {
-    SVDEBUG << "OSCHandler: method = \""
-            << message.getMethod() << "\"" << endl;
+    QElapsedTimer timer;
+    timer.start();
+    
+    SVDEBUG << "OSCHandler at " << NOW << ": handling message: "
+            << message.toString() << endl;
 
     if (message.getMethod() == "open") {
 
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (open(path, ReplaceMainModel) != FileOpenSucceeded) {
-                cerr << "OSCHandler: File open failed for path \""
-                          << path << "\"" << endl;
+            if (open(path, ReplaceMainModel) == FileOpenSucceeded) {
+                SVDEBUG << "OSCHandler: Opened path \""
+                        << path << "\"" << endl;
+            } else {
+                SVCERR << "OSCHandler: File open failed for path \""
+                       << path << "\"" << endl;
             }
             //!!! we really need to spin here and not return until the
             // file has been completely decoded...
@@ -58,8 +68,11 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
             QString path = message.getArg(0).toString();
-            if (open(path, CreateAdditionalModel) != FileOpenSucceeded) {
-                cerr << "OSCHandler: File open failed for path \""
+            if (open(path, CreateAdditionalModel) == FileOpenSucceeded) {
+                SVDEBUG << "OSCHandler: Opened additional path \""
+                        << path << "\"" << endl;
+            } else {
+                SVCERR << "OSCHandler: File open failed for path \""
                           << path << "\"" << endl;
             }
         }
@@ -75,9 +88,13 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
         std::vector<QString> recent = m_recentFiles.getRecent();
         if (n >= 0 && n < int(recent.size())) {
-            if (open(recent[n], ReplaceMainModel) != FileOpenSucceeded) {
-                cerr << "OSCHandler: File open failed for path \""
-                          << recent[n] << "\"" << endl;
+            QString path = recent[n];
+            if (open(path, ReplaceMainModel) == FileOpenSucceeded) {
+                SVDEBUG << "OSCHandler: Opened recent path \""
+                        << path << "\"" << endl;
+            } else {
+                SVCERR << "OSCHandler: File open failed for path \""
+                       << path << "\"" << endl;
             }
         }
 
@@ -88,9 +105,13 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
-                SVDEBUG << "OSCHandler: Refusing to overwrite existing file in save" << endl;
+                SVCERR << "OSCHandler: Refusing to overwrite existing file in save" << endl;
+            } else if (saveSessionFile(path)) {
+                SVDEBUG << "OSCHandler: Saved session to path \""
+                        << path << "\"" << endl;
             } else {
-                saveSessionFile(path);
+                SVCERR << "OSCHandler: Save failed to path \""
+                       << path << "\"" << endl;
             }
         }
 
@@ -102,18 +123,21 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 message.getArg(0).canConvert(QVariant::String)) {
                 path = message.getArg(0).toString();
                 if (QFileInfo(path).exists()) {
-                    SVDEBUG << "OSCHandler: Refusing to overwrite existing file in export" << endl;
+                    SVCERR << "OSCHandler: Refusing to overwrite existing file in export" << endl;
                 } else {
                     WavFileWriter writer(path,
                                          getMainModel()->getSampleRate(),
                                          getMainModel()->getChannelCount(),
                                          WavFileWriter::WriteToTemporary);
                     MultiSelection ms = m_viewManager->getSelection();
-                    if (!ms.getSelections().empty()) {
-                        //!!! todo: update WavFileWriter!
-                        writer.writeModel(getMainModel().get(), &ms);
+                    if (writer.writeModel
+                        (getMainModel().get(),
+                         ms.getSelections().empty() ? nullptr : &ms)) {
+                        SVDEBUG << "OSCHandler: Exported audio to path \""
+                                << path << "\"" << endl;
                     } else {
-                        writer.writeModel(getMainModel().get());
+                        SVCERR << "OSCHandler: Export failed to path \""
+                               << path << "\"" << endl;
                     }
                 }
             }
@@ -132,10 +156,19 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 Layer *currentLayer = nullptr;
                 if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
                 if (currentPane) currentLayer = currentPane->getSelectedLayer();
+                MultiSelection ms = m_viewManager->getSelection();
                 if (currentLayer) {
                     QString error;
-                    if (!exportLayerTo(currentLayer, path, error)) {
-                        SVCERR << "OSCHandler: Failed to export current layer to " << path << ": " << error << endl;
+                    if (exportLayerTo
+                        (currentLayer, currentPane,
+                         ms.getSelections().empty() ? nullptr : &ms,
+                         path, error)) {
+                        SVDEBUG << "OSCHandler: Exported layer \""
+                                << currentLayer->getLayerPresentationName()
+                                << "\" to path \"" << path << "\"" << endl;
+                    } else {
+                        SVCERR << "OSCHandler: Export failed to path \""
+                               << path << "\"" << endl;
                     }
                 } else {
                     SVCERR << "OSCHandler: No current layer to export" << endl;
@@ -213,10 +246,12 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             if (message.getArg(0).canConvert(QVariant::String) &&
                 message.getArg(0).toString() == "similar") {
 
+                SVDEBUG << "OSCHandler: Calling ffwdSimilar" << endl;
                 ffwdSimilar();
             }
         } else {
 
+            SVDEBUG << "OSCHandler: Calling ffwd" << endl;
             ffwd();
         }
 
@@ -227,22 +262,26 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             if (message.getArg(0).canConvert(QVariant::String) &&
                 message.getArg(0).toString() == "similar") {
 
+                SVDEBUG << "OSCHandler: Calling rewindSimilar" << endl;
                 rewindSimilar();
             }
         } else {
 
+            SVDEBUG << "OSCHandler: Calling rewind" << endl;
             rewind();
         }
 
     } else if (message.getMethod() == "stop") {
             
-            if (m_playSource->isPlaying()) {
-                // As with play, we want to use the MainWindow
-                // function rather than call m_playSource directly
-                // because that way the audio driver suspend/resume
-                // etc is handled properly
-                MainWindow::stop();
-            }
+        if (m_playSource->isPlaying()) {
+            // As with play, we want to use the MainWindow function
+            // rather than call m_playSource directly because that way
+            // the audio driver suspend/resume etc is handled properly
+            SVDEBUG << "OSCHandler: Calling stop" << endl;
+            MainWindow::stop();
+        } else {
+            SVDEBUG << "OSCHandler: Not playing, doing nothing" << endl;
+        }
 
     } else if (message.getMethod() == "loop") {
 
@@ -251,8 +290,10 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             QString str = message.getArg(0).toString();
             if (str == "on") {
+                SVDEBUG << "OSCHandler: Enabling loop mode" << endl;
                 m_viewManager->setPlayLoopMode(true);
             } else if (str == "off") {
+                SVDEBUG << "OSCHandler: Disabling loop mode" << endl;
                 m_viewManager->setPlayLoopMode(false);
             }
         }
@@ -264,8 +305,10 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             QString str = message.getArg(0).toString();
             if (str == "on") {
+                SVDEBUG << "OSCHandler: Enabling solo mode" << endl;
                 m_viewManager->setPlaySoloMode(true);
             } else if (str == "off") {
+                SVDEBUG << "OSCHandler: Disabling solo mode" << endl;
                 m_viewManager->setPlaySoloMode(false);
             }
         }
@@ -292,6 +335,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
                 f0 = lrint(t0 * getMainModel()->getSampleRate());
                 f1 = lrint(t1 * getMainModel()->getSampleRate());
+
+                SVDEBUG << "OSCHandler: Converted selection extents to frames "
+                        << f0 << " and " << f1 << endl;
                 
                 Pane *pane = m_paneStack->getCurrentPane();
                 Layer *layer = nullptr;
@@ -302,6 +348,11 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                                               Layer::SnapLeft, -1);
                     layer->snapToFeatureFrame(pane, f1, resolution,
                                               Layer::SnapRight, -1);
+
+                    SVDEBUG << "OSCHandler: Snapped selection extents to "
+                            << f0 << " and " << f1 << " for current layer \""
+                            << layer->getLayerPresentationName() << "\""
+                            << endl;
                 }
 
             } else if (message.getArgCount() == 1 &&
@@ -309,8 +360,13 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
                 QString str = message.getArg(0).toString();
                 if (str == "none") {
+                    SVDEBUG << "OSCHandler: Clearing selection" << endl;
                     m_viewManager->clearSelections();
                     done = true;
+                } else if (str == "all") {
+                    SVDEBUG << "OSCHandler: Selecting all" << endl;
+                    f0 = getModelsStartFrame();
+                    f0 = getModelsEndFrame();
                 }
             }
 
@@ -321,6 +377,13 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     m_viewManager->addSelection(Selection(f0, f1));
                 }
             }
+
+            SVDEBUG << "OSCHandler: Selection now is "
+                    << m_viewManager->getSelection().toString() << endl;
+
+        } else {
+            SVCERR << "OSCHandler: No main model, can't modify selection"
+                   << endl;
         }
 
     } else if (message.getMethod() == "add") {
@@ -336,7 +399,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     channel = message.getArg(0).toInt();
                     if (channel < -1 ||
                         channel > int(getMainModel()->getChannelCount())) {
-                        cerr << "WARNING: OSCHandler: channel "
+                        SVCERR << "WARNING: OSCHandler: channel "
                                   << channel << " out of range" << endl;
                         channel = -1;
                     }
@@ -348,28 +411,33 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     LayerFactory::getInstance()->getLayerTypeForName(str);
 
                 if (type == LayerFactory::UnknownLayer) {
-                    cerr << "WARNING: OSCHandler: unknown layer "
-                              << "type " << str << endl;
+                    SVCERR << "WARNING: OSCHandler: unknown layer "
+                           << "type " << str << endl;
                 } else {
 
                     LayerConfiguration configuration(type,
                                                      getMainModelId(),
                                                      channel);
+
+                    QString pname = LayerFactory::getInstance()->
+                        getLayerPresentationName(type);
                     
-                    addPane(configuration,
-                            tr("Add %1 Pane")
-                            .arg(LayerFactory::getInstance()->
-                                 getLayerPresentationName(type)));
+                    addPane(configuration, tr("Add %1 Pane") .arg(pname));
+
+                    SVDEBUG << "OSCHandler: Added pane \"" << pname
+                            << "\"" << endl;
                 }
             }
         }
 
     } else if (message.getMethod() == "undo") {
 
+        SVDEBUG << "OSCHandler: Calling undo" << endl;
         CommandHistory::getInstance()->undo();
 
     } else if (message.getMethod() == "redo") {
 
+        SVDEBUG << "OSCHandler: Calling redo" << endl;
         CommandHistory::getInstance()->redo();
 
     } else if (message.getMethod() == "set") {
@@ -474,12 +542,21 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (paneIndex >= 0 && paneIndex < m_paneStack->getPaneCount()) {
             Pane *pane = m_paneStack->getPane(paneIndex);
             m_paneStack->setCurrentPane(pane);
+            SVDEBUG << "OSCHandler: Set current pane to index "
+                    << paneIndex << " (pane id " << pane->getId()
+                    << ")" << endl;
             if (layerIndex >= 0 && layerIndex < pane->getLayerCount()) {
-                Layer *layer = pane->getLayer(layerIndex);
+                Layer *layer = pane->getFixedOrderLayer(layerIndex);
                 m_paneStack->setCurrentLayer(pane, layer);
+                SVDEBUG << "OSCHandler: Set current layer to index "
+                        << layerIndex << " (layer \""
+                        << layer->getLayerPresentationName() << "\")" << endl;
             } else if (wantLayer && layerIndex == -1) {
                 m_paneStack->setCurrentLayer(pane, nullptr);
-            }
+            } else if (wantLayer) {
+                SVCERR << "OSCHandler: Layer index "
+                       << layerIndex << " out of range for pane" << endl;
+            }                
         }
 
     } else if (message.getMethod() == "delete") {
@@ -491,15 +568,18 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             if (target == "pane") {
 
+                SVDEBUG << "OSCHandler: Calling deleteCurrentPane" << endl;
                 deleteCurrentPane();
 
             } else if (target == "layer") {
 
+                SVDEBUG << "OSCHandler: Calling deleteCurrentLayer" << endl;
                 deleteCurrentLayer();
 
             } else {
                 
-                cerr << "WARNING: OSCHandler: Unknown delete target " << target << endl;
+                SVCERR << "WARNING: OSCHandler: Unknown delete target \""
+                       << target << "\"" << endl;
             }
         }
 
@@ -530,7 +610,12 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                                           int(round(1.0 / level)));
                 }
                 if (currentPane) {
+                    SVDEBUG << "OSCHandler: Setting zoom level to "
+                            << zoomLevel << endl;
                     currentPane->setZoomLevel(zoomLevel);
+                } else {
+                    SVCERR << "OSCHandler: No current pane, can't set zoom"
+                           << endl;
                 }
             }
         }
@@ -570,8 +655,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         }
 
     } else if (message.getMethod() == "quit") {
-        
-        m_abandoning = true;
+
+        SVDEBUG << "OSCHandler: Exiting abruptly" << endl;
+        m_documentModified = false; // so we don't ask to save
         close();
 
     } else if (message.getMethod() == "resize") {
@@ -600,31 +686,43 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
     } else if (message.getMethod() == "transform") {
 
-        Pane *pane = m_paneStack->getCurrentPane();
-
-        if (getMainModel() &&
-            pane &&
-            message.getArgCount() == 1 &&
+        if (message.getArgCount() == 1 &&
             message.getArg(0).canConvert(QVariant::String)) {
 
-            TransformId transformId = message.getArg(0).toString();
-
-            Transform transform = TransformFactory::getInstance()->
-                getDefaultTransformFor(transformId);
+            Pane *pane = m_paneStack->getCurrentPane();
             
-            Layer *newLayer = m_document->createDerivedLayer
-                (transform, getMainModelId());
+            if (getMainModel() && pane) {
 
-            if (newLayer) {
-                m_document->addLayerToView(pane, newLayer);
-                m_recentTransforms.add(transformId);
-                m_paneStack->setCurrentLayer(pane, newLayer);
+                TransformId transformId = message.getArg(0).toString();
+
+                Transform transform = TransformFactory::getInstance()->
+                    getDefaultTransformFor(transformId);
+
+                SVDEBUG << "OSCHandler: Running transform on main model:"
+                        << transform.toXmlString() << endl;
+            
+                Layer *newLayer = m_document->createDerivedLayer
+                    (transform, getMainModelId());
+                
+                if (newLayer) {
+                    m_document->addLayerToView(pane, newLayer);
+                    m_recentTransforms.add(transformId);
+                    m_paneStack->setCurrentLayer(pane, newLayer);
+                } else {
+                    SVCERR << "OSCHandler: Transform failed to run" << endl;
+                }
+            } else {
+                SVCERR << "OSCHandler: Lack main model or pane, "
+                       << "can't run transform" << endl;
             }
-        }
+        }            
 
     } else {
-        cerr << "WARNING: OSCHandler: Unknown or unsupported "
+        SVCERR << "WARNING: OSCHandler: Unknown or unsupported "
                   << "method \"" << message.getMethod()
                   << "\"" << endl;
     }
+
+    SVDEBUG << "OSCHandler at " << NOW << ": finished message: "
+            << message.toString() << " in " << timer.elapsed() << "ms" << endl;
 }

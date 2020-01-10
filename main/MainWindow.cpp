@@ -3020,9 +3020,37 @@ MainWindow::exportLayer()
 
     if (path == "") return;
 
+    QString suffix = QFileInfo(path).suffix().toLower();
+    if (suffix == "") suffix = "svl"; // this is what exportLayerTo defaults to
+
+    bool canWriteSelection = ! (suffix == "xml" ||
+                                suffix == "svl" ||
+                                suffix == "n3" ||
+                                suffix == "ttl");
+    
+    MultiSelection ms = m_viewManager->getSelection();
+    MultiSelection *selectionToWrite = nullptr;
+
+    if (canWriteSelection && !ms.getSelections().empty()) {
+
+        QStringList items;
+        items << tr("Export the content of the selected area")
+              << tr("Export the whole layer");
+        
+        bool ok = false;
+        QString item = ListInputDialog::getItem
+            (this, tr("Select region to export"),
+             tr("Which region of the layer do you want to export?"),
+             items, 0, &ok);
+        
+        if (!ok || item.isEmpty()) return;
+        
+        if (item == items[0]) selectionToWrite = &ms;
+    }
+    
     QString error;
 
-    if (!exportLayerTo(layer, path, error)) {
+    if (!exportLayerTo(layer, pane, selectionToWrite, path, error)) {
         QMessageBox::critical(this, tr("Failed to write file"), error);
     } else {
         m_recentFiles.addFile(path);
@@ -3594,7 +3622,7 @@ MainWindow::closeEvent(QCloseEvent *e)
         return;
     }
 
-    if (!m_abandoning && !checkSaveModified()) {
+    if (!checkSaveModified()) {
         SVCERR << "Close refused by user - ignoring close event" << endl;
         e->ignore();
         return;
