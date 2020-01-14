@@ -83,6 +83,7 @@
 #include "base/UnitDatabase.h"
 #include "layer/ColourDatabase.h"
 #include "widgets/ModelDataTableDialog.h"
+#include "widgets/CSVExportDialog.h"
 #include "rdf/PluginRDFIndexer.h"
 
 #include "Surveyer.h"
@@ -3023,15 +3024,64 @@ MainWindow::exportLayer()
     QString suffix = QFileInfo(path).suffix().toLower();
     if (suffix == "") suffix = "svl"; // this is what exportLayerTo defaults to
 
-    bool canWriteSelection = ! (suffix == "xml" ||
-                                suffix == "svl" ||
-                                suffix == "n3" ||
-                                suffix == "ttl");
+    bool canWriteSelection =
+        ! (suffix == "xml" || suffix == "svl" ||
+           suffix == "n3" || suffix == "ttl");
+
+    bool useCSVDialog =
+        ! (suffix == "xml" || suffix == "svl" ||
+           suffix == "mid" || suffix == "midi" ||
+           suffix == "n3" || suffix == "ttl");
     
     MultiSelection ms = m_viewManager->getSelection();
+    bool haveSelection = !ms.getSelections().empty();
+    
     MultiSelection *selectionToWrite = nullptr;
+    LayerGeometryProvider *provider = pane;
 
-    if (canWriteSelection && !ms.getSelections().empty()) {
+    DataExportOptions options = DataExportDefaults;
+    QString delimiter = ",";
+    
+    if (useCSVDialog) {
+
+        CSVExportDialog::Configuration config;
+        config.layerName = layer->getLayerPresentationName();
+        config.fileExtension = suffix;
+        config.isDense = false;
+        if (auto m = ModelById::get(modelId)) {
+            config.isDense = !m->isSparse();
+        }
+        config.haveView = true;
+        config.haveSelection = canWriteSelection && haveSelection;
+
+        CSVExportDialog dialog(config, this);
+        if (dialog.exec() != QDialog::Accepted) {
+            return;
+        }
+
+        if (dialog.shouldConstrainToSelection()) {
+            selectionToWrite = &ms;
+        }
+
+        if (!dialog.shouldConstrainToViewHeight()) {
+            provider = nullptr;
+        }
+
+        delimiter = dialog.getDelimiter();
+
+        if (dialog.shouldIncludeHeader()) {
+            options |= DataExportIncludeHeader;
+        }
+
+        if (dialog.shouldIncludeTimestamps()) {
+            options |= DataExportAlwaysIncludeTimestamp;
+        }
+
+        if (dialog.shouldWriteTimeInFrames()) {
+            options |= DataExportWriteTimeInFrames;
+        }
+
+    } else if (canWriteSelection && haveSelection) {
 
         QStringList items;
         items << tr("Export the content of the selected area")
@@ -3043,14 +3093,31 @@ MainWindow::exportLayer()
              tr("Which region of the layer do you want to export?"),
              items, 0, &ok);
         
-        if (!ok || item.isEmpty()) return;
+        if (!ok || item.isEmpty()) {
+            return;
+        }
         
-        if (item == items[0]) selectionToWrite = &ms;
+        if (item == items[0]) {
+            selectionToWrite = &ms;
+        }
     }
     
     QString error;
 
-    if (!exportLayerTo(layer, pane, selectionToWrite, path, error)) {
+    bool result = false;
+
+    if (suffix == "xml" || suffix == "svl") {
+        result = exportLayerToSVL(layer, path, error);
+    } else if (suffix == "mid" || suffix == "midi") {
+        result = exportLayerToMIDI(layer, selectionToWrite, path, error);
+    } else if (suffix == "ttl" || suffix == "n3") {
+        result = exportLayerToRDF(layer, path, error);
+    } else {
+        result = exportLayerToCSV(layer, provider, selectionToWrite,
+                                  delimiter, options, path, error);
+    }
+    
+    if (!result) {
         QMessageBox::critical(this, tr("Failed to write file"), error);
     } else {
         m_recentFiles.addFile(path);
