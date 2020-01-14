@@ -1,11 +1,13 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
 
+  @W@
+
   <Product
       Name="Sonic Visualiser" 
       Id="*"
       Language="1033"
       Codepage="1252" 
-      Version="4.0"
+      Version="@VERSION@"
       UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
       Manufacturer="Queen Mary, University of London">
     
@@ -13,7 +15,7 @@
         Id="*"
         Keywords="Installer"
         Description="Sonic Visualiser 32-bit Installer" 
-        Comments="Copyright (c) 2018 Queen Mary, University of London and others."
+        Comments="Copyright (c) 2020 Queen Mary, University of London and others."
         Manufacturer="Queen Mary, University of London" 
         InstallerVersion="100" 
         Languages="1033" 
@@ -156,6 +158,19 @@
                 Name="libwinpthread-1.dll"
                 Source="release\libwinpthread-1.dll"/>
           </Component>
+
+          <Component Id="OpenSSL"
+                     Guid="dd5a0ca6-7b8d-4ecb-ae43-589c6e24b8b7">
+            <File
+                Id="libeay32"
+                Name="libeay32.dll"
+                Source="c:\OpenSSL-Win32\bin\libeay32.dll"
+                KeyPath="yes"/>
+            <File
+                Id="ssleay32"
+                Name="ssleay32.dll"
+                Source="c:\OpenSSL-Win32\bin\ssleay32.dll"/>
+          </Component>
 	  
 	  <Directory Id="Platforms" Name="platforms">
             <Component
@@ -245,6 +260,7 @@
       <ComponentRef Id="Qt5"/>
       <ComponentRef Id="Qt5PlatformPlugins"/>
       <ComponentRef Id="Qt5StylePlugins"/>
+      <ComponentRef Id="OpenSSL"/>
       <ComponentRef Id="Piper"/>
       <ComponentRef Id="Checker"/>
       <ComponentRef Id="ProgramMenuDir"/>

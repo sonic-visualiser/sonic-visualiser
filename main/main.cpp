@@ -43,6 +43,7 @@
 #include <QPainter>
 #include <QFileOpenEvent>
 #include <QCommandLineParser>
+#include <QSslSocket>
 
 #include <iostream>
 #include <signal.h>
@@ -389,6 +390,10 @@ main(int argc, char **argv)
 
     StoreStartupLocale();
 
+    SVDEBUG << "Note: SSL library build version is: "
+            << QSslSocket::sslLibraryBuildVersionString()
+            << endl;
+    
     // Make known-plugins query as early as possible after showing
     // splash screen.
     PluginScan::getInstance()->scan();

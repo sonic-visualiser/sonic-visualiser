@@ -12,6 +12,9 @@ if not exist "C:\Program Files (x86)\WiX Toolset v3.11\bin" (
 @   exit /b 2
 )
 
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win32\generate-wxs.ps1'"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win64\generate-wxs.ps1'"
+
 set ORIGINALPATH=%PATH%
 set PATH=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;%PATH%
 set NAME=Open Source Developer, Christopher Cannam
