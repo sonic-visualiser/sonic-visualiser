@@ -16,15 +16,18 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "csv-export-dialog"
         },
         "svgui": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "csv-export-dialog"
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+	    "service": "soundsoftware",
+            "branch": "csv-export-dialog"
         },
         "checker": {
             "vcs": "hg",
