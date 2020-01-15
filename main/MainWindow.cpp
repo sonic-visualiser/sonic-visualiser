@@ -3022,7 +3022,7 @@ MainWindow::exportLayer()
     if (path == "") return;
 
     QString suffix = QFileInfo(path).suffix().toLower();
-    if (suffix == "") suffix = "svl"; // this is what exportLayerTo defaults to
+    if (suffix == "") suffix = "csv";
 
     bool canWriteSelection =
         ! (suffix == "xml" || suffix == "svl" ||
