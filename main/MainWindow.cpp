@@ -3032,6 +3032,23 @@ MainWindow::exportLayer()
         ! (suffix == "xml" || suffix == "svl" ||
            suffix == "mid" || suffix == "midi" ||
            suffix == "n3" || suffix == "ttl");
+
+    if (!ModelById::isa<NoteModel>(modelId) &&
+        (suffix == "mid" || suffix == "midi")) {
+        QMessageBox::critical
+            (this, tr("Failed to export layer"),
+             tr("Only note layers may be exported to MIDI files."));
+        return;
+    }
+
+    if (ModelById::isa<DenseTimeValueModel>(modelId) &&
+        !useCSVDialog) {
+        // This is the case for spectrograms
+        QMessageBox::critical
+            (this, tr("Failed to export layer"),
+             tr("Cannot export this layer to this file type. Only delimited column formats such as CSV are supported."));
+        return;
+    }
     
     MultiSelection ms = m_viewManager->getSelection();
     bool haveSelection = !ms.getSelections().empty();
