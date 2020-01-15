@@ -13,7 +13,10 @@ if not exist "C:\Program Files (x86)\WiX Toolset v3.11\bin" (
 )
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win32\generate-wxs.ps1'"
+if errorlevel 1 exit /b %errorlevel%
+
 powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win64\generate-wxs.ps1'"
+if errorlevel 1 exit /b %errorlevel%
 
 set ORIGINALPATH=%PATH%
 set PATH=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;%PATH%
