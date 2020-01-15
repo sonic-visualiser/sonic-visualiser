@@ -436,6 +436,93 @@ Label:	%4</source>
     </message>
 </context>
 <context>
+    <name>CSVExportDialog</name>
+    <message>
+        <source>Export Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exporting layer &quot;%1&quot; to %2 file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Row and column options:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pipe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Colon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Column separator:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 &apos;%2&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Include a header row before the data rows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Include a timestamp column before the data columns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Timing format:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write times in seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write times in audio sample frames</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Range to export:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export only the current selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the full duration of the layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export only the height of the visible view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the full height of the layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CSVFileWriter</name>
     <message>
         <source>Failed to open file %1 for writing</source>
@@ -4476,6 +4563,30 @@ Co chcete vyvést?</translation>
         <source>&lt;br&gt;With Opus decoder &amp;copy; Xiph.Org Foundation</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Failed to export layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only note layers may be exported to MIDI files.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot export this layer to this file type. Only delimited column formats such as CSV are supported.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the content of the selected area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export the whole layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Which region of the layer do you want to export?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>
@@ -4731,6 +4842,10 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
         <source>Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)</source>
         <translation type="unfinished">Promiňte, ale typ této vrstvu nelze vyvést do RDF (podporovanými typy jsou: oblast, poznámka, text, okamžiky času. hodnoty času)</translation>
     </message>
+    <message>
+        <source>Failed to export layer for an unknown reason</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ModelDataTableDialog</name>
@@ -4860,7 +4975,7 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
     </message>
     <message>
         <source>%1 %2</source>
-        <translation>%1 %2</translation>
+        <translation type="vanished">%1 %2</translation>
     </message>
     <message>
         <source>Paste</source>
@@ -6453,6 +6568,10 @@ for semantic music analysis and annotation.</source>
     <message>
         <source>&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
         <translation>&lt;b&gt;Nepodařilo se nahrát jednu nebo více knihoven přídavných modulů:&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Exporting layer...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
