@@ -28,6 +28,7 @@ class QLineEdit;
 class QTabWidget;
 class QComboBox;
 class PluginPathConfigurator;
+class ColourComboBox;
 
 class PreferencesDialog : public QDialog
 {
@@ -98,6 +99,7 @@ protected:
 
     QLineEdit *m_tempDirRootEdit;
 
+    ColourComboBox *m_overviewColourCombo;
     QComboBox *m_audioPlaybackDeviceCombo;
     QComboBox *m_audioRecordDeviceCombo;
     void rebuildDeviceCombos();

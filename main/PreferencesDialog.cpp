@@ -169,12 +169,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     colour3DColour->setCurrentIndex(m_colour3DColour);
 
     // can't have "add new colour", as it gets saved in the session not in prefs
-    ColourComboBox *overviewColour = new ColourComboBox(false);
+    m_overviewColourCombo = new ColourComboBox(false);
     int overviewColourIndex =
         ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
     SVCERR << "index = " << overviewColourIndex << " for colour " << m_overviewColour.name() << endl;
     if (overviewColourIndex >= 0) {
-        overviewColour->setCurrentIndex(overviewColourIndex);
+        m_overviewColourCombo->setCurrentIndex(overviewColourIndex);
     }
 
     connect(spectrogramGColour, SIGNAL(colourMapChanged(int)),
@@ -183,7 +183,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             this, SLOT(spectrogramMColourChanged(int)));
     connect(colour3DColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(colour3DColourChanged(int)));
-    connect(overviewColour, SIGNAL(colourChanged(int)),
+    connect(m_overviewColourCombo, SIGNAL(colourChanged(int)),
             this, SLOT(overviewColourChanged(int)));
 
     m_tuningFrequency = prefs->getTuningFrequency();
@@ -285,7 +285,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(showSplash, SIGNAL(stateChanged(int)),
             this, SLOT(showSplashChanged(int)));
 
-#ifdef NOT_DEFINED // This no longer works correctly on any platform AFAICS
+#ifndef Q_OS_MAC
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
                                              &deflt);
@@ -404,6 +404,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     }
 #endif
 
+#ifndef Q_OS_MAC
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Background Mode"))),
+                       row, 0);
+    subgrid->addWidget(bgMode, row++, 1, 1, 2);
+#endif
+
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Property Box Layout"))),
                        row, 0);
@@ -423,14 +430,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     subgrid->addWidget(new QLabel(tr("Overview waveform colour:")),
                        row, 0);
-    subgrid->addWidget(overviewColour, row++, 1, 1, 2);
-
-#ifdef NOT_DEFINED // see earlier
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Background Mode"))),
-                       row, 0);
-    subgrid->addWidget(bgMode, row++, 1, 1, 2);
-#endif
+    subgrid->addWidget(m_overviewColourCombo, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("View Font Size"))),
@@ -884,6 +884,23 @@ PreferencesDialog::backgroundModeChanged(int mode)
     m_backgroundMode = mode;
     m_applyButton->setEnabled(true);
     m_changesOnRestart = true;
+
+    // When switching to one of the explicit background choices
+    // (dark/light), also default the overview colour preference to
+    // something sensible
+    
+    int overviewColour = m_overviewColourCombo->currentIndex();
+    int plainColours = 6; // we happen to know there are 6 "light" and 6 "dark"
+    
+    if (mode == Preferences::DarkBackground && overviewColour < plainColours) {
+        overviewColour += plainColours;
+    }
+    if (mode == Preferences::LightBackground && overviewColour >= plainColours) {
+        overviewColour -= plainColours;
+    }
+
+    m_overviewColourCombo->setCurrentIndex(overviewColour);
+    overviewColourChanged(overviewColour);
 }
 
 void
