@@ -1,5 +1,11 @@
 
-CONFIG += c++14
+win32-msvc* {
+    # Necessary for WinRT header used to determine background colour
+    CONFIG += c++17
+}
+!win32-msvc* {
+    CONFIG += c++14
+}
 
 CONFIG += release
 #CONFIG += debug
@@ -97,7 +103,7 @@ win32-msvc* {
             -L$$PWD/sv-dependency-builds/win64-msvc/lib
     }
 
-    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION
+    DEFINES += NOMINMAX _USE_MATH_DEFINES CAPNP_LITE HAVE_MEDIAFOUNDATION _HAS_STD_BYTE=0
 
     QMAKE_CXXFLAGS_RELEASE += -fp:fast -gl
     QMAKE_LFLAGS_RELEASE += -ltcg
@@ -111,8 +117,10 @@ win32-msvc* {
     # Don't have liblo
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
+
+##!!! WindowsApp seems to be win10-specific! can I avoid this?
     
-    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lpropsys -ladvapi32 -lwinmm -lws2_32
+    LIBS += -lWindowsApp -lmfplat -lmfreadwrite -lmfuuid -lpropsys -ladvapi32 -lwinmm -lws2_32
 }
 
 macx* {
