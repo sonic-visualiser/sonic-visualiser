@@ -4,10 +4,10 @@
       "pin": "c42e50a5c297"
     },
     "svcore": {
-      "pin": "fc18ce2d99d7"
+      "pin": "472865574b1a"
     },
     "svgui": {
-      "pin": "2c974337f306"
+      "pin": "85f04c956f03"
     },
     "svapp": {
       "pin": "de7969894402"
@@ -46,7 +46,7 @@
       "pin": "d0c2a83c1364"
     },
     "icons/scalable": {
-      "pin": "be45984f7915"
+      "pin": "fd0ace21dce3"
     }
   }
 }
