@@ -149,12 +149,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                            int(ColourMapper::Sunset)).toInt());
     m_colour3DColour = (settings.value("colour-3d-plot-colour",
                                        int(ColourMapper::Green)).toInt());
+    m_overviewColourIsSet = false;
     m_overviewColour = ColourDatabase::getInstance()->getColour(tr("Green"));
     if (settings.contains("overview-colour")) {
         QString qcolorName =
             settings.value("overview-colour", m_overviewColour.name())
             .toString();
         m_overviewColour.setNamedColor(qcolorName);
+        m_overviewColourIsSet = true;
         SVCERR << "loaded colour " << m_overviewColour.name() << " from settings" << endl;
     }
     settings.endGroup();
@@ -170,11 +172,15 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     // can't have "add new colour", as it gets saved in the session not in prefs
     m_overviewColourCombo = new ColourComboBox(false);
-    int overviewColourIndex =
-        ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
-    SVCERR << "index = " << overviewColourIndex << " for colour " << m_overviewColour.name() << endl;
-    if (overviewColourIndex >= 0) {
-        m_overviewColourCombo->setCurrentIndex(overviewColourIndex);
+    m_overviewColourCombo->includeUnsetEntry(tr("Follow desktop theme"));
+    if (m_overviewColourIsSet) {
+        int overviewColourIndex =
+            ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
+        if (overviewColourIndex >= 0) {
+            m_overviewColourCombo->setCurrentIndex(overviewColourIndex + 1);
+        }
+    } else {
+        m_overviewColourCombo->setCurrentIndex(0);
     }
 
     connect(spectrogramGColour, SIGNAL(colourMapChanged(int)),
@@ -747,7 +753,10 @@ PreferencesDialog::colour3DColourChanged(int colour)
 void
 PreferencesDialog::overviewColourChanged(int colour)
 {
-    m_overviewColour = ColourDatabase::getInstance()->getColour(colour);
+    m_overviewColourIsSet = (colour >= 0);
+    if (m_overviewColourIsSet) {
+        m_overviewColour = ColourDatabase::getInstance()->getColour(colour);
+    }
     m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
@@ -889,18 +898,23 @@ PreferencesDialog::backgroundModeChanged(int mode)
     // (dark/light), also default the overview colour preference to
     // something sensible
     
-    int overviewColour = m_overviewColourCombo->currentIndex();
-    int plainColours = 6; // we happen to know there are 6 "light" and 6 "dark"
-    
-    if (mode == Preferences::DarkBackground && overviewColour < plainColours) {
-        overviewColour += plainColours;
-    }
-    if (mode == Preferences::LightBackground && overviewColour >= plainColours) {
-        overviewColour -= plainColours;
-    }
+    int overviewColour = m_overviewColourCombo->getCurrentColourIndex();
 
-    m_overviewColourCombo->setCurrentIndex(overviewColour);
-    overviewColourChanged(overviewColour);
+    if (overviewColour >= 0) {
+        int plainColours = 6; // we happen to know there are 6 light and 6 dark
+    
+        if (mode == Preferences::DarkBackground &&
+            overviewColour < plainColours) {
+            overviewColour += plainColours;
+        }
+        if (mode == Preferences::LightBackground &&
+            overviewColour >= plainColours) {
+            overviewColour -= plainColours;
+        }
+
+        m_overviewColourCombo->setCurrentIndex(overviewColour + 1);
+        overviewColourChanged(overviewColour);
+    }
 }
 
 void
@@ -1016,7 +1030,11 @@ PreferencesDialog::applyClicked()
     settings.setValue("spectrogram-colour", m_spectrogramGColour);
     settings.setValue("spectrogram-melodic-colour", m_spectrogramMColour);
     settings.setValue("colour-3d-plot-colour", m_colour3DColour);
-    settings.setValue("overview-colour", m_overviewColour.name());
+    if (m_overviewColourIsSet) {
+        settings.setValue("overview-colour", m_overviewColour.name());
+    } else {
+        settings.remove("overview-colour");
+    }
     settings.endGroup();
 
     settings.beginGroup("MainWindow");

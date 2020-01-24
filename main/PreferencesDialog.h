@@ -118,6 +118,7 @@ protected:
     int m_spectrogramGColour;
     int m_spectrogramMColour;
     int m_colour3DColour;
+    bool m_overviewColourIsSet;
     QColor m_overviewColour;
     int m_propertyLayout;
     double m_tuningFrequency;
