@@ -44,6 +44,8 @@
 #include <QFileOpenEvent>
 #include <QCommandLineParser>
 #include <QSslSocket>
+#include <QFont>
+#include <QFontInfo>
 
 #include <iostream>
 #include <signal.h>
@@ -322,6 +324,30 @@ main(int argc, char **argv)
 
     QSettings settings;
 
+    QString language = QLocale::system().name();
+    SVDEBUG << "System language is: " << language << endl;
+
+    settings.beginGroup("Preferences");
+    QString prefLanguage = settings.value("locale", language).toString();
+    if (prefLanguage != QString()) language = prefLanguage;
+    settings.endGroup();
+
+    settings.beginGroup("Preferences");
+    if (!(settings.value("always-use-default-font", false).toBool())) {
+#ifdef Q_OS_WIN32
+        if (!language.startsWith("ru_")) { // + any future non-Latin i18ns
+            QFont font(QApplication::font());
+            QString preferredFamily = "Segoe UI";
+            font.setFamily(preferredFamily);
+            if (QFontInfo(font).family() == preferredFamily) {
+                font.setPointSize(9);
+                QApplication::setFont(font);
+            }
+        }
+#endif
+    }
+    settings.endGroup();
+
     settings.beginGroup("Preferences");
     // Default to using Piper server; can change in preferences
     if (!settings.contains("run-vamp-plugins-in-process")) {
@@ -354,14 +380,6 @@ main(int argc, char **argv)
         icon.addFile(QString(":icons/sv-%1x%2.png").arg(sizes[i]).arg(sizes[i]));
     }
     QApplication::setWindowIcon(icon);
-
-    QString language = QLocale::system().name();
-    SVDEBUG << "System language is: " << language << endl;
-
-    settings.beginGroup("Preferences");
-    QString prefLanguage = settings.value("locale", language).toString();
-    if (prefLanguage != QString()) language = prefLanguage;
-    settings.endGroup();
 
     QTranslator qtTranslator;
     QString qtTrName = QString("qt_%1").arg(language);

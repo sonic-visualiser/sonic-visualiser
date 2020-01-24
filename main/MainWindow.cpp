@@ -196,7 +196,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     cdb->setUseDarkBackground(cdb->addColour(Qt::white, tr("White")), true);
     cdb->setUseDarkBackground(cdb->addColour(Qt::red, tr("Bright Red")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(30, 150, 255), tr("Bright Blue")), true);
-    cdb->setUseDarkBackground(cdb->addColour(Qt::green, tr("Bright Green")), true);
+    cdb->setUseDarkBackground(cdb->addColour(QColor(20, 255, 90), tr("Bright Green")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(225, 74, 255), tr("Bright Purple")), true);
     cdb->setUseDarkBackground(cdb->addColour(QColor(255, 188, 80), tr("Bright Orange")), true);
 
@@ -3913,17 +3913,27 @@ MainWindow::coloursChanged()
 {
     QSettings settings;
     settings.beginGroup("Preferences");
-    QString defaultColourName(tr("Green"));
-    if (m_viewManager && m_viewManager->getGlobalDarkBackground()) {
-        defaultColourName = tr("Bright Green");
-    }
+
+    bool haveDarkBackground = (m_viewManager &&
+                               m_viewManager->getGlobalDarkBackground());
+    QColor highlight = QApplication::palette().color(QPalette::Highlight);
     ColourDatabase *cdb = ColourDatabase::getInstance();
+    int nearestIndex = cdb->getNearbyColourIndex
+        (highlight,
+         haveDarkBackground ?
+         ColourDatabase::WithDarkBackground :
+         ColourDatabase::WithLightBackground);
+    QString defaultColourName = cdb->getColourName(nearestIndex);
+    
     QColor colour = QColor
         (settings.value("overview-colour",
                         cdb->getColour(defaultColourName).name()).toString());
     settings.endGroup();
 
     int index = cdb->getColourIndex(colour);
+
+    SVCERR << "MainWindow::coloursChanged: haveDarkBackground = " << haveDarkBackground << ", highlight = " << highlight.name() << ", nearestIndex = " << nearestIndex << ", defaultColourName = " << defaultColourName << ", colour = " << colour.name() << ", index = " << index << endl;
+
     if (index >= 0) {
         m_panLayer->setBaseColour(index);
     }

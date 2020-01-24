@@ -149,12 +149,14 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                                            int(ColourMapper::Sunset)).toInt());
     m_colour3DColour = (settings.value("colour-3d-plot-colour",
                                        int(ColourMapper::Green)).toInt());
+    m_overviewColourIsSet = false;
     m_overviewColour = ColourDatabase::getInstance()->getColour(tr("Green"));
     if (settings.contains("overview-colour")) {
         QString qcolorName =
             settings.value("overview-colour", m_overviewColour.name())
             .toString();
         m_overviewColour.setNamedColor(qcolorName);
+        m_overviewColourIsSet = true;
         SVCERR << "loaded colour " << m_overviewColour.name() << " from settings" << endl;
     }
     settings.endGroup();
@@ -169,12 +171,16 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     colour3DColour->setCurrentIndex(m_colour3DColour);
 
     // can't have "add new colour", as it gets saved in the session not in prefs
-    ColourComboBox *overviewColour = new ColourComboBox(false);
-    int overviewColourIndex =
-        ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
-    SVCERR << "index = " << overviewColourIndex << " for colour " << m_overviewColour.name() << endl;
-    if (overviewColourIndex >= 0) {
-        overviewColour->setCurrentIndex(overviewColourIndex);
+    m_overviewColourCombo = new ColourComboBox(false);
+    m_overviewColourCombo->includeUnsetEntry(tr("Follow desktop theme"));
+    if (m_overviewColourIsSet) {
+        int overviewColourIndex =
+            ColourDatabase::getInstance()->getColourIndex(m_overviewColour);
+        if (overviewColourIndex >= 0) {
+            m_overviewColourCombo->setCurrentIndex(overviewColourIndex + 1);
+        }
+    } else {
+        m_overviewColourCombo->setCurrentIndex(0);
     }
 
     connect(spectrogramGColour, SIGNAL(colourMapChanged(int)),
@@ -183,7 +189,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
             this, SLOT(spectrogramMColourChanged(int)));
     connect(colour3DColour, SIGNAL(colourMapChanged(int)),
             this, SLOT(colour3DColourChanged(int)));
-    connect(overviewColour, SIGNAL(colourChanged(int)),
+    connect(m_overviewColourCombo, SIGNAL(colourChanged(int)),
             this, SLOT(overviewColourChanged(int)));
 
     m_tuningFrequency = prefs->getTuningFrequency();
@@ -285,7 +291,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(showSplash, SIGNAL(stateChanged(int)),
             this, SLOT(showSplashChanged(int)));
 
-#ifdef NOT_DEFINED // This no longer works correctly on any platform AFAICS
+#ifndef Q_OS_MAC
     QComboBox *bgMode = new QComboBox;
     int bg = prefs->getPropertyRangeAndValue("Background Mode", &min, &max,
                                              &deflt);
@@ -404,6 +410,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     }
 #endif
 
+#ifndef Q_OS_MAC
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Background Mode"))),
+                       row, 0);
+    subgrid->addWidget(bgMode, row++, 1, 1, 2);
+#endif
+
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Property Box Layout"))),
                        row, 0);
@@ -423,14 +436,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
 
     subgrid->addWidget(new QLabel(tr("Overview waveform colour:")),
                        row, 0);
-    subgrid->addWidget(overviewColour, row++, 1, 1, 2);
-
-#ifdef NOT_DEFINED // see earlier
-    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
-                                                ("Background Mode"))),
-                       row, 0);
-    subgrid->addWidget(bgMode, row++, 1, 1, 2);
-#endif
+    subgrid->addWidget(m_overviewColourCombo, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("View Font Size"))),
@@ -747,7 +753,10 @@ PreferencesDialog::colour3DColourChanged(int colour)
 void
 PreferencesDialog::overviewColourChanged(int colour)
 {
-    m_overviewColour = ColourDatabase::getInstance()->getColour(colour);
+    m_overviewColourIsSet = (colour >= 0);
+    if (m_overviewColourIsSet) {
+        m_overviewColour = ColourDatabase::getInstance()->getColour(colour);
+    }
     m_coloursChanged = true;
     m_applyButton->setEnabled(true);
 }
@@ -884,6 +893,28 @@ PreferencesDialog::backgroundModeChanged(int mode)
     m_backgroundMode = mode;
     m_applyButton->setEnabled(true);
     m_changesOnRestart = true;
+
+    // When switching to one of the explicit background choices
+    // (dark/light), also default the overview colour preference to
+    // something sensible
+    
+    int overviewColour = m_overviewColourCombo->getCurrentColourIndex();
+
+    if (overviewColour >= 0) {
+        int plainColours = 6; // we happen to know there are 6 light and 6 dark
+    
+        if (mode == Preferences::DarkBackground &&
+            overviewColour < plainColours) {
+            overviewColour += plainColours;
+        }
+        if (mode == Preferences::LightBackground &&
+            overviewColour >= plainColours) {
+            overviewColour -= plainColours;
+        }
+
+        m_overviewColourCombo->setCurrentIndex(overviewColour + 1);
+        overviewColourChanged(overviewColour);
+    }
 }
 
 void
@@ -999,7 +1030,11 @@ PreferencesDialog::applyClicked()
     settings.setValue("spectrogram-colour", m_spectrogramGColour);
     settings.setValue("spectrogram-melodic-colour", m_spectrogramMColour);
     settings.setValue("colour-3d-plot-colour", m_colour3DColour);
-    settings.setValue("overview-colour", m_overviewColour.name());
+    if (m_overviewColourIsSet) {
+        settings.setValue("overview-colour", m_overviewColour.name());
+    } else {
+        settings.remove("overview-colour");
+    }
     settings.endGroup();
 
     settings.beginGroup("MainWindow");

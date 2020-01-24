@@ -21,6 +21,8 @@
 #include <QScreen>
 #include <QSvgRenderer>
 
+#include "system/System.h"
+
 #include <cmath>
 
 #include <iostream>
@@ -29,8 +31,10 @@ using namespace std;
 SVSplash::SVSplash()
 {
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+
+    bool darkTheme = OSReportsDarkThemeActive();
     
-    QPixmap *p1 = new QPixmap(":icons/scalable/sv-splash.png");
+    QPixmap *p1 = new QPixmap(QString(":icons/scalable/sv-splash.png"));
 
     int w = p1->width(), h = p1->height();
     QScreen *screen = QApplication::primaryScreen();
@@ -41,10 +45,11 @@ SVSplash::SVSplash()
 
     int sw = w, sh = h;
 
-    if (widthMultiple > 2.5 || dpratio > 1.0) {
+    if (widthMultiple > 2.5 || dpratio > 1.0 || darkTheme) {
 
         // Hi-dpi either via pixel doubling or simply via lots of
-        // pixels
+        // pixels - or dark theme splash, for which we only have an
+        // svg version
 
         double factor = widthMultiple / 2.5;
         if (factor < 1.0) factor = 1.0;
@@ -58,8 +63,12 @@ SVSplash::SVSplash()
 //        cerr << "pixmap size = " << m_pixmap->width() << " * "
 //             << m_pixmap->height() << endl;
         
-        m_pixmap->fill(Qt::red);
-        QSvgRenderer renderer(QString(":icons/scalable/sv-splash.svg"));
+        m_pixmap->fill(Qt::white);
+        QString filename = "sv-splash";
+        if (darkTheme) {
+            filename = "sv-splash-dark";
+        }
+        QSvgRenderer renderer(QString(":icons/scalable/%1.svg").arg(filename));
         QPainter painter(m_pixmap);
         renderer.render(&painter);
         painter.end();
@@ -97,7 +106,7 @@ SVSplash::drawContents(QPainter *painter)
 
     painter->drawPixmap(rect(), *m_pixmap, m_pixmap->rect());
     QString text = QString("v%1").arg(SV_VERSION);
-    painter->setPen(Qt::black);
+    painter->setPen(OSReportsDarkThemeActive() ? Qt::white : Qt::black);
     painter->drawText
         (width() - painter->fontMetrics().width(text) - (width()/50),
          (width()/70) + painter->fontMetrics().ascent(),

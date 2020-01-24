@@ -4,13 +4,13 @@
       "pin": "c42e50a5c297"
     },
     "svcore": {
-      "pin": "23d5cb3f9f38"
+      "pin": "0bc6caf87658"
     },
     "svgui": {
-      "pin": "5f6fdd525158"
+      "pin": "a2ff9c01889e"
     },
     "svapp": {
-      "pin": "16932dfaf64e"
+      "pin": "fda54e91ca05"
     },
     "checker": {
       "pin": "ef64b3f171d9"
@@ -22,7 +22,7 @@
       "pin": "f381235a4ba88eac2fa31fc1f7f613cca9707f63"
     },
     "dataquay": {
-      "pin": "c523464d1466"
+      "pin": "35098262cadd"
     },
     "bqvec": {
       "pin": "cd235ecbeb31"
@@ -46,7 +46,7 @@
       "pin": "d0c2a83c1364"
     },
     "icons/scalable": {
-      "pin": "be45984f7915"
+      "pin": "fd0ace21dce3"
     }
   }
 }
