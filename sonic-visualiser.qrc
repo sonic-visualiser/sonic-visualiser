@@ -73,6 +73,7 @@
     <file>icons/scalable/sv-splash.svg</file>
     <file>icons/scalable/sv-splash.png</file>
     <file>icons/scalable/sv-splash@2x.png</file>
+    <file>icons/scalable/sv-splash-dark.svg</file>
 
     <file>icons/image.png</file>
     <file>icons/draw-curve.png</file>
@@ -95,7 +96,6 @@
     <file>icons/sv-48x48.png</file>
     <file>icons/sv-64x64.png</file>
     <file>icons/sv-128x128.png</file>
-    <file>icons/sv-splash.png</file>
     <file>icons/qm-logo-larger.png</file>
     <file>icons/qm-logo-smaller.png</file>
     <file>samples/bass.wav</file>
