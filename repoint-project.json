@@ -24,7 +24,8 @@
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+	    "service": "soundsoftware",
+            "branch": "audio-source-refactor"
         },
         "checker": {
             "vcs": "hg",
