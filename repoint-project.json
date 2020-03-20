@@ -16,11 +16,13 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "audio-source-refactor"
         },
         "svgui": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "audio-source-refactor"
         },
         "svapp": {
             "vcs": "hg",
