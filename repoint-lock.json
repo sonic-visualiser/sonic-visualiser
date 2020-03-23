@@ -10,7 +10,7 @@
       "pin": "11660e0c896f"
     },
     "svapp": {
-      "pin": "846970dbef17"
+      "pin": "6508d9d216c7"
     },
     "checker": {
       "pin": "ef64b3f171d9"
@@ -34,7 +34,7 @@
       "pin": "c2fb51b31fe4"
     },
     "bqaudioio": {
-      "pin": "f459c5148334"
+      "pin": "4fe94361597f"
     },
     "bqaudiostream": {
       "pin": "a0926b93e771"
