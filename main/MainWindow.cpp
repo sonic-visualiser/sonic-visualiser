@@ -5058,6 +5058,19 @@ MainWindow::paneRightButtonMenuRequested(Pane *pane, QPoint position)
     m_rightButtonMenu->popup(position);
 }
 
+#ifdef Q_OS_LINUX
+#define MENU_LEFT_INDENT \
+    (m_viewManager->scalePixelSize(5) + \
+     2 * qApp->style()->pixelMetric(QStyle::PM_SmallIconSize))
+#else
+#ifdef Q_OS_WIN
+#define MENU_LEFT_INDENT \
+    (9 + qApp->style()->pixelMetric(QStyle::PM_SmallIconSize))
+#else
+#define MENU_LEFT_INDENT 17
+#endif
+#endif
+
 void
 MainWindow::panePropertiesRightButtonMenuRequested(Pane *pane, QPoint position)
 {
@@ -5074,8 +5087,7 @@ MainWindow::panePropertiesRightButtonMenuRequested(Pane *pane, QPoint position)
     QLabel *title = new QLabel;
     title->setText(tr("<b>Pane</b>"));
     title->setMargin(m_viewManager->scalePixelSize(3));
-    title->setIndent(m_viewManager->scalePixelSize(12) +
-                     qApp->style()->pixelMetric(QStyle::PM_SmallIconSize));
+    title->setIndent(MENU_LEFT_INDENT);
     wa->setDefaultWidget(title);
     m->addAction(wa);
 
@@ -5115,8 +5127,7 @@ MainWindow::layerPropertiesRightButtonMenuRequested(Pane *pane, Layer *layer, QP
          .arg(XmlExportable::encodeEntities
               (layer->getLayerPresentationName())));
     title->setMargin(m_viewManager->scalePixelSize(3));
-    title->setIndent(m_viewManager->scalePixelSize(12) +
-                     qApp->style()->pixelMetric(QStyle::PM_SmallIconSize));
+    title->setIndent(MENU_LEFT_INDENT);
     wa->setDefaultWidget(title);
     m->addAction(wa);
     
