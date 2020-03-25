@@ -5073,8 +5073,9 @@ MainWindow::panePropertiesRightButtonMenuRequested(Pane *pane, QPoint position)
     QWidgetAction *wa = new QWidgetAction(m);
     QLabel *title = new QLabel;
     title->setText(tr("<b>Pane</b>"));
-    title->setMargin(m_viewManager->scalePixelSize(2));
-    title->setIndent(m_viewManager->scalePixelSize(12));
+    title->setMargin(m_viewManager->scalePixelSize(3));
+    title->setIndent(m_viewManager->scalePixelSize(12) +
+                     qApp->style()->pixelMetric(QStyle::PM_SmallIconSize));
     wa->setDefaultWidget(title);
     m->addAction(wa);
 
@@ -5113,8 +5114,9 @@ MainWindow::layerPropertiesRightButtonMenuRequested(Pane *pane, Layer *layer, QP
         (tr("<b>%2</b>")
          .arg(XmlExportable::encodeEntities
               (layer->getLayerPresentationName())));
-    title->setMargin(m_viewManager->scalePixelSize(2));
-    title->setIndent(m_viewManager->scalePixelSize(12));
+    title->setMargin(m_viewManager->scalePixelSize(3));
+    title->setIndent(m_viewManager->scalePixelSize(12) +
+                     qApp->style()->pixelMetric(QStyle::PM_SmallIconSize));
     wa->setDefaultWidget(title);
     m->addAction(wa);
     
