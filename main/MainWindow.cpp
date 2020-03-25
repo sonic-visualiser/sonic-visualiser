@@ -126,6 +126,7 @@
 #include <QDialogButtonBox>
 #include <QFileSystemWatcher>
 #include <QTextEdit>
+#include <QWidgetAction>
 
 #include <iostream>
 #include <cstdio>
@@ -153,6 +154,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     m_rightButtonLayerMenu(nullptr),
     m_rightButtonTransformsMenu(nullptr),
     m_rightButtonPlaybackMenu(nullptr),
+    m_lastRightButtonPropertyMenu(nullptr),
     m_soloAction(nullptr),
     m_rwdStartAction(nullptr),
     m_rwdSimilarAction(nullptr),
@@ -5050,11 +5052,100 @@ MainWindow::alignmentFailed(QString message)
 }
 
 void
-MainWindow::rightButtonMenuRequested(Pane *pane, QPoint position)
+MainWindow::paneRightButtonMenuRequested(Pane *pane, QPoint position)
 {
-//    SVDEBUG << "MainWindow::rightButtonMenuRequested(" << pane << ", " << position.x() << ", " << position.y() << ")" << endl;
     m_paneStack->setCurrentPane(pane);
     m_rightButtonMenu->popup(position);
+}
+
+void
+MainWindow::panePropertiesRightButtonMenuRequested(Pane *pane, QPoint position)
+{
+    if (m_lastRightButtonPropertyMenu) {
+        delete m_lastRightButtonPropertyMenu;
+    }
+
+    m_paneStack->setCurrentLayer(pane, nullptr);
+    
+    QMenu *m = new QMenu;
+    IconLoader il;
+
+    QWidgetAction *wa = new QWidgetAction(m);
+    QLabel *title = new QLabel;
+    title->setText(tr("<b>Pane</b>"));
+    title->setMargin(m_viewManager->scalePixelSize(2));
+    title->setIndent(m_viewManager->scalePixelSize(12));
+    wa->setDefaultWidget(title);
+    m->addAction(wa);
+
+    m->addSeparator();
+
+    // We repeat the setCurrentLayer call here just in case some
+    // unexpected UI interaction (scripting?) changes it while the
+    // menu is visible
+    
+    m->addAction(il.load("editdelete"),
+                 tr("&Delete Pane"),
+                 [=]() {
+                     m_paneStack->setCurrentLayer(pane, nullptr);
+                     deleteCurrentPane();
+                 });
+
+    m->popup(position);
+    m_lastRightButtonPropertyMenu = m;
+}
+
+void
+MainWindow::layerPropertiesRightButtonMenuRequested(Pane *pane, Layer *layer, QPoint position)
+{
+    if (m_lastRightButtonPropertyMenu) {
+        delete m_lastRightButtonPropertyMenu;
+    }
+
+    m_paneStack->setCurrentLayer(pane, layer);
+    
+    QMenu *m = new QMenu;
+    IconLoader il;
+
+    QWidgetAction *wa = new QWidgetAction(m);
+    QLabel *title = new QLabel;
+    title->setText
+        (tr("<b>%2</b>")
+         .arg(XmlExportable::encodeEntities
+              (layer->getLayerPresentationName())));
+    title->setMargin(m_viewManager->scalePixelSize(2));
+    title->setIndent(m_viewManager->scalePixelSize(12));
+    wa->setDefaultWidget(title);
+    m->addAction(wa);
+    
+    m->addSeparator();
+
+    // We repeat the setCurrentLayer calls here just in case some
+    // unexpected UI interaction (scripting?) changes it while the
+    // menu is visible
+    
+    m->addAction(tr("&Rename Layer..."),
+                 [=]() {
+                     m_paneStack->setCurrentLayer(pane, layer);
+                     renameCurrentLayer();
+                 });
+
+    m->addAction(tr("Edit Layer Data"),
+                 [=]() {
+                     m_paneStack->setCurrentLayer(pane, layer);
+                     editCurrentLayer();
+                 })
+        ->setEnabled(layer->isLayerEditable());
+    
+    m->addAction(il.load("editdelete"),
+                 tr("&Delete Layer"),
+                 [=]() {
+                     m_paneStack->setCurrentLayer(pane, layer);
+                     deleteCurrentLayer();
+                 });
+
+    m->popup(position);
+    m_lastRightButtonPropertyMenu = m;
 }
 
 void

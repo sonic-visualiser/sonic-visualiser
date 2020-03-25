@@ -101,7 +101,9 @@ protected slots:
     void modelRegenerationWarning(QString, QString, QString) override;
     void alignmentFailed(QString) override;
 
-    void rightButtonMenuRequested(Pane *, QPoint point) override;
+    void paneRightButtonMenuRequested(Pane *, QPoint point) override;
+    void panePropertiesRightButtonMenuRequested(Pane *, QPoint point) override;
+    void layerPropertiesRightButtonMenuRequested(Pane *, Layer *, QPoint point) override;
 
     virtual void propertyStacksResized(int);
 
@@ -190,6 +192,7 @@ protected:
     QMenu                   *m_rightButtonLayerMenu;
     QMenu                   *m_rightButtonTransformsMenu;
     QMenu                   *m_rightButtonPlaybackMenu;
+    QMenu                   *m_lastRightButtonPropertyMenu;
 
     QAction                 *m_deleteSelectedAction;
     QAction                 *m_soloAction;
