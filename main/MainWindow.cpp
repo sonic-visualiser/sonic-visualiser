@@ -5067,7 +5067,7 @@ MainWindow::paneRightButtonMenuRequested(Pane *pane, QPoint position)
 #define MENU_LEFT_INDENT \
     (9 + qApp->style()->pixelMetric(QStyle::PM_SmallIconSize))
 #else
-#define MENU_LEFT_INDENT 17
+#define MENU_LEFT_INDENT 16
 #endif
 #endif
 
