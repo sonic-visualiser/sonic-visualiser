@@ -84,6 +84,7 @@
 #include "layer/ColourDatabase.h"
 #include "widgets/ModelDataTableDialog.h"
 #include "widgets/CSVExportDialog.h"
+#include "widgets/MenuTitle.h"
 #include "rdf/PluginRDFIndexer.h"
 
 #include "Surveyer.h"
@@ -5058,19 +5059,6 @@ MainWindow::paneRightButtonMenuRequested(Pane *pane, QPoint position)
     m_rightButtonMenu->popup(position);
 }
 
-#ifdef Q_OS_LINUX
-#define MENU_LEFT_INDENT \
-    (m_viewManager->scalePixelSize(5) + \
-     2 * qApp->style()->pixelMetric(QStyle::PM_SmallIconSize))
-#else
-#ifdef Q_OS_WIN
-#define MENU_LEFT_INDENT \
-    (9 + qApp->style()->pixelMetric(QStyle::PM_SmallIconSize))
-#else
-#define MENU_LEFT_INDENT 16
-#endif
-#endif
-
 void
 MainWindow::panePropertiesRightButtonMenuRequested(Pane *pane, QPoint position)
 {
@@ -5083,15 +5071,7 @@ MainWindow::panePropertiesRightButtonMenuRequested(Pane *pane, QPoint position)
     QMenu *m = new QMenu;
     IconLoader il;
 
-    QWidgetAction *wa = new QWidgetAction(m);
-    QLabel *title = new QLabel;
-    title->setText(tr("<b>Pane</b>"));
-    title->setMargin(m_viewManager->scalePixelSize(3));
-    title->setIndent(MENU_LEFT_INDENT);
-    wa->setDefaultWidget(title);
-    m->addAction(wa);
-
-    m->addSeparator();
+    MenuTitle::addTitle(m, tr("Pane"));
 
     // We repeat the setCurrentLayer call here just in case some
     // unexpected UI interaction (scripting?) changes it while the
@@ -5120,18 +5100,7 @@ MainWindow::layerPropertiesRightButtonMenuRequested(Pane *pane, Layer *layer, QP
     QMenu *m = new QMenu;
     IconLoader il;
 
-    QWidgetAction *wa = new QWidgetAction(m);
-    QLabel *title = new QLabel;
-    title->setText
-        (tr("<b>%2</b>")
-         .arg(XmlExportable::encodeEntities
-              (layer->getLayerPresentationName())));
-    title->setMargin(m_viewManager->scalePixelSize(3));
-    title->setIndent(MENU_LEFT_INDENT);
-    wa->setDefaultWidget(title);
-    m->addAction(wa);
-    
-    m->addSeparator();
+    MenuTitle::addTitle(m, layer->getLayerPresentationName());
 
     // We repeat the setCurrentLayer calls here just in case some
     // unexpected UI interaction (scripting?) changes it while the
