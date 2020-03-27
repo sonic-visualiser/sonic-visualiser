@@ -4362,20 +4362,32 @@ void
 MainWindow::renameCurrentLayer()
 {
     Pane *pane = m_paneStack->getCurrentPane();
-    if (pane) {
-        Layer *layer = pane->getSelectedLayer();
-        if (layer) {
-            bool ok = false;
-            QString newName = QInputDialog::getText
-                (this, tr("Rename Layer"),
-                 tr("New name for this layer:"),
-                 QLineEdit::Normal, layer->objectName(), &ok);
-            if (ok) {
-                layer->setPresentationName(newName);
-                setupExistingLayersMenus();
-            }
-        }
-    }
+    if (!pane) return;
+    
+    Layer *layer = pane->getSelectedLayer();
+    if (!layer) return;
+    
+    bool ok = false;
+    QString newName = QInputDialog::getText
+        (this, tr("Rename Layer"),
+         tr("New name for this layer:"),
+         QLineEdit::Normal, layer->objectName(), &ok);
+    if (!ok) return;
+            
+    bool existingNameSet = layer->isPresentationNameSet();
+    QString existingName = layer->getLayerPresentationName();
+
+    CommandHistory::getInstance()->addCommand
+        (new GenericCommand
+         (tr("Rename Layer"),
+          [=]() {
+              layer->setPresentationName(newName);
+              setupExistingLayersMenus();
+          },
+          [=]() {
+              layer->setPresentationName(existingNameSet ? existingName : "");
+              setupExistingLayersMenus();
+          }));
 }
 
 void
