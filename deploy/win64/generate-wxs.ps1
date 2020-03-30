@@ -2,13 +2,23 @@
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = "Stop"
 
-$redist_ver = "14.24.28127"
+$redist_parent_dir = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\"
+
+$redists = (Get-ChildItem -Path $redist_parent_dir -Name -Include 14.* -Attributes Directory)
+
+if (!$redists) {
+    echo "ERROR: No 14.x redistributable directories found under $redist_parent_dir"
+    exit 1
+}
+
+$redist_ver = $redists[-1]
+
 $version = (Get-Content version.h) -replace '#define SV_VERSION ','' -replace '"',''
 $wxs = "deploy\win64\sonic-visualiser.wxs"
 
 $in = "$wxs.in"
 
-$redist_dir="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\$redist_ver\x64\Microsoft.VC142.CRT"
+$redist_dir="$redist_parent_dir\$redist_ver\x64\Microsoft.VC142.CRT"
 
 echo "Generating $wxs..."
 echo " ...for SV version $version"
