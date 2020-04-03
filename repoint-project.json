@@ -16,11 +16,13 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "sensible-delimited-data-strings"
         },
         "svgui": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "sensible-delimited-data-strings"
         },
         "svapp": {
             "vcs": "hg",
