@@ -144,7 +144,7 @@ for type in instants values image regions text notes 3dplot spectrogram boxes pe
                 echo "Test failed for layer type \"$type\"!"
             else
                 echo "Test failed for selected regions in layer type \"$type\"!"
-            fi            
+            fi
             echo
             echo "Actual:"
             ls -l "$actual"
@@ -152,7 +152,7 @@ for type in instants values image regions text notes 3dplot spectrogram boxes pe
             ls -l "$expected"
             echo
             echo "Diff begins:"
-            diff -u1 "$actual" "$expected" | head 
+            git diff --no-index --word-diff=color --word-diff-regex=. "$actual" "$expected" | head
             echo
         fi
     done
@@ -171,7 +171,7 @@ for csv in selected-zoomed-3dplot.csv ; do
         ls -l "$expected"
         echo
         echo "Diff begins:"
-        diff -u1 "$actual" "$expected" | head 
+        git diff --no-index --word-diff=color --word-diff-regex=. "$actual" "$expected" | head
         echo
     fi
 done
@@ -194,7 +194,7 @@ for other in notes.mid selected-notes.mid ; do
         od -c "$expected" > "$tmpdir/expected-$other".txt
         echo
         echo "Diff:"
-        diff -u1 "$actual".txt "$tmpdir/expected-$other".txt
+        git diff --no-index --word-diff=color --word-diff-regex=. "$actual".txt "expected-$other".txt | head
         echo
     fi
 done
