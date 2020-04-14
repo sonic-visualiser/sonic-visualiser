@@ -15,6 +15,8 @@ Changes in Sonic Visualiser v4.1 (April 2020) since the previous release 4.0.1:
  - Fix failure to show parameter updates when changing the current
    program in a Vamp plugin that supports programs (e.g. Melodia)
 
+ - Fix inability of Windows builds to open https:// URLs
+
  - Improve performance of peak-frequency spectrogram
 
  - Fix missing undo/redo of layer renames
