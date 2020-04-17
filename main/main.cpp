@@ -365,11 +365,24 @@ main(int argc, char **argv)
     settings.endGroup();
 
     settings.beginGroup("RDF");
-    if (!settings.contains("rdf-indices")) {
-        QStringList list;
-        list << "http://www.vamp-plugins.org/rdf/plugins/index.txt";
-        settings.setValue("rdf-indices", list);
+    QStringList list;
+    bool absent = !(settings.contains("rdf-indices"));
+    QString plugIndex("http://www.vamp-plugins.org/rdf/plugins/index.txt");
+    QString packsIndex("http://www.vamp-plugins.org/rdf/packs/index.txt");
+    if (absent) {
+        list << plugIndex;
+        list << packsIndex;
+    } else {
+        list = settings.value("rdf-indices").toStringList();
+        if (!settings.contains("rdf-indices-refreshed-for-4.1")) {
+            // Packs introduced
+            if (!list.contains(packsIndex)) {
+                list << packsIndex;
+            }
+            settings.setValue("rdf-indices-refreshed-for-4.1", true);
+        }
     }
+    settings.setValue("rdf-indices", list);
     settings.endGroup();
 
     PluginPathSetter::initialiseEnvironmentVariables();
