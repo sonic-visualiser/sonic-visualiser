@@ -395,7 +395,7 @@ Changes in Sonic Visualiser 2.1 (16 May 2013) since the previous release 2.0.1:
  - Update code to build against Qt5
 
 
-Changes in Sonic Visualiser 2.0.1 ( Mar 2013) since the previous release 2.0:
+Changes in Sonic Visualiser 2.0.1 (07 Mar 2013) since the previous release 2.0:
 
  - Fix incorrect samplerate in reading m4a files on OS/X
 
