@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+  <data>
+    <model id="18" name="" sampleRate="48000" start="0" end="983039" />
+  </data>
+  <display>
+    <layer id="20" type="colour3dplot" name="Key Strength Plot" model="19"  scale="0" minY="0" maxY="0" invertVertical="false" opaque="true" binScale="0" smooth="false" gain="1" colourMap="Magma" colourScheme="1" columnNormalization="none" normalizeColumns="false" normalizeVisibleArea="false" />
+  </display>
+</sv>

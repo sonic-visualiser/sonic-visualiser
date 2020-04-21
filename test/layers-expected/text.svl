@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+  <data>
+    <model id="13" name="" sampleRate="48000" start="61440" end="788481" type="sparse" dimensions="2" resolution="1" notifyOnAdd="true" dataset="12" subtype="text" />
+    <dataset id="12" dimensions="2">
+      <point frame="61440" height="0.664063" label="Here&apos;s where it all began" />
+      <point frame="788480" height="0.34375" label="Here&apos;s where it all ended" />
+    </dataset>
+  </data>
+  <display>
+    <layer id="14" type="text" name="Text" model="13"  colourName="Orange" colour="#ff9632" darkBackground="false" />
+  </display>
+</sv>

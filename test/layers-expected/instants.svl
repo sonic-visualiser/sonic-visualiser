@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+  <data>
+    <model id="1" name="s1.ogg: Note Onsets" sampleRate="48000" start="557" end="913480" type="sparse" dimensions="1" resolution="557" notifyOnAdd="true" dataset="0" />
+    <dataset id="0" dimensions="1">
+      <point frame="557" label="" />
+      <point frame="81879" label="" />
+      <point frame="304122" label="" />
+      <point frame="382102" label="" />
+      <point frame="468437" label="" />
+      <point frame="476792" label="" />
+      <point frame="481248" label="" />
+      <point frame="485704" label="" />
+      <point frame="490160" label="" />
+      <point frame="494616" label="" />
+      <point frame="512440" label="" />
+      <point frame="590420" label="" />
+      <point frame="611586" label="" />
+      <point frame="619941" label="" />
+      <point frame="624397" label="" />
+      <point frame="631638" label="" />
+      <point frame="651133" label="" />
+      <point frame="689566" label="" />
+      <point frame="694022" label="" />
+      <point frame="711846" label="" />
+      <point frame="716302" label="" />
+      <point frame="720758" label="" />
+      <point frame="725214" label="" />
+      <point frame="729670" label="" />
+      <point frame="734126" label="" />
+      <point frame="738582" label="" />
+      <point frame="743038" label="" />
+      <point frame="834943" label="" />
+      <point frame="839399" label="" />
+      <point frame="843855" label="" />
+      <point frame="848311" label="" />
+      <point frame="857223" label="" />
+      <point frame="861679" label="" />
+      <point frame="866135" label="" />
+      <point frame="870591" label="" />
+      <point frame="875047" label="" />
+      <point frame="884516" label="" />
+      <point frame="888972" label="" />
+      <point frame="893985" label="" />
+      <point frame="912923" label="" />
+    </dataset>
+  </data>
+  <display>
+    <layer id="2" type="timeinstants" name="Note Onsets" model="1"  plotStyle="0" colourName="Purple" colour="#c832ff" darkBackground="false" />
+  </display>
+</sv>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+  <data>
+    <model id="25" name="" sampleRate="48000" start="0" end="652288" type="sparse" dimensions="2" resolution="1" notifyOnAdd="true" dataset="24" subtype="box" minimum="318.507" maximum="634.188" units="Hz" />
+    <dataset id="24" dimensions="2">
+      <point frame="0" value="374.032" duration="89088" extent="101.953" label="Area of no interest" />
+      <point frame="384000" value="318.507" duration="87040" extent="215.372" label="Area of interest" />
+      <point frame="588800" value="405.325" duration="63488" extent="228.863" label="Area of more interest" />
+    </dataset>
+  </data>
+  <display>
+    <layer id="26" type="boxes" name="Boxes" model="25"  verticalScale="0"  colourName="White" colour="#ffffff" darkBackground="true" />
+  </display>
+</sv>

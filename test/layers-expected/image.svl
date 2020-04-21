@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+  <data>
+    <model id="7" name="" sampleRate="48000" start="348160" end="348161" type="sparse" dimensions="1" resolution="1" notifyOnAdd="true" dataset="6" subtype="image" />
+    <dataset id="6" dimensions="1">
+      <point frame="348160" label="The SV splash screen" image="/home/cannam/code/sonic-visualiser/icons/scalable/sv-splash.svg" />
+    </dataset>
+  </data>
+  <display>
+    <layer id="8" type="image" name="Images" model="7" />
+  </display>
+</sv>

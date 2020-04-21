@@ -89,7 +89,30 @@ cat > "$tmpdir/script" <<EOF
 /setcurrent 4 3
 /exportlayer "$tmpdir/notes.mid"
 
-# Now test exporting only the contents of a (multiple) selection.
+# And everything as SVL
+/setcurrent 1 3
+/exportlayer "$tmpdir/instants.svl"
+/setcurrent 2 3
+/exportlayer "$tmpdir/values.svl"
+/setcurrent 3 2
+/exportlayer "$tmpdir/image.svl"
+/setcurrent 3 3
+/exportlayer "$tmpdir/regions.svl"
+/setcurrent 4 2
+/exportlayer "$tmpdir/text.svl"
+/setcurrent 4 3
+/exportlayer "$tmpdir/notes.svl"
+/setcurrent 5 2
+/exportlayer "$tmpdir/3dplot.svl"
+/setcurrent 6 2
+/exportlayer "$tmpdir/spectrogram.svl"
+/setcurrent 6 3
+/exportlayer "$tmpdir/boxes.svl"
+/setcurrent 7 2
+/exportlayer "$tmpdir/peakfreq.svl"
+
+# Now test exporting only the contents of a (multiple) selection. This
+# is only supported for CSV files.
 # First set waveform layer as current, to avoid snapping the selection
 # to the contents of an annotation layer.
 /setcurrent 1 2
@@ -135,26 +158,31 @@ EOF
 "$sv" --no-splash --osc-script "$tmpdir/script"
 
 for type in instants values image regions text notes 3dplot spectrogram boxes peakfreq ; do
-    for pfx in "" "selected-"; do
-        actual="$tmpdir/$pfx$type.csv"
-        expected="layers-expected/$pfx$type.csv"
-        if ! cmp -s "$actual" "$expected" ; then
-            echo
-            if [ -z "$pfx" ]; then
-                echo "Test failed for layer type \"$type\"!"
-            else
-                echo "Test failed for selected regions in layer type \"$type\"!"
+    for format in csv svl ; do
+        for pfx in "" "selected-"; do
+            if [ "$format" = "svl" ] && [ -n "$pfx" ]; then
+                continue
             fi
-            echo
-            echo "Actual:"
-            ls -l "$actual"
-            echo "Expected:"
-            ls -l "$expected"
-            echo
-            echo "Diff begins:"
-            git diff --no-index --word-diff=color --word-diff-regex=. "$actual" "$expected" | head
-            echo
-        fi
+            actual="$tmpdir/$pfx$type.$format"
+            expected="layers-expected/$pfx$type.$format"
+            if ! cmp -s "$actual" "$expected" ; then
+                echo
+                if [ -z "$pfx" ]; then
+                    echo "Test failed for file type $format, layer type \"$type\"!"
+                else
+                    echo "Test failed for selected regions in layer type \"$type\"!"
+                fi
+                echo
+                echo "Actual:"
+                ls -l "$actual"
+                echo "Expected:"
+                ls -l "$expected"
+                echo
+                echo "Diff begins:"
+                git diff --no-index --word-diff=color --word-diff-regex=. "$actual" "$expected" | head
+                echo
+            fi
+        done
     done
 done
 

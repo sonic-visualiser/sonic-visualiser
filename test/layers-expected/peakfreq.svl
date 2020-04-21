@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+  <data>
+    <model id="27" name="" sampleRate="48000" start="0" end="845056" />
+  </data>
+  <display>
+    <layer id="29" type="spectrogram" name="Spectrogram &lt;3&gt;" model="28"  channel="-1" windowSize="4096" windowHopLevel="5" oversampling="1" gain="1" threshold="1e-08" minFrequency="40" maxFrequency="2000" colourScale="0" colourRotation="0" frequencyScale="1" binDisplay="2" colourMap="Magma" colourScheme="1" columnNormalization="peak" normalizeColumns="true" normalizeVisibleArea="false" />
+  </display>
+</sv>

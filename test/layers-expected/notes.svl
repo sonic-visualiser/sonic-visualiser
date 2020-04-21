@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sonic-visualiser>
+<sv>
+  <data>
+    <model id="16" name="s1.ogg: Note transcription" sampleRate="48000" start="960" end="939896" type="sparse" dimensions="3" resolution="68" notifyOnAdd="true" dataset="15" subtype="note" valueQuantization="0" minimum="329.628" maximum="554.365" units="Hz" />
+    <dataset id="15" dimensions="3">
+      <point frame="960" value="415.305" duration="82560" level="0.354331" label="G#4" />
+      <point frame="81600" value="440" duration="858240" level="0.338583" label="A4" />
+      <point frame="305280" value="369.994" duration="77760" level="0.291339" label="F#4" />
+      <point frame="382080" value="329.628" duration="87360" level="0.354331" label="E4" />
+      <point frame="469440" value="493.883" duration="121920" level="0.330709" label="B4" />
+      <point frame="611520" value="493.883" duration="21120" level="0.330709" label="B4" />
+      <point frame="632640" value="554.365" duration="19200" level="0.385827" label="C#5" />
+      <point frame="651840" value="493.883" duration="288000" level="0.401575" label="B4" />
+    </dataset>
+  </data>
+  <display>
+    <layer id="17" type="notes" name="Note transcription" model="16"  verticalScale="0" scaleMinimum="0" scaleMaximum="0"  colourName="Blue" colour="#000080" darkBackground="false" />
+  </display>
+</sv>
