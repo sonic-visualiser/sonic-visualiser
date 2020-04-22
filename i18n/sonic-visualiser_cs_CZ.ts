@@ -108,6 +108,18 @@
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
+    <message>
+        <source>Dial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Edit...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AudioTargetFactory</name>
@@ -2035,6 +2047,26 @@ All files (*.*)</source>
     <message>
         <source>Click to adjust level and pan</source>
         <translation>Klepněte pro přizpůsobení úrovně a vyvážení</translation>
+    </message>
+    <message>
+        <source>Muted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Level: %1 dB - Balance: Middle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Level: %1 dB - Balance: +%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Level: %1 dB - Balance: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset to Default</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4587,6 +4619,10 @@ Co chcete vyvést?</translation>
         <source>Which region of the layer do you want to export?</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Pane</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MainWindowBase</name>
@@ -5503,7 +5539,7 @@ Doba trvání:	%3
     </message>
     <message>
         <source>New vertical display range, from %1 to %2 %4:</source>
-        <translation>Nový rozsah svislého zobrazení, od %1 do %2 %4:</translation>
+        <translation type="vanished">Nový rozsah svislého zobrazení, od %1 do %2 %4:</translation>
     </message>
     <message>
         <source>Cmd-click left button and drag to select an additional region</source>
@@ -5528,6 +5564,22 @@ Doba trvání:	%3
     <message>
         <source>Aligned at +%1 cents</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Vertical Range: %1 - %2 %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Edit...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New vertical display range, from %1 to %2 %3:</source>
+        <translation type="unfinished">Nový rozsah svislého zobrazení, od %1 do %2 %4: {1 ?} {2 %3:?}</translation>
     </message>
 </context>
 <context>
@@ -6181,6 +6233,10 @@ Použít je před zavřením?</translation>
         <source>&amp;Plugins</source>
         <translation>&amp;Přídavné moduly</translation>
     </message>
+    <message>
+        <source>Follow desktop theme</source>
+        <translation type="unfinished">Držet se námětu plochy</translation>
+    </message>
 </context>
 <context>
     <name>ProgressDialog</name>
@@ -6282,6 +6338,22 @@ Použít je před zavřením?</translation>
     <message>
         <source>%1%2</source>
         <translation>%1%2</translation>
+    </message>
+    <message>
+        <source>%1: On</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: %2</source>
+        <translation type="unfinished">%1: %2</translation>
     </message>
 </context>
 <context>
@@ -6571,6 +6643,26 @@ for semantic music analysis and annotation.</source>
     </message>
     <message>
         <source>Exporting layer...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mac</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>64-bit Linux</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>32-bit Linux</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;%1&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7697,6 +7789,18 @@ Výška:	%2
         <source>New value for %1, from %2 to %3 %4:</source>
         <translation>Nová hodnota pro %1, od %2 do %3 %4:</translation>
     </message>
+    <message>
+        <source>Thumbwheel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Edit...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Reset to Default</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TimeInstantLayer</name>
@@ -8134,7 +8238,7 @@ Hodnota:	%2
     </message>
     <message>
         <source>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; System identifier: %1</source>
-        <translation>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Systémový identifikátor: %1</translation>
+        <translation type="vanished">&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Systémový identifikátor: %1</translation>
     </message>
     <message>
         <source>&lt;p&gt;%1&lt;br&gt;Perhaps the network connection is down, services are responding too slowly, or a processing problem has occurred.&lt;br&gt;Only the descriptions of installed plugins will be searched.</source>
@@ -8154,7 +8258,7 @@ Hodnota:	%2
     </message>
     <message>
         <source>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Plugin type: %1</source>
-        <translation>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Typ přídavného modulu: %1</translation>
+        <translation type="vanished">&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Typ přídavného modulu: %1</translation>
     </message>
     <message>
         <source>&lt;small&gt;%1&lt;/small&gt;</source>
@@ -8170,7 +8274,7 @@ Hodnota:	%2
     </message>
     <message>
         <source>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Category: %1</source>
-        <translation>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Skupina: %1</translation>
+        <translation type="vanished">&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Skupina: %1</translation>
     </message>
     <message numerus="yes">
         <source>Found %n description(s) containing &lt;b&gt;%1&lt;/b&gt;</source>
@@ -8186,7 +8290,7 @@ Hodnota:	%2
     </message>
     <message>
         <source>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; More information: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
-        <translation>&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Více informací naleznete na stránkách: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
+        <translation type="vanished">&lt;br&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash; Více informací naleznete na stránkách: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;No plugins are currently installed!&lt;/b&gt;</source>
@@ -8215,6 +8319,46 @@ Hodnota:	%2
     <message>
         <source>&lt;b&gt;Unable to retrieve published descriptions from network!&lt;/b&gt;</source>
         <translation>&lt;b&gt;Zveřejněné popisy se ze sítě získat nepodařilo!&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;mdash;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;%1 Plugin type: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;%1 Category: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;%1 System identifier: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;%1 More information: &lt;a href=&quot;%2&quot;&gt;%2&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;%1 Download for %2: &lt;a href=&quot;%3&quot;&gt;%3&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;a href=&quot;%1&quot;&gt;%2&lt;/a&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;%1 Also available in: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;br&gt;%1 Available in: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>, </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
