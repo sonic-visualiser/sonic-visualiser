@@ -4680,17 +4680,6 @@ MainWindow::audioOverloadPluginDisabled()
 }
 
 void
-MainWindow::audioTimeStretchMultiChannelDisabled()
-{
-    static bool shownOnce = false;
-    if (shownOnce) return;
-    QMessageBox::information
-        (this, tr("Audio processing overload"),
-         tr("<b>Overloaded</b><p>Audio playback speed processing has been reduced to a single channel, due to a processing overload."));
-    shownOnce = true;
-}
-
-void
 MainWindow::betaReleaseWarning()
 {
     QMessageBox::information

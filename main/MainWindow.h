@@ -72,7 +72,6 @@ protected slots:
 
     void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
     void audioOverloadPluginDisabled() override;
-    void audioTimeStretchMultiChannelDisabled() override;
 
     virtual void toolNavigateSelected();
     virtual void toolSelectSelected();
