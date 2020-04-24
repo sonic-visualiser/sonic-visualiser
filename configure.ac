@@ -87,7 +87,11 @@ if test x"$USER_CXXFLAGS" != x; then
 fi
 
 CXXFLAGS="$CXXFLAGS_BUILD $SV_DEFINES_BUILD"
-LDFLAGS="$LDFLAGS_BUILD"
+
+# Set our own LDFLAGS only if the user didn't request any
+if test x"LDFLAGS" = x; then
+   LDFLAGS="$LDFLAGS_BUILD"
+fi
 
 SV_MODULE_REQUIRED([bz2],[],[bzlib.h],[bz2],[BZ2_bzReadOpen])
 SV_MODULE_REQUIRED([fftw3],[fftw3 >= 3.0.0],[fftw3.h],[fftw3],[fftw_execute])

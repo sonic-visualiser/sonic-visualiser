@@ -4508,7 +4508,10 @@ $as_echo "$as_me: Overriding default compiler flags with the above user setting.
 fi
 
 CXXFLAGS="$CXXFLAGS_BUILD $SV_DEFINES_BUILD"
-LDFLAGS="$LDFLAGS_BUILD"
+
+if test x"LDFLAGS" = x; then
+   LDFLAGS="$LDFLAGS_BUILD"
+fi
 
 # On IRIX 5.3, sys/types and inttypes.h are conflicting.
 for ac_header in sys/types.h sys/stat.h stdlib.h string.h memory.h strings.h \
