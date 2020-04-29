@@ -36,7 +36,11 @@
 #include <QTime>
 #include <QElapsedTimer>
 
+#if (QT_VERSION >= 0x050600)
 #define NOW (QTime::currentTime().toString(Qt::ISODateWithMs))
+#else
+#define NOW (QTime::currentTime().toString(Qt::ISODate))
+#endif
 
 void
 MainWindow::handleOSCMessage(const OSCMessage &message)
