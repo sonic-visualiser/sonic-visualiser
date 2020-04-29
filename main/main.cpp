@@ -431,9 +431,11 @@ main(int argc, char **argv)
 
     StoreStartupLocale();
 
+#if (QT_VERSION >= 0x050400)
     SVDEBUG << "Note: SSL library build version is: "
             << QSslSocket::sslLibraryBuildVersionString()
             << endl;
+#endif
     
     // Make known-plugins query as early as possible after showing
     // splash screen.
