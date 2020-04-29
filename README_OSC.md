@@ -217,28 +217,6 @@ Stop playback.
 Switch playback loop mode on or off.
 
 
-### Region selection
-
-```
-/select <t0> <t1>
-/select all
-/select none
-```
-
-Select the region from times `<t0>` to `<t1>` in seconds; or select
-the whole file; or clear the selection.  If there is a layer selected
-that can be used as a snap guide for the selection, then the selection
-will be snapped to it (in the same manner as when making selections
-interactively).
-
-```
-/addselect <t0> <t1>
-```
-
-Make an additional selection (leaving any existing selection in place)
-from times `<t0>` to `<t1>` in seconds.
-
-
 ### Panes, layers, and the window
 
 ```
@@ -248,7 +226,8 @@ from times `<t0>` to `<t1>` in seconds.
 
 Add a new pane containing a layer of the given type, based on the
 given channel of the main audio file (numbered from 0). If no
-`<channel>` is specified, mix all channels.
+`<channel>` is specified, mix all channels. The specified layer is
+made the current layer, and the new pane becomes the current pane.
 
 Useful values of `<layertype>` are:
 
@@ -361,6 +340,38 @@ vertically; or return to the default vertical zoom level.  The effect
 of this method is heavily dependent on the current layer.
 
 ```
+/resize <w> <h>
+```
+
+Resize the main window to width `<w>` and height `<h>` (if the window
+system permits).
+
+
+### Region selection
+
+```
+/select <t0> <t1>
+/select all
+/select none
+```
+
+Select the region from times `<t0>` to `<t1>` in seconds; or select
+the whole file; or clear the selection.  If there is a layer selected
+that can be used as a snap guide for the selection, then the selection
+will be snapped to it (in the same manner as when making selections
+interactively).
+
+```
+/addselect <t0> <t1>
+```
+
+Make an additional selection (leaving any existing selection in place)
+from times `<t0>` to `<t1>` in seconds.
+
+
+### Feature extraction
+
+```
 /transform <name>
 ```
 
@@ -385,13 +396,6 @@ use the plugin and output name, not description: in this case
 There is not yet any way to run a transform via OSC on any but the
 main audio file, nor with any but its default parameters, processing
 block/step size, or channel selection.
-
-```
-/resize <w> <h>
-```
-
-Resize the main window to width `<w>` and height `<h>` (if the window
-system permits).
 
 
 ### Housekeeping
