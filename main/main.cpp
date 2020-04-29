@@ -356,13 +356,19 @@ main(int argc, char **argv)
     settings.endGroup();
 
     settings.beginGroup("Preferences");
-    if (showSplash && settings.value("show-splash", true).toBool()) {
+    if (showSplash) {
+        if (!settings.value("show-splash", true).toBool()) {
+            showSplash = false;
+        }
+    }
+    settings.endGroup();
+
+    if (showSplash) {
         splash = new SVSplash();
         splash->show();
         QTimer::singleShot(5000, splash, SLOT(hide()));
         application.processEvents();
     }
-    settings.endGroup();
 
     settings.beginGroup("RDF");
     QStringList list;
@@ -393,6 +399,10 @@ main(int argc, char **argv)
         icon.addFile(QString(":icons/sv-%1x%2.png").arg(sizes[i]).arg(sizes[i]));
     }
     QApplication::setWindowIcon(icon);
+
+    if (showSplash) {
+        application.processEvents();
+    }
 
     QTranslator qtTranslator;
     QString qtTrName = QString("qt_%1").arg(language);
@@ -428,6 +438,10 @@ main(int argc, char **argv)
     // Make known-plugins query as early as possible after showing
     // splash screen.
     PluginScan::getInstance()->scan();
+
+    if (showSplash) {
+        application.processEvents();
+    }
     
     // Permit these types to be used as args in queued signal calls
     qRegisterMetaType<PropertyContainer::PropertyName>("PropertyContainer::PropertyName");
