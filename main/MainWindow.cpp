@@ -5066,24 +5066,16 @@ MainWindow::panePropertiesRightButtonMenuRequested(Pane *pane, QPoint position)
     if (m_lastRightButtonPropertyMenu) {
         delete m_lastRightButtonPropertyMenu;
     }
-
-    m_paneStack->setCurrentLayer(pane, nullptr);
     
     QMenu *m = new QMenu;
     IconLoader il;
 
     MenuTitle::addTitle(m, tr("Pane"));
 
-    // We repeat the setCurrentLayer call here just in case some
-    // unexpected UI interaction (scripting?) changes it while the
-    // menu is visible
-    
-    m->addAction(il.load("editdelete"),
-                 tr("&Delete Pane"),
-                 [=]() {
-                     m_paneStack->setCurrentLayer(pane, nullptr);
-                     deleteCurrentPane();
-                 });
+    m_paneStack->setCurrentLayer(pane, nullptr);
+
+    m->addAction(il.load("editdelete"), tr("&Delete Pane"),
+                 this, SLOT(deleteCurrentPane()));
 
     m->popup(position);
     m_lastRightButtonPropertyMenu = m;
@@ -5095,37 +5087,23 @@ MainWindow::layerPropertiesRightButtonMenuRequested(Pane *pane, Layer *layer, QP
     if (m_lastRightButtonPropertyMenu) {
         delete m_lastRightButtonPropertyMenu;
     }
-
-    m_paneStack->setCurrentLayer(pane, layer);
     
     QMenu *m = new QMenu;
     IconLoader il;
 
     MenuTitle::addTitle(m, layer->getLayerPresentationName());
 
-    // We repeat the setCurrentLayer calls here just in case some
-    // unexpected UI interaction (scripting?) changes it while the
-    // menu is visible
-    
+    m_paneStack->setCurrentLayer(pane, layer);
+
     m->addAction(tr("&Rename Layer..."),
-                 [=]() {
-                     m_paneStack->setCurrentLayer(pane, layer);
-                     renameCurrentLayer();
-                 });
+                 this, SLOT(renameCurrentLayer()));
 
     m->addAction(tr("Edit Layer Data"),
-                 [=]() {
-                     m_paneStack->setCurrentLayer(pane, layer);
-                     editCurrentLayer();
-                 })
+                 this, SLOT(editCurrentLayer()))
         ->setEnabled(layer->isLayerEditable());
-    
-    m->addAction(il.load("editdelete"),
-                 tr("&Delete Layer"),
-                 [=]() {
-                     m_paneStack->setCurrentLayer(pane, layer);
-                     deleteCurrentLayer();
-                 });
+
+    m->addAction(il.load("editdelete"), tr("&Delete Layer"),
+                 this, SLOT(deleteCurrentLayer()));
 
     m->popup(position);
     m_lastRightButtonPropertyMenu = m;
