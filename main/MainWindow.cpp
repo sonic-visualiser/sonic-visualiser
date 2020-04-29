@@ -3285,7 +3285,7 @@ MainWindow::exportSVG()
     bool result = false;
         
     if (item == items[0]) {
-        result = pane->renderToSvgFile(path );
+        result = pane->renderToSvgFile(path);
     } else if (item == items[1]) {
         result = pane->renderPartToSvgFile(path,
                                            pane->getFirstVisibleFrame(),
