@@ -3,8 +3,10 @@ OSC control of Sonic Visualiser
 ===============================
 
 Sonic Visualiser can be controlled remotely using the Open Sound
-Control protocol.  This facility requires Steve Harris's liblo (Lite
-OSC) library to have been available when Sonic Visualiser was built.
+Control protocol.  This facility requires the
+[liblo](http://liblo.sourceforge.net/) (Lite OSC) library by Steve
+Harris and Stephen Sinclair to have been available when Sonic
+Visualiser was built.
 
 Sonic Visualiser opens a single OSC port on startup, provided that OSC
 support is compiled in, the `--no-osc` command-line option has not
