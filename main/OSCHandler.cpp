@@ -61,6 +61,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             }
             //!!! we really need to spin here and not return until the
             // file has been completely decoded...
+        } else {
+            SVCERR << "OSCHandler: Usage: /open <filename>" << endl;
         }
 
     } else if (message.getMethod() == "openadditional") {
@@ -75,6 +77,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 SVCERR << "OSCHandler: File open failed for path \""
                           << path << "\"" << endl;
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /openadditional <filename>" << endl;
         }
 
     } else if (message.getMethod() == "recent" ||
@@ -96,6 +100,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 SVCERR << "OSCHandler: File open failed for path \""
                        << path << "\"" << endl;
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /recent <n>" << endl;
+            SVCERR << "               or  /last" << endl;
         }
 
     } else if (message.getMethod() == "save") {
@@ -113,6 +120,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 SVCERR << "OSCHandler: Save failed to path \""
                        << path << "\"" << endl;
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /save <filename>" << endl;
         }
 
     } else if (message.getMethod() == "export") {
@@ -141,6 +150,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     }
                 }
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /export <filename>" << endl;
         }
 
     } else if (message.getMethod() == "exportlayer") {
@@ -150,7 +161,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             message.getArg(0).canConvert(QVariant::String)) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
-                SVDEBUG << "OSCHandler: Refusing to overwrite existing file in layer export" << endl;
+                SVCERR << "OSCHandler: Refusing to overwrite existing file in layer export" << endl;
             } else {
                 Pane *currentPane = nullptr;
                 Layer *currentLayer = nullptr;
@@ -174,6 +185,86 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     SVCERR << "OSCHandler: No current layer to export" << endl;
                 }
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /exportlayer <filename>" << endl;
+        }
+
+    } else if (message.getMethod() == "exportimage") {
+
+        QString path;
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+            path = message.getArg(0).toString();
+            if (QFileInfo(path).exists()) {
+                SVCERR << "OSCHandler: Refusing to overwrite existing file in image export" << endl;
+            } else {
+                Pane *currentPane = nullptr;
+                if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+                MultiSelection ms = m_viewManager->getSelection();
+                if (currentPane) {
+                    QImage *image = nullptr;
+                    auto sel = ms.getSelections();
+                    if (!sel.empty()) {
+                        sv_frame_t sf0 = sel.begin()->getStartFrame();
+                        sv_frame_t sf1 = sel.rbegin()->getEndFrame();
+                        image = currentPane->renderPartToNewImage(sf0, sf1);
+                    } else {
+                        image = currentPane->renderToNewImage();
+                    }
+                    if (!image) {
+                        SVCERR << "OSCHandler: Failed to create image from pane"
+                               << endl;
+                    } else if (!image->save(path, "PNG")) {
+                        SVCERR << "OSCHandler: Export failed to image file \""
+                               << path << "\"" << endl;
+                    } else {                        
+                        SVDEBUG << "OSCHandler: Exported pane to image file \""
+                               << path << "\"" << endl;
+                    }
+                    delete image;
+                } else {
+                    SVCERR << "OSCHandler: No current pane to export" << endl;
+                }
+            }
+        } else {
+            SVCERR << "OSCHandler: Usage: /exportimage <filename>" << endl;
+        }
+
+    } else if (message.getMethod() == "exportsvg") {
+
+        QString path;
+        if (message.getArgCount() == 1 &&
+            message.getArg(0).canConvert(QVariant::String)) {
+            path = message.getArg(0).toString();
+            if (QFileInfo(path).exists()) {
+                SVCERR << "OSCHandler: Refusing to overwrite existing file in SVG export" << endl;
+            } else {
+                Pane *currentPane = nullptr;
+                if (m_paneStack) currentPane = m_paneStack->getCurrentPane();
+                MultiSelection ms = m_viewManager->getSelection();
+                if (currentPane) {
+                    bool result = false;
+                    auto sel = ms.getSelections();
+                    if (!sel.empty()) {
+                        sv_frame_t sf0 = sel.begin()->getStartFrame();
+                        sv_frame_t sf1 = sel.rbegin()->getEndFrame();
+                        result = currentPane->renderPartToSvgFile(path, sf0, sf1);
+                    } else {
+                        result = currentPane->renderToSvgFile(path);
+                    }
+                    if (!result) {
+                        SVCERR << "OSCHandler: Export failed to SVG file \""
+                               << path << "\"" << endl;
+                    } else {                        
+                        SVDEBUG << "OSCHandler: Exported pane to SVG file \""
+                                << path << "\"" << endl;
+                    }
+                } else {
+                    SVCERR << "OSCHandler: No current pane to export" << endl;
+                }
+            }
+        } else {
+            SVCERR << "OSCHandler: Usage: /exportsvg <filename>" << endl;
         }
 
     } else if (message.getMethod() == "jump" ||
@@ -357,7 +448,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             } else if (message.getArgCount() == 1 &&
                        message.getArg(0).canConvert(QVariant::String)) {
-
+                
                 QString str = message.getArg(0).toString();
                 if (str == "none") {
                     SVDEBUG << "OSCHandler: Clearing selection" << endl;
@@ -398,9 +489,11 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     message.getArg(0).canConvert(QVariant::Int)) {
                     channel = message.getArg(0).toInt();
                     if (channel < -1 ||
-                        channel > int(getMainModel()->getChannelCount())) {
-                        SVCERR << "WARNING: OSCHandler: channel "
-                                  << channel << " out of range" << endl;
+                        channel >= int(getMainModel()->getChannelCount())) {
+                        SVCERR << "OSCHandler: channel " << channel
+                               << " out of range (0 to "
+                               << (getMainModel()->getChannelCount() - 1)
+                               << ")" << endl;
                         channel = -1;
                     }
                 }
@@ -427,6 +520,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                     SVDEBUG << "OSCHandler: Added pane \"" << pname
                             << "\"" << endl;
                 }
+            } else {
+                SVCERR << "OSCHandler: Usage: /add <layertype> [<channel>]"
+                       << endl;
             }
         }
 
@@ -512,6 +608,10 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 } else if (message.getArg(0).toString() == "layer") {
                     container = pane->getSelectedLayer();
                 }
+            } else {
+                SVCERR << "OSCHandler: Usage: /set <control> <value>" << endl
+                       << "               or  /set pane <control> <value>" << endl
+                       << "               or  /set layer <control> <value>" << endl;
             }
             if (container) {
                 QString nameString = message.getArg(1).toString();
@@ -537,6 +637,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 wantLayer = true;
                 layerIndex = message.getArg(1).toInt() - 1;
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /setcurrent <pane> [<layer>]" << endl;
         }
 
         if (paneIndex >= 0 && paneIndex < m_paneStack->getPaneCount()) {
@@ -581,6 +683,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 SVCERR << "WARNING: OSCHandler: Unknown delete target \""
                        << target << "\"" << endl;
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /delete pane" << endl
+                   << "               or  /delete layer" << endl;
         }
 
     } else if (message.getMethod() == "zoom") {
@@ -618,6 +723,12 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                            << endl;
                 }
             }
+        } else {
+            SVCERR << "OSCHandler: Usage: /zoom <level>" << endl
+                   << "               or  /zoom in" << endl
+                   << "               or  /zoom out" << endl
+                   << "               or  /zoom fit" << endl
+                   << "               or  /zoom default" << endl;
         }
 
     } else if (message.getMethod() == "zoomvertical") {
