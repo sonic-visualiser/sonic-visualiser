@@ -772,6 +772,14 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "quit") {
 
         SVDEBUG << "OSCHandler: Exiting abruptly" << endl;
+
+        // discard any more pending OSC messages
+        if (m_oscQueue) {
+            while (!m_oscQueue->isEmpty()) {
+                (void)m_oscQueue->readMessage();
+            }
+        }
+        
         m_documentModified = false; // so we don't ask to save
         close();
 
