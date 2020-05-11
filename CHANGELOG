@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser v4.1 (April 2020) since the previous release 4.0.1:
+Changes in Sonic Visualiser v4.1 (May 2020) since the previous release 4.0.1:
 
  - Support "dark mode" on Windows and Linux as well as macOS
 
@@ -12,14 +12,29 @@ Changes in Sonic Visualiser v4.1 (April 2020) since the previous release 4.0.1:
 
  - Add export of spectrogram data to CSV formats
 
+ - Support doubling escapes for quotes in quoted CSV fields on import
+
+ - Fix truncated image export when exporting from spectrogram view
+   that hasn't finished loading when the export is requested
+
  - Fix failure to show parameter updates when changing the current
    program in a Vamp plugin that supports programs (e.g. Melodia)
 
  - Fix inability of Windows builds to open https:// URLs
 
+ - Add references to Vamp Plugin Pack in "Find a Transform" results
+   for plugins that are not yet installed but are available in pack
+
+ - Improve and tidy various aspects of OSC support, and update
+   documentation for it
+
  - Improve performance of peak-frequency spectrogram
 
  - Fix missing undo/redo of layer renames
+
+ - Fix failure to audition effects plugins live, while adjusting their
+   parameters in preparation for applying them - this worked in some
+   cases, but not the most common ones; it should now work everywhere
 
 
 Changes in Sonic Visualiser v4.0.1 (10 Dec 2019) since the previous release 4.0:
