@@ -29,22 +29,20 @@
 #include "transform/TransformFactory.h"
 #include "plugin/PluginIdentifier.h"
 
-Surveyer::Surveyer(QString hostname, QString testPath, QString surveyPath) :
+Surveyer::Surveyer(Config config) :
+    m_config(config),
     m_httpFailed(false),
-    m_hostname(hostname),
-    m_testPath(testPath),
-    m_surveyPath(surveyPath),
     m_reply(nullptr),
     m_nm(new QNetworkAccessManager)
 {
     QSettings settings;
     settings.beginGroup("Survey");
-    if (!settings.contains("countdown")) {
-        settings.setValue("countdown", 15);
+    if (!settings.contains(m_config.countdownKey)) {
+        settings.setValue(m_config.countdownKey, m_config.countdownFrom);
         settings.endGroup();
         return;
     }
-    int countdown = settings.value("countdown").toInt();
+    int countdown = settings.value(m_config.countdownKey).toInt();
     if (countdown == 0) {
         // The countdown value will now remain 0 until we have
         // successfully tested for a survey and offered it to the
@@ -54,14 +52,15 @@ Surveyer::Surveyer(QString hostname, QString testPath, QString surveyPath) :
         // the user the chance to respond to it and (regardless of
         // whether they want to or not) set the countdown to -1 so
         // that it is never offered again.
-        QUrl url(QString("http://%1/%2").arg(m_hostname).arg(m_testPath));
-        cerr << "Surveyer: Test URL is " << url << endl;
+        QUrl url(QString("http://%1/%2")
+                 .arg(m_config.hostname).arg(m_config.testPath));
+        SVDEBUG << "Surveyer: Test URL is " << url << endl;
         m_reply = m_nm->get(QNetworkRequest(url));
         connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
                 this, SLOT(error(QNetworkReply::NetworkError)));
         connect(m_reply, SIGNAL(finished()), this, SLOT(finished()));
     } else if (countdown > 0) {
-        settings.setValue("countdown", countdown-1);
+        settings.setValue(m_config.countdownKey, countdown-1);
     }
     settings.endGroup();
 }
@@ -78,7 +77,7 @@ Surveyer::~Surveyer()
 void
 Surveyer::error(QNetworkReply::NetworkError)
 {
-    cerr << "Surveyer: error: " << m_reply->errorString() << endl;
+    SVDEBUG << "Surveyer: error: " << m_reply->errorString() << endl;
     m_httpFailed = true;
 }
 
@@ -87,21 +86,19 @@ Surveyer::finished()
 {
     if (m_httpFailed) return;
 
-    QString title = "Sonic Visualiser - User Survey";
-    QString text = "<h3>Sonic Visualiser: Take part in our survey!</h3><p>We at Queen Mary, University of London are running a short survey for users of Sonic Visualiser.  We are trying to find out how useful Sonic Visualiser is to people, and what we can do to improve it.</p><p>We do not ask for any personal information, and it should only take five minutes.</p><p>Would you like to take part?</p>";
-
     QMessageBox mb(dynamic_cast<QWidget *>(parent()));
-    mb.setWindowTitle(title);
-    mb.setText(text);
+    mb.setWindowTitle(m_config.title);
+    mb.setText(m_config.text);
 
-    QPushButton *yes = mb.addButton(tr("Yes! Take me to the survey"), QMessageBox::ActionRole);
-    mb.addButton(tr("No, thanks"), QMessageBox::RejectRole);
+    QPushButton *yes =
+        mb.addButton(m_config.acceptLabel, QMessageBox::ActionRole);
+    mb.addButton(m_config.rejectLabel, QMessageBox::RejectRole);
 
     mb.exec();
 
     QSettings settings;
     settings.beginGroup("Survey");
-    settings.setValue("countdown", -1);
+    settings.setValue(m_config.countdownKey, -1);
     settings.endGroup();
 
     if (mb.clickedButton() == yes) {
@@ -136,7 +133,12 @@ Surveyer::finished()
                 plugsarg = plugsarg + *i;
             }
         }
-        QDesktopServices::openUrl(QUrl(QString("http://%1/%2?sv=%3&plugs=%4&platform=%5").arg(m_hostname).arg(m_surveyPath).arg(svarg).arg(plugsarg).arg(platformarg)));
+
+        if (m_config.includeSystemInfo) {
+            QDesktopServices::openUrl(QUrl(QString("http://%1/%2?sv=%3&plugs=%4&platform=%5").arg(m_config.hostname).arg(m_config.surveyPath).arg(svarg).arg(plugsarg).arg(platformarg)));
+        } else {
+            QDesktopServices::openUrl(QUrl(QString("http://%1/%2?sv=%3").arg(m_config.hostname).arg(m_config.surveyPath).arg(svarg)));
+        }
     }
 }
 

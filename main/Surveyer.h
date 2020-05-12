@@ -27,7 +27,20 @@ class Surveyer : public QObject
     Q_OBJECT
 
 public:
-    Surveyer(QString hostname, QString testPath, QString surveyPath);
+    struct Config {
+        QString hostname;
+        QString testPath;
+        QString surveyPath;
+        QString countdownKey;
+        int countdownFrom;
+        QString title;
+        QString text;
+        QString acceptLabel;
+        QString rejectLabel;
+        bool includeSystemInfo;
+    };
+    
+    Surveyer(Config config);
     virtual ~Surveyer();
 
 protected slots:
@@ -35,10 +48,8 @@ protected slots:
     void error(QNetworkReply::NetworkError);
 
 private:
+    Config m_config;
     bool m_httpFailed;
-    QString m_hostname;
-    QString m_testPath;
-    QString m_surveyPath;
     QNetworkReply *m_reply;
     QNetworkAccessManager *m_nm;
 };

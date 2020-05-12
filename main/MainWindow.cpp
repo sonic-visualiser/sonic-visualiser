@@ -337,9 +337,24 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
         SVDEBUG << "MainWindow: Starting transform population thread" << endl;
         TransformFactory::getInstance()->startPopulationThread();
 
+        m_surveyer = nullptr;
+
+//#define WITH_SURVEY 1
+#ifdef WITH_SURVEY
         SVDEBUG << "MainWindow: Creating surveyer" << endl;
-        m_surveyer = new Surveyer
-            ("sonicvisualiser.org", "survey23-present.txt", "survey23.php");
+        Surveyer::Config config;
+        config.hostname = "sonicvisualiser.org";
+        config.testPath = "feedback41-present.txt";
+        config.surveyPath = "feedback41.php";
+        config.countdownKey = "countdown41";
+        config.countdownFrom = 1;
+        config.title = "Sonic Visualiser - Can you help?";
+        config.text = "<h3>Sonic Visualiser: Can you help?</h3><p>Are you using Sonic Visualiser for research or commercial purposes? Or do you intend to do so?</p><p>In the Centre for Digital Music, where Sonic Visualiser is made, we are gathering information about the impact of our work, to guide our future actions.</p><p>Would you be interested in giving us your contact details, and a description of the work you do that is related to Sonic Visualiser?</p><p>Anything you tell us will be used only to guide research and development at Queen Mary University of London.</p>";
+        config.acceptLabel = tr("Yes, I'd be happy to");
+        config.rejectLabel = tr("No, thank you");
+        config.includeSystemInfo = false;
+        m_surveyer = new Surveyer(config);
+#endif
 
         SVDEBUG << "MainWindow: Creating version tester" << endl;
         m_versionTester = new VersionTester
