@@ -339,8 +339,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
 
         m_surveyer = nullptr;
 
-//#define WITH_SURVEY 1
-#ifdef WITH_SURVEY
+#ifdef WITH_FEEDBACK_REQUEST
         SVDEBUG << "MainWindow: Creating surveyer" << endl;
         Surveyer::Config config;
         config.hostname = "sonicvisualiser.org";
@@ -349,7 +348,9 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
         config.countdownKey = "countdown41";
         config.countdownFrom = 1;
         config.title = "Sonic Visualiser - Can you help?";
-        config.text = "<h3>Sonic Visualiser: Can you help?</h3><p>Are you using Sonic Visualiser for research or commercial purposes? Or do you intend to do so?</p><p>In the Centre for Digital Music, where Sonic Visualiser is made, we are gathering information about the impact of our work, to guide our future actions.</p><p>Would you be interested in giving us your contact details, and a description of the work you do that is related to Sonic Visualiser?</p><p>Anything you tell us will be used only to guide research and development at Queen Mary University of London.</p>";
+        config.text = "<h3>Sonic Visualiser: Can you help?</h3><p>"
+            "<p>Are you using Sonic Visualiser in academic research or for commercial purposes? Or do you intend to do so?</p>"
+            "<p>If so, would you be interested in telling us something about your work? We are gathering case studies to gauge the impact of our work and to guide our future actions.</p><p>Anything you tell us will be used only to guide research and development at the Centre for Digital Music, Queen Mary University of London.</p>";
         config.acceptLabel = tr("Yes, I'd be happy to");
         config.rejectLabel = tr("No, thank you");
         config.includeSystemInfo = false;

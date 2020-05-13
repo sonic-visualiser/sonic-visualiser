@@ -58,6 +58,7 @@ RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 RUN rm -f /usr/lib/x86_64-linux-gnu/librubberband.so*
 
 WORKDIR /sonic-visualiser
+RUN qmake -set SV_PERSISTENT_DEFINES "WITH_FEEDBACK_REQUEST"
 RUN ./configure
 RUN make -j3
 
