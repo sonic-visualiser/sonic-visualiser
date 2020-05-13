@@ -98,7 +98,7 @@ protected slots:
     void modelGenerationWarning(QString, QString) override;
     void modelRegenerationFailed(QString, QString, QString) override;
     void modelRegenerationWarning(QString, QString, QString) override;
-    void alignmentFailed(QString) override;
+    void alignmentFailed(ModelId, QString) override;
 
     void paneRightButtonMenuRequested(Pane *, QPoint point) override;
     void panePropertiesRightButtonMenuRequested(Pane *, QPoint point) override;
