@@ -346,7 +346,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
         config.testPath = "feedback41-present.txt";
         config.surveyPath = "feedback41.php";
         config.countdownKey = "countdown41";
-        config.countdownFrom = 1;
+        config.countdownFrom = 5;
         config.title = "Sonic Visualiser - Can you help?";
         config.text = "<h3>Sonic Visualiser: Can you help?</h3><p>"
             "<p>Are you using Sonic Visualiser in academic research or for commercial purposes? Or do you intend to do so?</p>"
@@ -1221,20 +1221,17 @@ MainWindow::shortcutFor(LayerFactory::LayerType layer, bool isPaneMenu)
 void
 MainWindow::setupPaneAndLayerMenus()
 {
+    Profiler profiler("MainWindow::setupPaneAndLayerMenus");
+    
     if (m_paneMenu) {
-        m_paneActions.clear();
         m_paneMenu->clear();
+        for (auto a: m_paneActions) {
+            delete a.first;
+        }
+        m_paneActions.clear();
     } else {
         m_paneMenu = menuBar()->addMenu(tr("&Pane"));
         m_paneMenu->setTearOffEnabled(true);
-    }
-
-    if (m_layerMenu) {
-        m_layerActions.clear();
-        m_layerMenu->clear();
-    } else {
-        m_layerMenu = menuBar()->addMenu(tr("&Layer"));
-        m_layerMenu->setTearOffEnabled(true);
     }
 
     if (m_rightButtonLayerMenu) {
@@ -1243,6 +1240,17 @@ MainWindow::setupPaneAndLayerMenus()
         m_rightButtonLayerMenu = m_rightButtonMenu->addMenu(tr("&Layer"));
         m_rightButtonLayerMenu->setTearOffEnabled(true);
         m_rightButtonMenu->addSeparator();
+    }
+
+    if (m_layerMenu) {
+        m_layerMenu->clear();
+        for (auto a: m_layerActions) {
+            delete a.first;
+        }
+        m_layerActions.clear();
+    } else {
+        m_layerMenu = menuBar()->addMenu(tr("&Layer"));
+        m_layerMenu->setTearOffEnabled(true);
     }
 
     QMenu *menu = m_paneMenu;
@@ -1680,9 +1688,13 @@ void
 MainWindow::setupTransformsMenu()
 {
     if (m_transformsMenu) {
-        m_transformActions.clear();
-        m_transformActionsReverse.clear();
         m_transformsMenu->clear();
+        m_recentTransformsMenu->clear();
+        m_transformActionsReverse.clear();
+        m_transformActions.clear();
+        for (auto a: m_transformActions) {
+            delete a.first;
+        }
     } else {
         m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
         m_transformsMenu->setTearOffEnabled(true);
@@ -1971,7 +1983,7 @@ MainWindow::setupRecentFilesMenu()
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
         QString path = files[i];
-        QAction *action = new QAction(path, this);
+        QAction *action = m_recentFilesMenu->addAction(path);
         action->setObjectName(path);
         connect(action, SIGNAL(triggered()), this, SLOT(openRecentFile()));
         if (i == 0) {
@@ -1981,7 +1993,6 @@ MainWindow::setupRecentFilesMenu()
                  action->shortcut().toString(),
                  tr("Re-open the current or most recently opened file"));
         }
-        m_recentFilesMenu->addAction(action);
     }
 }
 
@@ -1990,10 +2001,9 @@ MainWindow::setupTemplatesMenu()
 {
     m_templatesMenu->clear();
 
-    QAction *defaultAction = new QAction(tr("Standard Waveform"), this);
+    QAction *defaultAction = m_templatesMenu->addAction(tr("Standard Waveform"));
     defaultAction->setObjectName("default");
     connect(defaultAction, SIGNAL(triggered()), this, SLOT(applyTemplate()));
-    m_templatesMenu->addAction(defaultAction);
 
     m_templatesMenu->addSeparator();
 
@@ -2012,9 +2022,8 @@ MainWindow::setupTemplatesMenu()
 
     foreach (QString t, byName) {
         if (t.toLower() == "default") continue;
-        action = new QAction(t, this);
+        action = m_templatesMenu->addAction(t);
         connect(action, SIGNAL(triggered()), this, SLOT(applyTemplate()));
-        m_templatesMenu->addAction(action);
     }
 
     if (!templates.empty()) m_templatesMenu->addSeparator();
@@ -2026,11 +2035,11 @@ MainWindow::setupTemplatesMenu()
                 this, SLOT(setupTemplatesMenu()));
     }
 
-    QAction *setDefaultAction = new QAction(tr("Choose Default Template..."), this);
+    m_templatesMenu->addSeparator();
+
+    QAction *setDefaultAction = m_templatesMenu->addAction(tr("Choose Default Template..."));
     setDefaultAction->setObjectName("set_default_template");
     connect(setDefaultAction, SIGNAL(triggered()), this, SLOT(preferences()));
-    m_templatesMenu->addSeparator();
-    m_templatesMenu->addAction(setDefaultAction);
 
     m_manageTemplatesAction->setEnabled(havePersonal);
 }
@@ -2070,10 +2079,18 @@ MainWindow::setupExistingLayersMenus()
 
 //    SVDEBUG << "MainWindow::setupExistingLayersMenu" << endl;
 
+    Profiler profiler1("MainWindow::setupExistingLayersMenu");
+
     m_existingLayersMenu->clear();
+    for (auto a: m_existingLayerActions) {
+        delete a.first;
+    }
     m_existingLayerActions.clear();
 
     m_sliceMenu->clear();
+    for (auto a: m_sliceActions) {
+        delete a.first;
+    }
     m_sliceActions.clear();
 
     IconLoader il;
@@ -2110,6 +2127,8 @@ MainWindow::setupExistingLayersMenus()
         }
     }
 
+    Profiler profiler3("MainWindow::setupExistingLayersMenu: after sorting");
+    
     map<QString, int> observedNames;
 
     for (size_t i = 0; i < orderedLayers.size(); ++i) {
@@ -4836,6 +4855,7 @@ MainWindow::playStatusChanged(bool )
 void
 MainWindow::layerRemoved(Layer *layer)
 {
+    Profiler profiler("MainWindow::layerRemoved");
     setupExistingLayersMenus();
     MainWindowBase::layerRemoved(layer);
 }
