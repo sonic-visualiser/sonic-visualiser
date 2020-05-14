@@ -17,6 +17,8 @@ DEFINES += NO_TIMING NO_HIT_COUNTS
 
 DEFINES += HAVE_PIPER HAVE_PLUGIN_CHECKER_HELPER
 
+DEFINES += $$[SV_PERSISTENT_DEFINES]
+
 # Full set of defines expected for all platforms when we have the
 # sv-dependency-builds subrepo available to provide the dependencies.
 
