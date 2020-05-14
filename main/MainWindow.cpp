@@ -340,17 +340,17 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
         m_surveyer = nullptr;
 
 #ifdef WITH_FEEDBACK_REQUEST
-        SVDEBUG << "MainWindow: Creating surveyer" << endl;
+        SVDEBUG << "MainWindow: Feedback request enabled, creating surveyer" << endl;
         Surveyer::Config config;
         config.hostname = "sonicvisualiser.org";
         config.testPath = "feedback41-present.txt";
         config.surveyPath = "feedback41.php";
         config.countdownKey = "countdown41";
-        config.countdownFrom = 5;
+        config.countdownFrom = 4;
         config.title = "Sonic Visualiser - Can you help?";
         config.text = "<h3>Sonic Visualiser: Can you help?</h3><p>"
             "<p>Are you using Sonic Visualiser in academic research or for commercial purposes? Or do you intend to do so?</p>"
-            "<p>If so, would you be interested in telling us something about your work? We are gathering case studies to gauge the impact of our work and to guide our future actions.</p><p>Anything you tell us will be used only to guide research and development at the Centre for Digital Music, Queen Mary University of London.</p>";
+            "<p>If so, would you be interested in telling us something about your work? We are gathering case studies to gauge our impact and inform our future actions.</p><p>Anything you tell us will be used solely to guide research and development at the Centre for Digital Music, Queen Mary University of London.</p>";
         config.acceptLabel = tr("Yes, I'd be happy to");
         config.rejectLabel = tr("No, thank you");
         config.includeSystemInfo = false;
