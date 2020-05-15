@@ -51,7 +51,7 @@ mkdir "$volume" || exit 1
 
 ln -s /Applications "$volume"/Applications
 cp README.md "$volume/README.txt"
-cp README.OSC "$volume/README-OSC.txt"
+cp README_OSC.md "$volume/README_OSC.txt"
 cp COPYING "$volume/COPYING.txt"
 cp CHANGELOG "$volume/CHANGELOG.txt"
 cp CITATION "$volume/CITATION.txt"
