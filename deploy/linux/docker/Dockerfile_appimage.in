@@ -51,7 +51,7 @@ ENV LC_ALL en_US.UTF-8
 
 RUN hg clone -r[[REVISION]] https://code.soundsoftware.ac.uk/hg/sonic-visualiser
 
-RUN git config --global http.postBuffer 2M
+RUN git config --global http.postBuffer 4M
 RUN git clone https://github.com/sandstorm-io/capnproto
 WORKDIR capnproto
 RUN git checkout v0.6.1
