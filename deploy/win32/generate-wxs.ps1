@@ -2,7 +2,7 @@
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = "Stop"
 
-$version = (Get-Content version.h) -replace '#define SV_VERSION ','' -replace '"',''
+$version = (Get-Content version.h) -replace '#define SV_VERSION ','' -replace '"','' -replace '-pre.*',''
 $wxs = "deploy\win32\sonic-visualiser.wxs"
 
 $in = "$wxs.in"
