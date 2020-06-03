@@ -436,10 +436,6 @@ main(int argc, char **argv)
             << QSslSocket::sslLibraryBuildVersionString()
             << endl;
 #endif
-    
-    // Make known-plugins query as early as possible after showing
-    // splash screen.
-    PluginScan::getInstance()->scan();
 
     if (showSplash) {
         application.processEvents();
@@ -546,6 +542,8 @@ main(int argc, char **argv)
                 << "\"" << endl;
         gui->cueOSCScript(scriptFile);
     }
+
+    SVDEBUG << "Entering main event loop" << endl;
     
     int rv = application.exec();
 

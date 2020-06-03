@@ -156,6 +156,8 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
+    void populateTransformsMenu();
+    
     virtual void betaReleaseWarning();
     virtual void pluginPopulationWarning();
 
@@ -284,21 +286,31 @@ protected:
     QString getReleaseText() const;
     
     void setupMenus() override;
-    virtual void setupFileMenu();
-    virtual void setupEditMenu();
-    virtual void setupViewMenu();
-    virtual void setupPaneAndLayerMenus();
-    virtual void setupTransformsMenu();
-    virtual void setupHelpMenu();
-    virtual void setupExistingLayersMenus();
-    virtual void setupToolbars();
 
-    virtual void addPane(const LayerConfiguration &configuration, QString text);
+    void setupFileMenu();
+    void setupEditMenu();
+    void setupViewMenu();
+    void setupPaneAndLayerMenus();
+    void prepareTransformsMenu();
+    void setupHelpMenu();
+    void setupExistingLayersMenus();
+    void setupToolbars();
+
+    class TransformPopulater : public QThread {
+    public:
+        TransformPopulater(MainWindow *mw) : QThread(mw), m_mw(mw) { }
+        void run() override;
+    private:
+        MainWindow *m_mw;
+    };
+    TransformPopulater *m_transformPopulater;
+    
+    void addPane(const LayerConfiguration &configuration, QString text);
 
     void closeEvent(QCloseEvent *e) override;
     bool checkSaveModified() override;
 
-    virtual void exportAudio(bool asData);
+    void exportAudio(bool asData);
 
     void updateVisibleRangeDisplay(Pane *p) const override;
     void updatePositionStatusDisplays() const override;

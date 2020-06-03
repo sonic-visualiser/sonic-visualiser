@@ -16,7 +16,8 @@
         },
         "svcore": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "startup-timing"
         },
         "svgui": {
             "vcs": "hg",
