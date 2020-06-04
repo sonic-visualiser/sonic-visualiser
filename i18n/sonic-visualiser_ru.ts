@@ -22,7 +22,7 @@
 <context>
     <name>AddLayerCommand</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="1188"/>
+        <location filename="../svapp/framework/Document.cpp" line="1223"/>
         <source>Add %1 Layer</source>
         <translation>Добавить слой %1</translation>
     </message>
@@ -54,22 +54,22 @@
 <context>
     <name>AudioCallbackPlaySource</name>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="529"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="533"/>
         <source>Play from %1</source>
         <translation>Воспроизведение от %1</translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="553"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="557"/>
         <source>Stop at %1</source>
         <translation>Остановка в позиции %1</translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="558"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="562"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1042"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1049"/>
         <source>Change time-stretch factor to %1</source>
         <translation>Смена коэффициента растяжения во времени на %1</translation>
     </message>
@@ -90,13 +90,13 @@
 <context>
     <name>AudioDial</name>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="594"/>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="610"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="588"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="604"/>
         <source>Enter new value</source>
         <translation>Введите новое значение</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="499"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="493"/>
         <source>%1: %2%3</source>
         <translation>%1: %2%3</translation>
     </message>
@@ -111,38 +111,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="124"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="121"/>
         <source>&amp;Reset to Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="489"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="483"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="501"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="495"/>
         <source>%2%3</source>
         <translation>%2%3</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="576"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="570"/>
         <source>New value for %1, from %2 to %3 %4:</source>
         <translation>Новое значение для «%1», от %2 до %3 %4:</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="579"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="573"/>
         <source>New value for %1, from %2 to %3:</source>
         <translation>Новое значение для «%1», от %2 до %3:</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="584"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="578"/>
         <source>Enter a new value from %1 to %2 %3:</source>
         <translation>Введите новое значение от %1 до %2 %3:</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="587"/>
-        <location filename="../svgui/widgets/AudioDial.cpp" line="611"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="581"/>
+        <location filename="../svgui/widgets/AudioDial.cpp" line="605"/>
         <source>Enter a new value from %1 to %2:</source>
         <translation>Введите новое значение от %1 до %2:</translation>
     </message>
@@ -1006,67 +1006,67 @@ Bin:	%3
 <context>
     <name>CommandHistory</name>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="67"/>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="70"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="68"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="71"/>
         <source>&amp;Undo</source>
         <translation>&amp;Отменить</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="63"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="64"/>
         <source>Ctrl+Z</source>
         <translation>Ctrl+Z</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="75"/>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="80"/>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="83"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="76"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="81"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="84"/>
         <source>Re&amp;do</source>
         <translation>Ве&amp;рнуть</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="76"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="77"/>
         <source>Ctrl+Shift+Z</source>
         <translation>Ctrl+Shift+Z</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="516"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="519"/>
         <source>Nothing to undo</source>
         <translation>Нет отменяемых действий</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="516"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="519"/>
         <source>Nothing to redo</source>
         <translation>Нет повторяемых действий</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="532"/>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="554"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="535"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="557"/>
         <source>&amp;Undo %1</source>
         <translation>&amp;Отменить действие «%1»</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="532"/>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="555"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="535"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="558"/>
         <source>Re&amp;do %1</source>
         <translation>Повто&amp;рить действие «%1»</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="64"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="65"/>
         <source>Undo the last editing operation</source>
         <translation>Отменить последнее действие правки</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="77"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="78"/>
         <source>Redo the last operation that was undone</source>
         <translation>Повторить последнее действие правки</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="357"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="358"/>
         <source>Undo %1</source>
         <translation>Отмена действия «%1»</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CommandHistory.cpp" line="383"/>
+        <location filename="../svgui/widgets/CommandHistory.cpp" line="384"/>
         <source>Redo %1</source>
         <translation>Повтор действия «%1»</translation>
     </message>
@@ -1128,12 +1128,12 @@ Bin:	%3
 <context>
     <name>Document</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="408"/>
+        <location filename="../svapp/framework/Document.cpp" line="431"/>
         <source>Set main model to %1</source>
         <translation>Сделать %1 основной моделью</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="410"/>
+        <location filename="../svapp/framework/Document.cpp" line="433"/>
         <source>Clear main model</source>
         <translation>Очистить основную модель</translation>
     </message>
@@ -1143,6 +1143,39 @@ Bin:	%3
     <message>
         <location filename="../svcore/data/model/EditableDenseThreeDimensionalModel.h" line="173"/>
         <source>Editable Dense 3-D</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ExternalProgramAligner</name>
+    <message>
+        <location filename="../svapp/align/ExternalProgramAligner.cpp" line="82"/>
+        <source>Failed to find local filepath for wave-file model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svapp/align/ExternalProgramAligner.cpp" line="118"/>
+        <source>Alignment program &quot;%1&quot; did not start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svapp/align/ExternalProgramAligner.cpp" line="173"/>
+        <source>Failed to parse output of program: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svapp/align/ExternalProgramAligner.cpp" line="190"/>
+        <source>Output of alignment program was not in the proper format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svapp/align/ExternalProgramAligner.cpp" line="201"/>
+        <source>Output of alignment program contained no mappings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svapp/align/ExternalProgramAligner.cpp" line="223"/>
+        <source>Aligner process returned non-zero exit status</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1571,63 +1604,63 @@ Label:	%4</source>
 <context>
     <name>ImageLayer</name>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="194"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="199"/>
         <source>In progress</source>
         <translation>В процессе</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="584"/>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="694"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="589"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="717"/>
         <source>Select image</source>
         <translation>Выбрать изображение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="658"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="681"/>
         <source>Move Image</source>
         <translation>Переместить изображение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="703"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="726"/>
         <source>Edit Image</source>
         <translation type="unfinished">Изменить изображение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="720"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="743"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="742"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="765"/>
         <source>Resize Selection</source>
         <translation>Изменить размер выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="771"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="794"/>
         <source>Delete Selection</source>
         <translation>Удалите выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="811"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="834"/>
         <source>Re-align pasted items?</source>
         <translation>Заново выровнять вставленные объекты?</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="812"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="835"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="825"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="848"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="856"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="879"/>
         <source>New Point</source>
         <translation>Новая точка</translation>
     </message>
     <message>
-        <location filename="../svgui/layer/ImageLayer.cpp" line="888"/>
+        <location filename="../svgui/layer/ImageLayer.cpp" line="928"/>
         <source>Opening image URL...</source>
         <translation>Открывается изображение по URL...</translation>
     </message>
@@ -2659,7 +2692,7 @@ Do you want to locate it?</source>
 <context>
     <name>MP3FileReader</name>
     <message>
-        <location filename="../svcore/data/fileio/MP3FileReader.cpp" line="133"/>
+        <location filename="../svcore/data/fileio/MP3FileReader.cpp" line="134"/>
         <source>Decoding %1...</source>
         <translation>Декодируется %1...</translation>
     </message>
@@ -2671,29 +2704,29 @@ Do you want to locate it?</source>
         <translation type="obsolete">Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="427"/>
-        <location filename="../main/MainWindow.cpp" line="1220"/>
-        <location filename="../main/MainWindow.cpp" line="1227"/>
+        <location filename="../main/MainWindow.cpp" line="448"/>
+        <location filename="../main/MainWindow.cpp" line="1245"/>
+        <location filename="../main/MainWindow.cpp" line="1257"/>
         <source>&amp;Layer</source>
         <translation>С&amp;лой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="497"/>
+        <location filename="../main/MainWindow.cpp" line="518"/>
         <source>&amp;File</source>
         <translation>&amp;Файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="499"/>
+        <location filename="../main/MainWindow.cpp" line="520"/>
         <source>File Toolbar</source>
         <translation>Панель файлов</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="506"/>
+        <location filename="../main/MainWindow.cpp" line="527"/>
         <source>&amp;New Session</source>
         <translation>&amp;Создать сессию</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="507"/>
+        <location filename="../main/MainWindow.cpp" line="528"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
@@ -2702,7 +2735,7 @@ Do you want to locate it?</source>
         <translation type="obsolete">&amp;Открыть сеанс...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="516"/>
+        <location filename="../main/MainWindow.cpp" line="537"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
@@ -2711,22 +2744,22 @@ Do you want to locate it?</source>
         <translation type="obsolete">Открыть файл сохранённого ранее сеанса Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="515"/>
+        <location filename="../main/MainWindow.cpp" line="536"/>
         <source>&amp;Open...</source>
         <translation>О&amp;ткрыть...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="517"/>
+        <location filename="../main/MainWindow.cpp" line="538"/>
         <source>Open a session file, audio file, or layer</source>
         <translation>Открыть файл сессии, звуковой файл или слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="555"/>
+        <location filename="../main/MainWindow.cpp" line="576"/>
         <source>&amp;Save Session</source>
         <translation>Сохр&amp;анить сессию</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="556"/>
+        <location filename="../main/MainWindow.cpp" line="577"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
@@ -2735,7 +2768,7 @@ Do you want to locate it?</source>
         <translation type="obsolete">Сохранить в файл текущий сеанс Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="565"/>
+        <location filename="../main/MainWindow.cpp" line="586"/>
         <source>Save Session &amp;As...</source>
         <translation>Сохранить сеанс &amp;как...</translation>
     </message>
@@ -2748,7 +2781,7 @@ Do you want to locate it?</source>
         <translation type="obsolete">&amp;Импортировать звуковой файл...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="526"/>
+        <location filename="../main/MainWindow.cpp" line="547"/>
         <source>Ctrl+I</source>
         <translation>Ctrl+I</translation>
     </message>
@@ -2769,27 +2802,27 @@ Do you want to locate it?</source>
         <translation type="obsolete">Импортировать ещё один звуковой файл в отдельный слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="580"/>
+        <location filename="../main/MainWindow.cpp" line="601"/>
         <source>&amp;Export Audio File...</source>
         <translation>Э&amp;кспортировать звуковой файл...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="581"/>
+        <location filename="../main/MainWindow.cpp" line="602"/>
         <source>Export selection as an audio file</source>
         <translation>Экспортировать выделенное в звуковой файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="588"/>
+        <location filename="../main/MainWindow.cpp" line="609"/>
         <source>Import Annotation &amp;Layer...</source>
         <translation>И&amp;мпортировать слой аннотаций...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="589"/>
+        <location filename="../main/MainWindow.cpp" line="610"/>
         <source>Ctrl+L</source>
         <translation>Ctrl+L</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="590"/>
+        <location filename="../main/MainWindow.cpp" line="611"/>
         <source>Import layer data from an existing file</source>
         <translation>Импортировать данные слоя из существующего файла</translation>
     </message>
@@ -2798,176 +2831,176 @@ Do you want to locate it?</source>
         <translation type="vanished">Экспортировать слой аннотаций...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="598"/>
+        <location filename="../main/MainWindow.cpp" line="619"/>
         <source>Export layer data to a file</source>
         <translation>Экспортировать данные слоя в файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="606"/>
+        <location filename="../main/MainWindow.cpp" line="627"/>
         <source>Convert Audio from Data File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="607"/>
+        <location filename="../main/MainWindow.cpp" line="628"/>
         <source>Convert and import audio sample values from a CSV data file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="611"/>
+        <location filename="../main/MainWindow.cpp" line="632"/>
         <source>Export Audio to Data File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="612"/>
+        <location filename="../main/MainWindow.cpp" line="633"/>
         <source>Export audio from selection into a CSV data file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="633"/>
+        <location filename="../main/MainWindow.cpp" line="654"/>
         <source>Browse Recorded and Converted Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="669"/>
+        <location filename="../main/MainWindow.cpp" line="690"/>
         <source>&amp;Quit</source>
         <translation>В&amp;ыход</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="670"/>
+        <location filename="../main/MainWindow.cpp" line="691"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="682"/>
+        <location filename="../main/MainWindow.cpp" line="703"/>
         <source>&amp;Edit</source>
         <translation>&amp;Правка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="693"/>
+        <location filename="../main/MainWindow.cpp" line="714"/>
         <source>Cu&amp;t</source>
         <translation>&amp;Вырезать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="694"/>
+        <location filename="../main/MainWindow.cpp" line="715"/>
         <source>Ctrl+X</source>
         <translation>Ctrl+X</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="703"/>
+        <location filename="../main/MainWindow.cpp" line="724"/>
         <source>&amp;Copy</source>
         <translation>С&amp;копировать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="704"/>
+        <location filename="../main/MainWindow.cpp" line="725"/>
         <source>Ctrl+C</source>
         <translation>Ctrl+C</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="713"/>
+        <location filename="../main/MainWindow.cpp" line="734"/>
         <source>&amp;Paste</source>
         <translation>Вст&amp;авить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="714"/>
+        <location filename="../main/MainWindow.cpp" line="735"/>
         <source>Ctrl+V</source>
         <translation>Ctrl+V</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="731"/>
-        <location filename="../main/MainWindow.cpp" line="2539"/>
+        <location filename="../main/MainWindow.cpp" line="752"/>
+        <location filename="../main/MainWindow.cpp" line="2579"/>
         <source>&amp;Delete Selected Items</source>
         <translation>&amp;Удалить выбранное</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="732"/>
+        <location filename="../main/MainWindow.cpp" line="753"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="745"/>
+        <location filename="../main/MainWindow.cpp" line="766"/>
         <source>Select &amp;All</source>
         <translation>В&amp;ыделить всё</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="746"/>
+        <location filename="../main/MainWindow.cpp" line="767"/>
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="754"/>
+        <location filename="../main/MainWindow.cpp" line="775"/>
         <source>Select &amp;Visible Range</source>
         <translation>Вы&amp;делить всё видимое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="755"/>
+        <location filename="../main/MainWindow.cpp" line="776"/>
         <source>Ctrl+Shift+A</source>
         <translation>Ctrl+Shift+A</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="762"/>
+        <location filename="../main/MainWindow.cpp" line="783"/>
         <source>Select to &amp;Start</source>
         <translation>Выделить до &amp;начала</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="763"/>
-        <location filename="../main/MainWindow.cpp" line="2359"/>
-        <location filename="../main/MainWindow.cpp" line="2393"/>
-        <location filename="../main/MainWindow.cpp" line="2470"/>
+        <location filename="../main/MainWindow.cpp" line="784"/>
+        <location filename="../main/MainWindow.cpp" line="2399"/>
+        <location filename="../main/MainWindow.cpp" line="2433"/>
+        <location filename="../main/MainWindow.cpp" line="2510"/>
         <source>Shift+Left</source>
         <translation>Shift+Left</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="770"/>
+        <location filename="../main/MainWindow.cpp" line="791"/>
         <source>Select to &amp;End</source>
         <translation>Выделить до &amp;конца</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="771"/>
+        <location filename="../main/MainWindow.cpp" line="792"/>
         <source>Shift+Right</source>
         <translation>Shift+Right</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="778"/>
+        <location filename="../main/MainWindow.cpp" line="799"/>
         <source>C&amp;lear Selection</source>
         <translation>Сн&amp;ять выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="779"/>
+        <location filename="../main/MainWindow.cpp" line="800"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="791"/>
+        <location filename="../main/MainWindow.cpp" line="812"/>
         <source>&amp;Insert Instant at Playback Position</source>
         <translation>Вставить &amp;отметку в точку воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="805"/>
+        <location filename="../main/MainWindow.cpp" line="826"/>
         <source>Enter</source>
         <translation>Enter</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="936"/>
+        <location filename="../main/MainWindow.cpp" line="957"/>
         <source>&amp;View</source>
         <translation>&amp;Вид</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1050"/>
+        <location filename="../main/MainWindow.cpp" line="1071"/>
         <source>0</source>
         <translation>0</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1060"/>
+        <location filename="../main/MainWindow.cpp" line="1081"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1070"/>
+        <location filename="../main/MainWindow.cpp" line="1091"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="938"/>
+        <location filename="../main/MainWindow.cpp" line="959"/>
         <source>Scroll &amp;Left</source>
         <translation>Прокрутить в&amp;лево</translation>
     </message>
@@ -2977,27 +3010,27 @@ Do you want to locate it?</source>
         <translation>Скорость воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="508"/>
+        <location filename="../main/MainWindow.cpp" line="529"/>
         <source>Abandon the current %1 session and start a new one</source>
         <translation>Отказаться от текущей сессии %1 и начать новую</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="534"/>
+        <location filename="../main/MainWindow.cpp" line="555"/>
         <source>Replace &amp;Main Audio...</source>
         <translation>&amp;Заменить основной аудиофайл…</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="535"/>
+        <location filename="../main/MainWindow.cpp" line="556"/>
         <source>Replace the main audio file of the session with a different file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="557"/>
+        <location filename="../main/MainWindow.cpp" line="578"/>
         <source>Save the current session into a %1 session file</source>
         <translation>Сохранить текущую сессию в файл сессии %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="567"/>
+        <location filename="../main/MainWindow.cpp" line="588"/>
         <source>Save the current session into a new %1 session file</source>
         <translation>Сохранить текущую сессию в новый файл сессии %1</translation>
     </message>
@@ -3006,22 +3039,22 @@ Do you want to locate it?</source>
         <translation type="vanished">Экспортировать звуковые данные…</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="596"/>
+        <location filename="../main/MainWindow.cpp" line="617"/>
         <source>Export Annotation La&amp;yer...</source>
         <translation>Экспортировать слой &amp;аннотаций…</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="597"/>
+        <location filename="../main/MainWindow.cpp" line="618"/>
         <source>Ctrl+Y</source>
         <translation>Ctrl+Y</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="625"/>
+        <location filename="../main/MainWindow.cpp" line="646"/>
         <source>Export SVG File...</source>
         <translation>Экспортировать файл SVG…</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="626"/>
+        <location filename="../main/MainWindow.cpp" line="647"/>
         <source>Export a single pane to a scalable SVG image file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3030,368 +3063,368 @@ Do you want to locate it?</source>
         <translation type="vanished">Открыть папку с записанными аудиофайлами</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="634"/>
+        <location filename="../main/MainWindow.cpp" line="655"/>
         <source>Open the Recorded Audio folder in the system file browser</source>
         <translation>Открыть папку с записанным звуком в файловом менеджере</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="671"/>
+        <location filename="../main/MainWindow.cpp" line="692"/>
         <source>Exit %1</source>
         <translation>Завершить работу с %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="811"/>
+        <location filename="../main/MainWindow.cpp" line="832"/>
         <source>Shift+;</source>
         <translation>Shift+;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="829"/>
+        <location filename="../main/MainWindow.cpp" line="850"/>
         <source>Ctrl+Shift+;</source>
         <translation>Ctrl+Shift+;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="841"/>
+        <location filename="../main/MainWindow.cpp" line="862"/>
         <source>Ctrl+Shift+Return</source>
         <translation>Ctrl+Shift+Return</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="892"/>
+        <location filename="../main/MainWindow.cpp" line="913"/>
         <source>Reset Numbering Counters</source>
         <translation>Сбросить счётчики нумерации</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="893"/>
+        <location filename="../main/MainWindow.cpp" line="914"/>
         <source>Reset to 1 all the counters used for counter-based labelling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="912"/>
+        <location filename="../main/MainWindow.cpp" line="933"/>
         <source>Subdivide Selected Instants...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="913"/>
+        <location filename="../main/MainWindow.cpp" line="934"/>
         <source>Add new instants at regular intervals between the selected instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="918"/>
+        <location filename="../main/MainWindow.cpp" line="939"/>
         <source>Winnow Selected Instants...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="919"/>
+        <location filename="../main/MainWindow.cpp" line="940"/>
         <source>Remove subdivisions, leaving only every Nth instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="939"/>
-        <location filename="../main/MainWindow.cpp" line="2356"/>
-        <location filename="../main/MainWindow.cpp" line="2381"/>
-        <location filename="../main/MainWindow.cpp" line="2410"/>
-        <location filename="../main/MainWindow.cpp" line="2430"/>
-        <location filename="../main/MainWindow.cpp" line="2447"/>
-        <location filename="../main/MainWindow.cpp" line="2464"/>
+        <location filename="../main/MainWindow.cpp" line="960"/>
+        <location filename="../main/MainWindow.cpp" line="2396"/>
+        <location filename="../main/MainWindow.cpp" line="2421"/>
+        <location filename="../main/MainWindow.cpp" line="2450"/>
+        <location filename="../main/MainWindow.cpp" line="2470"/>
+        <location filename="../main/MainWindow.cpp" line="2487"/>
+        <location filename="../main/MainWindow.cpp" line="2504"/>
         <source>Left</source>
         <translation>Влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="940"/>
+        <location filename="../main/MainWindow.cpp" line="961"/>
         <source>Scroll the current pane to the left</source>
         <translation>Прокрутить активное окно влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="946"/>
+        <location filename="../main/MainWindow.cpp" line="967"/>
         <source>Scroll &amp;Right</source>
         <translation>Прокрутить в&amp;право</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="947"/>
+        <location filename="../main/MainWindow.cpp" line="968"/>
         <source>Right</source>
         <translation>Вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="948"/>
+        <location filename="../main/MainWindow.cpp" line="969"/>
         <source>Scroll the current pane to the right</source>
         <translation>Прокрутить активное окно вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="955"/>
-        <location filename="../main/MainWindow.cpp" line="2385"/>
-        <location filename="../main/MainWindow.cpp" line="2389"/>
+        <location filename="../main/MainWindow.cpp" line="976"/>
+        <location filename="../main/MainWindow.cpp" line="2425"/>
+        <location filename="../main/MainWindow.cpp" line="2429"/>
         <source>Ctrl+Left</source>
         <translation>Ctrl+Влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="956"/>
+        <location filename="../main/MainWindow.cpp" line="977"/>
         <source>Scroll the current pane a big step to the left</source>
         <translation>Сделать большой шаг прокрутки влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="963"/>
+        <location filename="../main/MainWindow.cpp" line="984"/>
         <source>Ctrl+Right</source>
         <translation>Ctrl+Вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="964"/>
+        <location filename="../main/MainWindow.cpp" line="985"/>
         <source>Scroll the current pane a big step to the right</source>
         <translation>Сделать большой шаг прокрутки вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="991"/>
+        <location filename="../main/MainWindow.cpp" line="1012"/>
         <source>Zoom &amp;In</source>
         <translation>При&amp;близить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="992"/>
+        <location filename="../main/MainWindow.cpp" line="1013"/>
         <source>Up</source>
         <translation>Вверх</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="993"/>
+        <location filename="../main/MainWindow.cpp" line="1014"/>
         <source>Increase the zoom level</source>
         <translation>Увеличить масштаб отображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1000"/>
+        <location filename="../main/MainWindow.cpp" line="1021"/>
         <source>Zoom &amp;Out</source>
         <translation>&amp;Отдалить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1001"/>
+        <location filename="../main/MainWindow.cpp" line="1022"/>
         <source>Down</source>
         <translation>Вниз</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1002"/>
+        <location filename="../main/MainWindow.cpp" line="1023"/>
         <source>Decrease the zoom level</source>
         <translation>Уменьшить масштаб отображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1008"/>
+        <location filename="../main/MainWindow.cpp" line="1029"/>
         <source>Restore &amp;Default Zoom</source>
         <translation>&amp;Восстановить обычный масштаб</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1015"/>
+        <location filename="../main/MainWindow.cpp" line="1036"/>
         <source>Zoom to &amp;Fit</source>
         <translation>&amp;Уместить в окне</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1017"/>
+        <location filename="../main/MainWindow.cpp" line="1038"/>
         <source>Zoom to show the whole file</source>
         <translation>Увидеть весь файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1027"/>
+        <location filename="../main/MainWindow.cpp" line="1048"/>
         <source>Show &amp;Centre Line</source>
         <translation>Показывать &amp;центральную линию</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1028"/>
+        <location filename="../main/MainWindow.cpp" line="1049"/>
         <source>&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1029"/>
+        <location filename="../main/MainWindow.cpp" line="1050"/>
         <source>Show or hide the centre line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1036"/>
+        <location filename="../main/MainWindow.cpp" line="1057"/>
         <source>Toggle All Time Rulers</source>
         <translation>Переключить видимость всех линеек</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1051"/>
+        <location filename="../main/MainWindow.cpp" line="1072"/>
         <source>Hide times, layer names, and scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1061"/>
+        <location filename="../main/MainWindow.cpp" line="1082"/>
         <source>Show times and basic scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1071"/>
+        <location filename="../main/MainWindow.cpp" line="1092"/>
         <source>Show times, layer names, and scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1129"/>
+        <location filename="../main/MainWindow.cpp" line="1150"/>
         <source>Show &amp;Unit Converter</source>
         <translation>Показать конвертер &amp;единиц</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1130"/>
+        <location filename="../main/MainWindow.cpp" line="1151"/>
         <source>Open a window of pitch and timing conversion utilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1139"/>
+        <location filename="../main/MainWindow.cpp" line="1160"/>
         <source>Go Full-Screen</source>
         <translation>Полноэкранный режим</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1140"/>
+        <location filename="../main/MainWindow.cpp" line="1161"/>
         <source>F11</source>
         <translation>F11</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1141"/>
+        <location filename="../main/MainWindow.cpp" line="1162"/>
         <source>Expand the pane area to the whole screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1212"/>
+        <location filename="../main/MainWindow.cpp" line="1238"/>
         <source>&amp;Pane</source>
         <translation>&amp;Окно</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1241"/>
+        <location filename="../main/MainWindow.cpp" line="1270"/>
         <source>Add &amp;New Pane</source>
         <translation>Добавить &amp;новое окно</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1243"/>
+        <location filename="../main/MainWindow.cpp" line="1272"/>
         <source>Add a new pane containing only a time ruler</source>
         <translation>Добавить новое окно, содержащее только линейку времени</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1267"/>
+        <location filename="../main/MainWindow.cpp" line="1296"/>
         <source>Add New %1 Layer</source>
         <translation>Добавить новый слой «%1»</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1268"/>
+        <location filename="../main/MainWindow.cpp" line="1297"/>
         <source>Add a new empty layer of type %1</source>
         <translation>Добавить новый пустой слой типа «%1»</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1334"/>
+        <location filename="../main/MainWindow.cpp" line="1363"/>
         <source>Add &amp;Waveform</source>
         <translation>Добавить &amp;волновую форму</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1336"/>
+        <location filename="../main/MainWindow.cpp" line="1365"/>
         <source>Add a new pane showing a waveform view</source>
         <translation>Добавить новое окно с видом волновой формы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1338"/>
+        <location filename="../main/MainWindow.cpp" line="1367"/>
         <source>Add a new layer showing a waveform view</source>
         <translation>Добавить новый слой с видом волновой формы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1355"/>
+        <location filename="../main/MainWindow.cpp" line="1384"/>
         <source>Add &amp;Melodic Range Spectrogram</source>
         <translation>Добавить спектограмму &amp;мелодического диапазона</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1367"/>
+        <location filename="../main/MainWindow.cpp" line="1396"/>
         <source>Add a new pane showing a spectrogram set up for tracking frequencies</source>
         <translation>Добавить новое окно, отображающее спектрограмму для отслеживания частот</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1369"/>
+        <location filename="../main/MainWindow.cpp" line="1398"/>
         <source>Add a new layer showing a spectrogram set up for tracking frequencies</source>
         <translation>Добавить новый слой, отображающий спектрограмму для отслеживания частот</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1451"/>
+        <location filename="../main/MainWindow.cpp" line="1480"/>
         <source>&amp;All Channels Mixed</source>
         <translation>Все &amp;каналы сведены</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1453"/>
+        <location filename="../main/MainWindow.cpp" line="1482"/>
         <source>&amp;All Channels</source>
         <translation>&amp;Все каналы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1456"/>
+        <location filename="../main/MainWindow.cpp" line="1485"/>
         <source>Channel &amp;%1</source>
         <translation>Канал &amp;%1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1544"/>
-        <location filename="../main/MainWindow.cpp" line="5093"/>
+        <location filename="../main/MainWindow.cpp" line="1573"/>
+        <location filename="../main/MainWindow.cpp" line="5118"/>
         <source>&amp;Delete Pane</source>
         <translation>У&amp;далить окно</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1554"/>
+        <location filename="../main/MainWindow.cpp" line="1583"/>
         <source>Add &amp;Time Ruler</source>
         <translation>Добавить линейку &amp;времени</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1555"/>
+        <location filename="../main/MainWindow.cpp" line="1584"/>
         <source>Add a new layer showing a time ruler</source>
         <translation>Добавить новый слой с линейкой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1563"/>
+        <location filename="../main/MainWindow.cpp" line="1592"/>
         <source>Add &amp;Existing Layer</source>
         <translation>Добавить &amp;существующий слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1575"/>
+        <location filename="../main/MainWindow.cpp" line="1604"/>
         <source>Switch to Previous Layer</source>
         <translation>Переключиться на предыдущий слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1576"/>
+        <location filename="../main/MainWindow.cpp" line="1605"/>
         <source>{</source>
         <translation>{</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1577"/>
+        <location filename="../main/MainWindow.cpp" line="1606"/>
         <source>Make the previous layer in the pane current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1583"/>
+        <location filename="../main/MainWindow.cpp" line="1612"/>
         <source>Switch to Next Layer</source>
         <translation>Переключиться на следующий слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1584"/>
+        <location filename="../main/MainWindow.cpp" line="1613"/>
         <source>}</source>
         <translation>}</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1585"/>
+        <location filename="../main/MainWindow.cpp" line="1614"/>
         <source>Make the next layer in the pane current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1594"/>
-        <location filename="../main/MainWindow.cpp" line="5121"/>
+        <location filename="../main/MainWindow.cpp" line="1623"/>
+        <location filename="../main/MainWindow.cpp" line="5139"/>
         <source>&amp;Rename Layer...</source>
         <translation>&amp;Переименовать слой...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1596"/>
+        <location filename="../main/MainWindow.cpp" line="1625"/>
         <source>Rename the currently active layer</source>
         <translation>Переименовать активный слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1610"/>
-        <location filename="../main/MainWindow.cpp" line="5135"/>
+        <location filename="../main/MainWindow.cpp" line="1639"/>
+        <location filename="../main/MainWindow.cpp" line="5146"/>
         <source>&amp;Delete Layer</source>
         <translation>&amp;Удалить слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1612"/>
+        <location filename="../main/MainWindow.cpp" line="1641"/>
         <source>Delete the currently active layer</source>
         <translation>Удалить активный слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1916"/>
+        <location filename="../main/MainWindow.cpp" line="1949"/>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1926"/>
+        <location filename="../main/MainWindow.cpp" line="1959"/>
         <source>&amp;Help Reference</source>
         <translation>&amp;Руководство пользователя</translation>
     </message>
@@ -3416,66 +3449,66 @@ Do you want to locate it?</source>
         <translation type="obsolete">Показать информацию о Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2144"/>
+        <location filename="../main/MainWindow.cpp" line="2184"/>
         <source>Rewind to Start</source>
         <translation>Перемотать в начало</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2145"/>
+        <location filename="../main/MainWindow.cpp" line="2185"/>
         <source>Home</source>
         <translation>Домой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2146"/>
+        <location filename="../main/MainWindow.cpp" line="2186"/>
         <source>Rewind to the start</source>
         <translation>Перемотать в начало</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2150"/>
-        <location filename="../main/MainWindow.cpp" line="2557"/>
-        <location filename="../main/MainWindow.cpp" line="2558"/>
+        <location filename="../main/MainWindow.cpp" line="2190"/>
+        <location filename="../main/MainWindow.cpp" line="2597"/>
+        <location filename="../main/MainWindow.cpp" line="2598"/>
         <source>Rewind</source>
         <translation>Перемотать назад</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2548"/>
+        <location filename="../main/MainWindow.cpp" line="2588"/>
         <source>Rewind to the previous time instant in the current layer</source>
         <translation>Перемотать до предыдущей отметки времени в текущем слое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2163"/>
+        <location filename="../main/MainWindow.cpp" line="2203"/>
         <source>Play / Pause</source>
         <translation>Воспроизвести / Приостановить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2171"/>
+        <location filename="../main/MainWindow.cpp" line="2211"/>
         <source>Space</source>
         <extracomment>This text is a shortcut label referring to the space-bar on the keyboard. It probably should not be translated, and certainly should not be translated as if referring to an empty void or to the extra-terrestrial universe.</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2173"/>
+        <location filename="../main/MainWindow.cpp" line="2213"/>
         <source>Start or stop playback from the current position</source>
         <translation>Запустить или остановить воспроизведение с текущей позиции</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2182"/>
-        <location filename="../main/MainWindow.cpp" line="2555"/>
+        <location filename="../main/MainWindow.cpp" line="2222"/>
+        <location filename="../main/MainWindow.cpp" line="2595"/>
         <source>Fast Forward</source>
         <translation>Перемотать вперёд</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2546"/>
+        <location filename="../main/MainWindow.cpp" line="2586"/>
         <source>Fast forward to the next time instant in the current layer</source>
         <translation>Перемотать до следующей отметки времени в текущем слое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2195"/>
+        <location filename="../main/MainWindow.cpp" line="2235"/>
         <source>Fast Forward to End</source>
         <translation>Перемотать до конца</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1935"/>
+        <location filename="../main/MainWindow.cpp" line="1968"/>
         <source>Open a window showing the keystrokes you can use in %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3484,154 +3517,154 @@ Do you want to locate it?</source>
         <translation type="vanished">%1 в &amp;Интернете</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1945"/>
+        <location filename="../main/MainWindow.cpp" line="1978"/>
         <source>&amp;About %1</source>
         <translation>&amp;О %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1946"/>
+        <location filename="../main/MainWindow.cpp" line="1979"/>
         <source>Show information about %1</source>
         <translation>Показать информацию о %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2196"/>
+        <location filename="../main/MainWindow.cpp" line="2236"/>
         <source>End</source>
         <translation>Конец</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2197"/>
+        <location filename="../main/MainWindow.cpp" line="2237"/>
         <source>Fast-forward to the end</source>
         <translation>Перемотать до конца</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2212"/>
+        <location filename="../main/MainWindow.cpp" line="2252"/>
         <source>Play Mode Toolbar</source>
         <translation>Панель режима воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2215"/>
+        <location filename="../main/MainWindow.cpp" line="2255"/>
         <source>Constrain Playback to Selection</source>
         <translation>Ограничить воспроизведение выделением</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2218"/>
+        <location filename="../main/MainWindow.cpp" line="2258"/>
         <source>s</source>
         <translation>с</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2226"/>
+        <location filename="../main/MainWindow.cpp" line="2266"/>
         <source>Loop Playback</source>
         <translation>Воспроизведение в цикле</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2229"/>
+        <location filename="../main/MainWindow.cpp" line="2269"/>
         <source>l</source>
         <translation>l</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2230"/>
+        <location filename="../main/MainWindow.cpp" line="2270"/>
         <source>Loop playback</source>
         <translation>Воспроизведение в цикле</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2334"/>
+        <location filename="../main/MainWindow.cpp" line="2374"/>
         <source>Edit Toolbar</source>
         <translation>Панель правки</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2337"/>
+        <location filename="../main/MainWindow.cpp" line="2377"/>
         <source>Tools Toolbar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2342"/>
-        <location filename="../main/MainWindow.cpp" line="2346"/>
-        <location filename="../main/MainWindow.cpp" line="2356"/>
+        <location filename="../main/MainWindow.cpp" line="2382"/>
+        <location filename="../main/MainWindow.cpp" line="2386"/>
+        <location filename="../main/MainWindow.cpp" line="2396"/>
         <source>Navigate</source>
         <translation>Перемещение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2345"/>
+        <location filename="../main/MainWindow.cpp" line="2385"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2369"/>
-        <location filename="../main/MainWindow.cpp" line="2381"/>
+        <location filename="../main/MainWindow.cpp" line="2409"/>
+        <location filename="../main/MainWindow.cpp" line="2421"/>
         <source>Select</source>
         <translation>Выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2371"/>
+        <location filename="../main/MainWindow.cpp" line="2411"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2365"/>
-        <location filename="../main/MainWindow.cpp" line="2397"/>
-        <location filename="../main/MainWindow.cpp" line="2413"/>
+        <location filename="../main/MainWindow.cpp" line="2405"/>
+        <location filename="../main/MainWindow.cpp" line="2437"/>
+        <location filename="../main/MainWindow.cpp" line="2453"/>
         <source>Edit</source>
         <translation>Правка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2399"/>
+        <location filename="../main/MainWindow.cpp" line="2439"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2417"/>
-        <location filename="../main/MainWindow.cpp" line="2430"/>
+        <location filename="../main/MainWindow.cpp" line="2457"/>
+        <location filename="../main/MainWindow.cpp" line="2470"/>
         <source>Draw</source>
         <translation>Рисование</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2419"/>
+        <location filename="../main/MainWindow.cpp" line="2459"/>
         <source>4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2567"/>
+        <location filename="../main/MainWindow.cpp" line="2607"/>
         <source>No audio file loaded.</source>
         <translation>Ни один звуковой файл не загружен.</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2580"/>
+        <location filename="../main/MainWindow.cpp" line="2620"/>
         <source>%1Hz (resampling to %2Hz)</source>
         <translation>%1 Гц (ресэмплирование до %2 Гц)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2651"/>
-        <location filename="../main/MainWindow.cpp" line="2665"/>
-        <location filename="../main/MainWindow.cpp" line="2679"/>
-        <location filename="../main/MainWindow.cpp" line="2968"/>
-        <location filename="../main/MainWindow.cpp" line="2998"/>
-        <location filename="../main/MainWindow.cpp" line="3003"/>
-        <location filename="../main/MainWindow.cpp" line="3422"/>
-        <location filename="../main/MainWindow.cpp" line="3426"/>
+        <location filename="../main/MainWindow.cpp" line="2691"/>
+        <location filename="../main/MainWindow.cpp" line="2705"/>
+        <location filename="../main/MainWindow.cpp" line="2719"/>
+        <location filename="../main/MainWindow.cpp" line="3008"/>
+        <location filename="../main/MainWindow.cpp" line="3038"/>
+        <location filename="../main/MainWindow.cpp" line="3043"/>
+        <location filename="../main/MainWindow.cpp" line="3462"/>
+        <location filename="../main/MainWindow.cpp" line="3466"/>
         <source>Failed to open file</source>
         <translation>Не удалось открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2791"/>
+        <location filename="../main/MainWindow.cpp" line="2831"/>
         <source>Export the selected region only</source>
         <translation>Экспортировать только выделенную область</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2792"/>
+        <location filename="../main/MainWindow.cpp" line="2832"/>
         <source>Export the whole audio file</source>
         <translation>Экспортировать весь звуковой файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2796"/>
-        <location filename="../main/MainWindow.cpp" line="2814"/>
-        <location filename="../main/MainWindow.cpp" line="3112"/>
-        <location filename="../main/MainWindow.cpp" line="3195"/>
-        <location filename="../main/MainWindow.cpp" line="3269"/>
+        <location filename="../main/MainWindow.cpp" line="2836"/>
+        <location filename="../main/MainWindow.cpp" line="2854"/>
+        <location filename="../main/MainWindow.cpp" line="3152"/>
+        <location filename="../main/MainWindow.cpp" line="3235"/>
+        <location filename="../main/MainWindow.cpp" line="3309"/>
         <source>Select region to export</source>
         <translation>Выделите область для экспорта</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2797"/>
+        <location filename="../main/MainWindow.cpp" line="2837"/>
         <source>Which region from the original audio file do you want to export?</source>
         <translation>Какую область исходного звукового файла вы хотите экспортировать?</translation>
     </message>
@@ -3640,25 +3673,25 @@ Do you want to locate it?</source>
         <translation type="obsolete">Экспортировать выделенные области в один звуковой файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2810"/>
+        <location filename="../main/MainWindow.cpp" line="2850"/>
         <source>Export the selected regions into separate files</source>
         <translation>Экспортировать выделенные области в разные звуковые файлы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2815"/>
+        <location filename="../main/MainWindow.cpp" line="2855"/>
         <source>Multiple regions of the original audio file are selected.
 What do you want to export?</source>
         <translation>Выбрано несколько областей исходного звукового файла.
 Какую из них вы хотите экспортировать?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2846"/>
+        <location filename="../main/MainWindow.cpp" line="2886"/>
         <source>Fragment file %1 already exists, aborting</source>
         <translation>Файл фрагмента %1 уже существует, прерывание</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2904"/>
-        <location filename="../main/MainWindow.cpp" line="3141"/>
+        <location filename="../main/MainWindow.cpp" line="2944"/>
+        <location filename="../main/MainWindow.cpp" line="3181"/>
         <source>Failed to write file</source>
         <translation>Не удалось записать файл</translation>
     </message>
@@ -3671,85 +3704,85 @@ What do you want to export?</source>
         <translation type="obsolete">Sonic Visualiser: %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3805"/>
+        <location filename="../main/MainWindow.cpp" line="3845"/>
         <source>Session modified</source>
         <translation>Сессия изменена</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3867"/>
-        <location filename="../main/MainWindow.cpp" line="3890"/>
+        <location filename="../main/MainWindow.cpp" line="3907"/>
+        <location filename="../main/MainWindow.cpp" line="3930"/>
         <source>Failed to save file</source>
         <translation>Не удалось сохранить файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4372"/>
-        <location filename="../main/MainWindow.cpp" line="4382"/>
+        <location filename="../main/MainWindow.cpp" line="4412"/>
+        <location filename="../main/MainWindow.cpp" line="4422"/>
         <source>Rename Layer</source>
         <translation>Переименовать слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4373"/>
+        <location filename="../main/MainWindow.cpp" line="4413"/>
         <source>New name for this layer:</source>
         <translation>Новое имя этого слоя:</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4666"/>
+        <location filename="../main/MainWindow.cpp" line="4706"/>
         <source>Sample rate mismatch</source>
         <translation>Несоответствие частоты дискретизации</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5031"/>
-        <location filename="../main/MainWindow.cpp" line="5038"/>
+        <location filename="../main/MainWindow.cpp" line="5061"/>
+        <location filename="../main/MainWindow.cpp" line="5068"/>
         <source>Failed to regenerate layer</source>
         <translation>Не удалось повторно создать слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5240"/>
+        <location filename="../main/MainWindow.cpp" line="5248"/>
         <source>http://www.sonicvisualiser.org/</source>
         <translation>http://www.sonicvisualiser.org/</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5327"/>
+        <location filename="../main/MainWindow.cpp" line="5335"/>
         <source>Release %1 : Revision %2</source>
         <translation>Версия %1 : Редакция %2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5329"/>
+        <location filename="../main/MainWindow.cpp" line="5337"/>
         <source>Release %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5333"/>
+        <location filename="../main/MainWindow.cpp" line="5341"/>
         <source>Unreleased : Revision %1</source>
         <translation>Не выпущено : редакция %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5348"/>
+        <location filename="../main/MainWindow.cpp" line="5356"/>
         <source>&lt;h3&gt;About Sonic Visualiser&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;О программе Sonic Visualiser&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5339"/>
+        <location filename="../main/MainWindow.cpp" line="5347"/>
         <source>Debug</source>
         <translation>Отладка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5339"/>
+        <location filename="../main/MainWindow.cpp" line="5347"/>
         <source>Release</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5381"/>
+        <location filename="../main/MainWindow.cpp" line="5389"/>
         <source>&lt;br&gt;With Ogg file decoder (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</source>
         <translation>&lt;br&gt;С декодером Ogg (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5426"/>
+        <location filename="../main/MainWindow.cpp" line="5434"/>
         <source>&lt;br&gt;With LADSPA plugin support (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</source>
         <translation>&lt;br&gt;С поддержкой плагинов LADSPA (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5427"/>
+        <location filename="../main/MainWindow.cpp" line="5435"/>
         <source>&lt;br&gt;With DSSI plugin support (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</source>
         <translation>&lt;br&gt;С поддержкой плагинов DSSI (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</translation>
     </message>
@@ -3758,13 +3791,13 @@ What do you want to export?</source>
         <translation type="vanished">О программе Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4998"/>
-        <location filename="../main/MainWindow.cpp" line="5005"/>
+        <location filename="../main/MainWindow.cpp" line="5028"/>
+        <location filename="../main/MainWindow.cpp" line="5035"/>
         <source>Failed to generate layer</source>
         <translation>Не удалось создать слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="663"/>
+        <location filename="../main/MainWindow.cpp" line="684"/>
         <source>Adjust the application preferences</source>
         <translation>Изменить параметры работы приложения</translation>
     </message>
@@ -3773,75 +3806,75 @@ What do you want to export?</source>
         <translation type="obsolete">Н&amp;едавние файлы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="662"/>
+        <location filename="../main/MainWindow.cpp" line="683"/>
         <source>&amp;Preferences...</source>
         <translation>&amp;Параметры...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="792"/>
+        <location filename="../main/MainWindow.cpp" line="813"/>
         <source>;</source>
         <translation>;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1081"/>
+        <location filename="../main/MainWindow.cpp" line="1102"/>
         <source>Show &amp;Zoom Wheels</source>
         <translation>Показывать &amp;колёса масштабирования</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1082"/>
+        <location filename="../main/MainWindow.cpp" line="1103"/>
         <source>Z</source>
         <translation>Z</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1083"/>
+        <location filename="../main/MainWindow.cpp" line="1104"/>
         <source>Show thumbwheels for zooming horizontally and vertically</source>
         <translation>Показывать колёса для масштабирования по горизонтали и вертикали</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1711"/>
+        <location filename="../main/MainWindow.cpp" line="1744"/>
         <source>%1 by Category</source>
         <translation>%1 по категории</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1726"/>
-        <location filename="../main/MainWindow.cpp" line="1817"/>
+        <location filename="../main/MainWindow.cpp" line="1759"/>
+        <location filename="../main/MainWindow.cpp" line="1850"/>
         <source>Unclassified</source>
         <translation>Неклассифицированные</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1765"/>
+        <location filename="../main/MainWindow.cpp" line="1798"/>
         <source>%1 by Maker</source>
         <translation>%1 по имени создателя</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1779"/>
-        <location filename="../main/MainWindow.cpp" line="1820"/>
+        <location filename="../main/MainWindow.cpp" line="1812"/>
+        <location filename="../main/MainWindow.cpp" line="1853"/>
         <source>Unknown</source>
         <translation>Неизвестен</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1757"/>
+        <location filename="../main/MainWindow.cpp" line="1790"/>
         <source>%1 by Plugin Name</source>
         <translation>%1 по названию плагина</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1836"/>
-        <location filename="../main/MainWindow.cpp" line="1862"/>
+        <location filename="../main/MainWindow.cpp" line="1869"/>
+        <location filename="../main/MainWindow.cpp" line="1895"/>
         <source>%1...</source>
         <translation>%1...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1375"/>
+        <location filename="../main/MainWindow.cpp" line="1404"/>
         <source>Add Spectr&amp;um</source>
         <translation>Добавить &amp;график спектральной функции</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1377"/>
+        <location filename="../main/MainWindow.cpp" line="1406"/>
         <source>Add a new pane showing a frequency spectrum</source>
         <translation>Добавить новое окно с частотой спектра</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1379"/>
+        <location filename="../main/MainWindow.cpp" line="1408"/>
         <source>Add a new layer showing a frequency spectrum</source>
         <translation>Добавить новый слой с частотой спектра</translation>
     </message>
@@ -3850,52 +3883,51 @@ What do you want to export?</source>
         <translation type="vanished">Ускорение воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="416"/>
-        <location filename="../main/MainWindow.cpp" line="1671"/>
+        <location filename="../main/MainWindow.cpp" line="437"/>
+        <location filename="../main/MainWindow.cpp" line="1704"/>
         <source>&amp;Transform</source>
         <translation>Пр&amp;еобразования</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1460"/>
-        <location filename="../main/MainWindow.cpp" line="3893"/>
-        <location filename="../main/MainWindow.cpp" line="5227"/>
+        <location filename="../main/MainWindow.cpp" line="1489"/>
+        <location filename="../main/MainWindow.cpp" line="3933"/>
+        <location filename="../main/MainWindow.cpp" line="5235"/>
         <source>%1: %2</source>
         <translation>%1: %2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1694"/>
+        <location filename="../main/MainWindow.cpp" line="1727"/>
         <source>&amp;Recent Transforms</source>
         <translation>&amp;Недавние преобразования</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1780"/>
-        <location filename="../main/MainWindow.cpp" line="1821"/>
+        <location filename="../main/MainWindow.cpp" line="1813"/>
+        <location filename="../main/MainWindow.cpp" line="1854"/>
         <source> [\(&lt;].*$</source>
         <translation> [\(&lt;].*$</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4678"/>
-        <location filename="../main/MainWindow.cpp" line="4688"/>
+        <location filename="../main/MainWindow.cpp" line="4718"/>
         <source>Audio processing overload</source>
         <translation>Перегрузка в обработке звука</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1090"/>
+        <location filename="../main/MainWindow.cpp" line="1111"/>
         <source>Show Property Bo&amp;xes</source>
         <translation>Показывать панели с&amp;войств</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1091"/>
+        <location filename="../main/MainWindow.cpp" line="1112"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1092"/>
+        <location filename="../main/MainWindow.cpp" line="1113"/>
         <source>Show the layer property boxes at the side of the main window</source>
         <translation>Показывать панели свойств слоёв сбоку от основного окна</translation>
     </message>
     <message>
-        <location filename="../main/OSCHandler.cpp" line="425"/>
+        <location filename="../main/OSCHandler.cpp" line="522"/>
         <source>Add %1 Pane</source>
         <translation>Добавить окно %1</translation>
     </message>
@@ -3904,17 +3936,17 @@ What do you want to export?</source>
         <translation type="obsolete">Отказаться от текущего сеанса Sonic Visualiser и начать новый</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="539"/>
+        <location filename="../main/MainWindow.cpp" line="560"/>
         <source>Open Lo&amp;cation...</source>
         <translation>Открыть &amp;местоположение...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="540"/>
+        <location filename="../main/MainWindow.cpp" line="561"/>
         <source>Ctrl+Shift+O</source>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="541"/>
+        <location filename="../main/MainWindow.cpp" line="562"/>
         <source>Open or import a file from a remote URL</source>
         <translation>Открыть или импортировать файл с удалённого узла</translation>
     </message>
@@ -3923,77 +3955,77 @@ What do you want to export?</source>
         <translation type="obsolete">Завершить работу с Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="695"/>
+        <location filename="../main/MainWindow.cpp" line="716"/>
         <source>Cut the selection from the current layer to the clipboard</source>
         <translation>Вырезать выделение из активного слоя в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="705"/>
+        <location filename="../main/MainWindow.cpp" line="726"/>
         <source>Copy the selection from the current layer to the clipboard</source>
         <translation>Скопировать выделение из активного слоя в буфер обмена</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="715"/>
+        <location filename="../main/MainWindow.cpp" line="736"/>
         <source>Paste from the clipboard to the current layer</source>
         <translation>Вставить содержимое буфера обмена в активный слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="747"/>
+        <location filename="../main/MainWindow.cpp" line="768"/>
         <source>Select the whole duration of the current session</source>
         <translation>Выбрать данные по всей длительности активнонр сеанса</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="756"/>
+        <location filename="../main/MainWindow.cpp" line="777"/>
         <source>Select the time range corresponding to the current window width</source>
         <translation>Сделать временной диапазон равным активной ширине окна</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="764"/>
+        <location filename="../main/MainWindow.cpp" line="785"/>
         <source>Select from the start of the session to the current playback position</source>
         <translation>Выделить от начала сессии до текущей точки воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="772"/>
+        <location filename="../main/MainWindow.cpp" line="793"/>
         <source>Select from the current playback position to the end of the session</source>
         <translation>Выделить от текущей точки воспроизведения до конца сессии</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="780"/>
+        <location filename="../main/MainWindow.cpp" line="801"/>
         <source>Clear the selection</source>
         <translation>Очистить выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="793"/>
+        <location filename="../main/MainWindow.cpp" line="814"/>
         <source>Insert a new time instant at the current playback position, in a new layer if necessary</source>
         <translation>Вставить новую отметку времени в точку воспроизведения, при необходимости — в новый слой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="810"/>
+        <location filename="../main/MainWindow.cpp" line="831"/>
         <source>Insert Instants at Selection &amp;Boundaries</source>
         <translation>Вставить отметки времени по &amp;краям выделения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="818"/>
+        <location filename="../main/MainWindow.cpp" line="839"/>
         <source>Shift+Enter</source>
         <translation>Shift+Enter</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="954"/>
+        <location filename="../main/MainWindow.cpp" line="975"/>
         <source>&amp;Jump Left</source>
         <translation>Перескочить в&amp;лево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="962"/>
+        <location filename="../main/MainWindow.cpp" line="983"/>
         <source>J&amp;ump Right</source>
         <translation>П&amp;ерескочить вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1009"/>
+        <location filename="../main/MainWindow.cpp" line="1030"/>
         <source>Restore the zoom level to the default</source>
         <translation>Восстановить обычный масштаб отображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1049"/>
+        <location filename="../main/MainWindow.cpp" line="1070"/>
         <source>Show &amp;No Overlays</source>
         <translation>Не по&amp;казывать перекрытия совсем</translation>
     </message>
@@ -4002,7 +4034,7 @@ What do you want to export?</source>
         <translation type="obsolete">Спрятать индикацию центра, времён выделения, имена слоёв и масштаб</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1059"/>
+        <location filename="../main/MainWindow.cpp" line="1080"/>
         <source>Show &amp;Minimal Overlays</source>
         <translation>Показывать &amp;минимум перекрытий</translation>
     </message>
@@ -4019,7 +4051,7 @@ What do you want to export?</source>
         <translation type="obsolete">Показывать индикатор центра, времена выделений, имена слоёв и масштаб</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1069"/>
+        <location filename="../main/MainWindow.cpp" line="1090"/>
         <source>Show &amp;All Overlays</source>
         <translation>Показывать в&amp;се перекрытия</translation>
     </message>
@@ -4032,42 +4064,42 @@ What do you want to export?</source>
         <translation type="obsolete">Показывать весь текст и масштаб</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1099"/>
+        <location filename="../main/MainWindow.cpp" line="1120"/>
         <source>Show Status &amp;Bar</source>
         <translation>Показывать статусную &amp;строку</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1100"/>
+        <location filename="../main/MainWindow.cpp" line="1121"/>
         <source>Show context help information in the status bar at the bottom of the window</source>
         <translation>Показывать контекстную справку в статусной строке, находящейся внизу окна программы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1347"/>
+        <location filename="../main/MainWindow.cpp" line="1376"/>
         <source>Add a new pane showing a spectrogram</source>
         <translation>Добавить новое окно с отображением спектрограммы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1349"/>
+        <location filename="../main/MainWindow.cpp" line="1378"/>
         <source>Add a new layer showing a spectrogram</source>
         <translation>Добавить новый слой с отображением спектрограммы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1357"/>
+        <location filename="../main/MainWindow.cpp" line="1386"/>
         <source>Add a new pane showing a spectrogram set up for an overview of note pitches</source>
         <translation>Добавить новое окно, отображающее спектрограмму для обзора высоты тона нот</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1359"/>
+        <location filename="../main/MainWindow.cpp" line="1388"/>
         <source>Add a new layer showing a spectrogram set up for an overview of note pitches</source>
         <translation>Добавить новый слой, отображающий спектрограмму для обзора высоты тона нот</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1546"/>
+        <location filename="../main/MainWindow.cpp" line="1575"/>
         <source>Delete the currently active pane</source>
         <translation>Удалить активное окно</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1567"/>
+        <location filename="../main/MainWindow.cpp" line="1596"/>
         <source>Add S&amp;lice of Layer</source>
         <translation>Добавить &amp;фрагмент слоя</translation>
     </message>
@@ -4080,70 +4112,70 @@ What do you want to export?</source>
         <translation type="vanished">Показать изменения в этой версии %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2372"/>
+        <location filename="../main/MainWindow.cpp" line="2412"/>
         <source>Select ranges</source>
         <translation>Выбрать диапазон</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2400"/>
+        <location filename="../main/MainWindow.cpp" line="2440"/>
         <source>Edit items in layer</source>
         <translation>Изменить объекты слоя</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2420"/>
+        <location filename="../main/MainWindow.cpp" line="2460"/>
         <source>Draw new items in layer</source>
         <translation>Нарисовать новые объекты в слое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3440"/>
+        <location filename="../main/MainWindow.cpp" line="3480"/>
         <source>Open Location</source>
         <translation>Открыть местоположение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3441"/>
+        <location filename="../main/MainWindow.cpp" line="3481"/>
         <source>Please enter the URL of the location to open:</source>
         <translation>Введите URL открываемого местоположения:</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3454"/>
-        <location filename="../main/MainWindow.cpp" line="3458"/>
-        <location filename="../main/MainWindow.cpp" line="3487"/>
-        <location filename="../main/MainWindow.cpp" line="3491"/>
+        <location filename="../main/MainWindow.cpp" line="3494"/>
+        <location filename="../main/MainWindow.cpp" line="3498"/>
+        <location filename="../main/MainWindow.cpp" line="3527"/>
+        <location filename="../main/MainWindow.cpp" line="3531"/>
         <source>Failed to open location</source>
         <translation>Не удалось открыть местоположение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4304"/>
+        <location filename="../main/MainWindow.cpp" line="4344"/>
         <source>Multiplex all of the above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4482"/>
+        <location filename="../main/MainWindow.cpp" line="4522"/>
         <source>Playback speed: %1% (%2x slower)</source>
         <translation>Скорость воспроизведения: %1% (в %2 раза медленнее)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4488"/>
+        <location filename="../main/MainWindow.cpp" line="4528"/>
         <source>Playback speed: %1% (%2x faster)</source>
         <translation>Скорость воспроизведения: %1% (в %2 раза быстрее)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4616"/>
+        <location filename="../main/MainWindow.cpp" line="4656"/>
         <source>Visible: %1 to %2 (duration %3)</source>
         <translation>Видимая область: от %1 до %2 (длительность %3)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4718"/>
+        <location filename="../main/MainWindow.cpp" line="4747"/>
         <source>Problems loading plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4999"/>
+        <location filename="../main/MainWindow.cpp" line="5029"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate derived layer.&lt;p&gt;The layer transform %1failed:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5006"/>
+        <location filename="../main/MainWindow.cpp" line="5036"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate a derived layer.&lt;p&gt;The layer transform %1failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4152,32 +4184,32 @@ What do you want to export?</source>
         <translation type="vanished">Изменить общую громкость воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5222"/>
+        <location filename="../main/MainWindow.cpp" line="5230"/>
         <source>Adjust the master playback speed</source>
         <translation>Изменить общую скорость воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5383"/>
+        <location filename="../main/MainWindow.cpp" line="5391"/>
         <source>&lt;br&gt;With Ogg file decoder &amp;copy; CSIRO Australia</source>
         <translation>&lt;br&gt;С декодером Ogg &amp;copy; CSIRO Australia</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5393"/>
+        <location filename="../main/MainWindow.cpp" line="5401"/>
         <source>&lt;br&gt;With MAD mp3 decoder &amp;copy; Underbit Technologies Inc</source>
         <translation>&lt;br&gt;С декодером MAD mp3 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5400"/>
+        <location filename="../main/MainWindow.cpp" line="5408"/>
         <source>&lt;br&gt;With libsamplerate &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsamplerate &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5407"/>
+        <location filename="../main/MainWindow.cpp" line="5415"/>
         <source>&lt;br&gt;With libsndfile &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsndfile &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5414"/>
+        <location filename="../main/MainWindow.cpp" line="5422"/>
         <source>&lt;br&gt;With FFTW3 &amp;copy; Matteo Frigo and MIT</source>
         <translation>&lt;br&gt;С FFTW3 &amp;copy; Matteo Frigo и MIT</translation>
     </message>
@@ -4186,68 +4218,68 @@ What do you want to export?</source>
         <translation type="vanished">&lt;br&gt;С поддержкой расширений Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5433"/>
+        <location filename="../main/MainWindow.cpp" line="5441"/>
         <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5442"/>
+        <location filename="../main/MainWindow.cpp" line="5450"/>
         <source>&lt;br&gt;With liblo Lite OSC library &amp;copy; Steve Harris</source>
         <translation>&lt;br&gt;С liblo Lite OSC library &amp;copy; Steve Harris</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="619"/>
+        <location filename="../main/MainWindow.cpp" line="640"/>
         <source>Export Image File...</source>
         <translation>Экспортировать в файл изображения...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="620"/>
+        <location filename="../main/MainWindow.cpp" line="641"/>
         <source>Export a single pane to an image file</source>
         <translation>Экспортировать всё окно в файл изображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3177"/>
+        <location filename="../main/MainWindow.cpp" line="3217"/>
         <source>Export the whole pane (%1x%2 pixels)</source>
         <translation>Экспортировать всё окно (%1x%2 пикселов)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3179"/>
+        <location filename="../main/MainWindow.cpp" line="3219"/>
         <source>Export the visible area only (%1x%2 pixels)</source>
         <translation>Экспортировать только видимую часть (%1x%2 пикселов)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3182"/>
+        <location filename="../main/MainWindow.cpp" line="3222"/>
         <source>Export the selection extent (%1x%2 pixels)</source>
         <translation>Экспортировать выделение (%1x%2 пикселов)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3185"/>
-        <location filename="../main/MainWindow.cpp" line="3261"/>
+        <location filename="../main/MainWindow.cpp" line="3225"/>
+        <location filename="../main/MainWindow.cpp" line="3301"/>
         <source>Export the selection extent</source>
         <translation>Экспортировать выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3196"/>
+        <location filename="../main/MainWindow.cpp" line="3236"/>
         <source>Which region of the current pane do you want to export as an image?</source>
         <translation>Какую область текущего окна вы хотите экспортировать как изображение?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3204"/>
+        <location filename="../main/MainWindow.cpp" line="3244"/>
         <source>Note: the whole pane is too wide to be exported as a single image.</source>
         <translation>Примечание: всё окно слишком широко, чтобы сохранить его как изображение.</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3229"/>
+        <location filename="../main/MainWindow.cpp" line="3269"/>
         <source>Failed to save image file</source>
         <translation>Не удалось сохранить файл изображения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3230"/>
+        <location filename="../main/MainWindow.cpp" line="3270"/>
         <source>Failed to save image file %1</source>
         <translation>Не удалось сохранить файл изображения %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4613"/>
+        <location filename="../main/MainWindow.cpp" line="4653"/>
         <source>Selection: %1 to %2 (duration %3)</source>
         <translation>Выделение: %1 до %2 (длительность %3)</translation>
     </message>
@@ -4312,314 +4344,324 @@ What do you want to export?</source>
         <translation>Ярко-оранжевый</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="501"/>
+        <location filename="../main/MainWindow.cpp" line="358"/>
+        <source>Yes, I&apos;d be happy to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="359"/>
+        <source>No, thank you</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../main/MainWindow.cpp" line="522"/>
         <source>File and Session Management</source>
         <translation>Файлы и управление сессиями</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="525"/>
+        <location filename="../main/MainWindow.cpp" line="546"/>
         <source>&amp;Import More Audio...</source>
         <translation>&amp;Импортировать ещё аудиофайл…</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="527"/>
+        <location filename="../main/MainWindow.cpp" line="548"/>
         <source>Import an extra audio file into a new pane</source>
         <translation>Открыть дополнительный аудиофайл в новой панели</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="546"/>
+        <location filename="../main/MainWindow.cpp" line="567"/>
         <source>Open &amp;Recent</source>
         <translation>Открыть &amp;недавний</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="640"/>
+        <location filename="../main/MainWindow.cpp" line="661"/>
         <source>Apply Session Template</source>
         <translation>Применить шаблон сессии</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="649"/>
+        <location filename="../main/MainWindow.cpp" line="670"/>
         <source>Export Session as Template...</source>
         <translation>Экспортировать сессию как шаблон…</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="656"/>
+        <location filename="../main/MainWindow.cpp" line="677"/>
         <source>Manage Exported Templates</source>
         <translation>Открыть папку с шаблонами</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="686"/>
+        <location filename="../main/MainWindow.cpp" line="707"/>
         <source>Editing</source>
         <translation>Редактирование</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="722"/>
+        <location filename="../main/MainWindow.cpp" line="743"/>
         <source>Paste at Playback Position</source>
         <translation>Вставить под курсор воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="723"/>
+        <location filename="../main/MainWindow.cpp" line="744"/>
         <source>Ctrl+Shift+V</source>
         <translation>Ctrl+Shift+V</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="724"/>
+        <location filename="../main/MainWindow.cpp" line="745"/>
         <source>Paste from the clipboard to the current layer, placing the first item at the playback position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="733"/>
-        <location filename="../main/MainWindow.cpp" line="2540"/>
+        <location filename="../main/MainWindow.cpp" line="754"/>
+        <location filename="../main/MainWindow.cpp" line="2580"/>
         <source>Delete items in current selection from the current layer</source>
         <translation>Удалить объекты в активном выделении текущего слоя</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="743"/>
+        <location filename="../main/MainWindow.cpp" line="764"/>
         <source>Selection</source>
         <translation>Выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="789"/>
+        <location filename="../main/MainWindow.cpp" line="810"/>
         <source>Tapping Time Instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="812"/>
+        <location filename="../main/MainWindow.cpp" line="833"/>
         <source>Insert new time instants at the start and end of the current selected regions, in a new layer if necessary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="850"/>
+        <location filename="../main/MainWindow.cpp" line="871"/>
         <source>Number New Instants with</source>
         <translation>Способ нумерации новых отметок</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="871"/>
+        <location filename="../main/MainWindow.cpp" line="892"/>
         <source>Cycle size</source>
         <translation>Размер цикла</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="898"/>
+        <location filename="../main/MainWindow.cpp" line="919"/>
         <source>Set Numbering Counters...</source>
         <translation>Установить счетчики нумерации...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="899"/>
+        <location filename="../main/MainWindow.cpp" line="920"/>
         <source>Set the counters used for counter-based labelling</source>
         <translation>Устанолвить счетчики для меток на основе подсчета</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="903"/>
+        <location filename="../main/MainWindow.cpp" line="924"/>
         <source>Renumber Selected Instants</source>
         <translation>Перенумеровать выбранные отметки</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="904"/>
+        <location filename="../main/MainWindow.cpp" line="925"/>
         <source>Renumber the selected instants using the current labelling scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="934"/>
+        <location filename="../main/MainWindow.cpp" line="955"/>
         <source>Panning and Navigation</source>
         <translation>Прокрутка и перемещение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="988"/>
+        <location filename="../main/MainWindow.cpp" line="1009"/>
         <source>Zoom</source>
         <translation>Масштаб просмотра</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1016"/>
+        <location filename="../main/MainWindow.cpp" line="1037"/>
         <source>F</source>
         <translation>F</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1025"/>
+        <location filename="../main/MainWindow.cpp" line="1046"/>
         <source>Display Features</source>
         <translation>Отображение элементов</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1037"/>
+        <location filename="../main/MainWindow.cpp" line="1058"/>
         <source>#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1038"/>
+        <location filename="../main/MainWindow.cpp" line="1059"/>
         <source>Show or hide all time rulers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1117"/>
+        <location filename="../main/MainWindow.cpp" line="1138"/>
         <source>Show La&amp;yer Summary</source>
         <translation>&amp;Показать сводку по слою</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1118"/>
+        <location filename="../main/MainWindow.cpp" line="1139"/>
         <source>Y</source>
         <translation>Y</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1119"/>
+        <location filename="../main/MainWindow.cpp" line="1140"/>
         <source>Open a window displaying the hierarchy of panes and layers in this session</source>
         <translation>Открыть окно, в котором отобразится иерархия окон и слоев активной сессии</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1236"/>
+        <location filename="../main/MainWindow.cpp" line="1265"/>
         <source>Managing Panes and Layers</source>
         <translation>Управление окнами и слоями</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1242"/>
+        <location filename="../main/MainWindow.cpp" line="1271"/>
         <source>N</source>
         <translation>N</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1274"/>
+        <location filename="../main/MainWindow.cpp" line="1303"/>
         <source>T</source>
         <translation>T</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1160"/>
+        <location filename="../main/MainWindow.cpp" line="1181"/>
         <source>W</source>
         <translation>W</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1162"/>
+        <location filename="../main/MainWindow.cpp" line="1183"/>
         <source>Shift+W</source>
         <translation>Shift+W</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1345"/>
+        <location filename="../main/MainWindow.cpp" line="1374"/>
         <source>Add Spectro&amp;gram</source>
         <translation>Добавить &amp;спектограмму</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1168"/>
+        <location filename="../main/MainWindow.cpp" line="1189"/>
         <source>G</source>
         <translation>G</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1170"/>
+        <location filename="../main/MainWindow.cpp" line="1191"/>
         <source>Shift+G</source>
         <translation>Shift+G</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1176"/>
+        <location filename="../main/MainWindow.cpp" line="1197"/>
         <source>M</source>
         <translation>M</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1178"/>
+        <location filename="../main/MainWindow.cpp" line="1199"/>
         <source>Shift+M</source>
         <translation>Shift+M</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1365"/>
+        <location filename="../main/MainWindow.cpp" line="1394"/>
         <source>Add Pea&amp;k Frequency Spectrogram</source>
         <translation>Добавить спектограмму &amp;пиковой частоты</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1184"/>
+        <location filename="../main/MainWindow.cpp" line="1205"/>
         <source>K</source>
         <translation>K</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1186"/>
+        <location filename="../main/MainWindow.cpp" line="1207"/>
         <source>Shift+K</source>
         <translation>Shift+K</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1192"/>
+        <location filename="../main/MainWindow.cpp" line="1213"/>
         <source>U</source>
         <translation>U</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1194"/>
+        <location filename="../main/MainWindow.cpp" line="1215"/>
         <source>Shift+U</source>
         <translation>Shift+U</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1526"/>
+        <location filename="../main/MainWindow.cpp" line="1555"/>
         <source>Switch to Previous Pane</source>
         <translation>Перейти к предыдущему окну</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1527"/>
+        <location filename="../main/MainWindow.cpp" line="1556"/>
         <source>[</source>
         <translation>[</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1528"/>
+        <location filename="../main/MainWindow.cpp" line="1557"/>
         <source>Make the next pane up in the pane stack current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1534"/>
+        <location filename="../main/MainWindow.cpp" line="1563"/>
         <source>Switch to Next Pane</source>
         <translation>Перейти к следующему окну</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1535"/>
+        <location filename="../main/MainWindow.cpp" line="1564"/>
         <source>]</source>
         <translation>]</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1536"/>
+        <location filename="../main/MainWindow.cpp" line="1565"/>
         <source>Make the next pane down in the pane stack current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1545"/>
+        <location filename="../main/MainWindow.cpp" line="1574"/>
         <source>Ctrl+Shift+D</source>
         <translation>Ctrl+Shift+D</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1595"/>
+        <location filename="../main/MainWindow.cpp" line="1624"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1602"/>
-        <location filename="../main/MainWindow.cpp" line="5127"/>
+        <location filename="../main/MainWindow.cpp" line="1631"/>
+        <location filename="../main/MainWindow.cpp" line="5142"/>
         <source>Edit Layer Data</source>
         <translation>Изменить данные слоя</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1603"/>
+        <location filename="../main/MainWindow.cpp" line="1632"/>
         <source>E</source>
         <translation>E</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1604"/>
+        <location filename="../main/MainWindow.cpp" line="1633"/>
         <source>Edit the currently active layer as a data grid</source>
         <translation>Изменить активный слой как сетку данных</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1611"/>
+        <location filename="../main/MainWindow.cpp" line="1640"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1919"/>
+        <location filename="../main/MainWindow.cpp" line="1952"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1927"/>
+        <location filename="../main/MainWindow.cpp" line="1960"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1928"/>
+        <location filename="../main/MainWindow.cpp" line="1961"/>
         <source>Open the %1 reference manual</source>
         <translation>Открыть справочник по %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1933"/>
+        <location filename="../main/MainWindow.cpp" line="1966"/>
         <source>&amp;Key and Mouse Reference</source>
         <translation>&amp;Использование клавиатуры и мыши</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1934"/>
+        <location filename="../main/MainWindow.cpp" line="1967"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
@@ -4628,437 +4670,437 @@ What do you want to export?</source>
         <translation type="obsolete">Открыть окно, в котором перечисляются клавиатурные комбинации Sonic Visualiser</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1962"/>
+        <location filename="../main/MainWindow.cpp" line="1995"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1964"/>
+        <location filename="../main/MainWindow.cpp" line="1997"/>
         <source>Re-open</source>
         <translation>Повторно открыть</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1966"/>
+        <location filename="../main/MainWindow.cpp" line="1999"/>
         <source>Re-open the current or most recently opened file</source>
         <translation>Повторно открыть активный или недавно открывавшийся файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1977"/>
+        <location filename="../main/MainWindow.cpp" line="2009"/>
         <source>Standard Waveform</source>
         <translation>Обычная волновая форма сигнала</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2013"/>
+        <location filename="../main/MainWindow.cpp" line="2045"/>
         <source>Choose Default Template...</source>
         <translation>Выбрать шаблон по умолчанию…</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2038"/>
+        <location filename="../main/MainWindow.cpp" line="2068"/>
         <source>Ctrl+T</source>
         <translation>Ctrl+T</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2040"/>
+        <location filename="../main/MainWindow.cpp" line="2070"/>
         <source>Repeat Transform</source>
         <translation>Повторить преобразование</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2042"/>
+        <location filename="../main/MainWindow.cpp" line="2072"/>
         <source>Re-select the most recently run transform</source>
         <translation>Повторно запустить самое последнее выполнявшееся преобразование</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2132"/>
+        <location filename="../main/MainWindow.cpp" line="2172"/>
         <source>Playback and Transport Controls</source>
         <translation>Управление воспроизведением и перемоткой</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2136"/>
+        <location filename="../main/MainWindow.cpp" line="2176"/>
         <source>Play&amp;back</source>
         <translation>Воспро&amp;изведение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2139"/>
+        <location filename="../main/MainWindow.cpp" line="2179"/>
         <source>Playback</source>
         <translation>Воспроизведение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2141"/>
+        <location filename="../main/MainWindow.cpp" line="2181"/>
         <source>Playback Toolbar</source>
         <translation>Панель воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2151"/>
+        <location filename="../main/MainWindow.cpp" line="2191"/>
         <source>PgUp</source>
         <translation>PgUp</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2152"/>
+        <location filename="../main/MainWindow.cpp" line="2192"/>
         <source>Rewind to the previous time instant or time ruler notch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2183"/>
+        <location filename="../main/MainWindow.cpp" line="2223"/>
         <source>PgDown</source>
         <translation>PgDown</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2184"/>
+        <location filename="../main/MainWindow.cpp" line="2224"/>
         <source>Fast-forward to the next time instant or time ruler notch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2202"/>
+        <location filename="../main/MainWindow.cpp" line="2242"/>
         <source>Record</source>
         <translation>Записать</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2204"/>
+        <location filename="../main/MainWindow.cpp" line="2244"/>
         <source>Ctrl+Space</source>
         <translation>Ctrl+Space</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2205"/>
+        <location filename="../main/MainWindow.cpp" line="2245"/>
         <source>Record a new audio file</source>
         <translation>Записать новый звуковой файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2219"/>
+        <location filename="../main/MainWindow.cpp" line="2259"/>
         <source>Constrain playback to the selected regions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2237"/>
+        <location filename="../main/MainWindow.cpp" line="2277"/>
         <source>Solo Current Pane</source>
         <translation>Соло активного окна</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2241"/>
+        <location filename="../main/MainWindow.cpp" line="2281"/>
         <source>o</source>
         <translation>o</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2242"/>
+        <location filename="../main/MainWindow.cpp" line="2282"/>
         <source>Solo the current pane during playback</source>
         <translation>При воспроизведении звучит лишь активное окно</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2251"/>
+        <location filename="../main/MainWindow.cpp" line="2291"/>
         <source>Align File Timelines</source>
         <translation>Выровнять линейки времени</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2254"/>
+        <location filename="../main/MainWindow.cpp" line="2294"/>
         <source>Treat multiple audio files as versions of the same work, and align their timelines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2308"/>
+        <location filename="../main/MainWindow.cpp" line="2348"/>
         <source>Speed Up</source>
         <translation>Ускорить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2309"/>
+        <location filename="../main/MainWindow.cpp" line="2349"/>
         <source>Ctrl+PgUp</source>
         <translation>Ctrl+PgUp</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2310"/>
+        <location filename="../main/MainWindow.cpp" line="2350"/>
         <source>Time-stretch playback to speed it up without changing pitch</source>
         <translation>Сжать время воспроизведения, не меняя высоту тона</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2314"/>
+        <location filename="../main/MainWindow.cpp" line="2354"/>
         <source>Slow Down</source>
         <translation>Замедлить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2315"/>
+        <location filename="../main/MainWindow.cpp" line="2355"/>
         <source>Ctrl+PgDown</source>
         <translation>Ctrl+PgDown</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2316"/>
+        <location filename="../main/MainWindow.cpp" line="2356"/>
         <source>Time-stretch playback to slow it down without changing pitch</source>
         <translation>Расширить время воспроизведения, не меняя высоту тона</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2320"/>
+        <location filename="../main/MainWindow.cpp" line="2360"/>
         <source>Restore Normal Speed</source>
         <translation>Восстановить обычную скорость</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2321"/>
+        <location filename="../main/MainWindow.cpp" line="2361"/>
         <source>Ctrl+Home</source>
         <translation>Ctrl+Home</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2322"/>
+        <location filename="../main/MainWindow.cpp" line="2362"/>
         <source>Restore non-time-stretched playback</source>
         <translation>Восстановить естественную скорость воспроизведения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2341"/>
-        <location filename="../main/MainWindow.cpp" line="2368"/>
-        <location filename="../main/MainWindow.cpp" line="2396"/>
-        <location filename="../main/MainWindow.cpp" line="2416"/>
-        <location filename="../main/MainWindow.cpp" line="2433"/>
-        <location filename="../main/MainWindow.cpp" line="2450"/>
+        <location filename="../main/MainWindow.cpp" line="2381"/>
+        <location filename="../main/MainWindow.cpp" line="2408"/>
+        <location filename="../main/MainWindow.cpp" line="2436"/>
+        <location filename="../main/MainWindow.cpp" line="2456"/>
+        <location filename="../main/MainWindow.cpp" line="2473"/>
+        <location filename="../main/MainWindow.cpp" line="2490"/>
         <source>Tool Selection</source>
         <translation>Выбор инструмента</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2354"/>
+        <location filename="../main/MainWindow.cpp" line="2394"/>
         <source>Navigate Tool Mouse Actions</source>
         <translation type="unfinished">Использование мыши с инструментом навигации</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2357"/>
+        <location filename="../main/MainWindow.cpp" line="2397"/>
         <source>Click left button and drag to move around</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2359"/>
-        <location filename="../main/MainWindow.cpp" line="2470"/>
+        <location filename="../main/MainWindow.cpp" line="2399"/>
+        <location filename="../main/MainWindow.cpp" line="2510"/>
         <source>Zoom to Area</source>
         <translation type="unfinished">Масштабировать в выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2360"/>
-        <location filename="../main/MainWindow.cpp" line="2471"/>
+        <location filename="../main/MainWindow.cpp" line="2400"/>
+        <location filename="../main/MainWindow.cpp" line="2511"/>
         <source>Shift-click left button and drag to zoom to a rectangular area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2362"/>
+        <location filename="../main/MainWindow.cpp" line="2402"/>
         <source>Relocate</source>
         <translation>Переместить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2362"/>
-        <location filename="../main/MainWindow.cpp" line="2365"/>
-        <location filename="../main/MainWindow.cpp" line="2413"/>
-        <location filename="../main/MainWindow.cpp" line="2467"/>
+        <location filename="../main/MainWindow.cpp" line="2402"/>
+        <location filename="../main/MainWindow.cpp" line="2405"/>
+        <location filename="../main/MainWindow.cpp" line="2453"/>
+        <location filename="../main/MainWindow.cpp" line="2507"/>
         <source>Double-Click Left</source>
         <translation type="unfinished">Двойной щелчок левой клавишей</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2363"/>
+        <location filename="../main/MainWindow.cpp" line="2403"/>
         <source>Double-click left button to jump to clicked location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2366"/>
-        <location filename="../main/MainWindow.cpp" line="2414"/>
+        <location filename="../main/MainWindow.cpp" line="2406"/>
+        <location filename="../main/MainWindow.cpp" line="2454"/>
         <source>Double-click left button on an item to edit it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2379"/>
+        <location filename="../main/MainWindow.cpp" line="2419"/>
         <source>Select Tool Mouse Actions</source>
         <translation type="unfinished">Использование мыши с инструментом выделения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2382"/>
+        <location filename="../main/MainWindow.cpp" line="2422"/>
         <source>Click left button and drag to select region; drag region edge to resize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2385"/>
-        <location filename="../main/MainWindow.cpp" line="2389"/>
+        <location filename="../main/MainWindow.cpp" line="2425"/>
+        <location filename="../main/MainWindow.cpp" line="2429"/>
         <source>Multi Select</source>
         <translation type="unfinished">Множественное выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2386"/>
+        <location filename="../main/MainWindow.cpp" line="2426"/>
         <source>Cmd-click left button and drag to select an additional region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2390"/>
+        <location filename="../main/MainWindow.cpp" line="2430"/>
         <source>Ctrl-click left button and drag to select an additional region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2393"/>
+        <location filename="../main/MainWindow.cpp" line="2433"/>
         <source>Fine Select</source>
         <translation type="unfinished">Выделить точно</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2394"/>
+        <location filename="../main/MainWindow.cpp" line="2434"/>
         <source>Shift-click left button and drag to select without snapping to items or grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2408"/>
+        <location filename="../main/MainWindow.cpp" line="2448"/>
         <source>Edit Tool Mouse Actions</source>
         <translation type="unfinished">Использование мыши с инструментом редактирования</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2410"/>
+        <location filename="../main/MainWindow.cpp" line="2450"/>
         <source>Move</source>
         <translation type="unfinished">Переместить</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2411"/>
+        <location filename="../main/MainWindow.cpp" line="2451"/>
         <source>Click left button on an item or selected region and drag to move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2428"/>
+        <location filename="../main/MainWindow.cpp" line="2468"/>
         <source>Draw Tool Mouse Actions</source>
         <translation type="unfinished">Использование мыши с инструментом рисования</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2431"/>
+        <location filename="../main/MainWindow.cpp" line="2471"/>
         <source>Click left button and drag to create new item</source>
         <translation type="unfinished">Щелкните левой клавишей мыши и перетащите курсор для создания нового объекта</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2434"/>
-        <location filename="../main/MainWindow.cpp" line="2447"/>
+        <location filename="../main/MainWindow.cpp" line="2474"/>
+        <location filename="../main/MainWindow.cpp" line="2487"/>
         <source>Erase</source>
         <translation>Стерка</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2436"/>
+        <location filename="../main/MainWindow.cpp" line="2476"/>
         <source>5</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2437"/>
+        <location filename="../main/MainWindow.cpp" line="2477"/>
         <source>Erase items from layer</source>
         <translation>Стирать объекты слоя</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2445"/>
+        <location filename="../main/MainWindow.cpp" line="2485"/>
         <source>Erase Tool Mouse Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2448"/>
+        <location filename="../main/MainWindow.cpp" line="2488"/>
         <source>Click left button on an item to remove it from the layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2451"/>
+        <location filename="../main/MainWindow.cpp" line="2491"/>
         <source>Measure</source>
         <translation>Измеритель</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2453"/>
+        <location filename="../main/MainWindow.cpp" line="2493"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2454"/>
+        <location filename="../main/MainWindow.cpp" line="2494"/>
         <source>Make measurements in layer</source>
         <translation>Выполнять измерения в слое</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2462"/>
+        <location filename="../main/MainWindow.cpp" line="2502"/>
         <source>Measure Tool Mouse Actions</source>
         <translation type="unfinished">Использование мыши с инструментом измерения</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2464"/>
+        <location filename="../main/MainWindow.cpp" line="2504"/>
         <source>Measure Area</source>
         <translation>Измерить область</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2465"/>
+        <location filename="../main/MainWindow.cpp" line="2505"/>
         <source>Click left button and drag to measure a rectangular area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2467"/>
+        <location filename="../main/MainWindow.cpp" line="2507"/>
         <source>Measure Item</source>
         <translation>Измерить объект</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2468"/>
+        <location filename="../main/MainWindow.cpp" line="2508"/>
         <source>Click left button and drag to measure extents of an item or shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2535"/>
+        <location filename="../main/MainWindow.cpp" line="2575"/>
         <source>&amp;Delete Current Measurement</source>
         <translation>&amp;Удалить активный замер</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2536"/>
+        <location filename="../main/MainWindow.cpp" line="2576"/>
         <source>Delete the measurement currently under the mouse pointer</source>
         <translation>Удалить замер, находящийся под курсором мыши</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2545"/>
+        <location filename="../main/MainWindow.cpp" line="2585"/>
         <source>Fast Forward to Next Instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2547"/>
+        <location filename="../main/MainWindow.cpp" line="2587"/>
         <source>Rewind to Previous Instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2550"/>
+        <location filename="../main/MainWindow.cpp" line="2590"/>
         <source>Fast Forward to Next Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2551"/>
+        <location filename="../main/MainWindow.cpp" line="2591"/>
         <source>Fast forward to the next point in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2552"/>
+        <location filename="../main/MainWindow.cpp" line="2592"/>
         <source>Rewind to Previous Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2553"/>
+        <location filename="../main/MainWindow.cpp" line="2593"/>
         <source>Rewind to the previous point in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2556"/>
+        <location filename="../main/MainWindow.cpp" line="2596"/>
         <source>Fast forward</source>
         <translation>Быстрый вперед</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2652"/>
-        <location filename="../main/MainWindow.cpp" line="2666"/>
-        <location filename="../main/MainWindow.cpp" line="2680"/>
+        <location filename="../main/MainWindow.cpp" line="2692"/>
+        <location filename="../main/MainWindow.cpp" line="2706"/>
+        <location filename="../main/MainWindow.cpp" line="2720"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Audio file &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть файл&lt;/b&gt;&lt;p&gt;Не удалось открыть звуковой файл &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2726"/>
+        <location filename="../main/MainWindow.cpp" line="2766"/>
         <source>&lt;unnamed&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2809"/>
+        <location filename="../main/MainWindow.cpp" line="2849"/>
         <source>Export the selected regions into a single file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2811"/>
+        <location filename="../main/MainWindow.cpp" line="2851"/>
         <source>Export the whole file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2935"/>
+        <location filename="../main/MainWindow.cpp" line="2975"/>
         <source>Converting audio data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2969"/>
+        <location filename="../main/MainWindow.cpp" line="3009"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Audio data file %1 could not be opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2999"/>
+        <location filename="../main/MainWindow.cpp" line="3039"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Layer file %1 could not be opened.</source>
         <translation>&lt;b&gt;Не удалось открыть файл&lt;/b&gt;&lt;p&gt;Не удалось открыть файл слоя &quot;%1&quot;</translation>
     </message>
@@ -5067,162 +5109,162 @@ What do you want to export?</source>
         <translation type="vanished">Невозможно экспортировать ненотные слои в MIDI</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3259"/>
+        <location filename="../main/MainWindow.cpp" line="3299"/>
         <source>Export the whole pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3260"/>
+        <location filename="../main/MainWindow.cpp" line="3300"/>
         <source>Export the visible area only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3270"/>
+        <location filename="../main/MainWindow.cpp" line="3310"/>
         <source>Which region of the current pane do you want to export as a scalable SVG image?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3298"/>
+        <location filename="../main/MainWindow.cpp" line="3338"/>
         <source>Failed to save SVG file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3299"/>
+        <location filename="../main/MainWindow.cpp" line="3339"/>
         <source>Failed to save SVG file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4257"/>
+        <location filename="../main/MainWindow.cpp" line="4297"/>
         <source>Failed to query transform attributes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4258"/>
+        <location filename="../main/MainWindow.cpp" line="4298"/>
         <source>&lt;b&gt;Failed to query transform attributes&lt;/b&gt;&lt;p&gt;Plugin or server error: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4330"/>
+        <location filename="../main/MainWindow.cpp" line="4370"/>
         <source>Multiplexed audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4352"/>
+        <location filename="../main/MainWindow.cpp" line="4392"/>
         <source>Transform failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4353"/>
+        <location filename="../main/MainWindow.cpp" line="4393"/>
         <source>&lt;b&gt;Failed to run transform&lt;/b&gt;&lt;p&gt;Plugin or server error: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4697"/>
+        <location filename="../main/MainWindow.cpp" line="4726"/>
         <source>Beta release</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4698"/>
+        <location filename="../main/MainWindow.cpp" line="4727"/>
         <source>&lt;b&gt;This is a beta release of %1&lt;/b&gt;&lt;p&gt;Please see the &quot;What&apos;s New&quot; option in the Help menu for a list of changes since the last proper release.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4719"/>
+        <location filename="../main/MainWindow.cpp" line="4748"/>
         <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4950"/>
+        <location filename="../main/MainWindow.cpp" line="4980"/>
         <source>Subdivide instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4951"/>
+        <location filename="../main/MainWindow.cpp" line="4981"/>
         <source>Number of subdivisions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4972"/>
+        <location filename="../main/MainWindow.cpp" line="5002"/>
         <source>Winnow instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4973"/>
+        <location filename="../main/MainWindow.cpp" line="5003"/>
         <source>Remove all instants apart from multiples of:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5062"/>
+        <location filename="../main/MainWindow.cpp" line="5092"/>
         <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment:&lt;p&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5219"/>
+        <location filename="../main/MainWindow.cpp" line="5227"/>
         <source>Adjust the master playback level and pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5220"/>
+        <location filename="../main/MainWindow.cpp" line="5228"/>
         <source>click then drag to adjust, ctrl+click to reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5223"/>
+        <location filename="../main/MainWindow.cpp" line="5231"/>
         <source>drag up/down to adjust, ctrl+click to reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5358"/>
+        <location filename="../main/MainWindow.cpp" line="5366"/>
         <source>With Qt v%1 &amp;copy; The Qt Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5387"/>
+        <location filename="../main/MainWindow.cpp" line="5395"/>
         <source>&lt;br&gt;With Opus decoder &amp;copy; Xiph.Org Foundation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5419"/>
+        <location filename="../main/MainWindow.cpp" line="5427"/>
         <source>&lt;br&gt;With Rubber Band Library v%1 &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5421"/>
+        <location filename="../main/MainWindow.cpp" line="5429"/>
         <source>&lt;br&gt;With Rubber Band Library &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5424"/>
+        <location filename="../main/MainWindow.cpp" line="5432"/>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam and QMUL</source>
         <translation>&lt;br&gt;С поддержкой плагинов Vamp (API v%1, host SDK v%2) &amp;copy; Chris Cannam и QMUL</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5425"/>
+        <location filename="../main/MainWindow.cpp" line="5433"/>
         <source>&lt;br&gt;With Piper Vamp protocol bridge &amp;copy; QMUL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5434"/>
+        <location filename="../main/MainWindow.cpp" line="5442"/>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5435"/>
+        <location filename="../main/MainWindow.cpp" line="5443"/>
         <source>&lt;br&gt;With Cap&apos;n Proto serialisation &amp;copy; Sandstorm Development Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5449"/>
+        <location filename="../main/MainWindow.cpp" line="5457"/>
         <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5451"/>
+        <location filename="../main/MainWindow.cpp" line="5459"/>
         <source>Czech UI translation contributed by Pavel Fric.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5538"/>
+        <location filename="../main/MainWindow.cpp" line="5546"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %2 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Доступна новая версия программы&lt;/h3&gt;&lt;p&gt;Вы используетее Sonic Visualiser версии %1, но уже доступна версия %2.&lt;/p&gt;&lt;p&gt;Загляните на &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;сайт Sonic Visualiser&lt;/a&gt;, чтобы узнать подробности.&lt;/p&gt; {3&gt;?} {3&gt;?} {1 ?} {2 ?}</translation>
     </message>
@@ -5231,64 +5273,64 @@ What do you want to export?</source>
         <translation type="vanished">&lt;b&gt;Не удалось открыть файл&lt;/b&gt;&lt;p&gt;Не удалось открыть файл сеанса &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3423"/>
+        <location filename="../main/MainWindow.cpp" line="3463"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;File &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть файл&lt;/b&gt;&lt;p&gt;Не удалось открыть файл &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3455"/>
+        <location filename="../main/MainWindow.cpp" line="3495"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;URL &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть ссылку&lt;/b&gt;&lt;p&gt;Не удалось открыть URL &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3488"/>
+        <location filename="../main/MainWindow.cpp" line="3528"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;File or URL &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть ссылку&lt;/b&gt;&lt;p&gt;Не удалось открыть файл или URL &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3531"/>
+        <location filename="../main/MainWindow.cpp" line="3571"/>
         <source>Enter template name</source>
         <translation>Введите название шаблона</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3536"/>
+        <location filename="../main/MainWindow.cpp" line="3576"/>
         <source>Please enter a name for the saved template:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3540"/>
+        <location filename="../main/MainWindow.cpp" line="3580"/>
         <source>Set as default template for future audio files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3560"/>
+        <location filename="../main/MainWindow.cpp" line="3600"/>
         <source>Template file exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3561"/>
+        <location filename="../main/MainWindow.cpp" line="3601"/>
         <source>&lt;b&gt;Template file exists&lt;/b&gt;&lt;p&gt;The template &quot;%1&quot; already exists.&lt;br&gt;Overwrite it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3668"/>
-        <location filename="../main/MainWindow.cpp" line="3673"/>
+        <location filename="../main/MainWindow.cpp" line="3708"/>
+        <location filename="../main/MainWindow.cpp" line="3713"/>
         <source>Failed to open dropped URL</source>
         <translation>Не удалось открыть URL, перемещенный мышью в окно программы</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3669"/>
+        <location filename="../main/MainWindow.cpp" line="3709"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;Dropped URL &quot;%1&quot; could not be opened</source>
         <translation>&lt;b&gt;Не удалось открыть ссылку&lt;/b&gt;&lt;p&gt;Не удалось открыть файл URL &quot;%1&quot;, перетащенный в окно программы мышью</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3806"/>
+        <location filename="../main/MainWindow.cpp" line="3846"/>
         <source>&lt;b&gt;Session modified&lt;/b&gt;&lt;p&gt;The current session has been modified.&lt;br&gt;Do you want to save it?</source>
         <translation>&lt;b&gt;Сеанс изменился&lt;/b&gt;&lt;p&gt;Активный сеанс изменился&lt;br&gt;Вы хотите сохранить его?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3868"/>
-        <location filename="../main/MainWindow.cpp" line="3891"/>
+        <location filename="../main/MainWindow.cpp" line="3908"/>
+        <location filename="../main/MainWindow.cpp" line="3931"/>
         <source>&lt;b&gt;Save failed&lt;/b&gt;&lt;p&gt;Session file &quot;%1&quot; could not be saved.</source>
         <translation>&lt;b&gt;Не удалось сохранить файл&lt;/b&gt;&lt;p&gt;Не удалось сохранить файл сессии &quot;%1&quot;</translation>
     </message>
@@ -5297,7 +5339,7 @@ What do you want to export?</source>
         <translation type="obsolete">%1: %1 {1:?}</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4478"/>
+        <location filename="../main/MainWindow.cpp" line="4518"/>
         <source>Playback speed: Normal</source>
         <translation>Скорость воспроизведения: обычная</translation>
     </message>
@@ -5306,88 +5348,83 @@ What do you want to export?</source>
         <translation type="vanished">Скорость воспроизведения: %1%2%</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4667"/>
+        <location filename="../main/MainWindow.cpp" line="4707"/>
         <source>&lt;b&gt;Wrong sample rate&lt;/b&gt;&lt;p&gt;The sample rate of this audio file (%1 Hz) does not match
 the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed and pitch.&lt;p&gt;Change the &lt;i&gt;Resample mismatching files on import&lt;/i&gt; option under &lt;i&gt;File&lt;/i&gt; -&gt; &lt;i&gt;Preferences&lt;/i&gt; if you want to alter this behaviour.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4679"/>
+        <location filename="../main/MainWindow.cpp" line="4719"/>
         <source>&lt;b&gt;Overloaded&lt;/b&gt;&lt;p&gt;Audio effects plugin auditioning has been disabled due to a processing overload.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4930"/>
+        <location filename="../main/MainWindow.cpp" line="4960"/>
         <source>Reset Counters</source>
         <translation>Обнуление счетчиков</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5018"/>
-        <location filename="../main/MainWindow.cpp" line="5053"/>
+        <location filename="../main/MainWindow.cpp" line="5048"/>
+        <location filename="../main/MainWindow.cpp" line="5083"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5032"/>
+        <location filename="../main/MainWindow.cpp" line="5062"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed:&lt;p&gt;%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5039"/>
+        <location filename="../main/MainWindow.cpp" line="5069"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5053"/>
+        <location filename="../main/MainWindow.cpp" line="5083"/>
         <source>&lt;b&gt;Warning when regenerating layer&lt;/b&gt;&lt;p&gt;When regenerating the derived layer &quot;%1&quot; using new data model as input:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5061"/>
+        <location filename="../main/MainWindow.cpp" line="5091"/>
         <source>Failed to calculate alignment</source>
         <translation>Не удалось рассчитать выравнивание</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5366"/>
+        <location filename="../main/MainWindow.cpp" line="5374"/>
         <source>&lt;br&gt;With JACK audio output library &amp;copy; Paul Davis and Jack O&apos;Quin</source>
         <translation>&lt;br&gt;С библиотекой JACK &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5370"/>
+        <location filename="../main/MainWindow.cpp" line="5378"/>
         <source>&lt;br&gt;With PortAudio audio output library &amp;copy; Ross Bencina and Phil Burk</source>
         <translation>&lt;br&gt;С библиотекой PortAudio &amp;copy; Ross Bencina и Phil Burk</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5376"/>
+        <location filename="../main/MainWindow.cpp" line="5384"/>
         <source>&lt;br&gt;With PulseAudio audio output library &amp;copy; Lennart Poettering and Pierre Ossman</source>
         <translation>&lt;br&gt;С библиотекой PulseAudio &amp;copy; Lennart Poettering и Pierre Ossman</translation>
-    </message>
-    <message>
-        <location filename="../main/MainWindow.cpp" line="4689"/>
-        <source>&lt;b&gt;Overloaded&lt;/b&gt;&lt;p&gt;Audio playback speed processing has been reduced to a single channel, due to a processing overload.</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;br&gt;With Rubber Band &amp;copy; Chris Cannam</source>
         <translation type="vanished">&lt;br&gt;С Rubber Band &amp;copy; Chris Cannam</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1901"/>
+        <location filename="../main/MainWindow.cpp" line="1934"/>
         <source>Find a Transform...</source>
         <translation>Найти эффект трансформации...</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1902"/>
+        <location filename="../main/MainWindow.cpp" line="1935"/>
         <source>Search for a transform from the installed plugins, by name or description</source>
         <translation>Найти эффект трансформации среди установленных плагинов по названию или описанию</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1903"/>
+        <location filename="../main/MainWindow.cpp" line="1936"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5349"/>
+        <location filename="../main/MainWindow.cpp" line="5357"/>
         <source>&lt;p&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;br&gt;&lt;a href=&quot;http://www.sonicvisualiser.org/&quot;&gt;http://www.sonicvisualiser.org/&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p&gt;Sonic Visualiser — программа для просмотра и исследования звукозаписей с целью семантического анализа и аннотации музыки.&lt;br&gt;&lt;a href=&quot;http://www.sonicvisualiser.org/&quot;&gt;http://www.sonicvisualiser.org/&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
@@ -5400,32 +5437,32 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="vanished">С использованием Qt v%1 &amp;copy; Nokia Corporation</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5364"/>
+        <location filename="../main/MainWindow.cpp" line="5372"/>
         <source>&lt;br&gt;With JACK audio output library v%1 &amp;copy; Paul Davis and Jack O&apos;Quin</source>
         <translation>&lt;br&gt;С библиотекой JACK v%1 &amp;copy; Paul Davis и Jack O&apos;Quin</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5374"/>
+        <location filename="../main/MainWindow.cpp" line="5382"/>
         <source>&lt;br&gt;With PulseAudio audio output library v%1 &amp;copy; Lennart Poettering and Pierre Ossman</source>
         <translation>&lt;br&gt;С библиотекой PulseAudio v%1 &amp;copy; Lennart Poettering и Pierre Ossman</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5391"/>
+        <location filename="../main/MainWindow.cpp" line="5399"/>
         <source>&lt;br&gt;With MAD mp3 decoder v%1 &amp;copy; Underbit Technologies Inc</source>
         <translation>&lt;br&gt;С декодером mp3 MAD v%1 &amp;copy; Underbit Technologies Inc</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5398"/>
+        <location filename="../main/MainWindow.cpp" line="5406"/>
         <source>&lt;br&gt;With libsamplerate v%1 &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsamplerate v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5405"/>
+        <location filename="../main/MainWindow.cpp" line="5413"/>
         <source>&lt;br&gt;With libsndfile v%1 &amp;copy; Erik de Castro Lopo</source>
         <translation>&lt;br&gt;С libsndfile v%1 &amp;copy; Erik de Castro Lopo</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5412"/>
+        <location filename="../main/MainWindow.cpp" line="5420"/>
         <source>&lt;br&gt;With FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</source>
         <translation>&lt;br&gt;С FFTW3 v%1 &amp;copy; Matteo Frigo и MIT</translation>
     </message>
@@ -5450,22 +5487,22 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="obsolete">&lt;br&gt;С движком запросов RDF  Rasqal &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5429"/>
+        <location filename="../main/MainWindow.cpp" line="5437"/>
         <source>&lt;br&gt;With Redland RDF datastore v%1 &amp;copy; Dave Beckett and the University of Bristol</source>
         <translation>&lt;br&gt;C хранилищем данных RDF Redland v%1 &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5431"/>
+        <location filename="../main/MainWindow.cpp" line="5439"/>
         <source>&lt;br&gt;With Redland RDF datastore &amp;copy; Dave Beckett and the University of Bristol</source>
         <translation>&lt;br&gt;C хранилищем данных RDF Redland &amp;copy; Dave Beckett и Бристольский университет</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5440"/>
+        <location filename="../main/MainWindow.cpp" line="5448"/>
         <source>&lt;br&gt;With liblo Lite OSC library v%1 &amp;copy; Steve Harris</source>
         <translation>&lt;br&gt;С библиотекой OSC liblo v%1 &amp;copy; Steve Harris</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5353"/>
+        <location filename="../main/MainWindow.cpp" line="5361"/>
         <source>&lt;/small&gt;&lt;p&gt;&lt;small&gt;The OSC URL for this instance is: &quot;%1&quot;</source>
         <translation>&lt;/small&gt;&lt;p&gt;&lt;small&gt;Адрес OSC для этой сессии: &quot;%1&quot;</translation>
     </message>
@@ -5478,257 +5515,257 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="vanished">Используя</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="970"/>
+        <location filename="../main/MainWindow.cpp" line="991"/>
         <source>Peek Left</source>
         <translation>Глянуть влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="971"/>
+        <location filename="../main/MainWindow.cpp" line="992"/>
         <source>Alt+Left</source>
         <translation>Alt+влево</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="972"/>
+        <location filename="../main/MainWindow.cpp" line="993"/>
         <source>Scroll the current pane to the left without moving the playback cursor or other panes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="978"/>
+        <location filename="../main/MainWindow.cpp" line="999"/>
         <source>Peek Right</source>
         <translation>Глянуть вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="979"/>
+        <location filename="../main/MainWindow.cpp" line="1000"/>
         <source>Alt+Right</source>
         <translation>Alt+вправо</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="980"/>
+        <location filename="../main/MainWindow.cpp" line="1001"/>
         <source>Scroll the current pane to the right without moving the playback cursor or other panes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1124"/>
+        <location filename="../main/MainWindow.cpp" line="1145"/>
         <source>Show Acti&amp;vity Log</source>
         <translation>Показать &amp;журнал действий</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1125"/>
+        <location filename="../main/MainWindow.cpp" line="1146"/>
         <source>Open a window listing interactions and other events</source>
         <translation>Открыть окно со списком всех действий в сеансе</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1940"/>
+        <location filename="../main/MainWindow.cpp" line="1973"/>
         <source>What&apos;s &amp;New In This Release?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1941"/>
+        <location filename="../main/MainWindow.cpp" line="1974"/>
         <source>List the changes in this release (and every previous release) of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2898"/>
+        <location filename="../main/MainWindow.cpp" line="2938"/>
         <source>Export multiple audio files</source>
         <translation>Экспортировать несколько звуковых файлов </translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2900"/>
+        <location filename="../main/MainWindow.cpp" line="2940"/>
         <source>Export audio to &quot;%1&quot;</source>
         <translation>Экспорт звука в &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3004"/>
-        <location filename="../main/MainWindow.cpp" line="3427"/>
-        <location filename="../main/MainWindow.cpp" line="3459"/>
-        <location filename="../main/MainWindow.cpp" line="3492"/>
-        <location filename="../main/MainWindow.cpp" line="3674"/>
+        <location filename="../main/MainWindow.cpp" line="3044"/>
+        <location filename="../main/MainWindow.cpp" line="3467"/>
+        <location filename="../main/MainWindow.cpp" line="3499"/>
+        <location filename="../main/MainWindow.cpp" line="3532"/>
+        <location filename="../main/MainWindow.cpp" line="3714"/>
         <source>&lt;b&gt;Audio required&lt;/b&gt;&lt;p&gt;Unable to load layer data from &quot;%1&quot; without an audio file.&lt;br&gt;Please load at least one audio file before importing annotations.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3042"/>
-        <location filename="../main/MainWindow.cpp" line="3051"/>
+        <location filename="../main/MainWindow.cpp" line="3082"/>
+        <location filename="../main/MainWindow.cpp" line="3091"/>
         <source>Failed to export layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3043"/>
+        <location filename="../main/MainWindow.cpp" line="3083"/>
         <source>Only note layers may be exported to MIDI files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3052"/>
+        <location filename="../main/MainWindow.cpp" line="3092"/>
         <source>Cannot export this layer to this file type. Only delimited column formats such as CSV are supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3107"/>
+        <location filename="../main/MainWindow.cpp" line="3147"/>
         <source>Export the content of the selected area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3108"/>
+        <location filename="../main/MainWindow.cpp" line="3148"/>
         <source>Export the whole layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3113"/>
+        <location filename="../main/MainWindow.cpp" line="3153"/>
         <source>Which region of the layer do you want to export?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3144"/>
+        <location filename="../main/MainWindow.cpp" line="3184"/>
         <source>Export layer to &quot;%1&quot;</source>
         <translation>Экспорт слоя в &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3784"/>
+        <location filename="../main/MainWindow.cpp" line="3824"/>
         <source>Export image to &quot;%1&quot;</source>
         <translation>Экспорт изображения в &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3839"/>
+        <location filename="../main/MainWindow.cpp" line="3879"/>
         <source>Close the current session and create a new one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3840"/>
+        <location filename="../main/MainWindow.cpp" line="3880"/>
         <source>Add this data to the current session</source>
         <translation>Добавить эти данные в активную сессию</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3844"/>
+        <location filename="../main/MainWindow.cpp" line="3884"/>
         <source>Select target for import</source>
         <translation>Выбрать цель для импорта</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3845"/>
+        <location filename="../main/MainWindow.cpp" line="3885"/>
         <source>&lt;b&gt;Select a target for import&lt;/b&gt;&lt;p&gt;This RDF document refers to one or more audio files.&lt;br&gt;You already have an audio waveform loaded.&lt;br&gt;What would you like to do with the new data?</source>
         <translation>&lt;b&gt;Выберите цель импорта&lt;/b&gt;&lt;p&gt;Этот документ RDF ссылается на один или более звуковых файлов.&lt;br&gt;У вас уже есть один загруженный звуковой файл.&lt;br&gt;Что вы хотите сделать с новыми данными?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3900"/>
+        <location filename="../main/MainWindow.cpp" line="3940"/>
         <source>Save session as &quot;%1&quot;</source>
         <translation>Сохранение сессию как &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4799"/>
+        <location filename="../main/MainWindow.cpp" line="4828"/>
         <source>Add Point</source>
         <translation>Добавить точку</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5086"/>
+        <location filename="../main/MainWindow.cpp" line="5114"/>
         <source>Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5246"/>
+        <location filename="../main/MainWindow.cpp" line="5254"/>
         <source>http://www.sonicvisualiser.org/doc/reference/%1/en/</source>
         <translation>http://www.sonicvisualiser.org/doc/reference/%1/en/</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5258"/>
+        <location filename="../main/MainWindow.cpp" line="5266"/>
         <source>What&apos;s New</source>
         <translation>Что нового в программе</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5270"/>
+        <location filename="../main/MainWindow.cpp" line="5278"/>
         <source>&lt;h3&gt;What&apos;s New in %1&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Что нового в %1&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5279"/>
+        <location filename="../main/MainWindow.cpp" line="5287"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; A newer version of Sonic Visualiser is available.&lt;br&gt;(Version %1 is available; you are using version %2)</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; доступна новая версия Sonic Visualiser.&lt;br&gt;(Доступна версия %1; вы пользуетесь версией %2)</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5337"/>
+        <location filename="../main/MainWindow.cpp" line="5345"/>
         <source>%1 : %2 configuration, %3-bit build</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5436"/>
+        <location filename="../main/MainWindow.cpp" line="5444"/>
         <source>&lt;br&gt;With RtMidi &amp;copy; Gary P. Scavone</source>
         <translation>&lt;br&gt;С RtMidi &amp;copy; Gary P. Scavone</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="566"/>
+        <location filename="../main/MainWindow.cpp" line="587"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="828"/>
+        <location filename="../main/MainWindow.cpp" line="849"/>
         <source>Insert Item at Selection</source>
         <translation>Вставить объект в выделение</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="836"/>
+        <location filename="../main/MainWindow.cpp" line="857"/>
         <source>Ctrl+Shift+Enter</source>
         <translation>Ctrl+Shift+Enter</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="830"/>
+        <location filename="../main/MainWindow.cpp" line="851"/>
         <source>Insert a new note or region item corresponding to the current selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2156"/>
+        <location filename="../main/MainWindow.cpp" line="2196"/>
         <source>Rewind to Similar Point</source>
         <translation>Назад к первой схожей точке</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2157"/>
+        <location filename="../main/MainWindow.cpp" line="2197"/>
         <source>Shift+PgUp</source>
         <translation>Shift+PgUp</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2158"/>
+        <location filename="../main/MainWindow.cpp" line="2198"/>
         <source>Rewind to the previous similarly valued time instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2188"/>
+        <location filename="../main/MainWindow.cpp" line="2228"/>
         <source>Fast Forward to Similar Point</source>
         <translation>Вперед к первой схожей точке</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2189"/>
+        <location filename="../main/MainWindow.cpp" line="2229"/>
         <source>Shift+PgDown</source>
         <translation>Shift+PgDown</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2190"/>
+        <location filename="../main/MainWindow.cpp" line="2230"/>
         <source>Fast-forward to the next similarly valued time instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2731"/>
+        <location filename="../main/MainWindow.cpp" line="2771"/>
         <source>1. %2</source>
         <translation>1. %2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2740"/>
+        <location filename="../main/MainWindow.cpp" line="2780"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2751"/>
+        <location filename="../main/MainWindow.cpp" line="2791"/>
         <source>Select audio file to export</source>
         <translation>Укажите экспортируемый звуковой файл</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2752"/>
+        <location filename="../main/MainWindow.cpp" line="2792"/>
         <source>Which audio file do you want to export from?</source>
         <translation>Какой звуковой файл вы хотите экспортировать?</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5469"/>
+        <location filename="../main/MainWindow.cpp" line="5477"/>
         <source>About %1</source>
         <translation>О программе %1</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5537"/>
+        <location filename="../main/MainWindow.cpp" line="5545"/>
         <source>Newer version available</source>
         <translation>Доступна более новая версия</translation>
     </message>
@@ -5783,32 +5820,32 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="obsolete">Загрузить этот файл в новое окно волновой формы</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1534"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1546"/>
         <source>Not enough disc space</source>
         <translation>Недостаточно дискового пространства</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1535"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1547"/>
         <source>&lt;b&gt;Not enough disc space&lt;/b&gt;&lt;p&gt;There doesn&apos;t appear to be enough spare disc space to accommodate any necessary temporary files.&lt;/p&gt;&lt;p&gt;Please clear some space and try again.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1542"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1554"/>
         <source>Not enough memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1543"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1555"/>
         <source>&lt;b&gt;Not enough memory&lt;/b&gt;&lt;p&gt;There doesn&apos;t appear to be enough memory to accommodate any necessary temporary data.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1637"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1649"/>
         <source>Select target for import</source>
         <translation>Выбрать цель для импорта</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1638"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1650"/>
         <source>&lt;b&gt;Select a target for import&lt;/b&gt;&lt;p&gt;You already have an audio file loaded.&lt;br&gt;What would you like to do with the new audio file?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5824,185 +5861,185 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation>%1: %2 [%3]</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1762"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1806"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1779"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1823"/>
         <source>Import &quot;%1&quot;</source>
         <translation>Импортировать &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1866"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1883"/>
         <source>Opening playlist...</source>
         <translation>Открывается список воспроизведения...</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2122"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2139"/>
         <source>Opening session...</source>
         <translation>Открывается сессия…</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2207"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2319"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2231"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2343"/>
         <source>SV XML file read error:
 %1</source>
         <translation>Ошибка чтения XML-файла SV:
 %1</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2233"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2257"/>
         <source>Incomplete session loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2234"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2258"/>
         <source>Some of the audio content referred to by the original session file could not be loaded.
 If you save this session, it will be saved without any reference to that audio, and information may be lost.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2329"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2353"/>
         <source>Open session template &quot;%1&quot;</source>
         <translation>Открыть шаблон сессии &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2415"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2439"/>
         <source>&lt;b&gt;Failed to import RDF&lt;/b&gt;&lt;p&gt;No suitable data models found for import from RDF document at &quot;%1&quot;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2610"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2634"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open an audio device.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2612"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2636"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open audio device: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2616"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2640"/>
         <source>&lt;p&gt;Automatic audio device detection failed. Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2618"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2642"/>
         <source>&lt;p&gt;Automatic audio device detection failed. Audio playback will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2625"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2649"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;).&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2627"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2651"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;): %2.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2631"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2655"/>
         <source>&lt;p&gt;Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2633"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2657"/>
         <source>&lt;p&gt;Audio playback will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2638"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2662"/>
         <source>Couldn&apos;t open audio device</source>
         <translation>Не удалось открыть звуковое устройство</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2753"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2766"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2804"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2777"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2790"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2828"/>
         <source>Failed to write file</source>
         <translation>Не удалось записать файл</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2754"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2767"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2805"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2778"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2791"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2829"/>
         <source>&lt;b&gt;Save failed&lt;/b&gt;&lt;p&gt;Failed to write to file &quot;%1&quot;: %2</source>
         <translation>&lt;b&gt;Не удалось сохранить&lt;/b&gt;&lt;p&gt;Не удалось записать файл &quot;%1&quot;: %2</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2826"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2866"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2914"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2944"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2850"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2890"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2938"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2968"/>
         <source>Internal error: unknown model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2832"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2856"/>
         <source>Failed to open file %1 for writing</source>
         <translation type="unfinished">Не удалось открыть файл %1 для записи</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2873"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2897"/>
         <source>Can&apos;t export non-note layers to MIDI</source>
         <translation type="unfinished">Невозможно экспортировать ненотные слои в MIDI</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2919"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2943"/>
         <source>Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2964"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2988"/>
         <source>Failed to export layer for an unknown reason</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3361"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3385"/>
         <source>No record device available</source>
         <translation>Нет доступных устройств записи</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3362"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3386"/>
         <source>&lt;b&gt;No record device available&lt;/b&gt;&lt;p&gt;Failed to find or open an audio device for recording. Only playback will be available.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3390"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3414"/>
         <source>Recording failed</source>
         <translation>Не удалось записать</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3391"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3415"/>
         <source>&lt;b&gt;Recording failed&lt;/b&gt;&lt;p&gt;Failed to switch to record mode (some internal problem?)&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3459"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3483"/>
         <source>Import Recorded Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3780"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3804"/>
         <source>Add Pane</source>
         <translation>Добавить окно</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3826"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3850"/>
         <source>Remove Pane</source>
         <translation>Удалить окно</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3849"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="4254"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3873"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="4279"/>
         <source>Delete Pane</source>
         <translation>Удалить окно</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="4083"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="4107"/>
         <source>Playing: %1 of %2 (%3 remaining)</source>
         <translation>Воспроизводится: %1 из %2 (осталось %3)</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="4095"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="4119"/>
         <source>Recording: %1</source>
         <translation>Запись: %1</translation>
     </message>
@@ -6011,17 +6048,17 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="vanished">&lt;b&gt;Беззвучный режим&lt;/b&gt;&lt;p&gt;Не удалось открыть звуковое устройство для воспроизведения.&lt;p&gt;Не удалось автоматически определить звуковое устройство. На этот раз придется обойтись без воспроизведения звука.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1631"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1643"/>
         <source>Close the current session and start a new one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1632"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1644"/>
         <source>Replace the main audio file in this session</source>
         <translation>Заменить основной аудиофайл в этйо сессии</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1633"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1645"/>
         <source>Add the audio file to this session</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6030,8 +6067,8 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="vanished">&lt;b&gt;Беззвучный режим&lt;/b&gt;&lt;p&gt;Не удалось открыть предпочитаемое звуковое устройство («%1»).&lt;p&gt;На этот раз придется обойтись без воспроизведения звука.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2384"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2410"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2408"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2434"/>
         <source>Importing from RDF...</source>
         <translation>Выполняется импорт из RDF...</translation>
     </message>
@@ -6040,38 +6077,38 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="obsolete">&lt;b&gt;Выберите цель импорта&lt;/b&gt;&lt;p&gt;У вас уже есть один загруженный звуковой файл.&lt;br&gt;Что вы хотите сделать с новыми звуковыми данными?</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1724"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1741"/>
         <source>Import audio file &quot;%1&quot;</source>
         <translation>Импорт звукового файла &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1952"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="1969"/>
         <source>Import layer XML file &quot;%1&quot;</source>
         <translation>Импорт XML-файла слоя &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="1989"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2006"/>
         <source>Import MIDI file &quot;%1&quot;</source>
         <translation>Импорт файла MIDI &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2220"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2244"/>
         <source>Import session file &quot;%1&quot;</source>
         <translation>Импорт файла сессии &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2401"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2414"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2425"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2438"/>
         <source>Failed to import RDF</source>
         <translation>Не удалось импортировать RDF</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2402"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2426"/>
         <source>&lt;b&gt;Failed to import RDF&lt;/b&gt;&lt;p&gt;Importing data from RDF document at &quot;%1&quot; failed: %2&lt;/p&gt;</source>
         <translation>&lt;b&gt;Не удалось импортировать RDF&lt;/b&gt;&lt;p&gt;Не удалось импортировать данные из документа RDF &quot;%1&quot;: %2&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2419"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2443"/>
         <source>Import RDF document &quot;%1&quot;</source>
         <translation>Импорт документа RDF &quot;%1&quot;</translation>
     </message>
@@ -6501,12 +6538,12 @@ Label:	%4</source>
         <translation>%1 / %2 Гц%3</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2729"/>
+        <location filename="../svgui/view/Pane.cpp" line="2724"/>
         <source>Drag Selection</source>
         <translation>Перетащить выделение</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2736"/>
+        <location filename="../svgui/view/Pane.cpp" line="2731"/>
         <source>Resize Selection</source>
         <translation>Изменить выделение</translation>
     </message>
@@ -6521,7 +6558,7 @@ Label:	%4</source>
         <translation>Вертикальное масштабирование</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2606"/>
+        <location filename="../svgui/view/Pane.cpp" line="2591"/>
         <source>Enter new range</source>
         <translation>Введите новый диапазон</translation>
     </message>
@@ -6534,92 +6571,92 @@ Label:	%4</source>
         <translation type="vanished">Щёлкните и потащите для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2917"/>
+        <location filename="../svgui/view/Pane.cpp" line="2912"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Ctrl for multi-select; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + Ctrl — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2911"/>
+        <location filename="../svgui/view/Pane.cpp" line="2906"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; hold Cmd for multi-select; middle-click and drag to navigate</source>
         <translation type="unfinished">Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2919"/>
+        <location filename="../svgui/view/Pane.cpp" line="2914"/>
         <source>Click and drag to select a range; hold Ctrl for multi-select; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения диапазона; + Ctrl — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2913"/>
+        <location filename="../svgui/view/Pane.cpp" line="2908"/>
         <source>Click and drag to select a range; hold Cmd for multi-select; middle-click and drag to navigate</source>
         <translation type="unfinished">Щёлкните и потащите для выделения диапазона; + Cmd — для выделения нескольких объектов, + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2574"/>
+        <location filename="../svgui/view/Pane.cpp" line="2569"/>
         <source>Vertical Range: %1 - %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2577"/>
+        <location filename="../svgui/view/Pane.cpp" line="2572"/>
         <source>&amp;Edit...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2581"/>
+        <location filename="../svgui/view/Pane.cpp" line="2573"/>
         <source>&amp;Reset to Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2607"/>
+        <location filename="../svgui/view/Pane.cpp" line="2592"/>
         <source>New vertical display range, from %1 to %2 %3:</source>
         <translation type="unfinished">Новый диапазон отображения по вертикали, от %1 до %2 %4: {1 ?} {2 %3:?}</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2900"/>
+        <location filename="../svgui/view/Pane.cpp" line="2895"/>
         <source>Click and drag to navigate; use mouse-wheel or trackpad-scroll to zoom; hold Shift and drag to zoom to an area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2928"/>
+        <location filename="../svgui/view/Pane.cpp" line="2923"/>
         <source>Click and drag to move the selection boundary</source>
         <translation>Щёлкните и потащите для перемещения границ выделения</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2933"/>
+        <location filename="../svgui/view/Pane.cpp" line="2928"/>
         <source>Click and drag to select a range; hold Shift to avoid snapping to items; middle-click to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + Shift — для отключения прилипания к объектам; + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2935"/>
+        <location filename="../svgui/view/Pane.cpp" line="2930"/>
         <source>Click and drag to select a range; middle-click and drag to navigate</source>
         <translation>Щёлкните и потащите для выделения области; + средняя клавиша мыши — для перемещения по окну</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2943"/>
+        <location filename="../svgui/view/Pane.cpp" line="2938"/>
         <source>Click to add a new item in the active layer</source>
         <translation>Щёлкните для добавления нового объекта на активный слой</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2962"/>
+        <location filename="../svgui/view/Pane.cpp" line="2957"/>
         <source>Click and drag to move all items in the selected range</source>
         <translation>Щёлкните и потащите все объекты в выделенной области</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2978"/>
+        <location filename="../svgui/view/Pane.cpp" line="2973"/>
         <source>Click and drag to adjust the visible range of the vertical scale</source>
         <translation>Щёлкните и потащите для смены видимого диапазона масштабирования по вертикали</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2980"/>
+        <location filename="../svgui/view/Pane.cpp" line="2975"/>
         <source>Click and drag to adjust the vertical zoom level</source>
         <translation>Щёлкните и потащите для смены уровня масштабирования по вертикали</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2982"/>
+        <location filename="../svgui/view/Pane.cpp" line="2977"/>
         <source>Click and drag to adjust the horizontal zoom level</source>
         <translation>Щёлкните и потащите для смены уровня масштабирования по горизонтали</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2984"/>
+        <location filename="../svgui/view/Pane.cpp" line="2979"/>
         <source>Reset horizontal and vertical zoom levels to their defaults</source>
         <translation>Сбросить уровни масштабирования по горизонтали и вертикали до исходных значений</translation>
     </message>
@@ -6873,7 +6910,7 @@ Label:	%4</source>
         <translation type="vanished">Измерить объект</translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2950"/>
+        <location filename="../svgui/view/Pane.cpp" line="2945"/>
         <source>Click to erase an item from the active layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6883,7 +6920,7 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/Pane.cpp" line="2957"/>
+        <location filename="../svgui/view/Pane.cpp" line="2952"/>
         <source>Click and drag an item in the active layer to move it; hold Shift to override initial resistance</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7744,7 +7781,7 @@ Apply them before closing?</source>
 <context>
     <name>PropertyBox</name>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="223"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="224"/>
         <source>Show</source>
         <translation>Показать</translation>
     </message>
@@ -7765,22 +7802,22 @@ Apply them before closing?</source>
         <translation type="vanished">Дб</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="173"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="174"/>
         <source>Click to toggle playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="702"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="705"/>
         <source>%1: On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="704"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="707"/>
         <source>%1: Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="707"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="709"/>
         <location filename="../svgui/widgets/PropertyBox.cpp" line="714"/>
         <source>&amp;Reset to Default</source>
         <translation type="unfinished"></translation>
@@ -7791,67 +7828,67 @@ Apply them before closing?</source>
         <translation type="unfinished">%1: %2</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="804"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="821"/>
         <source>Set playback clip:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="879"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="896"/>
         <source>Adjust playback level and pan of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="880"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="897"/>
         <source>click then drag to adjust, ctrl+click to reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="886"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="903"/>
         <source>Change sound used for playback (currently &quot;%1&quot;)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="896"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="913"/>
         <source> (current value: %1%2)</source>
         <translation> (текущее значение: %1%2)</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="898"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="915"/>
         <source> (current value: %1)</source>
         <translation> (текущее значение: %1)</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="900"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="917"/>
         <source>drag up/down to adjust, ctrl+click to reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="903"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="920"/>
         <source>Toggle Visibility of %1</source>
         <translation>Переключить видимость %1</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="906"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="923"/>
         <source>Toggle Playback of %1</source>
         <translation>Переключить воспроизведение %1</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="913"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="930"/>
         <source>Toggle %1 property of %2</source>
         <translation>Переключить %1 свойство %2</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="920"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="937"/>
         <source>Adjust %1 property of %2%3</source>
         <translation>Скорректировать %1 свойство %2%3</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="928"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="945"/>
         <source>%1%2: %3</source>
         <translation>%1%2: %3</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/PropertyBox.cpp" line="931"/>
+        <location filename="../svgui/widgets/PropertyBox.cpp" line="948"/>
         <source>%1%2</source>
         <translation>%1%2</translation>
     </message>
@@ -8025,18 +8062,18 @@ for semantic music analysis and annotation.</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../main/main.cpp" line="640"/>
-        <location filename="../main/main.cpp" line="645"/>
+        <location filename="../main/main.cpp" line="656"/>
+        <location filename="../main/main.cpp" line="661"/>
         <source>Failed to open file</source>
         <translation>Не удалось открыть файл</translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="641"/>
+        <location filename="../main/main.cpp" line="657"/>
         <source>File or URL &quot;%1&quot; could not be opened</source>
         <translation>Файл или URL &quot;%1&quot; не мог быть открыт</translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="646"/>
+        <location filename="../main/main.cpp" line="662"/>
         <source>&lt;b&gt;Audio required&lt;/b&gt;&lt;p&gt;Please load at least one audio file before importing annotation data</source>
         <translation>&lt;b&gt;Нужны звуковые данные&lt;/b&gt;&lt;p&gt;Загрузите хотя бы один звуковой файл перед импортом аннотаций</translation>
     </message>
@@ -8223,12 +8260,12 @@ for semantic music analysis and annotation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2869"/>
+        <location filename="../main/MainWindow.cpp" line="2909"/>
         <source>Exporting audio data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2949"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2973"/>
         <source>Exporting layer...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8268,17 +8305,17 @@ for semantic music analysis and annotation.</source>
 <context>
     <name>RDFImporter</name>
     <message>
-        <location filename="../svcore/rdf/RDFImporter.cpp" line="270"/>
+        <location filename="../svcore/rdf/RDFImporter.cpp" line="272"/>
         <source>Importing audio referenced in RDF...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/rdf/RDFImporter.cpp" line="295"/>
+        <location filename="../svcore/rdf/RDFImporter.cpp" line="297"/>
         <source>Importing dense signal data from RDF...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/rdf/RDFImporter.cpp" line="481"/>
+        <location filename="../svcore/rdf/RDFImporter.cpp" line="483"/>
         <source>Importing event data from RDF...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8302,7 +8339,7 @@ for semantic music analysis and annotation.</source>
 <context>
     <name>ReadOnlyWaveFileModel</name>
     <message>
-        <location filename="../svcore/data/model/ReadOnlyWaveFileModel.h" line="96"/>
+        <location filename="../svcore/data/model/ReadOnlyWaveFileModel.h" line="98"/>
         <source>Wave File</source>
         <translation type="unfinished">Звуковой файл</translation>
     </message>
@@ -8521,7 +8558,7 @@ Label:	%4</source>
 <context>
     <name>RemoveLayerCommand</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="1249"/>
+        <location filename="../svapp/framework/Document.cpp" line="1284"/>
         <source>Delete %1 Layer</source>
         <translation>Удалить слой %1 </translation>
     </message>
@@ -9430,14 +9467,12 @@ dB:	%5</source>
 <context>
     <name>Surveyer</name>
     <message>
-        <location filename="../main/Surveyer.cpp" line="97"/>
         <source>Yes! Take me to the survey</source>
-        <translation>Да, я хочу заполнить отчёт</translation>
+        <translation type="vanished">Да, я хочу заполнить отчёт</translation>
     </message>
     <message>
-        <location filename="../main/Surveyer.cpp" line="98"/>
         <source>No, thanks</source>
-        <translation>Спасибо, нет</translation>
+        <translation type="vanished">Спасибо, нет</translation>
     </message>
 </context>
 <context>
@@ -9607,44 +9642,44 @@ Label:	%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="88"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="85"/>
         <source>&amp;Reset to Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="287"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="281"/>
         <source>%1: %2%3</source>
         <translation>%1: %2%3</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="289"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="283"/>
         <source>%2%3</source>
         <translation>%2%3</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="411"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="405"/>
         <source>New value for %1, from %2 to %3 %4:</source>
         <translation>Новое значение для %1, от %2 до %3 %4:</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="414"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="408"/>
         <source>New value for %1, from %2 to %3:</source>
         <translation>Новое значение для %1, от %2 до %3:</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="419"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="413"/>
         <source>Enter a new value from %1 to %2 %3:</source>
         <translation>Введите новое значение от %1 до %2 %3:</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="422"/>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="446"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="416"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="440"/>
         <source>Enter a new value from %1 to %2:</source>
         <translation>Введите новое значение от %1 до %2:</translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="429"/>
-        <location filename="../svgui/widgets/Thumbwheel.cpp" line="445"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="423"/>
+        <location filename="../svgui/widgets/Thumbwheel.cpp" line="439"/>
         <source>Enter new value</source>
         <translation>Введите новое значение</translation>
     </message>
@@ -10466,23 +10501,23 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="3018"/>
+        <location filename="../svgui/view/View.cpp" line="3032"/>
         <source>Waiting for layers to be ready...</source>
         <translation>Ожидание готовности слоёв...</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="3019"/>
-        <location filename="../svgui/view/View.cpp" line="3048"/>
+        <location filename="../svgui/view/View.cpp" line="3033"/>
+        <location filename="../svgui/view/View.cpp" line="3098"/>
         <source>Cancel</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="3047"/>
+        <location filename="../svgui/view/View.cpp" line="3097"/>
         <source>Rendering image...</source>
         <translation>Отрисовывается изображение...</translation>
     </message>
     <message>
-        <location filename="../svgui/view/View.cpp" line="3165"/>
+        <location filename="../svgui/view/View.cpp" line="3219"/>
         <source>Exported image from %1</source>
         <translation type="unfinished"></translation>
     </message>

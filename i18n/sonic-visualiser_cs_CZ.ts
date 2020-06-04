@@ -914,6 +914,33 @@ Hodnota:	%4</translation>
     </message>
 </context>
 <context>
+    <name>ExternalProgramAligner</name>
+    <message>
+        <source>Failed to find local filepath for wave-file model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alignment program &quot;%1&quot; did not start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to parse output of program: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output of alignment program was not in the proper format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output of alignment program contained no mappings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aligner process returned non-zero exit status</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FFTModel</name>
     <message>
         <source>FFT</source>
@@ -3297,7 +3324,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>&lt;b&gt;Overloaded&lt;/b&gt;&lt;p&gt;Audio playback speed processing has been reduced to a single channel, due to a processing overload.</source>
-        <translation>&lt;b&gt;Přetíženo&lt;/b&gt;&lt;p&gt;Zpracování rychlosti přehrávání zvuku bylo omezeno na jeden kanál kvůli přetížení při zpracování.</translation>
+        <translation type="vanished">&lt;b&gt;Přetíženo&lt;/b&gt;&lt;p&gt;Zpracování rychlosti přehrávání zvuku bylo omezeno na jeden kanál kvůli přetížení při zpracování.</translation>
     </message>
     <message>
         <source>&lt;b&gt;Save failed&lt;/b&gt;&lt;p&gt;Session file &quot;%1&quot; could not be saved.</source>
@@ -4621,6 +4648,14 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Pane</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yes, I&apos;d be happy to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No, thank you</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -7630,11 +7665,11 @@ dB:	%5</translation>
     <name>Surveyer</name>
     <message>
         <source>No, thanks</source>
-        <translation>Ne, děkuji</translation>
+        <translation type="vanished">Ne, děkuji</translation>
     </message>
     <message>
         <source>Yes! Take me to the survey</source>
-        <translation>Ano! Vezmi mě do průzkumu</translation>
+        <translation type="vanished">Ano! Vezmi mě do průzkumu</translation>
     </message>
 </context>
 <context>
