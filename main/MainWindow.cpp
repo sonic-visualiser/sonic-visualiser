@@ -382,7 +382,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
         startOSCQueue(false);
     }
     
-    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+//    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
     
     QString warning = PluginScan::getInstance()->getStartupFailureReport();
     if (warning != "") {
