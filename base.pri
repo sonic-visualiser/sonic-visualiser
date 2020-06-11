@@ -31,6 +31,8 @@ macx*:    DEFINES += __MACOSX_CORE__
 win*:     DEFINES += __WINDOWS_MM__
 solaris*: DEFINES += __RTMIDI_DUMMY_ONLY__
 
+DEFINES += QT_DEPRECATED_WARNINGS_SINCE=0x050A00
+
 # Defines for Dataquay
 DEFINES += USE_SORD
 
