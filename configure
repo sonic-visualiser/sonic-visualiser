@@ -4509,6 +4509,7 @@ fi
 
 CXXFLAGS="$CXXFLAGS_BUILD $SV_DEFINES_BUILD"
 
+# Set our own LDFLAGS only if the user didn't request any
 if test x"LDFLAGS" = x; then
    LDFLAGS="$LDFLAGS_BUILD"
 fi
