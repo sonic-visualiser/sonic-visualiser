@@ -6,8 +6,6 @@ case "$mydir" in
     *) mydir="$PWD/$mydir";;
 esac
 
-echo "AppImage root is $mydir"
-
 PATH="$mydir/usr/bin:$mydir/bin:$PATH"
 export PATH
 
