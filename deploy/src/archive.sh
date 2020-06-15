@@ -25,7 +25,7 @@ mkdir -p packages
 
 hg update -r"$tag"
 
-./repoint archive "$(pwd)"/packages/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds repoint.pri
+./repoint archive "$(pwd)"/packages/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds export-tests repoint.pri
 
 hg update -r"$current"
 
