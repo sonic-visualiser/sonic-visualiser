@@ -2,7 +2,7 @@
 <!DOCTYPE sonic-visualiser>
 <sv>
   <data>
-    <model id="1" name="s1.ogg: Note Onsets" sampleRate="48000" start="557" end="913480" type="sparse" dimensions="1" resolution="557" notifyOnAdd="true" dataset="0" />
+    <model id="1" name="s1.wav: Note Onsets" sampleRate="48000" start="557" end="913480" type="sparse" dimensions="1" resolution="557" notifyOnAdd="true" dataset="0" />
     <dataset id="0" dimensions="1">
       <point frame="557" label="" />
       <point frame="81879" label="" />

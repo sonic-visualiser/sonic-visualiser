@@ -2,7 +2,7 @@
 <!DOCTYPE sonic-visualiser>
 <sv>
   <data>
-    <model id="4" name="s2.ogg: Estimated f0" sampleRate="48000" start="1024" end="845824" type="sparse" dimensions="2" resolution="256" notifyOnAdd="true" dataset="3" minimum="-1525.37" maximum="500" units="Hz" />
+    <model id="4" name="s2.wav: Estimated f0" sampleRate="48000" start="1024" end="845824" type="sparse" dimensions="2" resolution="256" notifyOnAdd="true" dataset="3" minimum="-1525.37" maximum="500" units="Hz" />
     <dataset id="3" dimensions="2">
       <point frame="1024" value="415.621" label="" />
       <point frame="1280" value="415.193" label="" />
