@@ -5537,7 +5537,7 @@ MainWindow::about()
     aboutText += "</small></p>";
 
     aboutText += 
-        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2019 Chris Cannam and "
+        "<p><small>Sonic Visualiser Copyright &copy; 2005&ndash;2020 Chris Cannam and "
         "Queen Mary, University of London.</small></p>";
 
     aboutText +=

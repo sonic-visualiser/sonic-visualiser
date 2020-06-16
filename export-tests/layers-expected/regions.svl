@@ -2,7 +2,7 @@
 <!DOCTYPE sonic-visualiser>
 <sv>
   <data>
-    <model id="10" name="s1.ogg: Segmenter" sampleRate="48000" start="0" end="931200" type="sparse" dimensions="3" resolution="9600" notifyOnAdd="true" dataset="9" subtype="region" valueQuantization="0" minimum="1" maximum="10" units="segment-type" />
+    <model id="10" name="s1.wav: Segmenter" sampleRate="48000" start="0" end="931200" type="sparse" dimensions="3" resolution="9600" notifyOnAdd="true" dataset="9" subtype="region" valueQuantization="0" minimum="1" maximum="10" units="segment-type" />
     <dataset id="9" dimensions="3">
       <point frame="0" value="1" duration="441600" label="A" />
       <point frame="441600" value="2" duration="211200" label="B" />

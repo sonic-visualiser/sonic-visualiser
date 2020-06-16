@@ -30,7 +30,7 @@ if [ ! -f "$sv" -o ! -x "$sv" ]; then
     exit 1
 fi
 
-version=$("$sv" -v 2>&1)
+version=$("$sv" -v 2>&1 | grep -v App)
 adequate=no
 case "$version" in
     [012].*) ;;

@@ -2,7 +2,7 @@
 <!DOCTYPE sonic-visualiser>
 <sv>
   <data>
-    <model id="16" name="s1.ogg: Note transcription" sampleRate="48000" start="960" end="939896" type="sparse" dimensions="3" resolution="68" notifyOnAdd="true" dataset="15" subtype="note" valueQuantization="0" minimum="329.628" maximum="554.365" units="Hz" />
+    <model id="16" name="s1.wav: Note transcription" sampleRate="48000" start="960" end="939896" type="sparse" dimensions="3" resolution="68" notifyOnAdd="true" dataset="15" subtype="note" valueQuantization="0" minimum="329.628" maximum="554.365" units="Hz" />
     <dataset id="15" dimensions="3">
       <point frame="960" value="415.305" duration="82560" level="0.354331" label="G#4" />
       <point frame="81600" value="440" duration="858240" level="0.338583" label="A4" />
