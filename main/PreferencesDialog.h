@@ -68,6 +68,7 @@ protected slots:
     void audioImplementationChanged(int impl);
     void audioPlaybackDeviceChanged(int device);
     void audioRecordDeviceChanged(int device);
+    void recordMonoChanged(int state);
     void resampleOnLoadChanged(int state);
     void gaplessModeChanged(int state);
     void vampProcessSeparationChanged(int state);
@@ -125,6 +126,7 @@ protected:
     int m_audioImplementation;
     int m_audioPlaybackDevice;
     int m_audioRecordDevice;
+    bool m_recordMono;
     bool m_resampleOnLoad;
     bool m_gapless;
     bool m_runPluginsInProcess;

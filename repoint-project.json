@@ -24,7 +24,8 @@
         },
         "svapp": {
             "vcs": "hg",
-	    "service": "soundsoftware"
+	    "service": "soundsoftware",
+            "branch": "smoother-recording"
         },
         "checker": {
             "vcs": "hg",

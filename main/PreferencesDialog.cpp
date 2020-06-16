@@ -260,6 +260,12 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     rebuildDeviceCombos();
     m_audioDeviceChanged = false; // the rebuild will have changed this
 
+    QCheckBox *recordMono = new QCheckBox;
+    m_recordMono = prefs->getRecordMono();
+    recordMono->setCheckState(m_recordMono ? Qt::Checked : Qt::Unchecked);
+    connect(recordMono, SIGNAL(stateChanged(int)),
+            this, SLOT(recordMonoChanged(int)));
+
     QCheckBox *resampleOnLoad = new QCheckBox;
     m_resampleOnLoad = prefs->getResampleOnLoad();
     resampleOnLoad->setCheckState(m_resampleOnLoad ? Qt::Checked :
@@ -570,6 +576,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     subgrid->addWidget(m_audioRecordDeviceCombo, row++, 1, 1, 2);
 
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Record Mono"))),
+                       row, 0);
+    subgrid->addWidget(recordMono, row++, 1, 1, 1);
+
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Use Gapless Mode"))),
                        row, 0);
     subgrid->addWidget(gaplessMode, row++, 1, 1, 1);
@@ -807,6 +818,13 @@ PreferencesDialog::audioRecordDeviceChanged(int s)
 }
 
 void
+PreferencesDialog::recordMonoChanged(int state)
+{
+    m_recordMono = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::resampleOnLoadChanged(int state)
 {
     m_resampleOnLoad = (state == Qt::Checked);
@@ -971,6 +989,7 @@ PreferencesDialog::applyClicked()
     prefs->setPropertyBoxLayout(Preferences::PropertyBoxLayout
                                 (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
+    prefs->setRecordMono(m_recordMono);
     prefs->setResampleOnLoad(m_resampleOnLoad);
     prefs->setUseGaplessMode(m_gapless);
     prefs->setRunPluginsInProcess(m_runPluginsInProcess);
