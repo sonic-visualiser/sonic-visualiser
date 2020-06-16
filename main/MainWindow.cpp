@@ -1715,6 +1715,9 @@ MainWindow::prepareTransformsMenu()
     m_transformsMenu->setTearOffEnabled(true);
     m_transformsMenu->setSeparatorsCollapsible(true);
 
+    auto pending = m_transformsMenu->addAction(tr("Scanning plugins..."));
+    pending->setEnabled(false);
+    
     SVDEBUG << "MainWindow::prepareTransformsMenu: Starting installed-transform population thread" << endl;
     m_transformPopulater = new TransformPopulater(this);
     m_transformPopulater->start();
