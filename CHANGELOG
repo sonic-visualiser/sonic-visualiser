@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser v4.1 (May 2020) since the previous release 4.0.1:
+Changes in Sonic Visualiser v4.1 (18 June 2020) since the previous release 4.0.1:
 
  - Support "dark mode" on Windows and Linux as well as macOS
 
@@ -9,6 +9,8 @@ Changes in Sonic Visualiser v4.1 (May 2020) since the previous release 4.0.1:
 
  - Provide format options when exporting layers to CSV, allowing
    control over column separator, header row, and timestamp format
+
+ - Permit and handle optional header row when importing from CSV
 
  - Add export of spectrogram data to CSV formats
 
