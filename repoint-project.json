@@ -21,7 +21,8 @@
         },
         "svgui": {
             "vcs": "hg",
-            "service": "soundsoftware"
+            "service": "soundsoftware",
+            "branch": "csv-import-headers"
         },
         "svapp": {
             "vcs": "hg",
