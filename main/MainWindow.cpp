@@ -176,7 +176,8 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     m_activityLog(new ActivityLog()),
     m_unitConverter(new UnitConverter()),
     m_keyReference(new KeyReference()),
-    m_templateWatcher(nullptr)
+    m_templateWatcher(nullptr),
+    m_transformPopulater(nullptr)
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -334,7 +335,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     NetworkPermissionTester tester(withOSCSupport);
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
-        SVDEBUG << "MainWindow: Starting transform population thread" << endl;
+        SVDEBUG << "MainWindow: Starting uninstalled-transform population thread" << endl;
         TransformFactory::getInstance()->startPopulationThread();
 
         m_surveyer = nullptr;
@@ -384,17 +385,18 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     
 //    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
     
-    QString warning = PluginScan::getInstance()->getStartupFailureReport();
-    if (warning != "") {
-        QTimer::singleShot(500, this, SLOT(pluginPopulationWarning()));
-    }
-
     SVDEBUG << "MainWindow: Constructor done" << endl;
 }
 
 MainWindow::~MainWindow()
 {
 //    SVDEBUG << "MainWindow::~MainWindow" << endl;
+
+    if (m_transformPopulater) {
+        m_transformPopulater->wait();
+        delete m_transformPopulater;
+    }
+    
     delete m_keyReference;
     delete m_activityLog;
     delete m_unitConverter;
@@ -409,6 +411,8 @@ MainWindow::~MainWindow()
 void
 MainWindow::setupMenus()
 {
+    SVDEBUG << "MainWindow::setupMenus" << endl;
+    
     if (!m_mainMenusCreated) {
 
 #ifdef Q_OS_LINUX
@@ -459,9 +463,11 @@ MainWindow::setupMenus()
     setupEditMenu();
     setupViewMenu();
     setupPaneAndLayerMenus();
-    setupTransformsMenu();
+    prepareTransformsMenu();
 
     m_mainMenusCreated = true;
+
+    SVDEBUG << "MainWindow::setupMenus: done" << endl;
 }
 
 void
@@ -513,6 +519,8 @@ MainWindow::endFullScreen()
 void
 MainWindow::setupFileMenu()
 {
+    SVDEBUG << "MainWindow::setupFileMenu" << endl;
+    
     if (m_mainMenusCreated) return;
 
     QMenu *menu = menuBar()->addMenu(tr("&File"));
@@ -686,8 +694,7 @@ MainWindow::setupFileMenu()
     menu->addAction(action);
         
     menu->addSeparator();
-    action = new QAction(il.load("exit"),
-                         tr("&Quit"), this);
+    action = new QAction(il.load("exit"), tr("&Quit"), this);
     action->setShortcut(tr("Ctrl+Q"));
     action->setStatusTip(tr("Exit %1").arg(QApplication::applicationName()));
     connect(action, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
@@ -698,6 +705,8 @@ MainWindow::setupFileMenu()
 void
 MainWindow::setupEditMenu()
 {
+    SVDEBUG << "MainWindow::setupEditMenu" << endl;
+    
     if (m_mainMenusCreated) return;
 
     QMenu *menu = menuBar()->addMenu(tr("&Edit"));
@@ -946,6 +955,8 @@ MainWindow::setupEditMenu()
 void
 MainWindow::setupViewMenu()
 {
+    SVDEBUG << "MainWindow::setupViewMenu" << endl;
+    
     if (m_mainMenusCreated) return;
 
     IconLoader il;
@@ -1226,6 +1237,8 @@ MainWindow::shortcutFor(LayerFactory::LayerType layer, bool isPaneMenu)
 void
 MainWindow::setupPaneAndLayerMenus()
 {
+    SVDEBUG << "MainWindow::setupPaneAndLayerMenus" << endl;
+    
     Profiler profiler("MainWindow::setupPaneAndLayerMenus");
     
     if (m_paneMenu) {
@@ -1690,11 +1703,61 @@ MainWindow::updateLayerShortcutsFor(ModelId modelId)
 }
 
 void
-MainWindow::setupTransformsMenu()
+MainWindow::prepareTransformsMenu()
 {
+    SVDEBUG << "MainWindow::prepareTransformsMenu" << endl;
+
+    if (m_transformsMenu) {
+        return;
+    }
+    
+    m_transformsMenu = menuBar()->addMenu(tr("&Transform")); 
+    m_transformsMenu->setTearOffEnabled(true);
+    m_transformsMenu->setSeparatorsCollapsible(true);
+
+    auto pending = m_transformsMenu->addAction(tr("Scanning plugins..."));
+    pending->setEnabled(false);
+    
+    SVDEBUG << "MainWindow::prepareTransformsMenu: Starting installed-transform population thread" << endl;
+    m_transformPopulater = new TransformPopulater(this);
+    m_transformPopulater->start();
+}
+
+void
+MainWindow::TransformPopulater::run()
+{
+    usleep(200000);
+    
+    TransformFactory *tf = TransformFactory::getInstance();
+    if (!tf) return;
+
+    connect(tf, SIGNAL(transformsPopulated()),
+            m_mw, SLOT(populateTransformsMenu()));
+
+    SVDEBUG << "MainWindow::TransformPopulater::run: scanning" << endl;
+    
+    PluginScan::getInstance()->scan();
+
+    QString warning = PluginScan::getInstance()->getStartupFailureReport();
+    if (warning != "") {
+        QTimer::singleShot(500, m_mw, SLOT(pluginPopulationWarning()));
+    }
+
+    SVDEBUG << "MainWindow::TransformPopulater::run: populating" << endl;
+    
+    (void)tf->haveTransform({}); // populate!
+
+    SVDEBUG << "MainWindow::TransformPopulater::run: done" << endl;
+}
+
+void
+MainWindow::populateTransformsMenu()
+{
+    SVDEBUG << "MainWindow::populateTransformsMenu" << endl;
+
     if (m_transformsMenu) {
         m_transformsMenu->clear();
-        m_recentTransformsMenu->clear();
+        m_rightButtonTransformsMenu->clear();
         m_transformActionsReverse.clear();
         m_transformActions.clear();
         for (auto a: m_transformActions) {
@@ -1941,11 +2004,15 @@ MainWindow::setupTransformsMenu()
     m_rightButtonTransformsMenu->addAction(action);
 
     setupRecentTransformsMenu();
+
+    updateMenuStates();
 }
 
 void
 MainWindow::setupHelpMenu()
 {
+    SVDEBUG << "MainWindow::setupHelpMenu" << endl;
+    
     QMenu *menu = menuBar()->addMenu(tr("&Help"));
     menu->setTearOffEnabled(true);
     
@@ -1984,6 +2051,8 @@ MainWindow::setupHelpMenu()
 void
 MainWindow::setupRecentFilesMenu()
 {
+    SVDEBUG << "MainWindow::setupRecentFilesMenu" << endl;
+    
     m_recentFilesMenu->clear();
     vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
@@ -2004,6 +2073,8 @@ MainWindow::setupRecentFilesMenu()
 void
 MainWindow::setupTemplatesMenu()
 {
+    SVDEBUG << "MainWindow::setupTemplatesMenu" << endl;
+    
     m_templatesMenu->clear();
 
     QAction *defaultAction = m_templatesMenu->addAction(tr("Standard Waveform"));
@@ -2053,6 +2124,8 @@ MainWindow::setupTemplatesMenu()
 void
 MainWindow::setupRecentTransformsMenu()
 {
+    SVDEBUG << "MainWindow::setupRecentTransformsMenu" << endl;
+    
     m_recentTransformsMenu->clear();
     vector<QString> transforms = m_recentTransforms.getRecent();
     for (size_t i = 0; i < transforms.size(); ++i) {
@@ -2080,6 +2153,8 @@ MainWindow::setupRecentTransformsMenu()
 void
 MainWindow::setupExistingLayersMenus()
 {
+    SVDEBUG << "MainWindow::setupExistingLayersMenus" << endl;
+    
     if (!m_existingLayersMenu) return; // should have been created by setupMenus
 
 //    SVDEBUG << "MainWindow::setupExistingLayersMenu" << endl;
@@ -2169,6 +2244,8 @@ MainWindow::setupExistingLayersMenus()
 void
 MainWindow::setupToolbars()
 {
+    SVDEBUG << "MainWindow::setupToolbars" << endl;
+    
     m_keyReference->setCategory(tr("Playback and Transport Controls"));
 
     IconLoader il;
@@ -2285,25 +2362,23 @@ MainWindow::setupToolbars()
     connect(m_soloAction, SIGNAL(triggered()), this, SLOT(playSoloToggled()));
     connect(this, SIGNAL(canChangeSolo(bool)), m_soloAction, SLOT(setEnabled(bool)));
 
-    QAction *alAction = nullptr;
-    if (Document::canAlign()) {
-        alAction = toolbar->addAction(il.load("align"),
-                                      tr("Align File Timelines"));
-        alAction->setCheckable(true);
-        alAction->setChecked(m_viewManager->getAlignMode());
-        alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
-        connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
-                alAction, SLOT(setChecked(bool)));
-        connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
-        connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
-    }
+    QAction *alAction = toolbar->addAction(il.load("align"),
+                                           tr("Align File Timelines"));
+    alAction->setCheckable(true);
+    alAction->setChecked(m_viewManager->getAlignMode());
+    alAction->setStatusTip(tr("Treat multiple audio files as versions of the same work, and align their timelines"));
+    alAction->setEnabled(false); // until canAlign emitted
+    connect(m_viewManager, SIGNAL(alignModeChanged(bool)),
+            alAction, SLOT(setChecked(bool)));
+    connect(alAction, SIGNAL(triggered()), this, SLOT(alignToggled()));
+    connect(this, SIGNAL(canAlign(bool)), alAction, SLOT(setEnabled(bool)));
 
     m_keyReference->registerShortcut(m_playAction);
     m_keyReference->registerShortcut(m_recordAction);
     m_keyReference->registerShortcut(m_playSelectionAction);
     m_keyReference->registerShortcut(m_playLoopAction);
     m_keyReference->registerShortcut(m_soloAction);
-    if (alAction) m_keyReference->registerShortcut(alAction);
+    m_keyReference->registerShortcut(alAction);
     m_keyReference->registerShortcut(m_rwdAction);
     m_keyReference->registerShortcut(m_ffwdAction);
     m_keyReference->registerShortcut(m_rwdSimilarAction);
@@ -2316,7 +2391,7 @@ MainWindow::setupToolbars()
     menu->addAction(m_playSelectionAction);
     menu->addAction(m_playLoopAction);
     menu->addAction(m_soloAction);
-    if (alAction) menu->addAction(alAction);
+    menu->addAction(alAction);
     menu->addSeparator();
     menu->addAction(m_rwdAction);
     menu->addAction(m_ffwdAction);
@@ -2532,6 +2607,8 @@ MainWindow::connectLayerEditDialog(ModelDataTableDialog *dialog)
 void
 MainWindow::updateMenuStates()
 {
+    SVDEBUG << "MainWindow::updateMenuStates" << endl;
+    
     MainWindowBase::updateMenuStates();
 
     Pane *currentPane = nullptr;
@@ -2562,7 +2639,10 @@ MainWindow::updateMenuStates()
     
     bool alignMode = m_viewManager && m_viewManager->getAlignMode();
     emit canChangeSolo(havePlayTarget && !alignMode);
-    emit canAlign(havePlayTarget && m_document && m_document->canAlign());
+
+    if (TransformFactory::getInstance()->havePopulated()) {
+        emit canAlign(havePlayTarget && m_document && m_document->canAlign());
+    }
 
     emit canChangePlaybackSpeed(true);
     int v = m_playSpeed->value();
