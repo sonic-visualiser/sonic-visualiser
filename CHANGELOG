@@ -1,4 +1,12 @@
 
+Changes in Sonic Visualiser v4.2 (August 2020) since the previous release 4.1:
+
+ - Speed up startup, especially on Windows and especially when a lot
+   of plugins are installed. Plugins are now scanned after the main
+   window has been displayed, and the Transform menus are populated
+   dynamically when the results are available.
+
+
 Changes in Sonic Visualiser v4.1 (18 June 2020) since the previous release 4.0.1:
 
  - Support "dark mode" on Windows and Linux as well as macOS
