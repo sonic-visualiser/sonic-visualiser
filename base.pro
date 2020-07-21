@@ -52,6 +52,10 @@ for (file, CHECKER_HEADERS)  { HEADERS += $$sprintf("checker/%1",  $$file) }
 for (file, SVCORE_SOURCES)   { SOURCES += $$sprintf("svcore/%1", $$file) }
 for (file, SVCORE_HEADERS)   { HEADERS += $$sprintf("svcore/%1", $$file) }
              
+win32-msvc* {
+    SOURCES -= svcore/system/os-other.cpp
+}
+
 for (file, CLIENT_HEADERS) {
     HEADERS += $$sprintf("piper-vamp-cpp/vamp-client/qt/%1",  $$file)
 }

@@ -120,9 +120,7 @@ win32-msvc* {
     DEFINES -= HAVE_LIBLO
     LIBS -= -llo
 
-##!!! WindowsApp seems to be win10-specific! can I avoid this?
-    
-    LIBS += -lWindowsApp -lmfplat -lmfreadwrite -lmfuuid -lpropsys -ladvapi32 -lwinmm -lws2_32
+    LIBS += -lmfplat -lmfreadwrite -lmfuuid -lpropsys -ladvapi32 -lwinmm -lws2_32
 }
 
 macx* {
