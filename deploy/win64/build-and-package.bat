@@ -19,7 +19,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win64\generate
 if errorlevel 1 exit /b %errorlevel%
 
 set ORIGINALPATH=%PATH%
-set PATH=C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin;%PATH%
+set PATH=C:\Program Files (x86)\Windows Kits\10\bin\x64;%PATH%
 set NAME=Open Source Developer, Christopher Cannam
 
 set ARG=%1
