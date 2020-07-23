@@ -6,6 +6,8 @@ Changes in Sonic Visualiser v4.2 (August 2020) since the previous release 4.1:
    window has been displayed, and the Transform menus are populated
    dynamically when the results are available.
 
+ - Fix incompatibility of 64-bit Windows build with Windows 7
+
 
 Changes in Sonic Visualiser v4.1 (18 June 2020) since the previous release 4.0.1:
 
