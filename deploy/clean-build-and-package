@@ -16,6 +16,11 @@ echo
 
 if [ -d /Applications ]; then
 
+    if [ ! -f Makefile ]; then 
+	echo "You must have run a routine normal build at least once before this, so I can see which Qt settings to use"
+	exit 1
+    fi
+
     qmake=$(grep '^# Command: ' Makefile | awk '{ print $3; }')
 
     echo "Proceed to rebuild, package, and sign version $version using"
