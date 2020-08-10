@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-set -eu
+set -e
 
 # Execute this from the top-level directory of the project (the one
 # that contains the .app bundle).  Supply the name of the .app bundle
@@ -12,6 +12,8 @@ if [ -z "$dir" ] || [ ! -d "$dir" ]; then
 	echo "All .app bundles in pkgdir will be signed"
 	exit 2
 fi
+
+set -u
 
 entitlements=deploy/osx/Entitlements.plist
 helper_entitlements=deploy/osx/HelperEntitlements.plist
