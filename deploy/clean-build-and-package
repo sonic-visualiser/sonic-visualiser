@@ -40,7 +40,7 @@ if [ -d /Applications ]; then
     ./repoint install
 
     rm -rf .qmake.stash
-    "$qmake" -set SV_PERSISTENT_DEFINES "WITH_FEEDBACK_REQUEST"
+    "$qmake" -unset SV_PERSISTENT_DEFINES
     "$qmake" -r
     make clean
     make -j3

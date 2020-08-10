@@ -69,7 +69,7 @@ RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 WORKDIR /sonic-visualiser
 ENV QTDIR /opt/qt510
 ENV PATH /opt/qt510/bin:$PATH
-RUN qmake -set SV_PERSISTENT_DEFINES "WITH_FEEDBACK_REQUEST"
+RUN qmake -unset SV_PERSISTENT_DEFINES
 RUN ./configure
 RUN make -j3
 

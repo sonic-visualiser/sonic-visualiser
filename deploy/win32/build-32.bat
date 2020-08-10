@@ -23,7 +23,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 mkdir build_win32
 cd build_win32
 
-qmake -set SV_PERSISTENT_DEFINES "WITH_FEEDBACK_REQUEST"
+qmake -unset SV_PERSISTENT_DEFINES
 qmake -spec win32-g++ -r ..\sonic-visualiser.pro
 if %errorlevel% neq 0 exit /b %errorlevel%
 
