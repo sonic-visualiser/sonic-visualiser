@@ -1738,11 +1738,6 @@ MainWindow::TransformPopulater::run()
     
     PluginScan::getInstance()->scan();
 
-    QString warning = PluginScan::getInstance()->getStartupFailureReport();
-    if (warning != "") {
-        QTimer::singleShot(500, m_mw, SLOT(pluginPopulationWarning()));
-    }
-
     SVDEBUG << "MainWindow::TransformPopulater::run: populating" << endl;
     
     (void)tf->haveTransform({}); // populate!
@@ -1772,9 +1767,31 @@ MainWindow::populateTransformsMenu()
     TransformFactory *factory = TransformFactory::getInstance();
 
     TransformList transforms = factory->getAllTransformDescriptions();
-
-    if (factory->getStartupFailureReport() != "") {
-        pluginPopulationWarning();
+    
+    // We have two possible sources of error here: plugin scan
+    // warnings, and transform factory startup errors.
+    //
+    // In the Piper world, a plugin scan warning is typically
+    // non-fatal (it means a plugin is being ignored) but a transform
+    // factory startup error is fatal (it means no plugins can be used
+    // at all, or at least no feature extraction plugins, and probably
+    // indicates an installation problem with SV itself rather than
+    // with a plugin).
+    //
+    // If we have both types of error text, we should either show both
+    // (which we don't do as we haven't designed a way to do that
+    // tidily) or else only show the transform factory one.
+    //
+    QString warning = factory->getStartupFailureReport();
+    if (warning != "") {
+        SVDEBUG << "MainWindow::populateTransformsMenu: Transform population yielded errors" << endl;
+        pluginPopulationWarning(warning);
+    } else {
+        warning = PluginScan::getInstance()->getStartupFailureReport();
+        if (warning != "") {
+            SVDEBUG << "MainWindow::populateTransformsMenu: Plugin scan yielded errors" << endl;
+            pluginPopulationWarning(warning);
+        }
     }
     
     vector<TransformDescription::Type> types = factory->getAllTransformTypes();
@@ -4055,7 +4072,7 @@ MainWindow::coloursChanged()
 
     int index = cdb->getColourIndex(colour);
 
-    SVCERR << "MainWindow::coloursChanged: haveDarkBackground = " << haveDarkBackground << ", highlight = " << highlight.name() << ", nearestIndex = " << nearestIndex << ", defaultColourName = " << defaultColourName << ", colour = " << colour.name() << ", index = " << index << endl;
+    SVDEBUG << "MainWindow::coloursChanged: haveDarkBackground = " << haveDarkBackground << ", highlight = " << highlight.name() << ", nearestIndex = " << nearestIndex << ", defaultColourName = " << defaultColourName << ", colour = " << colour.name() << ", index = " << index << endl;
 
     if (index >= 0) {
         m_panLayer->setBaseColour(index);
@@ -4808,29 +4825,16 @@ MainWindow::betaReleaseWarning()
 }
 
 void
-MainWindow::pluginPopulationWarning()
+MainWindow::pluginPopulationWarning(QString warning)
 {
-    QString scanWarning = PluginScan::getInstance()->getStartupFailureReport();
-    QString factWarning = TransformFactory::getInstance()->getStartupFailureReport();
-    QString warning;
-    if (factWarning != "") {
-        // The order of events on startup implies that, if scanWarning
-        // and factWarning are both present, then we have already been
-        // called once for scanWarning so don't want to report it again
-        warning = factWarning;
-    } else if (scanWarning != "") {
-        warning = scanWarning;
-    }
-    if (warning != "") {
-        emit hideSplash();
-        QMessageBox box;
-        box.setWindowTitle(tr("Problems loading plugins"));
-        box.setText(tr("<b>Failed to load plugins</b>"));
-        box.setInformativeText(warning);
-        box.setIcon(QMessageBox::Warning);
-        box.setStandardButtons(QMessageBox::Ok);
-        box.exec();
-    }
+    emit hideSplash();
+    QMessageBox box;
+    box.setWindowTitle(tr("Problems loading plugins"));
+    box.setText(tr("<b>Failed to load plugins</b>"));
+    box.setInformativeText(warning);
+    box.setIcon(QMessageBox::Warning);
+    box.setStandardButtons(QMessageBox::Ok);
+    box.exec();
 }
 
 void

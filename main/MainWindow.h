@@ -159,7 +159,7 @@ protected slots:
     void populateTransformsMenu();
     
     virtual void betaReleaseWarning();
-    virtual void pluginPopulationWarning();
+    virtual void pluginPopulationWarning(QString text);
 
     virtual void saveSessionAsTemplate();
     virtual void manageSavedTemplates();
