@@ -2,15 +2,17 @@
 How to compile Sonic Visualiser from source
 ===========================================
 
-(NOTE: Refer also to .travis.yml and .appveyor.yml to see what the
-continuous-integration processes do to run a build)
+(NOTE: Refer also to .travis.yml and .appveyor.yml to how the
+continuous-integration processes run a build)
 
-On Windows and Mac is it actually easier to build from a checkout of
+On Windows and Mac it is perhaps easier to build from a checkout of
 the Mercurial repository (be sure to update to the appropriate tag if
 you need a specific release) than it is to build from an official
 Sonic Visualiser source release package. This is because the
 repository checkout pulls in some required library builds, while the
 source package contains only Sonic Visualiser code.
+
+On Linux it is simpler to build from a source package.
 
 
 Windows
@@ -90,17 +92,13 @@ For Cap'n Proto you will need v0.6 or newer.
 For the rest, if you happen to be using a Debian-based Linux, you
 probably want to apt install something like the following packages:
 
-build-essential libbz2-dev libfftw3-dev libfishsound1-dev
-libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev
-libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev
-libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default
-libqt5svg5-dev raptor2-utils librubberband-dev libcapnp-dev git mercurial
-autoconf automake libtool mlton
+build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev capnproto libcapnp-dev git mercurial autoconf automake libtool mlton
 
 If you are building Sonic Visualiser from a repository checkout, then
 the configure script will use Repoint to obtain further checkouts of
-various modules. You will need to have a SML compiler installed for
-this to work, such as SML/NJ, MLton, or Poly/ML - hence the presence
-of mlton in the Debian package list above. This is not necessary when
-building from an official Sonic Visualiser source release.
+various dependencies. You will need to have a SML compiler installed
+for this to work, such as SML/NJ, MLton, or Poly/ML - hence the
+presence of mlton in the Debian package list above. This is not
+necessary when building from an official Sonic Visualiser source
+release.
 

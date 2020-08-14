@@ -81,8 +81,8 @@ NetworkPermissionTester::havePermission()
         QString postamble;
         postamble = QCoreApplication::translate
             ("NetworkPermissionTester",
-             "<p><b>No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.</b> We will however make aggregate counts of distinct requests for usage reporting.</p>"
-             "<p>We recommend that you allow this, because it makes Sonic Visualiser more useful to you and supports the public funding of this work. But if you do not wish to allow it, please un-check the box below.<br></p>");
+             "<p><b>No personal information will be sent, no tracking is carried out, and no information will be shared with anyone else.</b></p>"
+             "<p>We recommend that you allow this, because it makes Sonic Visualiser more useful to you. But if you do not wish to allow it, please un-check the box below.<br></p>");
         
         QLabel *label = new QLabel;
         label->setWordWrap(true);

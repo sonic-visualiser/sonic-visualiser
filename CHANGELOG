@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser v4.2 (August 2020) since the previous release 4.1:
+Changes in Sonic Visualiser v4.2 (14 August 2020) since the previous release 4.1:
 
  - Speed up startup, especially on Windows and especially when a lot
    of plugins are installed. Plugins are now scanned after the main
