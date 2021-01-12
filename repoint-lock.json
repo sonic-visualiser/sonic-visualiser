@@ -4,7 +4,7 @@
       "pin": "0e32c328b02a"
     },
     "svcore": {
-      "pin": "cb73ca195ba05c0e4991bfe85181910d83e781af"
+      "pin": "25b3abdd4990cd6ad482d2514976fc0251b374c3"
     },
     "svgui": {
       "pin": "e775b080ee7d739430a1277dc81dfb78d9eaa8d7"
@@ -22,7 +22,7 @@
       "pin": "7dff60d52bb280968c8e3a2502b1ba312dc0ab61"
     },
     "dataquay": {
-      "pin": "35098262cadd"
+      "pin": "95def499e10f"
     },
     "bqvec": {
       "pin": "90fcebe85b1d"
