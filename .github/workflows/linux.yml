@@ -9,9 +9,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: deps
-      run: sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev git mercurial autoconf automake libtool ninja-build mlton
-    - name: capnp
+    - name: install-packages
+      run: sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev git mercurial autoconf automake libtool mlton
+    - name: install-capnp
       run: |
         mkdir -p tmp/capnproto
         git clone https://github.com/sandstorm-io/capnproto tmp/capnproto
@@ -19,17 +19,25 @@ jobs:
         git checkout v0.6.1
         cd c++
         autoreconf -i && ./configure --enable-shared=no --enable-static=yes && make -j3 && sudo make install
-    - name: meson
+    - name: install-meson
       run: |
         mkdir -p tmp/meson
         cd tmp/meson
         wget https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.0.tar.gz
         tar xvf meson-0.56.0.tar.gz
         sudo ln -s $(pwd)/meson-0.56.0/meson.py /usr/bin/meson
+    - name: install-ninja
+      run: |
+        mkdir -p tmp/ninja
+        cd tmp/ninja
+        wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
+        unzip ninja-linux.zip
+        sudo ln -s $(pwd)/ninja /usr/bin/ninja
     - name: repoint
       run: ./repoint install
     - name: configure
       run: meson build --buildtype release
     - name: make
       run: ninja -C build
-
+    - name: test
+      run: meson test -C build
