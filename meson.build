@@ -8,7 +8,6 @@ project(
     'cpp_std=c++17',
     'warning_level=3',
     'b_ndebug=if-release',
-    'b_lto=true',
     'b_pie=true',
   ])
 
@@ -21,7 +20,7 @@ qt = import('qt5')
 qt_dep = dependency(
   'qt5',
   modules: [
-    'Core', 'Gui', 'Widgets', 'Xml', 'Network', 'Svg',
+    'Core', 'Gui', 'Widgets', 'Xml', 'Network', 'Svg', 'Test',
   ]
 )
 
@@ -112,10 +111,50 @@ elif system == 'windows'
 elif system == 'darwin'
 endif
 
+general_defines = [
+  '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00'
+]
+
+if get_option('buildtype').startswith('release')
+  general_defines += [
+    '-DNO_TIMING',
+    '-DNO_HIT_COUNTS',
+  ]
 if meson.get_compiler('cpp').get_id() == 'gcc' or \
    meson.get_compiler('cpp').get_id() == 'clang'
-  add_global_arguments([ '-ffast-math' ], language: 'cpp')
+  general_defines += [
+    '-ffast-math',
+  ]
 endif
+endif
+
+dl_dep = meson.get_compiler('c').find_library('dl', required: false)
+
+all_include_dirs = include_directories(
+  [
+    'bqvec',
+    'bqvec/bqvec',
+    'bqfft',
+    'bqresample',
+    'bqaudioio',
+    'bqaudioio/bqaudioio',
+    'bqaudiostream',
+    'bqaudiostream/bqaudiostream',
+    'bqthingfactory',
+    'piper-vamp-cpp',
+    'checker',
+    'checker/checker',
+    'dataquay',
+    'dataquay/dataquay',
+    'svcore',
+    'svcore/data',
+    'svcore/plugin/api/alsa',
+    'svcore',
+    'svgui',
+    'svapp',
+    'vamp-plugin-sdk',
+  ]
+)
 
 bq_files = [
   'bqvec/src/Allocators.cpp',
@@ -345,6 +384,76 @@ svcore_moc_files = qt.preprocess(
 ],
   moc_extra_arguments: svcore_moc_args,
 )
+
+svcore_lib = static_library(
+  'svcore',
+  bq_files,
+  vamp_plugin_sdk_files,
+  dataquay_moc_files,
+  svcore_moc_files,
+  dataquay_files,
+  svcore_files,
+  include_directories: all_include_dirs,
+  dependencies: [
+    qt_dep,
+    feature_dependencies,
+    dl_dep,
+  ],
+  cpp_args: [
+    feature_defines,
+    general_defines,
+  ],
+)
+
+svcore_dep = declare_dependency(
+  link_with: svcore_lib,
+  include_directories: all_include_dirs,
+)
+
+svcore_base_test_moc_files = qt.preprocess(
+  moc_headers: [
+  'svcore/base/test/TestById.h',
+  'svcore/base/test/TestColumnOp.h',
+  'svcore/base/test/TestLogRange.h',
+  'svcore/base/test/TestMovingMedian.h',
+  'svcore/base/test/TestOurRealTime.h',
+  'svcore/base/test/TestPitch.h',
+  'svcore/base/test/TestEventSeries.h',
+  'svcore/base/test/TestRangeMapper.h',
+  'svcore/base/test/TestScaleTickIntervals.h',
+  'svcore/base/test/TestStringBits.h',
+  'svcore/base/test/TestVampRealTime.h',
+  'svcore/base/test/StressEventSeries.h',
+],
+  moc_extra_arguments: svcore_moc_args,
+)
+
+svcore_system_test_moc_files = qt.preprocess(
+  moc_headers: [
+  'svcore/system/test/TestEnv.h',
+])
+
+svcore_data_model_test_moc_files = qt.preprocess(
+  moc_headers: [
+  'svcore/data/model/test/MockWaveModel.h',
+  'svcore/data/model/test/TestFFTModel.h',
+  'svcore/data/model/test/TestSparseModels.h',
+  'svcore/data/model/test/TestWaveformOversampler.h',
+  'svcore/data/model/test/TestZoomConstraints.h',
+])
+
+svcore_data_fileio_test_moc_files = qt.preprocess(
+  moc_headers: [
+  'svcore/data/model/test/MockWaveModel.h',
+  'svcore/data/fileio/test/AudioFileReaderTest.h',
+  'svcore/data/fileio/test/BogusAudioFileReaderTest.h',
+  'svcore/data/fileio/test/AudioFileWriterTest.h',
+  'svcore/data/fileio/test/EncodingTest.h',
+  'svcore/data/fileio/test/MIDIFileReaderTest.h',
+  'svcore/data/fileio/test/CSVFormatTest.h',
+  'svcore/data/fileio/test/CSVReaderTest.h',
+  'svcore/data/fileio/test/CSVStreamWriterTest.h',
+])
 
 svgui_files = [
   'svgui/layer/Colour3DPlotExporter.cpp',
@@ -605,56 +714,104 @@ else
   sv_main_name = 'Sonic Visualiser'
 endif
 
-all_include_dirs = include_directories(
-  [
-    'bqvec',
-    'bqvec/bqvec',
-    'bqfft',
-    'bqresample',
-    'bqaudioio',
-    'bqaudioio/bqaudioio',
-    'bqaudiostream',
-    'bqaudiostream/bqaudiostream',
-    'bqthingfactory',
-    'piper-vamp-cpp',
-    'checker',
-    'checker/checker',
-    'dataquay',
-    'dataquay/dataquay',
-    'svcore',
-    'svcore/data',
-    'svcore/plugin/api/alsa',
-    'svcore',
-    'svgui',
-    'svapp',
-    'vamp-plugin-sdk',
-  ])
+svcore_base_test_exe = executable(
+  'test-svcore-base',
+  svcore_base_test_moc_files,
+  'svcore/base/test/svcore-base-test.cpp',
+  dependencies: [
+    svcore_dep,
+    qt_dep,
+    feature_dependencies,
+    dl_dep,
+  ],
+  cpp_args: [
+    feature_defines,
+    general_defines,
+  ],
+  link_args: [
+    feature_additional_libs,
+  ],
+  gui_app: false
+)
 
-sv_src_files = [
-  bq_files,
-  vamp_plugin_sdk_files,
-  dataquay_files,
-  svcore_files,
-  svgui_files,
-  svapp_files,
-  checker_lib_files,
-  sv_main_files
-]
+svcore_system_test_exe = executable(
+  'test-svcore-system',
+  svcore_system_test_moc_files,
+  'svcore/system/test/svcore-system-test.cpp',
+  dependencies: [
+    svcore_dep,
+    qt_dep,
+    feature_dependencies,
+    dl_dep,
+  ],
+  cpp_args: [
+    feature_defines,
+    general_defines,
+  ],
+  link_args: [
+    feature_additional_libs,
+  ],
+  gui_app: false
+)
 
-sv_moc_files = [
-  dataquay_moc_files,
-  svcore_moc_files,
-  svgui_moc_files,
-  svapp_moc_files,
-  sv_main_moc_files
-]
+svcore_data_model_test_exe = executable(
+  'test-svcore-data-model',
+  svcore_data_model_test_moc_files,
+  'svcore/data/model/test/MockWaveModel.cpp',
+  'svcore/data/model/test/svcore-data-model-test.cpp',
+  dependencies: [
+    svcore_dep,
+    qt_dep,
+    feature_dependencies,
+    dl_dep,
+  ],
+  cpp_args: [
+    feature_defines,
+    general_defines,
+  ],
+  link_args: [
+    feature_additional_libs,
+  ],
+  gui_app: false
+)
 
-dl_dep = meson.get_compiler('c').find_library('dl', required: false)
+svcore_data_fileio_test_exe = executable(
+  'test-svcore-data-fileio',
+  svcore_data_fileio_test_moc_files,
+  'svcore/data/model/test/MockWaveModel.cpp',
+  'svcore/data/fileio/test/UnsupportedFormat.cpp',
+  'svcore/data/fileio/test/svcore-data-fileio-test.cpp',
+  dependencies: [
+    svcore_dep,
+    qt_dep,
+    feature_dependencies,
+    dl_dep,
+  ],
+  cpp_args: [
+    feature_defines,
+    general_defines,
+  ],
+  link_args: [
+    feature_additional_libs,
+  ],
+  gui_app: false
+)
+
+test('svcore-base', svcore_base_test_exe)
+test('svcore-system', svcore_system_test_exe)
+test('svcore-data-model', svcore_data_model_test_exe)
+test('svcore-data-fileio', svcore_data_fileio_test_exe,
+     args: [
+       '--testdir', meson.current_source_dir() / 'svcore/data/fileio/test'
+     ])
 
 executable(
   'vamp-plugin-load-checker',
   checker_helper_files,
   include_directories: [
+  ],
+  cpp_args: [
+    general_defines,
   ],
   dependencies: [
     dl_dep,
@@ -672,6 +829,9 @@ executable(
     'piper-vamp-cpp',
     'piper-vamp-cpp/ext',
   ],
+  cpp_args: [
+    general_defines,
+  ],
   dependencies: [
     capnp_dep,
     sord_dep,
@@ -680,22 +840,19 @@ executable(
   gui_app: false
 )
 
-general_defines = []
-if get_option('buildtype').startswith('release')
-  general_defines = [
-    '-DNO_TIMING',
-    '-DNO_HIT_COUNTS',
-  ]
-endif
-
 executable(
   sv_main_name,
   qt_resource_files,
-  sv_moc_files,
-  sv_src_files,
+  svgui_moc_files,
+  svapp_moc_files,
+  sv_main_moc_files,
   capnp_gen_target,
-  include_directories: all_include_dirs,
+  svgui_files,
+  svapp_files,
+  checker_lib_files,
+  sv_main_files,
   dependencies: [
+    svcore_dep,
     qt_dep,
     feature_dependencies,
     dl_dep
@@ -705,7 +862,7 @@ executable(
     '-DHAVE_PIPER',
     '-DHAVE_PLUGIN_CHECKER_HELPER',
     '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00',
-    general_defines
+    general_defines,
   ],
   link_args: [
     feature_additional_libs,
