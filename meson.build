@@ -28,9 +28,17 @@ qt_dep = dependency(
 system = build_machine.system()
 architecture = host_machine.cpu_family()
 
+feature_additional_libs = []
+
 if system == 'linux'
 
-  bzip2_dep = dependency('bzip2')
+  bzip2_dep = dependency('bzip2', required: false)
+
+  if not bzip2_dep.found()
+    message('Failed to find bzip2 dependency. On many systems this exists but is not discoverable through pkg-config; proceeding on this assumption')
+    feature_additional_libs = [ '-lbz2' ]
+  endif
+  
   fftw3_dep = dependency('fftw3', version: '>= 3.0.0')
   fftw3f_dep = dependency('fftw3f', version: '>= 3.0.0')
   sndfile_dep = dependency('sndfile', version: '>= 1.0.16')
@@ -102,6 +110,11 @@ if system == 'linux'
   
 elif system == 'windows'
 elif system == 'darwin'
+endif
+
+if meson.get_compiler('cpp').get_id() == 'gcc' or \
+   meson.get_compiler('cpp').get_id() == 'clang'
+  add_global_arguments([ '-ffast-math' ], language: 'cpp')
 endif
 
 bq_files = [
@@ -675,11 +688,6 @@ if get_option('buildtype').startswith('release')
   ]
 endif
 
-if meson.get_compiler('cpp').get_id() == 'gcc' or \
-   meson.get_compiler('cpp').get_id() == 'clang'
-  add_global_arguments([ '-ffast-math' ], language: 'cpp')
-endif
-
 executable(
   sv_main_name,
   qt_resource_files,
@@ -698,6 +706,9 @@ executable(
     '-DHAVE_PLUGIN_CHECKER_HELPER',
     '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00',
     general_defines
+  ],
+  link_args: [
+    feature_additional_libs,
   ],
   gui_app: true
 )
