@@ -697,7 +697,7 @@ capnp_gen_target = custom_target(
   command: [
     'capnp', 'compile',
     '--src-prefix=' + meson.current_source_dir() / 'piper/capnp',
-    '-oc++:.',
+    '-oc++:@OUTDIR@',
     '@INPUT@'
   ])
 
