@@ -15,16 +15,22 @@
             "service": "soundsoftware"
         },
         "svcore": {
-            "vcs": "hg",
-            "service": "soundsoftware"
+            "vcs": "git",
+            "service": "github",
+            "owner": "cannam",
+            "branch": "default"
         },
         "svgui": {
-            "vcs": "hg",
-            "service": "soundsoftware"
+            "vcs": "git",
+            "service": "github",
+            "owner": "cannam",
+            "branch": "default"
         },
         "svapp": {
-            "vcs": "hg",
-	    "service": "soundsoftware"
+            "vcs": "git",
+            "service": "github",
+            "owner": "cannam",
+            "branch": "default"
         },
         "checker": {
             "vcs": "hg",

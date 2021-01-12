@@ -4,13 +4,13 @@
       "pin": "0e32c328b02a"
     },
     "svcore": {
-      "pin": "f803d3c33f76"
+      "pin": "b403f10819e9b51e3aa7562ffe40d753fccff6f3"
     },
     "svgui": {
-      "pin": "f67e9e12e101"
+      "pin": "7637898d81827dd014f54e0d7da654e2e872381c"
     },
     "svapp": {
-      "pin": "1089d65c585d"
+      "pin": "87f09b7751401b82089c4c0fc158b2cbd1f750f5"
     },
     "checker": {
       "pin": "e839338d3869"
@@ -19,28 +19,28 @@
       "pin": "3a742c556ac1f2bf9823f30b937c71c690e1f6ae"
     },
     "piper-vamp-cpp": {
-      "pin": "f0d3ab2952b21d287b481759bda986427df10ef7"
+      "pin": "7dff60d52bb280968c8e3a2502b1ba312dc0ab61"
     },
     "dataquay": {
       "pin": "35098262cadd"
     },
     "bqvec": {
-      "pin": "cd235ecbeb31"
+      "pin": "90fcebe85b1d"
     },
     "bqfft": {
-      "pin": "e1c392f85e97"
+      "pin": "7ee762bb3c0b"
     },
     "bqresample": {
-      "pin": "c2fb51b31fe4"
+      "pin": "ca43790feeca"
     },
     "bqaudioio": {
-      "pin": "4fe94361597f"
+      "pin": "66aaf093e668"
     },
     "bqaudiostream": {
-      "pin": "a0926b93e771"
+      "pin": "0a255e6185c8"
     },
     "bqthingfactory": {
-      "pin": "7686116dcdd5"
+      "pin": "2e4bd170f57f"
     },
     "sv-dependency-builds": {
       "pin": "08ae793730bd"
