@@ -18,7 +18,7 @@ jobs:
         cd tmp/capnproto
         git checkout v0.6.1
         cd c++
-        autoreconf -i && ./configure --enable-shared=no --enable-static=yes && make -j3 && sudo make install
+        autoreconf -i && CXXFLAGS=-fPIC ./configure --enable-shared=no --enable-static=yes && make -j3 && sudo make install
     - name: install-meson
       run: |
         mkdir -p tmp/meson
