@@ -27,10 +27,19 @@ qt_dep = dependency(
 system = build_machine.system()
 architecture = host_machine.cpu_family()
 
+svcore_moc_args = []
 feature_additional_libs = []
+feature_include_dirs = []
+server_dependencies = []
+
+dl_dep = meson.get_compiler('c').find_library('dl', required: false)
 
 if system == 'linux'
 
+  capnp = find_program('capnp')
+  capnp_additional_args = []
+  capnp_cpp_plugin = 'c++'
+  
   bzip2_dep = dependency('bzip2', required: false)
 
   if not bzip2_dep.found()
@@ -78,6 +87,12 @@ if system == 'linux'
     jack_dep,
     libpulse_dep,
   ]
+
+  server_dependencies = [
+    capnp_dep,
+    sord_dep,
+    dl_dep,
+  ]
   
   feature_defines = [
     '-DHAVE_BZ2',
@@ -102,16 +117,101 @@ if system == 'linux'
     '-D__LINUX_ALSASEQ__',
     '-D__LINUX_ALSA__'
   ]
+  
+  svcore_moc_args = [
+    '-DHAVE_MAD'
+  ]
+  
+elif system == 'darwin'
 
+  svdeps_dir = meson.current_source_dir() / 'sv-dependency-builds/osx'
+  
+  capnp = find_program(
+    'capnp',
+    dirs: [
+      svdeps_dir / 'bin'
+    ])
+  capnp_additional_args = [
+    '-I' + svdeps_dir / 'include'
+  ]
+  capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+  
+  feature_defines = [
+    '-DHAVE_BZ2',
+    '-DHAVE_FFTW3',
+    '-DHAVE_FFTW3F',
+    '-DHAVE_SNDFILE',
+    '-DHAVE_LIBSAMPLERATE',
+    '-DHAVE_RUBBERBAND',
+    '-DHAVE_SORD', '-DUSE_SORD',
+    '-DHAVE_SERD',
+    '-DHAVE_CAPNP',
+    '-DHAVE_MAD',
+    '-DHAVE_ID3TAG',
+    '-DHAVE_OPUS',
+    '-DHAVE_LIBLO',
+    '-DHAVE_PORTAUDIO',
+    '-DHAVE_COREAUDIO',
+    '-DHAVE_VDSP',
+  ]
+
+  feature_dependencies = [
+  ]
+
+  server_dependencies = [
+    dl_dep,
+  ]
+  
+  feature_include_dirs = [
+    # These must be relative, so not using svdeps_dir
+    'sv-dependency-builds/osx/include',
+    'sv-dependency-builds/osx/include/opus',
+  ]
+  
+  feature_additional_libs = [
+    '-L' + svdeps_dir / 'lib',
+    '-lbz2',
+    '-lrubberband',
+    '-lfftw3',
+    '-lfftw3f',
+    '-lsndfile',
+    '-lFLAC',
+    '-logg',
+    '-lvorbis',
+    '-lvorbisenc',
+    '-lvorbisfile',
+    '-lopusfile',
+    '-lopus',
+    '-logg',
+    '-lmad',
+    '-lid3tag',
+    '-lportaudio',
+    '-lsamplerate',
+    '-lz',
+    '-lsord-0',
+    '-lserd-0',
+    '-llo',
+    '-lcapnp',
+    '-lkj',
+    '-framework', 'CoreAudio',
+    '-framework', 'CoreMidi',
+    '-framework', 'AudioUnit',
+    '-framework', 'AudioToolbox',
+    '-framework', 'CoreFoundation',
+    '-framework', 'CoreServices',
+    '-framework', 'Accelerate',
+  ]
+  
   svcore_moc_args = [
     '-DHAVE_MAD'
   ]
   
 elif system == 'windows'
-elif system == 'darwin'
 endif
 
 general_defines = [
+  '-DHAVE_PIPER',
+  '-DHAVE_PLUGIN_CHECKER_HELPER',
   '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00'
 ]
 
@@ -127,8 +227,6 @@ if meson.get_compiler('cpp').get_id() == 'gcc' or \
   ]
 endif
 endif
-
-dl_dep = meson.get_compiler('c').find_library('dl', required: false)
 
 all_include_dirs = include_directories(
   [
@@ -155,6 +253,21 @@ all_include_dirs = include_directories(
     'vamp-plugin-sdk',
   ]
 )
+
+capnp_gen_target = custom_target(
+  'capnp_gen',
+  # The input must be absolute, or (the version of capnp I have here)
+  # writes output into the wrong directory!
+  input: meson.current_source_dir() / 'piper/capnp/piper.capnp',
+  output: 'piper.capnp.c++',
+  command: [
+    capnp,
+    capnp_additional_args,
+    'compile',
+    '--src-prefix=' + meson.current_source_dir() / 'piper/capnp',
+    '-o' + capnp_cpp_plugin + ':@OUTDIR@',
+    '@INPUT@'
+  ])
 
 bq_files = [
   'bqvec/src/Allocators.cpp',
@@ -327,6 +440,7 @@ svcore_files = [
   'svcore/transform/TransformFactory.cpp',
   'svcore/transform/ModelTransformer.cpp',
   'svcore/transform/ModelTransformerFactory.cpp',
+  capnp_gen_target,
 ]
 
 svcore_moc_files = qt.preprocess(
@@ -393,7 +507,10 @@ svcore_lib = static_library(
   svcore_moc_files,
   dataquay_files,
   svcore_files,
-  include_directories: all_include_dirs,
+  include_directories: [
+    all_include_dirs,
+    feature_include_dirs,
+  ],
   dependencies: [
     qt_dep,
     feature_dependencies,
@@ -407,7 +524,10 @@ svcore_lib = static_library(
 
 svcore_dep = declare_dependency(
   link_with: svcore_lib,
-  include_directories: all_include_dirs,
+  include_directories: [
+    all_include_dirs,
+    feature_include_dirs,
+  ],
 )
 
 svcore_base_test_moc_files = qt.preprocess(
@@ -690,17 +810,6 @@ server_files = [
   'piper-vamp-cpp/vamp-server/simple-server.cpp',
 ]
 
-capnp_gen_target = custom_target(
-  'capnp_gen',
-  input: 'piper/capnp/piper.capnp',
-  output: 'piper.capnp.c++',
-  command: [
-    'capnp', 'compile',
-    '--src-prefix=' + meson.current_source_dir() / 'piper/capnp',
-    '-oc++:@OUTDIR@',
-    '@INPUT@'
-  ])
-
 #!!! + server, + windows and mac specific stuff, +  + translations, + icons, + install, + resources
   
 qt_resource_files = qt.preprocess(
@@ -828,14 +937,16 @@ executable(
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
     'piper-vamp-cpp/ext',
+    feature_include_dirs,
   ],
   cpp_args: [
     general_defines,
   ],
   dependencies: [
-    capnp_dep,
-    sord_dep,
-    dl_dep,
+    server_dependencies,
+  ],
+  link_args: [
+    feature_additional_libs,
   ],
   gui_app: false
 )
@@ -846,7 +957,6 @@ executable(
   svgui_moc_files,
   svapp_moc_files,
   sv_main_moc_files,
-  capnp_gen_target,
   svgui_files,
   svapp_files,
   checker_lib_files,
@@ -859,9 +969,6 @@ executable(
   ],
   cpp_args: [
     feature_defines,
-    '-DHAVE_PIPER',
-    '-DHAVE_PLUGIN_CHECKER_HELPER',
-    '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00',
     general_defines,
   ],
   link_args: [
