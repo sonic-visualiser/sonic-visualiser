@@ -24,6 +24,8 @@ fi
 set -u
 
 mkdir -p "$source/Contents/MacOS"
+mkdir -p "$source/Contents/Resources"
+
 cp -a "build/$app" "$source/Contents/MacOS"
 
 version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
@@ -53,11 +55,11 @@ cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
 echo "Copying in plugin load checker."
-cp checker/vamp-plugin-load-checker "$source"/Contents/MacOS/
+cp build/vamp-plugin-load-checker "$source"/Contents/MacOS/
 
 echo
 echo "Copying in plugin server."
-cp piper-vamp-simple-server "$source"/Contents/MacOS/
+cp build/piper-vamp-simple-server "$source"/Contents/MacOS/
 
 echo
 echo "Copying in lproj directories containing InfoPlist.strings translation files."

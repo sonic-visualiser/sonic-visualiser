@@ -144,7 +144,7 @@ if system == 'linux'
     '-DHAVE_JACK', '-DDYNAMIC_JACK',
     '-DHAVE_LIBPULSE',
     '-D__LINUX_ALSASEQ__',
-    '-D__LINUX_ALSA__'
+    '-D__LINUX_ALSA__' # for RtMidi
   ]
   
   svcore_moc_args = [
@@ -182,6 +182,7 @@ elif system == 'darwin'
     '-DHAVE_PORTAUDIO',
     '-DHAVE_COREAUDIO',
     '-DHAVE_VDSP',
+    '-D__MACOSX_CORE__', # for RtMidi
   ]
 
   feature_dependencies = [
@@ -275,7 +276,7 @@ elif system == 'windows'
     '-DHAVE_ID3TAG',
     '-DHAVE_OPUS',
     '-DHAVE_PORTAUDIO',
-    '-D__WINDOWS_MM__',
+    '-D__WINDOWS_MM__', # for RtMidi
   ]
 
   feature_dependencies = [

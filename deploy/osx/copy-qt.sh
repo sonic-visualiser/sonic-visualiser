@@ -13,10 +13,10 @@ frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtWidgets QtPrintSupport QtDBus"
 
 plugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen macstyle"
 
-qtdir=$(grep "Command:" Makefile | head -1 | awk '{ print $3; }' | sed s,/bin/.*,,)
+qtdir="$QTDIR"
 
 if [ ! -d "$qtdir" ]; then
-    echo "Failed to discover Qt installation directory from Makefile, exiting"
+    echo "QTDIR must be set"
     exit 2
 fi
 
