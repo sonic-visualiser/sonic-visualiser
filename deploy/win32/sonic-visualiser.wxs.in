@@ -9,14 +9,14 @@
       Codepage="1252" 
       Version="@VERSION@"
       UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
-      Manufacturer="Queen Mary, University of London">
+      Manufacturer="sonicvisualiser.org">
     
     <Package
         Id="*"
         Keywords="Installer"
         Description="Sonic Visualiser 32-bit Installer" 
-        Comments="Copyright (c) 2020 Queen Mary, University of London and others."
-        Manufacturer="Queen Mary, University of London" 
+        Comments="Copyright (c) 2021 Chris Cannam, Queen Mary University of London, and others."
+        Manufacturer="sonicvisualiser.org" 
         InstallerVersion="100" 
         Languages="1033" 
         Compressed="yes" 
@@ -37,7 +37,7 @@
             <File
                 Id="VampREADME"
                 Name="README.txt"
-                Source="..\deploy\win32\README-Vamp.txt"/>
+                Source="deploy\win32\README-Vamp.txt"/>
           </Component>
         </Directory>
         <Directory Id="APPLICATIONFOLDER" Name="Sonic Visualiser">
@@ -49,7 +49,7 @@
             <File
                 Id="SVExecutable"
                 Name="Sonic Visualiser.exe"
-                Source="release\Sonic Visualiser.exe"
+                Source="build_win32\Sonic Visualiser.exe"
                 KeyPath="yes">
 
               <Shortcut
@@ -74,24 +74,24 @@
             <File
                 Id="COPYING"
                 Name="COPYING.txt"
-                Source="..\COPYING"/>
+                Source="COPYING"/>
             <File
                 Id="README"
                 Name="README.txt"
-                Source="..\README.md"/>
+                Source="README.md"/>
             <File
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
-                Source="..\CHANGELOG"/>
+                Source="CHANGELOG"/>
             <File
                 Id="CITATION"
                 Name="CITATION.txt"
-                Source="..\CITATION"/>
+                Source="CITATION"/>
 
             <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
-                Source="..\icons/sv-winicon.ico"/>
+                Source="icons/sv-winicon.ico"/>
           </Component>
           
           <Component
@@ -123,40 +123,40 @@
             <File
                 Id="QtCore"
                 Name="Qt5Core.dll"
-                Source="release\Qt5Core.dll"
+                Source="build_win32\Qt5Core.dll"
 		KeyPath="yes"/>
             <File
                 Id="QtGui"
                 Name="Qt5Gui.dll"
-                Source="release\Qt5Gui.dll"/>
+                Source="build_win32\Qt5Gui.dll"/>
             <File
                 Id="QtNetwork"
                 Name="Qt5Network.dll"
-                Source="release\Qt5Network.dll"/>
+                Source="build_win32\Qt5Network.dll"/>
             <File
                 Id="QtWidgets"
                 Name="Qt5Widgets.dll"
-                Source="release\Qt5Widgets.dll"/>
+                Source="build_win32\Qt5Widgets.dll"/>
             <File
                 Id="QtXml"
                 Name="Qt5Xml.dll"
-                Source="release\Qt5Xml.dll"/>
+                Source="build_win32\Qt5Xml.dll"/>
             <File
                 Id="QtSvg"
                 Name="Qt5Svg.dll"
-                Source="release\Qt5Svg.dll"/>
+                Source="build_win32\Qt5Svg.dll"/>
             <File
                 Id="libgcc"
                 Name="libgcc_s_dw2-1.dll"
-                Source="release\libgcc_s_dw2-1.dll"/>
+                Source="build_win32\libgcc_s_dw2-1.dll"/>
             <File
                 Id="libstdcplusplus"
                 Name="libstdc++-6.dll"
-                Source="release\libstdc++-6.dll"/>
+                Source="build_win32\libstdc++-6.dll"/>
             <File
                 Id="libwinpthread"
                 Name="libwinpthread-1.dll"
-                Source="release\libwinpthread-1.dll"/>
+                Source="build_win32\libwinpthread-1.dll"/>
           </Component>
 
           <Component Id="OpenSSL"
@@ -179,11 +179,11 @@
 	      <File
                   Id="qminimal"
                   Name="qminimal.dll"
-                  Source="release\qminimal.dll"/>
+                  Source="build_win32\qminimal.dll"/>
 	      <File
                   Id="qwindows"
                   Name="qwindows.dll"
-                  Source="release\qwindows.dll"/>
+                  Source="build_win32\qwindows.dll"/>
             </Component>
 	  </Directory>
 	  
@@ -194,7 +194,7 @@
 	      <File
                   Id="qwindowsvistastyle"
                   Name="qwindowsvistastyle.dll"
-                  Source="release\qwindowsvistastyle.dll"/>
+                  Source="build_win32\qwindowsvistastyle.dll"/>
             </Component>
 	  </Directory>
 
@@ -204,30 +204,30 @@
 	      <File
 		  Id="piperconv"
 		  Name="piper-convert.exe"
-		  Source="release\piper-convert.exe"/>
+		  Source="build_win32\piper-convert.exe"/>
 	      <File
 		  Id="piper"
 		  Name="piper-vamp-simple-server.exe"
-		  Source="release\piper-vamp-simple-server.exe"/>
+		  Source="build_win32\piper-vamp-simple-server.exe"/>
 	      <File
                   Id="libgcc32"
                   Name="libgcc_s_dw2-1.dll"
-                  Source="release\libgcc_s_dw2-1.dll"/>
+                  Source="build_win32\libgcc_s_dw2-1.dll"/>
 	      <File
                   Id="libstdcplusplus32"
                   Name="libstdc++-6.dll"
-                  Source="release\libstdc++-6.dll"/>
+                  Source="build_win32\libstdc++-6.dll"/>
 	      <File
                   Id="libwinpthread32"
                   Name="libwinpthread-1.dll"
-                  Source="release\libwinpthread-1.dll"/>
+                  Source="build_win32\libwinpthread-1.dll"/>
 	    </Component>
             <Component Id="Checker"
                        Guid="DB09B035-0594-4876-B494-4D25CED43601">
 	      <File
 		  Id="checker"
 		  Name="vamp-plugin-load-checker.exe"
-		  Source="release\vamp-plugin-load-checker.exe"/>
+		  Source="build_win32\vamp-plugin-load-checker.exe"/>
 	    </Component>
 	  </Directory> <!-- helpers -->
         </Directory> <!-- sv --> 
@@ -275,13 +275,13 @@
     <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
     <Property Id="ApplicationFolderName" Value="Sonic Visualiser" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
-    <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win32\License.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="deploy\win32\License.rtf" />
     
-    <Icon Id="winicon.ico" SourceFile="..\icons\sv-winicon.ico"/>
+    <Icon Id="winicon.ico" SourceFile="icons\sv-winicon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
 
-    <WixVariable Id="WixUIBannerBmp" Value="..\deploy\win32\top.bmp"/>
-    <WixVariable Id="WixUIDialogBmp" Value="..\deploy\win32\main.bmp"/>
+    <WixVariable Id="WixUIBannerBmp" Value="deploy\win32\top.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="deploy\win32\main.bmp"/>
 
   </Product>
 </Wix>

@@ -13,7 +13,7 @@ if (!$redists) {
 
 $redist_ver = $redists[-1]
 
-$version = (Get-Content version.h) -replace '#define SV_VERSION ','' -replace '"','' -replace '-pre.*',''
+$version = (Get-Content build\version.h) -replace '#define SV_VERSION ','' -replace '"','' -replace '-pre.*',''
 $wxs = "deploy\win64\sonic-visualiser.wxs"
 
 $in = "$wxs.in"

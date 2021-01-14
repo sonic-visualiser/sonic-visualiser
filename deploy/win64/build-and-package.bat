@@ -12,15 +12,9 @@ if not exist "C:\Program Files (x86)\WiX Toolset v3.11\bin" (
 @   exit /b 2
 )
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win32\generate-wxs.ps1'"
-if errorlevel 1 exit /b %errorlevel%
-
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win64\generate-wxs.ps1'"
-if errorlevel 1 exit /b %errorlevel%
-
 set ORIGINALPATH=%PATH%
 set PATH=C:\Program Files (x86)\Windows Kits\10\bin\x64;%PATH%
-set NAME=Open Source Developer, Christopher Cannam
+set NAME=Christopher Cannam
 
 set ARG=%1
 shift
@@ -49,7 +43,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%ARG%" == "sign" (
 @echo Signing 32-bit executables and libraries
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a build_win32\release\*.exe build_win32\release\*.dll
+signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a build_win32\*.exe build_win32\*.dll
 )
 
 @echo Rebuilding 64-bit
@@ -61,16 +55,22 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%ARG%" == "sign" (
 @echo Signing 64-bit executables and libraries
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a build_win64\release\*.exe build_win64\release\*.dll
+signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a build_win64\*.exe build_win64\*.dll
 )
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win32\generate-wxs.ps1'"
+if errorlevel 1 exit /b %errorlevel%
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win64\generate-wxs.ps1'"
+if errorlevel 1 exit /b %errorlevel%
 
 set PATH=%PATH%;"C:\Program Files (x86)\WiX Toolset v3.11\bin"
 
 @echo Packaging 32-bit
 
-cd %STARTPWD%\build_win32
+cd %STARTPWD%
 del sonic-visualiser.msi
-candle -v ..\deploy\win32\sonic-visualiser.wxs
+candle -v deploy\win32\sonic-visualiser.wxs
 light -b . -ext WixUIExtension -ext WixUtilExtension -v sonic-visualiser.wixobj
 if %errorlevel% neq 0 exit /b %errorlevel%
 del sonic-visualiser.wixobj
@@ -84,9 +84,9 @@ signtool verify /pa sonic-visualiser.msi
 
 @echo Packaging 64-bit
 
-cd %STARTPWD%\build_win64
+cd %STARTPWD%
 del sonic-visualiser.msi
-candle -v ..\deploy\win64\sonic-visualiser.wxs
+candle -v deploy\win64\sonic-visualiser.wxs
 light -b . -ext WixUIExtension -ext WixUtilExtension -v sonic-visualiser.wixobj
 if %errorlevel% neq 0 exit /b %errorlevel%
 del sonic-visualiser.wixobj

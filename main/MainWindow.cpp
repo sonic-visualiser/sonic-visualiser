@@ -5442,7 +5442,10 @@ MainWindow::about()
     aboutText += QString("<p><small>%1</small></p>").arg(getReleaseText());
 
     if (m_oscQueue && m_oscQueue->isOK()) {
-        aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(m_oscQueue->getOSCURL());
+        QString url = m_oscQueue->getOSCURL();
+        if (url != "") {
+            aboutText += tr("</small><p><small>The OSC URL for this instance is: \"%1\"").arg(url);
+        }
     }
 
     aboutText += "</small><p><small>";

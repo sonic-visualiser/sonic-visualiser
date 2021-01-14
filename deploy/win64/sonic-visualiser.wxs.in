@@ -9,14 +9,14 @@
       Codepage="1252" 
       Version="@VERSION@"
       UpgradeCode="D476941E-65F3-4962-9E72-B40FAAE5DBD0"
-      Manufacturer="Queen Mary, University of London">
+      Manufacturer="sonicvisualiser.org">
     
     <Package
         Id="*"
         Keywords="Installer"
         Description="Sonic Visualiser 64-bit Installer" 
-        Comments="Copyright (c) 2020 Queen Mary, University of London and others."
-        Manufacturer="Queen Mary, University of London" 
+        Comments="Copyright (c) 2021 Chris Cannam, Queen Mary University of London, and others."
+        Manufacturer="sonicvisualiser.org" 
         InstallerVersion="200"
         Languages="1033" 
         Compressed="yes" 
@@ -38,7 +38,7 @@
             <File
                 Id="VampREADME"
                 Name="README.txt"
-                Source="..\deploy\win64\README-Vamp.txt"/>
+                Source="deploy\win64\README-Vamp.txt"/>
           </Component>
         </Directory>
 
@@ -51,7 +51,7 @@
             <File
                 Id="SVExecutable"
                 Name="Sonic Visualiser.exe"
-                Source="release\Sonic Visualiser.exe"
+                Source="build_win64\Sonic Visualiser.exe"
                 KeyPath="yes">
 
               <Shortcut
@@ -76,24 +76,24 @@
             <File
                 Id="COPYING"
                 Name="COPYING.txt"
-                Source="..\COPYING"/>
+                Source="COPYING"/>
             <File
                 Id="README"
                 Name="README.txt"
-                Source="..\README.md"/>
+                Source="README.md"/>
             <File
                 Id="CHANGELOG"
                 Name="CHANGELOG.txt"
-                Source="..\CHANGELOG"/>
+                Source="CHANGELOG"/>
             <File
                 Id="CITATION"
                 Name="CITATION.txt"
-                Source="..\CITATION"/>
+                Source="CITATION"/>
 
             <File
                 Id="winicon.ico"
                 Name="sv-winicon.ico"
-                Source="..\icons\sv-winicon.ico"/>
+                Source="icons\sv-winicon.ico"/>
           </Component>
           
           <Component Win64="yes"
@@ -125,28 +125,28 @@
             <File
                 Id="QtCore"
                 Name="Qt5Core.dll"
-                Source="release\Qt5Core.dll"
+                Source="build_win64\Qt5Core.dll"
 		KeyPath="yes"/>
             <File
                 Id="QtGui"
                 Name="Qt5Gui.dll"
-                Source="release\Qt5Gui.dll"/>
+                Source="build_win64\Qt5Gui.dll"/>
             <File
                 Id="QtNetwork"
                 Name="Qt5Network.dll"
-                Source="release\Qt5Network.dll"/>
+                Source="build_win64\Qt5Network.dll"/>
             <File
                 Id="QtWidgets"
                 Name="Qt5Widgets.dll"
-                Source="release\Qt5Widgets.dll"/>
+                Source="build_win64\Qt5Widgets.dll"/>
             <File
                 Id="QtXml"
                 Name="Qt5Xml.dll"
-                Source="release\Qt5Xml.dll"/>
+                Source="build_win64\Qt5Xml.dll"/>
             <File
                 Id="QtSvg"
                 Name="Qt5Svg.dll"
-                Source="release\Qt5Svg.dll"/>
+                Source="build_win64\Qt5Svg.dll"/>
           </Component>
 
           <Component Win64="yes"
@@ -155,7 +155,7 @@
             <File
                 Id="libsndfile"
                 Name="libsndfile-1.dll"
-                Source="..\sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
+                Source="sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll"
                 KeyPath="yes"/>
           </Component>
 
@@ -181,7 +181,7 @@
             <File
                 Id="os_win10"
                 Name="os.dll"
-                Source="release\os.dll"
+                Source="build_win64\os.dll"
                 KeyPath="yes"/>
           </Component>
 
@@ -193,7 +193,7 @@
             <File
                 Id="os_other"
                 Name="os.dll"
-                Source="release\os_other.dll"
+                Source="build_win64\os_other.dll"
                 KeyPath="yes"/>
           </Component>
 
@@ -240,11 +240,11 @@
 	      <File
                   Id="qminimal"
                   Name="qminimal.dll"
-                  Source="release\qminimal.dll"/>
+                  Source="build_win64\qminimal.dll"/>
 	      <File
                   Id="qwindows"
                   Name="qwindows.dll"
-                  Source="release\qwindows.dll"/>
+                  Source="build_win64\qwindows.dll"/>
             </Component>
 	  </Directory>
 
@@ -255,7 +255,7 @@
 	      <File
                   Id="qwindowsvistastyle"
                   Name="qwindowsvistastyle.dll"
-                  Source="release\qwindowsvistastyle.dll"/>
+                  Source="build_win64\qwindowsvistastyle.dll"/>
             </Component>
 	  </Directory>
 
@@ -266,11 +266,11 @@
 	      <File
 		  Id="piperconv64"
 		  Name="piper-convert.exe"
-		  Source="release\piper-convert.exe"/>
+		  Source="build_win64\piper-convert.exe"/>
 	      <File
 		  Id="piper64"
 		  Name="piper-vamp-simple-server.exe"
-		  Source="release\piper-vamp-simple-server.exe"/>
+		  Source="build_win64\piper-vamp-simple-server.exe"/>
               <File
                   Id="concrt140h"
                   Name="concrt140.dll"
@@ -299,19 +299,19 @@
 	      <File
 		  Id="piper32"
 		  Name="piper-vamp-simple-server-32.exe"
-		  Source="..\build_win32\release\piper-vamp-simple-server.exe"/>
+		  Source="build_win32\piper-vamp-simple-server.exe"/>
 	      <File
                   Id="libgcc32"
                   Name="libgcc_s_dw2-1.dll"
-                  Source="..\build_win32\release\libgcc_s_dw2-1.dll"/>
+                  Source="build_win32\libgcc_s_dw2-1.dll"/>
 	      <File
                   Id="libstdcplusplus32"
                   Name="libstdc++-6.dll"
-                  Source="..\build_win32\release\libstdc++-6.dll"/>
+                  Source="build_win32\libstdc++-6.dll"/>
 	      <File
                   Id="libwinpthread32"
                   Name="libwinpthread-1.dll"
-                  Source="..\build_win32\release\libwinpthread-1.dll"/>
+                  Source="build_win32\libwinpthread-1.dll"/>
 	    </Component>
             <Component Win64="yes"
                 Id="Checker64"
@@ -319,7 +319,7 @@
 	      <File
 		  Id="checker64"
 		  Name="vamp-plugin-load-checker.exe"
-		  Source="release\vamp-plugin-load-checker.exe"/>
+		  Source="build_win64\vamp-plugin-load-checker.exe"/>
 	    </Component>
             <Component Win64="yes"
                 Id="Checker32"
@@ -327,7 +327,7 @@
 	      <File
 		  Id="checker32"
 		  Name="vamp-plugin-load-checker-32.exe"
-		  Source="..\build_win32\release\vamp-plugin-load-checker.exe"/>
+		  Source="build_win32\vamp-plugin-load-checker.exe"/>
 	    </Component>
 	    
 	  </Directory> <!-- helpers -->
@@ -342,7 +342,7 @@
             <File
                 Id="Vamp32README"
                 Name="README.txt"
-                Source="..\deploy\win64\README-Vamp32.txt"/>
+                Source="deploy\win64\README-Vamp32.txt"/>
           </Component>
         </Directory>
       </Directory>
@@ -396,12 +396,12 @@
     <Property Id="WIXUI_DONTVALIDATEPATH" Value="1" />
     <Property Id="ApplicationFolderName" Value="Sonic Visualiser" />
     <Property Id="WixAppFolder" Value="WixPerMachineFolder" />
-    <WixVariable Id="WixUILicenseRtf" Value="..\deploy\win64\License.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="deploy\win64\License.rtf" />
     
-    <Icon Id="winicon.ico" SourceFile="..\icons\sv-winicon.ico"/>
+    <Icon Id="winicon.ico" SourceFile="icons\sv-winicon.ico"/>
     <Property Id="ARPPRODUCTICON" Value="winicon.ico" />
 
-    <WixVariable Id="WixUIBannerBmp" Value="..\deploy\win32\top.bmp"/>
-    <WixVariable Id="WixUIDialogBmp" Value="..\deploy\win32\main.bmp"/>
+    <WixVariable Id="WixUIBannerBmp" Value="deploy\win32\top.bmp"/>
+    <WixVariable Id="WixUIDialogBmp" Value="deploy\win32\main.bmp"/>
 
   </Product> </Wix>

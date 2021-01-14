@@ -6,10 +6,12 @@ project(
   license: 'GPL-2.0-or-later',
   default_options: [
     'cpp_std=c++17',
-    'warning_level=3',
+    'warning_level=2',
+    'buildtype=release',
     'b_ndebug=if-release',
-    'b_pie=true',
-  ])
+  ],
+  meson_version: '>= 0.54.0'
+)
 
 conf = configuration_data()
 conf.set('version', meson.project_version())
@@ -21,11 +23,38 @@ qt_dep = dependency(
   'qt5',
   modules: [
     'Core', 'Gui', 'Widgets', 'Xml', 'Network', 'Svg', 'Test',
-  ]
+  ],
+  main: true
 )
 
 system = build_machine.system()
 architecture = host_machine.cpu_family()
+compiler = meson.get_compiler('cpp').get_id()
+
+general_defines = [
+  '-DHAVE_PIPER',
+  '-DHAVE_PLUGIN_CHECKER_HELPER',
+  '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00'
+]
+
+if get_option('buildtype').startswith('release')
+  general_defines += [
+    '-DNO_TIMING',
+    '-DNO_HIT_COUNTS',
+  ]
+if compiler == 'gcc' or compiler == 'clang'
+  general_defines += [
+    '-ffast-math',
+  ]
+elif compiler == 'msvc'
+  general_defines += [
+    '-fp:fast',
+    '-wd4068', # unknown pragma (we have lots of pragma 'GCC')
+    '-wd4267', # conversion from size_t to smaller integral type
+    '-wd4996', # deprecated functions, including annoying warnings about POSIX
+  ]
+endif # compiler
+endif # get_option('buildtype')
 
 svcore_moc_args = []
 feature_additional_libs = []
@@ -45,7 +74,7 @@ if system == 'linux'
   if not bzip2_dep.found()
     message('Failed to find bzip2 dependency. On many systems this exists but is not discoverable through pkg-config; proceeding on this assumption')
     feature_additional_libs = [ '-lbz2' ]
-  endif
+  endif # bzip2_dep
   
   fftw3_dep = dependency('fftw3', version: '>= 3.0.0')
   fftw3f_dep = dependency('fftw3f', version: '>= 3.0.0')
@@ -182,7 +211,6 @@ elif system == 'darwin'
     '-lvorbisfile',
     '-lopusfile',
     '-lopus',
-    '-logg',
     '-lmad',
     '-lid3tag',
     '-lportaudio',
@@ -207,27 +235,130 @@ elif system == 'darwin'
   ]
   
 elif system == 'windows'
-endif
 
-general_defines = [
-  '-DHAVE_PIPER',
-  '-DHAVE_PLUGIN_CHECKER_HELPER',
-  '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00'
-]
-
-if get_option('buildtype').startswith('release')
-  general_defines += [
-    '-DNO_TIMING',
-    '-DNO_HIT_COUNTS',
+  if architecture == 'x86'
+    svdeps_dir = meson.current_source_dir() / 'sv-dependency-builds/win32-mingw'
+  else 
+    svdeps_dir = meson.current_source_dir() / 'sv-dependency-builds/win64-msvc'
+  endif # architecture
+  
+  capnp = find_program(
+    'capnp',
+    dirs: [
+      svdeps_dir / 'bin'
+    ])
+  capnp_additional_args = [
+    '-I' + svdeps_dir / 'include'
   ]
-if meson.get_compiler('cpp').get_id() == 'gcc' or \
-   meson.get_compiler('cpp').get_id() == 'clang'
-  general_defines += [
-    '-ffast-math',
-  ]
-endif
-endif
+  capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
 
+  general_defines += [
+    '-DWIN32',
+    '-DNOMINMAX',
+    '-DUNICODE',
+    '-D_USE_MATH_DEFINES',
+    '-DCAPNP_LITE',
+    '-D_HAS_STD_BYTE=0',
+  ]
+  
+  feature_defines = [
+    '-DHAVE_BZ2',
+    '-DHAVE_FFTW3',
+    '-DHAVE_FFTW3F',
+    '-DHAVE_SNDFILE',
+    '-DHAVE_LIBSAMPLERATE',
+    '-DHAVE_RUBBERBAND',
+    '-DHAVE_SORD', '-DUSE_SORD',
+    '-DHAVE_SERD',
+    '-DHAVE_CAPNP',
+    '-DHAVE_MAD',
+    '-DHAVE_ID3TAG',
+    '-DHAVE_OPUS',
+    '-DHAVE_PORTAUDIO',
+    '-D__WINDOWS_MM__',
+  ]
+
+  feature_dependencies = [
+  ]
+
+  server_dependencies = [
+    dl_dep,
+  ]
+  
+  if architecture == 'x86'
+    feature_include_dirs = [
+      # These must be relative, so not using svdeps_dir
+      'sv-dependency-builds/win32-mingw/include',
+      'sv-dependency-builds/win32-mingw/include/opus',
+    ]
+  else
+    feature_defines += [
+      '-DHAVE_MEDIAFOUNDATION',
+    ]
+    feature_include_dirs = [
+      # These must be relative, so not using svdeps_dir
+      'sv-dependency-builds/win64-msvc/include',
+      'sv-dependency-builds/win64-msvc/include/opus',
+    ]
+  endif # architecture
+  
+  feature_additional_libs = [
+    '-L' + svdeps_dir / 'lib',
+    '-lbz2',
+    '-lrubberband',
+    '-lfftw3',
+    '-lfftw3f',
+    '-lsndfile',
+    '-logg',
+    '-lopusfile',
+    '-lopus',
+    '-lmad',
+    '-lid3tag',
+    '-lportaudio',
+    '-lsamplerate',
+    '-lz',
+    '-lcapnp',
+    '-lkj',
+  ]
+
+  if architecture == 'x86'
+    feature_additional_libs += [
+      '-lFLAC',
+      '-lvorbis',
+      '-lvorbisenc',
+      '-lvorbisfile',
+      '-lsord-0',
+      '-lserd-0',
+      # (We don't have MediaFoundation support with this build sadly)
+      '-lwinmm',
+      '-lws2_32',
+    ]
+  elif architecture == 'x86_64'
+    feature_additional_libs += [
+      '-NODEFAULTLIB:LIBCMT',
+      '-lsord',
+      '-lserd',
+      '-lmfplat',
+      '-lmfreadwrite',
+      '-lmfuuid',
+      '-lpropsys',
+      '-ladvapi32',
+      '-lwinmm',
+      '-lws2_32',
+    ]
+  else 
+    error('Build for architecture ' + architecture + ' is not supported on this platform')
+  endif # architecture
+  
+  svcore_moc_args = [
+    '-DHAVE_MAD',
+    '-DQ_OS_WIN',
+  ]
+
+else
+    error('This operating system ("' + system + '") is not supported by this build file')
+endif # system
+    
 all_include_dirs = include_directories(
   [
     'bqvec',
@@ -259,7 +390,7 @@ capnp_gen_target = custom_target(
   # The input must be absolute, or (the version of capnp I have here)
   # writes output into the wrong directory!
   input: meson.current_source_dir() / 'piper/capnp/piper.capnp',
-  output: 'piper.capnp.c++',
+  output: ['piper.capnp.h', 'piper.capnp.c++'],
   command: [
     capnp,
     capnp_additional_args,
@@ -268,6 +399,43 @@ capnp_gen_target = custom_target(
     '-o' + capnp_cpp_plugin + ':@OUTDIR@',
     '@INPUT@'
   ])
+
+capnp_gen_header_dep = declare_dependency(
+  sources: capnp_gen_target[0]
+)
+
+if system == 'windows'
+
+  # This nonsense is just because MSVC CL won't accept files with a
+  # .c++ extension (unless you can somehow finagle the /tp option into
+  # the right place in the args list). We copy the .c++ file generated
+  # by capnpc-c++ to a .cpp file and use that instead
+  
+  capnp_gen_cpp_target = custom_target(
+    'capnp_gen_cpp',
+    input: capnp_gen_target[1],
+    output: 'piper.capnp.cpp',
+    command: [
+      'xcopy',
+      '@INPUT@',
+      '@OUTPUT@' + '*',
+    ])
+
+else
+
+  # Unnecessary on non-Windows platforms, but for consistency...
+  
+  capnp_gen_cpp_target = custom_target(
+    'capnp_gen_cpp',
+    input: capnp_gen_target[1],
+    output: 'piper.capnp.cpp',
+    command: [
+      'cp',
+      '@INPUT@',
+      '@OUTPUT@',
+    ])
+
+endif  
 
 bq_files = [
   'bqvec/src/Allocators.cpp',
@@ -440,7 +608,6 @@ svcore_files = [
   'svcore/transform/TransformFactory.cpp',
   'svcore/transform/ModelTransformer.cpp',
   'svcore/transform/ModelTransformerFactory.cpp',
-  capnp_gen_target,
 ]
 
 svcore_moc_files = qt.preprocess(
@@ -501,6 +668,7 @@ svcore_moc_files = qt.preprocess(
 
 svcore_lib = static_library(
   'svcore',
+  capnp_gen_cpp_target,
   bq_files,
   vamp_plugin_sdk_files,
   dataquay_moc_files,
@@ -512,6 +680,7 @@ svcore_lib = static_library(
     feature_include_dirs,
   ],
   dependencies: [
+    capnp_gen_header_dep,
     qt_dep,
     feature_dependencies,
     dl_dep,
@@ -524,6 +693,9 @@ svcore_lib = static_library(
 
 svcore_dep = declare_dependency(
   link_with: svcore_lib,
+  dependencies: [
+    capnp_gen_header_dep,
+  ],
   include_directories: [
     all_include_dirs,
     feature_include_dirs,
@@ -821,7 +993,7 @@ if system == 'linux'
   sv_main_name = 'sonic-visualiser'
 else
   sv_main_name = 'Sonic Visualiser'
-endif
+endif # system
 
 svcore_base_test_exe = executable(
   'test-svcore-base',
@@ -930,9 +1102,9 @@ executable(
 
 executable(
   'piper-vamp-simple-server',
+  capnp_gen_cpp_target,
   vamp_plugin_sdk_files,
   server_files,
-  capnp_gen_target,
   include_directories: [
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
@@ -943,6 +1115,7 @@ executable(
     general_defines,
   ],
   dependencies: [
+    capnp_gen_header_dep,
     server_dependencies,
   ],
   link_args: [
@@ -950,6 +1123,24 @@ executable(
   ],
   gui_app: false
 )
+
+if compiler == 'msvc'
+  shared_library(
+    'os',
+    [ 'svcore/system/os-win10.cpp' ],
+    link_args: [
+      '-EXPORT:OSReportsDarkThemeActive',
+      '-EXPORT:OSQueryAccentColour',
+      '-lWindowsApp'
+    ])
+  shared_library(
+    'os_other',
+    [ 'svcore/system/os-other.cpp' ],
+    link_args: [
+      '-EXPORT:OSReportsDarkThemeActive',
+      '-EXPORT:OSQueryAccentColour',
+    ])
+endif
 
 executable(
   sv_main_name,
