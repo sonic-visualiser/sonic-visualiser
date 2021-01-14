@@ -17,7 +17,7 @@ set -u
 
 app="Sonic Visualiser"
 
-version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
+version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
 
 source="$app.app"
 volume="$app"-"$version"
