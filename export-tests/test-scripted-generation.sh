@@ -9,9 +9,9 @@ fi
 
 set -u
 
-sv="../sonic-visualiser"
+sv="../build/sonic-visualiser"
 if [ ! -f "$sv" -o ! -x "$sv" ]; then
-    echo "This script must be run from the sonic-visualiser/test directory" 1>&2
+    echo "This script must be run from the sonic-visualiser/export-tests directory" 1>&2
     exit 1
 fi
 
@@ -46,12 +46,12 @@ for method in 1 2; do
           echo "/transform vamp:qm-vamp-plugins:qm-keydetector:keystrength" ;
           echo "/exportlayer $actual" ;
           echo "/quit" ) |
-            ../sonic-visualiser --osc-script -
+            "$sv" --osc-script -
     else
         ( echo "/transform vamp:qm-vamp-plugins:qm-keydetector:keystrength" ;
           echo "/exportlayer $actual" ;
           echo "/quit" ) |
-            ../sonic-visualiser --osc-script - s1.wav
+            "$sv" --osc-script - s1.wav
     fi
 
     if ! cmp -s "$actual" "$expected" ; then

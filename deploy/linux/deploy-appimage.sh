@@ -5,6 +5,7 @@ set -eu
 program=sonic-visualiser
 checker=vamp-plugin-load-checker
 piper=piper-vamp-simple-server
+convert=piper-convert
 
 get_id() {
     if [ -d .hg ]; then
@@ -33,7 +34,8 @@ mkdir "$targetdir"
 mkdir -p "$targetdir"/usr/bin
 mkdir -p "$targetdir"/usr/lib
 
-cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
+cp "build/$program" "build/$checker" "build/$piper" "build/$convert" \
+   "$targetdir"/usr/bin/
 
 ldd /usr/lib/x86_64-linux-gnu/libpulse.so.0 || true
 
@@ -69,9 +71,10 @@ add_dependencies() {
     done
 }
 
-add_dependencies "$program"
-add_dependencies "$checker"
-add_dependencies "$piper"
+add_dependencies "build/$program"
+add_dependencies "build/$checker"
+add_dependencies "build/$piper"
+add_dependencies "build/$convert"
 
 qtplugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen xcb"
 qtlibdirs="/usr/lib/x86_64-linux-gnu/qt5 /usr/lib/x86_64-linux-gnu/qt /usr/lib/qt5 /usr/lib/qt"

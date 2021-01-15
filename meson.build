@@ -68,6 +68,8 @@ if system == 'linux'
   capnp = find_program('capnp')
   capnp_additional_args = []
   capnp_cpp_plugin = 'c++'
+
+  rc = []
   
   bzip2_dep = dependency('bzip2', required: false)
 
@@ -91,9 +93,11 @@ if system == 'linux'
   id3tag_dep = dependency('id3tag', version: '>= 0.15.0')
   opus_dep = dependency('opusfile')
   lo_dep = dependency('liblo')
-  portaudio_dep = dependency('portaudio-2.0', version: '>= 19')
   jack_dep = dependency('jack', version: '>= 0.100')
   libpulse_dep = dependency('libpulse', version: '>= 0.9')
+  alsa_dep = dependency('alsa')
+  
+  portaudio_dep = dependency('portaudio-2.0', version: '>= 19', required: false)
 
   feature_dependencies = [
     bzip2_dep,
@@ -115,6 +119,7 @@ if system == 'linux'
     portaudio_dep,
     jack_dep,
     libpulse_dep,
+    alsa_dep,
   ]
 
   server_dependencies = [
@@ -140,13 +145,18 @@ if system == 'linux'
     '-DHAVE_ID3TAG',
     '-DHAVE_OPUS',
     '-DHAVE_LIBLO',
-    '-DHAVE_PORTAUDIO',
     '-DHAVE_JACK', '-DDYNAMIC_JACK',
     '-DHAVE_LIBPULSE',
     '-D__LINUX_ALSASEQ__',
     '-D__LINUX_ALSA__' # for RtMidi
   ]
-  
+
+  if portaudio_dep.found()
+    feature_defines += [
+      '-DHAVE_PORTAUDIO',
+    ]
+  endif
+
   svcore_moc_args = [
     '-DHAVE_MAD'
   ]
@@ -164,6 +174,8 @@ elif system == 'darwin'
     '-I' + svdeps_dir / 'include'
   ]
   capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+  
+  rc = []
   
   feature_defines = [
     '-DHAVE_BZ2',
@@ -252,6 +264,9 @@ elif system == 'windows'
     '-I' + svdeps_dir / 'include'
   ]
   capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+
+  windows = import('windows')
+  rc = windows.compile_resources('icons/sv.rc')
 
   general_defines += [
     '-DWIN32',
@@ -974,27 +989,12 @@ checker_lib_files = [
   'checker/src/knownplugins.cpp',
 ]
 
-checker_helper_files = [
-  'checker/src/helper.cpp',
-]
-
-server_files = [
-  'piper-vamp-cpp/ext/json11/json11.cpp',
-  'piper-vamp-cpp/vamp-server/simple-server.cpp',
-]
-
 #!!! + server, + windows and mac specific stuff, +  + translations, + icons, + install, + resources
   
 qt_resource_files = qt.preprocess(
   qresources: [
   'sonic-visualiser.qrc',
 ])
-
-if system == 'linux'
-  sv_main_name = 'sonic-visualiser'
-else
-  sv_main_name = 'Sonic Visualiser'
-endif # system
 
 svcore_base_test_exe = executable(
   'test-svcore-base',
@@ -1089,7 +1089,7 @@ test('svcore-data-fileio', svcore_data_fileio_test_exe,
 
 executable(
   'vamp-plugin-load-checker',
-  checker_helper_files,
+  'checker/src/helper.cpp',
   include_directories: [
   ],
   cpp_args: [
@@ -1098,14 +1098,16 @@ executable(
   dependencies: [
     dl_dep,
   ],
-  gui_app: false
+  gui_app: false,
+  install: true,
 )
 
 executable(
   'piper-vamp-simple-server',
+  'piper-vamp-cpp/ext/json11/json11.cpp',
+  'piper-vamp-cpp/vamp-server/simple-server.cpp',
   capnp_gen_cpp_target,
   vamp_plugin_sdk_files,
-  server_files,
   include_directories: [
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
@@ -1122,7 +1124,34 @@ executable(
   link_args: [
     feature_additional_libs,
   ],
-  gui_app: false
+  gui_app: false,
+  install: true,
+)
+
+executable(
+  'piper-convert',
+  'piper-vamp-cpp/ext/json11/json11.cpp',
+  'piper-vamp-cpp/vamp-server/convert.cpp',
+  capnp_gen_cpp_target,
+  vamp_plugin_sdk_files,
+  include_directories: [
+    'vamp-plugin-sdk',
+    'piper-vamp-cpp',
+    'piper-vamp-cpp/ext',
+    feature_include_dirs,
+  ],
+  cpp_args: [
+    general_defines,
+  ],
+  dependencies: [
+    capnp_gen_header_dep,
+    server_dependencies,
+  ],
+  link_args: [
+    feature_additional_libs,
+  ],
+  gui_app: false,
+  install: true,
 )
 
 if compiler == 'msvc'
@@ -1143,6 +1172,22 @@ if compiler == 'msvc'
     ])
 endif
 
+if system == 'linux'
+  sv_main_name = 'sonic-visualiser'
+else
+  sv_main_name = 'Sonic Visualiser'
+endif # system
+
+install_data(
+  'sonic-visualiser.desktop',
+  install_dir : get_option('datadir') / 'applications',
+)
+
+install_data(
+  'icons/sonic-visualiser.svg',
+  install_dir : get_option('datadir') / 'icons/hicolor/scalable/apps',
+)
+
 executable(
   sv_main_name,
   qt_resource_files,
@@ -1153,6 +1198,7 @@ executable(
   svapp_files,
   checker_lib_files,
   sv_main_files,
+  rc,
   dependencies: [
     svcore_dep,
     qt_dep,
@@ -1166,6 +1212,7 @@ executable(
   link_args: [
     feature_additional_libs,
   ],
-  gui_app: true
+  gui_app: true,
+  install: true,
 )
 
