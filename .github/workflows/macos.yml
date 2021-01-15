@@ -14,7 +14,7 @@ jobs:
     - name: repoint
       run: ./repoint install
     - name: configure
-      run: meson build --buildtype release
+      run: PATH=$PATH:/usr/local/opt/qt5/bin meson build --buildtype release
     - name: make
       run: ninja -C build
     - name: test
