@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
 RUN apt-get update && \
     apt-get install -y \
@@ -28,6 +28,7 @@ RUN apt-get update && \
     mercurial \
     curl wget \
     mlton \
+    python3-pip \
     autoconf automake libtool lintian
 
 # NB we do not install portaudio. We don't want to end up including it
@@ -37,17 +38,12 @@ RUN apt-get update && \
 # should ensure we can detect, configure, and use that without
 # actually linking against it. We also have Pulse as the default I/O.
 
-RUN apt-add-repository -y ppa:beineri/opt-qt-5.10.1-trusty
+RUN apt-add-repository -y ppa:beineri/opt-qt-5.15.2-xenial
 RUN apt-get update && \
     apt-get install -y \
-    qt510base \
-    qt510svg
+    qt515base \
+    qt515svg
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8
 
 RUN git config --global http.postBuffer 4M
 
@@ -58,10 +54,7 @@ WORKDIR c++
 RUN autoreconf -i && ./configure && make -j3 && make install
 
 WORKDIR /root
-
-RUN wget https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.0.tar.gz
-RUN tar xvf meson-0.56.0.tar.gz
-RUN ln -s $(pwd)/meson-0.56.0/meson.py /usr/bin/meson
+RUN pip3 install meson
 
 COPY id_rsa_build .ssh/id_rsa_build
 COPY known_hosts .ssh/known_hosts
@@ -74,8 +67,9 @@ RUN git clone https://github.com/cannam/sonic-visualiser
 WORKDIR sonic-visualiser
 RUN git checkout [[REVISION]]
 
-ENV QTDIR /opt/qt510
-ENV PATH /opt/qt510/bin:$PATH
+ENV QTDIR /opt/qt515
+ENV PATH /opt/qt515/bin:$PATH
+RUN qmake -v
 
 RUN ./repoint install
 RUN meson build --buildtype release
