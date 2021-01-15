@@ -1,15 +1,13 @@
 #!/bin/bash
 
-id=`hg id | awk '{ print $1; }'`
-
-case "$id" in
-    *+) echo "ERROR: Current working copy has been modified - unmodified copy required"; exit 2;;
-    *);;
+case $(git status --porcelain --untracked-files=no) in
+    "") ;;
+    *) echo "ERROR: Current working copy has been modified - unmodified copy required"; exit 2;;
 esac
 
-echo "Packaging from id $id..."
+id=$(git rev-parse --short HEAD)
 
-hg update -r"$id"
+echo "Packaging from id $id..."
 
 ./repoint archive /tmp/sonic-visualiser-"$id".tar.gz --exclude sv-dependency-builds export-tests repoint.pri
 
