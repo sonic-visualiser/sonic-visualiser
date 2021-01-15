@@ -7,7 +7,7 @@ FROM centos:8
 RUN echo [[REVISION]]
 
 RUN yum -y update
-RUN yum -y groupinstall "Server with GUI" --nobest
+RUN yum -y groupinstall GNOME
 RUN yum -y install wget
 ADD output/SonicVisualiser-[[REVISION]]-x86_64.AppImage SV.AppImage
 RUN chmod +x SV.AppImage
