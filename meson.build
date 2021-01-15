@@ -95,6 +95,7 @@ if system == 'linux'
   lo_dep = dependency('liblo')
   jack_dep = dependency('jack', version: '>= 0.100')
   libpulse_dep = dependency('libpulse', version: '>= 0.9')
+  alsa_dep = dependency('alsa')
   
   portaudio_dep = dependency('portaudio-2.0', version: '>= 19', required: false)
 
@@ -1096,7 +1097,8 @@ executable(
   dependencies: [
     dl_dep,
   ],
-  gui_app: false
+  gui_app: false,
+  install: true,
 )
 
 executable(
@@ -1121,7 +1123,8 @@ executable(
   link_args: [
     feature_additional_libs,
   ],
-  gui_app: false
+  gui_app: false,
+  install: true,
 )
 
 executable(
@@ -1146,7 +1149,8 @@ executable(
   link_args: [
     feature_additional_libs,
   ],
-  gui_app: false
+  gui_app: false,
+  install: true,
 )
 
 if compiler == 'msvc'
@@ -1173,6 +1177,16 @@ else
   sv_main_name = 'Sonic Visualiser'
 endif # system
 
+install_data(
+  'sonic-visualiser.desktop',
+  install_dir : get_option('datadir') / 'applications',
+)
+
+install_data(
+  'icons/sonic-visualiser.svg',
+  install_dir : get_option('datadir') / 'icons/hicolor/scalable/apps',
+)
+
 executable(
   sv_main_name,
   qt_resource_files,
@@ -1197,6 +1211,7 @@ executable(
   link_args: [
     feature_additional_libs,
   ],
-  gui_app: true
+  gui_app: true,
+  install: true,
 )
 
