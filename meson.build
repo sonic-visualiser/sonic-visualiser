@@ -93,9 +93,10 @@ if system == 'linux'
   id3tag_dep = dependency('id3tag', version: '>= 0.15.0')
   opus_dep = dependency('opusfile')
   lo_dep = dependency('liblo')
-  portaudio_dep = dependency('portaudio-2.0', version: '>= 19')
   jack_dep = dependency('jack', version: '>= 0.100')
   libpulse_dep = dependency('libpulse', version: '>= 0.9')
+  
+  portaudio_dep = dependency('portaudio-2.0', version: '>= 19', required: false)
 
   feature_dependencies = [
     bzip2_dep,
@@ -142,13 +143,18 @@ if system == 'linux'
     '-DHAVE_ID3TAG',
     '-DHAVE_OPUS',
     '-DHAVE_LIBLO',
-    '-DHAVE_PORTAUDIO',
     '-DHAVE_JACK', '-DDYNAMIC_JACK',
     '-DHAVE_LIBPULSE',
     '-D__LINUX_ALSASEQ__',
     '-D__LINUX_ALSA__' # for RtMidi
   ]
-  
+
+  if portaudio_dep.found()
+    feature_defines += [
+      '-DHAVE_PORTAUDIO',
+    ]
+  endif
+
   svcore_moc_args = [
     '-DHAVE_MAD'
   ]
