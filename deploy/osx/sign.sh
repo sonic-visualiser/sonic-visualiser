@@ -18,13 +18,15 @@ set -u
 entitlements=deploy/osx/Entitlements.plist
 helper_entitlements=deploy/osx/HelperEntitlements.plist
 
+gatekeeper_key="Developer ID Application: Particular Programs Ltd (73F996B92S)"
+
 for app in "$dir"/*.app; do
     find "$app" -name \*.dylib -print | while read fr; do
-	codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime "$fr"
+	codesign -s "$gatekeeper_key" -fv --deep --options runtime "$fr"
     done
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$entitlements" "$app/Contents/MacOS/Sonic Visualiser"
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app/Contents/MacOS/vamp-plugin-load-checker"
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app/Contents/MacOS/piper-vamp-simple-server"
-    codesign -s "Developer ID Application: Chris Cannam" -fv --deep --options runtime --entitlements "$entitlements" "$app"
+    codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$entitlements" "$app/Contents/MacOS/Sonic Visualiser"
+    codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app/Contents/MacOS/vamp-plugin-load-checker"
+    codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app/Contents/MacOS/piper-vamp-simple-server"
+    codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$entitlements" "$app"
 done
 

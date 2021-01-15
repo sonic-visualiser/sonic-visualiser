@@ -13,17 +13,22 @@ set -e
 app="$1"
 source="$app.app"
 
-if [ -z "$app" ] || [ ! -d "$source" ] || [ -n "$2" ]; then
+if [ -z "$app" ] || [ -n "$2" ]; then
 	echo "Usage: $0 <app>"
 	echo "  e.g. $0 MyApplication"
- 	echo "  The app bundle must exist in ./<app>.app."
-	echo "  Version number will be extracted from version.h."
+ 	echo "  The executable must be present in build/<app>."
+	echo "  Version number will be extracted from build/version.h."
 	exit 2
 fi
 
 set -u
 
-version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
+mkdir -p "$source/Contents/MacOS"
+mkdir -p "$source/Contents/Resources"
+
+cp -a "build/$app" "$source/Contents/MacOS"
+
+version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
 stem=${version%%-*}
 stem=${stem%%pre*}
 case "$stem" in
@@ -50,11 +55,11 @@ cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
 echo "Copying in plugin load checker."
-cp checker/vamp-plugin-load-checker "$source"/Contents/MacOS/
+cp build/vamp-plugin-load-checker "$source"/Contents/MacOS/
 
 echo
 echo "Copying in plugin server."
-cp piper-vamp-simple-server "$source"/Contents/MacOS/
+cp build/piper-vamp-simple-server "$source"/Contents/MacOS/
 
 echo
 echo "Copying in lproj directories containing InfoPlist.strings translation files."

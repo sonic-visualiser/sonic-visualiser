@@ -2,33 +2,33 @@
 
 set -eu
 
-current=$(hg id | awk '{ print $1; }')
-
-case "$current" in
-    *+) echo "ERROR: Current working copy has been modified - not proceeding";exit 2;;
-    *);;
-esac
-
-version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h`
+#case $(git status --porcelain --untracked-files=no) in
+#    "") ;;
+#    *) echo "ERROR: Current working copy has been modified - not proceeding";exit 2;;
+#esac
 
 mkdir -p packages
 echo
 
 if [ -d /Applications ]; then
 
-    if [ ! -f Makefile ]; then 
-	echo "You must have run a routine normal build at least once before this, so I can see which Qt settings to use"
-	exit 1
+    if [ -z "$QTDIR" ]; then
+	echo "QTDIR must be set"
     fi
 
-    qmake=$(grep '^# Command: ' Makefile | awk '{ print $3; }')
-
-    echo "Proceed to rebuild, package, and sign version $version using"
-    echo -n "qmake path \"$qmake\" [Yn] ? "
+    echo -n "Proceed to rebuild, package, and sign [Yn] ? "
     read yn
     case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
     echo "Proceeding"
 
+    ./repoint install
+
+    rm -rf build
+    meson build --buildtype release -Db_lto=true
+    ninja -C build
+
+    version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
+    
     app="Sonic Visualiser"
     volume="$app"-"$version"
     dmg="$volume".dmg
@@ -37,13 +37,6 @@ if [ -d /Applications ]; then
     rm -rf "$volume"
     rm -f "$dmg"
 
-    ./repoint install
-
-    rm -rf .qmake.stash
-    "$qmake" -unset SV_PERSISTENT_DEFINES
-    "$qmake" -r
-    make clean
-    make -j3
     deploy/osx/deploy-and-package.sh
 
     mv "$dmg" packages/
@@ -56,6 +49,8 @@ else
     echo "Proceeding"
 
     ./deploy/linux/build-and-test-appimage.sh
+
+    version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
 
     squashedversion=$(echo "$version" | sed 's/_-//g')
 
