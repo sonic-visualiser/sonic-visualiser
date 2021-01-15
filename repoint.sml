@@ -1458,10 +1458,16 @@ structure GitControl :> VCS_CONTROL = struct
                the lib dir might be nested and git will happily check
                out into an existing empty dir anyway *)
             case FileBits.mkpath (FileBits.libpath context libname) of
-                OK () => git_command context ""
-                                     ["clone", "--origin", our_remote,
-                                      "--branch", branch_name branch,
-                                      url, libname]
+                OK () =>
+                git_command context ""
+                            (case branch of
+                                 DEFAULT_BRANCH =>
+                                 ["clone", "--origin", our_remote,
+                                  url, libname]
+                               | _ => 
+                                 ["clone", "--origin", our_remote,
+                                  "--branch", branch_name branch,
+                                  url, libname])
               | ERROR e => ERROR e
         end
 
