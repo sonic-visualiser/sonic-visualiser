@@ -38,6 +38,12 @@ case "$stem" in
 esac
 
 echo
+echo "Copying in icon."
+
+cp "icons/sv-macicon.icns" "$source/Contents/Resources"
+
+
+echo
 echo "Copying in frameworks and plugins from Qt installation directory."
 
 deploy/osx/copy-qt.sh "$app" || exit 2
@@ -60,6 +66,10 @@ cp build/vamp-plugin-load-checker "$source"/Contents/MacOS/
 echo
 echo "Copying in plugin server."
 cp build/piper-vamp-simple-server "$source"/Contents/MacOS/
+
+echo
+echo "Copying in piper convert tool."
+cp build/piper-convert "$source"/Contents/MacOS/
 
 echo
 echo "Copying in lproj directories containing InfoPlist.strings translation files."

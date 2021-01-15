@@ -37,6 +37,8 @@ general_defines = [
   '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00'
 ]
 
+general_link_args = []
+
 if get_option('buildtype').startswith('release')
   general_defines += [
     '-DNO_TIMING',
@@ -176,6 +178,13 @@ elif system == 'darwin'
   capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
   
   rc = []
+
+  general_defines += [
+    '-mmacosx-version-min=10.12'
+  ]
+  general_link_args += [
+    '-mmacosx-version-min=10.12'
+  ]
   
   feature_defines = [
     '-DHAVE_BZ2',
@@ -989,8 +998,6 @@ checker_lib_files = [
   'checker/src/knownplugins.cpp',
 ]
 
-#!!! + server, + windows and mac specific stuff, +  + translations, + icons, + install, + resources
-  
 qt_resource_files = qt.preprocess(
   qresources: [
   'sonic-visualiser.qrc',
@@ -1012,6 +1019,7 @@ svcore_base_test_exe = executable(
   ],
   link_args: [
     feature_additional_libs,
+    general_link_args,
   ],
   gui_app: false
 )
@@ -1032,6 +1040,7 @@ svcore_system_test_exe = executable(
   ],
   link_args: [
     feature_additional_libs,
+    general_link_args,
   ],
   gui_app: false
 )
@@ -1053,6 +1062,7 @@ svcore_data_model_test_exe = executable(
   ],
   link_args: [
     feature_additional_libs,
+    general_link_args,
   ],
   gui_app: false
 )
@@ -1075,6 +1085,7 @@ svcore_data_fileio_test_exe = executable(
   ],
   link_args: [
     feature_additional_libs,
+    general_link_args,
   ],
   gui_app: false
 )
@@ -1097,6 +1108,9 @@ executable(
   ],
   dependencies: [
     dl_dep,
+  ],
+  link_args: [
+    general_link_args,
   ],
   gui_app: false,
   install: true,
@@ -1123,6 +1137,7 @@ executable(
   ],
   link_args: [
     feature_additional_libs,
+    general_link_args,
   ],
   gui_app: false,
   install: true,
@@ -1149,6 +1164,7 @@ executable(
   ],
   link_args: [
     feature_additional_libs,
+    general_link_args,
   ],
   gui_app: false,
   install: true,
@@ -1211,6 +1227,7 @@ executable(
   ],
   link_args: [
     feature_additional_libs,
+    general_link_args,
   ],
   gui_app: true,
   install: true,
