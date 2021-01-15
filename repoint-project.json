@@ -87,9 +87,11 @@
             "service": "soundsoftware"
         },
         "icons/scalable": {
-            "vcs": "hg",
-            "service": "soundsoftware",
-            "repository": "sv-iconset"
+            "vcs": "git",
+            "service": "github",
+            "owner": "cannam",
+            "repository": "sv-iconset",
+            "branch": "default"
         }
     }
 }
