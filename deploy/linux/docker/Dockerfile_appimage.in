@@ -26,7 +26,7 @@ RUN apt-get update && \
     librubberband-dev \
     git \
     mercurial \
-    curl wget \
+    curl wget unzip \
     mlton \
     python3-pip \
     autoconf automake libtool lintian
@@ -38,11 +38,11 @@ RUN apt-get update && \
 # should ensure we can detect, configure, and use that without
 # actually linking against it. We also have Pulse as the default I/O.
 
-RUN apt-add-repository -y ppa:beineri/opt-qt-5.15.2-xenial
+RUN apt-add-repository -y ppa:beineri/opt-qt-5.12.9-xenial
 RUN apt-get update && \
     apt-get install -y \
-    qt515base \
-    qt515svg
+    qt512base \
+    qt512svg
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN git config --global http.postBuffer 4M
@@ -55,6 +55,10 @@ RUN autoreconf -i && ./configure && make -j3 && make install
 
 WORKDIR /root
 RUN pip3 install meson
+
+RUN wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
+RUN unzip ninja-linux.zip
+RUN ln -s $(pwd)/ninja /usr/bin/ninja
 
 COPY id_rsa_build .ssh/id_rsa_build
 COPY known_hosts .ssh/known_hosts
@@ -71,9 +75,9 @@ RUN git clone https://github.com/cannam/sonic-visualiser
 WORKDIR sonic-visualiser
 RUN git checkout [[REVISION]]
 
-ENV QTDIR /opt/qt515
-ENV PATH /opt/qt515/bin:$PATH
-RUN qmake -v
+ENV QTDIR /opt/qt512
+ENV PATH /opt/qt512/bin:$PATH
+RUN cat /opt/qt512/bin/qt512-env.sh
 
 RUN ./repoint install
 RUN meson build --buildtype release
