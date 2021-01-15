@@ -9,7 +9,7 @@
 ## NB to verify:
 # spctl -a -v "/Applications/Application.app"
 
-user="cannam+apple@all-day-breakfast.com"
+user="appstore@particularprograms.co.uk"
 bundleid="org.sonicvisualiser.SonicVisualiser"
 
 set -e

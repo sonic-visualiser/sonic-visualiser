@@ -82,7 +82,9 @@ echo "Done"
 echo
 echo "Signing dmg..."
 
-codesign -s "Developer ID Application: Chris Cannam" -fv "$dmg"
+gatekeeper_key="Developer ID Application: Particular Programs Ltd (73F996B92S)"
+
+codesign -s "$gatekeeper_key" -fv "$dmg"
 
 if [ "$notarize" = no ]; then
     echo
