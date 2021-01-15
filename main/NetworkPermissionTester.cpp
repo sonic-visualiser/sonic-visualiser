@@ -54,8 +54,8 @@ NetworkPermissionTester::havePermission()
         preamble = QCoreApplication::translate
             ("NetworkPermissionTester",
              "<h2>Welcome to Sonic Visualiser!</h2>"
-             "<p><img src=\":icons/qm-logo-smaller.png\" style=\"float:right\">Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>"
-             "<p>Developed in the Centre for Digital Music at Queen Mary University of London, Sonic Visualiser is open source software under the GNU General Public License.</p>"
+             "<p>Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.</p>"
+             "<p>Sonic Visualiser is open source software under the GNU General Public License.</p>"
              "<p><hr></p>"
              "<p><b>Before we go on...</b></p>"
              "<p>Sonic Visualiser would like permission to use the network.</p>");
