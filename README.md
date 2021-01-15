@@ -87,23 +87,24 @@ this distribution for more information.
 
 Sonic Visualiser may also make use of the following libraries:
 
- * Qt5 -- Copyright The Qt Company, distributed under the LGPL
- * JACK -- Copyright Paul Davis, Jack O'Quin et al, under the LGPL
- * PortAudio -- Copyright Ross Bencina, Phil Burk et al, BSD license
- * Ogg decoder -- Copyright CSIRO Australia, BSD license
- * MAD mp3 decoder -- Copyright Underbit Technologies Inc, GPL
- * libsamplerate -- Copyright Erik de Castro Lopo, BSD license
- * libsndfile -- Copyright Erik de Castro Lopo, LGPL
- * FFTW3 -- Copyright Matteo Frigo and MIT, GPL
- * Rubber Band -- Copyright Particular Programs Ltd, GPL
- * Vamp plugin SDK -- Copyright Chris Cannam and QMUL, BSD license
- * LADSPA plugin SDK -- Copyright Richard Furse et al, LGPL
- * RtMIDI -- Copyright Gary P. Scavone, BSD license
- * Dataquay -- Copyright Particular Programs Ltd, BSD license
- * Sord and Serd -- Copyright David Robillard, BSD license
- * Redland -- Copyright Dave Beckett and the University of Bristol, LGPL/Apache license
- * liblo OSC library -- Copyright Steve Harris, GPL
- * Cap'n Proto -- Copyright Sandstorm Development Group, Inc, BSD license
+ * Qt5 - Copyright The Qt Company, distributed under the LGPL
+ * JACK - Copyright Paul Davis, Jack O'Quin et al, under the LGPL
+ * PortAudio - Copyright Ross Bencina, Phil Burk et al, BSD license
+ * Ogg decoder - Copyright CSIRO Australia, BSD license
+ * MAD mp3 decoder - Copyright Underbit Technologies Inc, GPL
+ * Opus decoder - Copyright Xiph.org and others, BSD license
+ * libsamplerate - Copyright Erik de Castro Lopo, BSD license
+ * libsndfile - Copyright Erik de Castro Lopo, LGPL
+ * FFTW3 - Copyright Matteo Frigo and MIT, GPL
+ * Rubber Band - Copyright Particular Programs Ltd, GPL
+ * Vamp plugin SDK - Copyright Chris Cannam and QMUL, BSD license
+ * LADSPA plugin SDK - Copyright Richard Furse et al, LGPL
+ * RtMIDI - Copyright Gary P. Scavone, BSD license
+ * Dataquay - Copyright Particular Programs Ltd, BSD license
+ * Sord and Serd - Copyright David Robillard, BSD license
+ * Redland - Copyright Dave Beckett and the University of Bristol, LGPL/Apache license
+ * liblo OSC library - Copyright Steve Harris, GPL
+ * Cap'n Proto - Copyright Sandstorm Development Group, Inc, BSD license
 
 (Some distributions of Sonic Visualiser may have one or more of these
 libraries statically linked.)  Many thanks to their authors.
