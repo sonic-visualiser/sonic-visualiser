@@ -2,15 +2,18 @@
 How to compile Sonic Visualiser from source
 ===========================================
 
-(NOTE: Refer also to .travis.yml and .appveyor.yml to how the
-continuous-integration processes run a build)
+(NOTE: Refer also to .github/workflows/linux.yml and .appveyor.yml to
+see how the continuous-integration processes run a build)
 
-On Windows and Mac it is perhaps easier to build from a checkout of
-the Mercurial repository (be sure to update to the appropriate tag if
-you need a specific release) than it is to build from an official
-Sonic Visualiser source release package. This is because the
-repository checkout pulls in some required library builds, while the
-source package contains only Sonic Visualiser code.
+From Sonic Visualiser v4.3 on, the Meson build system is used (see
+https://mesonbuild.com).
+
+On Windows and Mac it is probably easier to build from a repository
+clone (be sure to checkout the appropriate tag if you need a specific
+release) than it is to build from an official Sonic Visualiser source
+package. This is because the repository build process will pull in
+some required library builds before building, while the source package
+contains only Sonic Visualiser code.
 
 On Linux it is simpler to build from a source package.
 
@@ -18,87 +21,62 @@ On Linux it is simpler to build from a source package.
 Windows
 -------
 
-Use the Qt Creator IDE with either the MinGW compiler (for 32-bit
-builds) or Visual C++ (for 64-bit builds).
+The build is for 64-bit Windows and uses Visual Studio 2019 tools (but
+run from a command prompt). It requires a repo checkout, not just the
+source package - otherwise getting all the dependencies together is a
+nightmare job.
 
-For details, see the wiki page at
-
-https://code.soundsoftware.ac.uk/projects/sonic-visualiser/wiki/WindowsBuild30
-
+ * Install the Meson and Ninja build tools (https://mesonbuild.com)
+ * Install SML/NJ (https://smlnj.org) for use by Repoint
+ * Install Qt open source edition (https://qt.io)
+ * Edit the file `deploy\win64\build-64.bat` and adjust the QTDIR setting
+   to match the location of your Qt install
+ * Run `deploy\win64\build-64.bat` in a command prompt
+ 
 
 MacOS
 -----
 
-Build from the command line, but do not use the configure script.
-
 Install Qt5, either via Homebrew or from the official installer.
 
- * If you are building from a repository checkout, install Poly/ML via
-Homebrew (`brew install polyml`) and run `./repoint install` before
-proceeding. This isn't necessary when building from an official source
-release.
+If building from a repository checkout, install Poly/ML via Homebrew
+(`brew install polyml`) and run `./repoint install` before proceeding.
 
- * If you are building from an official source release, make sure the
-following required dependencies are available, whether installed using
-Homebrew or some other method: (This isn't necessary when building
-from a repository checkout)
-
-REQUIRED        Rubber Band Library     http://www.breakfastquay.com/rubberband/
-REQUIRED        libsndfile              http://www.mega-nerd.com/libsndfile/
-REQUIRED        libsamplerate           http://www.mega-nerd.com/SRC/
-REQUIRED        FFTW3                   http://www.fftw.org/
-REQUIRED        bzip2 library           http://www.bzip.org/
-REQUIRED        Sord and Serd libraries http://drobilla.net/software/
-REQUIRED        Cap'n Proto             http://capnproto.org/
-
-Then run `qmake -r sonic-visualiser.pro` and `make`. (You may need to
-provide the full path to the correct `qmake` executable for the
-version of Qt you want to build with.)
+Then run `meson build` and `ninja -C build`.
 
 
 Linux
 -----
 
-$ ./configure && make && make install
+If building from a repository checkout, install MLton from your
+package manager and run `./repoint install` before proceeding.
 
-The following additional libraries are required or optional:
+Then run `meson build`, `ninja -C build`, and `meson install`.
 
-REQUIRED        Qt v5                   http://www.qt.io/
-REQUIRED        Rubber Band Library     http://www.breakfastquay.com/rubberband/
-REQUIRED        libsndfile              http://www.mega-nerd.com/libsndfile/
-REQUIRED        libsamplerate           http://www.mega-nerd.com/SRC/
-REQUIRED        FFTW3                   http://www.fftw.org/
-REQUIRED        bzip2 library           http://www.bzip.org/
-REQUIRED        Sord and Serd libraries http://drobilla.net/software/
-REQUIRED        Cap'n Proto             http://capnproto.org/
-REQUIRED        MAD mp3 decoder         http://www.underbit.com/products/mad/
-REQUIRED        Oggz and fishsound      http://xiph.org/oggz/
-REQUIRED        Opus                    http://www.opus-codec.org/
+The following additional libraries are required:
 
-Optional        liblo OSC library       http://www.plugin.org.uk/liblo/
-Optional        JACK                    http://www.jackaudio.org/
-Optional        PortAudio v19           http://www.portaudio.com/
-Optional        PulseAudio              http://www.pulseaudio.org/
+        Qt v5                   http://www.qt.io/
+        Rubber Band Library     http://www.breakfastquay.com/rubberband/
+        libsndfile              http://www.mega-nerd.com/libsndfile/
+        libsamplerate           http://www.mega-nerd.com/SRC/
+        FFTW3                   http://www.fftw.org/
+        bzip2 library           http://www.bzip.org/
+        Sord and Serd libraries http://drobilla.net/software/
+        Cap'n Proto             http://capnproto.org/
+        MAD mp3 decoder         http://www.underbit.com/products/mad/
+        Oggz and fishsound      http://xiph.org/oggz/
+        Opus                    http://www.opus-codec.org/
+        liblo OSC library       http://www.plugin.org.uk/liblo/
+        JACK                    http://www.jackaudio.org/
+        PulseAudio              http://www.pulseaudio.org/
+        PortAudio v19           http://www.portaudio.com/
 
-Although JACK, PortAudio, and PulseAudio are individually optional,
-you will need to have at least one of them in order to get any audio
-playback.  Usually JACK is preferred on Linux, with PulseAudio as a
-backup, and PortAudio is used elsewhere.
-
-On Linux, you will need the ALSA libraries (used for MIDI).
+You will also need the ALSA libraries (used for MIDI).
 
 For Cap'n Proto you will need v0.6 or newer.
 
-For the rest, if you happen to be using a Debian-based Linux, you
-probably want to apt install something like the following packages:
+If you happen to be using a Debian-based Linux, you probably want to
+apt install something like the following packages:
 
-build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev capnproto libcapnp-dev git mercurial autoconf automake libtool mlton
-
-If you are building Sonic Visualiser from a repository checkout, then
-the configure script will use Repoint to obtain further checkouts of
-various dependencies. You will need to have a SML compiler installed
-for this to work, such as SML/NJ, MLton, or Poly/ML - hence the
-presence of mlton in the Debian package list above. This is not
-necessary when building from an official Sonic Visualiser source
-release.
+build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev capnproto libcapnp-dev git mercurial autoconf automake libtool mlton meson ninja-build
 
