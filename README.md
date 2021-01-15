@@ -2,36 +2,32 @@
 Sonic Visualiser
 ================
 
-#### A program for viewing and analysing the contents of music audio files
+### A program for viewing and analysing the contents of music audio files
 
 ![Sonic Visualiser small screenshot](http://sonicvisualiser.org/images/sv-3.0-win-thumb.png)
 
 * Home page and downloads: http://sonicvisualiser.org/
-* Code project: https://code.soundsoftware.ac.uk/projects/sonic-visualiser
+* Code project: https://github.com/sonic-visualiser/sonic-visualiser
+
+Sonic Visualiser is a free, open source, cross-platform desktop
+application for music audio visualisation, annotation, and analysis.
 
 With Sonic Visualiser you can:
 
- * Load audio files in various formats (WAV/AIFF, plus Ogg and mp3
-if compiled in) and view their waveforms
- 
+ * Load audio files in various formats (WAV/AIFF, Ogg, Opus, MP3 etc)
+   and view their waveforms
  * Look at audio visualisations such as spectrogram views, with
-interactive adjustment of display parameters
-
+   interactive adjustment of display parameters
  * Annotate audio data by adding labelled time points and defining
-segments, point values and curves
-
+   segments, point values and curves
  * Run feature-extraction plugins to calculate annotations
-automatically, using algorithms such as beat trackers, pitch
-detectors and so on (see http://vamp-plugins.org/)
-
+   automatically, using algorithms such as beat trackers, pitch detectors
+   and so on (see http://vamp-plugins.org/)
  * Import annotation data from various text formats and MIDI files
-
  * Play back the original audio with synthesised annotations, taking
-care to synchronise playback with the display position
-
+   care to synchronise playback with the display position
  * Slow down and speed up playback and loop segments of interest,
-including seamless looping of complex non-contiguous areas
-
+   including seamless looping of complex non-contiguous areas
  * Export annotations and audio selections to external files.
 
 Sonic Visualiser can also be controlled remotely using the Open Sound
@@ -41,18 +37,28 @@ Control (OSC) protocol (if support is compiled in).
 Credits
 -------
 
-Sonic Visualiser was developed at the Centre for Digital Music,
-Queen Mary, University of London.
+Sonic Visualiser was devised, and developed from 2005-2020, in the
+Centre for Digital Music at Queen Mary University of London.
 
-  http://c4dm.eecs.qmul.ac.uk/
+    http://c4dm.eecs.qmul.ac.uk/
 
 Sonic Visualiser was written by Chris Cannam with contributions from
 Christian Landone, Mathieu Barthet, Dan Stowell, Jesus Corral Garcia,
-Matthias Mauch, and Craig Sapp.
+Matthias Mauch, and Craig Sapp. Special thanks to Professor Mark
+Sandler for initiating and supporting the project.
 
-Code copyright 2005-2007 Chris Cannam and copyright 2006-2020 Queen
-Mary, University of London, except where indicated in the individual
-source files.
+It is currently maintained primarily by Chris Cannam at Particular
+Programs Ltd.
+
+The Sonic Visualiser code is
+Copyright (c) 2005-2007 Chris Cannam
+Copyright (c) 2006-2020 Queen Mary University of London
+Copyright (c) 2020-2021 Particular Programs Ltd
+apart from a few exceptions as indicated in the individual source
+files.
+
+If you are using Sonic Visualiser in research work for publication,
+please see the file CITATION for a reference to cite.
 
 Russian translation provided by Alexandre Prokoudine, copyright
 2006-2019 Alexandre Prokoudine.
