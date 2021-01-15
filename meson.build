@@ -68,6 +68,8 @@ if system == 'linux'
   capnp = find_program('capnp')
   capnp_additional_args = []
   capnp_cpp_plugin = 'c++'
+
+  rc = []
   
   bzip2_dep = dependency('bzip2', required: false)
 
@@ -165,6 +167,8 @@ elif system == 'darwin'
   ]
   capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
   
+  rc = []
+  
   feature_defines = [
     '-DHAVE_BZ2',
     '-DHAVE_FFTW3',
@@ -251,6 +255,9 @@ elif system == 'windows'
     '-I' + svdeps_dir / 'include'
   ]
   capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+
+  windows = import('windows')
+  rc = windows.compile_resources('icons/sv.rc')
 
   general_defines += [
     '-DWIN32',
@@ -973,27 +980,12 @@ checker_lib_files = [
   'checker/src/knownplugins.cpp',
 ]
 
-checker_helper_files = [
-  'checker/src/helper.cpp',
-]
-
-server_files = [
-  'piper-vamp-cpp/ext/json11/json11.cpp',
-  'piper-vamp-cpp/vamp-server/simple-server.cpp',
-]
-
 #!!! + server, + windows and mac specific stuff, +  + translations, + icons, + install, + resources
   
 qt_resource_files = qt.preprocess(
   qresources: [
   'sonic-visualiser.qrc',
 ])
-
-if system == 'linux'
-  sv_main_name = 'sonic-visualiser'
-else
-  sv_main_name = 'Sonic Visualiser'
-endif # system
 
 svcore_base_test_exe = executable(
   'test-svcore-base',
@@ -1088,7 +1080,7 @@ test('svcore-data-fileio', svcore_data_fileio_test_exe,
 
 executable(
   'vamp-plugin-load-checker',
-  checker_helper_files,
+  'checker/src/helper.cpp',
   include_directories: [
   ],
   cpp_args: [
@@ -1102,9 +1094,35 @@ executable(
 
 executable(
   'piper-vamp-simple-server',
+  'piper-vamp-cpp/ext/json11/json11.cpp',
+  'piper-vamp-cpp/vamp-server/simple-server.cpp',
   capnp_gen_cpp_target,
   vamp_plugin_sdk_files,
-  server_files,
+  include_directories: [
+    'vamp-plugin-sdk',
+    'piper-vamp-cpp',
+    'piper-vamp-cpp/ext',
+    feature_include_dirs,
+  ],
+  cpp_args: [
+    general_defines,
+  ],
+  dependencies: [
+    capnp_gen_header_dep,
+    server_dependencies,
+  ],
+  link_args: [
+    feature_additional_libs,
+  ],
+  gui_app: false
+)
+
+executable(
+  'piper-convert',
+  'piper-vamp-cpp/ext/json11/json11.cpp',
+  'piper-vamp-cpp/vamp-server/convert.cpp',
+  capnp_gen_cpp_target,
+  vamp_plugin_sdk_files,
   include_directories: [
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
@@ -1142,6 +1160,12 @@ if compiler == 'msvc'
     ])
 endif
 
+if system == 'linux'
+  sv_main_name = 'sonic-visualiser'
+else
+  sv_main_name = 'Sonic Visualiser'
+endif # system
+
 executable(
   sv_main_name,
   qt_resource_files,
@@ -1152,6 +1176,7 @@ executable(
   svapp_files,
   checker_lib_files,
   sv_main_files,
+  rc,
   dependencies: [
     svcore_dep,
     qt_dep,

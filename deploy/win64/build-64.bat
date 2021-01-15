@@ -28,7 +28,7 @@ cd %STARTPWD%
 call .\repoint install
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-if not exist build_win64 (
+if not exist build_win64\build.ninja (
   meson build_win64 --buildtype release -Db_lto=true
   if %errorlevel% neq 0 exit /b %errorlevel%
 )
