@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
 RUN apt-get update && \
     apt-get install -y \
@@ -28,27 +28,27 @@ RUN apt-get update && \
     qt5-default libqt5svg5-dev \
     git \
     mercurial \
-    curl wget \
+    curl wget unzip \
     mlton \
+    python3-pip \
     autoconf automake libtool lintian
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8
-
-RUN hg clone -r[[REVISION]] https://code.soundsoftware.ac.uk/hg/sonic-visualiser
-
 RUN git config --global http.postBuffer 4M
+
 RUN git clone https://github.com/sandstorm-io/capnproto
 WORKDIR capnproto
 RUN git checkout v0.6.1
 WORKDIR c++
-RUN autoreconf -i && ./configure --enable-shared=no --enable-static=yes && make -j3 && make install
+RUN autoreconf -i && ./configure && make -j3 && make install
 
 WORKDIR /root
+RUN pip3 install meson
+
+RUN wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
+RUN unzip ninja-linux.zip
+RUN ln -s $(pwd)/ninja /usr/bin/ninja
 
 COPY id_rsa_build .ssh/id_rsa_build
 COPY known_hosts .ssh/known_hosts
@@ -58,10 +58,18 @@ RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 
 RUN rm -f /usr/lib/x86_64-linux-gnu/librubberband.so*
 
-WORKDIR /sonic-visualiser
-RUN qmake -unset SV_PERSISTENT_DEFINES
-RUN ./configure
-RUN make -j3
+# The explicit revision number here is to make sure the following git
+# clone is not cached from a different revision
+RUN echo Cloning revision [[REVISION]]
+
+#!!! todo: official repo
+RUN git clone https://github.com/cannam/sonic-visualiser
+WORKDIR sonic-visualiser
+RUN git checkout [[REVISION]]
+
+RUN ./repoint install
+RUN meson build --buildtype release
+RUN ninja -C build
 
 RUN deploy/linux/deploy-deb.sh [[RELEASE]] amd64
-RUN tar cvf output-deb.tar *.deb && cp output-deb.tar ..
+RUN tar cvf output-deb.tar *.deb && cp output-deb.tar /tmp/

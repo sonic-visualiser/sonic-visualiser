@@ -42,7 +42,7 @@ mkdir -p "$outdir"
 
 container=$(sudo docker create "$dockertag")
 
-sudo docker cp "$container":output-deb.tar "$outdir"
+sudo docker cp "$container":/tmp/output-deb.tar "$outdir"
 sudo docker rm "$container"
 
 ( cd "$outdir" ; tar xf output-deb.tar && rm -f output-deb.tar )
