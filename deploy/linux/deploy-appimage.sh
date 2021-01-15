@@ -5,6 +5,7 @@ set -eu
 program=sonic-visualiser
 checker=vamp-plugin-load-checker
 piper=piper-vamp-simple-server
+convert=piper-convert
 
 get_id() {
     if [ -d .hg ]; then
@@ -33,7 +34,8 @@ mkdir "$targetdir"
 mkdir -p "$targetdir"/usr/bin
 mkdir -p "$targetdir"/usr/lib
 
-cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
+cp "build/$program" "build/$checker" "build/$piper" "build/$convert" \
+   "$targetdir"/usr/bin/
 
 ldd /usr/lib/x86_64-linux-gnu/libpulse.so.0 || true
 

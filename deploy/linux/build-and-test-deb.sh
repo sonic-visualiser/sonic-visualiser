@@ -4,27 +4,28 @@
 
 set -eu
 
-current=$(hg id | awk '{ print $1; }')
-release=$(perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' version.h)
-
-case "$current" in
-    *+) echo "ERROR: Current working copy has been modified - unmodified copy required so we know we can check it out separately and obtain the same contents"; exit 2;;
-    *);;
+case $(git status --porcelain --untracked-files=no) in
+    "") ;;
+    *) echo "ERROR: Current working copy has been modified - unmodified copy required so we know we can check it out separately and obtain the same contents"; exit 2;;
 esac
 
+current=$(git rev-parse --short HEAD)
+
+version=$(grep '^ *version:' meson.build | sed "s/^ *version: *'//" | sed "s/'.*$//")
+
 echo
-echo "Building Debian deb archive from revision $current..."
+echo "Building Debian deb archive for version $version from revision $current..."
 
 dockerdir=deploy/linux/docker
 
 cat "$dockerdir"/Dockerfile_deb.in | \
     perl -p -e "s/\[\[REVISION\]\]/$current/g" | \
-    perl -p -e "s/\[\[RELEASE\]\]/$release/g" > \
+    perl -p -e "s/\[\[RELEASE\]\]/$version/g" > \
          "$dockerdir"/Dockerfile_deb.gen
 
 cat "$dockerdir"/Dockerfile_test_deb.in | \
     perl -p -e "s/\[\[REVISION\]\]/$current/g" | \
-    perl -p -e "s/\[\[RELEASE\]\]/$release/g" > \
+    perl -p -e "s/\[\[RELEASE\]\]/$version/g" > \
          "$dockerdir"/Dockerfile_test_deb.gen
 
 fgrep 'hg.sr.ht' ~/.ssh/known_hosts > "$dockerdir"/known_hosts

@@ -25,6 +25,8 @@ set -eu
 program=sonic-visualiser
 checker=vamp-plugin-load-checker
 piper=piper-vamp-simple-server
+convert=piper-convert
+
 depdir=deploy/linux
 
 targetdir="${program}_${version}_${arch}"
@@ -42,7 +44,8 @@ cp -r "$depdir"/deb-skeleton/* "$targetdir"/
 
 mkdir -p "$targetdir"/usr/bin "$targetdir"/usr/share/pixmaps
 
-cp "$program" "$checker" "$piper" "$targetdir"/usr/bin/
+cp "build/$program" "build/$checker" "build/$piper" "build/$convert" \
+   "$targetdir"/usr/bin/
 
 cp icons/sv-icon*.svg "$targetdir"/usr/share/pixmaps/
 cp icons/sv-128x128.png "$targetdir"/usr/share/pixmaps/sv-icon.png

@@ -4,12 +4,12 @@
 
 set -eu
 
-current=$(hg id | awk '{ print $1; }')
-
-case "$current" in
-    *+) echo "ERROR: Current working copy has been modified - unmodified copy required so we know we can check it out separately and obtain the same contents"; exit 2;;
-    *);;
+case $(git status --porcelain --untracked-files=no) in
+    "") ;;
+    *) echo "ERROR: Current working copy has been modified - unmodified copy required so we know we can check it out separately and obtain the same contents"; exit 2;;
 esac
+
+current=$(git rev-parse --short HEAD)
 
 echo
 echo "Building appimage from revision $current..."

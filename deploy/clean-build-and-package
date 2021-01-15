@@ -2,13 +2,15 @@
 
 set -eu
 
-#case $(git status --porcelain --untracked-files=no) in
-#    "") ;;
-#    *) echo "ERROR: Current working copy has been modified - not proceeding";exit 2;;
-#esac
+case $(git status --porcelain --untracked-files=no) in
+    "") ;;
+    *) echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
+esac
 
 mkdir -p packages
 echo
+
+version=$(grep '^ *version:' meson.build | sed "s/^ *version: *'//" | sed "s/'.*$//")
 
 if [ -d /Applications ]; then
 
@@ -16,7 +18,7 @@ if [ -d /Applications ]; then
 	echo "QTDIR must be set"
     fi
 
-    echo -n "Proceed to rebuild, package, and sign [Yn] ? "
+    echo -n "Proceed to rebuild, package, and sign version $version [Yn] ? "
     read yn
     case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
     echo "Proceeding"
@@ -27,8 +29,6 @@ if [ -d /Applications ]; then
     meson build --buildtype release -Db_lto=true
     ninja -C build
 
-    version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
-    
     app="Sonic Visualiser"
     volume="$app"-"$version"
     dmg="$volume".dmg
@@ -50,7 +50,7 @@ else
 
     ./deploy/linux/build-and-test-appimage.sh
 
-    version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
+    current=$(git rev-parse --short HEAD)
 
     squashedversion=$(echo "$version" | sed 's/_-//g')
 

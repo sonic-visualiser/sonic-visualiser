@@ -49,9 +49,8 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en  
 ENV LC_ALL en_US.UTF-8
 
-RUN hg clone -r[[REVISION]] https://code.soundsoftware.ac.uk/hg/sonic-visualiser
-
 RUN git config --global http.postBuffer 4M
+
 RUN git clone https://github.com/sandstorm-io/capnproto
 WORKDIR capnproto
 RUN git checkout v0.6.1
@@ -60,18 +59,27 @@ RUN autoreconf -i && ./configure && make -j3 && make install
 
 WORKDIR /root
 
+RUN wget https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.0.tar.gz
+RUN tar xvf meson-0.56.0.tar.gz
+RUN ln -s $(pwd)/meson-0.56.0/meson.py /usr/bin/meson
+
 COPY id_rsa_build .ssh/id_rsa_build
 COPY known_hosts .ssh/known_hosts
 RUN chmod 600 .ssh/id_rsa_build .ssh/known_hosts
 RUN echo '{"accounts": {"sourcehut": "~breakfastquay"}}' > .repoint.json
 RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 
-WORKDIR /sonic-visualiser
+#!!! todo: official repo
+RUN git clone https://github.com/cannam/sonic-visualiser
+WORKDIR sonic-visualiser
+RUN git checkout [[REVISION]]
+
 ENV QTDIR /opt/qt510
 ENV PATH /opt/qt510/bin:$PATH
-RUN qmake -unset SV_PERSISTENT_DEFINES
-RUN ./configure
-RUN make -j3
+
+RUN ./repoint install
+RUN meson build --buildtype release
+RUN ninja -C build
 
 RUN deploy/linux/deploy-appimage.sh
 RUN tar cvf output-appimage.tar *.AppImage && cp output-appimage.tar ..
