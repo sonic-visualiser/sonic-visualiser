@@ -119,6 +119,7 @@ if system == 'linux'
     portaudio_dep,
     jack_dep,
     libpulse_dep,
+    alsa_dep,
   ]
 
   server_dependencies = [
