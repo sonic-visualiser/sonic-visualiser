@@ -1,0 +1,21 @@
+name: macOS CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: deps
+      run: brew install polyml qt5 meson ninja capnp
+    - name: repoint
+      run: ./repoint install
+    - name: configure
+      run: meson build --buildtype release
+    - name: make
+      run: ninja -C build
+    - name: test
+      run: meson test -C build
