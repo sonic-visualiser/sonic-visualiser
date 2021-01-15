@@ -31,12 +31,11 @@ for p in `cat $pfile`; do
 		echo $p
 	    fi
     done
-done | sort | uniq > $rfile
+done | sort | uniq | grep -v qt5 > $rfile
 
-echo "Packages that can be eliminated because other packages depend on them:" 1>&2
+echo "Packages that can be eliminated because other packages depend on them (excluding qt5 packages):" 1>&2
 cat $rfile 1>&2
 echo 1>&2
 
 cat $pfile $rfile | sort | uniq -u | sed 's/$/,/' | fmt -1000 | sed 's/^/Depends: /' | sed 's/,$/, libc6/' | sed 's/ libjack0,//'
-
 
