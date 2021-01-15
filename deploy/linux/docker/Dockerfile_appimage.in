@@ -62,6 +62,10 @@ RUN chmod 600 .ssh/id_rsa_build .ssh/known_hosts
 RUN echo '{"accounts": {"sourcehut": "~breakfastquay"}}' > .repoint.json
 RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 
+# The explicit revision number here is to make sure the following git
+# clone is not cached from a different revision
+RUN echo Cloning revision [[REVISION]]
+
 #!!! todo: official repo
 RUN git clone https://github.com/cannam/sonic-visualiser
 WORKDIR sonic-visualiser
