@@ -54,7 +54,7 @@ cp README.md "$targetdir"/usr/share/doc/"$program"/
 
 perl -i -p -e "s/Architecture: .*/Architecture: $arch/" "$targetdir"/DEBIAN/control
 
-deps=`bash "$depdir"/debian-dependencies.sh "$program"`
+deps=`bash "$depdir"/debian-dependencies.sh "build/$program"`
 
 perl -i -p -e "s/Depends: .*/$deps/" "$targetdir"/DEBIAN/control
 
