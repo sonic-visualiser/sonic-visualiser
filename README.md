@@ -116,7 +116,8 @@ Compiling Sonic Visualiser
 If you are planning to compile Sonic Visualiser from source code,
 please read the file INSTALL.txt.
 
-* Linux CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/Linux%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22Linux+CI%22)
+ * Linux CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/Linux%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22Linux+CI%22)
+ * macOS CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/macOS%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22macOS+CI%22)
  * Windows CI build: [![Build status](https://ci.appveyor.com/api/projects/status/26pygienkigw39p7?svg=true)](https://ci.appveyor.com/project/cannam/sonic-visualiser)
 
 
