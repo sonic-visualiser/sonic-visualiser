@@ -2,7 +2,7 @@
 
 set -eu
 
-tag=`hg tags | grep '^sv_v' | head -1 | awk '{ print $1; }'`
+tag=`git tag --list --sort=authordate | grep '^sv_v' | tail -1 | awk '{ print $1; }'`
 
 v=`echo "$tag" | sed 's/sv_v//' | sed 's/_.*$//'`
 
@@ -11,23 +11,23 @@ read yn
 case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
 echo "Proceeding"
 
-current=$(hg id | awk '{ print $1; }')
-
-case "$current" in
-    *+) echo "ERROR: Current working copy has been modified - unmodified copy required so we can update to tag and back again safely"; exit 2;;
-    *);;
+case $(git status --porcelain --untracked-files=no) in
+    "") ;;
+    *) echo "ERROR: Current working copy has been modified - unmodified copy required so we can update to tag and back again safely"; exit 2;;
 esac
-          
+
 echo
 echo -n "Packaging up version $v from tag $tag... "
 
+current=$(git rev-parse --short HEAD)
+
 mkdir -p packages
 
-hg update -r"$tag"
+git checkout "$tag"
 
 ./repoint archive "$(pwd)"/packages/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds export-tests repoint.pri
 
-hg update -r"$current"
+git checkout "$current"
 
 echo Done
 echo
