@@ -84,4 +84,4 @@ RUN meson build --buildtype release
 RUN ninja -C build
 
 RUN deploy/linux/deploy-appimage.sh
-RUN tar cvf output-appimage.tar *.AppImage && cp output-appimage.tar ..
+RUN tar cvf output-appimage.tar *.AppImage && cp output-appimage.tar /tmp/

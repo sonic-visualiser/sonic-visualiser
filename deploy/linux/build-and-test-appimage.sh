@@ -38,7 +38,7 @@ mkdir -p "$outdir"
 
 container=$(sudo docker create "$dockertag")
 
-sudo docker cp "$container":output-appimage.tar "$outdir"
+sudo docker cp "$container":/tmp/output-appimage.tar "$outdir"
 sudo docker rm "$container"
 
 ( cd "$outdir" ; tar xf output-appimage.tar && rm -f output-appimage.tar )
