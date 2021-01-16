@@ -19,3 +19,8 @@ jobs:
       run: ninja -C build
     - name: test
       run: meson test -C build
+    - name: deploy-app
+      run: ./deploy/osx/deploy.sh "Sonic Visualiser"
+    - name: check
+      run: ./"Sonic Visualiser.app/Contents/MacOS/Sonic Visualiser" --version
+
