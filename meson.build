@@ -635,7 +635,7 @@ svcore_files = [
   'svcore/transform/ModelTransformerFactory.cpp',
 ]
 
-if system != 'windows'
+if compiler != 'msvc' # i.e. build is not the 64-bit Windows one
   svcore_files += [
     'svcore/system/os-other.cpp',
   ]
