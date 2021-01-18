@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser v4.3 (15 January 2021) since the previous release 4.2:
+Changes in Sonic Visualiser v4.3 (18 January 2021) since the previous release 4.2:
 
  - Fix failure to activate the Align button on startup, even when the
    appropriate alignment plugin is installed
