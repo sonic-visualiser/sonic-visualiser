@@ -37,16 +37,16 @@ Control (OSC) protocol (if support is compiled in).
 Credits
 -------
 
-Sonic Visualiser was devised, and developed from 2005-2020, in the
-[Centre for Digital Music](https://c4dm.eecs.qmul.ac.uk/) at Queen
-Mary University of London.
+Sonic Visualiser was devised in the [Centre for Digital
+Music](https://c4dm.eecs.qmul.ac.uk/) at Queen Mary University of
+London, and was developed there from 2005 to 2020.
 
 It was written by Chris Cannam with contributions from Christian
 Landone, Mathieu Barthet, Dan Stowell, Jesus Corral Garcia, Matthias
 Mauch, and Craig Sapp. Special thanks to Professor Mark Sandler for
 initiating and supporting the project.
 
-Sonic Visualiser is currently maintained primarily by Chris Cannam at
+Sonic Visualiser is currently maintained mostly by Chris Cannam at
 Particular Programs Ltd.
 
 The Sonic Visualiser code is
