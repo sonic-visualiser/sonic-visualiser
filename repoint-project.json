@@ -2,13 +2,6 @@
     "config": {
         "extdir": "."
     },
-    "services": {
-        "soundsoftware": {
-            "vcs": ["hg", "git"],
-            "anonymous": "https://code.soundsoftware.ac.uk/{vcs}/{repository}",
-            "authenticated": "https://{account}@code.soundsoftware.ac.uk/{vcs}/{repository}"
-        }
-    },
     "libraries": {
         "vamp-plugin-sdk": {
             "vcs": "git",
@@ -18,19 +11,19 @@
         "svcore": {
             "vcs": "git",
             "service": "github",
-            "owner": "cannam",
+            "owner": "sonic-visualiser",
             "branch": "default"
         },
         "svgui": {
             "vcs": "git",
             "service": "github",
-            "owner": "cannam",
+            "owner": "sonic-visualiser",
             "branch": "default"
         },
         "svapp": {
             "vcs": "git",
             "service": "github",
-            "owner": "cannam",
+            "owner": "sonic-visualiser",
             "branch": "default"
         },
         "checker": {
@@ -49,7 +42,7 @@
         "icons/scalable": {
             "vcs": "git",
             "service": "github",
-            "owner": "cannam",
+            "owner": "sonic-visualiser",
             "repository": "sv-iconset",
             "branch": "default"
         },
