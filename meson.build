@@ -625,7 +625,6 @@ svcore_files = [
   'svcore/rdf/RDFTransformFactory.cpp',
   'svcore/system/Init.cpp',
   'svcore/system/System.cpp',
-  'svcore/system/os-other.cpp',
   'svcore/transform/CSVFeatureWriter.cpp',
   'svcore/transform/FeatureExtractionModelTransformer.cpp',
   'svcore/transform/FileFeatureWriter.cpp',
@@ -635,6 +634,12 @@ svcore_files = [
   'svcore/transform/ModelTransformer.cpp',
   'svcore/transform/ModelTransformerFactory.cpp',
 ]
+
+if system != 'windows'
+  svcore_files += [
+    'svcore/system/os-other.cpp',
+  ]
+endif
 
 svcore_moc_files = qt.preprocess(
   moc_headers: [
@@ -1172,7 +1177,7 @@ executable(
 )
 
 if compiler == 'msvc'
-  shared_library(
+  os = shared_library(
     'os',
     [ 'svcore/system/os-win10.cpp' ],
     cpp_args: [
@@ -1195,6 +1200,11 @@ if compiler == 'msvc'
       '-EXPORT:OSQueryAccentColour',
       general_link_args,
     ])
+  os_dep = declare_dependency(
+    link_with: os
+  )
+else
+  os_dep = []
 endif
 
 if system == 'linux'
@@ -1228,6 +1238,7 @@ executable(
     svcore_dep,
     qt_dep,
     feature_dependencies,
+    os_dep,
     dl_dep
   ],
   cpp_args: [
