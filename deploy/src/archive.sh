@@ -2,7 +2,7 @@
 
 set -eu
 
-tag=`git tag --list --sort=authordate | grep '^sv_v' | tail -1 | awk '{ print $1; }'`
+tag=`git tag --list --sort=creatordate | grep '^sv_v' | tail -1 | awk '{ print $1; }'`
 
 v=`echo "$tag" | sed 's/sv_v//' | sed 's/_.*$//'`
 
