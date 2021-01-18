@@ -62,8 +62,7 @@ RUN rm -f /usr/lib/x86_64-linux-gnu/librubberband.so*
 # clone is not cached from a different revision
 RUN echo Cloning revision [[REVISION]]
 
-#!!! todo: official repo
-RUN git clone https://github.com/cannam/sonic-visualiser
+RUN git clone https://github.com/sonic-visualiser/sonic-visualiser
 WORKDIR sonic-visualiser
 RUN git checkout [[REVISION]]
 
