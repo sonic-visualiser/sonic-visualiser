@@ -1175,17 +1175,25 @@ if compiler == 'msvc'
   shared_library(
     'os',
     [ 'svcore/system/os-win10.cpp' ],
+    cpp_args: [
+      general_defines,
+    ],
     link_args: [
       '-EXPORT:OSReportsDarkThemeActive',
       '-EXPORT:OSQueryAccentColour',
-      '-lWindowsApp'
+      '-lWindowsApp',
+      general_link_args,
     ])
   shared_library(
     'os_other',
     [ 'svcore/system/os-other.cpp' ],
+    cpp_args: [
+      general_defines,
+    ],
     link_args: [
       '-EXPORT:OSReportsDarkThemeActive',
       '-EXPORT:OSQueryAccentColour',
+      general_link_args,
     ])
 endif
 
