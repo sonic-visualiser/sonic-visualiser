@@ -22,5 +22,6 @@ jobs:
     - name: deploy-app
       run: QTDIR=/usr/local/opt/qt5 ./deploy/osx/deploy.sh "Sonic Visualiser"
     - name: check
-      run: ./"Sonic Visualiser.app/Contents/MacOS/Sonic Visualiser" --version
-
+      run: |
+        otool -L ./"Sonic Visualiser.app/Contents/MacOS/Sonic Visualiser"
+        ./"Sonic Visualiser.app/Contents/MacOS/Sonic Visualiser" --version
