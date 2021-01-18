@@ -8,14 +8,14 @@ see how the continuous-integration processes run a build)
 From Sonic Visualiser v4.3 on, the Meson build system is used (see
 https://mesonbuild.com).
 
-On Windows and Mac it is probably easier to build from a repository
-clone (be sure to checkout the appropriate tag if you need a specific
-release) than it is to build from an official Sonic Visualiser source
+On Windows and Mac it is easier to build from a repository clone (be
+sure to checkout the appropriate tag if you need a specific release)
+than it is to build from an official Sonic Visualiser source
 package. This is because the repository build process will pull in
 some required library builds before building, while the source package
 contains only Sonic Visualiser code.
 
-On Linux it is simpler to build from a source package.
+On Linux it's simpler to build from the official source package.
 
 
 Windows
@@ -24,7 +24,8 @@ Windows
 The build is for 64-bit Windows and uses Visual Studio 2019 tools (but
 run from a command prompt). It requires a repo checkout, not just the
 source package - otherwise getting all the dependencies together is a
-nightmare job.
+bit of a nightmare. Even from a checkout, the build is still a little
+painful with plenty of potential points of failure.
 
  * Install the Meson and Ninja build tools (https://mesonbuild.com)
  * Install SML/NJ (https://smlnj.org) for use by Repoint
