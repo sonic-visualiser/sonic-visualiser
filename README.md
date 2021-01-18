@@ -37,29 +37,28 @@ Control (OSC) protocol (if support is compiled in).
 Credits
 -------
 
+If you are using Sonic Visualiser in research work for publication,
+please see the file CITATION for a reference to cite.
+
 Sonic Visualiser was devised in the [Centre for Digital
 Music](https://c4dm.eecs.qmul.ac.uk/) at Queen Mary University of
-London, and was developed there from 2005 to 2020.
+London and was developed there from 2005 to 2020, primarily by Chris
+Cannam, with contributions from Christian Landone, Mathieu Barthet,
+Dan Stowell, Jesus Corral Garcia, Matthias Mauch, and Craig
+Sapp. Special thanks to Professor Mark Sandler for initiating and
+supporting the project.
 
-It was written by Chris Cannam with contributions from Christian
-Landone, Mathieu Barthet, Dan Stowell, Jesus Corral Garcia, Matthias
-Mauch, and Craig Sapp. Special thanks to Professor Mark Sandler for
-initiating and supporting the project.
-
-Sonic Visualiser is currently maintained mostly by Chris Cannam at
+The release you are holding now was made in 2021 by Chris Cannam at
 Particular Programs Ltd.
 
 The Sonic Visualiser code is
 
  * Copyright (c) 2005-2007 Chris Cannam
  * Copyright (c) 2006-2020 Queen Mary University of London
- * Copyright (c) 2020-2021 Particular Programs Ltd
+ * Copyright (c) 2021 Particular Programs Ltd
  
 apart from a few exceptions as indicated in the individual source
 files.
-
-If you are using Sonic Visualiser in research work for publication,
-please see the file CITATION for a reference to cite.
 
 Russian translation provided by Alexandre Prokoudine, copyright
 2006-2019 Alexandre Prokoudine.
