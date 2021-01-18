@@ -54,6 +54,7 @@ elif compiler == 'msvc'
     '-wd4068', # unknown pragma (we have lots of pragma 'GCC')
     '-wd4267', # conversion from size_t to smaller integral type
     '-wd4996', # deprecated functions, including annoying warnings about POSIX
+    '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
   ]
 endif # compiler
 endif # get_option('buildtype')
