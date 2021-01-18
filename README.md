@@ -4,9 +4,9 @@ Sonic Visualiser
 
 ### A program for viewing and analysing the contents of music audio files
 
-![Sonic Visualiser small screenshot](http://sonicvisualiser.org/images/sv-3.0-win-thumb.png)
+![Sonic Visualiser small screenshot](https://sonicvisualiser.org/images/sv-3.0-win-thumb.png)
 
-* Home page and downloads: http://sonicvisualiser.org/
+* Home page and downloads: https://sonicvisualiser.org/
 * Code project: https://github.com/sonic-visualiser/sonic-visualiser
 
 Sonic Visualiser is a free, open source, cross-platform desktop
@@ -22,7 +22,7 @@ With Sonic Visualiser you can:
    segments, point values and curves
  * Run feature-extraction plugins to calculate annotations
    automatically, using algorithms such as beat trackers, pitch detectors
-   and so on (see http://vamp-plugins.org/)
+   and so on (see https://vamp-plugins.org/)
  * Import annotation data from various text formats and MIDI files
  * Play back the original audio with synthesised annotations, taking
    care to synchronise playback with the display position
@@ -125,5 +125,5 @@ More information
 
 For more information about Sonic Visualiser, please go to
 
-  http://www.sonicvisualiser.org/
+  https://www.sonicvisualiser.org/
 
