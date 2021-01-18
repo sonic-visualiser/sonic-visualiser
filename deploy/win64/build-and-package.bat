@@ -66,6 +66,8 @@ if errorlevel 1 exit /b %errorlevel%
 
 set PATH=%PATH%;"C:\Program Files (x86)\WiX Toolset v3.11\bin"
 
+mkdir packages
+
 @echo Packaging 32-bit
 
 cd %STARTPWD%
@@ -82,6 +84,12 @@ signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a sonic-visualis
 signtool verify /pa sonic-visualiser.msi
 )
 
+@echo Copying 32-bit package to packages dir
+@set /p VERSION=<build_win32\version.h
+@set VERSION=%VERSION:#define SV_VERSION "=%
+set VERSION=%VERSION:"=%
+copy sonic-visualiser.msi packages\sonic-visualiser-%VERSION%-win32.msi
+
 @echo Packaging 64-bit
 
 cd %STARTPWD%
@@ -97,6 +105,12 @@ if "%ARG%" == "sign" (
 signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a sonic-visualiser.msi
 signtool verify /pa sonic-visualiser.msi
 )
+
+@echo Copying 64-bit package to packages dir
+@set /p VERSION=<build_win64\version.h
+@set VERSION=%VERSION:#define SV_VERSION "=%
+set VERSION=%VERSION:"=%
+copy sonic-visualiser.msi packages\sonic-visualiser-%VERSION%-win64.msi
 
 set PATH=%ORIGINALPATH%
 
