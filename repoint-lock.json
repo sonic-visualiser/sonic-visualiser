@@ -1,7 +1,7 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "0e32c328b02a"
+      "pin": "c3ef877327f1b081b95a1d05349c297f8c4454f0"
     },
     "svcore": {
       "pin": "d338d6b24fb64c7b76a7c32fd79f19fc0f9d375d"
@@ -13,7 +13,13 @@
       "pin": "2272026ae69979009e6e2e8e44c2afae0ea0baaa"
     },
     "checker": {
-      "pin": "e839338d3869"
+      "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
+    },
+    "sv-dependency-builds": {
+      "pin": "8e4f885b8b49db63fec4488231d00b7685ad91a5"
+    },
+    "icons/scalable": {
+      "pin": "9dfacf743c6d7df6a891406f2c8c0f9548b396e1"
     },
     "piper": {
       "pin": "3a742c556ac1f2bf9823f30b937c71c690e1f6ae"
@@ -41,12 +47,6 @@
     },
     "bqthingfactory": {
       "pin": "2e4bd170f57f"
-    },
-    "sv-dependency-builds": {
-      "pin": "08ae793730bd"
-    },
-    "icons/scalable": {
-      "pin": "9dfacf743c6d7df6a891406f2c8c0f9548b396e1"
     }
   }
 }

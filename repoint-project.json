@@ -11,8 +11,9 @@
     },
     "libraries": {
         "vamp-plugin-sdk": {
-            "vcs": "hg",
-            "service": "soundsoftware"
+            "vcs": "git",
+            "service": "github",
+            "owner": "c4dm"
         },
         "svcore": {
             "vcs": "git",
@@ -33,9 +34,24 @@
             "branch": "default"
         },
         "checker": {
-            "vcs": "hg",
-            "service": "soundsoftware",
-            "repository": "vamp-plugin-load-checker"
+            "vcs": "git",
+            "service": "github",
+            "owner": "sonic-visualiser",
+            "repository": "vamp-plugin-load-checker",
+            "branch": "default"
+        },
+        "sv-dependency-builds": {
+            "vcs": "git",
+            "service": "github",
+            "owner": "sonic-visualiser",
+            "branch": "default"
+        },
+        "icons/scalable": {
+            "vcs": "git",
+            "service": "github",
+            "owner": "cannam",
+            "repository": "sv-iconset",
+            "branch": "default"
         },
         "piper": {
             "vcs": "git",
@@ -81,17 +97,6 @@
             "vcs": "hg",
             "service": "sourcehut",
             "owner": "breakfastquay"
-        },
-        "sv-dependency-builds": {
-            "vcs": "hg",
-            "service": "soundsoftware"
-        },
-        "icons/scalable": {
-            "vcs": "git",
-            "service": "github",
-            "owner": "cannam",
-            "repository": "sv-iconset",
-            "branch": "default"
         }
     }
 }
