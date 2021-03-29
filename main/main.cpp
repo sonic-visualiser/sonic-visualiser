@@ -253,7 +253,10 @@ main(int argc, char **argv)
     QApplication::setOrganizationDomain("sonicvisualiser.org");
     QApplication::setApplicationName(QApplication::tr("Sonic Visualiser"));
     QApplication::setApplicationVersion(SV_VERSION);
+
+#if (QT_VERSION >= 0x050700)
     QApplication::setDesktopFileName("sonic-visualiser");
+#endif
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::tr("\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation."));
