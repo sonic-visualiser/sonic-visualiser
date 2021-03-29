@@ -31,10 +31,10 @@
       "pin": "95def499e10f"
     },
     "bqvec": {
-      "pin": "35fce1c93dd7"
+      "pin": "13251adcfb3f"
     },
     "bqfft": {
-      "pin": "7ee762bb3c0b"
+      "pin": "c8ab2d3d5df2"
     },
     "bqresample": {
       "pin": "ca43790feeca"
