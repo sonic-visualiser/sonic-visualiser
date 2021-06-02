@@ -17,10 +17,12 @@ appropriate tag if you want to build a specific release. The most
 recent code in the repository (on the `default` branch) is not always
 as stable as the release tags.
 
-This document has two sections: first a description of how to proceed
-using command-line tools, and then a description using an IDE (Qt
-Creator). Scroll down if the second one is what you want.
+This document has two sections:
 
+ * a description of how to proceed using command-line tools only
+ * a description of the same thing using an IDE (Qt Creator).
+
+Keep scrolling down if the second one is what you want.
 
 Step-by-step using command-line tools only
 ------------------------------------------
@@ -31,16 +33,14 @@ Step-by-step using command-line tools only
 
 These are
 
- * [Qt5](https://qt.io), GPL edition, which can be installed either
-via Homebrew or from the official installer
-
+ * [Qt5](https://qt.io), GPL edition
  * [Meson](https://mesonbuild.com) and [Ninja](https://ninja-build.org)
 build tools
-
+ * An SML compiler, e.g. [Poly/ML](https://polyml.org)
  * The Xcode command-line tools (e.g. the C++ compiler, `c++`)
 
- * An SML compiler, e.g. [Poly/ML](https://polyml.org), which is also
-available through Homebrew
+The first three are available through Homebrew, although the official
+Qt installer is also quite convenient.
 
 ### 2. Get the Sonic Visualiser code
 
@@ -59,7 +59,7 @@ $ git clone --branch sv_v4.3 https://github.com/sonic-visualiser/sonic-visualise
 Then `cd` to the newly checked-out directory. The rest of these
 instructions assume you are in that directory.
 
-### The build
+### 3. Configure and build
 
 First get or update the dependent libraries:
 
@@ -75,36 +75,37 @@ $ export QTDIR=$HOME/Qt/5.12.10/clang_64
 $ export PATH=$PATH:$QTDIR/bin
 ```
 
-Then configure the build. This creates a subdirectory called `build`
-in which all the magic will happen:
+Then configure the build by running Meson. This creates a subdirectory
+called `build` in which the magic will happen:
 
 ```
 $ meson build
 ```
 
-And now compile the code into the `build` directory:
+And now compile the code into the `build` directory using the Ninja
+build tool:
 
 ```
 $ ninja -C build
 ```
 
-### Running Sonic Visualiser from the build directory
+### 4. Running Sonic Visualiser from the build directory
 
-If the build succeeds, you should have all the necessary executables
-in the `build` directory - but not yet in the form of an app bundle
-that you can install or run straight from Finder.
+If the build succeeds, you should now have all the necessary
+executables in the `build` directory. They are not yet in the form of
+an app bundle that you can install or run straight from Finder, but it
+is possible to run them from the build directory.
 
-To run from the command line, you first need to set the
-`DYLD_FRAMEWORK_PATH` environment variable to point to the location of
-your Qt frameworks, for example:
+To do so you first need to set the `DYLD_FRAMEWORK_PATH` environment
+variable to point to the location of your Qt frameworks, typically:
 
 ```
-$ export DYLD_FRAMEWORK_PATH=/Users/whatever/Qt/5.12.10/clang_64/lib/
+$ export DYLD_FRAMEWORK_PATH=$QTDIR/lib
 ```
 
-This is because the Qt libraries are still neither part of the Sonic
-Visualiser app bundle (which hasn't been created yet) nor installed in
-a standard system location, and so there is no stable way for the
+This is because the Qt libraries have not been deployed to the Sonic
+Visualiser app bundle (which hasn't been created yet) nor considered
+to be standard system libraries, and so there is no stable way for the
 executable to refer to them.
 
 After setting this, you should be able to run
@@ -113,20 +114,21 @@ After setting this, you should be able to run
 $ ./build/"Sonic Visualiser"
 ```
 
-and the Sonic Visualiser window should appear.
+(note the quotes, because of the space in the filename) and the Sonic
+Visualiser window should appear.
 
-(If you haven't set `DYLD_FRAMEWORK_PATH`, you'll probably see this
-error instead:
+(If you haven't set `DYLD_FRAMEWORK_PATH`, you'll probably see an error
+like this instead:
 
 ```
 dyld: Library not loaded: @rpath/QtCore.framework/Versions/5/QtCore
-  Referenced from: /Users/cannam/opensource/sonic-visualiser/./build/Sonic Visualiser
+  Referenced from: /path/to/sonic-visualiser/./build/Sonic Visualiser
   Reason: image not found
 Abort trap: 6
 ```
 )
 
-### Deploying into an app bundle
+### 5. Deploying into an app bundle
 
 To make an application you can install or copy around, run the
 deployment script:
@@ -136,13 +138,13 @@ $ ./deploy/macos/deploy.sh "Sonic Visualiser"
 ```
 
 If this runs successfully, then it should leave an app bundle named
-`Sonic Visualiser.app` in the current directory. This can be opened by
-e.g. locating it in Finder and double-clicking, and it can also be
-installed by dragging to the `/Applications` folder.
+`Sonic Visualiser.app` in the current directory. This can be run
+directly from Finder, and it can also be installed by dragging to the
+`/Applications` folder.
 
-However, it is still not code-signed, so if you distribute it to
-anyone they will need to override the operating system's initial
-refusal to run it (Ctrl-click in Finder, say "Open...", and say yes to
-the resulting dialog). Code signing for distribution is beyond the
-scope of this document.
+It is still not code-signed, so if you distribute it to anyone they
+will need to override the operating system's initial refusal to run it
+(Ctrl-click in Finder, say "Open...", and say yes to the resulting
+dialog). Code signing for distribution is beyond the scope of this
+document.
 
