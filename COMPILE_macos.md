@@ -24,12 +24,13 @@ This document has two sections:
 
 Keep scrolling down if the second one is what you want.
 
-Step-by-step using command-line tools only
-------------------------------------------
+
+1. Step-by-step using command-line tools only
+---------------------------------------------
 
 (This is what I generally do)
 
-### 1. Install prerequisites
+### 1.1. Install prerequisites
 
 These are
 
@@ -42,7 +43,7 @@ build tools
 The first three are available through Homebrew, although the official
 Qt installer is also quite convenient.
 
-### 2. Get the Sonic Visualiser code
+### 1.2. Get the Sonic Visualiser code
 
 For the most recent code and its history,
 
@@ -59,7 +60,7 @@ $ git clone --branch sv_v4.3 https://github.com/sonic-visualiser/sonic-visualise
 Then `cd` to the newly checked-out directory. The rest of these
 instructions assume you are in that directory.
 
-### 3. Configure and build
+### 1.3. Configure and build
 
 First get or update the dependent libraries:
 
@@ -89,7 +90,7 @@ build tool:
 $ ninja -C build
 ```
 
-### 4. Running Sonic Visualiser from the build directory
+### 1.4. Run Sonic Visualiser from the build directory
 
 If the build succeeds, you should now have all the necessary
 executables in the `build` directory. They are not yet in the form of
@@ -128,7 +129,7 @@ Abort trap: 6
 ```
 )
 
-### 5. Deploying into an app bundle
+### 1.5. Deploy into an app bundle
 
 To make an application you can install or copy around, run the
 deployment script:
