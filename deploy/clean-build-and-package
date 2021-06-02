@@ -37,7 +37,7 @@ if [ -d /Applications ]; then
     rm -rf "$volume"
     rm -f "$dmg"
 
-    deploy/osx/deploy-and-package.sh
+    deploy/macos/deploy-and-package.sh
 
     mv "$dmg" packages/
 

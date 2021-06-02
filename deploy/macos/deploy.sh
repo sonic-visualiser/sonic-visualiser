@@ -46,18 +46,18 @@ cp "icons/sv-macicon.icns" "$source/Contents/Resources"
 echo
 echo "Copying in frameworks and plugins from Qt installation directory."
 
-deploy/osx/copy-qt.sh "$app" || exit 2
+deploy/macos/copy-qt.sh "$app" || exit 2
 
 echo
 echo "Fixing up paths."
 
-deploy/osx/paths.sh "$app"
+deploy/macos/paths.sh "$app"
 
 echo
 echo "Copying in qt.conf to set local-only plugin paths."
 echo "Make sure all necessary Qt plugins are in $source/Contents/plugins/*"
 echo "You probably want platforms/, accessible/ and imageformats/ subdirectories."
-cp deploy/osx/qt.conf "$source"/Contents/Resources/qt.conf
+cp deploy/macos/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
 echo "Copying in plugin load checker."
@@ -79,7 +79,7 @@ echo
 echo "Writing version $bundleVersion in to bundle."
 echo "(This should be a three-part number: major.minor.point)"
 
-perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/osx/Info.plist \
+perl -p -e "s/SV_VERSION/$bundleVersion/" deploy/macos/Info.plist \
     > "$source"/Contents/Info.plist
 
 echo "Done: check $source/Contents/Info.plist for sanity please"

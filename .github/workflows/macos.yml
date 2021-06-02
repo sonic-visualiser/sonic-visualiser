@@ -20,7 +20,7 @@ jobs:
     - name: test
       run: meson test -C build
     - name: deploy-app
-      run: QTDIR=/usr/local/opt/qt5 ./deploy/osx/deploy.sh "Sonic Visualiser"
+      run: QTDIR=/usr/local/opt/qt5 ./deploy/macos/deploy.sh "Sonic Visualiser"
     - name: check
       run: |
         otool -L ./"Sonic Visualiser.app/Contents/MacOS/Sonic Visualiser"

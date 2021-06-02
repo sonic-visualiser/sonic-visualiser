@@ -15,8 +15,8 @@ fi
 
 set -u
 
-entitlements=deploy/osx/Entitlements.plist
-helper_entitlements=deploy/osx/HelperEntitlements.plist
+entitlements=deploy/macos/Entitlements.plist
+helper_entitlements=deploy/macos/HelperEntitlements.plist
 
 gatekeeper_key="Developer ID Application: Particular Programs Ltd (73F996B92S)"
 

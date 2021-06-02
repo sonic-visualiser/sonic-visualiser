@@ -42,7 +42,7 @@ fi
 echo
 echo "(Re-)running deploy script..."
 
-deploy/osx/deploy.sh "$app" || exit 1
+deploy/macos/deploy.sh "$app" || exit 1
 
 echo
 echo "Making target tree."
@@ -65,7 +65,7 @@ echo "Done"
 echo
 echo "Code-signing volume..."
 
-deploy/osx/sign.sh "$volume" || exit 1
+deploy/macos/sign.sh "$volume" || exit 1
 
 echo "Done"
 
@@ -93,7 +93,7 @@ else
     echo
     echo "Submitting dmg for notarization..."
 
-    deploy/osx/notarize.sh "$dmg" || exit 1
+    deploy/macos/notarize.sh "$dmg" || exit 1
 fi
 
 echo "Done"
