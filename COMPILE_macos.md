@@ -1,6 +1,5 @@
 
-How to compile Sonic Visualiser from source (on a Mac)
-======================================================
+# How to compile Sonic Visualiser from source (on a Mac)
 
 From Sonic Visualiser v4.3 on, the [Meson](https://mesonbuild.com)
 build system is used.
@@ -25,8 +24,7 @@ This document has two sections:
 Keep scrolling down if the second one is what you want.
 
 
-1. Step-by-step using command-line tools only
----------------------------------------------
+## 1. Step-by-step using command-line tools only
 
 (This is what I generally do)
 
