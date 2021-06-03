@@ -47,6 +47,7 @@ if get_option('buildtype').startswith('release')
 if compiler == 'gcc' or compiler == 'clang'
   general_defines += [
     '-ffast-math',
+    '-Wno-deprecated-copy', # Qt currently hits lots of these internally
   ]
 elif compiler == 'msvc'
   general_defines += [
