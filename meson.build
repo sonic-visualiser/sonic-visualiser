@@ -1009,6 +1009,83 @@ qt_resource_files = qt.preprocess(
   'sonic-visualiser.qrc',
 ])
 
+if compiler == 'msvc'
+  os = shared_library(
+    'os',
+    [ 'svcore/system/os-win10.cpp' ],
+    cpp_args: [
+      general_defines,
+    ],
+    link_args: [
+      '-EXPORT:OSReportsDarkThemeActive',
+      '-EXPORT:OSQueryAccentColour',
+      '-lWindowsApp',
+      general_link_args,
+    ])
+  shared_library(
+    'os_other',
+    [ 'svcore/system/os-other.cpp' ],
+    cpp_args: [
+      general_defines,
+    ],
+    link_args: [
+      '-EXPORT:OSReportsDarkThemeActive',
+      '-EXPORT:OSQueryAccentColour',
+      general_link_args,
+    ])
+  os_dep = declare_dependency(
+    link_with: os
+  )
+else
+  os_dep = []
+endif
+
+if system == 'linux'
+  sv_main_name = 'sonic-visualiser'
+else
+  sv_main_name = 'Sonic Visualiser'
+endif # system
+
+install_data(
+  'sonic-visualiser.desktop',
+  install_dir : get_option('datadir') / 'applications',
+)
+
+install_data(
+  'icons/sonic-visualiser.svg',
+  install_dir : get_option('datadir') / 'icons/hicolor/scalable/apps',
+)
+
+executable(
+  sv_main_name,
+  qt_resource_files,
+  svgui_moc_files,
+  svapp_moc_files,
+  sv_main_moc_files,
+  svgui_files,
+  svapp_files,
+  checker_lib_files,
+  sv_main_files,
+  rc,
+  dependencies: [
+    svcore_dep,
+    qt_dep,
+    feature_dependencies,
+    os_dep,
+    dl_dep
+  ],
+  cpp_args: [
+    feature_defines,
+    general_defines,
+  ],
+  link_args: [
+    feature_additional_libs,
+    general_link_args,
+  ],
+  gui_app: true,
+  install: true,
+)
+
 svcore_base_test_exe = executable(
   'test-svcore-base',
   svcore_base_test_moc_files,
@@ -1173,83 +1250,6 @@ executable(
     general_link_args,
   ],
   gui_app: false,
-  install: true,
-)
-
-if compiler == 'msvc'
-  os = shared_library(
-    'os',
-    [ 'svcore/system/os-win10.cpp' ],
-    cpp_args: [
-      general_defines,
-    ],
-    link_args: [
-      '-EXPORT:OSReportsDarkThemeActive',
-      '-EXPORT:OSQueryAccentColour',
-      '-lWindowsApp',
-      general_link_args,
-    ])
-  shared_library(
-    'os_other',
-    [ 'svcore/system/os-other.cpp' ],
-    cpp_args: [
-      general_defines,
-    ],
-    link_args: [
-      '-EXPORT:OSReportsDarkThemeActive',
-      '-EXPORT:OSQueryAccentColour',
-      general_link_args,
-    ])
-  os_dep = declare_dependency(
-    link_with: os
-  )
-else
-  os_dep = []
-endif
-
-if system == 'linux'
-  sv_main_name = 'sonic-visualiser'
-else
-  sv_main_name = 'Sonic Visualiser'
-endif # system
-
-install_data(
-  'sonic-visualiser.desktop',
-  install_dir : get_option('datadir') / 'applications',
-)
-
-install_data(
-  'icons/sonic-visualiser.svg',
-  install_dir : get_option('datadir') / 'icons/hicolor/scalable/apps',
-)
-
-executable(
-  sv_main_name,
-  qt_resource_files,
-  svgui_moc_files,
-  svapp_moc_files,
-  sv_main_moc_files,
-  svgui_files,
-  svapp_files,
-  checker_lib_files,
-  sv_main_files,
-  rc,
-  dependencies: [
-    svcore_dep,
-    qt_dep,
-    feature_dependencies,
-    os_dep,
-    dl_dep
-  ],
-  cpp_args: [
-    feature_defines,
-    general_defines,
-  ],
-  link_args: [
-    feature_additional_libs,
-    general_link_args,
-  ],
-  gui_app: true,
   install: true,
 )
 
