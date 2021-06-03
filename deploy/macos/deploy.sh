@@ -10,25 +10,56 @@ set -e
 # libraries and setting up paths etc. It does not create a
 # package. Use deploy-and-package.sh for that.
 
-app="$1"
-source="$app.app"
+usage() {
+    echo
+    echo "Usage: $0 <app> [<builddir>]"
+    echo
+    echo "  where <builddir> defaults to \"build\""
+    echo 
+    echo "For example,"
+    echo
+    echo "  \$ $0 MyApplication"
+    echo "  to deploy app MyApplication built in the directory \"build\""
+    echo
+    echo "  \$ $0 MyApplication build-release"
+    echo "  to deploy app MyApplication built in the directory \"build-release\""
+    echo
+    echo "The executable must be already present in <builddir>/<app>, and its"
+    echo "version number will be extracted from <builddir>/version.h."
+    echo 
+    echo "In all cases the target will be an app bundle called <app>.app in"
+    echo "the current directory."
+    echo
+    exit 2
+}
 
-if [ -z "$app" ] || [ -n "$2" ]; then
-	echo "Usage: $0 <app>"
-	echo "  e.g. $0 MyApplication"
- 	echo "  The executable must be present in build/<app>."
-	echo "  Version number will be extracted from build/version.h."
-	exit 2
+app="$1"
+if [ -z "$app" ]; then
+    usage
 fi
+
+builddir="$2"
+if [ -z "$builddir" ]; then
+    builddir=build
+elif [ -n "$3" ]; then
+    usage
+fi
+
+if [ ! -f "$builddir/$app" ]; then
+    echo "File $app not found in builddir $builddir"
+    exit 2
+fi
+
+source="$app.app"
 
 set -u
 
 mkdir -p "$source/Contents/MacOS"
 mkdir -p "$source/Contents/Resources"
 
-cp -a "build/$app" "$source/Contents/MacOS"
+cp -a "$builddir/$app" "$source/Contents/MacOS"
 
-version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
+version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' $builddir/version.h`
 stem=${version%%-*}
 stem=${stem%%pre*}
 case "$stem" in
@@ -61,15 +92,15 @@ cp deploy/macos/qt.conf "$source"/Contents/Resources/qt.conf
 
 echo
 echo "Copying in plugin load checker."
-cp build/vamp-plugin-load-checker "$source"/Contents/MacOS/
+cp $builddir/vamp-plugin-load-checker "$source"/Contents/MacOS/
 
 echo
 echo "Copying in plugin server."
-cp build/piper-vamp-simple-server "$source"/Contents/MacOS/
+cp $builddir/piper-vamp-simple-server "$source"/Contents/MacOS/
 
 echo
 echo "Copying in piper convert tool."
-cp build/piper-convert "$source"/Contents/MacOS/
+cp $builddir/piper-convert "$source"/Contents/MacOS/
 
 echo
 echo "Copying in lproj directories containing InfoPlist.strings translation files."
