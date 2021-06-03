@@ -55,8 +55,8 @@ For a specific release, e.g. v4.3,
 $ git clone --branch sv_v4.3 https://github.com/sonic-visualiser/sonic-visualiser
 ```
 
-Then `cd` to the newly checked-out directory. (The rest of these
-instructions assume you are in that directory.)
+Then `cd` to the newly checked-out `sonic-visualiser` directory. (The
+rest of these instructions assume you are in that directory.)
 
 Next get or update the dependent libraries:
 
@@ -107,9 +107,9 @@ $ export DYLD_FRAMEWORK_PATH=$QTDIR/lib
 ```
 
 This is because the Qt libraries have not been deployed to the Sonic
-Visualiser app bundle (which hasn't been created yet) nor considered
-to be standard system libraries, and so there is no stable way for the
-executable to refer to them.
+Visualiser app bundle (which hasn't been created yet) and are not
+considered to be standard system libraries, so there is no stable way
+for the executable to refer to them.
 
 After setting this, you should be able to run
 
