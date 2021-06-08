@@ -11,20 +11,20 @@
         "svcore": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser",
-            "branch": "default"
+            "owner": "cannam",
+            "branch": "qt6"
         },
         "svgui": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser",
-            "branch": "default"
+            "owner": "cannam",
+            "branch": "qt6"
         },
         "svapp": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser",
-            "branch": "default"
+            "owner": "cannam",
+            "branch": "qt6"
         },
         "checker": {
             "vcs": "git",

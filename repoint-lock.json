@@ -4,13 +4,13 @@
       "pin": "c3ef877327f1b081b95a1d05349c297f8c4454f0"
     },
     "svcore": {
-      "pin": "94ef61e2c4573f4825797fb56d84544de4cfbff4"
+      "pin": "ad75d15f6ade1ee0ba533807732a1c4ededdc7c4"
     },
     "svgui": {
-      "pin": "844589dcf20157752f4b66619eb16f80cccf2b09"
+      "pin": "6e402f7c234a4d7007c5681cdfb5d30276b0badf"
     },
     "svapp": {
-      "pin": "c8b14759ad111d073348ec858c4525dbdd693888"
+      "pin": "406123359cc886da03e82620c71504666a66bb3d"
     },
     "checker": {
       "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
@@ -31,13 +31,13 @@
       "pin": "95def499e10f"
     },
     "bqvec": {
-      "pin": "13251adcfb3f"
+      "pin": "a6cb2dc34ad9"
     },
     "bqfft": {
       "pin": "c8ab2d3d5df2"
     },
     "bqresample": {
-      "pin": "ca43790feeca"
+      "pin": "8692d553b672"
     },
     "bqaudioio": {
       "pin": "818954587967"

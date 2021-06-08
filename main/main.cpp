@@ -190,7 +190,7 @@ signalHandler(int /* signal */)
 {
     // Avoid this happening more than once across threads
 
-    cerr << "signalHandler: cleaning up and exiting" << endl;
+    std::cerr << "signalHandler: cleaning up and exiting" << std::endl;
 
     if (cleanupMutex.tryLock(5000)) {
         if (!cleanedUp) {
@@ -241,7 +241,7 @@ main(int argc, char **argv)
 {
     if (argc == 2 && (QString(argv[1]) == "--version" ||
                       QString(argv[1]) == "-v")) {
-        cerr << SV_VERSION << endl;
+        std::cerr << SV_VERSION << std::endl;
         exit(0);
     }
     
@@ -421,7 +421,7 @@ main(int argc, char **argv)
     if (!success) {
         SVDEBUG << "Failed\nFailed to load Qt translation for locale" << endl;
     } else {
-        cerr << "Done" << endl;
+        SVDEBUG << "Done" << endl;
     }
     application.installTranslator(&qtTranslator);
 
@@ -630,7 +630,7 @@ void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
                 haveMainModel = true;
             }
         } else {
-            cerr << "WARNING: Ignoring additional session file argument \"" << path << "\"" << endl;
+            SVCERR << "WARNING: Ignoring additional session file argument \"" << path << "\"" << endl;
             status = MainWindow::FileOpenSucceeded;
         }
     }

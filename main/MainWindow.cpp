@@ -1898,7 +1898,7 @@ MainWindow::populateTransformsMenu()
         QString name = transforms[i].name;
         if (name == "") name = transforms[i].identifier;
 
-//        cerr << "Plugin Name: " << name << endl;
+//        SVCERR << "Plugin Name: " << name << endl;
 
         TransformDescription::Type type = transforms[i].type;
         QString typeStr = factory->getTransformTypeName(type);
@@ -1932,7 +1932,7 @@ MainWindow::populateTransformsMenu()
         action->setStatusTip(transforms[i].longDescription);
 
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
-            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            SVCERR << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
                       << name << "\" (category = \""
                       << category << "\")" << endl;
@@ -1941,7 +1941,7 @@ MainWindow::populateTransformsMenu()
         }
 
         if (makerMenus[type].find(maker) == makerMenus[type].end()) {
-            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            SVCERR << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No maker menu for transform \""
                       << name << "\" (maker = \""
                       << maker << "\")" << endl;
@@ -1955,7 +1955,7 @@ MainWindow::populateTransformsMenu()
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
         action->setStatusTip(transforms[i].longDescription);
 
-//        cerr << "Transform: \"" << name << "\": plugin name \"" << pluginName << "\"" << endl;
+//        SVCERR << "Transform: \"" << name << "\": plugin name \"" << pluginName << "\"" << endl;
 
         if (pluginNameMenus[type].find(pluginName) ==
             pluginNameMenus[type].end()) {
@@ -2126,7 +2126,7 @@ MainWindow::setupRecentTransformsMenu()
         TransformActionReverseMap::iterator ti =
             m_transformActionsReverse.find(transforms[i]);
         if (ti == m_transformActionsReverse.end()) {
-            cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
+            SVCERR << "WARNING: MainWindow::setupRecentTransformsMenu: "
                       << "Unknown transform \"" << transforms[i]
                       << "\" in recent transforms list" << endl;
             continue;
@@ -2185,11 +2185,11 @@ MainWindow::setupExistingLayersMenus()
             Layer *layer = pane->getLayer(j);
             if (!layer) continue;
             if (observedLayers.find(layer) != observedLayers.end()) {
-//                cerr << "found duplicate layer " << layer << endl;
+//                SVCERR << "found duplicate layer " << layer << endl;
                 continue;
             }
 
-//            cerr << "found new layer " << layer << " (name = " 
+//            SVCERR << "found new layer " << layer << " (name = " 
 //                      << layer->getLayerPresentationName() << ")" << endl;
 
             orderedLayers.push_back(layer);
@@ -2824,7 +2824,7 @@ MainWindow::exportAudio(bool asData)
             for (int j = 0; j < pane->getLayerCount(); ++j) {
                 Layer *layer = pane->getLayer(j);
                 if (!layer) continue;
-                cerr << "layer = " << layer->objectName() << endl;
+                SVCERR << "layer = " << layer->objectName() << endl;
                 ModelId m = layer->getModel();
                 if (ModelById::isa<RangeSummarisableTimeValueModel>(m)) {
                     otherModelIds.insert(m);
@@ -3091,13 +3091,13 @@ MainWindow::importLayer()
     
     if (!pane) {
         // shouldn't happen, as the menu action should have been disabled
-        cerr << "WARNING: MainWindow::importLayer: no current pane" << endl;
+        SVCERR << "WARNING: MainWindow::importLayer: no current pane" << endl;
         return;
     }
 
     if (!getMainModel()) {
         // shouldn't happen, as the menu action should have been disabled
-        cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
+        SVCERR << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
         return;
     }
 
@@ -3581,7 +3581,7 @@ MainWindow::openRecentFile()
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
-        cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
+        SVCERR << "WARNING: MainWindow::openRecentFile: sender is not an action"
              << endl;
         return;
     }
@@ -3589,7 +3589,7 @@ MainWindow::openRecentFile()
     QString path = action->objectName();
 
     if (path == "") {
-        cerr << "WARNING: MainWindow::openRecentFile: action incorrectly named"
+        SVCERR << "WARNING: MainWindow::openRecentFile: action incorrectly named"
              << endl;
         return;
     }
@@ -3614,7 +3614,7 @@ MainWindow::applyTemplate()
     QAction *action = qobject_cast<QAction *>(s);
 
     if (!action) {
-        cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
+        SVCERR << "WARNING: MainWindow::applyTemplate: sender is not an action"
                   << endl;
         return;
     }
@@ -3623,7 +3623,7 @@ MainWindow::applyTemplate()
     if (n == "") n = action->text();
 
     if (n == "") {
-        cerr << "WARNING: MainWindow::applyTemplate: sender has no name"
+        SVCERR << "WARNING: MainWindow::applyTemplate: sender has no name"
                   << endl;
         return;
     }
@@ -4076,10 +4076,10 @@ MainWindow::addPane()
     QObject *s = sender();
     QAction *action = dynamic_cast<QAction *>(s);
 
-    cerr << "addPane: sender is " << s << ", action is " << action << ", name " << action->text() << endl;
+    SVCERR << "addPane: sender is " << s << ", action is " << action << ", name " << action->text() << endl;
     
     if (!action) {
-        cerr << "WARNING: MainWindow::addPane: sender is not an action"
+        SVCERR << "WARNING: MainWindow::addPane: sender is not an action"
                   << endl;
         return;
     }
@@ -4091,12 +4091,12 @@ MainWindow::addPane()
     }
 
     if (i == m_paneActions.end()) {
-        cerr << "WARNING: MainWindow::addPane: unknown action "
+        SVCERR << "WARNING: MainWindow::addPane: unknown action "
              << action->objectName() << endl;
-        cerr << "known actions are:" << endl;
+        SVCERR << "known actions are:" << endl;
         for (PaneActions::const_iterator i = m_paneActions.begin();
              i != m_paneActions.end(); ++i) {
-            cerr << i->first << ", name " << i->first->text() << endl;
+            SVCERR << i->first << ", name " << i->first->text() << endl;
         }
         return;
     }
@@ -4124,7 +4124,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         configuration.layer != LayerFactory::Spectrum) {
 
         if (!m_timeRulerLayer) {
-//            cerr << "no time ruler layer, creating one" << endl;
+//            SVCERR << "no time ruler layer, creating one" << endl;
             m_timeRulerLayer = m_document->createMainModelLayer
                 (LayerFactory::TimeRuler);
         }
@@ -4150,7 +4150,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         }
 
         if (modelId.isNone()) {
-            cerr << "WARNING: Model " << modelId
+            SVCERR << "WARNING: Model " << modelId
                  << " appears in pane action map, but is not reported "
                  << "by document as a valid transform source" << endl;
         }
@@ -4184,7 +4184,7 @@ MainWindow::addLayer()
     QAction *action = dynamic_cast<QAction *>(s);
     
     if (!action) {
-        cerr << "WARNING: MainWindow::addLayer: sender is not an action"
+        SVCERR << "WARNING: MainWindow::addLayer: sender is not an action"
                   << endl;
         return;
     }
@@ -4192,7 +4192,7 @@ MainWindow::addLayer()
     Pane *pane = m_paneStack->getCurrentPane();
     
     if (!pane) {
-        cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+        SVCERR << "WARNING: MainWindow::addLayer: no current pane" << endl;
         return;
     }
 
@@ -4248,7 +4248,7 @@ MainWindow::addLayer()
         }
         
         if (i == m_layerActions.end()) {
-            cerr << "WARNING: MainWindow::addLayer: unknown action "
+            SVCERR << "WARNING: MainWindow::addLayer: unknown action "
                       << action->objectName() << endl;
             return;
         }
@@ -4358,7 +4358,7 @@ MainWindow::addLayer(QString transformId)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) {
-        cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+        SVCERR << "WARNING: MainWindow::addLayer: no current pane" << endl;
         return;
     }
 
@@ -4578,7 +4578,7 @@ MainWindow::playSpeedChanged(int position)
     double percent = m_playSpeed->mappedValue();
     double factor = mapper.getFactorForValue(percent);
 
-//    cerr << "play speed position = " << position << " (range 0-120) percent = " << percent << " factor = " << factor << endl;
+//    SVCERR << "play speed position = " << position << " (range 0-120) percent = " << percent << " factor = " << factor << endl;
 
     int centre = m_playSpeed->defaultValue();
 
