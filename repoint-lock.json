@@ -31,13 +31,13 @@
       "pin": "95def499e10f"
     },
     "bqvec": {
-      "pin": "13251adcfb3f"
+      "pin": "a6cb2dc34ad9"
     },
     "bqfft": {
       "pin": "c8ab2d3d5df2"
     },
     "bqresample": {
-      "pin": "ca43790feeca"
+      "pin": "8692d553b672"
     },
     "bqaudioio": {
       "pin": "818954587967"
