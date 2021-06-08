@@ -37,7 +37,7 @@
             "vcs": "git",
             "service": "github",
             "owner": "sonic-visualiser",
-            "branch": "default"
+            "branch": "macos-arm64"
         },
         "icons/scalable": {
             "vcs": "git",

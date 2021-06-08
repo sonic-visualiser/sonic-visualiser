@@ -27,7 +27,7 @@ qt_dep = dependency(
   main: true
 )
 
-system = build_machine.system()
+system = host_machine.system()
 architecture = host_machine.cpu_family()
 compiler = meson.get_compiler('cpp').get_id()
 
@@ -168,7 +168,13 @@ if system == 'linux'
 elif system == 'darwin'
 
   svdeps_dir = meson.current_source_dir() / 'sv-dependency-builds/osx'
-  
+
+  if architecture == 'aarch64'
+    svdeps_libdir = svdeps_dir / 'lib-arm64'
+  else
+    svdeps_libdir = svdeps_dir / 'lib'
+  endif
+    
   capnp = find_program(
     'capnp',
     dirs: [
@@ -190,8 +196,6 @@ elif system == 'darwin'
   
   feature_defines = [
     '-DHAVE_BZ2',
-    '-DHAVE_FFTW3',
-    '-DHAVE_FFTW3F',
     '-DHAVE_SNDFILE',
     '-DHAVE_LIBSAMPLERATE',
     '-DHAVE_RUBBERBAND',
@@ -222,11 +226,9 @@ elif system == 'darwin'
   ]
   
   feature_additional_libs = [
-    '-L' + svdeps_dir / 'lib',
+    '-L' + svdeps_libdir,
     '-lbz2',
     '-lrubberband',
-    '-lfftw3',
-    '-lfftw3f',
     '-lsndfile',
     '-lFLAC',
     '-logg',
