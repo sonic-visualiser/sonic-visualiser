@@ -4,7 +4,7 @@
       "pin": "c3ef877327f1b081b95a1d05349c297f8c4454f0"
     },
     "svcore": {
-      "pin": "94ef61e2c4573f4825797fb56d84544de4cfbff4"
+      "pin": "3dc3797e90316f45500926e7f8787d56c020e628"
     },
     "svgui": {
       "pin": "844589dcf20157752f4b66619eb16f80cccf2b09"
@@ -16,7 +16,7 @@
       "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
     },
     "sv-dependency-builds": {
-      "pin": "8e4f885b8b49db63fec4488231d00b7685ad91a5"
+      "pin": "c9b172a2bbb588de7eaf095d33d418e4465a26fa"
     },
     "icons/scalable": {
       "pin": "9dfacf743c6d7df6a891406f2c8c0f9548b396e1"

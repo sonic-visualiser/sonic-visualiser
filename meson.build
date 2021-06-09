@@ -202,8 +202,6 @@ elif system == 'darwin'
     '-DHAVE_SORD', '-DUSE_SORD',
     '-DHAVE_SERD',
     '-DHAVE_CAPNP',
-    '-DHAVE_MAD',
-    '-DHAVE_ID3TAG',
     '-DHAVE_OPUS',
     '-DHAVE_LIBLO',
     '-DHAVE_PORTAUDIO',
@@ -212,6 +210,20 @@ elif system == 'darwin'
     '-D__MACOSX_CORE__', # for RtMidi
   ]
 
+  if architecture != 'aarch64'
+    # We don't actually need MAD on this platform at all - CoreAudio
+    # can read mp3 files no problem - but we have been using it up to
+    # now, so for consistency let's stick with it. No need to bring it
+    # along to aarch64 with us though.
+    feature_defines += [
+      '-DHAVE_MAD',
+      '-DHAVE_ID3TAG',
+    ]
+    svcore_moc_args += [
+      '-DHAVE_MAD',
+    ]
+  endif
+    
   feature_dependencies = [
   ]
 
@@ -237,8 +249,6 @@ elif system == 'darwin'
     '-lvorbisfile',
     '-lopusfile',
     '-lopus',
-    '-lmad',
-    '-lid3tag',
     '-lportaudio',
     '-lsamplerate',
     '-lz',
@@ -255,10 +265,13 @@ elif system == 'darwin'
     '-framework', 'CoreServices',
     '-framework', 'Accelerate',
   ]
-  
-  svcore_moc_args = [
-    '-DHAVE_MAD'
-  ]
+
+  if architecture != 'aarch64'
+    feature_additional_libs += [
+      '-lmad',
+      '-lid3tag',
+    ]
+  endif
   
 elif system == 'windows'
 
