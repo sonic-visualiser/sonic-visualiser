@@ -10,7 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install-packages
-      run: sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev git mercurial autoconf automake libtool mlton
+      run: |
+        sudo apt-get update
+        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev git mercurial autoconf automake libtool mlton
     - name: install-capnp
       run: |
         mkdir -p tmp/capnproto
