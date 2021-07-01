@@ -4,7 +4,7 @@
       "pin": "c3ef877327f1b081b95a1d05349c297f8c4454f0"
     },
     "svcore": {
-      "pin": "94ef61e2c4573f4825797fb56d84544de4cfbff4"
+      "pin": "a136201568d3cadee06ae448007f19583d04cd7a"
     },
     "svgui": {
       "pin": "844589dcf20157752f4b66619eb16f80cccf2b09"
@@ -28,16 +28,16 @@
       "pin": "9e23ae46e1fc466d0be01cacb38df143d909b120"
     },
     "dataquay": {
-      "pin": "95def499e10f"
+      "pin": "e6bda0866e70"
     },
     "bqvec": {
-      "pin": "13251adcfb3f"
+      "pin": "a6cb2dc34ad9"
     },
     "bqfft": {
-      "pin": "c8ab2d3d5df2"
+      "pin": "4f44b459b35f"
     },
     "bqresample": {
-      "pin": "ca43790feeca"
+      "pin": "8692d553b672"
     },
     "bqaudioio": {
       "pin": "818954587967"
