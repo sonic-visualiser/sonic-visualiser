@@ -175,15 +175,28 @@ elif system == 'darwin'
     svdeps_libdir = svdeps_dir / 'lib'
   endif
     
-  capnp = find_program(
-    'capnp',
-    dirs: [
-      svdeps_dir / 'bin'
-    ])
-  capnp_additional_args = [
-    '-I' + svdeps_dir / 'include'
-  ]
-  capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+  if architecture == 'aarch64'
+    capnp = find_program(
+      'capnp',
+      dirs: [
+	svdeps_dir / 'bin-arm64'
+      ])
+    capnp_additional_args = [
+      '-I' + svdeps_dir / 'include-arm64',
+      '-I' + svdeps_dir / 'include'
+    ]
+    capnp_cpp_plugin = svdeps_dir / 'bin-arm64/capnpc-c++'
+  else
+    capnp = find_program(
+      'capnp',
+      dirs: [
+	svdeps_dir / 'bin'
+      ])
+    capnp_additional_args = [
+      '-I' + svdeps_dir / 'include'
+    ]
+    capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+  endif
   
   rc = []
 
@@ -233,6 +246,7 @@ elif system == 'darwin'
   
   feature_include_dirs = [
     # These must be relative, so not using svdeps_dir
+    'sv-dependency-builds/osx/include-arm64',
     'sv-dependency-builds/osx/include',
     'sv-dependency-builds/osx/include/opus',
   ]

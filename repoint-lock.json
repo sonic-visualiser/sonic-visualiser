@@ -16,7 +16,7 @@
       "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
     },
     "sv-dependency-builds": {
-      "pin": "c9b172a2bbb588de7eaf095d33d418e4465a26fa"
+      "pin": "f9f06916c008de78d7612dae39c28ed06d06e874"
     },
     "icons/scalable": {
       "pin": "9dfacf743c6d7df6a891406f2c8c0f9548b396e1"
@@ -28,13 +28,13 @@
       "pin": "9e23ae46e1fc466d0be01cacb38df143d909b120"
     },
     "dataquay": {
-      "pin": "e6bda0866e70"
+      "pin": "95def499e10f"
     },
     "bqvec": {
       "pin": "a6cb2dc34ad9"
     },
     "bqfft": {
-      "pin": "4f44b459b35f"
+      "pin": "c8ab2d3d5df2"
     },
     "bqresample": {
       "pin": "8692d553b672"
