@@ -4,7 +4,7 @@ set -eu
 
 case $(git status --porcelain --untracked-files=no) in
     "") ;;
-    *) ;; ##echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
+    *) echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
 esac
 
 mkdir -p packages
@@ -68,7 +68,7 @@ if [ -d /Applications ]; then
     rm -rf "$volume"
     rm -f "$dmg"
 
-    deploy/macos/deploy-and-package.sh
+    deploy/macos/deploy-and-package.sh build-x86_64 build-arm64
 
     mv "$dmg" packages/
 
