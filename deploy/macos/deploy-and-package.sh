@@ -5,19 +5,44 @@
 
 set -e
 
+##!!! Make this accept more than one builddir for different architectures - lipo together the SV and library binaries, and include the helpers from the first builddir as primary and second, if present, as -translated suffix
+
+usage() {
+    echo
+    echo "Usage: $0 [--no-notarization] [<builddir>]"
+    echo
+    echo "  where <builddir> defaults to \"build\""
+    echo
+    exit 2
+}
+
 notarize=yes
 if [ "$1" = "--no-notarization" ]; then
     notarize=no
-elif [ -n "$1" ]; then
-    echo "Usage: $0 [--no-notarization]"
+    shift
+fi
+
+app="Sonic Visualiser"
+
+builddir="$1"
+if [ -z "$builddir" ]; then
+    builddir=build
+else
+    shift
+fi
+
+if [ -n "$1" ]; then
+    usage
+fi
+
+if [ ! -f "$builddir/$app" ]; then
+    echo "File $app not found in builddir $builddir"
     exit 2
 fi
 
 set -u
 
-app="Sonic Visualiser"
-
-version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' build/version.h`
+version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' $builddir/version.h`
 
 source="$app.app"
 volume="$app"-"$version"
@@ -42,12 +67,14 @@ fi
 echo
 echo "(Re-)running deploy script..."
 
-deploy/macos/deploy.sh "$app" || exit 1
+deploy/macos/deploy.sh "$app" "$builddir" || exit 1
 
 echo
 echo "Making target tree."
 
 mkdir "$volume" || exit 1
+
+##!!! This is the point where we should lipo together the architectures
 
 ln -s /Applications "$volume"/Applications
 cp README.md "$volume/README.txt"

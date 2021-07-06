@@ -4,7 +4,7 @@ set -eu
 
 case $(git status --porcelain --untracked-files=no) in
     "") ;;
-    *) echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
+    *) ;; ##echo "ERROR: Current working copy has been modified - not proceeding"; exit 2;;
 esac
 
 mkdir -p packages
@@ -14,21 +14,52 @@ version=$(grep '^ *version:' meson.build | sed "s/^ *version: *'//" | sed "s/'.*
 
 if [ -d /Applications ]; then
 
-    if [ -z "$QTDIR" ]; then
-	echo "QTDIR must be set"
-    fi
+    archs="x86_64 arm64"
+    qtdir_x86_64="/Users/cannam/Qt/5.12.10/clang_64"
+    qtdir_arm64="/Users/cannam/Qt/5.15.2-arm64"
 
-    echo -n "Proceed to rebuild, package, and sign version $version [Yn] ? "
+    echo "Proceed to rebuild, package, and sign version $version using:"
+    for arch in $archs; do
+	case "$arch" in
+	    x86_64) qtdir="$qtdir_x86_64";;
+	    arm64) qtdir="$qtdir_arm64";;
+	    *) echo "(internal error, unknown arch)"; exit 1;;
+	esac
+	echo "-> for arch $arch: Qt dir $qtdir"
+	if [ ! -d "$qtdir" ]; then
+	    echo "*** ERROR: Qt dir $qtdir does not exist"
+	    exit 1
+	fi
+	if [ ! -f "$qtdir/bin/qmake" ]; then
+	    echo "*** ERROR: qmake not found in $qmake (for Qt dir $qtdir)"
+	    exit 1
+	fi
+	qmake_arch=$(lipo -archs "$qtdir/bin/qmake")
+	if [ t"$qmake_arch" != t"$arch" ]; then
+	    echo "*** ERROR: wrong arch $qmake_arch for qmake $qmake (expected $arch)"
+	    exit 1
+	fi
+    done
+    echo -n "[Yn] ? "
     read yn
     case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
     echo "Proceeding"
 
     ./repoint install
 
-    rm -rf build
-    meson build --buildtype release -Db_lto=true
-    ninja -C build
+    for arch in $archs; do
 
+	case "$arch" in
+	    x86_64) qtdir="$qtdir_x86_64";;
+	    arm64) qtdir="$qtdir_arm64";;
+	esac
+
+	rm -rf build-$arch
+	PATH="$qtdir/bin:$PATH" arch -$arch meson build-$arch --cross-file=deploy/cross/macos-$arch.txt --buildtype release -Db_lto=true
+	ninja -C build-$arch
+
+    done
+    
     app="Sonic Visualiser"
     volume="$app"-"$version"
     dmg="$volume".dmg
