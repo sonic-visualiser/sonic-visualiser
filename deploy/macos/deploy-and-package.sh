@@ -9,9 +9,10 @@ set -e
 
 usage() {
     echo
-    echo "Usage: $0 [--no-notarization] [<builddir>]"
+    echo "Usage: $0 [--no-notarization] <builddir> [<builddir> ...]"
     echo
-    echo "  where <builddir> defaults to \"build\""
+    echo "  More than one <builddir> may be provided if multiple architectures"
+    echo "  are to be merged."
     echo
     exit 2
 }
@@ -24,25 +25,34 @@ fi
 
 app="Sonic Visualiser"
 
-builddir="$1"
-if [ -z "$builddir" ]; then
-    builddir=build
-else
-    shift
-fi
-
-if [ -n "$1" ]; then
+builddirs="$@"
+if [ -z "$builddirs" ]; then
     usage
-fi
-
-if [ ! -f "$builddir/$app" ]; then
-    echo "File $app not found in builddir $builddir"
-    exit 2
 fi
 
 set -u
 
-version=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' $builddir/version.h`
+version=""
+
+for builddir in $builddirs; do
+    if [ ! -f "$builddir/$app" ]; then
+	echo "File $app not found in builddir $builddir"
+	exit 2
+    fi
+    version_here=`perl -p -e 's/^[^"]*"([^"]*)".*$/$1/' $builddir/version.h`
+    if [ -z "$version_here" ]; then
+	echo "Unable to extract version from builddir $builddir"
+	exit 2
+    fi
+    if [ -z "$version" ]; then
+	version="$version_here"
+    elif [ "$version" != "$version_here" ]; then
+	echo "Version $version_here found in builddir $builddir does not match version $version found in prior builddir(s)"
+	exit 2
+    fi
+done
+
+echo "Version: $version"
 
 source="$app.app"
 volume="$app"-"$version"
@@ -65,16 +75,9 @@ if [ "$notarize" = no ]; then
 fi
 
 echo
-echo "(Re-)running deploy script..."
-
-deploy/macos/deploy.sh "$app" "$builddir" || exit 1
-
-echo
 echo "Making target tree."
 
 mkdir "$volume" || exit 1
-
-##!!! This is the point where we should lipo together the architectures
 
 ln -s /Applications "$volume"/Applications
 cp README.md "$volume/README.txt"
@@ -82,45 +85,84 @@ cp README_OSC.md "$volume/README_OSC.txt"
 cp COPYING "$volume/COPYING.txt"
 cp CHANGELOG "$volume/CHANGELOG.txt"
 cp CITATION "$volume/CITATION.txt"
-cp -rp "$source" "$target"
+
+for builddir in $builddirs; do
+
+    qtdir=$(grep '^Found qmake: ' $builddir/meson-logs/meson-log.txt |
+		head -1 |
+		sed 's/Found qmake: //' |
+		sed 's,/bin/qmake.*,,')
+    if [ -z "$qtdir" ]; then
+	echo "Unable to discover QTDIR from build dir $builddir"
+	exit 1
+    elif [ ! -d "$qtdir" ]; then
+	echo "Discovered QTDIR as $qtdir from build dir $builddir, but it doesn't exist"
+	exit 1
+    fi
+    
+    echo
+    echo "(Re-)running deploy script in $builddir..."
+
+    QTDIR="$qtdir" deploy/macos/deploy.sh "$app" "$builddir" || exit 1
+
+    if [ ! -f "$target/Contents/Macos/$app" ]; then
+	echo "App does not yet exist in target $target, copying verbatim..."
+	cp -rp "$source" "$target"
+    else
+	echo "App exists in target $target, merging..."
+	find "$source" -name "$app" -o -name \*.dylib -o -name Qt\* |
+	    while read f; do
+		lipo "$f" "$volume/$f" -create -output "$volume/$f"
+	    done
+	for helper in vamp-plugin-load-checker piper-vamp-simple-server; do
+	    path="Contents/MacOS/$helper"
+	    if [ -f "$target/$path" ]; then
+		arch=$(lipo -archs "$target/$path")
+		mv "$target/$path" "$target/$path-$arch"
+	    fi
+	    arch=$(lipo -archs "$source/$path")
+	    cp "$source/$path" "$target/$path-$arch"
+	done
+    fi
+    echo "Done"
+
+done
 
 # update file timestamps so as to make the build date apparent
 find "$volume" -exec touch \{\} \;
-
-echo "Done"
 
 echo
 echo "Code-signing volume..."
 
 deploy/macos/sign.sh "$volume" || exit 1
 
-echo "Done"
+    echo "Done"
 
-echo
-echo "Making dmg..."
+    echo
+    echo "Making dmg..."
 
-rm -f "$dmg"
+    rm -f "$dmg"
 
-hdiutil create -srcfolder "$volume" "$dmg" -volname "$volume" -fs HFS+ && 
+    hdiutil create -srcfolder "$volume" "$dmg" -volname "$volume" -fs HFS+ && 
 	rm -r "$volume"
 
-echo "Done"
+    echo "Done"
 
-echo
-echo "Signing dmg..."
-
-gatekeeper_key="Developer ID Application: Particular Programs Ltd (73F996B92S)"
-
-codesign -s "$gatekeeper_key" -fv "$dmg"
-
-if [ "$notarize" = no ]; then
     echo
-    echo "The --no-notarization flag was set: not submitting for notarization"
-else
-    echo
-    echo "Submitting dmg for notarization..."
+    echo "Signing dmg..."
 
-    deploy/macos/notarize.sh "$dmg" || exit 1
-fi
+    gatekeeper_key="Developer ID Application: Particular Programs Ltd (73F996B92S)"
 
-echo "Done"
+    codesign -s "$gatekeeper_key" -fv "$dmg"
+
+    if [ "$notarize" = no ]; then
+	echo
+	echo "The --no-notarization flag was set: not submitting for notarization"
+    else
+	echo
+	echo "Submitting dmg for notarization..."
+
+	deploy/macos/notarize.sh "$dmg" || exit 1
+    fi
+
+    echo "Done"
