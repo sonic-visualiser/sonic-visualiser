@@ -5391,22 +5391,25 @@ MainWindow::getReleaseText() const
 #ifdef BUILD_DEBUG
     debug = true;
 #endif // BUILD_DEBUG
-#ifdef SV_VERSION
-#ifdef SVNREV
-    version = tr("Release %1 : Revision %2").arg(SV_VERSION).arg(SVNREV);
-#else // !SVNREV
-    version = tr("Release %1").arg(SV_VERSION);
-#endif // SVNREV
-#else // !SV_VERSION
-#ifdef SVNREV
-    version = tr("Unreleased : Revision %1").arg(SVNREV);
-#endif // SVNREV
-#endif // SV_VERSION
 
-    return tr("%1 : %2 configuration, %3-bit build")
+    version = tr("Release %1").arg(SV_VERSION);
+
+    QString archtag;
+#ifdef Q_OS_MAC
+#if (defined(__aarch64__) || defined(__arm__) || defined(_M_ARM64))
+    archtag = " (arm64)";
+#elif (defined(__x86_64__) || defined(__i386__) || defined(_M_IX86) || defined(_M_X64))
+    archtag = " (x86_64)";
+#else
+    archtag = " (unknown arch)"
+#endif
+#endif
+    
+    return tr("%1 : %2 configuration, %3-bit build%4")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"))
-        .arg(sizeof(void *) * 8);
+        .arg(sizeof(void *) * 8)
+        .arg(archtag);
 }
 
 void
