@@ -11,14 +11,14 @@
         "svcore": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser",
-            "branch": "default"
+            "owner": "cannam",
+            "branch": "dB"
         },
         "svgui": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser",
-            "branch": "default"
+            "owner": "cannam",
+            "branch": "dB"
         },
         "svapp": {
             "vcs": "git",
