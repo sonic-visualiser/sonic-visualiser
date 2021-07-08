@@ -348,6 +348,11 @@ main(int argc, char **argv)
             }
         }
 #endif
+#ifdef Q_OS_MAC
+        QFont font(QApplication::font());
+        font.setKerning(false);
+        QApplication::setFont(font);
+#endif
     }
     settings.endGroup();
 
