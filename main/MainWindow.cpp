@@ -360,8 +360,10 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
                 << endl;
         startOSCQueue(false);
     }
-    
-//    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+
+    if (QString(SV_VERSION).contains("-")) {
+        QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+    }
     
     SVDEBUG << "MainWindow: Constructor done" << endl;
 }
