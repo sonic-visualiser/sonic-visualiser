@@ -36,7 +36,8 @@
         "sv-dependency-builds": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser"
+            "owner": "sonic-visualiser",
+            "branch": "default"
         },
         "icons/scalable": {
             "vcs": "git",
