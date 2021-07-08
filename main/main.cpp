@@ -421,7 +421,7 @@ main(int argc, char **argv)
     if (!success) {
         SVDEBUG << "Failed\nFailed to load Qt translation for locale" << endl;
     } else {
-        cerr << "Done" << endl;
+        SVDEBUG << "Done" << endl;
     }
     application.installTranslator(&qtTranslator);
 
@@ -630,7 +630,7 @@ void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
                 haveMainModel = true;
             }
         } else {
-            cerr << "WARNING: Ignoring additional session file argument \"" << path << "\"" << endl;
+            SVCERR << "WARNING: Ignoring additional session file argument \"" << path << "\"" << endl;
             status = MainWindow::FileOpenSucceeded;
         }
     }
