@@ -44,7 +44,7 @@ if get_option('buildtype').startswith('release')
     '-DNO_TIMING',
     '-DNO_HIT_COUNTS',
   ]
-if compiler == 'gcc' or compiler == 'clang'
+if compiler == 'clang'
   general_defines += [
     '-ffast-math',
     '-Wno-deprecated-copy', # Qt currently hits lots of these internally
