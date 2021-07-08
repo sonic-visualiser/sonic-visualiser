@@ -189,6 +189,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     udb->registerUnit("Hz");
     udb->registerUnit("dB");
     udb->registerUnit("s");
+    udb->registerUnit("V");
 
     ColourDatabase *cdb = ColourDatabase::getInstance();
     cdb->addColour(Qt::black, tr("Black"));

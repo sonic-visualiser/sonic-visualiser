@@ -44,7 +44,7 @@ if get_option('buildtype').startswith('release')
     '-DNO_TIMING',
     '-DNO_HIT_COUNTS',
   ]
-if compiler == 'gcc' or compiler == 'clang'
+if compiler == 'clang'
   general_defines += [
     '-ffast-math',
     '-Wno-deprecated-copy', # Qt currently hits lots of these internally
@@ -856,7 +856,6 @@ svgui_files = [
   'svgui/widgets/CSVAudioFormatDialog.cpp',
   'svgui/widgets/CSVExportDialog.cpp',
   'svgui/widgets/CSVFormatDialog.cpp',
-  'svgui/widgets/Fader.cpp',
   'svgui/widgets/InteractiveFileFinder.cpp',
   'svgui/widgets/IconLoader.cpp',
   'svgui/widgets/ImageDialog.cpp',
@@ -933,7 +932,6 @@ svgui_moc_files = qt.preprocess(
   'svgui/widgets/CSVAudioFormatDialog.h',
   'svgui/widgets/CSVExportDialog.h',
   'svgui/widgets/CSVFormatDialog.h',
-  'svgui/widgets/Fader.h',
   'svgui/widgets/InteractiveFileFinder.h',
   'svgui/widgets/ImageDialog.h',
   'svgui/widgets/ItemEditDialog.h',
