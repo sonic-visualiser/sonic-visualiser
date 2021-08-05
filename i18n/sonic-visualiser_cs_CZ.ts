@@ -623,6 +623,18 @@ Label:	%4</source>
         <source>Column separator:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>&lt;tab&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;whitespace&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>First row contains column headings:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Colour3DPlotLayer</name>
@@ -939,6 +951,10 @@ Hodnota:	%4</translation>
         <source>Aligner process returned non-zero exit status</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>No external program specified</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FFTModel</name>
@@ -955,19 +971,19 @@ Hodnota:	%4</translation>
     <name>Fader</name>
     <message>
         <source>New fader level, from %1 to %2 dBFS:</source>
-        <translation>Nová úroveň prolínače, od %1 do %2 dBFS:</translation>
+        <translation type="vanished">Nová úroveň prolínače, od %1 do %2 dBFS:</translation>
     </message>
     <message>
         <source>Enter new fader level</source>
-        <translation>Zadat novou úroveň prolínače</translation>
+        <translation type="vanished">Zadat novou úroveň prolínače</translation>
     </message>
     <message>
         <source>Level: %1%2.%3%4 dB</source>
-        <translation>Úroveň: %1%2.%3%4 dB</translation>
+        <translation type="vanished">Úroveň: %1%2.%3%4 dB</translation>
     </message>
     <message>
         <source>Level: Off</source>
-        <translation>Úroveň: Vypnuto</translation>
+        <translation type="vanished">Úroveň: Vypnuto</translation>
     </message>
 </context>
 <context>
@@ -3436,7 +3452,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Release %1 : Revision %2</source>
-        <translation>Vydání %1: Revize %2</translation>
+        <translation type="vanished">Vydání %1: Revize %2</translation>
     </message>
     <message>
         <source>&lt;br&gt;With Raptor RDF parser v%1 &amp;copy; Dave Beckett and the University of Bristol</source>
@@ -3680,7 +3696,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>Unreleased : Revision %1</source>
-        <translation>Nevydáno: Revize %1</translation>
+        <translation type="vanished">Nevydáno: Revize %1</translation>
     </message>
     <message>
         <source>http://www.sonicvisualiser.org/</source>
@@ -4528,7 +4544,7 @@ Co chcete vyvést?</translation>
     </message>
     <message>
         <source>%1 : %2 configuration, %3-bit build</source>
-        <translation>%1 : %2 nastavení, %3-bitové sestavení</translation>
+        <translation type="vanished">%1 : %2 nastavení, %3-bitové sestavení</translation>
     </message>
     <message>
         <source>About %1</source>
@@ -4651,11 +4667,11 @@ Co chcete vyvést?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Yes, I&apos;d be happy to</source>
+        <source>Scanning plugins...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No, thank you</source>
+        <source>%1 : %2 configuration, %3-bit build%4</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5023,7 +5039,7 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Sonic Visualiser!&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;:icons/qm-logo-smaller.png&quot; style=&quot;float:right&quot;&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;/p&gt;&lt;p&gt;Developed in the Centre for Digital Music at Queen Mary University of London, Sonic Visualiser is open source software under the GNU General Public License.&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Before we go on...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Visualiser would like permission to use the network.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Vítejte v Sonic Visualiseru!&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;:icons/qm-logo-smaller.png&quot; style=&quot;float:right&quot;&gt;Sonic Visualiser je program na zobrazování a zkoumání zvukových dat pro semantický rozbor hudby a psaní poznámek.&lt;/p&gt;&lt;p&gt;Vyvíjen ve Středisku pro digitální hudbu (Centre for Digital Music) na londýnské univerzitě královny Marie (Queen Mary University of London), Sonic Visualiser je program s otevřeným zdrojovým kódem pod veřejnou obecnou licencí GNU (GNU General Public License).&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Předtím než budeme pokračovat...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Visualiser chce požádat o svolení k používání sítě.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;h2&gt;Vítejte v Sonic Visualiseru!&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;:icons/qm-logo-smaller.png&quot; style=&quot;float:right&quot;&gt;Sonic Visualiser je program na zobrazování a zkoumání zvukových dat pro semantický rozbor hudby a psaní poznámek.&lt;/p&gt;&lt;p&gt;Vyvíjen ve Středisku pro digitální hudbu (Centre for Digital Music) na londýnské univerzitě královny Marie (Queen Mary University of London), Sonic Visualiser je program s otevřeným zdrojovým kódem pod veřejnou obecnou licencí GNU (GNU General Public License).&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Předtím než budeme pokračovat...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Visualiser chce požádat o svolení k používání sítě.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;This is to:&lt;/p&gt;&lt;ul&gt;&lt;li&gt; Find information about available and installed plugins;&lt;/li&gt;&lt;li&gt; Support the use of Open Sound Control; and&lt;/li&gt;&lt;li&gt; Tell you when updates are available.&lt;/li&gt;&lt;/ul&gt;</source>
@@ -5035,7 +5051,15 @@ Pokud toto sezení uložíte, bude uloženo bez jakéhokoli odkazu na onen zvuk 
     </message>
     <message>
         <source>&lt;p&gt;&lt;b&gt;No personal information will be sent, no tracking is carried out, and no individual information will be shared with anyone else.&lt;/b&gt; We will however make aggregate counts of distinct requests for usage reporting.&lt;/p&gt;&lt;p&gt;We recommend that you allow this, because it makes Sonic Visualiser more useful to you and supports the public funding of this work. But if you do not wish to allow it, please un-check the box below.&lt;br&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Nebudou odesílány žádné osobní informace, neprovádí se žádné sledování, a žádné údaje o jednotlivci nebudou s nikým dalším sdíleny.&lt;/b&gt; Nicméně budeme dělat úhrnné součty odlišných požadavků pro zpravodajství o užití.&lt;/p&gt;&lt;p&gt;Doporučujeme, abyste toto povolil, protože to pro vás dělá Sonic Visualiser užitečnějším a podporuje veřejné financování této práce. Pokud si to však nepřejete, zrušte, prosím, zaškrtnutí okénka níže.&lt;br&gt;&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;&lt;b&gt;Nebudou odesílány žádné osobní informace, neprovádí se žádné sledování, a žádné údaje o jednotlivci nebudou s nikým dalším sdíleny.&lt;/b&gt; Nicméně budeme dělat úhrnné součty odlišných požadavků pro zpravodajství o užití.&lt;/p&gt;&lt;p&gt;Doporučujeme, abyste toto povolil, protože to pro vás dělá Sonic Visualiser užitečnějším a podporuje veřejné financování této práce. Pokud si to však nepřejete, zrušte, prosím, zaškrtnutí okénka níže.&lt;br&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;Welcome to Sonic Visualiser!&lt;/h2&gt;&lt;p&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;/p&gt;&lt;p&gt;Sonic Visualiser is open source software under the GNU General Public License.&lt;/p&gt;&lt;p&gt;&lt;hr&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Before we go on...&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Sonic Visualiser would like permission to use the network.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;b&gt;No personal information will be sent, no tracking is carried out, and no information will be shared with anyone else.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;We recommend that you allow this, because it makes Sonic Visualiser more useful to you. But if you do not wish to allow it, please un-check the box below.&lt;br&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6094,6 +6118,10 @@ ale dostupné jsou %2. Použije se pouze první %3.
     <message>
         <source>Load mp3 files in gapless mode</source>
         <translation>Nahrát soubory MP3 v bezmezerovém režimu</translation>
+    </message>
+    <message>
+        <source>Mix recorded channels to mono</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7206,7 +7234,7 @@ Koš:	%5
     </message>
     <message>
         <source>dBV</source>
-        <translation>dBV</translation>
+        <translation type="vanished">dBV</translation>
     </message>
     <message>
         <source>%1Hz</source>
@@ -7294,7 +7322,7 @@ Koš:	%5
     </message>
     <message>
         <source>dBV^2</source>
-        <translation>dBV^2</translation>
+        <translation type="vanished">dBV^2</translation>
     </message>
     <message>
         <source>Colour Scale</source>
@@ -7529,6 +7557,10 @@ Důvodem pro to může být nedostatek paměti, nebo nedostatek místa na disku.
     <message>
         <source>8x</source>
         <translation>8x</translation>
+    </message>
+    <message>
+        <source>dB^2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8148,6 +8180,17 @@ Hodnota:	%2
     <message>
         <source>Tip of the Day</source>
         <translation>Rada na tento den</translation>
+    </message>
+</context>
+<context>
+    <name>TransformDTWAligner</name>
+    <message>
+        <source>Failed to calculate alignment using DTW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Alignment of transform outputs failed</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
