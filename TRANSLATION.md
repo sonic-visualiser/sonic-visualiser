@@ -5,7 +5,7 @@ Translation strings
 Sonic Visualiser loads translation strings from the Qt `.qm` compiled
 files found in the `i18n/` directory. These are generated from the
 editable XML `.ts` strings files in the same location, using the
-standard Qt language tools (`lupdate`, `lrelease`, and the `Linguist`
+standard Qt5 language tools (`lupdate`, `lrelease`, and the Linguist
 interactive editor).
 
 Everything that appears within a `tr()` call anywhere in the source
@@ -21,7 +21,7 @@ without any command-line arguments, and it:
  merging translations, using `lupdate`
 
  2. Compiles all of the `.ts` files into `.qm` files ready to be
- included into the next build.
+ included into the next build, using `lrelease`.
 
 This means you can run it both before and after making a change to a
 translation - run it beforehand to ensure the merged strings are
@@ -58,4 +58,4 @@ I believe the process should go like this:
  7. Build Sonic Visualiser following the `COMPILE` instructions
  elsewhere and test.
 
-Enhancements & efficiency improvements welcome.
+Corrections, enhancements, & efficiency improvements welcome!
