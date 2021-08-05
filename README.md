@@ -122,6 +122,10 @@ These three platform builds are checked via continuous integration:
  * macOS CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/macOS%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22macOS+CI%22)
  * Windows CI build: [![Build status](https://ci.appveyor.com/api/projects/status/26pygienkigw39p7?svg=true)](https://ci.appveyor.com/project/cannam/sonic-visualiser)
 
+For notes on how to update and edit the UI translation strings, see
+
+ * [TRANSLATION.md](https://github.com/sonic-visualiser/sonic-visualiser/blob/default/TRANSLATION.md)
+
 
 More information
 ----------------
