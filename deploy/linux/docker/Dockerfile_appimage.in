@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
 RUN apt-get update && \
     apt-get install -y \
@@ -22,7 +22,7 @@ RUN apt-get update && \
     libsord-dev \
     libxml2-utils \
     libgl1-mesa-dev \
-    raptor-utils \
+    raptor2-utils \
     librubberband-dev \
     git \
     mercurial \
@@ -38,11 +38,11 @@ RUN apt-get update && \
 # should ensure we can detect, configure, and use that without
 # actually linking against it. We also have Pulse as the default I/O.
 
-RUN apt-add-repository -y ppa:beineri/opt-qt-5.12.9-xenial
+RUN apt-add-repository -y ppa:beineri/opt-qt-5.15.2-bionic
 RUN apt-get update && \
     apt-get install -y \
-    qt512base \
-    qt512svg
+    qt515base \
+    qt515svg
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN git config --global http.postBuffer 4M
@@ -74,10 +74,10 @@ RUN git clone https://github.com/sonic-visualiser/sonic-visualiser
 WORKDIR sonic-visualiser
 RUN git checkout [[REVISION]]
 
-ENV QTDIR /opt/qt512
-ENV PATH /opt/qt512/bin:$PATH
-ENV LD_LIBRARY_PATH /opt/qt512/lib/x86_64-linux-gnu:/opt/qt512/lib:$LD_LIBRARY_PATH
-RUN cat /opt/qt512/bin/qt512-env.sh
+ENV QTDIR /opt/qt515
+ENV PATH /opt/qt515/bin:$PATH
+ENV LD_LIBRARY_PATH /opt/qt515/lib/x86_64-linux-gnu:/opt/qt515/lib:$LD_LIBRARY_PATH
+RUN cat /opt/qt515/bin/qt515-env.sh
 
 RUN ./repoint install
 RUN meson build --buildtype release
