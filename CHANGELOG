@@ -1,20 +1,24 @@
 
-Changes in Sonic Visualiser v4.4 (July 2021) since the previous release 4.3:
-
- - Fix long-standing idiosycratic (to say the least) choice of dB
-   scale to as to conform to conventional reality for root-power
-   quantities
-
- - Fix misalignment and potential crash when rendering 3d plots with
-   variant sample rates
-
- - Adjust scroll-wheel behaviour with modifiers (shift/alt), and
-   documentation for them, so as to be consistent with one another and
-   with other contexts
+Changes in Sonic Visualiser v4.4 (August 2021) since the previous release 4.3:
 
  - Update Mac build to add support for Apple M1 (arm64) architecture:
    the official package is now a universal binary app, and the arm64
    slice can use both (existing) x86_64 and (future) arm64 Vamp plugins
+
+ - Fix long-standing idiosycratic (to say the least) choice of dB
+   scale so as to conform to conventional reality for root-power
+   quantities
+
+ - Fix time lag between visual position of playback pointer and actual
+   audio played, particularly when playing files resampled from one
+   rate to another
+
+ - Fix misalignment and potential crash when rendering 3d plots with
+   variant sample rates
+
+ - Change interpretation of modifiers (shift/alt) for the mouse
+   scroll-wheel, and the documentation for them, so as to be
+   consistent with one another and with other contexts
    
 
 Changes in Sonic Visualiser v4.3 (18 January 2021) since the previous release 4.2:
