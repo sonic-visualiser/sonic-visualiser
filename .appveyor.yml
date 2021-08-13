@@ -8,6 +8,7 @@ configuration:
 
 install:
   - cinst --allow-empty-checksums smlnj
+  - cinst meson
 
 for:
 
