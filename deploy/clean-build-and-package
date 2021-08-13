@@ -79,9 +79,9 @@ else
     case "$yn" in "") ;; [Yy]) ;; *) exit 3;; esac
     echo "Proceeding"
 
-    ./deploy/linux/build-and-test-appimage.sh
-
     current=$(git rev-parse --short HEAD)
+
+    ./deploy/linux/build-and-test-appimage.sh
 
     squashedversion=$(echo "$version" | sed 's/_-//g')
 
