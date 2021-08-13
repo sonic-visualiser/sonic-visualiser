@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
 RUN apt-get update && \
     apt-get install -y \
@@ -22,7 +22,7 @@ RUN apt-get update && \
     libsord-dev \
     libxml2-utils \
     libgl1-mesa-dev \
-    raptor-utils \
+    raptor2-utils \
     librubberband-dev \
     portaudio19-dev \
     qt5-default libqt5svg5-dev \
@@ -56,6 +56,7 @@ RUN chmod 600 .ssh/id_rsa_build .ssh/known_hosts
 RUN echo '{"accounts": {"sourcehut": "~breakfastquay"}}' > .repoint.json
 RUN ( echo '[ui]' ; echo 'ssh = ssh -i /root/.ssh/id_rsa_build' ) > .hgrc
 
+RUN ls -l /usr/lib/x86_64-linux-gnu/librubberband.so*
 RUN rm -f /usr/lib/x86_64-linux-gnu/librubberband.so*
 
 # The explicit revision number here is to make sure the following git
