@@ -39,7 +39,12 @@ general_defines = [
 
 general_link_args = []
 
+config_summary = { 'Compiler': compiler,
+		   'Architecture': architecture,
+		   'System': system }
+
 if get_option('buildtype').startswith('release')
+  config_summary += { 'Build type': 'release' }
   general_defines += [
     '-DNO_TIMING',
     '-DNO_HIT_COUNTS',
@@ -58,6 +63,8 @@ elif compiler == 'msvc'
     '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
   ]
 endif # compiler
+else # buildtype
+  config_summary += { 'Build type': 'debug' }
 endif # get_option('buildtype')
 
 svcore_moc_args = []
@@ -1281,3 +1288,10 @@ executable(
   install: true,
 )
 
+summary({'prefix': get_option('prefix'),
+         'bindir': get_option('bindir'),
+         'libdir': get_option('libdir'),
+         'datadir': get_option('datadir'),
+        }, section: 'Directories')
+
+summary(config_summary, section: 'Configuration', bool_yn: true)
