@@ -6,16 +6,16 @@ image:
 configuration:
   - Release
 
-install:
-  - cinst --allow-empty-checksums smlnj
-  - cinst meson
-
 for:
 
 -
   matrix:
     only:
       - image: Visual Studio 2017
+
+  install:
+    - cinst --allow-empty-checksums smlnj
+    - cinst meson
       
   build_script:
     - deploy\win32\build-32.bat
@@ -24,6 +24,9 @@ for:
   matrix:
     only:
       - image: Visual Studio 2019
+
+  install:
+    - cinst --allow-empty-checksums smlnj
       
   build_script:
     - deploy\win64\build-64.bat
