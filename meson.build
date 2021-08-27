@@ -54,6 +54,10 @@ if compiler == 'clang'
     '-ffast-math',
     '-Wno-deprecated-copy', # Qt currently hits lots of these internally
   ]
+elif compiler == 'gcc'
+  general_defines += [
+    '-ffast-math',
+  ]
 elif compiler == 'msvc'
   general_defines += [
     '-fp:fast',
@@ -90,7 +94,6 @@ if system == 'linux'
   endif # bzip2_dep
   
   fftw3_dep = dependency('fftw3', version: '>= 3.0.0')
-  fftw3f_dep = dependency('fftw3f', version: '>= 3.0.0')
   sndfile_dep = dependency('sndfile', version: '>= 1.0.16')
   samplerate_dep = dependency('samplerate', version: '>= 0.1.2')
   rubberband_dep = dependency('rubberband')
@@ -113,7 +116,6 @@ if system == 'linux'
   feature_dependencies = [
     bzip2_dep,
     fftw3_dep,
-    fftw3f_dep,
     sndfile_dep,
     samplerate_dep,
     rubberband_dep,
@@ -142,7 +144,7 @@ if system == 'linux'
   feature_defines = [
     '-DHAVE_BZ2',
     '-DHAVE_FFTW3',
-    '-DHAVE_FFTW3F',
+    '-DFFTW_DOUBLE_ONLY',
     '-DHAVE_SNDFILE',
     '-DHAVE_LIBSAMPLERATE',
     '-DHAVE_RUBBERBAND',
@@ -231,6 +233,18 @@ elif system == 'darwin'
   ]
 
   if architecture != 'aarch64'
+    
+    # vDSP will be used in preference to FFTW most of the time, but
+    # FFTW supports more fft lengths - without it we can end up with a
+    # very slow implementation for unusual lengths. However we don't
+    # have this in the deps build for arm64 yet because my first
+    # attempt at arm64 build failed and I haven't had a moment to
+    # return to it yet.
+    feature_defines += [
+      '-DHAVE_FFTW3',
+      '-DFFTW_DOUBLE_ONLY',
+    ]
+
     # We don't actually need MAD on this platform at all - CoreAudio
     # can read mp3 files no problem - but we have been using it up to
     # now, so for consistency let's stick with it. No need to bring it
@@ -242,6 +256,7 @@ elif system == 'darwin'
     svcore_moc_args += [
       '-DHAVE_MAD',
     ]
+    
   endif
     
   feature_dependencies = [
@@ -288,7 +303,9 @@ elif system == 'darwin'
   ]
 
   if architecture != 'aarch64'
+    # See comments when setting up feature_defines above
     feature_additional_libs += [
+      '-lfftw3',
       '-lmad',
       '-lid3tag',
     ]
@@ -327,7 +344,7 @@ elif system == 'windows'
   feature_defines = [
     '-DHAVE_BZ2',
     '-DHAVE_FFTW3',
-    '-DHAVE_FFTW3F',
+    '-DFFTW_DOUBLE_ONLY',
     '-DHAVE_SNDFILE',
     '-DHAVE_LIBSAMPLERATE',
     '-DHAVE_RUBBERBAND',
@@ -370,7 +387,6 @@ elif system == 'windows'
     '-lbz2',
     '-lrubberband',
     '-lfftw3',
-    '-lfftw3f',
     '-lsndfile',
     '-logg',
     '-lopusfile',
