@@ -177,6 +177,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     m_unitConverter(new UnitConverter()),
     m_keyReference(new KeyReference()),
     m_templateWatcher(nullptr),
+    m_shouldStartOSCQueue(false),
     m_transformPopulater(nullptr)
 {
     Profiler profiler("MainWindow::MainWindow");
@@ -351,16 +352,8 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
         m_versionTester = nullptr;
     }
 
-    if (withOSCSupport && networkPermission) {
-        SVDEBUG << "MainWindow: Creating OSC queue with network port"
-                << endl;
-        startOSCQueue(true);
-    } else {
-        SVDEBUG << "MainWindow: Creating internal-only OSC queue without port"
-                << endl;
-        startOSCQueue(false);
-    }
-
+    m_shouldStartOSCQueue = (withOSCSupport && networkPermission);
+    
     if (QString(SV_VERSION).contains("-")) {
         QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
     }
@@ -1706,13 +1699,16 @@ MainWindow::prepareTransformsMenu()
 void
 MainWindow::TransformPopulater::run()
 {
-    usleep(200000);
+    usleep(150000);
     
     TransformFactory *tf = TransformFactory::getInstance();
     if (!tf) return;
 
     connect(tf, SIGNAL(transformsPopulated()),
             m_mw, SLOT(populateTransformsMenu()));
+
+    connect(tf, SIGNAL(transformsPopulated()),
+            m_mw, SLOT(transformsPopulated()));
 
     SVDEBUG << "MainWindow::TransformPopulater::run: scanning" << endl;
     
@@ -1723,6 +1719,22 @@ MainWindow::TransformPopulater::run()
     (void)tf->haveTransform({}); // populate!
 
     SVDEBUG << "MainWindow::TransformPopulater::run: done" << endl;
+}
+
+void
+MainWindow::transformsPopulated()
+{
+    populateTransformsMenu();
+
+    if (m_shouldStartOSCQueue) {
+        SVDEBUG << "MainWindow: Creating OSC queue with network port"
+                << endl;
+        startOSCQueue(true);
+    } else {
+        SVDEBUG << "MainWindow: Creating internal-only OSC queue without port"
+                << endl;
+        startOSCQueue(false);
+    }
 }
 
 void

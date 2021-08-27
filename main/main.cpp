@@ -52,7 +52,7 @@
 
 #include "../version.h"
 
-#ifdef HAVE_FFTW3F
+#if (defined (HAVE_FFTW3F) || defined (HAVE_FFTW3))
 #include <fftw3.h>
 #endif
 
@@ -208,8 +208,6 @@ class SVApplication : public QApplication
 public:
     SVApplication(int &argc, char **argv) :
         QApplication(argc, argv),
-        m_readyForFiles(false),
-        m_filepathQueue(QStringList()),
         m_mainWindow(nullptr)
     {
     }
@@ -227,9 +225,6 @@ public:
     }
 
     void handleFilepathArgument(QString path, SVSplash *splash);
-
-    bool m_readyForFiles;
-    QStringList m_filepathQueue;
 
 protected:
     MainWindow *m_mainWindow;
@@ -507,48 +502,48 @@ main(int argc, char **argv)
     // complete.  As a lazy hack, apply it explicitly from here
     gui->preferenceChanged("Property Box Layout");
 
-    application.m_readyForFiles = true; // Ready to receive files from e.g. Apple Events
-
-    for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
-
+    QStringList filesToOpen;
+    for (QString arg: args) {
         // Note QCommandLineParser has now pulled out argv[0] and all
         // the options, so in theory everything here from the very
         // first arg should be relevant. But let's reject names
         // starting with "-" just in case.
-        
-        if (i->startsWith('-')) continue;
-
-        QString path = *i;
-
-        application.handleFilepathArgument(path, splash);
+        if (arg.startsWith('-')) continue;
+        filesToOpen.push_back(arg);
     }
     
-    for (QStringList::iterator i = application.m_filepathQueue.begin();
-         i != application.m_filepathQueue.end(); ++i) {
-        QString path = *i;
-        application.handleFilepathArgument(path, splash);
-    }
-    
-#ifdef HAVE_FFTW3F
     settings.beginGroup("FFTWisdom");
-    QString wisdom = settings.value("wisdom").toString();
-    if (wisdom != "") {
-        fftwf_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+#ifdef HAVE_FFTW3F
+    {
+        QString wisdom = settings.value("wisdom").toString();
+        if (wisdom != "") {
+            fftwf_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+        }
     }
+#endif
 #ifdef HAVE_FFTW3
-    wisdom = settings.value("wisdom_d").toString();
-    if (wisdom != "") {
-        fftw_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+    {
+        QString wisdom = settings.value("wisdom_d").toString();
+        if (wisdom != "") {
+            fftw_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+        }
     }
 #endif
     settings.endGroup();
-#endif
 
     QString scriptFile = parser.value("osc-script");
     if (scriptFile != "") {
         SVDEBUG << "Note: Cueing OSC script from filename \"" << scriptFile
                 << "\"" << endl;
         gui->cueOSCScript(scriptFile);
+    }
+
+    if (!filesToOpen.empty()) {
+        QTimer::singleShot(200, [&]() {
+            for (QString file: filesToOpen) {
+                QApplication::postEvent(&application, new QFileOpenEvent(file));
+            }
+        });
     }
 
     SVDEBUG << "Entering main event loop" << endl;
@@ -567,22 +562,26 @@ main(int argc, char **argv)
 
     application.releaseMainWindow();
 
-#ifdef HAVE_FFTW3F
     settings.beginGroup("FFTWisdom");
-    char *cwisdom = fftwf_export_wisdom_to_string();
-    if (cwisdom) {
-        settings.setValue("wisdom", cwisdom);
-        free(cwisdom);
+#ifdef HAVE_FFTW3F
+    {
+        char *cwisdom = fftwf_export_wisdom_to_string();
+        if (cwisdom) {
+            settings.setValue("wisdom", cwisdom);
+            free(cwisdom);
+        }
     }
+#endif
 #ifdef HAVE_FFTW3
-    cwisdom = fftw_export_wisdom_to_string();
-    if (cwisdom) {
-        settings.setValue("wisdom_d", cwisdom);
-        free(cwisdom);
+    {
+        char *cwisdom = fftw_export_wisdom_to_string();
+        if (cwisdom) {
+            settings.setValue("wisdom_d", cwisdom);
+            free(cwisdom);
+        }
     }
 #endif
     settings.endGroup();
-#endif
 
     FileSource::debugReport();
     
@@ -604,11 +603,9 @@ bool SVApplication::event(QEvent *event){
 
     switch (event->type()) {
     case QEvent::FileOpen:
+        SVDEBUG << "SVApplication::event: Handling FileOpen event" << endl;
         thePath = static_cast<QFileOpenEvent *>(event)->file();
-        if(m_readyForFiles)
-            handleFilepathArgument(thePath, nullptr);
-        else
-            m_filepathQueue.append(thePath);
+                                                                      handleFilepathArgument(thePath, nullptr);
         return true;
     default:
         return QApplication::event(event);
@@ -621,6 +618,26 @@ void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
     static bool haveMainModel = false;
     static bool havePriorCommandLineModel = false;
 
+    int waitCount = 0;
+    if (!TransformFactory::getInstance()->havePopulated()) {
+        SVDEBUG << "SVApplication::handleFilepathArgument: Transform factory not yet populated" << endl;
+        while (!TransformFactory::getInstance()->havePopulated()) {
+            if (waitCount > 90) {
+                SVDEBUG << "SVApplication::handleFilepathArgument: Waited too long, continuing regardless" << endl;
+                break;
+            }
+            if (waitCount == 0) {
+                SVDEBUG << "SVApplication::handleFilepathArgument: Waiting until transform factory has been populated (presumably by MainWindow thread) before opening a file, as it may require transform to run" << endl;
+            } else {
+                SVDEBUG << "SVApplication::handleFilepathArgument: Still waiting..." << endl;
+            }
+            usleep(200000);
+            ++waitCount;
+        }
+    } else {
+        SVDEBUG << "SVApplication::handleFilepathArgument: Transform factory has been populated" << endl;
+    }            
+    
     MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 
 #ifdef Q_OS_WIN32

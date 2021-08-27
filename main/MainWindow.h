@@ -156,6 +156,7 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
+    void transformsPopulated();
     void populateTransformsMenu();
     
     virtual void betaReleaseWarning();
@@ -233,6 +234,8 @@ protected:
 
     QFileSystemWatcher      *m_templateWatcher;
 
+    bool                     m_shouldStartOSCQueue;
+    
     Surveyer                *m_surveyer;
     VersionTester           *m_versionTester;
     QString                  m_newerVersionIs;
