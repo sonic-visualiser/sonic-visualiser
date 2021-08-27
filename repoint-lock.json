@@ -1,7 +1,7 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "7651023cdc21839c7cc7c5d004b8627d5bf25419"
+      "pin": "3c4ee685c397ba09b6773c3350305a64fa8ecfc1"
     },
     "svcore": {
       "pin": "9b0a48f23868396f7a3657f3adaa05f2ea061f6b"
@@ -16,7 +16,7 @@
       "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
     },
     "sv-dependency-builds": {
-      "pin": "8973e9c9235e9fc5d73a2af32ce1df1e45c08f0b"
+      "pin": "77328254c0f6e5ea7cdabbe7873a2c40f2b148cf"
     },
     "icons/scalable": {
       "pin": "9dfacf743c6d7df6a891406f2c8c0f9548b396e1"
