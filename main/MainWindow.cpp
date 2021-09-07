@@ -1705,9 +1705,6 @@ MainWindow::TransformPopulater::run()
     if (!tf) return;
 
     connect(tf, SIGNAL(transformsPopulated()),
-            m_mw, SLOT(populateTransformsMenu()));
-
-    connect(tf, SIGNAL(transformsPopulated()),
             m_mw, SLOT(transformsPopulated()));
 
     SVDEBUG << "MainWindow::TransformPopulater::run: scanning" << endl;
