@@ -85,6 +85,9 @@ called `build` in which the magic will happen:
 $ meson build
 ```
 
+(If this fails with an error like `Include dir bqvec does not exist`,
+go back and re-read step 1.2 above.)
+
 And now compile the code into the `build` directory using the Ninja
 build tool:
 
