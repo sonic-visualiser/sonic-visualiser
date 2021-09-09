@@ -617,26 +617,6 @@ void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
     static bool haveSession = false;
     static bool haveMainModel = false;
     static bool havePriorCommandLineModel = false;
-
-    int waitCount = 0;
-    if (!TransformFactory::getInstance()->havePopulated()) {
-        SVDEBUG << "SVApplication::handleFilepathArgument: Transform factory not yet populated" << endl;
-        while (!TransformFactory::getInstance()->havePopulated()) {
-            if (waitCount > 90) {
-                SVDEBUG << "SVApplication::handleFilepathArgument: Waited too long, continuing regardless" << endl;
-                break;
-            }
-            if (waitCount == 0) {
-                SVDEBUG << "SVApplication::handleFilepathArgument: Waiting until transform factory has been populated (presumably by MainWindow thread) before opening a file, as it may require transform to run" << endl;
-            } else {
-                SVDEBUG << "SVApplication::handleFilepathArgument: Still waiting..." << endl;
-            }
-            usleep(200000);
-            ++waitCount;
-        }
-    } else {
-        SVDEBUG << "SVApplication::handleFilepathArgument: Transform factory has been populated" << endl;
-    }            
     
     MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 

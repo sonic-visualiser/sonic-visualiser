@@ -116,7 +116,7 @@ Surveyer::finished()
         QString plugsarg;
         TransformFactory *tf = TransformFactory::getInstance();
         if (tf) {
-            TransformList tl = tf->getAllTransformDescriptions();
+            TransformList tl = tf->getInstalledTransformDescriptions();
             std::set<QString> packages;
             for (size_t i = 0; i < tl.size(); ++i) {
                 TransformId id = tl[i].identifier;

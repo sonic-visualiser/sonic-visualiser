@@ -177,8 +177,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     m_unitConverter(new UnitConverter()),
     m_keyReference(new KeyReference()),
     m_templateWatcher(nullptr),
-    m_shouldStartOSCQueue(false),
-    m_transformPopulater(nullptr)
+    m_shouldStartOSCQueue(false)
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -338,7 +337,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
         SVDEBUG << "MainWindow: Starting uninstalled-transform population thread" << endl;
-        TransformFactory::getInstance()->startPopulationThread();
+        TransformFactory::getInstance()->startPopulatingUninstalledTransforms();
 
         m_surveyer = nullptr;
 
@@ -365,11 +364,6 @@ MainWindow::~MainWindow()
 {
 //    SVDEBUG << "MainWindow::~MainWindow" << endl;
 
-    if (m_transformPopulater) {
-        m_transformPopulater->wait();
-        delete m_transformPopulater;
-    }
-    
     delete m_keyReference;
     delete m_activityLog;
     delete m_unitConverter;
@@ -1692,34 +1686,18 @@ MainWindow::prepareTransformsMenu()
     pending->setEnabled(false);
     
     SVDEBUG << "MainWindow::prepareTransformsMenu: Starting installed-transform population thread" << endl;
-    m_transformPopulater = new TransformPopulater(this);
-    m_transformPopulater->start();
+
+    connect(TransformFactory::getInstance(),
+            SIGNAL(installedTransformsPopulated()),
+            this,
+            SLOT(installedTransformsPopulated()));
+
+    QTimer::singleShot(150, TransformFactory::getInstance(),
+                       SLOT(startPopulatingInstalledTransforms()));
 }
 
 void
-MainWindow::TransformPopulater::run()
-{
-    usleep(150000);
-    
-    TransformFactory *tf = TransformFactory::getInstance();
-    if (!tf) return;
-
-    connect(tf, SIGNAL(transformsPopulated()),
-            m_mw, SLOT(transformsPopulated()));
-
-    SVDEBUG << "MainWindow::TransformPopulater::run: scanning" << endl;
-    
-    PluginScan::getInstance()->scan();
-
-    SVDEBUG << "MainWindow::TransformPopulater::run: populating" << endl;
-    
-    (void)tf->haveTransform({}); // populate!
-
-    SVDEBUG << "MainWindow::TransformPopulater::run: done" << endl;
-}
-
-void
-MainWindow::transformsPopulated()
+MainWindow::installedTransformsPopulated()
 {
     populateTransformsMenu();
 
@@ -1755,7 +1733,7 @@ MainWindow::populateTransformsMenu()
 
     TransformFactory *factory = TransformFactory::getInstance();
 
-    TransformList transforms = factory->getAllTransformDescriptions();
+    TransformList transforms = factory->getInstalledTransformDescriptions();
     
     // We have two possible sources of error here: plugin scan
     // warnings, and transform factory startup errors.
@@ -1783,7 +1761,7 @@ MainWindow::populateTransformsMenu()
         }
     }
     
-    vector<TransformDescription::Type> types = factory->getAllTransformTypes();
+    vector<TransformDescription::Type> types = factory->getTransformTypes();
 
     map<TransformDescription::Type, map<QString, SubdividingMenu *> > categoryMenus;
     map<TransformDescription::Type, map<QString, SubdividingMenu *> > makerMenus;
@@ -2646,7 +2624,7 @@ MainWindow::updateMenuStates()
     bool alignMode = m_viewManager && m_viewManager->getAlignMode();
     emit canChangeSolo(havePlayTarget && !alignMode);
 
-    if (TransformFactory::getInstance()->havePopulated()) {
+    if (TransformFactory::getInstance()->havePopulatedInstalledTransforms()) {
         emit canAlign(havePlayTarget && m_document && m_document->canAlign());
     }
 
