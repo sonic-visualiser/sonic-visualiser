@@ -2,7 +2,7 @@
 project(
   'Sonic Visualiser',
   'c', 'cpp',
-  version: '4.4-pre3',
+  version: '4.4',
   license: 'GPL-2.0-or-later',
   default_options: [
     'cpp_std=c++17',
