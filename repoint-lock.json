@@ -31,7 +31,7 @@
       "pin": "6e94b6858cb6"
     },
     "bqvec": {
-      "pin": "a6cb2dc34ad9"
+      "pin": "506df70f7466"
     },
     "bqfft": {
       "pin": "4f44b459b35f"
@@ -40,7 +40,7 @@
       "pin": "8692d553b672"
     },
     "bqaudioio": {
-      "pin": "7a8667ea7a7a"
+      "pin": "80912d12e4c1"
     },
     "bqaudiostream": {
       "pin": "530f3ad687a7"
