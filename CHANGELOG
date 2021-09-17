@@ -18,8 +18,11 @@ Changes in Sonic Visualiser v4.4 (17 September 2021) since the previous release 
  - When recording audio into an empty session with an active session
    template that includes one or more plugin transforms, re-run the
    transforms when recording finishes, instead of only when the
-   recorded model is first created, so as to get proper results for
-   the full recording
+   recorded model is first created (so as to get proper results for
+   the full recording)
+
+ - Fix failure to re-run transforms when loading a session or template
+   before the initial plugin scan has completed
 
  - Fix misalignment and potential crash when rendering 3d plots with
    variant sample rates

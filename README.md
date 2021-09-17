@@ -47,13 +47,11 @@ Landone, Mathieu Barthet, Dan Stowell, Jesus Corral Garcia, Matthias
 Mauch, and Craig Sapp. Special thanks to Professor Mark Sandler for
 initiating and supporting the project.
 
-The 4.3 release was made in 2021 by Chris Cannam at Particular
-Programs Ltd.
-
-The Sonic Visualiser code is, in general,
+The Sonic Visualiser code is in general
 
  * Copyright (c) 2005-2007 Chris Cannam
  * Copyright (c) 2006-2020 Queen Mary University of London
+ * Copyright (c) 2020-2021 Particular Programs Ltd
 
 with a few exceptions as indicated in the individual source files.
 
