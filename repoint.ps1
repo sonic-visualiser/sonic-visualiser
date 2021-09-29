@@ -18,6 +18,7 @@ $program = "$mydir/repoint.sml"
 # We need either Poly/ML or SML/NJ. No great preference as to which.
 
 # Typical locations
+$former_path = $env:PATH
 $env:PATH = "$env:PATH;C:\Program Files (x86)\SMLNJ\bin;C:\Program Files\Poly ML;C:\Program Files (x86)\Poly ML"
 
 if (!$sml) {
@@ -43,6 +44,7 @@ ERROR: No supported SML compiler or interpreter found
        - executable name: polyml
 
 "@
+       $env:PATH = $former_path
        exit 1
     }
 }
@@ -59,6 +61,7 @@ if ($sml -eq "poly") {
     echo "use ""$program""; repoint $arglist" | polyml -q --error-exit | Out-Host
 
     if (-not $?) {
+        $env:PATH = $former_path
         exit $LastExitCode
     }
 
@@ -105,6 +108,7 @@ val _ = OS.Process.exit (OS.Process.success);
 
     if (-not $?) {
         del $tmpfile
+        $env:PATH = $former_path
         exit $LastExitCode
     }
 
@@ -113,5 +117,8 @@ val _ = OS.Process.exit (OS.Process.success);
 } else {
 
     "Unknown SML implementation name: $sml"
+    $env:PATH = $former_path
     exit 2
 }
+
+$env:PATH = $former_path
