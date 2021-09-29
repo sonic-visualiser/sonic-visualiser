@@ -25,7 +25,7 @@ mkdir -p packages
 
 git checkout "$tag"
 
-./repoint archive "$(pwd)"/packages/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds export-tests repoint.pri
+./repoint archive "$(pwd)"/packages/sonic-visualiser-"$v".tar.gz --exclude sv-dependency-builds export-tests repoint.pri .gitignore .github .appveyor.yml .hgtags
 
 git checkout "$current"
 
