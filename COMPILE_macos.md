@@ -197,6 +197,18 @@ tell it to re-configure it by right-clicking on the project name in
 the Projects pane and selecting `Configure`. This should cause the
 project to be populated in the IDE with all of its source files.
 
+If configuration fails because Qt can't find the Meson or Ninja
+programs, try these interventions:
+
+ * Go to the project's `Build & Run` settings, edit the list of
+   variables in the Build Environment section, and add the locations
+   of Meson and Ninja executables (e.g. `/usr/local/bin`) to the
+   `PATH` entry
+
+ * Go to the `Manage Kits...` window, find Meson in the list of
+   sections on the left, pick the Tools tab, and add the locations of
+   Meson and Ninja if they are not there already
+
 ### 2.3. Build the code
 
 Once you have the project configured and have selected a "build kit"
