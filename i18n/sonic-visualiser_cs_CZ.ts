@@ -8158,6 +8158,10 @@ Label:	%4</source>
 Hodnota:	%2
 Štítek:	%4</translation>
     </message>
+    <message>
+        <source>Fill Segment Colours</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TipDialog</name>
@@ -8742,6 +8746,10 @@ Hodnota:	%2
     <message>
         <source>Channels</source>
         <translation>Kanály</translation>
+    </message>
+    <message>
+        <source>Interpolate</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

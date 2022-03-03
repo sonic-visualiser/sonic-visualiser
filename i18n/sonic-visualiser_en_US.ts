@@ -22,7 +22,7 @@
 <context>
     <name>AddLayerCommand</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="1224"/>
+        <location filename="../svapp/framework/Document.cpp" line="1235"/>
         <source>Add %1 Layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -69,7 +69,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1061"/>
+        <location filename="../svapp/audio/AudioCallbackPlaySource.cpp" line="1066"/>
         <source>Change time-stretch factor to %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -395,52 +395,52 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="240"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="241"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="241"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="242"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="242"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="243"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="243"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="244"/>
         <source>Min Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="244"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="245"/>
         <source>Max Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="245"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="246"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="246"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="247"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="297"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="298"/>
         <source>Edit Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="306"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="307"/>
         <source>Add Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/BoxModel.h" line="315"/>
+        <location filename="../svcore/data/model/BoxModel.h" line="316"/>
         <source>Delete Box</source>
         <translation type="unfinished"></translation>
     </message>
@@ -639,118 +639,118 @@ Label:	%4</source>
 <context>
     <name>CSVFormatDialog</name>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="79"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="86"/>
         <source>Select Data Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="81"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="88"/>
         <source>&lt;tab&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="82"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="89"/>
         <source>&lt;whitespace&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="89"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="96"/>
         <source>Please select the correct data format for this file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="101"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="108"/>
         <source>Column separator:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="125"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="132"/>
         <source>First row contains column headings:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="240"/>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="252"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="258"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="270"/>
         <source>&lt;ignore&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="241"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="259"/>
         <source>Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="247"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="265"/>
         <source>(%1 more)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="253"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="271"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="254"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="272"/>
         <source>End time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="255"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="273"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="256"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="274"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="257"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="275"/>
         <source>Pitch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="258"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="276"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="133"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="140"/>
         <source>Timing is specified:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="138"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="145"/>
         <source>Explicitly, in seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="139"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="146"/>
         <source>Explicitly, in milliseconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="140"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="147"/>
         <source>Explicitly, in audio sample frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="141"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="148"/>
         <source>Implicitly: rows are equally spaced in time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="153"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="160"/>
         <source>Audio sample rate (Hz):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="168"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="175"/>
         <source>Frame increment between rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="361"/>
+        <location filename="../svgui/widgets/CSVFormatDialog.cpp" line="379"/>
         <source>Data will be displayed in a %1 layer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1005,12 +1005,12 @@ Value:	%4</source>
 <context>
     <name>Document</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="431"/>
+        <location filename="../svapp/framework/Document.cpp" line="430"/>
         <source>Set main model to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="433"/>
+        <location filename="../svapp/framework/Document.cpp" line="432"/>
         <source>Clear main model</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1464,42 +1464,42 @@ Label:	%4</source>
     <name>ImageModel</name>
     <message>
         <location filename="../svcore/data/model/ImageModel.h" line="58"/>
-        <location filename="../svcore/data/model/ImageModel.h" line="184"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="185"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="182"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="183"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="183"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="184"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="185"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="186"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="186"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="187"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="228"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="229"/>
         <source>Edit Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="239"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="240"/>
         <source>Add Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/ImageModel.h" line="248"/>
+        <location filename="../svcore/data/model/ImageModel.h" line="249"/>
         <source>Delete Image</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2411,126 +2411,126 @@ Do you want to locate it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="432"/>
-        <location filename="../main/MainWindow.cpp" line="1238"/>
-        <location filename="../main/MainWindow.cpp" line="1250"/>
+        <location filename="../main/MainWindow.cpp" line="419"/>
+        <location filename="../main/MainWindow.cpp" line="1225"/>
+        <location filename="../main/MainWindow.cpp" line="1237"/>
         <source>&amp;Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="421"/>
-        <location filename="../main/MainWindow.cpp" line="1694"/>
-        <location filename="../main/MainWindow.cpp" line="1742"/>
+        <location filename="../main/MainWindow.cpp" line="408"/>
+        <location filename="../main/MainWindow.cpp" line="1681"/>
+        <location filename="../main/MainWindow.cpp" line="1729"/>
         <source>&amp;Transform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="506"/>
+        <location filename="../main/MainWindow.cpp" line="493"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="508"/>
+        <location filename="../main/MainWindow.cpp" line="495"/>
         <source>File Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="510"/>
+        <location filename="../main/MainWindow.cpp" line="497"/>
         <source>File and Session Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="515"/>
+        <location filename="../main/MainWindow.cpp" line="502"/>
         <source>&amp;New Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="516"/>
+        <location filename="../main/MainWindow.cpp" line="503"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="525"/>
+        <location filename="../main/MainWindow.cpp" line="512"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="524"/>
+        <location filename="../main/MainWindow.cpp" line="511"/>
         <source>&amp;Open...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="526"/>
+        <location filename="../main/MainWindow.cpp" line="513"/>
         <source>Open a session file, audio file, or layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="564"/>
+        <location filename="../main/MainWindow.cpp" line="551"/>
         <source>&amp;Save Session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="565"/>
+        <location filename="../main/MainWindow.cpp" line="552"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="574"/>
+        <location filename="../main/MainWindow.cpp" line="561"/>
         <source>Save Session &amp;As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="575"/>
+        <location filename="../main/MainWindow.cpp" line="562"/>
         <source>Ctrl+Shift+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="535"/>
+        <location filename="../main/MainWindow.cpp" line="522"/>
         <source>Ctrl+I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="589"/>
+        <location filename="../main/MainWindow.cpp" line="576"/>
         <source>&amp;Export Audio File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="590"/>
+        <location filename="../main/MainWindow.cpp" line="577"/>
         <source>Export selection as an audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="597"/>
+        <location filename="../main/MainWindow.cpp" line="584"/>
         <source>Import Annotation &amp;Layer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="598"/>
+        <location filename="../main/MainWindow.cpp" line="585"/>
         <source>Ctrl+L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="599"/>
+        <location filename="../main/MainWindow.cpp" line="586"/>
         <source>Import layer data from an existing file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="607"/>
+        <location filename="../main/MainWindow.cpp" line="594"/>
         <source>Export layer data to a file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="628"/>
+        <location filename="../main/MainWindow.cpp" line="615"/>
         <source>Export Image File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="629"/>
+        <location filename="../main/MainWindow.cpp" line="616"/>
         <source>Export a single pane to an image file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="548"/>
+        <location filename="../main/MainWindow.cpp" line="535"/>
         <source>Open Lo&amp;cation...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2540,495 +2540,495 @@ Do you want to locate it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="549"/>
+        <location filename="../main/MainWindow.cpp" line="536"/>
         <source>Ctrl+Shift+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="550"/>
+        <location filename="../main/MainWindow.cpp" line="537"/>
         <source>Open or import a file from a remote URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="671"/>
+        <location filename="../main/MainWindow.cpp" line="658"/>
         <source>&amp;Preferences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="672"/>
+        <location filename="../main/MainWindow.cpp" line="659"/>
         <source>Adjust the application preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="677"/>
+        <location filename="../main/MainWindow.cpp" line="664"/>
         <source>&amp;Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="678"/>
+        <location filename="../main/MainWindow.cpp" line="665"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="692"/>
+        <location filename="../main/MainWindow.cpp" line="679"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="696"/>
+        <location filename="../main/MainWindow.cpp" line="683"/>
         <source>Editing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="703"/>
+        <location filename="../main/MainWindow.cpp" line="690"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="704"/>
+        <location filename="../main/MainWindow.cpp" line="691"/>
         <source>Ctrl+X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="705"/>
+        <location filename="../main/MainWindow.cpp" line="692"/>
         <source>Cut the selection from the current layer to the clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="713"/>
+        <location filename="../main/MainWindow.cpp" line="700"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="714"/>
+        <location filename="../main/MainWindow.cpp" line="701"/>
         <source>Ctrl+C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="715"/>
+        <location filename="../main/MainWindow.cpp" line="702"/>
         <source>Copy the selection from the current layer to the clipboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="723"/>
+        <location filename="../main/MainWindow.cpp" line="710"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="724"/>
+        <location filename="../main/MainWindow.cpp" line="711"/>
         <source>Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="725"/>
+        <location filename="../main/MainWindow.cpp" line="712"/>
         <source>Paste from the clipboard to the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="732"/>
+        <location filename="../main/MainWindow.cpp" line="719"/>
         <source>Paste at Playback Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="733"/>
+        <location filename="../main/MainWindow.cpp" line="720"/>
         <source>Ctrl+Shift+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="734"/>
+        <location filename="../main/MainWindow.cpp" line="721"/>
         <source>Paste from the clipboard to the current layer, placing the first item at the playback position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="741"/>
-        <location filename="../main/MainWindow.cpp" line="2656"/>
+        <location filename="../main/MainWindow.cpp" line="728"/>
+        <location filename="../main/MainWindow.cpp" line="2643"/>
         <source>&amp;Delete Selected Items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="742"/>
+        <location filename="../main/MainWindow.cpp" line="729"/>
         <source>Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="743"/>
-        <location filename="../main/MainWindow.cpp" line="2657"/>
+        <location filename="../main/MainWindow.cpp" line="730"/>
+        <location filename="../main/MainWindow.cpp" line="2644"/>
         <source>Delete items in current selection from the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="753"/>
+        <location filename="../main/MainWindow.cpp" line="740"/>
         <source>Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="755"/>
+        <location filename="../main/MainWindow.cpp" line="742"/>
         <source>Select &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="756"/>
+        <location filename="../main/MainWindow.cpp" line="743"/>
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="757"/>
+        <location filename="../main/MainWindow.cpp" line="744"/>
         <source>Select the whole duration of the current session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="764"/>
+        <location filename="../main/MainWindow.cpp" line="751"/>
         <source>Select &amp;Visible Range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="765"/>
+        <location filename="../main/MainWindow.cpp" line="752"/>
         <source>Ctrl+Shift+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="766"/>
+        <location filename="../main/MainWindow.cpp" line="753"/>
         <source>Select the time range corresponding to the current window width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="772"/>
+        <location filename="../main/MainWindow.cpp" line="759"/>
         <source>Select to &amp;Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="773"/>
-        <location filename="../main/MainWindow.cpp" line="2471"/>
-        <location filename="../main/MainWindow.cpp" line="2505"/>
-        <location filename="../main/MainWindow.cpp" line="2582"/>
+        <location filename="../main/MainWindow.cpp" line="760"/>
+        <location filename="../main/MainWindow.cpp" line="2458"/>
+        <location filename="../main/MainWindow.cpp" line="2492"/>
+        <location filename="../main/MainWindow.cpp" line="2569"/>
         <source>Shift+Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="774"/>
+        <location filename="../main/MainWindow.cpp" line="761"/>
         <source>Select from the start of the session to the current playback position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="780"/>
+        <location filename="../main/MainWindow.cpp" line="767"/>
         <source>Select to &amp;End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="781"/>
+        <location filename="../main/MainWindow.cpp" line="768"/>
         <source>Shift+Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="782"/>
+        <location filename="../main/MainWindow.cpp" line="769"/>
         <source>Select from the current playback position to the end of the session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="788"/>
+        <location filename="../main/MainWindow.cpp" line="775"/>
         <source>C&amp;lear Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="789"/>
+        <location filename="../main/MainWindow.cpp" line="776"/>
         <source>Esc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="790"/>
+        <location filename="../main/MainWindow.cpp" line="777"/>
         <source>Clear the selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="799"/>
+        <location filename="../main/MainWindow.cpp" line="786"/>
         <source>Tapping Time Instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="801"/>
+        <location filename="../main/MainWindow.cpp" line="788"/>
         <source>&amp;Insert Instant at Playback Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="815"/>
+        <location filename="../main/MainWindow.cpp" line="802"/>
         <source>Enter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="803"/>
+        <location filename="../main/MainWindow.cpp" line="790"/>
         <source>Insert a new time instant at the current playback position, in a new layer if necessary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="802"/>
+        <location filename="../main/MainWindow.cpp" line="789"/>
         <source>;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="820"/>
+        <location filename="../main/MainWindow.cpp" line="807"/>
         <source>Insert Instants at Selection &amp;Boundaries</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="828"/>
+        <location filename="../main/MainWindow.cpp" line="815"/>
         <source>Shift+Enter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="822"/>
+        <location filename="../main/MainWindow.cpp" line="809"/>
         <source>Insert new time instants at the start and end of the current selected regions, in a new layer if necessary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="838"/>
+        <location filename="../main/MainWindow.cpp" line="825"/>
         <source>Insert Item at Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="840"/>
+        <location filename="../main/MainWindow.cpp" line="827"/>
         <source>Insert a new note or region item corresponding to the current selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="860"/>
+        <location filename="../main/MainWindow.cpp" line="847"/>
         <source>Number New Instants with</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="881"/>
+        <location filename="../main/MainWindow.cpp" line="868"/>
         <source>Cycle size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="902"/>
+        <location filename="../main/MainWindow.cpp" line="889"/>
         <source>Reset Numbering Counters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="903"/>
+        <location filename="../main/MainWindow.cpp" line="890"/>
         <source>Reset to 1 all the counters used for counter-based labelling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="908"/>
+        <location filename="../main/MainWindow.cpp" line="895"/>
         <source>Set Numbering Counters...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="909"/>
+        <location filename="../main/MainWindow.cpp" line="896"/>
         <source>Set the counters used for counter-based labelling</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="913"/>
+        <location filename="../main/MainWindow.cpp" line="900"/>
         <source>Renumber Selected Instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="914"/>
+        <location filename="../main/MainWindow.cpp" line="901"/>
         <source>Renumber the selected instants using the current labelling scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="946"/>
+        <location filename="../main/MainWindow.cpp" line="933"/>
         <source>Panning and Navigation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="948"/>
+        <location filename="../main/MainWindow.cpp" line="935"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="950"/>
+        <location filename="../main/MainWindow.cpp" line="937"/>
         <source>Scroll &amp;Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="951"/>
-        <location filename="../main/MainWindow.cpp" line="2468"/>
-        <location filename="../main/MainWindow.cpp" line="2493"/>
-        <location filename="../main/MainWindow.cpp" line="2522"/>
-        <location filename="../main/MainWindow.cpp" line="2542"/>
-        <location filename="../main/MainWindow.cpp" line="2559"/>
-        <location filename="../main/MainWindow.cpp" line="2576"/>
+        <location filename="../main/MainWindow.cpp" line="938"/>
+        <location filename="../main/MainWindow.cpp" line="2455"/>
+        <location filename="../main/MainWindow.cpp" line="2480"/>
+        <location filename="../main/MainWindow.cpp" line="2509"/>
+        <location filename="../main/MainWindow.cpp" line="2529"/>
+        <location filename="../main/MainWindow.cpp" line="2546"/>
+        <location filename="../main/MainWindow.cpp" line="2563"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="952"/>
+        <location filename="../main/MainWindow.cpp" line="939"/>
         <source>Scroll the current pane to the left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="958"/>
+        <location filename="../main/MainWindow.cpp" line="945"/>
         <source>Scroll &amp;Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="959"/>
+        <location filename="../main/MainWindow.cpp" line="946"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="960"/>
+        <location filename="../main/MainWindow.cpp" line="947"/>
         <source>Scroll the current pane to the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="966"/>
+        <location filename="../main/MainWindow.cpp" line="953"/>
         <source>&amp;Jump Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="967"/>
-        <location filename="../main/MainWindow.cpp" line="2497"/>
-        <location filename="../main/MainWindow.cpp" line="2501"/>
+        <location filename="../main/MainWindow.cpp" line="954"/>
+        <location filename="../main/MainWindow.cpp" line="2484"/>
+        <location filename="../main/MainWindow.cpp" line="2488"/>
         <source>Ctrl+Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="968"/>
+        <location filename="../main/MainWindow.cpp" line="955"/>
         <source>Scroll the current pane a big step to the left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="974"/>
+        <location filename="../main/MainWindow.cpp" line="961"/>
         <source>J&amp;ump Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="975"/>
+        <location filename="../main/MainWindow.cpp" line="962"/>
         <source>Ctrl+Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="976"/>
+        <location filename="../main/MainWindow.cpp" line="963"/>
         <source>Scroll the current pane a big step to the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="982"/>
+        <location filename="../main/MainWindow.cpp" line="969"/>
         <source>Peek Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="983"/>
+        <location filename="../main/MainWindow.cpp" line="970"/>
         <source>Alt+Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="984"/>
+        <location filename="../main/MainWindow.cpp" line="971"/>
         <source>Scroll the current pane to the left without moving the playback cursor or other panes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="990"/>
+        <location filename="../main/MainWindow.cpp" line="977"/>
         <source>Peek Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="991"/>
+        <location filename="../main/MainWindow.cpp" line="978"/>
         <source>Alt+Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="992"/>
+        <location filename="../main/MainWindow.cpp" line="979"/>
         <source>Scroll the current pane to the right without moving the playback cursor or other panes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1000"/>
+        <location filename="../main/MainWindow.cpp" line="987"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1003"/>
+        <location filename="../main/MainWindow.cpp" line="990"/>
         <source>Zoom &amp;In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1004"/>
+        <location filename="../main/MainWindow.cpp" line="991"/>
         <source>Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1005"/>
+        <location filename="../main/MainWindow.cpp" line="992"/>
         <source>Increase the zoom level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1012"/>
+        <location filename="../main/MainWindow.cpp" line="999"/>
         <source>Zoom &amp;Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1013"/>
+        <location filename="../main/MainWindow.cpp" line="1000"/>
         <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1014"/>
+        <location filename="../main/MainWindow.cpp" line="1001"/>
         <source>Decrease the zoom level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1020"/>
+        <location filename="../main/MainWindow.cpp" line="1007"/>
         <source>Restore &amp;Default Zoom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1021"/>
+        <location filename="../main/MainWindow.cpp" line="1008"/>
         <source>Restore the zoom level to the default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1027"/>
+        <location filename="../main/MainWindow.cpp" line="1014"/>
         <source>Zoom to &amp;Fit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1028"/>
+        <location filename="../main/MainWindow.cpp" line="1015"/>
         <source>F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1029"/>
+        <location filename="../main/MainWindow.cpp" line="1016"/>
         <source>Zoom to show the whole file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1037"/>
+        <location filename="../main/MainWindow.cpp" line="1024"/>
         <source>Display Features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1039"/>
+        <location filename="../main/MainWindow.cpp" line="1026"/>
         <source>Show &amp;Centre Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1040"/>
+        <location filename="../main/MainWindow.cpp" line="1027"/>
         <source>&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1041"/>
+        <location filename="../main/MainWindow.cpp" line="1028"/>
         <source>Show or hide the centre line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1048"/>
+        <location filename="../main/MainWindow.cpp" line="1035"/>
         <source>Toggle All Time Rulers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1061"/>
+        <location filename="../main/MainWindow.cpp" line="1048"/>
         <source>Show &amp;No Overlays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1062"/>
+        <location filename="../main/MainWindow.cpp" line="1049"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3037,12 +3037,12 @@ Do you want to locate it?</source>
         <translation type="obsolete">Hide center indicator, frame times, layer names and scale</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1071"/>
+        <location filename="../main/MainWindow.cpp" line="1058"/>
         <source>Show &amp;Minimal Overlays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1072"/>
+        <location filename="../main/MainWindow.cpp" line="1059"/>
         <source>9</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3051,7 +3051,7 @@ Do you want to locate it?</source>
         <translation type="obsolete">Show center indicator only</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1082"/>
+        <location filename="../main/MainWindow.cpp" line="1069"/>
         <source>8</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3060,2147 +3060,2147 @@ Do you want to locate it?</source>
         <translation type="obsolete">Show center indicator, frame times and scale</translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1081"/>
+        <location filename="../main/MainWindow.cpp" line="1068"/>
         <source>Show &amp;All Overlays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1049"/>
+        <location filename="../main/MainWindow.cpp" line="1036"/>
         <source>#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="605"/>
+        <location filename="../main/MainWindow.cpp" line="592"/>
         <source>Export Annotation La&amp;yer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="606"/>
+        <location filename="../main/MainWindow.cpp" line="593"/>
         <source>Ctrl+Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="634"/>
+        <location filename="../main/MainWindow.cpp" line="621"/>
         <source>Export SVG File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="635"/>
+        <location filename="../main/MainWindow.cpp" line="622"/>
         <source>Export a single pane to a scalable SVG image file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="643"/>
+        <location filename="../main/MainWindow.cpp" line="630"/>
         <source>Open the Recorded Audio folder in the system file browser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="821"/>
+        <location filename="../main/MainWindow.cpp" line="808"/>
         <source>Shift+;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="839"/>
+        <location filename="../main/MainWindow.cpp" line="826"/>
         <source>Ctrl+Shift+;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="846"/>
+        <location filename="../main/MainWindow.cpp" line="833"/>
         <source>Ctrl+Shift+Enter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="851"/>
+        <location filename="../main/MainWindow.cpp" line="838"/>
         <source>Ctrl+Shift+Return</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="922"/>
+        <location filename="../main/MainWindow.cpp" line="909"/>
         <source>Subdivide Selected Instants...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="923"/>
+        <location filename="../main/MainWindow.cpp" line="910"/>
         <source>Add new instants at regular intervals between the selected instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="928"/>
+        <location filename="../main/MainWindow.cpp" line="915"/>
         <source>Winnow Selected Instants...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="929"/>
+        <location filename="../main/MainWindow.cpp" line="916"/>
         <source>Remove subdivisions, leaving only every Nth instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1050"/>
+        <location filename="../main/MainWindow.cpp" line="1037"/>
         <source>Show or hide all time rulers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1063"/>
+        <location filename="../main/MainWindow.cpp" line="1050"/>
         <source>Hide times, layer names, and scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1073"/>
+        <location filename="../main/MainWindow.cpp" line="1060"/>
         <source>Show times and basic scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1083"/>
+        <location filename="../main/MainWindow.cpp" line="1070"/>
         <source>Show times, layer names, and scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1093"/>
+        <location filename="../main/MainWindow.cpp" line="1080"/>
         <source>Show &amp;Zoom Wheels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1094"/>
+        <location filename="../main/MainWindow.cpp" line="1081"/>
         <source>Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1095"/>
+        <location filename="../main/MainWindow.cpp" line="1082"/>
         <source>Show thumbwheels for zooming horizontally and vertically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1102"/>
+        <location filename="../main/MainWindow.cpp" line="1089"/>
         <source>Show Property Bo&amp;xes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1103"/>
+        <location filename="../main/MainWindow.cpp" line="1090"/>
         <source>X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1104"/>
+        <location filename="../main/MainWindow.cpp" line="1091"/>
         <source>Show the layer property boxes at the side of the main window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1111"/>
+        <location filename="../main/MainWindow.cpp" line="1098"/>
         <source>Show Status &amp;Bar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1112"/>
+        <location filename="../main/MainWindow.cpp" line="1099"/>
         <source>Show context help information in the status bar at the bottom of the window</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1129"/>
+        <location filename="../main/MainWindow.cpp" line="1116"/>
         <source>Show La&amp;yer Summary</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1130"/>
+        <location filename="../main/MainWindow.cpp" line="1117"/>
         <source>Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1131"/>
+        <location filename="../main/MainWindow.cpp" line="1118"/>
         <source>Open a window displaying the hierarchy of panes and layers in this session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1136"/>
+        <location filename="../main/MainWindow.cpp" line="1123"/>
         <source>Show Acti&amp;vity Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1137"/>
+        <location filename="../main/MainWindow.cpp" line="1124"/>
         <source>Open a window listing interactions and other events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1141"/>
+        <location filename="../main/MainWindow.cpp" line="1128"/>
         <source>Show &amp;Unit Converter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1142"/>
+        <location filename="../main/MainWindow.cpp" line="1129"/>
         <source>Open a window of pitch and timing conversion utilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1151"/>
+        <location filename="../main/MainWindow.cpp" line="1138"/>
         <source>Go Full-Screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1152"/>
+        <location filename="../main/MainWindow.cpp" line="1139"/>
         <source>F11</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1153"/>
+        <location filename="../main/MainWindow.cpp" line="1140"/>
         <source>Expand the pane area to the whole screen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1231"/>
+        <location filename="../main/MainWindow.cpp" line="1218"/>
         <source>&amp;Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1258"/>
+        <location filename="../main/MainWindow.cpp" line="1245"/>
         <source>Managing Panes and Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1263"/>
+        <location filename="../main/MainWindow.cpp" line="1250"/>
         <source>Add &amp;New Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1264"/>
+        <location filename="../main/MainWindow.cpp" line="1251"/>
         <source>N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1265"/>
+        <location filename="../main/MainWindow.cpp" line="1252"/>
         <source>Add a new pane containing only a time ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1289"/>
+        <location filename="../main/MainWindow.cpp" line="1276"/>
         <source>Add New %1 Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1290"/>
+        <location filename="../main/MainWindow.cpp" line="1277"/>
         <source>Add a new empty layer of type %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1296"/>
+        <location filename="../main/MainWindow.cpp" line="1283"/>
         <source>T</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1356"/>
+        <location filename="../main/MainWindow.cpp" line="1343"/>
         <source>Add &amp;Waveform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1172"/>
+        <location filename="../main/MainWindow.cpp" line="1159"/>
         <source>W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1358"/>
+        <location filename="../main/MainWindow.cpp" line="1345"/>
         <source>Add a new pane showing a waveform view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1174"/>
+        <location filename="../main/MainWindow.cpp" line="1161"/>
         <source>Shift+W</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1360"/>
+        <location filename="../main/MainWindow.cpp" line="1347"/>
         <source>Add a new layer showing a waveform view</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1367"/>
+        <location filename="../main/MainWindow.cpp" line="1354"/>
         <source>Add Spectro&amp;gram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1180"/>
+        <location filename="../main/MainWindow.cpp" line="1167"/>
         <source>G</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1369"/>
+        <location filename="../main/MainWindow.cpp" line="1356"/>
         <source>Add a new pane showing a spectrogram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1182"/>
+        <location filename="../main/MainWindow.cpp" line="1169"/>
         <source>Shift+G</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1371"/>
+        <location filename="../main/MainWindow.cpp" line="1358"/>
         <source>Add a new layer showing a spectrogram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1377"/>
+        <location filename="../main/MainWindow.cpp" line="1364"/>
         <source>Add &amp;Melodic Range Spectrogram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1188"/>
+        <location filename="../main/MainWindow.cpp" line="1175"/>
         <source>M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1379"/>
+        <location filename="../main/MainWindow.cpp" line="1366"/>
         <source>Add a new pane showing a spectrogram set up for an overview of note pitches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1190"/>
+        <location filename="../main/MainWindow.cpp" line="1177"/>
         <source>Shift+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1381"/>
+        <location filename="../main/MainWindow.cpp" line="1368"/>
         <source>Add a new layer showing a spectrogram set up for an overview of note pitches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1387"/>
+        <location filename="../main/MainWindow.cpp" line="1374"/>
         <source>Add Pea&amp;k Frequency Spectrogram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1196"/>
+        <location filename="../main/MainWindow.cpp" line="1183"/>
         <source>K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1389"/>
+        <location filename="../main/MainWindow.cpp" line="1376"/>
         <source>Add a new pane showing a spectrogram set up for tracking frequencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1198"/>
+        <location filename="../main/MainWindow.cpp" line="1185"/>
         <source>Shift+K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1391"/>
+        <location filename="../main/MainWindow.cpp" line="1378"/>
         <source>Add a new layer showing a spectrogram set up for tracking frequencies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1397"/>
+        <location filename="../main/MainWindow.cpp" line="1384"/>
         <source>Add Spectr&amp;um</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1204"/>
+        <location filename="../main/MainWindow.cpp" line="1191"/>
         <source>U</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1399"/>
+        <location filename="../main/MainWindow.cpp" line="1386"/>
         <source>Add a new pane showing a frequency spectrum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1206"/>
+        <location filename="../main/MainWindow.cpp" line="1193"/>
         <source>Shift+U</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1401"/>
+        <location filename="../main/MainWindow.cpp" line="1388"/>
         <source>Add a new layer showing a frequency spectrum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1473"/>
+        <location filename="../main/MainWindow.cpp" line="1460"/>
         <source>&amp;All Channels Mixed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1475"/>
+        <location filename="../main/MainWindow.cpp" line="1462"/>
         <source>&amp;All Channels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1478"/>
+        <location filename="../main/MainWindow.cpp" line="1465"/>
         <source>Channel &amp;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1482"/>
-        <location filename="../main/MainWindow.cpp" line="4010"/>
-        <location filename="../main/MainWindow.cpp" line="5299"/>
+        <location filename="../main/MainWindow.cpp" line="1469"/>
+        <location filename="../main/MainWindow.cpp" line="3997"/>
+        <location filename="../main/MainWindow.cpp" line="5286"/>
         <source>%1: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1548"/>
+        <location filename="../main/MainWindow.cpp" line="1535"/>
         <source>Switch to Previous Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1549"/>
+        <location filename="../main/MainWindow.cpp" line="1536"/>
         <source>[</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1550"/>
+        <location filename="../main/MainWindow.cpp" line="1537"/>
         <source>Make the next pane up in the pane stack current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1556"/>
+        <location filename="../main/MainWindow.cpp" line="1543"/>
         <source>Switch to Next Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1557"/>
+        <location filename="../main/MainWindow.cpp" line="1544"/>
         <source>]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1558"/>
+        <location filename="../main/MainWindow.cpp" line="1545"/>
         <source>Make the next pane down in the pane stack current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1566"/>
-        <location filename="../main/MainWindow.cpp" line="5182"/>
+        <location filename="../main/MainWindow.cpp" line="1553"/>
+        <location filename="../main/MainWindow.cpp" line="5169"/>
         <source>&amp;Delete Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1567"/>
+        <location filename="../main/MainWindow.cpp" line="1554"/>
         <source>Ctrl+Shift+D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1568"/>
+        <location filename="../main/MainWindow.cpp" line="1555"/>
         <source>Delete the currently active pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1576"/>
+        <location filename="../main/MainWindow.cpp" line="1563"/>
         <source>Add &amp;Time Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1577"/>
+        <location filename="../main/MainWindow.cpp" line="1564"/>
         <source>Add a new layer showing a time ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1585"/>
+        <location filename="../main/MainWindow.cpp" line="1572"/>
         <source>Add &amp;Existing Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1589"/>
+        <location filename="../main/MainWindow.cpp" line="1576"/>
         <source>Add S&amp;lice of Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1597"/>
+        <location filename="../main/MainWindow.cpp" line="1584"/>
         <source>Switch to Previous Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1598"/>
+        <location filename="../main/MainWindow.cpp" line="1585"/>
         <source>{</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1599"/>
+        <location filename="../main/MainWindow.cpp" line="1586"/>
         <source>Make the previous layer in the pane current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1605"/>
+        <location filename="../main/MainWindow.cpp" line="1592"/>
         <source>Switch to Next Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1606"/>
+        <location filename="../main/MainWindow.cpp" line="1593"/>
         <source>}</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1607"/>
+        <location filename="../main/MainWindow.cpp" line="1594"/>
         <source>Make the next layer in the pane current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1616"/>
-        <location filename="../main/MainWindow.cpp" line="5203"/>
+        <location filename="../main/MainWindow.cpp" line="1603"/>
+        <location filename="../main/MainWindow.cpp" line="5190"/>
         <source>&amp;Rename Layer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1617"/>
+        <location filename="../main/MainWindow.cpp" line="1604"/>
         <source>R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1618"/>
+        <location filename="../main/MainWindow.cpp" line="1605"/>
         <source>Rename the currently active layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1624"/>
-        <location filename="../main/MainWindow.cpp" line="5206"/>
+        <location filename="../main/MainWindow.cpp" line="1611"/>
+        <location filename="../main/MainWindow.cpp" line="5193"/>
         <source>Edit Layer Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1625"/>
+        <location filename="../main/MainWindow.cpp" line="1612"/>
         <source>E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1626"/>
+        <location filename="../main/MainWindow.cpp" line="1613"/>
         <source>Edit the currently active layer as a data grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1632"/>
-        <location filename="../main/MainWindow.cpp" line="5210"/>
+        <location filename="../main/MainWindow.cpp" line="1619"/>
+        <location filename="../main/MainWindow.cpp" line="5197"/>
         <source>&amp;Delete Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1633"/>
+        <location filename="../main/MainWindow.cpp" line="1620"/>
         <source>Ctrl+D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1634"/>
+        <location filename="../main/MainWindow.cpp" line="1621"/>
         <source>Delete the currently active layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1698"/>
+        <location filename="../main/MainWindow.cpp" line="1685"/>
         <source>Scanning plugins...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1787"/>
+        <location filename="../main/MainWindow.cpp" line="1774"/>
         <source>&amp;Recent Transforms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1804"/>
+        <location filename="../main/MainWindow.cpp" line="1791"/>
         <source>%1 by Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1819"/>
-        <location filename="../main/MainWindow.cpp" line="1910"/>
+        <location filename="../main/MainWindow.cpp" line="1806"/>
+        <location filename="../main/MainWindow.cpp" line="1897"/>
         <source>Unclassified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1850"/>
+        <location filename="../main/MainWindow.cpp" line="1837"/>
         <source>%1 by Plugin Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1858"/>
+        <location filename="../main/MainWindow.cpp" line="1845"/>
         <source>%1 by Maker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1872"/>
-        <location filename="../main/MainWindow.cpp" line="1913"/>
+        <location filename="../main/MainWindow.cpp" line="1859"/>
+        <location filename="../main/MainWindow.cpp" line="1900"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1873"/>
-        <location filename="../main/MainWindow.cpp" line="1914"/>
+        <location filename="../main/MainWindow.cpp" line="1860"/>
+        <location filename="../main/MainWindow.cpp" line="1901"/>
         <source> [\(&lt;].*$</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1929"/>
-        <location filename="../main/MainWindow.cpp" line="1955"/>
+        <location filename="../main/MainWindow.cpp" line="1916"/>
+        <location filename="../main/MainWindow.cpp" line="1942"/>
         <source>%1...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1994"/>
+        <location filename="../main/MainWindow.cpp" line="1981"/>
         <source>Find a Transform...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1995"/>
+        <location filename="../main/MainWindow.cpp" line="1982"/>
         <source>Search for a transform from the installed plugins, by name or description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="1996"/>
+        <location filename="../main/MainWindow.cpp" line="1983"/>
         <source>Ctrl+M</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2013"/>
+        <location filename="../main/MainWindow.cpp" line="2000"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2016"/>
+        <location filename="../main/MainWindow.cpp" line="2003"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2023"/>
+        <location filename="../main/MainWindow.cpp" line="2010"/>
         <source>&amp;Help Reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2024"/>
+        <location filename="../main/MainWindow.cpp" line="2011"/>
         <source>F1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2030"/>
+        <location filename="../main/MainWindow.cpp" line="2017"/>
         <source>&amp;Key and Mouse Reference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2031"/>
+        <location filename="../main/MainWindow.cpp" line="2018"/>
         <source>F2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2061"/>
+        <location filename="../main/MainWindow.cpp" line="2048"/>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2063"/>
+        <location filename="../main/MainWindow.cpp" line="2050"/>
         <source>Re-open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2065"/>
+        <location filename="../main/MainWindow.cpp" line="2052"/>
         <source>Re-open the current or most recently opened file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2077"/>
+        <location filename="../main/MainWindow.cpp" line="2064"/>
         <source>Standard Waveform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2113"/>
+        <location filename="../main/MainWindow.cpp" line="2100"/>
         <source>Choose Default Template...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2138"/>
+        <location filename="../main/MainWindow.cpp" line="2125"/>
         <source>Ctrl+T</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2140"/>
+        <location filename="../main/MainWindow.cpp" line="2127"/>
         <source>Repeat Transform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2142"/>
+        <location filename="../main/MainWindow.cpp" line="2129"/>
         <source>Re-select the most recently run transform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2246"/>
+        <location filename="../main/MainWindow.cpp" line="2233"/>
         <source>Playback and Transport Controls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2250"/>
+        <location filename="../main/MainWindow.cpp" line="2237"/>
         <source>Play&amp;back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2253"/>
+        <location filename="../main/MainWindow.cpp" line="2240"/>
         <source>Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2255"/>
+        <location filename="../main/MainWindow.cpp" line="2242"/>
         <source>Playback Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2258"/>
+        <location filename="../main/MainWindow.cpp" line="2245"/>
         <source>Rewind to Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2259"/>
+        <location filename="../main/MainWindow.cpp" line="2246"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2260"/>
+        <location filename="../main/MainWindow.cpp" line="2247"/>
         <source>Rewind to the start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2264"/>
-        <location filename="../main/MainWindow.cpp" line="2674"/>
-        <location filename="../main/MainWindow.cpp" line="2675"/>
+        <location filename="../main/MainWindow.cpp" line="2251"/>
+        <location filename="../main/MainWindow.cpp" line="2661"/>
+        <location filename="../main/MainWindow.cpp" line="2662"/>
         <source>Rewind</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2265"/>
+        <location filename="../main/MainWindow.cpp" line="2252"/>
         <source>PgUp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2266"/>
+        <location filename="../main/MainWindow.cpp" line="2253"/>
         <source>Rewind to the previous time instant or time ruler notch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2270"/>
+        <location filename="../main/MainWindow.cpp" line="2257"/>
         <source>Rewind to Similar Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2271"/>
+        <location filename="../main/MainWindow.cpp" line="2258"/>
         <source>Shift+PgUp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2272"/>
+        <location filename="../main/MainWindow.cpp" line="2259"/>
         <source>Rewind to the previous similarly valued time instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2277"/>
+        <location filename="../main/MainWindow.cpp" line="2264"/>
         <source>Play / Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2285"/>
+        <location filename="../main/MainWindow.cpp" line="2272"/>
         <source>Space</source>
         <extracomment>This text is a shortcut label referring to the space-bar on the keyboard. It probably should not be translated, and certainly should not be translated as if referring to an empty void or to the extra-terrestrial universe.</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2287"/>
+        <location filename="../main/MainWindow.cpp" line="2274"/>
         <source>Start or stop playback from the current position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2296"/>
-        <location filename="../main/MainWindow.cpp" line="2672"/>
+        <location filename="../main/MainWindow.cpp" line="2283"/>
+        <location filename="../main/MainWindow.cpp" line="2659"/>
         <source>Fast Forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2297"/>
+        <location filename="../main/MainWindow.cpp" line="2284"/>
         <source>PgDown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2298"/>
+        <location filename="../main/MainWindow.cpp" line="2285"/>
         <source>Fast-forward to the next time instant or time ruler notch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2302"/>
+        <location filename="../main/MainWindow.cpp" line="2289"/>
         <source>Fast Forward to Similar Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2303"/>
+        <location filename="../main/MainWindow.cpp" line="2290"/>
         <source>Shift+PgDown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2304"/>
+        <location filename="../main/MainWindow.cpp" line="2291"/>
         <source>Fast-forward to the next similarly valued time instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2309"/>
+        <location filename="../main/MainWindow.cpp" line="2296"/>
         <source>Fast Forward to End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2310"/>
+        <location filename="../main/MainWindow.cpp" line="2297"/>
         <source>End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2311"/>
+        <location filename="../main/MainWindow.cpp" line="2298"/>
         <source>Fast-forward to the end</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2316"/>
+        <location filename="../main/MainWindow.cpp" line="2303"/>
         <source>Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2318"/>
+        <location filename="../main/MainWindow.cpp" line="2305"/>
         <source>Ctrl+Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2319"/>
+        <location filename="../main/MainWindow.cpp" line="2306"/>
         <source>Record a new audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2326"/>
+        <location filename="../main/MainWindow.cpp" line="2313"/>
         <source>Play Mode Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2329"/>
+        <location filename="../main/MainWindow.cpp" line="2316"/>
         <source>Constrain Playback to Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2332"/>
+        <location filename="../main/MainWindow.cpp" line="2319"/>
         <source>s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2333"/>
+        <location filename="../main/MainWindow.cpp" line="2320"/>
         <source>Constrain playback to the selected regions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2340"/>
+        <location filename="../main/MainWindow.cpp" line="2327"/>
         <source>Loop Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2343"/>
+        <location filename="../main/MainWindow.cpp" line="2330"/>
         <source>l</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2344"/>
+        <location filename="../main/MainWindow.cpp" line="2331"/>
         <source>Loop playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2351"/>
+        <location filename="../main/MainWindow.cpp" line="2338"/>
         <source>Solo Current Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2355"/>
+        <location filename="../main/MainWindow.cpp" line="2342"/>
         <source>o</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2356"/>
+        <location filename="../main/MainWindow.cpp" line="2343"/>
         <source>Solo the current pane during playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2363"/>
+        <location filename="../main/MainWindow.cpp" line="2350"/>
         <source>Align File Timelines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2366"/>
+        <location filename="../main/MainWindow.cpp" line="2353"/>
         <source>Treat multiple audio files as versions of the same work, and align their timelines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2420"/>
+        <location filename="../main/MainWindow.cpp" line="2407"/>
         <source>Speed Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2421"/>
+        <location filename="../main/MainWindow.cpp" line="2408"/>
         <source>Ctrl+PgUp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2422"/>
+        <location filename="../main/MainWindow.cpp" line="2409"/>
         <source>Time-stretch playback to speed it up without changing pitch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2426"/>
+        <location filename="../main/MainWindow.cpp" line="2413"/>
         <source>Slow Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2427"/>
+        <location filename="../main/MainWindow.cpp" line="2414"/>
         <source>Ctrl+PgDown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2428"/>
+        <location filename="../main/MainWindow.cpp" line="2415"/>
         <source>Time-stretch playback to slow it down without changing pitch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2432"/>
+        <location filename="../main/MainWindow.cpp" line="2419"/>
         <source>Restore Normal Speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2433"/>
+        <location filename="../main/MainWindow.cpp" line="2420"/>
         <source>Ctrl+Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2434"/>
+        <location filename="../main/MainWindow.cpp" line="2421"/>
         <source>Restore non-time-stretched playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2446"/>
+        <location filename="../main/MainWindow.cpp" line="2433"/>
         <source>Edit Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2453"/>
-        <location filename="../main/MainWindow.cpp" line="2480"/>
-        <location filename="../main/MainWindow.cpp" line="2508"/>
-        <location filename="../main/MainWindow.cpp" line="2528"/>
-        <location filename="../main/MainWindow.cpp" line="2545"/>
-        <location filename="../main/MainWindow.cpp" line="2562"/>
+        <location filename="../main/MainWindow.cpp" line="2440"/>
+        <location filename="../main/MainWindow.cpp" line="2467"/>
+        <location filename="../main/MainWindow.cpp" line="2495"/>
+        <location filename="../main/MainWindow.cpp" line="2515"/>
+        <location filename="../main/MainWindow.cpp" line="2532"/>
+        <location filename="../main/MainWindow.cpp" line="2549"/>
         <source>Tool Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2843"/>
+        <location filename="../main/MainWindow.cpp" line="2830"/>
         <source>&lt;unnamed&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3159"/>
-        <location filename="../main/MainWindow.cpp" line="3168"/>
+        <location filename="../main/MainWindow.cpp" line="3146"/>
+        <location filename="../main/MainWindow.cpp" line="3155"/>
         <source>Failed to export layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3160"/>
+        <location filename="../main/MainWindow.cpp" line="3147"/>
         <source>Only note layers may be exported to MIDI files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3169"/>
+        <location filename="../main/MainWindow.cpp" line="3156"/>
         <source>Cannot export this layer to this file type. Only delimited column formats such as CSV are supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3224"/>
+        <location filename="../main/MainWindow.cpp" line="3211"/>
         <source>Export the content of the selected area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3225"/>
+        <location filename="../main/MainWindow.cpp" line="3212"/>
         <source>Export the whole layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3230"/>
+        <location filename="../main/MainWindow.cpp" line="3217"/>
         <source>Which region of the layer do you want to export?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3376"/>
+        <location filename="../main/MainWindow.cpp" line="3363"/>
         <source>Export the whole pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3377"/>
+        <location filename="../main/MainWindow.cpp" line="3364"/>
         <source>Export the visible area only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3387"/>
+        <location filename="../main/MainWindow.cpp" line="3374"/>
         <source>Which region of the current pane do you want to export as a scalable SVG image?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3415"/>
+        <location filename="../main/MainWindow.cpp" line="3402"/>
         <source>Failed to save SVG file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3416"/>
+        <location filename="../main/MainWindow.cpp" line="3403"/>
         <source>Failed to save SVG file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4374"/>
+        <location filename="../main/MainWindow.cpp" line="4361"/>
         <source>Failed to query transform attributes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4375"/>
+        <location filename="../main/MainWindow.cpp" line="4362"/>
         <source>&lt;b&gt;Failed to query transform attributes&lt;/b&gt;&lt;p&gt;Plugin or server error: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4447"/>
+        <location filename="../main/MainWindow.cpp" line="4434"/>
         <source>Multiplexed audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4469"/>
+        <location filename="../main/MainWindow.cpp" line="4456"/>
         <source>Transform failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4470"/>
+        <location filename="../main/MainWindow.cpp" line="4457"/>
         <source>&lt;b&gt;Failed to run transform&lt;/b&gt;&lt;p&gt;Plugin or server error: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4599"/>
+        <location filename="../main/MainWindow.cpp" line="4586"/>
         <source>Playback speed: %1% (%2x slower)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4605"/>
+        <location filename="../main/MainWindow.cpp" line="4592"/>
         <source>Playback speed: %1% (%2x faster)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4803"/>
+        <location filename="../main/MainWindow.cpp" line="4790"/>
         <source>Beta release</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4804"/>
+        <location filename="../main/MainWindow.cpp" line="4791"/>
         <source>&lt;b&gt;This is a beta release of %1&lt;/b&gt;&lt;p&gt;Please see the &quot;What&apos;s New&quot; option in the Help menu for a list of changes since the last proper release.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4813"/>
+        <location filename="../main/MainWindow.cpp" line="4800"/>
         <source>&lt;b&gt;Failed to load plugins&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5044"/>
+        <location filename="../main/MainWindow.cpp" line="5031"/>
         <source>Subdivide instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5045"/>
+        <location filename="../main/MainWindow.cpp" line="5032"/>
         <source>Number of subdivisions:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5066"/>
+        <location filename="../main/MainWindow.cpp" line="5053"/>
         <source>Winnow instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5067"/>
+        <location filename="../main/MainWindow.cpp" line="5054"/>
         <source>Remove all instants apart from multiples of:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5093"/>
+        <location filename="../main/MainWindow.cpp" line="5080"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate derived layer.&lt;p&gt;The layer transform %1failed:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5100"/>
+        <location filename="../main/MainWindow.cpp" line="5087"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to generate a derived layer.&lt;p&gt;The layer transform %1failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5156"/>
+        <location filename="../main/MainWindow.cpp" line="5143"/>
         <source>&lt;b&gt;Alignment calculation failed&lt;/b&gt;&lt;p&gt;Failed to calculate an audio alignment:&lt;p&gt;%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5178"/>
+        <location filename="../main/MainWindow.cpp" line="5165"/>
         <source>Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5291"/>
+        <location filename="../main/MainWindow.cpp" line="5278"/>
         <source>Adjust the master playback level and pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5292"/>
+        <location filename="../main/MainWindow.cpp" line="5279"/>
         <source>click then drag to adjust, ctrl+click to reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5295"/>
+        <location filename="../main/MainWindow.cpp" line="5282"/>
         <source>drag up/down to adjust, ctrl+click to reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5411"/>
+        <location filename="../main/MainWindow.cpp" line="5398"/>
         <source>%1 : %2 configuration, %3-bit build%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5436"/>
+        <location filename="../main/MainWindow.cpp" line="5423"/>
         <source>With Qt v%1 &amp;copy; The Qt Company</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5465"/>
+        <location filename="../main/MainWindow.cpp" line="5452"/>
         <source>&lt;br&gt;With Opus decoder &amp;copy; Xiph.Org Foundation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5497"/>
+        <location filename="../main/MainWindow.cpp" line="5484"/>
         <source>&lt;br&gt;With Rubber Band Library v%1 &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5499"/>
+        <location filename="../main/MainWindow.cpp" line="5486"/>
         <source>&lt;br&gt;With Rubber Band Library &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5502"/>
+        <location filename="../main/MainWindow.cpp" line="5489"/>
         <source>&lt;br&gt;With Vamp plugin support (API v%1, host SDK v%2) &amp;copy; Chris Cannam and QMUL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5503"/>
+        <location filename="../main/MainWindow.cpp" line="5490"/>
         <source>&lt;br&gt;With Piper Vamp protocol bridge &amp;copy; QMUL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5512"/>
+        <location filename="../main/MainWindow.cpp" line="5499"/>
         <source>&lt;br&gt;With Dataquay Qt/RDF library &amp;copy; Particular Programs Ltd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5513"/>
+        <location filename="../main/MainWindow.cpp" line="5500"/>
         <source>&lt;br&gt;With Cap&apos;n Proto serialisation &amp;copy; Sandstorm Development Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5527"/>
+        <location filename="../main/MainWindow.cpp" line="5514"/>
         <source>Russian UI translation contributed by Alexandre Prokoudine.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5529"/>
+        <location filename="../main/MainWindow.cpp" line="5516"/>
         <source>Czech UI translation contributed by Pavel Fric.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5615"/>
+        <location filename="../main/MainWindow.cpp" line="5602"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;You are using version %1 of Sonic Visualiser, but version %2 is now available.&lt;/p&gt;&lt;p&gt;Please see the &lt;a href=&quot;http://sonicvisualiser.org/&quot;&gt;Sonic Visualiser website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2449"/>
+        <location filename="../main/MainWindow.cpp" line="2436"/>
         <source>Tools Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2454"/>
-        <location filename="../main/MainWindow.cpp" line="2458"/>
-        <location filename="../main/MainWindow.cpp" line="2468"/>
+        <location filename="../main/MainWindow.cpp" line="2441"/>
+        <location filename="../main/MainWindow.cpp" line="2445"/>
+        <location filename="../main/MainWindow.cpp" line="2455"/>
         <source>Navigate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2457"/>
+        <location filename="../main/MainWindow.cpp" line="2444"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2481"/>
-        <location filename="../main/MainWindow.cpp" line="2493"/>
+        <location filename="../main/MainWindow.cpp" line="2468"/>
+        <location filename="../main/MainWindow.cpp" line="2480"/>
         <source>Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2483"/>
+        <location filename="../main/MainWindow.cpp" line="2470"/>
         <source>2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2484"/>
+        <location filename="../main/MainWindow.cpp" line="2471"/>
         <source>Select ranges</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2477"/>
-        <location filename="../main/MainWindow.cpp" line="2509"/>
-        <location filename="../main/MainWindow.cpp" line="2525"/>
+        <location filename="../main/MainWindow.cpp" line="2464"/>
+        <location filename="../main/MainWindow.cpp" line="2496"/>
+        <location filename="../main/MainWindow.cpp" line="2512"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="615"/>
+        <location filename="../main/MainWindow.cpp" line="602"/>
         <source>Convert Audio from Data File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="616"/>
+        <location filename="../main/MainWindow.cpp" line="603"/>
         <source>Convert and import audio sample values from a CSV data file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="620"/>
+        <location filename="../main/MainWindow.cpp" line="607"/>
         <source>Export Audio to Data File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="621"/>
+        <location filename="../main/MainWindow.cpp" line="608"/>
         <source>Export audio from selection into a CSV data file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="642"/>
+        <location filename="../main/MainWindow.cpp" line="629"/>
         <source>Browse Recorded and Converted Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2037"/>
+        <location filename="../main/MainWindow.cpp" line="2024"/>
         <source>What&apos;s &amp;New In This Release?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2038"/>
+        <location filename="../main/MainWindow.cpp" line="2025"/>
         <source>List the changes in this release (and every previous release) of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2466"/>
+        <location filename="../main/MainWindow.cpp" line="2453"/>
         <source>Navigate Tool Mouse Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2469"/>
+        <location filename="../main/MainWindow.cpp" line="2456"/>
         <source>Click left button and drag to move around</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2471"/>
-        <location filename="../main/MainWindow.cpp" line="2582"/>
+        <location filename="../main/MainWindow.cpp" line="2458"/>
+        <location filename="../main/MainWindow.cpp" line="2569"/>
         <source>Zoom to Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2472"/>
-        <location filename="../main/MainWindow.cpp" line="2583"/>
+        <location filename="../main/MainWindow.cpp" line="2459"/>
+        <location filename="../main/MainWindow.cpp" line="2570"/>
         <source>Shift-click left button and drag to zoom to a rectangular area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2474"/>
+        <location filename="../main/MainWindow.cpp" line="2461"/>
         <source>Relocate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2474"/>
-        <location filename="../main/MainWindow.cpp" line="2477"/>
-        <location filename="../main/MainWindow.cpp" line="2525"/>
-        <location filename="../main/MainWindow.cpp" line="2579"/>
+        <location filename="../main/MainWindow.cpp" line="2461"/>
+        <location filename="../main/MainWindow.cpp" line="2464"/>
+        <location filename="../main/MainWindow.cpp" line="2512"/>
+        <location filename="../main/MainWindow.cpp" line="2566"/>
         <source>Double-Click Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2475"/>
+        <location filename="../main/MainWindow.cpp" line="2462"/>
         <source>Double-click left button to jump to clicked location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2478"/>
-        <location filename="../main/MainWindow.cpp" line="2526"/>
+        <location filename="../main/MainWindow.cpp" line="2465"/>
+        <location filename="../main/MainWindow.cpp" line="2513"/>
         <source>Double-click left button on an item to edit it</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2491"/>
+        <location filename="../main/MainWindow.cpp" line="2478"/>
         <source>Select Tool Mouse Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2494"/>
+        <location filename="../main/MainWindow.cpp" line="2481"/>
         <source>Click left button and drag to select region; drag region edge to resize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2497"/>
-        <location filename="../main/MainWindow.cpp" line="2501"/>
+        <location filename="../main/MainWindow.cpp" line="2484"/>
+        <location filename="../main/MainWindow.cpp" line="2488"/>
         <source>Multi Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2498"/>
+        <location filename="../main/MainWindow.cpp" line="2485"/>
         <source>Cmd-click left button and drag to select an additional region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2502"/>
+        <location filename="../main/MainWindow.cpp" line="2489"/>
         <source>Ctrl-click left button and drag to select an additional region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2505"/>
+        <location filename="../main/MainWindow.cpp" line="2492"/>
         <source>Fine Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2506"/>
+        <location filename="../main/MainWindow.cpp" line="2493"/>
         <source>Shift-click left button and drag to select without snapping to items or grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2511"/>
+        <location filename="../main/MainWindow.cpp" line="2498"/>
         <source>3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2512"/>
+        <location filename="../main/MainWindow.cpp" line="2499"/>
         <source>Edit items in layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2520"/>
+        <location filename="../main/MainWindow.cpp" line="2507"/>
         <source>Edit Tool Mouse Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2522"/>
+        <location filename="../main/MainWindow.cpp" line="2509"/>
         <source>Move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2523"/>
+        <location filename="../main/MainWindow.cpp" line="2510"/>
         <source>Click left button on an item or selected region and drag to move</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2516"/>
         <location filename="../main/MainWindow.cpp" line="2529"/>
-        <location filename="../main/MainWindow.cpp" line="2542"/>
         <source>Draw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2531"/>
+        <location filename="../main/MainWindow.cpp" line="2518"/>
         <source>4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2532"/>
+        <location filename="../main/MainWindow.cpp" line="2519"/>
         <source>Draw new items in layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2540"/>
+        <location filename="../main/MainWindow.cpp" line="2527"/>
         <source>Draw Tool Mouse Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2543"/>
+        <location filename="../main/MainWindow.cpp" line="2530"/>
         <source>Click left button and drag to create new item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../main/MainWindow.cpp" line="2533"/>
         <location filename="../main/MainWindow.cpp" line="2546"/>
-        <location filename="../main/MainWindow.cpp" line="2559"/>
         <source>Erase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2548"/>
+        <location filename="../main/MainWindow.cpp" line="2535"/>
         <source>5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2549"/>
+        <location filename="../main/MainWindow.cpp" line="2536"/>
         <source>Erase items from layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2557"/>
+        <location filename="../main/MainWindow.cpp" line="2544"/>
         <source>Erase Tool Mouse Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2560"/>
+        <location filename="../main/MainWindow.cpp" line="2547"/>
         <source>Click left button on an item to remove it from the layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2563"/>
+        <location filename="../main/MainWindow.cpp" line="2550"/>
         <source>Measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2565"/>
+        <location filename="../main/MainWindow.cpp" line="2552"/>
         <source>6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2566"/>
+        <location filename="../main/MainWindow.cpp" line="2553"/>
         <source>Make measurements in layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2574"/>
+        <location filename="../main/MainWindow.cpp" line="2561"/>
         <source>Measure Tool Mouse Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2576"/>
+        <location filename="../main/MainWindow.cpp" line="2563"/>
         <source>Measure Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2577"/>
+        <location filename="../main/MainWindow.cpp" line="2564"/>
         <source>Click left button and drag to measure a rectangular area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2579"/>
+        <location filename="../main/MainWindow.cpp" line="2566"/>
         <source>Measure Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2580"/>
+        <location filename="../main/MainWindow.cpp" line="2567"/>
         <source>Click left button and drag to measure extents of an item or shape</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2652"/>
+        <location filename="../main/MainWindow.cpp" line="2639"/>
         <source>&amp;Delete Current Measurement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2653"/>
+        <location filename="../main/MainWindow.cpp" line="2640"/>
         <source>Delete the measurement currently under the mouse pointer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2662"/>
+        <location filename="../main/MainWindow.cpp" line="2649"/>
         <source>Fast Forward to Next Instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2663"/>
+        <location filename="../main/MainWindow.cpp" line="2650"/>
         <source>Fast forward to the next time instant in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2664"/>
+        <location filename="../main/MainWindow.cpp" line="2651"/>
         <source>Rewind to Previous Instant</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2665"/>
+        <location filename="../main/MainWindow.cpp" line="2652"/>
         <source>Rewind to the previous time instant in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2667"/>
+        <location filename="../main/MainWindow.cpp" line="2654"/>
         <source>Fast Forward to Next Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2668"/>
+        <location filename="../main/MainWindow.cpp" line="2655"/>
         <source>Fast forward to the next point in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2669"/>
+        <location filename="../main/MainWindow.cpp" line="2656"/>
         <source>Rewind to Previous Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2670"/>
+        <location filename="../main/MainWindow.cpp" line="2657"/>
         <source>Rewind to the previous point in the current layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2673"/>
+        <location filename="../main/MainWindow.cpp" line="2660"/>
         <source>Fast forward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2684"/>
+        <location filename="../main/MainWindow.cpp" line="2671"/>
         <source>No audio file loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2697"/>
+        <location filename="../main/MainWindow.cpp" line="2684"/>
         <source>%1Hz (resampling to %2Hz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2768"/>
-        <location filename="../main/MainWindow.cpp" line="2782"/>
-        <location filename="../main/MainWindow.cpp" line="2796"/>
-        <location filename="../main/MainWindow.cpp" line="3085"/>
-        <location filename="../main/MainWindow.cpp" line="3115"/>
-        <location filename="../main/MainWindow.cpp" line="3120"/>
-        <location filename="../main/MainWindow.cpp" line="3539"/>
-        <location filename="../main/MainWindow.cpp" line="3543"/>
+        <location filename="../main/MainWindow.cpp" line="2755"/>
+        <location filename="../main/MainWindow.cpp" line="2769"/>
+        <location filename="../main/MainWindow.cpp" line="2783"/>
+        <location filename="../main/MainWindow.cpp" line="3072"/>
+        <location filename="../main/MainWindow.cpp" line="3102"/>
+        <location filename="../main/MainWindow.cpp" line="3107"/>
+        <location filename="../main/MainWindow.cpp" line="3526"/>
+        <location filename="../main/MainWindow.cpp" line="3530"/>
         <source>Failed to open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2769"/>
-        <location filename="../main/MainWindow.cpp" line="2783"/>
-        <location filename="../main/MainWindow.cpp" line="2797"/>
+        <location filename="../main/MainWindow.cpp" line="2756"/>
+        <location filename="../main/MainWindow.cpp" line="2770"/>
+        <location filename="../main/MainWindow.cpp" line="2784"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Audio file &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2848"/>
+        <location filename="../main/MainWindow.cpp" line="2835"/>
         <source>1. %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2857"/>
+        <location filename="../main/MainWindow.cpp" line="2844"/>
         <source>%1. %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2868"/>
+        <location filename="../main/MainWindow.cpp" line="2855"/>
         <source>Select audio file to export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2869"/>
+        <location filename="../main/MainWindow.cpp" line="2856"/>
         <source>Which audio file do you want to export from?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2908"/>
+        <location filename="../main/MainWindow.cpp" line="2895"/>
         <source>Export the selected region only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2909"/>
+        <location filename="../main/MainWindow.cpp" line="2896"/>
         <source>Export the whole audio file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2913"/>
-        <location filename="../main/MainWindow.cpp" line="2931"/>
-        <location filename="../main/MainWindow.cpp" line="3229"/>
-        <location filename="../main/MainWindow.cpp" line="3312"/>
-        <location filename="../main/MainWindow.cpp" line="3386"/>
+        <location filename="../main/MainWindow.cpp" line="2900"/>
+        <location filename="../main/MainWindow.cpp" line="2918"/>
+        <location filename="../main/MainWindow.cpp" line="3216"/>
+        <location filename="../main/MainWindow.cpp" line="3299"/>
+        <location filename="../main/MainWindow.cpp" line="3373"/>
         <source>Select region to export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2914"/>
+        <location filename="../main/MainWindow.cpp" line="2901"/>
         <source>Which region from the original audio file do you want to export?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2927"/>
+        <location filename="../main/MainWindow.cpp" line="2914"/>
         <source>Export the selected regions into separate files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2932"/>
+        <location filename="../main/MainWindow.cpp" line="2919"/>
         <source>Multiple regions of the original audio file are selected.
 What do you want to export?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2963"/>
+        <location filename="../main/MainWindow.cpp" line="2950"/>
         <source>Fragment file %1 already exists, aborting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3015"/>
+        <location filename="../main/MainWindow.cpp" line="3002"/>
         <source>Export multiple audio files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3017"/>
+        <location filename="../main/MainWindow.cpp" line="3004"/>
         <source>Export audio to &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3021"/>
-        <location filename="../main/MainWindow.cpp" line="3258"/>
+        <location filename="../main/MainWindow.cpp" line="3008"/>
+        <location filename="../main/MainWindow.cpp" line="3245"/>
         <source>Failed to write file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3052"/>
+        <location filename="../main/MainWindow.cpp" line="3039"/>
         <source>Converting audio data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3086"/>
+        <location filename="../main/MainWindow.cpp" line="3073"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Audio data file %1 could not be opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3116"/>
+        <location filename="../main/MainWindow.cpp" line="3103"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;Layer file %1 could not be opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3121"/>
-        <location filename="../main/MainWindow.cpp" line="3544"/>
-        <location filename="../main/MainWindow.cpp" line="3576"/>
-        <location filename="../main/MainWindow.cpp" line="3609"/>
-        <location filename="../main/MainWindow.cpp" line="3791"/>
+        <location filename="../main/MainWindow.cpp" line="3108"/>
+        <location filename="../main/MainWindow.cpp" line="3531"/>
+        <location filename="../main/MainWindow.cpp" line="3563"/>
+        <location filename="../main/MainWindow.cpp" line="3596"/>
+        <location filename="../main/MainWindow.cpp" line="3778"/>
         <source>&lt;b&gt;Audio required&lt;/b&gt;&lt;p&gt;Unable to load layer data from &quot;%1&quot; without an audio file.&lt;br&gt;Please load at least one audio file before importing annotations.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3648"/>
+        <location filename="../main/MainWindow.cpp" line="3635"/>
         <source>Enter template name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3653"/>
+        <location filename="../main/MainWindow.cpp" line="3640"/>
         <source>Please enter a name for the saved template:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3657"/>
+        <location filename="../main/MainWindow.cpp" line="3644"/>
         <source>Set as default template for future audio files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3677"/>
+        <location filename="../main/MainWindow.cpp" line="3664"/>
         <source>Template file exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3678"/>
+        <location filename="../main/MainWindow.cpp" line="3665"/>
         <source>&lt;b&gt;Template file exists&lt;/b&gt;&lt;p&gt;The template &quot;%1&quot; already exists.&lt;br&gt;Overwrite it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5318"/>
+        <location filename="../main/MainWindow.cpp" line="5305"/>
         <source>http://www.sonicvisualiser.org/doc/reference/%1/en/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5330"/>
+        <location filename="../main/MainWindow.cpp" line="5317"/>
         <source>What&apos;s New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5342"/>
+        <location filename="../main/MainWindow.cpp" line="5329"/>
         <source>&lt;h3&gt;What&apos;s New in %1&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5351"/>
+        <location filename="../main/MainWindow.cpp" line="5338"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; A newer version of Sonic Visualiser is available.&lt;br&gt;(Version %1 is available; you are using version %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5511"/>
+        <location filename="../main/MainWindow.cpp" line="5498"/>
         <source>&lt;br&gt;With Serd and Sord RDF parser and store &amp;copy; David Robillard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5546"/>
+        <location filename="../main/MainWindow.cpp" line="5533"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5614"/>
+        <location filename="../main/MainWindow.cpp" line="5601"/>
         <source>Newer version available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="517"/>
+        <location filename="../main/MainWindow.cpp" line="504"/>
         <source>Abandon the current %1 session and start a new one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="534"/>
+        <location filename="../main/MainWindow.cpp" line="521"/>
         <source>&amp;Import More Audio...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="536"/>
+        <location filename="../main/MainWindow.cpp" line="523"/>
         <source>Import an extra audio file into a new pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="543"/>
+        <location filename="../main/MainWindow.cpp" line="530"/>
         <source>Replace &amp;Main Audio...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="544"/>
+        <location filename="../main/MainWindow.cpp" line="531"/>
         <source>Replace the main audio file of the session with a different file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="555"/>
+        <location filename="../main/MainWindow.cpp" line="542"/>
         <source>Open &amp;Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="566"/>
+        <location filename="../main/MainWindow.cpp" line="553"/>
         <source>Save the current session into a %1 session file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="576"/>
+        <location filename="../main/MainWindow.cpp" line="563"/>
         <source>Save the current session into a new %1 session file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="649"/>
+        <location filename="../main/MainWindow.cpp" line="636"/>
         <source>Apply Session Template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="658"/>
+        <location filename="../main/MainWindow.cpp" line="645"/>
         <source>Export Session as Template...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="665"/>
+        <location filename="../main/MainWindow.cpp" line="652"/>
         <source>Manage Exported Templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="679"/>
+        <location filename="../main/MainWindow.cpp" line="666"/>
         <source>Exit %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2025"/>
+        <location filename="../main/MainWindow.cpp" line="2012"/>
         <source>Open the %1 reference manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2032"/>
+        <location filename="../main/MainWindow.cpp" line="2019"/>
         <source>Open a window showing the keystrokes you can use in %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2042"/>
+        <location filename="../main/MainWindow.cpp" line="2029"/>
         <source>&amp;About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2043"/>
+        <location filename="../main/MainWindow.cpp" line="2030"/>
         <source>Show information about %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2926"/>
+        <location filename="../main/MainWindow.cpp" line="2913"/>
         <source>Export the selected regions into a single file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2928"/>
+        <location filename="../main/MainWindow.cpp" line="2915"/>
         <source>Export the whole file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3261"/>
+        <location filename="../main/MainWindow.cpp" line="3248"/>
         <source>Export layer to &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3294"/>
+        <location filename="../main/MainWindow.cpp" line="3281"/>
         <source>Export the whole pane (%1x%2 pixels)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3296"/>
+        <location filename="../main/MainWindow.cpp" line="3283"/>
         <source>Export the visible area only (%1x%2 pixels)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3299"/>
+        <location filename="../main/MainWindow.cpp" line="3286"/>
         <source>Export the selection extent (%1x%2 pixels)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3302"/>
-        <location filename="../main/MainWindow.cpp" line="3378"/>
+        <location filename="../main/MainWindow.cpp" line="3289"/>
+        <location filename="../main/MainWindow.cpp" line="3365"/>
         <source>Export the selection extent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3313"/>
+        <location filename="../main/MainWindow.cpp" line="3300"/>
         <source>Which region of the current pane do you want to export as an image?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3321"/>
+        <location filename="../main/MainWindow.cpp" line="3308"/>
         <source>Note: the whole pane is too wide to be exported as a single image.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3346"/>
+        <location filename="../main/MainWindow.cpp" line="3333"/>
         <source>Failed to save image file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3347"/>
+        <location filename="../main/MainWindow.cpp" line="3334"/>
         <source>Failed to save image file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3540"/>
+        <location filename="../main/MainWindow.cpp" line="3527"/>
         <source>&lt;b&gt;File open failed&lt;/b&gt;&lt;p&gt;File &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3557"/>
+        <location filename="../main/MainWindow.cpp" line="3544"/>
         <source>Open Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3558"/>
+        <location filename="../main/MainWindow.cpp" line="3545"/>
         <source>Please enter the URL of the location to open:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3571"/>
-        <location filename="../main/MainWindow.cpp" line="3575"/>
-        <location filename="../main/MainWindow.cpp" line="3604"/>
-        <location filename="../main/MainWindow.cpp" line="3608"/>
+        <location filename="../main/MainWindow.cpp" line="3558"/>
+        <location filename="../main/MainWindow.cpp" line="3562"/>
+        <location filename="../main/MainWindow.cpp" line="3591"/>
+        <location filename="../main/MainWindow.cpp" line="3595"/>
         <source>Failed to open location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3572"/>
+        <location filename="../main/MainWindow.cpp" line="3559"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;URL &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3605"/>
+        <location filename="../main/MainWindow.cpp" line="3592"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;File or URL &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3785"/>
-        <location filename="../main/MainWindow.cpp" line="3790"/>
+        <location filename="../main/MainWindow.cpp" line="3772"/>
+        <location filename="../main/MainWindow.cpp" line="3777"/>
         <source>Failed to open dropped URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3786"/>
+        <location filename="../main/MainWindow.cpp" line="3773"/>
         <source>&lt;b&gt;Open failed&lt;/b&gt;&lt;p&gt;Dropped URL &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3901"/>
+        <location filename="../main/MainWindow.cpp" line="3888"/>
         <source>Export image to &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3922"/>
+        <location filename="../main/MainWindow.cpp" line="3909"/>
         <source>Session modified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3923"/>
+        <location filename="../main/MainWindow.cpp" line="3910"/>
         <source>&lt;b&gt;Session modified&lt;/b&gt;&lt;p&gt;The current session has been modified.&lt;br&gt;Do you want to save it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3956"/>
+        <location filename="../main/MainWindow.cpp" line="3943"/>
         <source>Close the current session and create a new one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3957"/>
+        <location filename="../main/MainWindow.cpp" line="3944"/>
         <source>Add this data to the current session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3961"/>
+        <location filename="../main/MainWindow.cpp" line="3948"/>
         <source>Select target for import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3962"/>
+        <location filename="../main/MainWindow.cpp" line="3949"/>
         <source>&lt;b&gt;Select a target for import&lt;/b&gt;&lt;p&gt;This RDF document refers to one or more audio files.&lt;br&gt;You already have an audio waveform loaded.&lt;br&gt;What would you like to do with the new data?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3984"/>
-        <location filename="../main/MainWindow.cpp" line="4007"/>
+        <location filename="../main/MainWindow.cpp" line="3971"/>
+        <location filename="../main/MainWindow.cpp" line="3994"/>
         <source>Failed to save file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="3985"/>
-        <location filename="../main/MainWindow.cpp" line="4008"/>
+        <location filename="../main/MainWindow.cpp" line="3972"/>
+        <location filename="../main/MainWindow.cpp" line="3995"/>
         <source>&lt;b&gt;Save failed&lt;/b&gt;&lt;p&gt;Session file &quot;%1&quot; could not be saved.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4017"/>
+        <location filename="../main/MainWindow.cpp" line="4004"/>
         <source>Save session as &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4421"/>
+        <location filename="../main/MainWindow.cpp" line="4408"/>
         <source>Multiplex all of the above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4489"/>
-        <location filename="../main/MainWindow.cpp" line="4499"/>
+        <location filename="../main/MainWindow.cpp" line="4476"/>
+        <location filename="../main/MainWindow.cpp" line="4486"/>
         <source>Rename Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4490"/>
+        <location filename="../main/MainWindow.cpp" line="4477"/>
         <source>New name for this layer:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4595"/>
+        <location filename="../main/MainWindow.cpp" line="4582"/>
         <source>Playback speed: Normal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4730"/>
+        <location filename="../main/MainWindow.cpp" line="4717"/>
         <source>Selection: %1 to %2 (duration %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4733"/>
+        <location filename="../main/MainWindow.cpp" line="4720"/>
         <source>Visible: %1 to %2 (duration %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4783"/>
+        <location filename="../main/MainWindow.cpp" line="4770"/>
         <source>Sample rate mismatch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4784"/>
+        <location filename="../main/MainWindow.cpp" line="4771"/>
         <source>&lt;b&gt;Wrong sample rate&lt;/b&gt;&lt;p&gt;The sample rate of this audio file (%1 Hz) does not match
 the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed and pitch.&lt;p&gt;Change the &lt;i&gt;Resample mismatching files on import&lt;/i&gt; option under &lt;i&gt;File&lt;/i&gt; -&gt; &lt;i&gt;Preferences&lt;/i&gt; if you want to alter this behaviour.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4795"/>
+        <location filename="../main/MainWindow.cpp" line="4782"/>
         <source>Audio processing overload</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4796"/>
+        <location filename="../main/MainWindow.cpp" line="4783"/>
         <source>&lt;b&gt;Overloaded&lt;/b&gt;&lt;p&gt;Audio effects plugin auditioning has been disabled due to a processing overload.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4812"/>
+        <location filename="../main/MainWindow.cpp" line="4799"/>
         <source>Problems loading plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="4892"/>
+        <location filename="../main/MainWindow.cpp" line="4879"/>
         <source>Add Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5024"/>
+        <location filename="../main/MainWindow.cpp" line="5011"/>
         <source>Reset Counters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5092"/>
-        <location filename="../main/MainWindow.cpp" line="5099"/>
+        <location filename="../main/MainWindow.cpp" line="5079"/>
+        <location filename="../main/MainWindow.cpp" line="5086"/>
         <source>Failed to generate layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5112"/>
-        <location filename="../main/MainWindow.cpp" line="5147"/>
+        <location filename="../main/MainWindow.cpp" line="5099"/>
+        <location filename="../main/MainWindow.cpp" line="5134"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5125"/>
-        <location filename="../main/MainWindow.cpp" line="5132"/>
+        <location filename="../main/MainWindow.cpp" line="5112"/>
+        <location filename="../main/MainWindow.cpp" line="5119"/>
         <source>Failed to regenerate layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5126"/>
+        <location filename="../main/MainWindow.cpp" line="5113"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed:&lt;p&gt;%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5133"/>
+        <location filename="../main/MainWindow.cpp" line="5120"/>
         <source>&lt;b&gt;Layer generation failed&lt;/b&gt;&lt;p&gt;Failed to regenerate derived layer &quot;%1&quot; using new data model as input.&lt;p&gt;The layer transform &quot;%2&quot; failed.&lt;p&gt;No error information is available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5147"/>
+        <location filename="../main/MainWindow.cpp" line="5134"/>
         <source>&lt;b&gt;Warning when regenerating layer&lt;/b&gt;&lt;p&gt;When regenerating the derived layer &quot;%1&quot; using new data model as input:&lt;p&gt;%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5155"/>
+        <location filename="../main/MainWindow.cpp" line="5142"/>
         <source>Failed to calculate alignment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5294"/>
+        <location filename="../main/MainWindow.cpp" line="5281"/>
         <source>Adjust the master playback speed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5312"/>
+        <location filename="../main/MainWindow.cpp" line="5299"/>
         <source>http://www.sonicvisualiser.org/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5398"/>
+        <location filename="../main/MainWindow.cpp" line="5385"/>
         <source>Release %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5423"/>
+        <location filename="../main/MainWindow.cpp" line="5410"/>
         <source>&lt;h3&gt;About Sonic Visualiser&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5424"/>
+        <location filename="../main/MainWindow.cpp" line="5411"/>
         <source>&lt;p&gt;Sonic Visualiser is a program for viewing and exploring audio data for semantic music analysis and annotation.&lt;br&gt;&lt;a href=&quot;http://www.sonicvisualiser.org/&quot;&gt;http://www.sonicvisualiser.org/&lt;/a&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5413"/>
+        <location filename="../main/MainWindow.cpp" line="5400"/>
         <source>Debug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5413"/>
+        <location filename="../main/MainWindow.cpp" line="5400"/>
         <source>Release</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5442"/>
+        <location filename="../main/MainWindow.cpp" line="5429"/>
         <source>&lt;br&gt;With JACK audio output library v%1 &amp;copy; Paul Davis and Jack O&apos;Quin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5444"/>
+        <location filename="../main/MainWindow.cpp" line="5431"/>
         <source>&lt;br&gt;With JACK audio output library &amp;copy; Paul Davis and Jack O&apos;Quin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5448"/>
+        <location filename="../main/MainWindow.cpp" line="5435"/>
         <source>&lt;br&gt;With PortAudio audio output library &amp;copy; Ross Bencina and Phil Burk</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5452"/>
+        <location filename="../main/MainWindow.cpp" line="5439"/>
         <source>&lt;br&gt;With PulseAudio audio output library v%1 &amp;copy; Lennart Poettering and Pierre Ossman</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5454"/>
+        <location filename="../main/MainWindow.cpp" line="5441"/>
         <source>&lt;br&gt;With PulseAudio audio output library &amp;copy; Lennart Poettering and Pierre Ossman</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5459"/>
+        <location filename="../main/MainWindow.cpp" line="5446"/>
         <source>&lt;br&gt;With Ogg file decoder (oggz v%1, fishsound v%2) &amp;copy; CSIRO Australia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5461"/>
+        <location filename="../main/MainWindow.cpp" line="5448"/>
         <source>&lt;br&gt;With Ogg file decoder &amp;copy; CSIRO Australia</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5469"/>
+        <location filename="../main/MainWindow.cpp" line="5456"/>
         <source>&lt;br&gt;With MAD mp3 decoder v%1 &amp;copy; Underbit Technologies Inc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5471"/>
+        <location filename="../main/MainWindow.cpp" line="5458"/>
         <source>&lt;br&gt;With MAD mp3 decoder &amp;copy; Underbit Technologies Inc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5476"/>
+        <location filename="../main/MainWindow.cpp" line="5463"/>
         <source>&lt;br&gt;With libsamplerate v%1 &amp;copy; Erik de Castro Lopo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5478"/>
+        <location filename="../main/MainWindow.cpp" line="5465"/>
         <source>&lt;br&gt;With libsamplerate &amp;copy; Erik de Castro Lopo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5483"/>
+        <location filename="../main/MainWindow.cpp" line="5470"/>
         <source>&lt;br&gt;With libsndfile v%1 &amp;copy; Erik de Castro Lopo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5485"/>
+        <location filename="../main/MainWindow.cpp" line="5472"/>
         <source>&lt;br&gt;With libsndfile &amp;copy; Erik de Castro Lopo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5490"/>
+        <location filename="../main/MainWindow.cpp" line="5477"/>
         <source>&lt;br&gt;With FFTW3 v%1 &amp;copy; Matteo Frigo and MIT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5492"/>
+        <location filename="../main/MainWindow.cpp" line="5479"/>
         <source>&lt;br&gt;With FFTW3 &amp;copy; Matteo Frigo and MIT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5504"/>
+        <location filename="../main/MainWindow.cpp" line="5491"/>
         <source>&lt;br&gt;With LADSPA plugin support (API v%1) &amp;copy; Richard Furse, Paul Davis, Stefan Westerfeld</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5505"/>
+        <location filename="../main/MainWindow.cpp" line="5492"/>
         <source>&lt;br&gt;With DSSI plugin support (API v%1) &amp;copy; Chris Cannam, Steve Harris, Sean Bolton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5507"/>
+        <location filename="../main/MainWindow.cpp" line="5494"/>
         <source>&lt;br&gt;With Redland RDF datastore v%1 &amp;copy; Dave Beckett and the University of Bristol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5509"/>
+        <location filename="../main/MainWindow.cpp" line="5496"/>
         <source>&lt;br&gt;With Redland RDF datastore &amp;copy; Dave Beckett and the University of Bristol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5514"/>
+        <location filename="../main/MainWindow.cpp" line="5501"/>
         <source>&lt;br&gt;With RtMidi &amp;copy; Gary P. Scavone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5518"/>
+        <location filename="../main/MainWindow.cpp" line="5505"/>
         <source>&lt;br&gt;With liblo Lite OSC library v%1 &amp;copy; Steve Harris</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5520"/>
+        <location filename="../main/MainWindow.cpp" line="5507"/>
         <source>&lt;br&gt;With liblo Lite OSC library &amp;copy; Steve Harris</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="5430"/>
+        <location filename="../main/MainWindow.cpp" line="5417"/>
         <source>&lt;/small&gt;&lt;p&gt;&lt;small&gt;The OSC URL for this instance is: &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5276,8 +5276,8 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2408"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2434"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2414"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2440"/>
         <source>Importing from RDF...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5343,7 +5343,7 @@ the current playback rate (%2 Hz).&lt;p&gt;The file will play at the wrong speed
     </message>
     <message>
         <location filename="../svapp/framework/MainWindowBase.cpp" line="2231"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2343"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2349"/>
         <source>SV XML file read error:
 %1</source>
         <translation type="unfinished"></translation>
@@ -5365,166 +5365,166 @@ If you save this session, it will be saved without any reference to that audio, 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2353"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2359"/>
         <source>Open session template &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2425"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2438"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2431"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2444"/>
         <source>Failed to import RDF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2426"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2432"/>
         <source>&lt;b&gt;Failed to import RDF&lt;/b&gt;&lt;p&gt;Importing data from RDF document at &quot;%1&quot; failed: %2&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2439"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2445"/>
         <source>&lt;b&gt;Failed to import RDF&lt;/b&gt;&lt;p&gt;No suitable data models found for import from RDF document at &quot;%1&quot;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2443"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2449"/>
         <source>Import RDF document &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2634"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2640"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open an audio device.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2636"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2642"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Could not open audio device: %1&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2640"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2646"/>
         <source>&lt;p&gt;Automatic audio device detection failed. Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2642"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2648"/>
         <source>&lt;p&gt;Automatic audio device detection failed. Audio playback will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2649"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2655"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;).&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2651"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2657"/>
         <source>&lt;b&gt;No audio available&lt;/b&gt;&lt;p&gt;Failed to open your preferred audio driver (&quot;%1&quot;): %2.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2655"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2661"/>
         <source>&lt;p&gt;Audio playback and recording will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2657"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2663"/>
         <source>&lt;p&gt;Audio playback will not be available during this session.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2662"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2668"/>
         <source>Couldn&apos;t open audio device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2850"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2890"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2938"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2968"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2856"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2896"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2944"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2974"/>
         <source>Internal error: unknown model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2856"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2862"/>
         <source>Failed to open file %1 for writing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2897"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2903"/>
         <source>Can&apos;t export non-note layers to MIDI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2943"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2949"/>
         <source>Sorry, cannot export this layer type to RDF (supported types are: region, note, text, time instants, time values)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2988"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2994"/>
         <source>Failed to export layer for an unknown reason</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="4119"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="4138"/>
         <source>Recording: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2777"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2790"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2828"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2783"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2796"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2834"/>
         <source>Failed to write file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2778"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2791"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2829"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2784"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2797"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2835"/>
         <source>&lt;b&gt;Save failed&lt;/b&gt;&lt;p&gt;Failed to write to file &quot;%1&quot;: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3385"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3391"/>
         <source>No record device available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3386"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3392"/>
         <source>&lt;b&gt;No record device available&lt;/b&gt;&lt;p&gt;Failed to find or open an audio device for recording. Only playback will be available.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3414"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3420"/>
         <source>Recording failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3415"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3421"/>
         <source>&lt;b&gt;Recording failed&lt;/b&gt;&lt;p&gt;Failed to switch to record mode (some internal problem?)&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3483"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3502"/>
         <source>Import Recorded Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3804"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3823"/>
         <source>Add Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3850"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3869"/>
         <source>Remove Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="3873"/>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="4279"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="3892"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="4298"/>
         <source>Delete Pane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="4107"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="4126"/>
         <source>Playing: %1 of %2 (%3 remaining)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5633,12 +5633,12 @@ If you save this session, it will be saved without any reference to that audio, 
 <context>
     <name>ModelTransformerFactory</name>
     <message>
-        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="97"/>
+        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="95"/>
         <source>%1 &lt;%2&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="258"/>
+        <location filename="../svcore/transform/ModelTransformerFactory.cpp" line="259"/>
         <source>%1: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5832,52 +5832,52 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="269"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="270"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="270"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="271"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="271"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="272"/>
         <source>Pitch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="272"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="273"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="273"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="274"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="274"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="275"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="275"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="276"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="316"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="317"/>
         <source>Edit Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="333"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="334"/>
         <source>Add Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/NoteModel.h" line="342"/>
+        <location filename="../svcore/data/model/NoteModel.h" line="343"/>
         <source>Delete Note</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7188,44 +7188,44 @@ Apply them before closing?</source>
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../main/main.cpp" line="254"/>
+        <location filename="../main/main.cpp" line="249"/>
         <source>Sonic Visualiser</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="262"/>
+        <location filename="../main/main.cpp" line="257"/>
         <source>
 Sonic Visualiser is a program for viewing and exploring audio data
 for semantic music analysis and annotation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="268"/>
+        <location filename="../main/main.cpp" line="263"/>
         <source>Do not attempt to open an audio output device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="271"/>
+        <location filename="../main/main.cpp" line="266"/>
         <source>Do not provide an Open Sound Control port for remote control.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="274"/>
+        <location filename="../main/main.cpp" line="269"/>
         <source>Do not show a splash screen.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="277"/>
+        <location filename="../main/main.cpp" line="272"/>
         <source>Batch run the Open Sound Control script found in the given file. Supply &quot;-&quot; as file to read from stdin. Scripts consist of /command arg1 arg2 ... OSC control lines, optionally interleaved with numbers to specify pauses in seconds.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="281"/>
+        <location filename="../main/main.cpp" line="276"/>
         <source>Clear any saved settings and reset to first-run behaviour.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="284"/>
+        <location filename="../main/main.cpp" line="279"/>
         <source>One or more Sonic Visualiser (.sv) and audio files may be provided.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7254,18 +7254,18 @@ for semantic music analysis and annotation.</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../main/main.cpp" line="662"/>
-        <location filename="../main/main.cpp" line="667"/>
+        <location filename="../main/main.cpp" line="659"/>
+        <location filename="../main/main.cpp" line="664"/>
         <source>Failed to open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="663"/>
+        <location filename="../main/main.cpp" line="660"/>
         <source>File or URL &quot;%1&quot; could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/main.cpp" line="668"/>
+        <location filename="../main/main.cpp" line="665"/>
         <source>&lt;b&gt;Audio required&lt;/b&gt;&lt;p&gt;Please load at least one audio file before importing annotation data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7293,52 +7293,52 @@ for semantic music analysis and annotation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="209"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="214"/>
         <source>Library file could not be opened</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="215"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="220"/>
         <source>Library has wrong architecture - possibly a 32-bit plugin installed in a 64-bit plugin folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="218"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="223"/>
         <source>Library has wrong architecture - possibly a 64-bit plugin installed in a 32-bit plugin folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="224"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="229"/>
         <source>Library depends on another library that cannot be found: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="230"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="235"/>
         <source>Library cannot be loaded: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="235"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="240"/>
         <source>Permission to load library was refused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="240"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="245"/>
         <source>Not a valid plugin library (no descriptor found)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="245"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="250"/>
         <source>Library contains no plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="251"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="256"/>
         <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../svcore/plugin/PluginScan.cpp" line="266"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="271"/>
         <source>... and %n further failure(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -7346,22 +7346,22 @@ for semantic music analysis and annotation.</source>
         </translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="288"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="293"/>
         <source>&lt;b&gt;Failed to scan for plugins&lt;/b&gt;&lt;p&gt;Failed to scan for plugins at startup. Possibly the plugin checker program was not correctly installed alongside %1?&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="295"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="300"/>
         <source>&lt;b&gt;Did not scan for plugins&lt;/b&gt;&lt;p&gt;Apparently no scan for plugins was attempted (internal error?)&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="355"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="360"/>
         <source>&lt;p&gt;Failed to load one or more plugin libraries:&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/plugin/PluginScan.cpp" line="357"/>
+        <location filename="../svcore/plugin/PluginScan.cpp" line="362"/>
         <source>&lt;p&gt;These plugins may be incompatible with the system, and will be ignored during this run of %1.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7447,12 +7447,12 @@ for semantic music analysis and annotation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../main/MainWindow.cpp" line="2986"/>
+        <location filename="../main/MainWindow.cpp" line="2973"/>
         <source>Exporting audio data...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svapp/framework/MainWindowBase.cpp" line="2973"/>
+        <location filename="../svapp/framework/MainWindowBase.cpp" line="2979"/>
         <source>Exporting layer...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7533,73 +7533,73 @@ for semantic music analysis and annotation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="119"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="122"/>
         <source>Vertical Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="120"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="123"/>
         <source>Scale Units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="121"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="124"/>
         <source>Plot Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="139"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="142"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="201"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="204"/>
         <source>Bars</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="202"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="205"/>
         <source>Segmentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="208"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="211"/>
         <source>Auto-Align</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="209"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="212"/>
         <source>Equal Spaced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="210"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="213"/>
         <source>Linear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="211"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="214"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="406"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="409"/>
         <source>In progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="408"/>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="435"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="411"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="438"/>
         <source>No local points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="444"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="447"/>
         <source>%1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="449"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="452"/>
         <source>Time:	%1
 Value:	%2
 Duration:	%3
@@ -7607,7 +7607,7 @@ No label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="454"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="457"/>
         <source>Time:	%1
 Value:	%2
 Duration:	%3
@@ -7615,63 +7615,63 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1132"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1135"/>
         <source>Draw Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1220"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1223"/>
         <source>Erase Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1282"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1285"/>
         <source>Drag Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1305"/>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1353"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1308"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1356"/>
         <source>Edit Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1307"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1310"/>
         <source>Relocate Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1310"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1313"/>
         <source>Change Point Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1371"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1374"/>
         <source>Drag Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1396"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1399"/>
         <source>Resize Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1428"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1431"/>
         <source>Delete Selected Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1473"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1476"/>
         <source>Re-align pasted items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1474"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1477"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/RegionLayer.cpp" line="1488"/>
+        <location filename="../svgui/layer/RegionLayer.cpp" line="1491"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7684,47 +7684,47 @@ Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="239"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="240"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="240"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="241"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="241"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="242"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="242"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="243"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="243"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="244"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="244"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="245"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="290"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="291"/>
         <source>Edit Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="299"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="300"/>
         <source>Add Region</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/RegionModel.h" line="308"/>
+        <location filename="../svcore/data/model/RegionModel.h" line="309"/>
         <source>Delete Region</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7732,7 +7732,7 @@ Label:	%4</source>
 <context>
     <name>RemoveLayerCommand</name>
     <message>
-        <location filename="../svapp/framework/Document.cpp" line="1285"/>
+        <location filename="../svapp/framework/Document.cpp" line="1296"/>
         <source>Delete %1 Layer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7787,13 +7787,13 @@ Bin:	%5
     </message>
     <message>
         <location filename="../svgui/layer/SliceLayer.cpp" line="172"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="961"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="965"/>
         <source>Mean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../svgui/layer/SliceLayer.cpp" line="172"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="962"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="966"/>
         <source>Peak</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7804,116 +7804,116 @@ Range:	%3 samples (%4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="718"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="722"/>
         <source>0dB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="719"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="723"/>
         <source>-Inf</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="770"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="774"/>
         <source>x10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="806"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="810"/>
         <source>Plot Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="807"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="844"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="811"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="848"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="808"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="812"/>
         <source>Normalize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="809"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="813"/>
         <source>Threshold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="810"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="814"/>
         <source>Gain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="811"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="815"/>
         <source>Sampling Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="951"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="977"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="955"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="981"/>
         <source>Linear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="952"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="956"/>
         <source>Meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="979"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="983"/>
         <source>Rev Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="989"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="992"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="993"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="996"/>
         <source>dB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="960"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="964"/>
         <source>Any</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="812"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="816"/>
         <source>Bin Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="846"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="850"/>
         <source>Bins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="953"/>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="978"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="957"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="982"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="954"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="958"/>
         <source>Absolute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="968"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="972"/>
         <source>Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="969"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="973"/>
         <source>Steps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="970"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="974"/>
         <source>Blocks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/SliceLayer.cpp" line="971"/>
+        <location filename="../svgui/layer/SliceLayer.cpp" line="975"/>
         <source>Colours</source>
         <translation type="unfinished">Colors</translation>
     </message>
@@ -7926,37 +7926,37 @@ Range:	%3 samples (%4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="198"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="199"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="199"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="200"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="200"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="201"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="201"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="202"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="240"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="241"/>
         <source>Edit Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="251"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="252"/>
         <source>Add Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="260"/>
+        <location filename="../svcore/data/model/SparseOneDimensionalModel.h" line="261"/>
         <source>Delete Point</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7969,42 +7969,42 @@ Range:	%3 samples (%4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="252"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="253"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="253"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="254"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="254"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="255"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="255"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="256"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="256"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="257"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="300"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="301"/>
         <source>Edit Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="309"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="310"/>
         <source>Add Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="318"/>
+        <location filename="../svcore/data/model/SparseTimeValueModel.h" line="319"/>
         <source>Delete Point</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8656,42 +8656,42 @@ Label:	%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="185"/>
+        <location filename="../svcore/data/model/TextModel.h" line="186"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="186"/>
+        <location filename="../svcore/data/model/TextModel.h" line="187"/>
         <source>Frame</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="187"/>
+        <location filename="../svcore/data/model/TextModel.h" line="188"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="188"/>
+        <location filename="../svcore/data/model/TextModel.h" line="189"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="189"/>
+        <location filename="../svcore/data/model/TextModel.h" line="190"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="231"/>
+        <location filename="../svcore/data/model/TextModel.h" line="232"/>
         <source>Edit Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="242"/>
+        <location filename="../svcore/data/model/TextModel.h" line="243"/>
         <source>Add Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/data/model/TextModel.h" line="251"/>
+        <location filename="../svcore/data/model/TextModel.h" line="252"/>
         <source>Delete Label</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8755,104 +8755,104 @@ Label:	%3</source>
     <name>TimeInstantLayer</name>
     <message>
         <location filename="../svgui/layer/TimeInstantLayer.cpp" line="45"/>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="517"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="520"/>
         <source>New Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="95"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="98"/>
         <source>Plot Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="135"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="138"/>
         <source>Instants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="136"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="139"/>
         <source>Segmentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="252"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="255"/>
         <source>In progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="254"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="257"/>
         <source>No local points</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="265"/>
-        <source>Time:	%1
-No label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../svgui/layer/TimeInstantLayer.cpp" line="268"/>
         <source>Time:	%1
+No label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="271"/>
+        <source>Time:	%1
 Label:	%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="520"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="523"/>
         <source>Draw Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="556"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="559"/>
         <source>Add Point at %1 s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="602"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="605"/>
         <source>Erase Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="647"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="650"/>
         <source>Drag Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="668"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="671"/>
         <source>Move Point to %1 s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="705"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="708"/>
         <source>Edit Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="722"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="725"/>
         <source>Drag Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="744"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="747"/>
         <source>Resize Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="773"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="776"/>
         <source>Delete Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="813"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="816"/>
         <source>Re-align pasted instants?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="814"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="817"/>
         <source>The instants you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="828"/>
+        <location filename="../svgui/layer/TimeInstantLayer.cpp" line="831"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8862,225 +8862,230 @@ Label:	%2</source>
     <message>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="58"/>
         <location filename="../svgui/layer/TimeValueLayer.cpp" line="59"/>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1361"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1397"/>
         <source>New Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="126"/>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="162"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="138"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="177"/>
         <source>Plot Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="127"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="139"/>
         <source>Vertical Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="128"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="140"/>
         <source>Scale Units</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="129"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="141"/>
         <source>Draw Segment Division Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="130"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="142"/>
+        <source>Fill Segment Colours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="143"/>
         <source>Show Derivative</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="158"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="173"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="253"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="275"/>
         <source>Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="254"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="276"/>
         <source>Stems</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="255"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="277"/>
         <source>Connected Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="256"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="278"/>
         <source>Lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="257"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="279"/>
         <source>Curve</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="258"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="280"/>
         <source>Segmentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="259"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="281"/>
         <source>Discrete Curves</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="264"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="286"/>
         <source>Auto-Align</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="265"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="287"/>
         <source>Linear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="266"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="288"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="267"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="289"/>
         <source>+/-1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="643"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="675"/>
         <source>In progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="645"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="677"/>
         <source>No local points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="658"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="690"/>
         <source>%1 Hz (%2, %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="663"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="695"/>
         <source>%1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="665"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="697"/>
         <source>%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="671"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="703"/>
         <source>Time:	%1
 Value:	%2
 No label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="675"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="707"/>
         <source>Time:	%1
 Value:	%2
 Label:	%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1367"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1403"/>
         <source>Draw Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1488"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1524"/>
         <source>Erase Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1536"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1572"/>
         <source>Drag Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1561"/>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1607"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1597"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1643"/>
         <source>Edit Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1563"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1599"/>
         <source>Relocate Point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1566"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1602"/>
         <source>Change Point Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1624"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1660"/>
         <source>Drag Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1647"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1683"/>
         <source>Resize Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1676"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1712"/>
         <source>Delete Selected Points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1716"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1752"/>
         <source>Re-align pasted items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1717"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1753"/>
         <source>The items you are pasting came from a layer with different source material from this one.  Do you want to re-align them in time, to match the source material for this layer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1731"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1767"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1784"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1820"/>
         <source>The items you are pasting do not have values.
 What values do you want to use for these items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1786"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1822"/>
         <source>Some of the items you are pasting do not have values.
 What values do you want to use for these items?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1796"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1832"/>
         <source>Zero for all items</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1805"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1841"/>
         <source>Choose value calculation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1829"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1865"/>
         <source>Select cycle size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1830"/>
+        <location filename="../svgui/layer/TimeValueLayer.cpp" line="1866"/>
         <source>Cycle size:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9129,141 +9134,141 @@ What values do you want to use for these items?</source>
 <context>
     <name>TransformFactory</name>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="393"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="438"/>
         <source> [\(&lt;].*$</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="457"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="548"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="503"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="594"/>
         <source>&lt;unknown maker&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="463"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="726"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="509"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="773"/>
         <source>Extract features using &quot;%1&quot; plugin (from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="466"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="729"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="512"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="776"/>
         <source>Extract features using &quot;%1&quot; output of &quot;%2&quot; plugin (from %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="471"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="734"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="517"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="781"/>
         <source>%1 using &quot;%2&quot; plugin (from %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="474"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="737"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="520"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="784"/>
         <source>%1 using &quot;%2&quot; output of &quot;%3&quot; plugin (from %4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="320"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="357"/>
         <source>Analysis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="323"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="360"/>
         <source>Generator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="324"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="326"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="361"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="363"/>
         <source>Other</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="564"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="719"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="610"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="766"/>
         <source>%1: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="574"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="620"/>
         <source>%1: Output %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="586"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="632"/>
         <source>Extract &quot;%1&quot; data output from &quot;%2&quot; effect plugin (from %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="591"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="637"/>
         <source>Extract data output %1 from &quot;%2&quot; effect plugin (from %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="322"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="359"/>
         <source>Effects Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="321"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="358"/>
         <source>Effects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="424"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="470"/>
         <source>Failed to list Vamp plugins: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="618"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="664"/>
         <source>Transform audio signal with &quot;%1&quot; effect plugin (from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="624"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="670"/>
         <source>Generate audio signal using &quot;%1&quot; plugin (from %2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1176"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1214"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1232"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1270"/>
         <source>Plugin type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1178"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1216"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1234"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1272"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1179"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1217"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1235"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1273"/>
         <source>System Identifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1180"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1218"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1236"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1274"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1181"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1219"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1237"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1275"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1182"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1220"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1238"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1276"/>
         <source>Maker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1183"/>
-        <location filename="../svcore/transform/TransformFactory.cpp" line="1221"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1239"/>
+        <location filename="../svcore/transform/TransformFactory.cpp" line="1277"/>
         <source>Units</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9682,103 +9687,108 @@ What values do you want to use for these items?</source>
 <context>
     <name>WaveformLayer</name>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="132"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="161"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="134"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="167"/>
         <source>Scale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="133"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="135"/>
         <source>Gain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="134"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="136"/>
         <source>Normalize Visible Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="135"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="137"/>
+        <source>Interpolate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="138"/>
         <source>Channels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="222"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="233"/>
         <source>Linear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="223"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="234"/>
         <source>Meter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="224"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="242"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="235"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="253"/>
         <source>dB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="230"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="241"/>
         <source>Separate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="231"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="242"/>
         <source>Mean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="232"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="243"/>
         <source>Butterfly</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1279"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1307"/>
         <source>Time:	%1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1283"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1311"/>
         <source>Time:	%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1303"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1331"/>
         <source>Level:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1305"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1333"/>
         <source>Left:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1306"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1334"/>
         <source>Right:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1307"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1335"/>
         <source>Channel %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1330"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1358"/>
         <source>
 %1	%2 - %3 (%4 dB peak)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1333"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1361"/>
         <source>
 %1	%2 (%3 dB peak)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1503"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1557"/>
-        <location filename="../svgui/layer/WaveformLayer.cpp" line="1567"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1531"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1585"/>
+        <location filename="../svgui/layer/WaveformLayer.cpp" line="1595"/>
         <source>0dB</source>
         <translation type="unfinished"></translation>
     </message>
