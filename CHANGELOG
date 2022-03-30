@@ -1,4 +1,40 @@
 
+Changes in Sonic Visualiser v4.4.1 (31 March 2022) since the previous release 4.4:
+
+ - Add option to switch off the interpolation used in the waveform
+   view for zoom levels closer than one pixel per frame: sometimes it
+   can be an unnecessary distraction. With interpolation switched off,
+   the individual samples are shown as unconnected points instead
+
+ - Make it possible to toggle segment colouring in the segmentation
+   view of the time value layer, as well as toggling segment division
+   lines
+
+ - When importing CSV files, if a column heading indicates a likely
+   unit for the column, use it by default; also remember last user
+   settings for the import dialog
+
+ - Ensure the Choose Default Template option on the templates menu can
+   be reached even when no file is loaded
+ 
+ - Give the spectrum layer the same effective scale range as it had
+   before the dB scale fix in v4.4, fixing the accidental halving of
+   the visible range for that layer in v4.4
+
+ - Fix hang when opening two plugin parameter dialogs at once
+ 
+ - Fix crash when rendering slice or spectrum layers scrolled to
+   earlier than the start of the audio or later than the end
+ 
+ - Fix crash when more than one audio file is supplied at the command
+   line with a default session template that requires regenerating one
+   or more feature extraction layers and layer generation produces an
+   error or warning
+ 
+ - Fix failure to exit fully if the window is closed before plugin
+   scan is complete at startup
+ 
+
 Changes in Sonic Visualiser v4.4 (17 September 2021) since the previous release 4.3:
 
  - Update Mac build to add support for Apple M1 (arm64) architecture:
