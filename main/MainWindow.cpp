@@ -636,9 +636,11 @@ MainWindow::setupFileMenu()
     QString templatesMenuLabel = tr("Apply Session Template");
     m_templatesMenu = menu->addMenu(templatesMenuLabel);
     m_templatesMenu->setTearOffEnabled(true);
-    // We need to have a main model for this option to be useful:
-    // canExportAudio captures that
-    connect(this, SIGNAL(canExportAudio(bool)), m_templatesMenu, SLOT(setEnabled(bool)));
+    // Formerly we enabled or disabled this menu according to whether
+    // we had a main model or not, since applying a template requires
+    // a main model. But the menu also contains the option to set the
+    // default, and that's useful regardless, so we now have the menu
+    // always enabled
 
     // Set up the menu in a moment, after m_manageTemplatesAction constructed
 
@@ -2063,6 +2065,10 @@ MainWindow::setupTemplatesMenu()
 
     QAction *defaultAction = m_templatesMenu->addAction(tr("Standard Waveform"));
     defaultAction->setObjectName("default");
+    // All the apply actions need to have a main model to be useful:
+    // canExportAudio captures that
+    connect(this, SIGNAL(canExportAudio(bool)), defaultAction, SLOT(setEnabled(bool)));
+
     connect(defaultAction, SIGNAL(triggered()), this, SLOT(applyTemplate()));
 
     m_templatesMenu->addSeparator();
@@ -2083,6 +2089,9 @@ MainWindow::setupTemplatesMenu()
     foreach (QString t, byName) {
         if (t.toLower() == "default") continue;
         action = m_templatesMenu->addAction(t);
+        // All the apply actions need to have a main model to be
+        // useful: canExportAudio captures that
+        connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
         connect(action, SIGNAL(triggered()), this, SLOT(applyTemplate()));
     }
 
