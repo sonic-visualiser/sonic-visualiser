@@ -1,4 +1,4 @@
-FROM centos:8
+FROM rockylinux:8
 
 # Ensure that everything subsequent is re-run when a new revision is
 # being built (rather than being cached) - so as to avoid potential
