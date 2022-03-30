@@ -43,9 +43,12 @@ please see the file CITATION for a reference to cite.
 Sonic Visualiser was devised and developed in the [Centre for Digital
 Music](https://c4dm.eecs.qmul.ac.uk/) at Queen Mary University of
 London, primarily by Chris Cannam, with contributions from Christian
-Landone, Mathieu Barthet, Dan Stowell, Jesus Corral Garcia, Matthias
+Landone, Mathieu Barthet, Dan Stowell, Jesús Corral García, Matthias
 Mauch, and Craig Sapp. Special thanks to Professor Mark Sandler for
 initiating and supporting the project.
+
+Sonic Visualiser is currently maintained primarily by Chris Cannam at
+Particular Programs Ltd.
 
 The Sonic Visualiser code is in general
 
@@ -90,7 +93,7 @@ Sonic Visualiser may also make use of the following libraries:
  * libsamplerate - Copyright Erik de Castro Lopo, BSD license
  * libsndfile - Copyright Erik de Castro Lopo, LGPL
  * FFTW3 - Copyright Matteo Frigo and MIT, GPL
- * Rubber Band - Copyright Particular Programs Ltd, GPL
+ * Rubber Band Library - Copyright Particular Programs Ltd, GPL
  * Vamp plugin SDK - Copyright Chris Cannam and QMUL, BSD license
  * LADSPA plugin SDK - Copyright Richard Furse et al, LGPL
  * RtMIDI - Copyright Gary P. Scavone, BSD license
