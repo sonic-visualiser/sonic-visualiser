@@ -605,7 +605,7 @@ bool SVApplication::event(QEvent *event){
     case QEvent::FileOpen:
         SVDEBUG << "SVApplication::event: Handling FileOpen event" << endl;
         thePath = static_cast<QFileOpenEvent *>(event)->file();
-                                                                      handleFilepathArgument(thePath, nullptr);
+        handleFilepathArgument(thePath, nullptr);
         return true;
     default:
         return QApplication::event(event);
