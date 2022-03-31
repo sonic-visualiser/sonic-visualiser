@@ -7100,6 +7100,10 @@ Koš:	%5
         <source>Sampling Mode</source>
         <translation>Režim vzorkování</translation>
     </message>
+    <message>
+        <source>-160</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SparseModel</name>
