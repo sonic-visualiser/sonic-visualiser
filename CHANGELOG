@@ -1,5 +1,5 @@
 
-Changes in Sonic Visualiser v4.4.1 (31 March 2022) since the previous release 4.4:
+Changes in Sonic Visualiser v4.5 (31 March 2022) since the previous release 4.4:
 
  - Add option to switch off the interpolation used in the waveform
    view for zoom levels closer than one pixel per frame: sometimes it
