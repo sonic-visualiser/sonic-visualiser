@@ -186,6 +186,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     setWindowTitle(QApplication::applicationName());
 
     UnitDatabase *udb = UnitDatabase::getInstance();
+    udb->registerUnit("");
     udb->registerUnit("Hz");
     udb->registerUnit("dB");
     udb->registerUnit("s");
