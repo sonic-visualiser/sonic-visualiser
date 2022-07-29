@@ -138,6 +138,7 @@ if system == 'linux'
   server_dependencies = [
     capnp_dep,
     sord_dep,
+    serd_dep,
     dl_dep,
   ]
   
