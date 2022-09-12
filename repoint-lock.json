@@ -31,10 +31,10 @@
       "pin": "6e94b6858cb6"
     },
     "bqvec": {
-      "pin": "eb5c0e8e5b6f"
+      "pin": "97eea3bdd5d2"
     },
     "bqfft": {
-      "pin": "3560080ff66c"
+      "pin": "d41a117b8cbe"
     },
     "bqresample": {
       "pin": "1645e7be5e9f"
@@ -43,7 +43,7 @@
       "pin": "837b107363df"
     },
     "bqaudiostream": {
-      "pin": "fae51b1b633d"
+      "pin": "71b9ecc06b21"
     },
     "bqthingfactory": {
       "pin": "2e4bd170f57f"
