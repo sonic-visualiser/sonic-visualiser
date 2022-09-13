@@ -213,8 +213,17 @@ public:
     }
     ~SVApplication() override { }
 
-    void setMainWindow(MainWindow *mw) { m_mainWindow = mw; }
-    void releaseMainWindow() { m_mainWindow = nullptr; }
+    void setMainWindow(MainWindow *mw) {
+        m_mainWindow = mw;
+        for (auto f: m_pendingFilepaths) {
+            handleFilepathArgument(f, nullptr);
+        }
+        m_pendingFilepaths.clear();
+    }
+    
+    void releaseMainWindow() {
+        m_mainWindow = nullptr;
+    }
 
     virtual void commitData(QSessionManager &manager) {
         if (!m_mainWindow) return;
@@ -228,6 +237,7 @@ public:
 
 protected:
     MainWindow *m_mainWindow;
+    std::vector<QString> m_pendingFilepaths;
     bool event(QEvent *) override;
 };
 
@@ -617,6 +627,12 @@ void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
     static bool haveSession = false;
     static bool haveMainModel = false;
     static bool havePriorCommandLineModel = false;
+
+    if (!m_mainWindow) {
+        // Not attached yet
+        m_pendingFilepaths.push_back(path);
+        return;
+    }
     
     MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 
