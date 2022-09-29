@@ -31,6 +31,13 @@ uuidfile=.notarization-uuid
 statfile=.notarization-status
 rm -f "$uuidfile" "$statfile"
 
+# At some point we need to switch to...
+#xcrun notarytool submit \
+#    "$dmg" \
+#    --apple-id "$user" \
+#    --keychain-profile altool \
+#    --wait --progress
+
 xcrun altool --notarize-app \
     -f "$dmg" \
     --primary-bundle-id "$bundleid" \
@@ -57,7 +64,6 @@ while true ; do
 	"$uuid" \
 	-u "$user" \
 	-p @keychain:altool 2>&1 | tee "$statfile"
-
     if grep -q 'Package Approved' "$statfile"; then
 	echo
 	echo "Approved! Status output is:"
