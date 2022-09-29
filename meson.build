@@ -96,7 +96,7 @@ if system == 'linux'
   fftw3_dep = dependency('fftw3', version: '>= 3.0.0')
   sndfile_dep = dependency('sndfile', version: '>= 1.0.16')
   samplerate_dep = dependency('samplerate', version: '>= 0.1.2')
-  rubberband_dep = dependency('rubberband')
+  rubberband_dep = dependency('rubberband', version: '>= 3.0.0')
   sord_dep = dependency('sord-0', version: '>= 0.5')
   serd_dep = dependency('serd-0', version: '>= 0.5')
   capnp_dep = dependency('capnp', version: '>= 0.6')
