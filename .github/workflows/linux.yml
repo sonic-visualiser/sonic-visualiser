@@ -12,7 +12,7 @@ jobs:
     - name: install-packages
       run: |
         sudo apt-get update
-        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev git mercurial autoconf automake libtool mlton
+        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils git mercurial autoconf automake libtool mlton
     - name: install-capnp
       run: |
         mkdir -p tmp/capnproto
@@ -35,6 +35,14 @@ jobs:
         wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
         unzip ninja-linux.zip
         sudo ln -s $(pwd)/ninja /usr/bin/ninja
+    - name: install-rubberband
+      run: |
+        mkdir -p tmp/rubberband
+        cd tmp/rubberband
+        wget https://breakfastquay.com/files/releases/rubberband-3.1.1.tar.bz2
+        tar xvjf rubberband-3.1.1.tar.bz2
+        cd rubberband-3.1.1
+        meson build && ninja -C build && sudo ninja -C build install
     - name: repoint
       run: ./repoint install
     - name: configure
