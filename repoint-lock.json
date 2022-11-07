@@ -16,7 +16,7 @@
       "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
     },
     "sv-dependency-builds": {
-      "pin": "c39acf2bf6dab0399b8df7c3bf0b66d795eac02a"
+      "pin": "f1eab0dce73880ed035b8c4e584a7e630d0f794d"
     },
     "icons/scalable": {
       "pin": "7b947da27cfa0b7f6a777684db38480eab695aae"
@@ -43,7 +43,7 @@
       "pin": "837b107363df"
     },
     "bqaudiostream": {
-      "pin": "054c59f62379"
+      "pin": "d8890ffd7b27"
     },
     "bqthingfactory": {
       "pin": "2e4bd170f57f"
