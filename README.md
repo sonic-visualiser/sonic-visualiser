@@ -47,8 +47,10 @@ Landone, Mathieu Barthet, Dan Stowell, Jesús Corral García, Matthias
 Mauch, and Craig Sapp. Special thanks to Professor Mark Sandler for
 initiating and supporting the project.
 
-Sonic Visualiser is currently maintained primarily by Chris Cannam at
-Particular Programs Ltd.
+Sonic Visualiser is currently lightly maintained by Chris Cannam at
+Particular Programs Ltd. There are no major features in development as
+of this release, only bug fixes. If you need something specific and
+have funding available for it, please contact us.
 
 The Sonic Visualiser code is in general
 
