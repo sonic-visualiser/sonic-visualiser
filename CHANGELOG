@@ -1,14 +1,17 @@
 Changes in Sonic Visualiser v4.5.1 (7 Nov 2022) since the previous release 4.5:
 
  - Update to use Rubber Band v3 with its higher quality timestretcher
-   (the older, lower-CPU one is still available in preferences)
+   (the older, lower-CPU one is still available in preferences). This
+   means the build requires rubberband-3.0.0 or newer, so you may need
+   to install it separately if building on an older system.
 
  - Fix inability to select Hz as the unit of a layer following import
 
- - Provisional fix to bailing out on startup when invoked with Open
-   With... on Mac
+ - Provisional fix to bailing out on startup when invoked with "Open
+   With..." on Mac
 
- - Fix nonsense display when showing frequency scaled points with value of 0Hz
+ - Fix nonsense display when showing frequency scaled points with value
+   of 0Hz
 
 
 Changes in Sonic Visualiser v4.5 (31 March 2022) since the previous release 4.4:
