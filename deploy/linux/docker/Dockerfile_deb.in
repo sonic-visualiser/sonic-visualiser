@@ -52,7 +52,7 @@ RUN ln -s $(pwd)/ninja /usr/bin/ninja
 RUN wget https://breakfastquay.com/files/releases/rubberband-3.1.1.tar.bz2
 RUN tar xvjf rubberband-3.1.1.tar.bz2
 WORKDIR rubberband-3.1.1
-RUN meson build && ninja -C build && ninja -C build install
+RUN meson build -Ddefault_library=static && ninja -C build && ninja -C build install
 WORKDIR /root
 
 COPY id_rsa_build .ssh/id_rsa_build

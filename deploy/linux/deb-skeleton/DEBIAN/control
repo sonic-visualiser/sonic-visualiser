@@ -5,7 +5,7 @@ Architecture: amd64
 Version: 2.4cc-1
 Installed-Size: 6056
 Section: contrib/sound
-Depends: libqt5core5a, libsndfile1, libsamplerate0, libfftw3-3, libbz2-1.0, libpulse0, libmad0, libid3tag0, liboggz2, libfishsound1, libasound2, liblo7, liblrdf0, libsord-0-0, libserd-0-0, vamp-plugin-sdk, librubberband2, libc6
+Depends: libqt5core5a, libsndfile1, libsamplerate0, libfftw3-3, libbz2-1.0, libpulse0, libmad0, libid3tag0, liboggz2, libfishsound1, libasound2, liblo7, liblrdf0, libsord-0-0, libserd-0-0, vamp-plugin-sdk, libc6
 Description: View and analyse the contents of music audio files
  Sonic Visualiser is an application for viewing and analysing the contents
  of music audio files. It was developed at the Centre for Digital Music at
