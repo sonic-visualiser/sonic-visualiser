@@ -1,3 +1,14 @@
+
+Changes in Sonic Visualiser v4.5.2 since the previous release 4.5.1:
+
+ - Support multi-line text labels on time instants
+ 
+ - Improve refresh of text labels in various layers
+
+ - Improve abbreviation of layer names in the key at bottom-right of a
+   pane
+
+
 Changes in Sonic Visualiser v4.5.1 (7 Nov 2022) since the previous release 4.5:
 
  - Update to use Rubber Band v3 with its higher quality timestretcher
