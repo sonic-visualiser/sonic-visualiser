@@ -4758,6 +4758,7 @@ MainWindow::updatePositionStatusDisplays() const
         if (!layer->isLayerEditable()) continue;
         QString label = layer->getLabelPreceding
             (pane->alignFromReference(frame));
+        label = label.split('\n')[0];
         m_currentLabel->setText(label);
         break;
     }
