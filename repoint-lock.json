@@ -37,13 +37,13 @@
       "pin": "d41a117b8cbe"
     },
     "bqresample": {
-      "pin": "1645e7be5e9f"
+      "pin": "6e5d4f06d3c8"
     },
     "bqaudioio": {
-      "pin": "837b107363df"
+      "pin": "e85272f8a6ad"
     },
     "bqaudiostream": {
-      "pin": "d8890ffd7b27"
+      "pin": "85868b0f215a"
     },
     "bqthingfactory": {
       "pin": "2e4bd170f57f"
