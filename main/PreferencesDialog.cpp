@@ -861,7 +861,7 @@ PreferencesDialog::retinaChanged(int state)
 {
     m_retina = (state == Qt::Checked);
     m_applyButton->setEnabled(true);
-    // Does not require a restart
+    m_changesOnRestart = true;
 }
 
 void
