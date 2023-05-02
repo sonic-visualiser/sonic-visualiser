@@ -544,8 +544,10 @@ bq_files = [
 ]
 
 if vamphostsdk_dep.found()
+  config_summary += { 'Vamp SDK': 'system' }
   vamphostsdk_files = []
 else
+  config_summary += { 'Vamp SDK': 'bundled' }
   vamphostsdk_files = [
     'vamp-plugin-sdk/src/vamp-hostsdk/PluginBufferingAdapter.cpp',
     'vamp-plugin-sdk/src/vamp-hostsdk/PluginChannelAdapter.cpp',
