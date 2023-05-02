@@ -11,6 +11,8 @@ Changes in Sonic Visualiser v4.5.2 since the previous release 4.5.1:
  - Fix repeated writes to settings file when rendering time-ruler
    layers at close zoom levels
 
+ - Use system Vamp host SDK if provided
+
 
 Changes in Sonic Visualiser v4.5.1 (7 Nov 2022) since the previous release 4.5:
 
