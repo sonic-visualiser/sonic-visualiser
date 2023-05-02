@@ -77,6 +77,7 @@ feature_include_dirs = []
 server_dependencies = []
 
 dl_dep = meson.get_compiler('c').find_library('dl', required: false)
+vamphostsdk_dep = dependency('vamp-hostsdk', version: '>= 2.10', required: false)
 
 if system == 'linux'
 
@@ -92,7 +93,7 @@ if system == 'linux'
     message('Failed to find bzip2 dependency. On many systems this exists but is not discoverable through pkg-config; proceeding on this assumption')
     feature_additional_libs = [ '-lbz2' ]
   endif # bzip2_dep
-  
+
   fftw3_dep = dependency('fftw3', version: '>= 3.0.0')
   sndfile_dep = dependency('sndfile', version: '>= 1.0.16')
   samplerate_dep = dependency('samplerate', version: '>= 0.1.2')
@@ -114,6 +115,7 @@ if system == 'linux'
   portaudio_dep = dependency('portaudio-2.0', version: '>= 19', required: false)
 
   feature_dependencies = [
+    vamphostsdk_dep,
     bzip2_dep,
     fftw3_dep,
     sndfile_dep,
@@ -136,6 +138,7 @@ if system == 'linux'
   ]
 
   server_dependencies = [
+    vamphostsdk_dep,
     capnp_dep,
     sord_dep,
     serd_dep,
@@ -261,9 +264,11 @@ elif system == 'darwin'
   endif
     
   feature_dependencies = [
+    vamphostsdk_dep,
   ]
 
   server_dependencies = [
+    vamphostsdk_dep,
     dl_dep,
   ]
   
@@ -360,9 +365,11 @@ elif system == 'windows'
   ]
 
   feature_dependencies = [
+    vamphostsdk_dep,
   ]
 
   server_dependencies = [
+    vamphostsdk_dep,
     dl_dep,
   ]
   
@@ -536,17 +543,21 @@ bq_files = [
   'bqaudiostream/src/AudioStreamExceptions.cpp',
 ]
 
-vamp_plugin_sdk_files = [
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginBufferingAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginChannelAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginHostAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginInputDomainAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginLoader.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginSummarisingAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp',
-]
+if vamphostsdk_dep.found()
+  vamphostsdk_files = []
+else
+  vamphostsdk_files = [
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginBufferingAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginChannelAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginHostAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginInputDomainAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginLoader.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginSummarisingAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp',
+  ]
+endif
 
 dataquay_files = [
   'dataquay/src/Connection.cpp',
@@ -755,7 +766,7 @@ svcore_lib = static_library(
   'svcore',
   capnp_gen_cpp_target,
   bq_files,
-  vamp_plugin_sdk_files,
+  vamphostsdk_files,
   dataquay_moc_files,
   svcore_moc_files,
   dataquay_files,
@@ -1256,7 +1267,7 @@ executable(
   'piper-vamp-cpp/ext/json11/json11.cpp',
   'piper-vamp-cpp/vamp-server/simple-server.cpp',
   capnp_gen_cpp_target,
-  vamp_plugin_sdk_files,
+  vamphostsdk_files,
   include_directories: [
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
@@ -1283,7 +1294,7 @@ executable(
   'piper-vamp-cpp/ext/json11/json11.cpp',
   'piper-vamp-cpp/vamp-server/convert.cpp',
   capnp_gen_cpp_target,
-  vamp_plugin_sdk_files,
+  vamphostsdk_files,
   include_directories: [
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
