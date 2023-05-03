@@ -4,7 +4,7 @@
     Sonic Visualiser
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
-    This file copyright 2006-2007 Chris Cannam and QMUL.
+    This file copyright 2006-2023 Chris Cannam and QMUL.
     
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -5528,7 +5528,7 @@ MainWindow::about()
     aboutText += "</small></p>";
 
     aboutText += 
-        "<p><small>Sonic Visualiser is Copyright &copy; 2005&ndash;2007 Chris Cannam; Copyright &copy; 2006&ndash;2020 Queen Mary, University of London; Copyright &copy; 2020-2022 Particular Programs Ltd.</small></p>";
+        "<p><small>Sonic Visualiser is Copyright &copy; 2005&ndash;2007 Chris Cannam; Copyright &copy; 2006&ndash;2020 Queen Mary, University of London; Copyright &copy; 2020-2023 Particular Programs Ltd.</small></p>";
 
     aboutText +=
         "<p><small>This program is free software; you can redistribute it and/or "

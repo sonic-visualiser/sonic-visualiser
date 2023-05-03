@@ -6123,6 +6123,10 @@ ale dostupné jsou %2. Použije se pouze první %3.
         <source>Mix recorded channels to mono</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Use fine-quality time stretcher</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PreferencesDialog</name>
