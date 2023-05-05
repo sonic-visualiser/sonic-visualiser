@@ -5,22 +5,14 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
     - name: install-packages
       run: |
         sudo apt-get update
-        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils git mercurial autoconf automake libtool mlton
-    - name: install-capnp
-      run: |
-        mkdir -p tmp/capnproto
-        git clone https://github.com/sandstorm-io/capnproto tmp/capnproto
-        cd tmp/capnproto
-        git checkout v0.6.1
-        cd c++
-        autoreconf -i && CXXFLAGS=-fPIC ./configure --enable-shared=no --enable-static=yes && make -j3 && sudo make install
+        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils git mercurial autoconf automake libtool mlton capnproto libcapnp-dev
     - name: install-meson
       run: |
         mkdir -p tmp/meson
