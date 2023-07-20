@@ -1,13 +1,13 @@
 {
   "libraries": {
     "vamp-plugin-sdk": {
-      "pin": "c3ef877327f1b081b95a1d05349c297f8c4454f0"
+      "pin": "7df85ecf98d9477c1ac5a36f51807062e00d8695"
     },
     "svcore": {
-      "pin": "ad75d15f6ade1ee0ba533807732a1c4ededdc7c4"
+      "pin": "14fa982c5c6584fea586d60b8727a7bccf89d956"
     },
     "svgui": {
-      "pin": "6e402f7c234a4d7007c5681cdfb5d30276b0badf"
+      "pin": "42f1b90b613fe712eea9f2a6bb1acc813b98f2a2"
     },
     "svapp": {
       "pin": "406123359cc886da03e82620c71504666a66bb3d"
@@ -16,34 +16,34 @@
       "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
     },
     "sv-dependency-builds": {
-      "pin": "8e4f885b8b49db63fec4488231d00b7685ad91a5"
+      "pin": "ed8a017cd93887b95fc42ac727d55539a5434473"
     },
     "icons/scalable": {
-      "pin": "9dfacf743c6d7df6a891406f2c8c0f9548b396e1"
+      "pin": "7b947da27cfa0b7f6a777684db38480eab695aae"
     },
     "piper": {
       "pin": "3a742c556ac1f2bf9823f30b937c71c690e1f6ae"
     },
     "piper-vamp-cpp": {
-      "pin": "9e23ae46e1fc466d0be01cacb38df143d909b120"
+      "pin": "57b4521fd8f5dc465ee09c62bb83e57dbf22d2de"
     },
     "dataquay": {
-      "pin": "95def499e10f"
+      "pin": "6e94b6858cb6"
     },
     "bqvec": {
-      "pin": "a6cb2dc34ad9"
+      "pin": "291cde50db9d"
     },
     "bqfft": {
-      "pin": "c8ab2d3d5df2"
+      "pin": "d41a117b8cbe"
     },
     "bqresample": {
-      "pin": "8692d553b672"
+      "pin": "38c3e524416a"
     },
     "bqaudioio": {
-      "pin": "818954587967"
+      "pin": "e85272f8a6ad"
     },
     "bqaudiostream": {
-      "pin": "530f3ad687a7"
+      "pin": "1ac3beeccf36"
     },
     "bqthingfactory": {
       "pin": "2e4bd170f57f"
