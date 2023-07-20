@@ -267,6 +267,13 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(resampleOnLoad, SIGNAL(stateChanged(int)),
             this, SLOT(resampleOnLoadChanged(int)));
 
+    QCheckBox *finerTimeStretch = new QCheckBox;
+    m_finerTimeStretch = prefs->getFinerTimeStretch();
+    finerTimeStretch->setCheckState(m_finerTimeStretch ? Qt::Checked :
+                                    Qt::Unchecked);
+    connect(finerTimeStretch, SIGNAL(stateChanged(int)),
+            this, SLOT(finerTimeStretchChanged(int)));
+
     QCheckBox *gaplessMode = new QCheckBox;
     m_gapless = prefs->getUseGaplessMode();
     gaplessMode->setCheckState(m_gapless ? Qt::Checked : Qt::Unchecked);
@@ -579,6 +586,11 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(resampleOnLoad, row++, 1, 1, 1);
 
+    subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
+                                                ("Use Finer Time Stretch"))),
+                       row, 0);
+    subgrid->addWidget(finerTimeStretch, row++, 1, 1, 1);
+
     subgrid->setRowStretch(row, 10);
     
     m_tabOrdering[AudioIOTab] = m_tabs->count();
@@ -815,6 +827,13 @@ PreferencesDialog::resampleOnLoadChanged(int state)
 }
 
 void
+PreferencesDialog::finerTimeStretchChanged(int state)
+{
+    m_finerTimeStretch = (state == Qt::Checked);
+    m_applyButton->setEnabled(true);
+}
+
+void
 PreferencesDialog::gaplessModeChanged(int state)
 {
     m_gapless = (state == Qt::Checked);
@@ -842,7 +861,7 @@ PreferencesDialog::retinaChanged(int state)
 {
     m_retina = (state == Qt::Checked);
     m_applyButton->setEnabled(true);
-    // Does not require a restart
+    m_changesOnRestart = true;
 }
 
 void
@@ -972,6 +991,7 @@ PreferencesDialog::applyClicked()
                                 (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
     prefs->setResampleOnLoad(m_resampleOnLoad);
+    prefs->setFinerTimeStretch(m_finerTimeStretch);
     prefs->setUseGaplessMode(m_gapless);
     prefs->setRunPluginsInProcess(m_runPluginsInProcess);
     prefs->setShowSplash(m_showSplash);

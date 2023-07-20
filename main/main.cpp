@@ -4,7 +4,7 @@
     Sonic Visualiser
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
-    This file copyright 2006 Chris Cannam and QMUL.
+    This file copyright 2006-2023 Chris Cannam and QMUL.
     
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -52,7 +52,7 @@
 
 #include "../version.h"
 
-#ifdef HAVE_FFTW3F
+#if (defined (HAVE_FFTW3F) || defined (HAVE_FFTW3))
 #include <fftw3.h>
 #endif
 
@@ -208,15 +208,22 @@ class SVApplication : public QApplication
 public:
     SVApplication(int &argc, char **argv) :
         QApplication(argc, argv),
-        m_readyForFiles(false),
-        m_filepathQueue(QStringList()),
         m_mainWindow(nullptr)
     {
     }
     ~SVApplication() override { }
 
-    void setMainWindow(MainWindow *mw) { m_mainWindow = mw; }
-    void releaseMainWindow() { m_mainWindow = nullptr; }
+    void setMainWindow(MainWindow *mw) {
+        m_mainWindow = mw;
+        for (auto f: m_pendingFilepaths) {
+            handleFilepathArgument(f, nullptr);
+        }
+        m_pendingFilepaths.clear();
+    }
+    
+    void releaseMainWindow() {
+        m_mainWindow = nullptr;
+    }
 
     virtual void commitData(QSessionManager &manager) {
         if (!m_mainWindow) return;
@@ -228,11 +235,9 @@ public:
 
     void handleFilepathArgument(QString path, SVSplash *splash);
 
-    bool m_readyForFiles;
-    QStringList m_filepathQueue;
-
 protected:
     MainWindow *m_mainWindow;
+    std::vector<QString> m_pendingFilepaths;
     bool event(QEvent *) override;
 };
 
@@ -347,6 +352,11 @@ main(int argc, char **argv)
                 QApplication::setFont(font);
             }
         }
+#endif
+#ifdef Q_OS_MAC
+        QFont font(QApplication::font());
+        font.setKerning(false);
+        QApplication::setFont(font);
 #endif
     }
     settings.endGroup();
@@ -502,48 +512,48 @@ main(int argc, char **argv)
     // complete.  As a lazy hack, apply it explicitly from here
     gui->preferenceChanged("Property Box Layout");
 
-    application.m_readyForFiles = true; // Ready to receive files from e.g. Apple Events
-
-    for (QStringList::iterator i = args.begin(); i != args.end(); ++i) {
-
+    QStringList filesToOpen;
+    for (QString arg: args) {
         // Note QCommandLineParser has now pulled out argv[0] and all
         // the options, so in theory everything here from the very
         // first arg should be relevant. But let's reject names
         // starting with "-" just in case.
-        
-        if (i->startsWith('-')) continue;
-
-        QString path = *i;
-
-        application.handleFilepathArgument(path, splash);
+        if (arg.startsWith('-')) continue;
+        filesToOpen.push_back(arg);
     }
     
-    for (QStringList::iterator i = application.m_filepathQueue.begin();
-         i != application.m_filepathQueue.end(); ++i) {
-        QString path = *i;
-        application.handleFilepathArgument(path, splash);
-    }
-    
-#ifdef HAVE_FFTW3F
     settings.beginGroup("FFTWisdom");
-    QString wisdom = settings.value("wisdom").toString();
-    if (wisdom != "") {
-        fftwf_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+#ifdef HAVE_FFTW3F
+    {
+        QString wisdom = settings.value("wisdom").toString();
+        if (wisdom != "") {
+            fftwf_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+        }
     }
+#endif
 #ifdef HAVE_FFTW3
-    wisdom = settings.value("wisdom_d").toString();
-    if (wisdom != "") {
-        fftw_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+    {
+        QString wisdom = settings.value("wisdom_d").toString();
+        if (wisdom != "") {
+            fftw_import_wisdom_from_string(wisdom.toLocal8Bit().data());
+        }
     }
 #endif
     settings.endGroup();
-#endif
 
     QString scriptFile = parser.value("osc-script");
     if (scriptFile != "") {
         SVDEBUG << "Note: Cueing OSC script from filename \"" << scriptFile
                 << "\"" << endl;
         gui->cueOSCScript(scriptFile);
+    }
+
+    if (!filesToOpen.empty()) {
+        QTimer::singleShot(200, [&]() {
+            for (QString file: filesToOpen) {
+                QApplication::postEvent(&application, new QFileOpenEvent(file));
+            }
+        });
     }
 
     SVDEBUG << "Entering main event loop" << endl;
@@ -562,22 +572,26 @@ main(int argc, char **argv)
 
     application.releaseMainWindow();
 
-#ifdef HAVE_FFTW3F
     settings.beginGroup("FFTWisdom");
-    char *cwisdom = fftwf_export_wisdom_to_string();
-    if (cwisdom) {
-        settings.setValue("wisdom", cwisdom);
-        free(cwisdom);
+#ifdef HAVE_FFTW3F
+    {
+        char *cwisdom = fftwf_export_wisdom_to_string();
+        if (cwisdom) {
+            settings.setValue("wisdom", cwisdom);
+            free(cwisdom);
+        }
     }
+#endif
 #ifdef HAVE_FFTW3
-    cwisdom = fftw_export_wisdom_to_string();
-    if (cwisdom) {
-        settings.setValue("wisdom_d", cwisdom);
-        free(cwisdom);
+    {
+        char *cwisdom = fftw_export_wisdom_to_string();
+        if (cwisdom) {
+            settings.setValue("wisdom_d", cwisdom);
+            free(cwisdom);
+        }
     }
 #endif
     settings.endGroup();
-#endif
 
     FileSource::debugReport();
     
@@ -599,11 +613,9 @@ bool SVApplication::event(QEvent *event){
 
     switch (event->type()) {
     case QEvent::FileOpen:
+        SVDEBUG << "SVApplication::event: Handling FileOpen event" << endl;
         thePath = static_cast<QFileOpenEvent *>(event)->file();
-        if(m_readyForFiles)
-            handleFilepathArgument(thePath, nullptr);
-        else
-            m_filepathQueue.append(thePath);
+        handleFilepathArgument(thePath, nullptr);
         return true;
     default:
         return QApplication::event(event);
@@ -616,6 +628,12 @@ void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
     static bool haveMainModel = false;
     static bool havePriorCommandLineModel = false;
 
+    if (!m_mainWindow) {
+        // Not attached yet
+        m_pendingFilepaths.push_back(path);
+        return;
+    }
+    
     MainWindow::FileOpenStatus status = MainWindow::FileOpenFailed;
 
 #ifdef Q_OS_WIN32

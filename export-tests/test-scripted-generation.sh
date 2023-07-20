@@ -32,8 +32,11 @@ fi
 tmpdir=$(mktemp -d)
 trap "rm -rf $tmpdir" 0
 
+failure=no
+
 for method in 1 2; do
 
+    echo
     echo "Testing method $method..."
 
     actual="$tmpdir/3dplot.csv"
@@ -66,5 +69,11 @@ for method in 1 2; do
         echo "Diff begins:"
         git diff --no-index --word-diff=color --word-diff-regex=. "$actual" "$expected" | head
         echo
+        failure=yes
     fi
 done
+
+if [ "$failure" == "no" ]; then
+    echo
+    echo Passed
+fi

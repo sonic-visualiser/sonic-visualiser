@@ -43,17 +43,20 @@ please see the file CITATION for a reference to cite.
 Sonic Visualiser was devised and developed in the [Centre for Digital
 Music](https://c4dm.eecs.qmul.ac.uk/) at Queen Mary University of
 London, primarily by Chris Cannam, with contributions from Christian
-Landone, Mathieu Barthet, Dan Stowell, Jesus Corral Garcia, Matthias
+Landone, Mathieu Barthet, Dan Stowell, Jesús Corral García, Matthias
 Mauch, and Craig Sapp. Special thanks to Professor Mark Sandler for
 initiating and supporting the project.
 
-The 4.3 release was made in 2021 by Chris Cannam at Particular
-Programs Ltd.
+Sonic Visualiser is currently lightly maintained by Chris Cannam at
+Particular Programs Ltd. There are no major features in development as
+of this release, only bug fixes. If you need something specific and
+have funding available for it, please contact us.
 
-The Sonic Visualiser code is, in general,
+The Sonic Visualiser code is in general
 
  * Copyright (c) 2005-2007 Chris Cannam
  * Copyright (c) 2006-2020 Queen Mary University of London
+ * Copyright (c) 2020-2023 Particular Programs Ltd
 
 with a few exceptions as indicated in the individual source files.
 
@@ -92,7 +95,7 @@ Sonic Visualiser may also make use of the following libraries:
  * libsamplerate - Copyright Erik de Castro Lopo, BSD license
  * libsndfile - Copyright Erik de Castro Lopo, LGPL
  * FFTW3 - Copyright Matteo Frigo and MIT, GPL
- * Rubber Band - Copyright Particular Programs Ltd, GPL
+ * Rubber Band Library - Copyright Particular Programs Ltd, GPL
  * Vamp plugin SDK - Copyright Chris Cannam and QMUL, BSD license
  * LADSPA plugin SDK - Copyright Richard Furse et al, LGPL
  * RtMIDI - Copyright Gary P. Scavone, BSD license
@@ -121,6 +124,8 @@ These three platform builds are checked via continuous integration:
  * Linux CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/Linux%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22Linux+CI%22)
  * macOS CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/macOS%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22macOS+CI%22)
  * Windows CI build: [![Build status](https://ci.appveyor.com/api/projects/status/26pygienkigw39p7?svg=true)](https://ci.appveyor.com/project/cannam/sonic-visualiser)
+
+For notes on how to update and edit the UI translation strings, see [TRANSLATION.md](https://github.com/sonic-visualiser/sonic-visualiser/blob/default/TRANSLATION.md)
 
 
 More information

@@ -69,6 +69,7 @@ protected slots:
     void audioPlaybackDeviceChanged(int device);
     void audioRecordDeviceChanged(int device);
     void resampleOnLoadChanged(int state);
+    void finerTimeStretchChanged(int state);
     void gaplessModeChanged(int state);
     void vampProcessSeparationChanged(int state);
     void tempDirRootChanged(QString root);
@@ -126,6 +127,7 @@ protected:
     int m_audioPlaybackDevice;
     int m_audioRecordDevice;
     bool m_resampleOnLoad;
+    bool m_finerTimeStretch;
     bool m_gapless;
     bool m_runPluginsInProcess;
     bool m_networkPermission;

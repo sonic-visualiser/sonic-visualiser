@@ -4,7 +4,7 @@
     Sonic Visualiser
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
-    This file copyright 2006-2007 Chris Cannam and QMUL.
+    This file copyright 2006-2023 Chris Cannam and QMUL.
     
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -177,7 +177,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     m_unitConverter(new UnitConverter()),
     m_keyReference(new KeyReference()),
     m_templateWatcher(nullptr),
-    m_transformPopulater(nullptr)
+    m_shouldStartOSCQueue(false)
 {
     Profiler profiler("MainWindow::MainWindow");
 
@@ -186,9 +186,11 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     setWindowTitle(QApplication::applicationName());
 
     UnitDatabase *udb = UnitDatabase::getInstance();
+    udb->registerUnit("");
     udb->registerUnit("Hz");
     udb->registerUnit("dB");
     udb->registerUnit("s");
+    udb->registerUnit("V");
 
     ColourDatabase *cdb = ColourDatabase::getInstance();
     cdb->addColour(Qt::black, tr("Black"));
@@ -336,7 +338,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     bool networkPermission = tester.havePermission();
     if (networkPermission) {
         SVDEBUG << "MainWindow: Starting uninstalled-transform population thread" << endl;
-        TransformFactory::getInstance()->startPopulationThread();
+        TransformFactory::getInstance()->startPopulatingUninstalledTransforms();
 
         m_surveyer = nullptr;
 
@@ -350,17 +352,11 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
         m_versionTester = nullptr;
     }
 
-    if (withOSCSupport && networkPermission) {
-        SVDEBUG << "MainWindow: Creating OSC queue with network port"
-                << endl;
-        startOSCQueue(true);
-    } else {
-        SVDEBUG << "MainWindow: Creating internal-only OSC queue without port"
-                << endl;
-        startOSCQueue(false);
-    }
+    m_shouldStartOSCQueue = (withOSCSupport && networkPermission);
     
-//    QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+    if (QString(SV_VERSION).contains("-")) {
+        QTimer::singleShot(500, this, SLOT(betaReleaseWarning()));
+    }
     
     SVDEBUG << "MainWindow: Constructor done" << endl;
 }
@@ -369,11 +365,6 @@ MainWindow::~MainWindow()
 {
 //    SVDEBUG << "MainWindow::~MainWindow" << endl;
 
-    if (m_transformPopulater) {
-        m_transformPopulater->wait();
-        delete m_transformPopulater;
-    }
-    
     delete m_keyReference;
     delete m_activityLog;
     delete m_unitConverter;
@@ -646,9 +637,11 @@ MainWindow::setupFileMenu()
     QString templatesMenuLabel = tr("Apply Session Template");
     m_templatesMenu = menu->addMenu(templatesMenuLabel);
     m_templatesMenu->setTearOffEnabled(true);
-    // We need to have a main model for this option to be useful:
-    // canExportAudio captures that
-    connect(this, SIGNAL(canExportAudio(bool)), m_templatesMenu, SLOT(setEnabled(bool)));
+    // Formerly we enabled or disabled this menu according to whether
+    // we had a main model or not, since applying a template requires
+    // a main model. But the menu also contains the option to set the
+    // default, and that's useful regardless, so we now have the menu
+    // always enabled
 
     // Set up the menu in a moment, after m_manageTemplatesAction constructed
 
@@ -1696,30 +1689,30 @@ MainWindow::prepareTransformsMenu()
     pending->setEnabled(false);
     
     SVDEBUG << "MainWindow::prepareTransformsMenu: Starting installed-transform population thread" << endl;
-    m_transformPopulater = new TransformPopulater(this);
-    m_transformPopulater->start();
+
+    connect(TransformFactory::getInstance(),
+            SIGNAL(installedTransformsPopulated()),
+            this,
+            SLOT(installedTransformsPopulated()));
+
+    QTimer::singleShot(150, TransformFactory::getInstance(),
+                       SLOT(startPopulatingInstalledTransforms()));
 }
 
 void
-MainWindow::TransformPopulater::run()
+MainWindow::installedTransformsPopulated()
 {
-    usleep(200000);
-    
-    TransformFactory *tf = TransformFactory::getInstance();
-    if (!tf) return;
+    populateTransformsMenu();
 
-    connect(tf, SIGNAL(transformsPopulated()),
-            m_mw, SLOT(populateTransformsMenu()));
-
-    SVDEBUG << "MainWindow::TransformPopulater::run: scanning" << endl;
-    
-    PluginScan::getInstance()->scan();
-
-    SVDEBUG << "MainWindow::TransformPopulater::run: populating" << endl;
-    
-    (void)tf->haveTransform({}); // populate!
-
-    SVDEBUG << "MainWindow::TransformPopulater::run: done" << endl;
+    if (m_shouldStartOSCQueue) {
+        SVDEBUG << "MainWindow: Creating OSC queue with network port"
+                << endl;
+        startOSCQueue(true);
+    } else {
+        SVDEBUG << "MainWindow: Creating internal-only OSC queue without port"
+                << endl;
+        startOSCQueue(false);
+    }
 }
 
 void
@@ -1743,7 +1736,7 @@ MainWindow::populateTransformsMenu()
 
     TransformFactory *factory = TransformFactory::getInstance();
 
-    TransformList transforms = factory->getAllTransformDescriptions();
+    TransformList transforms = factory->getInstalledTransformDescriptions();
     
     // We have two possible sources of error here: plugin scan
     // warnings, and transform factory startup errors.
@@ -1771,7 +1764,7 @@ MainWindow::populateTransformsMenu()
         }
     }
     
-    vector<TransformDescription::Type> types = factory->getAllTransformTypes();
+    vector<TransformDescription::Type> types = factory->getTransformTypes();
 
     map<TransformDescription::Type, map<QString, SubdividingMenu *> > categoryMenus;
     map<TransformDescription::Type, map<QString, SubdividingMenu *> > makerMenus;
@@ -2073,6 +2066,10 @@ MainWindow::setupTemplatesMenu()
 
     QAction *defaultAction = m_templatesMenu->addAction(tr("Standard Waveform"));
     defaultAction->setObjectName("default");
+    // All the apply actions need to have a main model to be useful:
+    // canExportAudio captures that
+    connect(this, SIGNAL(canExportAudio(bool)), defaultAction, SLOT(setEnabled(bool)));
+
     connect(defaultAction, SIGNAL(triggered()), this, SLOT(applyTemplate()));
 
     m_templatesMenu->addSeparator();
@@ -2093,6 +2090,9 @@ MainWindow::setupTemplatesMenu()
     foreach (QString t, byName) {
         if (t.toLower() == "default") continue;
         action = m_templatesMenu->addAction(t);
+        // All the apply actions need to have a main model to be
+        // useful: canExportAudio captures that
+        connect(this, SIGNAL(canExportAudio(bool)), action, SLOT(setEnabled(bool)));
         connect(action, SIGNAL(triggered()), this, SLOT(applyTemplate()));
     }
 
@@ -2634,7 +2634,7 @@ MainWindow::updateMenuStates()
     bool alignMode = m_viewManager && m_viewManager->getAlignMode();
     emit canChangeSolo(havePlayTarget && !alignMode);
 
-    if (TransformFactory::getInstance()->havePopulated()) {
+    if (TransformFactory::getInstance()->havePopulatedInstalledTransforms()) {
         emit canAlign(havePlayTarget && m_document && m_document->canAlign());
     }
 
@@ -4758,6 +4758,7 @@ MainWindow::updatePositionStatusDisplays() const
         if (!layer->isLayerEditable()) continue;
         QString label = layer->getLabelPreceding
             (pane->alignFromReference(frame));
+        label = label.split('\n')[0];
         m_currentLabel->setText(label);
         break;
     }
@@ -5391,22 +5392,25 @@ MainWindow::getReleaseText() const
 #ifdef BUILD_DEBUG
     debug = true;
 #endif // BUILD_DEBUG
-#ifdef SV_VERSION
-#ifdef SVNREV
-    version = tr("Release %1 : Revision %2").arg(SV_VERSION).arg(SVNREV);
-#else // !SVNREV
-    version = tr("Release %1").arg(SV_VERSION);
-#endif // SVNREV
-#else // !SV_VERSION
-#ifdef SVNREV
-    version = tr("Unreleased : Revision %1").arg(SVNREV);
-#endif // SVNREV
-#endif // SV_VERSION
 
-    return tr("%1 : %2 configuration, %3-bit build")
+    version = tr("Release %1").arg(SV_VERSION);
+
+    QString archtag;
+#ifdef Q_OS_MAC
+#if (defined(__aarch64__) || defined(__arm__) || defined(_M_ARM64))
+    archtag = " (arm64)";
+#elif (defined(__x86_64__) || defined(__i386__) || defined(_M_IX86) || defined(_M_X64))
+    archtag = " (x86_64)";
+#else
+    archtag = " (unknown arch)"
+#endif
+#endif
+    
+    return tr("%1 : %2 configuration, %3-bit build%4")
         .arg(version)
         .arg(debug ? tr("Debug") : tr("Release"))
-        .arg(sizeof(void *) * 8);
+        .arg(sizeof(void *) * 8)
+        .arg(archtag);
 }
 
 void
@@ -5524,7 +5528,7 @@ MainWindow::about()
     aboutText += "</small></p>";
 
     aboutText += 
-        "<p><small>Sonic Visualiser is Copyright &copy; 2005&ndash;2007 Chris Cannam; Copyright &copy; 2006&ndash;2020 Queen Mary, University of London; Copyright &copy; 2020-2021 Particular Programs Ltd.</small></p>";
+        "<p><small>Sonic Visualiser is Copyright &copy; 2005&ndash;2007 Chris Cannam; Copyright &copy; 2006&ndash;2020 Queen Mary, University of London; Copyright &copy; 2020-2023 Particular Programs Ltd.</small></p>";
 
     aboutText +=
         "<p><small>This program is free software; you can redistribute it and/or "

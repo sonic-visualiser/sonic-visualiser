@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER Chris Cannam <cannam@all-day-breakfast.com>
 RUN apt-get update && \
     apt-get install -y \
@@ -22,8 +22,7 @@ RUN apt-get update && \
     libsord-dev \
     libxml2-utils \
     libgl1-mesa-dev \
-    raptor-utils \
-    librubberband-dev \
+    raptor2-utils \
     portaudio19-dev \
     qt5-default libqt5svg5-dev \
     git \
@@ -49,6 +48,12 @@ RUN pip3 install meson
 RUN wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
 RUN unzip ninja-linux.zip
 RUN ln -s $(pwd)/ninja /usr/bin/ninja
+
+RUN wget https://breakfastquay.com/files/releases/rubberband-3.1.1.tar.bz2
+RUN tar xvjf rubberband-3.1.1.tar.bz2
+WORKDIR rubberband-3.1.1
+RUN meson build -Ddefault_library=static && ninja -C build && ninja -C build install
+WORKDIR /root
 
 COPY id_rsa_build .ssh/id_rsa_build
 COPY known_hosts .ssh/known_hosts

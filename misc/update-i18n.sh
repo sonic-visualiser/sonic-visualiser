@@ -1,5 +1,7 @@
 #!/bin/sh
 
+LANGUAGES="ru en_GB en_US cs_CZ"
+
 LUPDATE="lupdate"
 LRELEASE="lrelease"
 
@@ -7,8 +9,6 @@ if lupdate-qt5 -version >/dev/null 2>&1; then
     LUPDATE="lupdate-qt5"
     LRELEASE="lrelease-qt5"
 fi
-
-LANGUAGES="ru en_GB en_US cs_CZ"
 
 for LANG in $LANGUAGES; do
     $LUPDATE \

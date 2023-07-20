@@ -2,7 +2,7 @@
 project(
   'Sonic Visualiser',
   'c', 'cpp',
-  version: '4.4-pre1',
+  version: '4.5.2',
   license: 'GPL-2.0-or-later',
   default_options: [
     'cpp_std=c++17',
@@ -27,7 +27,7 @@ qt_dep = dependency(
   main: true
 )
 
-system = build_machine.system()
+system = host_machine.system()
 architecture = host_machine.cpu_family()
 compiler = meson.get_compiler('cpp').get_id()
 
@@ -39,15 +39,24 @@ general_defines = [
 
 general_link_args = []
 
+config_summary = { 'Compiler': compiler,
+		   'Architecture': architecture,
+		   'System': system }
+
 if get_option('buildtype').startswith('release')
+  config_summary += { 'Build type': 'release' }
   general_defines += [
     '-DNO_TIMING',
     '-DNO_HIT_COUNTS',
   ]
-if compiler == 'gcc' or compiler == 'clang'
+if compiler == 'clang'
   general_defines += [
     '-ffast-math',
     '-Wno-deprecated-copy', # Qt currently hits lots of these internally
+  ]
+elif compiler == 'gcc'
+  general_defines += [
+    '-ffast-math',
   ]
 elif compiler == 'msvc'
   general_defines += [
@@ -58,6 +67,8 @@ elif compiler == 'msvc'
     '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
   ]
 endif # compiler
+else # buildtype
+  config_summary += { 'Build type': 'debug' }
 endif # get_option('buildtype')
 
 svcore_moc_args = []
@@ -66,6 +77,7 @@ feature_include_dirs = []
 server_dependencies = []
 
 dl_dep = meson.get_compiler('c').find_library('dl', required: false)
+vamphostsdk_dep = dependency('vamp-hostsdk', version: '>= 2.10', required: false)
 
 if system == 'linux'
 
@@ -81,12 +93,11 @@ if system == 'linux'
     message('Failed to find bzip2 dependency. On many systems this exists but is not discoverable through pkg-config; proceeding on this assumption')
     feature_additional_libs = [ '-lbz2' ]
   endif # bzip2_dep
-  
+
   fftw3_dep = dependency('fftw3', version: '>= 3.0.0')
-  fftw3f_dep = dependency('fftw3f', version: '>= 3.0.0')
   sndfile_dep = dependency('sndfile', version: '>= 1.0.16')
   samplerate_dep = dependency('samplerate', version: '>= 0.1.2')
-  rubberband_dep = dependency('rubberband')
+  rubberband_dep = dependency('rubberband', version: '>= 3.0.0')
   sord_dep = dependency('sord-0', version: '>= 0.5')
   serd_dep = dependency('serd-0', version: '>= 0.5')
   capnp_dep = dependency('capnp', version: '>= 0.6')
@@ -104,9 +115,9 @@ if system == 'linux'
   portaudio_dep = dependency('portaudio-2.0', version: '>= 19', required: false)
 
   feature_dependencies = [
+    vamphostsdk_dep,
     bzip2_dep,
     fftw3_dep,
-    fftw3f_dep,
     sndfile_dep,
     samplerate_dep,
     rubberband_dep,
@@ -127,15 +138,17 @@ if system == 'linux'
   ]
 
   server_dependencies = [
+    vamphostsdk_dep,
     capnp_dep,
     sord_dep,
+    serd_dep,
     dl_dep,
   ]
   
   feature_defines = [
     '-DHAVE_BZ2',
     '-DHAVE_FFTW3',
-    '-DHAVE_FFTW3F',
+    '-DFFTW_DOUBLE_ONLY',
     '-DHAVE_SNDFILE',
     '-DHAVE_LIBSAMPLERATE',
     '-DHAVE_RUBBERBAND',
@@ -168,16 +181,35 @@ if system == 'linux'
 elif system == 'darwin'
 
   svdeps_dir = meson.current_source_dir() / 'sv-dependency-builds/osx'
-  
-  capnp = find_program(
-    'capnp',
-    dirs: [
-      svdeps_dir / 'bin'
-    ])
-  capnp_additional_args = [
-    '-I' + svdeps_dir / 'include'
-  ]
-  capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+
+  if architecture == 'aarch64'
+    svdeps_libdir = svdeps_dir / 'lib-arm64'
+  else
+    svdeps_libdir = svdeps_dir / 'lib'
+  endif
+    
+  if architecture == 'aarch64'
+    capnp = find_program(
+      'capnp',
+      dirs: [
+	svdeps_dir / 'bin-arm64'
+      ])
+    capnp_additional_args = [
+      '-I' + svdeps_dir / 'include-arm64',
+      '-I' + svdeps_dir / 'include'
+    ]
+    capnp_cpp_plugin = svdeps_dir / 'bin-arm64/capnpc-c++'
+  else
+    capnp = find_program(
+      'capnp',
+      dirs: [
+	svdeps_dir / 'bin'
+      ])
+    capnp_additional_args = [
+      '-I' + svdeps_dir / 'include'
+    ]
+    capnp_cpp_plugin = svdeps_dir / 'bin/capnpc-c++'
+  endif
   
   rc = []
 
@@ -190,16 +222,12 @@ elif system == 'darwin'
   
   feature_defines = [
     '-DHAVE_BZ2',
-    '-DHAVE_FFTW3',
-    '-DHAVE_FFTW3F',
     '-DHAVE_SNDFILE',
     '-DHAVE_LIBSAMPLERATE',
     '-DHAVE_RUBBERBAND',
     '-DHAVE_SORD', '-DUSE_SORD',
     '-DHAVE_SERD',
     '-DHAVE_CAPNP',
-    '-DHAVE_MAD',
-    '-DHAVE_ID3TAG',
     '-DHAVE_OPUS',
     '-DHAVE_LIBLO',
     '-DHAVE_PORTAUDIO',
@@ -208,25 +236,53 @@ elif system == 'darwin'
     '-D__MACOSX_CORE__', # for RtMidi
   ]
 
+  if architecture != 'aarch64'
+    
+    # vDSP will be used in preference to FFTW most of the time, but
+    # FFTW supports more fft lengths - without it we can end up with a
+    # very slow implementation for unusual lengths. However we don't
+    # have this in the deps build for arm64 yet because my first
+    # attempt at arm64 build failed and I haven't had a moment to
+    # return to it yet.
+    feature_defines += [
+      '-DHAVE_FFTW3',
+      '-DFFTW_DOUBLE_ONLY',
+    ]
+
+    # We don't actually need MAD on this platform at all - CoreAudio
+    # can read mp3 files no problem - but we have been using it up to
+    # now, so for consistency let's stick with it. No need to bring it
+    # along to aarch64 with us though.
+    feature_defines += [
+      '-DHAVE_MAD',
+      '-DHAVE_ID3TAG',
+    ]
+    svcore_moc_args += [
+      '-DHAVE_MAD',
+    ]
+    
+  endif
+    
   feature_dependencies = [
+    vamphostsdk_dep,
   ]
 
   server_dependencies = [
+    vamphostsdk_dep,
     dl_dep,
   ]
   
   feature_include_dirs = [
     # These must be relative, so not using svdeps_dir
+    'sv-dependency-builds/osx/include-arm64',
     'sv-dependency-builds/osx/include',
     'sv-dependency-builds/osx/include/opus',
   ]
   
   feature_additional_libs = [
-    '-L' + svdeps_dir / 'lib',
+    '-L' + svdeps_libdir,
     '-lbz2',
     '-lrubberband',
-    '-lfftw3',
-    '-lfftw3f',
     '-lsndfile',
     '-lFLAC',
     '-logg',
@@ -235,8 +291,6 @@ elif system == 'darwin'
     '-lvorbisfile',
     '-lopusfile',
     '-lopus',
-    '-lmad',
-    '-lid3tag',
     '-lportaudio',
     '-lsamplerate',
     '-lz',
@@ -253,10 +307,15 @@ elif system == 'darwin'
     '-framework', 'CoreServices',
     '-framework', 'Accelerate',
   ]
-  
-  svcore_moc_args = [
-    '-DHAVE_MAD'
-  ]
+
+  if architecture != 'aarch64'
+    # See comments when setting up feature_defines above
+    feature_additional_libs += [
+      '-lfftw3',
+      '-lmad',
+      '-lid3tag',
+    ]
+  endif
   
 elif system == 'windows'
 
@@ -291,7 +350,7 @@ elif system == 'windows'
   feature_defines = [
     '-DHAVE_BZ2',
     '-DHAVE_FFTW3',
-    '-DHAVE_FFTW3F',
+    '-DFFTW_DOUBLE_ONLY',
     '-DHAVE_SNDFILE',
     '-DHAVE_LIBSAMPLERATE',
     '-DHAVE_RUBBERBAND',
@@ -306,9 +365,11 @@ elif system == 'windows'
   ]
 
   feature_dependencies = [
+    vamphostsdk_dep,
   ]
 
   server_dependencies = [
+    vamphostsdk_dep,
     dl_dep,
   ]
   
@@ -334,7 +395,6 @@ elif system == 'windows'
     '-lbz2',
     '-lrubberband',
     '-lfftw3',
-    '-lfftw3f',
     '-lsndfile',
     '-logg',
     '-lopusfile',
@@ -483,17 +543,23 @@ bq_files = [
   'bqaudiostream/src/AudioStreamExceptions.cpp',
 ]
 
-vamp_plugin_sdk_files = [
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginBufferingAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginChannelAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginHostAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginInputDomainAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginLoader.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginSummarisingAdapter.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp',
-  'vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp',
-]
+if vamphostsdk_dep.found()
+  config_summary += { 'Vamp SDK': 'system' }
+  vamphostsdk_files = []
+else
+  config_summary += { 'Vamp SDK': 'bundled' }
+  vamphostsdk_files = [
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginBufferingAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginChannelAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginHostAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginInputDomainAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginLoader.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginSummarisingAdapter.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/PluginWrapper.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/RealTime.cpp',
+    'vamp-plugin-sdk/src/vamp-hostsdk/Files.cpp',
+  ]
+endif
 
 dataquay_files = [
   'dataquay/src/Connection.cpp',
@@ -702,7 +768,7 @@ svcore_lib = static_library(
   'svcore',
   capnp_gen_cpp_target,
   bq_files,
-  vamp_plugin_sdk_files,
+  vamphostsdk_files,
   dataquay_moc_files,
   svcore_moc_files,
   dataquay_files,
@@ -827,7 +893,6 @@ svgui_files = [
   'svgui/widgets/CSVAudioFormatDialog.cpp',
   'svgui/widgets/CSVExportDialog.cpp',
   'svgui/widgets/CSVFormatDialog.cpp',
-  'svgui/widgets/Fader.cpp',
   'svgui/widgets/InteractiveFileFinder.cpp',
   'svgui/widgets/IconLoader.cpp',
   'svgui/widgets/ImageDialog.cpp',
@@ -904,7 +969,6 @@ svgui_moc_files = qt.preprocess(
   'svgui/widgets/CSVAudioFormatDialog.h',
   'svgui/widgets/CSVExportDialog.h',
   'svgui/widgets/CSVFormatDialog.h',
-  'svgui/widgets/Fader.h',
   'svgui/widgets/InteractiveFileFinder.h',
   'svgui/widgets/ImageDialog.h',
   'svgui/widgets/ItemEditDialog.h',
@@ -1205,7 +1269,7 @@ executable(
   'piper-vamp-cpp/ext/json11/json11.cpp',
   'piper-vamp-cpp/vamp-server/simple-server.cpp',
   capnp_gen_cpp_target,
-  vamp_plugin_sdk_files,
+  vamphostsdk_files,
   include_directories: [
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
@@ -1232,7 +1296,7 @@ executable(
   'piper-vamp-cpp/ext/json11/json11.cpp',
   'piper-vamp-cpp/vamp-server/convert.cpp',
   capnp_gen_cpp_target,
-  vamp_plugin_sdk_files,
+  vamphostsdk_files,
   include_directories: [
     'vamp-plugin-sdk',
     'piper-vamp-cpp',
@@ -1254,3 +1318,10 @@ executable(
   install: true,
 )
 
+summary({'prefix': get_option('prefix'),
+         'bindir': get_option('bindir'),
+         'libdir': get_option('libdir'),
+         'datadir': get_option('datadir'),
+        }, section: 'Directories')
+
+summary(config_summary, section: 'Configuration', bool_yn: true)

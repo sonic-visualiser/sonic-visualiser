@@ -1,4 +1,104 @@
 
+Changes in Sonic Visualiser v4.5.2 (3 May 2023) since the previous release 4.5.1:
+
+ - Support multi-line text labels on time instants
+ 
+ - Improve refresh and rendering of text labels in various layers
+
+ - Improve abbreviation of layer names in the key at bottom-right of a
+   pane
+
+ - Fix repeated writes to settings file when rendering time-ruler
+   layers at close zoom levels
+
+ - Use system Vamp host SDK if provided
+
+
+Changes in Sonic Visualiser v4.5.1 (7 Nov 2022) since the previous release 4.5:
+
+ - Update to use Rubber Band v3 with its higher quality timestretcher
+   (the older, lower-CPU one is still available in preferences). This
+   means the build requires rubberband-3.0.0 or newer, so you may need
+   to install it separately if building on an older system.
+
+ - Fix inability to select Hz as the unit of a layer following import
+
+ - Provisional fix to bailing out on startup when invoked with "Open
+   With..." on Mac
+
+ - Fix nonsense display when showing frequency scaled points with value
+   of 0Hz
+
+
+Changes in Sonic Visualiser v4.5 (31 March 2022) since the previous release 4.4:
+
+ - Add option to switch off the interpolation used in the waveform
+   view for zoom levels closer than one pixel per frame: sometimes it
+   can be an unnecessary distraction. With interpolation switched off,
+   the individual samples are shown as unconnected points instead
+
+ - Make it possible to toggle segment colouring in the segmentation
+   view of the time value layer, as well as toggling segment division
+   lines
+
+ - When importing CSV files, if a column heading indicates a likely
+   unit for the column, use it by default; also remember last user
+   settings for the import dialog
+
+ - Ensure the Choose Default Template option on the templates menu can
+   be reached even when no file is loaded
+ 
+ - Give the spectrum layer the same effective scale range as it had
+   before the dB scale fix in v4.4, fixing the accidental halving of
+   the visible range for that layer in v4.4
+
+ - Fix hang when opening two plugin parameter dialogs at once
+ 
+ - Fix crash when rendering slice or spectrum layers scrolled to
+   earlier than the start of the audio or later than the end
+ 
+ - Fix crash when more than one audio file is supplied at the command
+   line with a default session template that requires regenerating one
+   or more feature extraction layers and layer generation produces an
+   error or warning
+ 
+ - Fix failure to exit fully if the window is closed before plugin
+   scan is complete at startup
+ 
+
+Changes in Sonic Visualiser v4.4 (17 September 2021) since the previous release 4.3:
+
+ - Update Mac build to add support for Apple M1 (arm64) architecture:
+   the official package is now a universal binary app, and the arm64
+   slice can use both (existing) x86_64 and (future) arm64 Vamp plugins
+
+ - Fix long-standing idiosycratic choice of dB scale, so as to conform
+   to conventional usage for root-power quantities. That is, dB values
+   for audio signals are now 20 x log10 rather than 10 x log10. Power
+   and power-like signals (where units are available) remain 10 x
+   log10
+
+ - Fix time lag between visual position of playback pointer and actual
+   audio played, particularly when playing files resampled from one
+   rate to another
+
+ - When recording audio into an empty session with an active session
+   template that includes one or more plugin transforms, re-run the
+   transforms when recording finishes, instead of only when the
+   recorded model is first created (so as to get proper results for
+   the full recording)
+
+ - Fix failure to re-run transforms when loading a session or template
+   before the initial plugin scan has completed
+
+ - Fix misalignment and potential crash when rendering 3d plots with
+   variant sample rates
+
+ - Change interpretation of modifiers (shift/alt) for the mouse
+   scroll-wheel, and the documentation for them, so as to be
+   consistent with one another and with other contexts
+
+
 Changes in Sonic Visualiser v4.3 (18 January 2021) since the previous release 4.2:
 
  - Fix failure to activate the Align button on startup, even when the

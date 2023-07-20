@@ -156,6 +156,7 @@ protected slots:
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
+    void installedTransformsPopulated();
     void populateTransformsMenu();
     
     virtual void betaReleaseWarning();
@@ -233,6 +234,8 @@ protected:
 
     QFileSystemWatcher      *m_templateWatcher;
 
+    bool                     m_shouldStartOSCQueue;
+    
     Surveyer                *m_surveyer;
     VersionTester           *m_versionTester;
     QString                  m_newerVersionIs;
@@ -295,15 +298,6 @@ protected:
     void setupHelpMenu();
     void setupExistingLayersMenus();
     void setupToolbars();
-
-    class TransformPopulater : public QThread {
-    public:
-        TransformPopulater(MainWindow *mw) : QThread(mw), m_mw(mw) { }
-        void run() override;
-    private:
-        MainWindow *m_mw;
-    };
-    TransformPopulater *m_transformPopulater;
     
     void addPane(const LayerConfiguration &configuration, QString text);
 

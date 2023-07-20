@@ -39,9 +39,9 @@ build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-d
 
 ## 2. Get the Sonic Visualiser code
 
-If you are building from an official Sonic Visualiser release source
-package, unpack it, `cd` to the unpacked directory, and skip straight
-to step 3.
+If you have an official Sonic Visualiser release source package (with
+a name like `sonic-visualiser-X.Y.tar.gz`), unpack it, `cd` to the
+unpacked directory, and skip straight to step 3.
 
 Otherwise:
 
@@ -78,6 +78,9 @@ called `build` in which the magic will happen:
 ```
 $ meson build
 ```
+
+(If this fails with an error like `Include dir bqvec does not exist`,
+go back and re-read step 2 above.)
 
 And now compile the code into the `build` directory using the Ninja
 build tool:

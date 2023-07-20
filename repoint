@@ -4,15 +4,39 @@
 # practice, not bad: clearer, safer, less error-prone.
 # shellcheck disable=SC2002
 
+# User configuration for preferred SML implementation (polyml, mlton,
+# mlkit, smlnj)
 sml="$REPOINT_SML"
 
 set -eu
 
-# avoid gussying up output
+# Avoid gussying up output
 export HGPLAIN=true
 
 mydir=$(dirname "$0")
 program="$mydir/repoint.sml"
+
+lockfile="$mydir/.repoint.pid"
+
+waitcount=0
+while ! ( set -o noclobber ; echo $$ > "$lockfile" ) 2>/dev/null ; do
+    other=$(cat "$lockfile")
+    case "$waitcount" in
+        *0) echo 1>&2
+            echo "Repoint (pid $other) is already running here, waiting for it to complete" 1>&2
+            echo "(^C to abandon, or delete $lockfile if there is no such process)" 1>&2;;
+        179) echo "ERROR: Waited too long, giving up" 1>&2
+             exit 1;;
+        *) ;;
+    esac
+    sleep 1
+    echo -n . 1>&2
+    waitcount=$(($waitcount + 1))
+done
+
+cleanup_lockfile() {
+    rm -f "$lockfile"
+}
 
 hasher=
 local_install=
@@ -28,19 +52,32 @@ if [ -w "$mydir" ]; then
     fi
 fi
 
+gen_sml=
+gen_out_local=
+gen_out_global=
+gen_out_exec=
 if [ -n "$local_install" ]; then
     hash=$(echo "$sml" | cat "$program" - | $hasher | cut -c1-16)
-    gen_sml=$mydir/.repoint-$hash.sml
-    gen_out=$mydir/.repoint-$hash.bin
-    trap 'rm -f $gen_sml' 0
+    gen_sml="$mydir/.repoint-$hash.sml"
+    gen_out_local="$mydir/.repoint-$hash.bin"
+    gen_out_exec="$gen_out_local"
 else
     gen_sml=$(mktemp /tmp/repoint-XXXXXXXX.sml)
-    gen_out=$(mktemp /tmp/repoint-XXXXXXXX.bin)
-    trap 'rm -f $gen_sml $gen_out' 0
+    gen_out_global=$(mktemp /tmp/repoint-XXXXXXXX.bin)
+    gen_out_exec="$gen_out_global"
 fi
 
-if [ -x "$gen_out" ]; then
-    exec "$gen_out" "$@"
+cleanup() {
+    if [ -n "$gen_sml" ]; then rm -f "$gen_sml"; fi
+    if [ -n "$gen_out_global" ]; then rm -f "$gen_out_global"; fi
+    cleanup_lockfile
+}
+
+trap cleanup 0
+
+if [ -x "$gen_out_exec" ]; then
+    "$gen_out_exec" "$@"
+    exit $?
 fi
 
 # We need one of Poly/ML, SML/NJ, MLton, or MLKit. Since we're running
@@ -111,28 +148,28 @@ done
 case "$sml" in
     polyml)
         if [ -n "$local_install" ] && polyc --help >/dev/null 2>&1 ; then
-            if [ ! -x "$gen_out" ]; then
-                polyc -o "$gen_out" "$program"
+            if [ ! -x "$gen_out_exec" ]; then
+                polyc -o "$gen_out_exec" "$program"
             fi
-	    "$gen_out" "$@"
+	    "$gen_out_exec" "$@"
         else
             echo 'use "'"$program"'"; repoint ['"$arglist"'];' |
                 poly -q --error-exit
         fi ;;
     mlton)
-        if [ ! -x "$gen_out" ]; then
+        if [ ! -x "$gen_out_exec" ]; then
 	    echo "[Precompiling Repoint binary...]" 1>&2
 	    echo "val _ = main ()" | cat "$program" - > "$gen_sml"
-	    mlton -output "$gen_out" "$gen_sml"
+	    mlton -output "$gen_out_exec" "$gen_sml"
         fi
-	"$gen_out" "$@" ;;
+	"$gen_out_exec" "$@" ;;
     mlkit)
-        if [ ! -x "$gen_out" ]; then
+        if [ ! -x "$gen_out_exec" ]; then
 	    echo "[Precompiling Repoint binary...]" 1>&2
 	    echo "val _ = main ()" | cat "$program" - > "$gen_sml"
-	    mlkit -output "$gen_out" "$gen_sml"
+	    mlkit -output "$gen_out_exec" "$gen_sml"
         fi
-	"$gen_out" "$@" ;;
+	"$gen_out_exec" "$@" ;;
     smlnj)
 	cat "$program" | (
 	    cat <<EOF

@@ -56,6 +56,8 @@ piper-convert
 build_win32
 build_win64
 build_win64_debug
+build-arm64
+build-x86_64
 *.AppImage
 *.AppDir
 Dockerfile*.gen
