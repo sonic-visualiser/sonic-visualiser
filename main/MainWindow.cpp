@@ -227,12 +227,7 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
     int overviewHeight = m_viewManager->scalePixelSize(35);
     if (overviewHeight < 40) overviewHeight = 40;
     m_overview->setFixedHeight(overviewHeight);
-#ifndef _WIN32
-    // For some reason, the contents of the overview never appear if we
-    // make this setting on Windows.  I have no inclination at the moment
-    // to track down the reason why.
     m_overview->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
-#endif
     connect(m_overview, SIGNAL(contextHelpChanged(const QString &)),
             this, SLOT(contextHelpChanged(const QString &)));
 
