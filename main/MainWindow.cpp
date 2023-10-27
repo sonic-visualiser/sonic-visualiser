@@ -4223,10 +4223,8 @@ MainWindow::addLayer()
         if (source && dest) {
             //!!!???
             dest->setSliceableModel(source->getSliceableModel());
-            connect(source, SIGNAL(sliceableModelReplaced(const Model *, const Model *)),
-                    dest, SLOT(sliceableModelReplaced(const Model *, const Model *)));
-            connect(m_document, SIGNAL(modelAboutToBeDeleted(Model *)),
-                    dest, SLOT(modelAboutToBeDeleted(Model *)));
+            connect(source, SIGNAL(sliceableModelReplaced(ModelId, ModelId)),
+                    dest, SLOT(sliceableModelReplaced(ModelId, ModelId)));
         }
         m_document->addLayerToView(pane, newLayer);
         m_paneStack->setCurrentLayer(pane, newLayer);
