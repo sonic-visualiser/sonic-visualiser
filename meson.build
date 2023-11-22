@@ -17,10 +17,10 @@ conf = configuration_data()
 conf.set('version', meson.project_version())
 configure_file(input: 'version.h.in', output: 'version.h', configuration: conf)
 
-qt = import('qt5')
+qt = import('qt6')
 
 qt_dep = dependency(
-  'qt5',
+  'qt6',
   modules: [
     'Core', 'Gui', 'Widgets', 'Xml', 'Network', 'Svg', 'Test',
   ],
@@ -214,10 +214,10 @@ elif system == 'darwin'
   rc = []
 
   general_defines += [
-    '-mmacosx-version-min=10.12'
+    '-mmacosx-version-min=10.15'
   ]
   general_link_args += [
-    '-mmacosx-version-min=10.12'
+    '-mmacosx-version-min=10.15'
   ]
   
   feature_defines = [

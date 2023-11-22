@@ -4,13 +4,13 @@
       "pin": "7df85ecf98d9477c1ac5a36f51807062e00d8695"
     },
     "svcore": {
-      "pin": "531c5f1fe8d541fb630b14ef256598b3cc8fc0a6"
+      "pin": "333bf10369fd0b778490e532378d487abc7a34f2"
     },
     "svgui": {
-      "pin": "3ec998d4ad5d168dd0ad33f0c2f78bbe92bad607"
+      "pin": "8a20801771d23020eb55b97de201b68e35b90705"
     },
     "svapp": {
-      "pin": "fb2528c27975c8f97d510305700afb84067c4a19"
+      "pin": "edb47e3d6d21b751a9f9b979da7ea41de117405e"
     },
     "checker": {
       "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
