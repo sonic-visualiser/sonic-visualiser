@@ -3882,7 +3882,7 @@ MainWindow::commitData(bool mayAskUser)
 #ifndef _WIN32
         QString fname = QString("tmp-%1-%2.sv")
             .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"))
-            .arg(QProcess().pid());
+            .arg(QProcess().processId());
 #else
         QString fname = QString("tmp-%1.sv")
             .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"));
