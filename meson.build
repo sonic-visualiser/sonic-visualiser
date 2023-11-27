@@ -49,26 +49,32 @@ if get_option('buildtype').startswith('release')
     '-DNO_TIMING',
     '-DNO_HIT_COUNTS',
   ]
-if compiler == 'clang'
-  general_defines += [
-    '-ffast-math',
-    '-Wno-deprecated-copy', # Qt currently hits lots of these internally
-  ]
-elif compiler == 'gcc'
-  general_defines += [
-    '-ffast-math',
-  ]
-elif compiler == 'msvc'
-  general_defines += [
-    '-fp:fast',
-    '-wd4068', # unknown pragma (we have lots of pragma 'GCC')
-    '-wd4267', # conversion from size_t to smaller integral type
-    '-wd4996', # deprecated functions, including annoying warnings about POSIX
-    '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
-  ]
-endif # compiler
+  if compiler == 'clang'
+    general_defines += [
+      '-ffast-math',
+      '-Wno-deprecated-copy', # Qt currently hits lots of these internally
+    ]
+  elif compiler == 'gcc'
+    general_defines += [
+      '-ffast-math',
+    ]
+  elif compiler == 'msvc'
+    general_defines += [
+      '-fp:fast',
+      '-wd4068', # unknown pragma (we have lots of pragma 'GCC')
+      '-wd4267', # conversion from size_t to smaller integral type
+      '-wd4996', # deprecated functions, including annoying warnings about POSIX
+      '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
+    ]
+  endif # compiler
 else # buildtype
   config_summary += { 'Build type': 'debug' }
+  if compiler == 'msvc'
+    general_defines += [
+      '-DNO_TIMING',
+      '-DNO_HIT_COUNTS',
+    ]
+  endif # compiler
 endif # get_option('buildtype')
 
 svcore_moc_args = []
@@ -278,7 +284,7 @@ elif system == 'darwin'
     'sv-dependency-builds/osx/include',
     'sv-dependency-builds/osx/include/opus',
   ]
-  
+
   feature_additional_libs = [
     '-L' + svdeps_libdir,
     '-lbz2',
@@ -389,9 +395,20 @@ elif system == 'windows'
       'sv-dependency-builds/win64-msvc/include/opus',
     ]
   endif # architecture
+
+  if get_option('buildtype').startswith('release')
+    feature_additional_libpaths =  [
+      '-L' + svdeps_dir / 'lib',
+    ]
+  else
+    feature_additional_libpaths =  [
+      '-L' + svdeps_dir / 'lib/debug',
+      '-L' + svdeps_dir / 'lib',
+    ]
+  endif
   
   feature_additional_libs = [
-    '-L' + svdeps_dir / 'lib',
+    feature_additional_libpaths,
     '-lbz2',
     '-lrubberband',
     '-lfftw3',
