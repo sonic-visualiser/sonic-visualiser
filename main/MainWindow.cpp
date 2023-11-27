@@ -105,6 +105,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QAction>
+#include <QActionGroup>
 #include <QMenuBar>
 #include <QToolBar>
 #include <QInputDialog>
@@ -114,14 +115,13 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTextStream>
-#include <QTextCodec>
 #include <QProcess>
 #include <QShortcut>
 #include <QSettings>
 #include <QDateTime>
 #include <QProcess>
 #include <QCheckBox>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QScrollArea>
 #include <QCloseEvent>
 #include <QDialogButtonBox>
@@ -1855,7 +1855,7 @@ MainWindow::populateTransformsMenu()
 
             QString maker = *j;
             if (maker == "") maker = tr("Unknown");
-            maker.replace(QRegExp(tr(" [\\(<].*$")), "");
+            maker.replace(QRegularExpression(tr(" [\\(<].*$")), "");
 
             makerMenus[*i][maker] = new SubdividingMenu(maker, 30, 40);
             makerMenus[*i][maker]->setTearOffEnabled(true);
@@ -1896,7 +1896,7 @@ MainWindow::populateTransformsMenu()
 
         QString maker = transforms[i].maker;
         if (maker == "") maker = tr("Unknown");
-        maker.replace(QRegExp(tr(" [\\(<].*$")), "");
+        maker.replace(QRegularExpression(tr(" [\\(<].*$")), "");
 
         QString pluginName = name.section(": ", 0, 0);
         QString output = name.section(": ", 1);
@@ -3659,7 +3659,7 @@ MainWindow::saveSessionAsTemplate()
     if (d->exec() == QDialog::Accepted) {
 
         QString name = lineEdit->text();
-        name.replace(QRegExp("[^\\w\\s\\.\"'-]"), "_");
+        name.replace(QRegularExpression("[^\\w\\s\\.\"'-]"), "_");
 
         ResourceFinder rf;
         QString dir = rf.getResourceSaveDir("templates");
@@ -5351,19 +5351,19 @@ MainWindow::whatsNew()
 
     // Un-wrap indented paragraphs (assume they are always preceded by
     // an empty line, so don't get merged into prior para)
-    text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
+    text.replace(QRegularExpression("(.)\n +(.)"), "\\1 \\2");
 
     // Rest of para following a " - " at start becomes bulleted entry
-    text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
+    text.replace(QRegularExpression("\n - ([^\n]+)"), "\n<li>\\1</li>");
 
     // Line-ending ":" introduces the bulleted list
-    text.replace(QRegExp(": *\n"), ":\n<ul>\n");
+    text.replace(QRegularExpression(": *\n"), ":\n<ul>\n");
 
     // Blank line (after unwrapping) ends the bulleted list
-    text.replace(QRegExp("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
+    text.replace(QRegularExpression("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
 
     // Text leading up to that line-ending ":" becomes bold heading
-    text.replace(QRegExp("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
+    text.replace(QRegularExpression("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
     
     textEdit->setHtml(text);
     textEdit->setReadOnly(true);

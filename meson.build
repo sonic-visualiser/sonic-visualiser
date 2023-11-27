@@ -344,7 +344,7 @@ elif system == 'windows'
     '-DUNICODE',
     '-D_USE_MATH_DEFINES',
     '-DCAPNP_LITE',
-    '-D_HAS_STD_BYTE=0',
+    '-D_HAS_STD_BYTE=1',
   ]
   
   feature_defines = [
@@ -422,7 +422,7 @@ elif system == 'windows'
     ]
   elif architecture == 'x86_64'
     feature_additional_libs += [
-      '-NODEFAULTLIB:LIBCMT',
+#      '-NODEFAULTLIB:LIBCMT',
       '-lsord',
       '-lserd',
       '-lmfplat',
@@ -925,7 +925,6 @@ svgui_files = [
   'svgui/widgets/SubdividingMenu.cpp',
   'svgui/widgets/TextAbbrev.cpp',
   'svgui/widgets/Thumbwheel.cpp',
-  'svgui/widgets/TipDialog.cpp',
   'svgui/widgets/TransformFinder.cpp',
   'svgui/widgets/UnitConverter.cpp',
   'svgui/widgets/WindowShapePreview.cpp',
@@ -999,7 +998,6 @@ svgui_moc_files = qt.preprocess(
   'svgui/widgets/SelectableLabel.h',
   'svgui/widgets/SubdividingMenu.h',
   'svgui/widgets/Thumbwheel.h',
-  'svgui/widgets/TipDialog.h',
   'svgui/widgets/TransformFinder.h',
   'svgui/widgets/UnitConverter.h',
   'svgui/widgets/WindowShapePreview.h',

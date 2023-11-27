@@ -22,7 +22,6 @@
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
 #include "data/fileio/FileSource.h"
-#include "widgets/TipDialog.h"
 #include "widgets/InteractiveFileFinder.h"
 #include "framework/TransformUserConfigurator.h"
 #include "transform/TransformFactory.h"
@@ -438,9 +437,12 @@ main(int argc, char **argv)
     QTranslator svTranslator;
     QString svTrName = QString("sonic-visualiser_%1").arg(language);
     SVDEBUG << "Loading " << svTrName << "... ";
-    svTranslator.load(svTrName, ":i18n");
-    SVDEBUG << "Done" << endl;
-    application.installTranslator(&svTranslator);
+    if (svTranslator.load(svTrName, ":i18n")) {
+        SVDEBUG << "Done" << endl;
+        application.installTranslator(&svTranslator);
+    } else {
+        SVDEBUG << "Unable to load" << endl;
+    }
 
     StoreStartupLocale();
 
@@ -577,7 +579,7 @@ main(int argc, char **argv)
     {
         char *cwisdom = fftwf_export_wisdom_to_string();
         if (cwisdom) {
-            settings.setValue("wisdom", cwisdom);
+            settings.setValue("wisdom", QString::fromLocal8Bit(cwisdom));
             free(cwisdom);
         }
     }
@@ -586,7 +588,7 @@ main(int argc, char **argv)
     {
         char *cwisdom = fftw_export_wisdom_to_string();
         if (cwisdom) {
-            settings.setValue("wisdom_d", cwisdom);
+            settings.setValue("wisdom_d", QString::fromLocal8Bit(cwisdom));
             free(cwisdom);
         }
     }
