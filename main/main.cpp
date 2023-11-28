@@ -262,6 +262,8 @@ main(int argc, char **argv)
     QApplication::setDesktopFileName("sonic-visualiser");
 #endif
 
+    SVCerr::installQtMessageHandler();
+
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::tr("\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation."));
     parser.addHelpOption();
