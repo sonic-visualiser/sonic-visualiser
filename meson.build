@@ -51,16 +51,13 @@ if get_option('buildtype').startswith('release')
   ]
   if compiler == 'clang'
     general_defines += [
-      '-ffast-math',
       '-Wno-deprecated-copy', # Qt currently hits lots of these internally
     ]
   elif compiler == 'gcc'
     general_defines += [
-      '-ffast-math',
     ]
   elif compiler == 'msvc'
     general_defines += [
-      '-fp:fast',
       '-wd4068', # unknown pragma (we have lots of pragma 'GCC')
       '-wd4267', # conversion from size_t to smaller integral type
       '-wd4996', # deprecated functions, including annoying warnings about POSIX
