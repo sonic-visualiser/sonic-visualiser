@@ -10,7 +10,7 @@ project(
     'buildtype=release',
     'b_ndebug=if-release',
   ],
-  meson_version: '>= 0.54.0'
+  meson_version: '>= 0.57.0'
 )
 
 conf = configuration_data()
