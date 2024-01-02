@@ -30,6 +30,7 @@ qt_dep = dependency(
 system = host_machine.system()
 architecture = host_machine.cpu_family()
 compiler = meson.get_compiler('cpp').get_id()
+buildtype = get_option('buildtype')
 
 general_defines = [
   '-DHAVE_PIPER',
@@ -39,12 +40,14 @@ general_defines = [
 
 general_link_args = []
 
-config_summary = { 'Compiler': compiler,
-		   'Architecture': architecture,
-		   'System': system }
+config_summary = {
+  'Compiler': compiler,
+  'Architecture': architecture,
+  'System': system,
+  'Build type': buildtype
+}
 
-if get_option('buildtype').startswith('release')
-  config_summary += { 'Build type': 'release' }
+if buildtype.startswith('release')
   general_defines += [
     '-DNO_TIMING',
     '-DNO_HIT_COUNTS',
@@ -64,14 +67,11 @@ if get_option('buildtype').startswith('release')
       '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
     ]
   endif # compiler
-else # buildtype
-  config_summary += { 'Build type': 'debug' }
-  if compiler == 'msvc'
-    general_defines += [
-      '-DNO_TIMING',
-      '-DNO_HIT_COUNTS',
-    ]
-  endif # compiler
+elif buildtype.startswith('debug')
+  general_defines += [
+    '-DWANT_TIMING',
+    '-DWANT_HIT_COUNTS',
+  ]
 endif # get_option('buildtype')
 
 svcore_moc_args = []
@@ -615,6 +615,7 @@ svcore_files = [
   'svcore/base/EventSeries.cpp',
   'svcore/base/Exceptions.cpp',
   'svcore/base/HelperExecPath.cpp',
+  'svcore/base/HitCount.cpp',
   'svcore/base/LogRange.cpp',
   'svcore/base/Pitch.cpp',
   'svcore/base/PlayParameterRepository.cpp',

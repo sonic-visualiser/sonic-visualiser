@@ -598,6 +598,7 @@ main(int argc, char **argv)
     settings.endGroup();
 
     FileSource::debugReport();
+    Profiles::getInstance()->dump();
     
     delete gui;
 

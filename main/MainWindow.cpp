@@ -358,8 +358,6 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
 
 MainWindow::~MainWindow()
 {
-//    SVDEBUG << "MainWindow::~MainWindow" << endl;
-
     delete m_keyReference;
     delete m_activityLog;
     delete m_unitConverter;
@@ -367,8 +365,6 @@ MainWindow::~MainWindow()
     delete m_layerTreeDialog;
     delete m_versionTester;
     delete m_surveyer;
-    Profiles::getInstance()->dump();
-//    SVDEBUG << "MainWindow::~MainWindow finishing" << endl;
 }
 
 void
