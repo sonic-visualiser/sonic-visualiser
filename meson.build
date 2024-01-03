@@ -1160,7 +1160,7 @@ executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: true,
+  win_subsystem: 'windows',
   install: true,
 )
 
@@ -1182,7 +1182,7 @@ svcore_base_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 svcore_system_test_exe = executable(
@@ -1203,7 +1203,7 @@ svcore_system_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 svcore_data_model_test_exe = executable(
@@ -1225,7 +1225,7 @@ svcore_data_model_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 svcore_data_fileio_test_exe = executable(
@@ -1248,7 +1248,7 @@ svcore_data_fileio_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 test('svcore-base', svcore_base_test_exe)
@@ -1273,7 +1273,7 @@ executable(
   link_args: [
     general_link_args,
   ],
-  gui_app: false,
+  win_subsystem: 'console',
   install: true,
 )
 
@@ -1300,7 +1300,7 @@ executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false,
+  win_subsystem: 'console',
   install: true,
 )
 
@@ -1327,7 +1327,7 @@ executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false,
+  win_subsystem: 'console',
   install: true,
 )
 
