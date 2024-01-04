@@ -27,7 +27,7 @@ set -u
 sv="../build/sonic-visualiser"
 if [ ! -f "$sv" -o ! -x "$sv" ]; then
     echo "This script must be run from the sonic-visualiser/export-tests directory" 1>&2
-    echo "It expects a sonic-visualiser binary to be found in ./build/" 1>&2
+    echo "It expects a sonic-visualiser binary to be found in ../build/" 1>&2
     exit 1
 fi
 

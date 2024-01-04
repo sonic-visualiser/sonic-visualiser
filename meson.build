@@ -35,7 +35,6 @@ buildtype = get_option('buildtype')
 general_defines = [
   '-DHAVE_PIPER',
   '-DHAVE_PLUGIN_CHECKER_HELPER',
-  '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00'
 ]
 
 general_link_args = []

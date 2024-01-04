@@ -466,7 +466,7 @@ MainWindow::endFullScreen()
 {
     // these were only created in goFullScreen:
     QObjectList cl = m_paneStack->children();
-    foreach (QObject *o, cl) {
+    for (QObject *o : cl) {
         QShortcut *sc = qobject_cast<QShortcut *>(o);
         if (sc) delete sc;
     }
@@ -2073,12 +2073,12 @@ MainWindow::setupTemplatesMenu()
 
     // (ordered by name)
     std::set<QString> byName;
-    foreach (QString t, templates) {
+    for (QString t : templates) {
         if (!t.startsWith(":")) havePersonal = true;
         byName.insert(QFileInfo(t).baseName());
     }
 
-    foreach (QString t, byName) {
+    for (QString t : byName) {
         if (t.toLower() == "default") continue;
         action = m_templatesMenu->addAction(t);
         // All the apply actions need to have a main model to be
