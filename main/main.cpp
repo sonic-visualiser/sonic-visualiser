@@ -319,8 +319,6 @@ main(int argc, char **argv)
     
     args = parser.positionalArguments();
 
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
-
     signal(SIGINT,  signalHandler);
     signal(SIGTERM, signalHandler);
 

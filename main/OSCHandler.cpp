@@ -54,7 +54,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     if (message.getMethod() == "open") {
 
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
             QString path = message.getArg(0).toString();
             if (open(path, ReplaceMainModel) == FileOpenSucceeded) {
                 SVDEBUG << "OSCHandler: Opened path \""
@@ -72,7 +72,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "openadditional") {
 
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
             QString path = message.getArg(0).toString();
             if (open(path, CreateAdditionalModel) == FileOpenSucceeded) {
                 SVDEBUG << "OSCHandler: Opened additional path \""
@@ -91,7 +91,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         int n = 0;
         if (message.getMethod() == "recent" &&
             message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::Int)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::Int))) {
             n = message.getArg(0).toInt() - 1;
         }
         std::vector<QString> recent = m_recentFiles.getRecent();
@@ -113,7 +113,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         QString path;
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
                 SVCERR << "OSCHandler: Refusing to overwrite existing file in save" << endl;
@@ -133,7 +133,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         QString path;
         if (getMainModel()) {
             if (message.getArgCount() == 1 &&
-                message.getArg(0).canConvert(QVariant::String)) {
+                message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
                 path = message.getArg(0).toString();
                 if (QFileInfo(path).exists()) {
                     SVCERR << "OSCHandler: Refusing to overwrite existing file in export" << endl;
@@ -162,7 +162,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         QString path;
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
                 SVCERR << "OSCHandler: Refusing to overwrite existing file in layer export" << endl;
@@ -197,7 +197,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         QString path;
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
                 SVCERR << "OSCHandler: Refusing to overwrite existing file in image export" << endl;
@@ -238,7 +238,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         QString path;
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
             path = message.getArg(0).toString();
             if (QFileInfo(path).exists()) {
                 SVCERR << "OSCHandler: Refusing to overwrite existing file in SVG export" << endl;
@@ -282,17 +282,17 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             if (message.getArgCount() == 1) {
 
-                if (message.getArg(0).canConvert(QVariant::String) &&
+                if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                     message.getArg(0).toString() == "selection") {
 
                     selection = true;
 
-                } else if (message.getArg(0).canConvert(QVariant::String) &&
+                } else if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                            message.getArg(0).toString() == "end") {
 
                     frame = getMainModel()->getEndFrame();
 
-                } else if (message.getArg(0).canConvert(QVariant::Double)) {
+                } else if (message.getArg(0).canConvert(QMetaType(QMetaType::Double))) {
 
                     double time = message.getArg(0).toDouble();
                     if (time < 0.0) time = 0.0;
@@ -338,7 +338,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (message.getArgCount() == 1) {
 
-            if (message.getArg(0).canConvert(QVariant::String) &&
+            if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                 message.getArg(0).toString() == "similar") {
 
                 SVDEBUG << "OSCHandler: Calling ffwdSimilar" << endl;
@@ -354,7 +354,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
         if (message.getArgCount() == 1) {
 
-            if (message.getArg(0).canConvert(QVariant::String) &&
+            if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                 message.getArg(0).toString() == "similar") {
 
                 SVDEBUG << "OSCHandler: Calling rewindSimilar" << endl;
@@ -381,7 +381,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "loop") {
 
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
 
             QString str = message.getArg(0).toString();
             if (str == "on") {
@@ -396,7 +396,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "solo") {
 
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
 
             QString str = message.getArg(0).toString();
             if (str == "on") {
@@ -419,8 +419,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             bool done = false;
 
             if (message.getArgCount() == 2 &&
-                message.getArg(0).canConvert(QVariant::Double) &&
-                message.getArg(1).canConvert(QVariant::Double)) {
+                message.getArg(0).canConvert(QMetaType(QMetaType::Double)) &&
+                message.getArg(1).canConvert(QMetaType(QMetaType::Double))) {
                 
                 double t0 = message.getArg(0).toDouble();
                 double t1 = message.getArg(1).toDouble();
@@ -451,7 +451,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
                 }
 
             } else if (message.getArgCount() == 1 &&
-                       message.getArg(0).canConvert(QVariant::String)) {
+                       message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
                 
                 QString str = message.getArg(0).toString();
                 if (str == "none") {
@@ -486,11 +486,11 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (getMainModel()) {
 
             if (message.getArgCount() >= 1 &&
-                message.getArg(0).canConvert(QVariant::String)) {
+                message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
 
                 int channel = -1;
                 if (message.getArgCount() == 2 &&
-                    message.getArg(0).canConvert(QVariant::Int)) {
+                    message.getArg(0).canConvert(QMetaType(QMetaType::Int))) {
                     channel = message.getArg(0).toInt();
                     if (channel < -1 ||
                         channel >= int(getMainModel()->getChannelCount())) {
@@ -543,8 +543,8 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "set") {
 
         if (message.getArgCount() == 2 &&
-            message.getArg(0).canConvert(QVariant::String) &&
-            message.getArg(1).canConvert(QVariant::Double)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
+            message.getArg(1).canConvert(QMetaType(QMetaType::Double))) {
 
             QString property = message.getArg(0).toString();
             float value = (float)message.getArg(1).toDouble();
@@ -604,9 +604,9 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
             Pane *pane = m_paneStack->getCurrentPane();
             if (pane &&
                 message.getArgCount() == 3 &&
-                message.getArg(0).canConvert(QVariant::String) &&
-                message.getArg(1).canConvert(QVariant::String) &&
-                message.getArg(2).canConvert(QVariant::String)) {
+                message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
+                message.getArg(1).canConvert(QMetaType(QMetaType::QString)) &&
+                message.getArg(2).canConvert(QMetaType(QMetaType::QString))) {
                 if (message.getArg(0).toString() == "pane") {
                     container = pane->getPropertyContainer(0);
                 } else if (message.getArg(0).toString() == "layer") {
@@ -632,12 +632,12 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         bool wantLayer = false;
 
         if (message.getArgCount() >= 1 &&
-            message.getArg(0).canConvert(QVariant::Int)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::Int))) {
 
             paneIndex = message.getArg(0).toInt() - 1;
 
             if (message.getArgCount() >= 2 &&
-                message.getArg(1).canConvert(QVariant::Int)) {
+                message.getArg(1).canConvert(QMetaType(QMetaType::Int))) {
                 wantLayer = true;
                 layerIndex = message.getArg(1).toInt() - 1;
             }
@@ -668,7 +668,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "delete") {
 
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
             
             QString target = message.getArg(0).toString();
 
@@ -695,19 +695,19 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "zoom") {
 
         if (message.getArgCount() == 1) {
-            if (message.getArg(0).canConvert(QVariant::String) &&
+            if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                 message.getArg(0).toString() == "in") {
                 zoomIn();
-            } else if (message.getArg(0).canConvert(QVariant::String) &&
+            } else if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                        message.getArg(0).toString() == "out") {
                 zoomOut();
-            } else if (message.getArg(0).canConvert(QVariant::String) &&
+            } else if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                        message.getArg(0).toString() == "default") {
                 zoomDefault();
-            } else if (message.getArg(0).canConvert(QVariant::String) &&
+            } else if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                        message.getArg(0).toString() == "fit") {
                 zoomToFit();
-            } else if (message.getArg(0).canConvert(QVariant::Double)) {
+            } else if (message.getArg(0).canConvert(QMetaType(QMetaType::Double))) {
                 double level = message.getArg(0).toDouble();
                 Pane *currentPane = m_paneStack->getCurrentPane();
                 ZoomLevel zoomLevel;
@@ -747,21 +747,21 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
         if (layer) {
             steps = layer->getVerticalZoomSteps(defaultStep);
             if (message.getArgCount() == 1 && steps > 0) {
-                if (message.getArg(0).canConvert(QVariant::String) &&
+                if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                     message.getArg(0).toString() == "in") {
                     int step = layer->getCurrentVerticalZoomStep() + 1;
                     if (step < steps) layer->setVerticalZoomStep(step);
-                } else if (message.getArg(0).canConvert(QVariant::String) &&
+                } else if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                            message.getArg(0).toString() == "out") {
                     int step = layer->getCurrentVerticalZoomStep() - 1;
                     if (step >= 0) layer->setVerticalZoomStep(step);
-                } else if (message.getArg(0).canConvert(QVariant::String) &&
+                } else if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                            message.getArg(0).toString() == "default") {
                     layer->setVerticalZoomStep(defaultStep);
                 }
             } else if (message.getArgCount() == 2) {
-                if (message.getArg(0).canConvert(QVariant::Double) &&
-                    message.getArg(1).canConvert(QVariant::Double)) {
+                if (message.getArg(0).canConvert(QMetaType(QMetaType::Double)) &&
+                    message.getArg(1).canConvert(QMetaType(QMetaType::Double))) {
                     double min = message.getArg(0).toDouble();
                     double max = message.getArg(1).toDouble();
                     layer->setDisplayExtents(min, max);
@@ -789,17 +789,17 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
 
             int width = 0, height = 0;
 
-            if (message.getArg(1).canConvert(QVariant::Int)) {
+            if (message.getArg(1).canConvert(QMetaType(QMetaType::Int))) {
 
                 height = message.getArg(1).toInt();
 
-                if (message.getArg(0).canConvert(QVariant::String) &&
+                if (message.getArg(0).canConvert(QMetaType(QMetaType::QString)) &&
                     message.getArg(0).toString() == "pane") {
 
                     Pane *pane = m_paneStack->getCurrentPane();
                     if (pane) pane->resize(pane->width(), height);
 
-                } else if (message.getArg(0).canConvert(QVariant::Int)) {
+                } else if (message.getArg(0).canConvert(QMetaType(QMetaType::Int))) {
 
                     width = message.getArg(0).toInt();
                     resize(width, height);
@@ -810,7 +810,7 @@ MainWindow::handleOSCMessage(const OSCMessage &message)
     } else if (message.getMethod() == "transform") {
 
         if (message.getArgCount() == 1 &&
-            message.getArg(0).canConvert(QVariant::String)) {
+            message.getArg(0).canConvert(QMetaType(QMetaType::QString))) {
 
             Pane *pane = m_paneStack->getCurrentPane();
             
