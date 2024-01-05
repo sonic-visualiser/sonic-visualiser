@@ -4574,20 +4574,21 @@ MainWindow::playSpeedChanged(int position)
     // Percentage is shown to 0dp if >100, to 1dp if <100; factor is
     // shown to 3sf
 
-    char pcbuf[30];
-    char facbuf[30];
+    size_t buflen = 30;
+    char pcbuf[buflen];
+    char facbuf[buflen];
     
     if (position == centre) {
         contextHelpChanged(tr("Playback speed: Normal"));
     } else if (position < centre) {
-        sprintf(pcbuf, "%.1f", percent);
-        sprintf(facbuf, "%.3g", 1.0 / factor);
+        snprintf(pcbuf, buflen, "%.1f", percent);
+        snprintf(facbuf, buflen, "%.3g", 1.0 / factor);
         contextHelpChanged(tr("Playback speed: %1% (%2x slower)")
                            .arg(pcbuf)
                            .arg(facbuf));
     } else {
-        sprintf(pcbuf, "%.0f", percent);
-        sprintf(facbuf, "%.3g", factor);
+        snprintf(pcbuf, buflen, "%.0f", percent);
+        snprintf(facbuf, buflen, "%.3g", factor);
         contextHelpChanged(tr("Playback speed: %1% (%2x faster)")
                            .arg(pcbuf)
                            .arg(facbuf));
