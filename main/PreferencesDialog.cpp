@@ -155,7 +155,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
         QString qcolorName =
             settings.value("overview-colour", m_overviewColour.name())
             .toString();
-        m_overviewColour.setNamedColor(qcolorName);
+        m_overviewColour = QColor::fromString(qcolorName);
         m_overviewColourIsSet = true;
         SVCERR << "loaded colour " << m_overviewColour.name() << " from settings" << endl;
     }
