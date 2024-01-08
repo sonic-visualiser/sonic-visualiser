@@ -51,6 +51,7 @@
 #include "../version.h"
 
 using namespace std;
+using namespace sv;
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),

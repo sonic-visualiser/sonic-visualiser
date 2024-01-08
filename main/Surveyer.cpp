@@ -29,6 +29,8 @@
 #include "transform/TransformFactory.h"
 #include "plugin/PluginIdentifier.h"
 
+using namespace sv;
+
 Surveyer::Surveyer(Config config) :
     m_config(config),
     m_httpFailed(false),

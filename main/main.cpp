@@ -181,6 +181,8 @@
 
 */
 
+using namespace sv;
+
 static QMutex cleanupMutex;
 static bool cleanedUp = false;
 

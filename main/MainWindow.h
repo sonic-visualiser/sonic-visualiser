@@ -17,17 +17,21 @@
 #define SV_MAIN_WINDOW_H
 
 #include "framework/MainWindowBase.h"
+#include "widgets/LayerTreeDialog.h"
 
-class VersionTester;
-class Surveyer;
-class LayerTreeDialog;
-class ActivityLog;
-class UnitConverter;
+#include "PreferencesDialog.h"
+#include "Surveyer.h"
 
 class QFileSystemWatcher;
 class QScrollArea;
 
-class MainWindow : public MainWindowBase
+namespace sv {
+class VersionTester;
+class ActivityLog;
+class UnitConverter;
+}
+
+class MainWindow : public sv::MainWindowBase
 {
     Q_OBJECT
 
@@ -40,7 +44,7 @@ signals:
     void canAlign(bool);
 
 public slots:
-    void preferenceChanged(PropertyContainer::PropertyName) override;
+    void preferenceChanged(sv::PropertyContainer::PropertyName) override;
     virtual void coloursChanged();
 
     virtual bool commitData(bool mayAskUser);
@@ -70,7 +74,7 @@ protected slots:
     void closeSession() override;
     virtual void preferences();
 
-    void sampleRateMismatch(sv_samplerate_t, sv_samplerate_t, bool) override;
+    void sampleRateMismatch(sv::sv_samplerate_t, sv::sv_samplerate_t, bool) override;
     void audioOverloadPluginDisabled() override;
 
     virtual void toolNavigateSelected();
@@ -98,11 +102,11 @@ protected slots:
     void modelGenerationWarning(QString, QString) override;
     void modelRegenerationFailed(QString, QString, QString) override;
     void modelRegenerationWarning(QString, QString, QString) override;
-    void alignmentFailed(ModelId, QString) override;
+    void alignmentFailed(sv::ModelId, QString) override;
 
-    void paneRightButtonMenuRequested(Pane *, QPoint point) override;
-    void panePropertiesRightButtonMenuRequested(Pane *, QPoint point) override;
-    void layerPropertiesRightButtonMenuRequested(Pane *, Layer *, QPoint point) override;
+    void paneRightButtonMenuRequested(sv::Pane *, QPoint point) override;
+    void panePropertiesRightButtonMenuRequested(sv::Pane *, QPoint point) override;
+    void layerPropertiesRightButtonMenuRequested(sv::Pane *, sv::Layer *, QPoint point) override;
 
     virtual void propertyStacksResized(int);
 
@@ -113,13 +117,13 @@ protected slots:
 
     virtual void findTransform();
 
-    void paneAdded(Pane *) override;
-    void paneHidden(Pane *) override;
-    void paneAboutToBeDeleted(Pane *) override;
-    void paneDropAccepted(Pane *, QStringList) override;
-    void paneDropAccepted(Pane *, QString) override;
+    void paneAdded(sv::Pane *) override;
+    void paneHidden(sv::Pane *) override;
+    void paneAboutToBeDeleted(sv::Pane *) override;
+    void paneDropAccepted(sv::Pane *, QStringList) override;
+    void paneDropAccepted(sv::Pane *, QString) override;
 
-    void paneCancelButtonPressed(Layer *);
+    void paneCancelButtonPressed(sv::Layer *);
 
     virtual void setupRecentFilesMenu();
     virtual void setupRecentTransformsMenu();
@@ -129,7 +133,7 @@ protected slots:
     void playSoloToggled() override;
     virtual void alignToggled();
 
-    void currentPaneChanged(Pane *) override;
+    void currentPaneChanged(sv::Pane *) override;
 
     virtual void speedUpPlayback();
     virtual void slowDownPlayback();
@@ -137,13 +141,13 @@ protected slots:
 
     void monitoringLevelsChanged(float, float) override;
 
-    void layerRemoved(Layer *) override;
-    void layerInAView(Layer *, bool) override;
+    void layerRemoved(sv::Layer *) override;
+    void layerInAView(sv::Layer *, bool) override;
 
-    void mainModelChanged(ModelId) override;
+    void mainModelChanged(sv::ModelId) override;
     virtual void mainModelGainChanged(float);
     virtual void mainModelPanChanged(float);
-    void modelAdded(ModelId) override;
+    void modelAdded(sv::ModelId) override;
 
     virtual void showLayerTree();
     virtual void showActivityLog();
@@ -152,7 +156,7 @@ protected slots:
     virtual void mouseEnteredWidget();
     virtual void mouseLeftWidget();
 
-    void handleOSCMessage(const OSCMessage &) override;
+    void handleOSCMessage(const sv::OSCMessage &) override;
     virtual void midiEventsAvailable();
     virtual void playStatusChanged(bool);
 
@@ -173,10 +177,10 @@ protected slots:
     void newerVersionAvailable(QString) override;
 
 protected:
-    Overview                *m_overview;
-    LevelPanToolButton      *m_mainLevelPan;
-    AudioDial               *m_playSpeed;
-    WaveformLayer           *m_panLayer;
+    sv::Overview                *m_overview;
+    sv::LevelPanToolButton      *m_mainLevelPan;
+    sv::AudioDial               *m_playSpeed;
+    sv::WaveformLayer           *m_panLayer;
     
     QScrollArea             *m_mainScroll;
 
@@ -226,33 +230,33 @@ protected:
     QLabel                  *m_currentLabel;
 
     QPointer<PreferencesDialog> m_preferencesDialog;
-    QPointer<LayerTreeDialog>   m_layerTreeDialog;
+    QPointer<sv::LayerTreeDialog> m_layerTreeDialog;
 
-    ActivityLog             *m_activityLog;
-    UnitConverter           *m_unitConverter;
-    KeyReference            *m_keyReference;
+    sv::ActivityLog             *m_activityLog;
+    sv::UnitConverter           *m_unitConverter;
+    sv::KeyReference            *m_keyReference;
 
     QFileSystemWatcher      *m_templateWatcher;
 
     bool                     m_shouldStartOSCQueue;
     
     Surveyer                *m_surveyer;
-    VersionTester           *m_versionTester;
+    sv::VersionTester           *m_versionTester;
     QString                  m_newerVersionIs;
 
     struct LayerConfiguration {
-        LayerConfiguration(LayerFactory::LayerType _layer
-                                               = LayerFactory::TimeRuler,
-                           ModelId _source = ModelId(),
+        LayerConfiguration(sv::LayerFactory::LayerType _layer
+                           = sv::LayerFactory::TimeRuler,
+                           sv::ModelId _source = sv::ModelId(),
                            int _channel = -1) :
             layer(_layer), sourceModel(_source), channel(_channel) { }
-        LayerFactory::LayerType layer;
-        ModelId sourceModel;
+        sv::LayerFactory::LayerType layer;
+        sv::ModelId sourceModel;
         int channel;
     };
 
-    QString shortcutFor(LayerFactory::LayerType, bool isPaneMenu);
-    void updateLayerShortcutsFor(ModelId);
+    QString shortcutFor(sv::LayerFactory::LayerType, bool isPaneMenu);
+    void updateLayerShortcutsFor(sv::ModelId);
 
     // Map from menu action to the resulting layer configurations
     // etc. These all used to be std::maps, but we sometimes want to
@@ -269,21 +273,21 @@ protected:
     typedef std::vector<std::pair<QAction *, LayerConfiguration>> LayerActions;
     LayerActions m_layerActions;
 
-    typedef std::vector<std::pair<QAction *, Layer *>> ExistingLayerActions;
+    typedef std::vector<std::pair<QAction *, sv::Layer *>> ExistingLayerActions;
     ExistingLayerActions m_existingLayerActions;
     ExistingLayerActions m_sliceActions;
 
-    typedef std::vector<std::pair<ViewManager::ToolMode, QAction *>> ToolActions;
+    typedef std::vector<std::pair<sv::ViewManager::ToolMode, QAction *>> ToolActions;
     ToolActions m_toolActions;
 
     typedef std::vector<std::pair<QAction *, int>> NumberingActions;
     NumberingActions m_numberingActions;
 
-    typedef std::vector<std::pair<QAction *, TransformId>> TransformActions;
+    typedef std::vector<std::pair<QAction *, sv::TransformId>> TransformActions;
     TransformActions m_transformActions;
 
     // This one only makes sense as a map though
-    typedef std::map<TransformId, QAction *> TransformActionReverseMap;
+    typedef std::map<sv::TransformId, QAction *> TransformActionReverseMap;
     TransformActionReverseMap m_transformActionsReverse;
 
     QString getReleaseText() const;
@@ -306,12 +310,12 @@ protected:
 
     void exportAudio(bool asData);
 
-    void updateVisibleRangeDisplay(Pane *p) const override;
+    void updateVisibleRangeDisplay(sv::Pane *p) const override;
     void updatePositionStatusDisplays() const override;
 
     bool shouldCreateNewSessionForRDFAudio(bool *cancel) override;
     
-    void connectLayerEditDialog(ModelDataTableDialog *) override;
+    void connectLayerEditDialog(sv::ModelDataTableDialog *) override;
 };
 
 
