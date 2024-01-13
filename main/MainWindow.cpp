@@ -3694,8 +3694,8 @@ MainWindow::paneAdded(Pane *pane)
 {
     if (m_overview) m_overview->registerView(pane);
     if (pane) {
-        connect(pane, SIGNAL(cancelButtonPressed(Layer *)),
-                this, SLOT(paneCancelButtonPressed(Layer *)));
+        connect(pane, &Pane::cancelButtonPressed,
+                this, &MainWindow::paneCancelButtonPressed);
     }
 }    
 
