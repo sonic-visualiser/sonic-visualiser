@@ -109,6 +109,10 @@ if system == 'linux'
   mad_dep = dependency('mad', version: '>= 0.15.0')
   id3tag_dep = dependency('id3tag', version: '>= 0.15.0')
   opus_dep = dependency('opusfile')
+  opusenc_dep = dependency('opusenc', required: false)
+  if not opusenc_dep.found()
+    opusenc_dep = dependency('libopusenc')
+  endif
   lo_dep = dependency('liblo')
   jack_dep = dependency('jack', version: '>= 0.100')
   libpulse_dep = dependency('libpulse', version: '>= 0.9')
@@ -132,6 +136,7 @@ if system == 'linux'
     mad_dep,
     id3tag_dep,
     opus_dep,
+    opusenc_dep,
     lo_dep,
     portaudio_dep,
     jack_dep,
