@@ -111,7 +111,7 @@ if system == 'linux'
   opus_dep = dependency('opusfile')
   opusenc_dep = dependency('opusenc', required: false)
   if not opusenc_dep.found()
-    opusenc_dep = dependency('libopusenc')
+    opusenc_dep = dependency('libopusenc', required: false)
   endif
   lo_dep = dependency('liblo')
   jack_dep = dependency('jack', version: '>= 0.100')
@@ -178,6 +178,12 @@ if system == 'linux'
   if portaudio_dep.found()
     feature_defines += [
       '-DHAVE_PORTAUDIO',
+    ]
+  endif
+
+  if not opusenc_dep.found()
+    feature_defines += [
+      '-DHAVE_OPUS_READ_ONLY'
     ]
   endif
 

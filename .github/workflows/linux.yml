@@ -12,7 +12,7 @@ jobs:
     - name: install-packages
       run: |
         sudo apt-get update
-        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusenc-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt6-base-dev qt6-base-dev-tools libqt6svg6-dev raptor2-utils git mercurial autoconf automake libtool smlnj capnproto libcapnp-dev ninja-build libglib2.0-dev
+        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt6-base-dev qt6-base-dev-tools libqt6svg6-dev raptor2-utils git mercurial autoconf automake libtool smlnj capnproto libcapnp-dev ninja-build libglib2.0-dev
     - name: install-meson
       run: |
         mkdir -p tmp/meson
