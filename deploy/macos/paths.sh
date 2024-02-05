@@ -11,7 +11,7 @@ fi
 
 set -u
 
-frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtWidgets QtPrintSupport QtDBus"
+frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtTest QtWidgets QtPrintSupport QtDBus"
 
 echo
 echo "I expect you to have already copied these frameworks from the Qt installation to"
@@ -32,7 +32,7 @@ done
 for fwk in $frameworks; do
     find "$app.app" -type f -print | while read x; do
 	if [ -x "$x" ]; then
-            current=$(otool -L "$x" | grep "$fwk" | grep amework | grep -v ':$' | awk '{ print $1; }')
+            current=$(otool -L "$x" | grep "$fwk" | grep amework | grep -v ':$' | awk '{ print $1; }' | head -1)
             [ -z "$current" ] && continue
             echo "$x has $current"
             relative=$(echo "$x" | sed -e "s,$app.app/Contents/,," \
