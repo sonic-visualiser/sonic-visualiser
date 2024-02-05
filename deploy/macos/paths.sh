@@ -11,7 +11,7 @@ fi
 
 set -u
 
-frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtTest QtWidgets QtPrintSupport QtDBus"
+frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtTest QtPdf QtWidgets QtPrintSupport QtDBus"
 
 echo
 echo "I expect you to have already copied these frameworks from the Qt installation to"
