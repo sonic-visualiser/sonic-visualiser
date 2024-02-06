@@ -32,14 +32,14 @@ done
 for fwk in $frameworks; do
     find "$app.app" -type f -print | while read x; do
 	if [ -x "$x" ]; then
-            current=$(otool -L "$x" | grep "$fwk" | grep amework | grep -v ':$' | awk '{ print $1; }' | head -1)
-            [ -z "$current" ] && continue
-            echo "$x has $current"
-            relative=$(echo "$x" | sed -e "s,$app.app/Contents/,," \
-				       -e 's,[^/]*/,../,g' \
-				       -e 's,/[^/]*$,/Frameworks/'"$fwk"',' )
-            echo "replacing with relative path $relative"
-            install_name_tool -change "$current" "@loader_path/$relative" "$x"
+            otool -L "$x" | grep "$fwk" | grep amework | grep -v ':$' | awk '{ print $1; }' | while read current ; do
+                echo "$x has $current"
+                relative=$(echo "$x" | sed -e "s,$app.app/Contents/,," \
+				           -e 's,[^/]*/,../,g' \
+				           -e 's,/[^/]*$,/Frameworks/'"$fwk"',' )
+                echo "replacing with relative path $relative"
+                install_name_tool -change "$current" "@loader_path/$relative" "$x"
+            done
 	fi
     done
 done
