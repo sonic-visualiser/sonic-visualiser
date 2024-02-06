@@ -380,7 +380,7 @@ main(int argc, char **argv)
     if (showSplash) {
         splash = new SVSplash();
         splash->show();
-        QTimer::singleShot(5000, splash, SLOT(hide()));
+        QTimer::singleShot(3000, splash, SLOT(hide()));
         application.processEvents();
     }
 
