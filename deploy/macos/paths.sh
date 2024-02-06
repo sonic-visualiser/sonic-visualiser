@@ -31,9 +31,8 @@ done
 
 for fwk in $frameworks; do
     find "$app.app" -type f -print | while read x; do
-        echo "Looking at $x:"
+        echo "Looking for framework $fwk in $x:"
         otool -L "$x"
-        echo "Done looking at $x"
 	if [ -x "$x" ]; then
             otool -L "$x" | grep "$fwk" | grep amework | grep -v ':$' | awk '{ print $1; }' | while read current ; do
                 echo "$x has $current"
@@ -43,7 +42,11 @@ for fwk in $frameworks; do
                 echo "replacing with relative path $relative"
                 install_name_tool -change "$current" "@loader_path/$relative" "$x"
             done
-	fi
+	else
+            echo "$x is not executable, skipping"
+        fi
+        echo "Done looking at $x"
+        echo
     done
 done
 
