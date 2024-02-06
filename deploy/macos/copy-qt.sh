@@ -36,6 +36,7 @@ for fwk in $frameworks; do
 	fi
     fi
     cp -v "$qtdir/lib/$fwk.framework/$fwk" "$fdir" || exit 2
+    chmod +x "$fdir/$fwk"
 done
 
 echo "Done"
