@@ -31,6 +31,9 @@ done
 
 for fwk in $frameworks; do
     find "$app.app" -type f -print | while read x; do
+        echo "Looking at $x:"
+        otool -L "$x"
+        echo "Done looking at $x"
 	if [ -x "$x" ]; then
             otool -L "$x" | grep "$fwk" | grep amework | grep -v ':$' | awk '{ print $1; }' | while read current ; do
                 echo "$x has $current"
