@@ -4,16 +4,16 @@
       "pin": "7df85ecf98d9477c1ac5a36f51807062e00d8695"
     },
     "svcore": {
-      "pin": "aa5d6d470d13c6776f5bd80c07fd520a6c2c075b"
+      "pin": "9adeb7c61f6a362d71a8a2733be0bde64f49de74"
     },
     "svgui": {
-      "pin": "c5de3266a5f585758c24f4936c87802dd045a742"
+      "pin": "98e3c77514a317078a390de18d76ec009301d850"
     },
     "svapp": {
       "pin": "0378656f4c1d7d79ddafea3dd1ad99fac234e6ca"
     },
     "checker": {
-      "pin": "4f7381d34a6a1d6de73e84ff564e6ac734986d40"
+      "pin": "fae540cf4a79ac5ed5a4d4dc0df680b1acbe8628"
     },
     "sv-dependency-builds": {
       "pin": "f4eb0637efbbb54bdd909625640b245e606a8374"
