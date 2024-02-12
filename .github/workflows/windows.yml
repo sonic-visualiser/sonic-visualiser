@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      uses: ProjectSavanna/setup-sml@v1.2.0
+    - uses: ProjectSavanna/setup-sml@v1.2.0
       with:
         smlnj-version: '110.99.4'
     - uses: actions/setup-python@v1
