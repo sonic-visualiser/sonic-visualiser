@@ -9,6 +9,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      uses: ProjectSavanna/setup-sml@v1.2.0
+      with:
+        smlnj-version: '110.99.4'
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
@@ -23,9 +26,6 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2019_64'
-
-    - name: install-smlnj
-      uses: ProjectSavanna/setup-sml@v1.2.0
 
     - name: repoint
       run: ./repoint install
