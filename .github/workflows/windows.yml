@@ -9,12 +9,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-
-    - name: install-meson
-      uses: actions/setup-python@v1
+    - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
-      run: pip install meson ninja        
+
+    - name: install-meson
+      run: pip install meson ninja
         
     - name: install-qt
       uses: jurplel/install-qt-action@v3
