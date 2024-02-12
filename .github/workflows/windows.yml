@@ -23,7 +23,6 @@ jobs:
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2019_64'
-        dir: '/'
 
     - name: install-smlnj
       uses: ProjectSavanna/setup-sml@v1.2.0
