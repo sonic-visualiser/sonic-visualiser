@@ -36,7 +36,12 @@ jobs:
 
     - name: build
       run: ninja -C build
-      
+
+    - name: copy-qt-etc
+      run: |
+          foreach ($lib in 'Core','Gui','Widgets','Network','Xml','Svg','Test') { copy "$env:QTDIR\bin\Qt6$lib.dll" build }
+          cp sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll build
+
     - name: test
       run: meson test -C build
       
