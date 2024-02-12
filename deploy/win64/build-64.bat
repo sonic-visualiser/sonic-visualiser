@@ -5,7 +5,11 @@ echo on
 
 set STARTPWD=%CD%
 
+rem The first path is for workstation builds, the second for CI
 set QTDIR=C:\Qt\6.6.1\msvc2019_64
+if not exist %QTDIR% (
+    set QTDIR=\a\sonic-visualiser\Qt\6.6.1\msvc2019_64
+)
 if not exist %QTDIR% (
 @   echo Could not find Qt in %QTDIR%
 @   exit /b 2
