@@ -1,0 +1,36 @@
+name: Windows CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: install-meson
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+      run: pip install meson ninja        
+        
+    - name: install-qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.6.1'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2019_64'
+        dir: '/'
+
+    - name: install-smlnj
+      uses: ProjectSavanna/setup-sml@v1.2.0
+
+    - name: repoint
+      run: ./repoint install
+
+    - name: configure
+      run: ./deploy/win64/build-64.bat
+
