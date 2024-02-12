@@ -36,7 +36,7 @@ jobs:
 
     - name: copy-qt-etc
       run: |
-          foreach ($lib in 'Core','Gui','Widgets','Network','Xml','Svg','Test') { copy "$env:QT_ROOT_DIR\bin\Qt6$lib.dll" build }
+          foreach ($lib in 'Core','Gui','Widgets','Network','Xml','Svg','Test') { copy "..\Qt\bin\Qt6$lib.dll" build }
           cp sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll build
 
     - name: build
