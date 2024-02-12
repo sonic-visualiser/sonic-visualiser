@@ -15,21 +15,28 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: '3.x'
-
-    - name: install-meson
-      run: pip install meson ninja
-        
-    - name: install-qt
-      uses: jurplel/install-qt-action@v3
+    - uses: jurplel/install-qt-action@v3
       with:
         version: '6.6.1'
         host: 'windows'
         target: 'desktop'
         arch: 'win64_msvc2019_64'
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        vsversion: '2019'
+
+    - name: install-meson
+      run: pip install meson ninja
 
     - name: repoint
       run: ./repoint install
 
     - name: configure
-      run: ./deploy/win64/build-64.bat
+      run: meson setup build --buildtype release
 
+    - name: build
+      run: ninja -C build
+      
+    - name: test
+      run: meson test -C build
+      
