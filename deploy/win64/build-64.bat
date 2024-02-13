@@ -5,16 +5,23 @@ echo on
 
 set STARTPWD=%CD%
 
-set QTDIR=C:\Qt\5.13.2\msvc2017_64
+rem The first path is for workstation builds, the others for CI
+set QTDIR=C:\Qt\6.6.1\msvc2019_64
 if not exist %QTDIR% (
-@   echo Could not find 64-bit Qt in %QTDIR%
+    set QTDIR=%QT_ROOT_DIR%
+)
+if not exist %QTDIR% (
+@   echo Could not find Qt in %QTDIR%
 @   exit /b 2
 )
 
+rem Similarly, the first path is for workstation builds, the second for CI
 set vcvarsall="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat"
-
 if not exist %vcvarsall% (
-@   echo "Could not find MSVC vars batch file"
+    set vcvarsall="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat"
+)
+if not exist %vcvarsall% (
+@   echo Could not find MSVC vars batch file in %vcvarsall%
 @   exit /b 2
 )
 
@@ -28,27 +35,37 @@ cd %STARTPWD%
 call .\repoint install
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-if not exist build_win64\build.ninja (
-  meson build_win64 --buildtype release -Db_lto=true
+set BUILDDIR=build_win64
+
+if not exist %BUILDDIR%\build.ninja (
+  meson setup %BUILDDIR% --buildtype release -Db_lto=true
   if %errorlevel% neq 0 exit /b %errorlevel%
 )
 
-ninja -C build_win64
+ninja -C %BUILDDIR%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
-copy %QTDIR%\bin\Qt5Core.dll .\build_win64
-copy %QTDIR%\bin\Qt5Gui.dll .\build_win64
-copy %QTDIR%\bin\Qt5Widgets.dll .\build_win64
-copy %QTDIR%\bin\Qt5Network.dll .\build_win64
-copy %QTDIR%\bin\Qt5Xml.dll .\build_win64
-copy %QTDIR%\bin\Qt5Svg.dll .\build_win64
-copy %QTDIR%\bin\Qt5Test.dll .\build_win64
-copy %QTDIR%\plugins\platforms\qminimal.dll .\build_win64
-copy %QTDIR%\plugins\platforms\qwindows.dll .\build_win64
-copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\build_win64
-copy sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll .\build_win64
+copy %QTDIR%\bin\Qt6Core.dll .\%BUILDDIR%
+copy %QTDIR%\bin\Qt6Gui.dll .\%BUILDDIR%
+copy %QTDIR%\bin\Qt6Widgets.dll .\%BUILDDIR%
+copy %QTDIR%\bin\Qt6Network.dll .\%BUILDDIR%
+copy %QTDIR%\bin\Qt6Xml.dll .\%BUILDDIR%
+copy %QTDIR%\bin\Qt6Svg.dll .\%BUILDDIR%
+copy %QTDIR%\bin\Qt6Test.dll .\%BUILDDIR%
 
-meson test -C build_win64
+mkdir .\%BUILDDIR%\plugins
+mkdir .\%BUILDDIR%\plugins\platforms
+mkdir .\%BUILDDIR%\plugins\styles
+
+copy %QTDIR%\plugins\platforms\qdirect2d.dll .\%BUILDDIR%\plugins\platforms
+copy %QTDIR%\plugins\platforms\qminimal.dll .\%BUILDDIR%\plugins\platforms
+copy %QTDIR%\plugins\platforms\qoffscreen.dll .\%BUILDDIR%\plugins\platforms
+copy %QTDIR%\plugins\platforms\qwindows.dll .\%BUILDDIR%\plugins\platforms
+copy %QTDIR%\plugins\styles\qwindowsvistastyle.dll .\%BUILDDIR%\plugins\styles
+
+copy sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll .\%BUILDDIR%
+
+meson test -C %BUILDDIR%
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 set PATH=%ORIGINALPATH%

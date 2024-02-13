@@ -105,6 +105,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QAction>
+#include <QActionGroup>
 #include <QMenuBar>
 #include <QToolBar>
 #include <QInputDialog>
@@ -114,14 +115,13 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QTextStream>
-#include <QTextCodec>
 #include <QProcess>
 #include <QShortcut>
 #include <QSettings>
 #include <QDateTime>
 #include <QProcess>
 #include <QCheckBox>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QScrollArea>
 #include <QCloseEvent>
 #include <QDialogButtonBox>
@@ -137,6 +137,7 @@ using std::vector;
 using std::map;
 using std::set;
 
+using namespace sv;
 
 MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSupport) :
     MainWindowBase(audioMode, midiMode, int(PaneStack::Option::Default)),
@@ -358,8 +359,6 @@ MainWindow::MainWindow(AudioMode audioMode, MIDIMode midiMode, bool withOSCSuppo
 
 MainWindow::~MainWindow()
 {
-//    SVDEBUG << "MainWindow::~MainWindow" << endl;
-
     delete m_keyReference;
     delete m_activityLog;
     delete m_unitConverter;
@@ -367,8 +366,6 @@ MainWindow::~MainWindow()
     delete m_layerTreeDialog;
     delete m_versionTester;
     delete m_surveyer;
-    Profiles::getInstance()->dump();
-//    SVDEBUG << "MainWindow::~MainWindow finishing" << endl;
 }
 
 void
@@ -470,7 +467,7 @@ MainWindow::endFullScreen()
 {
     // these were only created in goFullScreen:
     QObjectList cl = m_paneStack->children();
-    foreach (QObject *o, cl) {
+    for (QObject *o : cl) {
         QShortcut *sc = qobject_cast<QShortcut *>(o);
         if (sc) delete sc;
     }
@@ -1855,7 +1852,7 @@ MainWindow::populateTransformsMenu()
 
             QString maker = *j;
             if (maker == "") maker = tr("Unknown");
-            maker.replace(QRegExp(tr(" [\\(<].*$")), "");
+            maker.replace(QRegularExpression(tr(" [\\(<].*$")), "");
 
             makerMenus[*i][maker] = new SubdividingMenu(maker, 30, 40);
             makerMenus[*i][maker]->setTearOffEnabled(true);
@@ -1886,7 +1883,7 @@ MainWindow::populateTransformsMenu()
         QString name = transforms[i].name;
         if (name == "") name = transforms[i].identifier;
 
-//        cerr << "Plugin Name: " << name << endl;
+//        SVCERR << "Plugin Name: " << name << endl;
 
         TransformDescription::Type type = transforms[i].type;
         QString typeStr = factory->getTransformTypeName(type);
@@ -1896,7 +1893,7 @@ MainWindow::populateTransformsMenu()
 
         QString maker = transforms[i].maker;
         if (maker == "") maker = tr("Unknown");
-        maker.replace(QRegExp(tr(" [\\(<].*$")), "");
+        maker.replace(QRegularExpression(tr(" [\\(<].*$")), "");
 
         QString pluginName = name.section(": ", 0, 0);
         QString output = name.section(": ", 1);
@@ -1920,7 +1917,7 @@ MainWindow::populateTransformsMenu()
         action->setStatusTip(transforms[i].longDescription);
 
         if (categoryMenus[type].find(category) == categoryMenus[type].end()) {
-            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            SVCERR << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No category menu for transform \""
                       << name << "\" (category = \""
                       << category << "\")" << endl;
@@ -1929,7 +1926,7 @@ MainWindow::populateTransformsMenu()
         }
 
         if (makerMenus[type].find(maker) == makerMenus[type].end()) {
-            cerr << "WARNING: MainWindow::setupMenus: Internal error: "
+            SVCERR << "WARNING: MainWindow::setupMenus: Internal error: "
                       << "No maker menu for transform \""
                       << name << "\" (maker = \""
                       << maker << "\")" << endl;
@@ -1943,7 +1940,7 @@ MainWindow::populateTransformsMenu()
         connect(this, SIGNAL(canAddLayer(bool)), action, SLOT(setEnabled(bool)));
         action->setStatusTip(transforms[i].longDescription);
 
-//        cerr << "Transform: \"" << name << "\": plugin name \"" << pluginName << "\"" << endl;
+//        SVCERR << "Transform: \"" << name << "\": plugin name \"" << pluginName << "\"" << endl;
 
         if (pluginNameMenus[type].find(pluginName) ==
             pluginNameMenus[type].end()) {
@@ -2077,12 +2074,12 @@ MainWindow::setupTemplatesMenu()
 
     // (ordered by name)
     std::set<QString> byName;
-    foreach (QString t, templates) {
+    for (QString t : templates) {
         if (!t.startsWith(":")) havePersonal = true;
         byName.insert(QFileInfo(t).baseName());
     }
 
-    foreach (QString t, byName) {
+    for (QString t : byName) {
         if (t.toLower() == "default") continue;
         action = m_templatesMenu->addAction(t);
         // All the apply actions need to have a main model to be
@@ -2121,7 +2118,7 @@ MainWindow::setupRecentTransformsMenu()
         TransformActionReverseMap::iterator ti =
             m_transformActionsReverse.find(transforms[i]);
         if (ti == m_transformActionsReverse.end()) {
-            cerr << "WARNING: MainWindow::setupRecentTransformsMenu: "
+            SVCERR << "WARNING: MainWindow::setupRecentTransformsMenu: "
                       << "Unknown transform \"" << transforms[i]
                       << "\" in recent transforms list" << endl;
             continue;
@@ -2180,11 +2177,11 @@ MainWindow::setupExistingLayersMenus()
             Layer *layer = pane->getLayer(j);
             if (!layer) continue;
             if (observedLayers.find(layer) != observedLayers.end()) {
-//                cerr << "found duplicate layer " << layer << endl;
+//                SVCERR << "found duplicate layer " << layer << endl;
                 continue;
             }
 
-//            cerr << "found new layer " << layer << " (name = " 
+//            SVCERR << "found new layer " << layer << " (name = " 
 //                      << layer->getLayerPresentationName() << ")" << endl;
 
             orderedLayers.push_back(layer);
@@ -2819,7 +2816,7 @@ MainWindow::exportAudio(bool asData)
             for (int j = 0; j < pane->getLayerCount(); ++j) {
                 Layer *layer = pane->getLayer(j);
                 if (!layer) continue;
-                cerr << "layer = " << layer->objectName() << endl;
+                SVCERR << "layer = " << layer->objectName() << endl;
                 ModelId m = layer->getModel();
                 if (ModelById::isa<RangeSummarisableTimeValueModel>(m)) {
                     otherModelIds.insert(m);
@@ -3086,13 +3083,13 @@ MainWindow::importLayer()
     
     if (!pane) {
         // shouldn't happen, as the menu action should have been disabled
-        cerr << "WARNING: MainWindow::importLayer: no current pane" << endl;
+        SVCERR << "WARNING: MainWindow::importLayer: no current pane" << endl;
         return;
     }
 
     if (!getMainModel()) {
         // shouldn't happen, as the menu action should have been disabled
-        cerr << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
+        SVCERR << "WARNING: MainWindow::importLayer: No main model -- hence no default sample rate available" << endl;
         return;
     }
 
@@ -3576,7 +3573,7 @@ MainWindow::openRecentFile()
     QAction *action = dynamic_cast<QAction *>(obj);
     
     if (!action) {
-        cerr << "WARNING: MainWindow::openRecentFile: sender is not an action"
+        SVCERR << "WARNING: MainWindow::openRecentFile: sender is not an action"
              << endl;
         return;
     }
@@ -3584,7 +3581,7 @@ MainWindow::openRecentFile()
     QString path = action->objectName();
 
     if (path == "") {
-        cerr << "WARNING: MainWindow::openRecentFile: action incorrectly named"
+        SVCERR << "WARNING: MainWindow::openRecentFile: action incorrectly named"
              << endl;
         return;
     }
@@ -3609,7 +3606,7 @@ MainWindow::applyTemplate()
     QAction *action = qobject_cast<QAction *>(s);
 
     if (!action) {
-        cerr << "WARNING: MainWindow::applyTemplate: sender is not an action"
+        SVCERR << "WARNING: MainWindow::applyTemplate: sender is not an action"
                   << endl;
         return;
     }
@@ -3618,7 +3615,7 @@ MainWindow::applyTemplate()
     if (n == "") n = action->text();
 
     if (n == "") {
-        cerr << "WARNING: MainWindow::applyTemplate: sender has no name"
+        SVCERR << "WARNING: MainWindow::applyTemplate: sender has no name"
                   << endl;
         return;
     }
@@ -3659,7 +3656,7 @@ MainWindow::saveSessionAsTemplate()
     if (d->exec() == QDialog::Accepted) {
 
         QString name = lineEdit->text();
-        name.replace(QRegExp("[^\\w\\s\\.\"'-]"), "_");
+        name.replace(QRegularExpression("[^\\w\\s\\.\"'-]"), "_");
 
         ResourceFinder rf;
         QString dir = rf.getResourceSaveDir("templates");
@@ -3697,8 +3694,8 @@ MainWindow::paneAdded(Pane *pane)
 {
     if (m_overview) m_overview->registerView(pane);
     if (pane) {
-        connect(pane, SIGNAL(cancelButtonPressed(Layer *)),
-                this, SLOT(paneCancelButtonPressed(Layer *)));
+        connect(pane, &Pane::cancelButtonPressed,
+                this, &MainWindow::paneCancelButtonPressed);
     }
 }    
 
@@ -3882,7 +3879,7 @@ MainWindow::commitData(bool mayAskUser)
 #ifndef _WIN32
         QString fname = QString("tmp-%1-%2.sv")
             .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"))
-            .arg(QProcess().pid());
+            .arg(QProcess().processId());
 #else
         QString fname = QString("tmp-%1.sv")
             .arg(QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz"));
@@ -4071,10 +4068,10 @@ MainWindow::addPane()
     QObject *s = sender();
     QAction *action = dynamic_cast<QAction *>(s);
 
-    cerr << "addPane: sender is " << s << ", action is " << action << ", name " << action->text() << endl;
+    SVCERR << "addPane: sender is " << s << ", action is " << action << ", name " << action->text() << endl;
     
     if (!action) {
-        cerr << "WARNING: MainWindow::addPane: sender is not an action"
+        SVCERR << "WARNING: MainWindow::addPane: sender is not an action"
                   << endl;
         return;
     }
@@ -4086,12 +4083,12 @@ MainWindow::addPane()
     }
 
     if (i == m_paneActions.end()) {
-        cerr << "WARNING: MainWindow::addPane: unknown action "
+        SVCERR << "WARNING: MainWindow::addPane: unknown action "
              << action->objectName() << endl;
-        cerr << "known actions are:" << endl;
+        SVCERR << "known actions are:" << endl;
         for (PaneActions::const_iterator i = m_paneActions.begin();
              i != m_paneActions.end(); ++i) {
-            cerr << i->first << ", name " << i->first->text() << endl;
+            SVCERR << i->first << ", name " << i->first->text() << endl;
         }
         return;
     }
@@ -4119,7 +4116,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         configuration.layer != LayerFactory::Spectrum) {
 
         if (!m_timeRulerLayer) {
-//            cerr << "no time ruler layer, creating one" << endl;
+//            SVCERR << "no time ruler layer, creating one" << endl;
             m_timeRulerLayer = m_document->createMainModelLayer
                 (LayerFactory::TimeRuler);
         }
@@ -4145,7 +4142,7 @@ MainWindow::addPane(const LayerConfiguration &configuration, QString text)
         }
 
         if (modelId.isNone()) {
-            cerr << "WARNING: Model " << modelId
+            SVCERR << "WARNING: Model " << modelId
                  << " appears in pane action map, but is not reported "
                  << "by document as a valid transform source" << endl;
         }
@@ -4179,7 +4176,7 @@ MainWindow::addLayer()
     QAction *action = dynamic_cast<QAction *>(s);
     
     if (!action) {
-        cerr << "WARNING: MainWindow::addLayer: sender is not an action"
+        SVCERR << "WARNING: MainWindow::addLayer: sender is not an action"
                   << endl;
         return;
     }
@@ -4187,7 +4184,7 @@ MainWindow::addLayer()
     Pane *pane = m_paneStack->getCurrentPane();
     
     if (!pane) {
-        cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+        SVCERR << "WARNING: MainWindow::addLayer: no current pane" << endl;
         return;
     }
 
@@ -4241,7 +4238,7 @@ MainWindow::addLayer()
         }
         
         if (i == m_layerActions.end()) {
-            cerr << "WARNING: MainWindow::addLayer: unknown action "
+            SVCERR << "WARNING: MainWindow::addLayer: unknown action "
                       << action->objectName() << endl;
             return;
         }
@@ -4351,7 +4348,7 @@ MainWindow::addLayer(QString transformId)
 {
     Pane *pane = m_paneStack->getCurrentPane();
     if (!pane) {
-        cerr << "WARNING: MainWindow::addLayer: no current pane" << endl;
+        SVCERR << "WARNING: MainWindow::addLayer: no current pane" << endl;
         return;
     }
 
@@ -4571,27 +4568,28 @@ MainWindow::playSpeedChanged(int position)
     double percent = m_playSpeed->mappedValue();
     double factor = mapper.getFactorForValue(percent);
 
-//    cerr << "play speed position = " << position << " (range 0-120) percent = " << percent << " factor = " << factor << endl;
+//    SVCERR << "play speed position = " << position << " (range 0-120) percent = " << percent << " factor = " << factor << endl;
 
     int centre = m_playSpeed->defaultValue();
 
     // Percentage is shown to 0dp if >100, to 1dp if <100; factor is
     // shown to 3sf
 
-    char pcbuf[30];
-    char facbuf[30];
+    constexpr size_t buflen = 30;
+    char pcbuf[buflen];
+    char facbuf[buflen];
     
     if (position == centre) {
         contextHelpChanged(tr("Playback speed: Normal"));
     } else if (position < centre) {
-        sprintf(pcbuf, "%.1f", percent);
-        sprintf(facbuf, "%.3g", 1.0 / factor);
+        snprintf(pcbuf, buflen, "%.1f", percent);
+        snprintf(facbuf, buflen, "%.3g", 1.0 / factor);
         contextHelpChanged(tr("Playback speed: %1% (%2x slower)")
                            .arg(pcbuf)
                            .arg(facbuf));
     } else {
-        sprintf(pcbuf, "%.0f", percent);
-        sprintf(facbuf, "%.3g", factor);
+        snprintf(pcbuf, buflen, "%.0f", percent);
+        snprintf(facbuf, buflen, "%.3g", factor);
         contextHelpChanged(tr("Playback speed: %1% (%2x faster)")
                            .arg(pcbuf)
                            .arg(facbuf));
@@ -5351,19 +5349,19 @@ MainWindow::whatsNew()
 
     // Un-wrap indented paragraphs (assume they are always preceded by
     // an empty line, so don't get merged into prior para)
-    text.replace(QRegExp("(.)\n +(.)"), "\\1 \\2");
+    text.replace(QRegularExpression("(.)\n +(.)"), "\\1 \\2");
 
     // Rest of para following a " - " at start becomes bulleted entry
-    text.replace(QRegExp("\n - ([^\n]+)"), "\n<li>\\1</li>");
+    text.replace(QRegularExpression("\n - ([^\n]+)"), "\n<li>\\1</li>");
 
     // Line-ending ":" introduces the bulleted list
-    text.replace(QRegExp(": *\n"), ":\n<ul>\n");
+    text.replace(QRegularExpression(": *\n"), ":\n<ul>\n");
 
     // Blank line (after unwrapping) ends the bulleted list
-    text.replace(QRegExp("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
+    text.replace(QRegularExpression("</li>\n\\s*\n"), "</li>\n</ul>\n\n");
 
     // Text leading up to that line-ending ":" becomes bold heading
-    text.replace(QRegExp("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
+    text.replace(QRegularExpression("\n(\\w[^:\n]+:)"), "\n<p><b>\\1</b></p>");
     
     textEdit->setHtml(text);
     textEdit->setReadOnly(true);

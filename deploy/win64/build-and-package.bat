@@ -33,20 +33,7 @@ del signtest.exe
 @   echo NOTE: sign option not specified, will not codesign anything
 )
 
-@echo(
-@echo Rebuilding 32-bit
-
-cd %STARTPWD%
-del /q /s build_win32
-call .\deploy\win32\build-32.bat
-if %errorlevel% neq 0 exit /b %errorlevel%
-
-if "%ARG%" == "sign" (
-@echo Signing 32-bit executables and libraries
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a build_win32\*.exe build_win32\*.dll
-)
-
-@echo Rebuilding 64-bit
+@echo Rebuilding
 
 cd %STARTPWD%
 del /q /s build_win64
@@ -54,12 +41,9 @@ call .\deploy\win64\build-64.bat
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 if "%ARG%" == "sign" (
-@echo Signing 64-bit executables and libraries
+@echo Signing executables and libraries
 signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a build_win64\*.exe build_win64\*.dll
 )
-
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win32\generate-wxs.ps1'"
-if errorlevel 1 exit /b %errorlevel%
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command "& 'deploy\win64\generate-wxs.ps1'"
 if errorlevel 1 exit /b %errorlevel%
@@ -68,29 +52,7 @@ set PATH=%PATH%;"C:\Program Files (x86)\WiX Toolset v3.11\bin"
 
 mkdir packages
 
-@echo Packaging 32-bit
-
-cd %STARTPWD%
-del sonic-visualiser.msi
-candle -v deploy\win32\sonic-visualiser.wxs
-light -b . -ext WixUIExtension -ext WixUtilExtension -v sonic-visualiser.wixobj
-if %errorlevel% neq 0 exit /b %errorlevel%
-del sonic-visualiser.wixobj
-del sonic-visualiser.wixpdb
-
-if "%ARG%" == "sign" (
-@echo Signing 32-bit package
-signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a sonic-visualiser.msi
-signtool verify /pa sonic-visualiser.msi
-)
-
-@echo Copying 32-bit package to packages dir
-@set /p VERSION=<build_win32\version.h
-@set VERSION=%VERSION:#define SV_VERSION "=%
-set VERSION=%VERSION:"=%
-copy sonic-visualiser.msi packages\sonic-visualiser-%VERSION%-win32.msi
-
-@echo Packaging 64-bit
+@echo Packaging
 
 cd %STARTPWD%
 del sonic-visualiser.msi
@@ -101,12 +63,12 @@ del sonic-visualiser.wixobj
 del sonic-visualiser.wixpdb
 
 if "%ARG%" == "sign" (
-@echo Signing 64-bit package
+@echo Signing package
 signtool sign /v /n "%NAME%" /t http://time.certum.pl /fd sha1 /a sonic-visualiser.msi
 signtool verify /pa sonic-visualiser.msi
 )
 
-@echo Copying 64-bit package to packages dir
+@echo Copying package to packages dir
 @set /p VERSION=<build_win64\version.h
 @set VERSION=%VERSION:#define SV_VERSION "=%
 set VERSION=%VERSION:"=%

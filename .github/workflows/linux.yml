@@ -5,40 +5,37 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v2
     - name: install-packages
       run: |
         sudo apt-get update
-        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils git mercurial autoconf automake libtool mlton capnproto libcapnp-dev
+        sudo apt-get install build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt6-base-dev qt6-pdf-dev qt6-base-dev-tools libqt6svg6-dev raptor2-utils git mercurial autoconf automake libtool smlnj capnproto libcapnp-dev ninja-build libglib2.0-dev
     - name: install-meson
       run: |
         mkdir -p tmp/meson
         cd tmp/meson
-        wget https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.0.tar.gz
-        tar xvf meson-0.56.0.tar.gz
-        sudo ln -s $(pwd)/meson-0.56.0/meson.py /usr/bin/meson
-    - name: install-ninja
-      run: |
-        mkdir -p tmp/ninja
-        cd tmp/ninja
-        wget https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-linux.zip
-        unzip ninja-linux.zip
-        sudo ln -s $(pwd)/ninja /usr/bin/ninja
+        wget https://github.com/mesonbuild/meson/releases/download/1.3.1/meson-1.3.1.tar.gz
+        tar xvf meson-1.3.1.tar.gz
+        sudo ln -s $(pwd)/meson-1.3.1/meson.py /usr/bin/meson
     - name: install-rubberband
       run: |
         mkdir -p tmp/rubberband
         cd tmp/rubberband
-        wget https://breakfastquay.com/files/releases/rubberband-3.1.1.tar.bz2
-        tar xvjf rubberband-3.1.1.tar.bz2
-        cd rubberband-3.1.1
-        meson build && ninja -C build && sudo ninja -C build install
+        wget https://breakfastquay.com/files/releases/rubberband-3.3.0.tar.bz2
+        tar xvjf rubberband-3.3.0.tar.bz2
+        cd rubberband-3.3.0
+        meson setup build --buildtype release
+        ninja -C build
+        sudo ninja -C build install
     - name: repoint
       run: ./repoint install
     - name: configure
-      run: meson build --buildtype release
+      run: |
+        qtchooser -install qt6 $(which qmake6)
+        QT_SELECT=qt6 meson setup build --buildtype release
     - name: make
       run: ninja -C build
     - name: test

@@ -22,13 +22,16 @@
 
 #include "base/Window.h"
 
-class WindowTypeSelector;
 class QPushButton;
 class QLineEdit;
 class QTabWidget;
 class QComboBox;
-class PluginPathConfigurator;
+
+namespace sv {
 class ColourComboBox;
+class WindowTypeSelector;
+class PluginPathConfigurator;
+}
 
 class PreferencesDialog : public QDialog
 {
@@ -56,9 +59,8 @@ public slots:
     void applicationClosing(bool quickly);
 
 protected slots:
-    void windowTypeChanged(WindowType type);
+    void windowTypeChanged(sv::WindowType type);
     void spectrogramSmoothingChanged(int state);
-    void spectrogramXSmoothingChanged(int state);
     void spectrogramGColourChanged(int state);
     void spectrogramMColourChanged(int state);
     void colour3DColourChanged(int state);
@@ -92,7 +94,7 @@ protected slots:
     void cancelClicked();
 
 protected:
-    WindowTypeSelector *m_windowTypeSelector;
+    sv::WindowTypeSelector *m_windowTypeSelector;
     QPushButton *m_applyButton;
 
     QTabWidget *m_tabs;
@@ -100,12 +102,12 @@ protected:
 
     QLineEdit *m_tempDirRootEdit;
 
-    ColourComboBox *m_overviewColourCombo;
+    sv::ColourComboBox *m_overviewColourCombo;
     QComboBox *m_audioPlaybackDeviceCombo;
     QComboBox *m_audioRecordDeviceCombo;
     void rebuildDeviceCombos();
 
-    PluginPathConfigurator *m_pluginPathConfigurator;
+    sv::PluginPathConfigurator *m_pluginPathConfigurator;
     
     QString m_currentTemplate;
     QStringList m_templates;
@@ -113,9 +115,8 @@ protected:
     QString m_currentLocale;
     QStringList m_locales;
     
-    WindowType m_windowType;
+    sv::WindowType m_windowType;
     int m_spectrogramSmoothing;
-    int m_spectrogramXSmoothing;
     int m_spectrogramGColour;
     int m_spectrogramMColour;
     int m_colour3DColour;

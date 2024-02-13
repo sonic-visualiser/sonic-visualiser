@@ -1,0 +1,47 @@
+name: Windows CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ProjectSavanna/setup-sml@v1.2.0
+      with:
+        smlnj-version: '110.99.4'
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - uses: jurplel/install-qt-action@v3
+      with:
+        version: '6.6.1'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2019_64'
+    - uses: ilammy/msvc-dev-cmd@v1
+      with:
+        vsversion: '2019'
+
+    - name: install-meson
+      run: pip install meson ninja
+
+    - name: repoint
+      run: ./repoint install
+
+    - name: configure
+      run: meson setup build --buildtype release
+
+    - name: copy-qt-etc
+      run: |
+          foreach ($lib in 'Core','Gui','Widgets','Network','Xml','Svg','Test') { copy "..\Qt\6.6.1\msvc2019_64\bin\Qt6$lib.dll" build }
+          cp sv-dependency-builds\win64-msvc\lib\libsndfile-1.dll build
+
+    - name: build
+      run: ninja -C build
+
+    - name: test
+      run: meson test -C build
+      

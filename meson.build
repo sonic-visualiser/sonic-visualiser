@@ -2,7 +2,7 @@
 project(
   'Sonic Visualiser',
   'c', 'cpp',
-  version: '4.5.2',
+  version: '5.0',
   license: 'GPL-2.0-or-later',
   default_options: [
     'cpp_std=c++17',
@@ -10,17 +10,17 @@ project(
     'buildtype=release',
     'b_ndebug=if-release',
   ],
-  meson_version: '>= 0.54.0'
+  meson_version: '>= 0.57.0'
 )
 
 conf = configuration_data()
 conf.set('version', meson.project_version())
 configure_file(input: 'version.h.in', output: 'version.h', configuration: conf)
 
-qt = import('qt5')
+qt = import('qt6')
 
 qt_dep = dependency(
-  'qt5',
+  'qt6',
   modules: [
     'Core', 'Gui', 'Widgets', 'Xml', 'Network', 'Svg', 'Test',
   ],
@@ -30,45 +30,47 @@ qt_dep = dependency(
 system = host_machine.system()
 architecture = host_machine.cpu_family()
 compiler = meson.get_compiler('cpp').get_id()
+buildtype = get_option('buildtype')
 
 general_defines = [
   '-DHAVE_PIPER',
   '-DHAVE_PLUGIN_CHECKER_HELPER',
-  '-DQT_DEPRECATED_WARNINGS_SINCE=0x050A00'
 ]
 
 general_link_args = []
 
-config_summary = { 'Compiler': compiler,
-		   'Architecture': architecture,
-		   'System': system }
+config_summary = {
+  'Compiler': compiler,
+  'Architecture': architecture,
+  'System': system,
+  'Build type': buildtype
+}
 
-if get_option('buildtype').startswith('release')
-  config_summary += { 'Build type': 'release' }
+if buildtype.startswith('release')
   general_defines += [
     '-DNO_TIMING',
     '-DNO_HIT_COUNTS',
   ]
-if compiler == 'clang'
+  if compiler == 'clang'
+    general_defines += [
+      '-Wno-deprecated-copy', # Qt currently hits lots of these internally
+    ]
+  elif compiler == 'gcc'
+    general_defines += [
+    ]
+  elif compiler == 'msvc'
+    general_defines += [
+      '-wd4068', # unknown pragma (we have lots of pragma 'GCC')
+      '-wd4267', # conversion from size_t to smaller integral type
+      '-wd4996', # deprecated functions, including annoying warnings about POSIX
+      '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
+    ]
+  endif # compiler
+elif buildtype.startswith('debug')
   general_defines += [
-    '-ffast-math',
-    '-Wno-deprecated-copy', # Qt currently hits lots of these internally
+    '-DWANT_TIMING',
+    '-DWANT_HIT_COUNTS',
   ]
-elif compiler == 'gcc'
-  general_defines += [
-    '-ffast-math',
-  ]
-elif compiler == 'msvc'
-  general_defines += [
-    '-fp:fast',
-    '-wd4068', # unknown pragma (we have lots of pragma 'GCC')
-    '-wd4267', # conversion from size_t to smaller integral type
-    '-wd4996', # deprecated functions, including annoying warnings about POSIX
-    '-Zc:twoPhase-', # work around incompatibility with some SDKs (CI only)
-  ]
-endif # compiler
-else # buildtype
-  config_summary += { 'Build type': 'debug' }
 endif # get_option('buildtype')
 
 svcore_moc_args = []
@@ -107,6 +109,10 @@ if system == 'linux'
   mad_dep = dependency('mad', version: '>= 0.15.0')
   id3tag_dep = dependency('id3tag', version: '>= 0.15.0')
   opus_dep = dependency('opusfile')
+  opusenc_dep = dependency('opusenc', required: false)
+  if not opusenc_dep.found()
+    opusenc_dep = dependency('libopusenc', required: false)
+  endif
   lo_dep = dependency('liblo')
   jack_dep = dependency('jack', version: '>= 0.100')
   libpulse_dep = dependency('libpulse', version: '>= 0.9')
@@ -130,6 +136,7 @@ if system == 'linux'
     mad_dep,
     id3tag_dep,
     opus_dep,
+    opusenc_dep,
     lo_dep,
     portaudio_dep,
     jack_dep,
@@ -174,6 +181,12 @@ if system == 'linux'
     ]
   endif
 
+  if not opusenc_dep.found()
+    feature_defines += [
+      '-DHAVE_OPUS_READ_ONLY'
+    ]
+  endif
+
   svcore_moc_args = [
     '-DHAVE_MAD'
   ]
@@ -214,10 +227,10 @@ elif system == 'darwin'
   rc = []
 
   general_defines += [
-    '-mmacosx-version-min=10.12'
+    '-mmacosx-version-min=10.15'
   ]
   general_link_args += [
-    '-mmacosx-version-min=10.12'
+    '-mmacosx-version-min=10.15'
   ]
   
   feature_defines = [
@@ -229,6 +242,7 @@ elif system == 'darwin'
     '-DHAVE_SERD',
     '-DHAVE_CAPNP',
     '-DHAVE_OPUS',
+    '-DHAVE_OPUS_READ_ONLY',
     '-DHAVE_LIBLO',
     '-DHAVE_PORTAUDIO',
     '-DHAVE_COREAUDIO',
@@ -278,7 +292,7 @@ elif system == 'darwin'
     'sv-dependency-builds/osx/include',
     'sv-dependency-builds/osx/include/opus',
   ]
-  
+
   feature_additional_libs = [
     '-L' + svdeps_libdir,
     '-lbz2',
@@ -344,7 +358,7 @@ elif system == 'windows'
     '-DUNICODE',
     '-D_USE_MATH_DEFINES',
     '-DCAPNP_LITE',
-    '-D_HAS_STD_BYTE=0',
+    '-D_HAS_STD_BYTE=1',
   ]
   
   feature_defines = [
@@ -360,6 +374,7 @@ elif system == 'windows'
     '-DHAVE_MAD',
     '-DHAVE_ID3TAG',
     '-DHAVE_OPUS',
+    '-DHAVE_OPUS_READ_ONLY',
     '-DHAVE_PORTAUDIO',
     '-D__WINDOWS_MM__', # for RtMidi
   ]
@@ -389,9 +404,20 @@ elif system == 'windows'
       'sv-dependency-builds/win64-msvc/include/opus',
     ]
   endif # architecture
+
+  if get_option('buildtype').startswith('release')
+    feature_additional_libpaths =  [
+      '-L' + svdeps_dir / 'lib',
+    ]
+  else
+    feature_additional_libpaths =  [
+      '-L' + svdeps_dir / 'lib/debug',
+      '-L' + svdeps_dir / 'lib',
+    ]
+  endif
   
   feature_additional_libs = [
-    '-L' + svdeps_dir / 'lib',
+    feature_additional_libpaths,
     '-lbz2',
     '-lrubberband',
     '-lfftw3',
@@ -422,7 +448,7 @@ elif system == 'windows'
     ]
   elif architecture == 'x86_64'
     feature_additional_libs += [
-      '-NODEFAULTLIB:LIBCMT',
+#      '-NODEFAULTLIB:LIBCMT',
       '-lsord',
       '-lserd',
       '-lmfplat',
@@ -540,6 +566,7 @@ bq_files = [
   'bqaudioio/src/SystemRecordSource.cpp',
   'bqaudiostream/src/AudioReadStream.cpp',
   'bqaudiostream/src/AudioReadStreamFactory.cpp',
+  'bqaudiostream/src/AudioWriteStreamFactory.cpp',
   'bqaudiostream/src/AudioStreamExceptions.cpp',
 ]
 
@@ -601,6 +628,7 @@ svcore_files = [
   'svcore/base/EventSeries.cpp',
   'svcore/base/Exceptions.cpp',
   'svcore/base/HelperExecPath.cpp',
+  'svcore/base/HitCount.cpp',
   'svcore/base/LogRange.cpp',
   'svcore/base/Pitch.cpp',
   'svcore/base/PlayParameterRepository.cpp',
@@ -925,7 +953,6 @@ svgui_files = [
   'svgui/widgets/SubdividingMenu.cpp',
   'svgui/widgets/TextAbbrev.cpp',
   'svgui/widgets/Thumbwheel.cpp',
-  'svgui/widgets/TipDialog.cpp',
   'svgui/widgets/TransformFinder.cpp',
   'svgui/widgets/UnitConverter.cpp',
   'svgui/widgets/WindowShapePreview.cpp',
@@ -999,7 +1026,6 @@ svgui_moc_files = qt.preprocess(
   'svgui/widgets/SelectableLabel.h',
   'svgui/widgets/SubdividingMenu.h',
   'svgui/widgets/Thumbwheel.h',
-  'svgui/widgets/TipDialog.h',
   'svgui/widgets/TransformFinder.h',
   'svgui/widgets/UnitConverter.h',
   'svgui/widgets/WindowShapePreview.h',
@@ -1147,7 +1173,7 @@ executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: true,
+  win_subsystem: 'windows',
   install: true,
 )
 
@@ -1169,7 +1195,7 @@ svcore_base_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 svcore_system_test_exe = executable(
@@ -1190,7 +1216,7 @@ svcore_system_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 svcore_data_model_test_exe = executable(
@@ -1212,7 +1238,7 @@ svcore_data_model_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 svcore_data_fileio_test_exe = executable(
@@ -1235,7 +1261,7 @@ svcore_data_fileio_test_exe = executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false
+  win_subsystem: 'console'
 )
 
 test('svcore-base', svcore_base_test_exe)
@@ -1260,7 +1286,7 @@ executable(
   link_args: [
     general_link_args,
   ],
-  gui_app: false,
+  win_subsystem: 'console',
   install: true,
 )
 
@@ -1287,7 +1313,7 @@ executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false,
+  win_subsystem: 'console',
   install: true,
 )
 
@@ -1314,7 +1340,7 @@ executable(
     feature_additional_libs,
     general_link_args,
   ],
-  gui_app: false,
+  win_subsystem: 'console',
   install: true,
 )
 

@@ -4,31 +4,31 @@
       "pin": "7df85ecf98d9477c1ac5a36f51807062e00d8695"
     },
     "svcore": {
-      "pin": "ce9f4472abffd6cd605a799eade8649a85448e2f"
+      "pin": "832ed015b6ccc45f9dad1f5521cd812a13db4c7a"
     },
     "svgui": {
-      "pin": "0e84e577c1c8eaa233d3ee7e687c9e9a18faa915"
+      "pin": "27c982edde59d9dfb9285fc084935187b699eaa5"
     },
     "svapp": {
-      "pin": "a831622fe4f86b95390dfc4d4be7eeee388f4e4e"
+      "pin": "d07286b92a4220ae47149ddec980640cb58d16de"
     },
     "checker": {
-      "pin": "ed75cff475c72381aedad936c72b93b4f38157d3"
+      "pin": "fae540cf4a79ac5ed5a4d4dc0df680b1acbe8628"
     },
     "sv-dependency-builds": {
       "pin": "f4eb0637efbbb54bdd909625640b245e606a8374"
     },
     "icons/scalable": {
-      "pin": "7b947da27cfa0b7f6a777684db38480eab695aae"
+      "pin": "326649cac070f922b695f9211eb085d9c7d8fd9a"
     },
     "piper": {
       "pin": "3a742c556ac1f2bf9823f30b937c71c690e1f6ae"
     },
     "piper-vamp-cpp": {
-      "pin": "57b4521fd8f5dc465ee09c62bb83e57dbf22d2de"
+      "pin": "c6519fcb8c926c8331f5e6deb351d738da48600a"
     },
     "dataquay": {
-      "pin": "6e94b6858cb6"
+      "pin": "79623fb778da"
     },
     "bqvec": {
       "pin": "291cde50db9d"
@@ -40,10 +40,10 @@
       "pin": "38c3e524416a"
     },
     "bqaudioio": {
-      "pin": "e85272f8a6ad"
+      "pin": "88520ab5b8e5"
     },
     "bqaudiostream": {
-      "pin": "1ac3beeccf36"
+      "pin": "cb76f04384cf"
     },
     "bqthingfactory": {
       "pin": "2e4bd170f57f"

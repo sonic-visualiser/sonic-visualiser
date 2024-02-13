@@ -22,7 +22,6 @@
 #include "base/PropertyContainer.h"
 #include "base/Preferences.h"
 #include "data/fileio/FileSource.h"
-#include "widgets/TipDialog.h"
 #include "widgets/InteractiveFileFinder.h"
 #include "framework/TransformUserConfigurator.h"
 #include "transform/TransformFactory.h"
@@ -182,6 +181,8 @@
 
 */
 
+using namespace sv;
+
 static QMutex cleanupMutex;
 static bool cleanedUp = false;
 
@@ -190,7 +191,7 @@ signalHandler(int /* signal */)
 {
     // Avoid this happening more than once across threads
 
-    cerr << "signalHandler: cleaning up and exiting" << endl;
+    std::cerr << "signalHandler: cleaning up and exiting" << std::endl;
 
     if (cleanupMutex.tryLock(5000)) {
         if (!cleanedUp) {
@@ -246,7 +247,7 @@ main(int argc, char **argv)
 {
     if (argc == 2 && (QString(argv[1]) == "--version" ||
                       QString(argv[1]) == "-v")) {
-        cerr << SV_VERSION << endl;
+        std::cerr << SV_VERSION << std::endl;
         exit(0);
     }
     
@@ -262,6 +263,8 @@ main(int argc, char **argv)
 #if (QT_VERSION >= 0x050700)
     QApplication::setDesktopFileName("sonic-visualiser");
 #endif
+
+    SVCerr::installQtMessageHandler();
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QApplication::tr("\nSonic Visualiser is a program for viewing and exploring audio data\nfor semantic music analysis and annotation."));
@@ -317,8 +320,6 @@ main(int argc, char **argv)
     }
     
     args = parser.positionalArguments();
-
-    QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     signal(SIGINT,  signalHandler);
     signal(SIGTERM, signalHandler);
@@ -379,7 +380,7 @@ main(int argc, char **argv)
     if (showSplash) {
         splash = new SVSplash();
         splash->show();
-        QTimer::singleShot(5000, splash, SLOT(hide()));
+        QTimer::singleShot(3000, splash, SLOT(hide()));
         application.processEvents();
     }
 
@@ -438,9 +439,12 @@ main(int argc, char **argv)
     QTranslator svTranslator;
     QString svTrName = QString("sonic-visualiser_%1").arg(language);
     SVDEBUG << "Loading " << svTrName << "... ";
-    svTranslator.load(svTrName, ":i18n");
-    SVDEBUG << "Done" << endl;
-    application.installTranslator(&svTranslator);
+    if (svTranslator.load(svTrName, ":i18n")) {
+        SVDEBUG << "Done" << endl;
+        application.installTranslator(&svTranslator);
+    } else {
+        SVDEBUG << "Unable to load" << endl;
+    }
 
     StoreStartupLocale();
 
@@ -577,7 +581,7 @@ main(int argc, char **argv)
     {
         char *cwisdom = fftwf_export_wisdom_to_string();
         if (cwisdom) {
-            settings.setValue("wisdom", cwisdom);
+            settings.setValue("wisdom", QString::fromLocal8Bit(cwisdom));
             free(cwisdom);
         }
     }
@@ -586,7 +590,7 @@ main(int argc, char **argv)
     {
         char *cwisdom = fftw_export_wisdom_to_string();
         if (cwisdom) {
-            settings.setValue("wisdom_d", cwisdom);
+            settings.setValue("wisdom_d", QString::fromLocal8Bit(cwisdom));
             free(cwisdom);
         }
     }
@@ -594,6 +598,7 @@ main(int argc, char **argv)
     settings.endGroup();
 
     FileSource::debugReport();
+    Profiles::getInstance()->dump();
     
     delete gui;
 

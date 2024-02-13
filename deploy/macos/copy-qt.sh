@@ -9,9 +9,9 @@ if [ -z "$app" ]; then
 	exit 2
 fi
 
-frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtWidgets QtPrintSupport QtDBus"
+frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtTest QtPdf QtWidgets QtPrintSupport QtDBus"
 
-plugins="gif icns ico jpeg tga tiff wbmp webp cocoa minimal offscreen macstyle"
+plugins="gif ico jpeg pdf svg cocoa minimal offscreen macstyle"
 
 qtdir="$QTDIR"
 
@@ -36,14 +36,26 @@ for fwk in $frameworks; do
 	fi
     fi
     cp -v "$qtdir/lib/$fwk.framework/$fwk" "$fdir" || exit 2
+    chmod +x "$fdir/$fwk"
 done
 
 echo "Done"
 
 echo
 echo "Copying plugins..."
+
+psrcdir="$qtdir"/plugins/
+if [ ! -d "$psrcdir" ]; then
+    echo "Failed to find plugin dir $psrcdir, trying alternative location"
+    psrcdir="$qtdir"/share/qt/plugins/
+    if [ ! -d "$psrcdir" ]; then
+        echo "Failed to find plugin dir alternative $psrcdir, exiting"
+        exit 2
+    fi
+fi
+        
 for plug in $plugins; do
-    pfile=$(ls "$qtdir"/plugins/*/libq"$plug".dylib)
+    pfile=$(ls "$psrcdir"/*/libq"$plug".dylib)
     if [ ! -f "$pfile" ]; then
 	echo "Failed to find plugin $plug, exiting"
 	exit 2

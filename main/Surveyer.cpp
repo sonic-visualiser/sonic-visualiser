@@ -29,6 +29,8 @@
 #include "transform/TransformFactory.h"
 #include "plugin/PluginIdentifier.h"
 
+using namespace sv;
+
 Surveyer::Surveyer(Config config) :
     m_config(config),
     m_httpFailed(false),
@@ -56,7 +58,7 @@ Surveyer::Surveyer(Config config) :
                  .arg(m_config.hostname).arg(m_config.testPath));
         SVDEBUG << "Surveyer: Test URL is " << url << endl;
         m_reply = m_nm->get(QNetworkRequest(url));
-        connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
+        connect(m_reply, SIGNAL(errorOccurred(QNetworkReply::NetworkError)),
                 this, SLOT(error(QNetworkReply::NetworkError)));
         connect(m_reply, SIGNAL(finished()), this, SLOT(finished()));
     } else if (countdown > 0) {

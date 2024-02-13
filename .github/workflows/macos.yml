@@ -10,17 +10,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: deps
-      run: brew install polyml qt5 meson ninja capnp mercurial
+      run: brew install polyml qt6 meson ninja capnp mercurial
     - name: repoint
       run: ./repoint install
     - name: configure
-      run: PATH=$PATH:/usr/local/opt/qt5/bin meson build --buildtype release
+      run: PATH=$PATH:/usr/local/opt/qt6/bin meson setup build --buildtype release
     - name: make
       run: ninja -C build
     - name: test
       run: meson test -C build
     - name: deploy-app
-      run: QTDIR=/usr/local/opt/qt5 ./deploy/macos/deploy.sh "Sonic Visualiser"
+      run: |
+        QTDIR=/usr/local/opt/qt6 ./deploy/macos/deploy.sh "Sonic Visualiser"
     - name: check
       run: |
         otool -L ./"Sonic Visualiser.app/Contents/MacOS/Sonic Visualiser"
