@@ -11,17 +11,20 @@
         "svcore": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser"
+            "owner": "sonic-visualiser",
+            "branch": "default"
         },
         "svgui": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser"
+            "owner": "sonic-visualiser",
+            "branch": "default"
         },
         "svapp": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser"
+            "owner": "sonic-visualiser",
+            "branch": "default"
         },
         "checker": {
             "vcs": "git",
