@@ -32,7 +32,7 @@ Keep scrolling down if the second one is what you want.
 
 These are
 
- * [Qt5](https://qt.io), GPL edition
+ * [Qt6](https://qt.io), GPL edition
  * [Meson](https://mesonbuild.com) and [Ninja](https://ninja-build.org)
 build tools
  * An SML compiler, e.g. [Poly/ML](https://polyml.org)
@@ -74,7 +74,7 @@ Ensure your `QTDIR` and `PATH` environment variables are set up to
 point to the Qt libraries and tools so that Meson can find them, e.g.
 
 ```
-$ export QTDIR=$HOME/Qt/5.12.10/clang_64
+$ export QTDIR=$HOME/Qt/6.6.1/clang_64
 $ export PATH=$PATH:$QTDIR/bin
 ```
 
@@ -127,7 +127,7 @@ Visualiser window should appear.
 like this instead:
 
 ```
-dyld: Library not loaded: @rpath/QtCore.framework/Versions/5/QtCore
+dyld: Library not loaded: @rpath/QtCore.framework/Versions/6/QtCore
   Referenced from: /path/to/sonic-visualiser/./build/Sonic Visualiser
   Reason: image not found
 Abort trap: 6
@@ -161,7 +161,7 @@ document.
 
 These are the same as for a command-line build:
 
- * [Qt5](https://qt.io), GPL edition, with Qt Creator IDE
+ * [Qt6](https://qt.io), GPL edition, with Qt Creator IDE
  * [Meson](https://mesonbuild.com) and [Ninja](https://ninja-build.org)
 build tools
  * An SML compiler, e.g. [Poly/ML](https://polyml.org)
@@ -232,7 +232,7 @@ is specified as `Use Build Environment`.
 
 Edit that section so as to set the `DYLD_FRAMEWORK_PATH` variable to
 your Qt library directory, for example
-`/Users/me/Qt/5.12.10/clang_64/lib`. (You should only have to do this
+`/Users/me/Qt/6.6.1/clang_64/lib`. (You should only have to do this
 once, not every time you rebuild the project!)
 
 After setting this, you should be able to run Sonic Visualiser by
@@ -242,7 +242,7 @@ clicking the big green arrow Run button.
 like this in the Application Output window instead:
 
 ```
-dyld: Library not loaded: @rpath/QtCore.framework/Versions/5/QtCore
+dyld: Library not loaded: @rpath/QtCore.framework/Versions/6/QtCore
   Referenced from: /path/to/sonic-visualiser/./build/Sonic Visualiser
   Reason: image not found
 Abort trap: 6

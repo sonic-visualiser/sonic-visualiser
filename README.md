@@ -55,7 +55,7 @@ have funding available for it, please contact us.
 The Sonic Visualiser code is in general
 
  * Copyright (c) 2005-2007 Chris Cannam
- * Copyright (c) 2006-2020 Queen Mary University of London
+ * Copyright (c) 2006-2020, 2024 Queen Mary University of London
  * Copyright (c) 2020-2023 Particular Programs Ltd
 
 with a few exceptions as indicated in the individual source files.
@@ -86,7 +86,7 @@ this distribution for more information.
 
 Sonic Visualiser may also make use of the following libraries:
 
- * Qt5 - Copyright The Qt Company, distributed under the LGPL
+ * Qt6 - Copyright The Qt Company, distributed under the LGPL
  * JACK - Copyright Paul Davis, Jack O'Quin et al, under the LGPL
  * PortAudio - Copyright Ross Bencina, Phil Burk et al, BSD license
  * Ogg decoder - Copyright CSIRO Australia, BSD license
@@ -123,7 +123,7 @@ These three platform builds are checked via continuous integration:
 
  * Linux CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/Linux%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22Linux+CI%22)
  * macOS CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/macOS%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22macOS+CI%22)
- * Windows CI build: [![Build status](https://ci.appveyor.com/api/projects/status/26pygienkigw39p7?svg=true)](https://ci.appveyor.com/project/cannam/sonic-visualiser)
+ * Windows CI build: [![Build Status](https://github.com/sonic-visualiser/sonic-visualiser/workflows/Windows%20CI/badge.svg)](https://github.com/sonic-visualiser/sonic-visualiser/actions?query=workflow%3A%22Windows+CI%22)
 
 For notes on how to update and edit the UI translation strings, see [TRANSLATION.md](https://github.com/sonic-visualiser/sonic-visualiser/blob/default/TRANSLATION.md)
 

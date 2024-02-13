@@ -5519,7 +5519,7 @@ MainWindow::about()
     aboutText += "</small></p>";
 
     aboutText += 
-        "<p><small>Sonic Visualiser is Copyright &copy; 2005&ndash;2007 Chris Cannam; Copyright &copy; 2006&ndash;2020 Queen Mary, University of London; Copyright &copy; 2020-2023 Particular Programs Ltd.</small></p>";
+        "<p><small>Sonic Visualiser is Copyright &copy; 2005&ndash;2007 Chris Cannam; Copyright &copy; 2006&ndash;2020, 2024 Queen Mary, University of London; Copyright &copy; 2020-2023 Particular Programs Ltd.</small></p>";
 
     aboutText +=
         "<p><small>This program is free software; you can redistribute it and/or "

@@ -9,7 +9,7 @@ build system is used.
 The following additional libraries or tools are required and should be
 installed through your system package manager:
 
-        Qt v5                   https://www.qt.io/
+        Qt v6                   https://www.qt.io/
         Meson                   https://mesonbuild.com/
         Ninja                   https://ninja-build.org/
         MLton                   https://mlton.org/
@@ -28,6 +28,8 @@ installed through your system package manager:
         PulseAudio              https://www.pulseaudio.org/
         PortAudio v19           https://www.portaudio.com/
 
+Versions of Sonic Visualiser prior to v5 require Qt5 instead of Qt6.
+
 You will also need the ALSA libraries (used for MIDI).
 
 For Cap'n Proto you will need v0.6 or newer.
@@ -35,7 +37,7 @@ For Cap'n Proto you will need v0.6 or newer.
 If you happen to be using a Debian-based Linux, you probably want to
 apt install something like the following packages:
 
-build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt5-default libqt5svg5-dev raptor2-utils librubberband-dev capnproto libcapnp-dev git mercurial autoconf automake libtool mlton meson ninja-build
+build-essential libbz2-dev libfftw3-dev libfishsound1-dev libid3tag0-dev liblo-dev liblrdf0-dev libmad0-dev liboggz2-dev libopus-dev libopusfile-dev libpulse-dev libsamplerate-dev libsndfile-dev libsord-dev libxml2-utils portaudio19-dev qt6-base-dev qt6-pdf-dev qt6-base-dev-tools libqt6svg6-dev raptor2-utils git mercurial autoconf automake libtool smlnj capnproto libcapnp-dev ninja-build libglib2.0-dev
 
 ## 2. Get the Sonic Visualiser code
 
