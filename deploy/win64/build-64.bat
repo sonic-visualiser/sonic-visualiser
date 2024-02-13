@@ -11,9 +11,6 @@ if not exist %QTDIR% (
     set QTDIR=%QT_ROOT_DIR%
 )
 if not exist %QTDIR% (
-    set QTDIR=\a\sonic-visualiser\Qt\6.6.1\msvc2019_64
-)
-if not exist %QTDIR% (
 @   echo Could not find Qt in %QTDIR%
 @   exit /b 2
 )
