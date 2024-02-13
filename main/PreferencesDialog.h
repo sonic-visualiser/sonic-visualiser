@@ -61,7 +61,6 @@ public slots:
 protected slots:
     void windowTypeChanged(sv::WindowType type);
     void spectrogramSmoothingChanged(int state);
-    void spectrogramXSmoothingChanged(int state);
     void spectrogramGColourChanged(int state);
     void spectrogramMColourChanged(int state);
     void colour3DColourChanged(int state);
@@ -118,7 +117,6 @@ protected:
     
     sv::WindowType m_windowType;
     int m_spectrogramSmoothing;
-    int m_spectrogramXSmoothing;
     int m_spectrogramGColour;
     int m_spectrogramMColour;
     int m_colour3DColour;

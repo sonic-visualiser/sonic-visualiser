@@ -113,21 +113,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     connect(smoothing, SIGNAL(currentIndexChanged(int)),
             this, SLOT(spectrogramSmoothingChanged(int)));
 
-    QComboBox *xsmoothing = new QComboBox;
-    
-    int xsm = prefs->getPropertyRangeAndValue("Spectrogram X Smoothing", &min, &max,
-                                             &deflt);
-    m_spectrogramXSmoothing = xsm;
-
-    for (i = min; i <= max; ++i) {
-        xsmoothing->addItem(prefs->getPropertyValueLabel("Spectrogram X Smoothing", i));
-    }
-
-    xsmoothing->setCurrentIndex(xsm);
-
-    connect(xsmoothing, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(spectrogramXSmoothingChanged(int)));
-
     QComboBox *propertyLayout = new QComboBox;
     int pl = prefs->getPropertyRangeAndValue("Property Box Layout", &min, &max,
                                          &deflt);
@@ -488,11 +473,6 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
                        row, 0);
     subgrid->addWidget(smoothing, row++, 1, 1, 2);
 
-    subgrid->addWidget(new QLabel(prefs->getPropertyLabel
-                                  ("Spectrogram X Smoothing")),
-                       row, 0);
-    subgrid->addWidget(xsmoothing, row++, 1, 1, 2);
-
     subgrid->addWidget(new QLabel(tr("%1:").arg(prefs->getPropertyLabel
                                                 ("Window Type"))),
                        row, 0);
@@ -729,13 +709,6 @@ void
 PreferencesDialog::spectrogramSmoothingChanged(int smoothing)
 {
     m_spectrogramSmoothing = smoothing;
-    m_applyButton->setEnabled(true);
-}
-
-void
-PreferencesDialog::spectrogramXSmoothingChanged(int smoothing)
-{
-    m_spectrogramXSmoothing = smoothing;
     m_applyButton->setEnabled(true);
 }
 
@@ -986,8 +959,6 @@ PreferencesDialog::applyClicked()
     prefs->setWindowType(WindowType(m_windowType));
     prefs->setSpectrogramSmoothing(Preferences::SpectrogramSmoothing
                                    (m_spectrogramSmoothing));
-    prefs->setSpectrogramXSmoothing(Preferences::SpectrogramXSmoothing
-                                   (m_spectrogramXSmoothing));
     prefs->setPropertyBoxLayout(Preferences::PropertyBoxLayout
                                 (m_propertyLayout));
     prefs->setTuningFrequency(m_tuningFrequency);
