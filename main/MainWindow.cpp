@@ -395,9 +395,7 @@ MainWindow::setupMenus()
         m_rightButtonMenu->setTearOffEnabled(false);
     }
 
-    if (m_rightButtonTransformsMenu) {
-        m_rightButtonTransformsMenu->clear();
-    } else {
+    if (!m_rightButtonTransformsMenu) {
         m_rightButtonTransformsMenu = m_rightButtonMenu->addMenu(tr("&Transform"));
         m_rightButtonTransformsMenu->setTearOffEnabled(true);
         m_rightButtonMenu->addSeparator();
