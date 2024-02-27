@@ -6,7 +6,7 @@
         "vamp-plugin-sdk": {
             "vcs": "git",
             "service": "github",
-            "owner": "c4dm"
+            "owner": "vamp-plugins"
         },
         "svcore": {
             "vcs": "git",
