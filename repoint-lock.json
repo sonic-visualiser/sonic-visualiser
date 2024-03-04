@@ -4,10 +4,10 @@
       "pin": "63e0c3b37b6fb9ce6f074ea8222b4903e4f5568a"
     },
     "svcore": {
-      "pin": "045a8eaeccc1bec75cabb267eb41e3929f2cd1e8"
+      "pin": "20e7181744677635bea6957b864cd4920ac0aab6"
     },
     "svgui": {
-      "pin": "1cecdcd92e876b358c8dbe1d7b9ad61a15daceae"
+      "pin": "18da36ad18f90f28ded28ebc270e94b090e091dc"
     },
     "svapp": {
       "pin": "d07286b92a4220ae47149ddec980640cb58d16de"
@@ -16,10 +16,10 @@
       "pin": "fae540cf4a79ac5ed5a4d4dc0df680b1acbe8628"
     },
     "sv-dependency-builds": {
-      "pin": "f4eb0637efbbb54bdd909625640b245e606a8374"
+      "pin": "c0e0372de677d29048dfa1488afd8d1acb66fb8e"
     },
     "icons/scalable": {
-      "pin": "326649cac070f922b695f9211eb085d9c7d8fd9a"
+      "pin": "fa47556361a34604e042c9a1820051424451a024"
     },
     "piper": {
       "pin": "3a742c556ac1f2bf9823f30b937c71c690e1f6ae"
