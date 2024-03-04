@@ -249,19 +249,16 @@ elif system == 'darwin'
     '-DHAVE_VDSP',
     '-D__MACOSX_CORE__', # for RtMidi
   ]
+    
+  # vDSP will be used in preference to FFTW most of the time, but
+  # FFTW supports more fft lengths - without it we can end up with a
+  # very slow implementation for unusual lengths.
+  feature_defines += [
+    '-DHAVE_FFTW3',
+    '-DFFTW_DOUBLE_ONLY',
+  ]
 
   if architecture != 'aarch64'
-    
-    # vDSP will be used in preference to FFTW most of the time, but
-    # FFTW supports more fft lengths - without it we can end up with a
-    # very slow implementation for unusual lengths. However we don't
-    # have this in the deps build for arm64 yet because my first
-    # attempt at arm64 build failed and I haven't had a moment to
-    # return to it yet.
-    feature_defines += [
-      '-DHAVE_FFTW3',
-      '-DFFTW_DOUBLE_ONLY',
-    ]
 
     # We don't actually need MAD on this platform at all - CoreAudio
     # can read mp3 files no problem - but we have been using it up to
@@ -307,6 +304,7 @@ elif system == 'darwin'
     '-lopus',
     '-lportaudio',
     '-lsamplerate',
+    '-lfftw3',
     '-lz',
     '-lsord-0',
     '-lserd-0',
@@ -325,7 +323,6 @@ elif system == 'darwin'
   if architecture != 'aarch64'
     # See comments when setting up feature_defines above
     feature_additional_libs += [
-      '-lfftw3',
       '-lmad',
       '-lid3tag',
     ]
