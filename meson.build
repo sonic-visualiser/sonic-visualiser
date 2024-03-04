@@ -402,7 +402,7 @@ elif system == 'windows'
     ]
   endif # architecture
 
-  if get_option('buildtype').startswith('release')
+  if buildtype.startswith('release')
     feature_additional_libpaths =  [
       '-L' + svdeps_dir / 'lib',
     ]
