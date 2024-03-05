@@ -11,18 +11,17 @@ fi
 
 set -u
 
-frameworks="QtCore QtNetwork QtGui QtXml QtSvg QtTest QtPdf QtWidgets QtPrintSupport QtDBus"
+frameworks=$( ( cd "$app.app/Contents/Frameworks" ; echo *.framework ) | sed 's/\.framework//g' )
 
 echo
-echo "I expect you to have already copied these frameworks from the Qt installation to"
-echo "$app.app/Contents/Frameworks -- expect errors to follow if they're missing:"
+echo "Found these frameworks in the app:"
 echo "$frameworks"
 echo
 
 echo "Fixing up loader paths in binaries..."
 
 for fwk in $frameworks; do
-    install_name_tool -id $fwk "$app.app/Contents/Frameworks/$fwk"
+    install_name_tool -id $fwk "$app.app/Contents/Frameworks/$fwk.framework/$fwk"
 done
 
 find "$app.app" -name \*.dylib -print | while read x; do
@@ -36,7 +35,7 @@ for fwk in $frameworks; do
                 echo "$x has $current"
                 relative=$(echo "$x" | sed -e "s,$app.app/Contents/,," \
 				           -e 's,[^/]*/,../,g' \
-				           -e 's,/[^/]*$,/Frameworks/'"$fwk"',' )
+				           -e 's,/[^/]*$,/Frameworks/'"$fwk.framework/$fwk"',' )
                 echo "replacing with relative path $relative"
                 install_name_tool -change "$current" "@loader_path/$relative" "$x"
             done

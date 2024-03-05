@@ -10,15 +10,16 @@ esac
 mkdir -p packages
 echo
 
-version=$(grep '^ *version:' meson.build | sed "s/^ *version: *'//" | sed "s/'.*$//")
+. deploy/metadata.sh
 
 if [ -d /Applications ]; then
 
     archs="x86_64 arm64"
-    qtdir_x86_64="/Users/cannam/Qt/5.12.10/clang_64"
-    qtdir_arm64="/Users/cannam/Qt/5.15.2-arm64"
+    
+    qtdir_x86_64="/Users/cannam/Qt/6.6.1/macos"
+    qtdir_arm64="/Users/cannam/Qt/6.6.1/macos"
 
-    echo "Proceed to rebuild, package, and sign version $version using:"
+    echo "Proceed to rebuild, package, and sign version $version of $full_name using:"
     for arch in $archs; do
 	case "$arch" in
 	    x86_64) qtdir="$qtdir_x86_64";;
@@ -30,12 +31,12 @@ if [ -d /Applications ]; then
 	    echo "*** ERROR: Qt dir $qtdir does not exist"
 	    exit 1
 	fi
-	if [ ! -f "$qtdir/bin/qmake" ]; then
+	qmake=$qtdir/bin/qmake
+	if [ ! -f "$qmake" ]; then
 	    echo "*** ERROR: qmake not found in $qmake (for Qt dir $qtdir)"
 	    exit 1
 	fi
-	qmake_arch=$(lipo -archs "$qtdir/bin/qmake")
-	if [ t"$qmake_arch" != t"$arch" ]; then
+	if ! lipo -archs "$qmake" | grep -q "$arch"; then
 	    echo "*** ERROR: wrong arch $qmake_arch for qmake $qmake (expected $arch)"
 	    exit 1
 	fi
@@ -47,6 +48,8 @@ if [ -d /Applications ]; then
 
     ./repoint install
 
+    builddirs=""
+
     for arch in $archs; do
 
 	case "$arch" in
@@ -54,23 +57,23 @@ if [ -d /Applications ]; then
 	    arm64) qtdir="$qtdir_arm64";;
 	esac
 
-	rm -rf build-$arch
-	PATH="$qtdir/bin:$PATH" arch -$arch meson build-$arch --cross-file=deploy/cross/macos-$arch.txt --buildtype release -Db_lto=true
-	ninja -C build-$arch
+	builddir="build-$arch"
+	
+	rm -rf "$builddir"
+	PATH="$qtdir/bin:$PATH" arch -$arch meson setup "$builddir" --cross-file=deploy/cross/macos-$arch.txt --buildtype release -Db_lto=true
+	ninja -C "$builddir"
+
+	builddirs="$builddirs $builddir"
 
     done
-    
-    app="Sonic Visualiser"
-    volume="$app"-"$version"
-    dmg="$volume".dmg
 
-    rm -rf "$app.app"
-    rm -rf "$volume"
-    rm -f "$dmg"
+    rm -rf "$full_app"
+    rm -rf "$full_versioned"
+    rm -f "$full_dmg"
 
-    deploy/macos/deploy-and-package.sh build-x86_64 build-arm64
+    deploy/macos/deploy-and-package.sh $builddirs
 
-    mv "$dmg" packages/
+    mv "$full_dmg" packages/
 
 else
 

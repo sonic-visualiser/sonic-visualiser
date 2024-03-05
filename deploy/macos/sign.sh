@@ -24,9 +24,12 @@ for app in "$dir"/*.app; do
     find "$app" -name \*.dylib -print | while read fr; do
 	codesign -s "$gatekeeper_key" -fv --deep --options runtime "$fr"
     done
-    codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$entitlements" "$app/Contents/MacOS/Sonic Visualiser"
-    codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app"/Contents/MacOS/vamp-plugin-load-checker*
-    codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$helper_entitlements" "$app"/Contents/MacOS/piper-vamp-simple-server*
+    find "$app/Contents/MacOS" -type f -print | while read f; do
+	codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$entitlements" "$f"
+    done
+    find "$app/Contents/Frameworks" -type f -print | while read f; do
+	codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$entitlements" "$f"
+    done
     codesign -s "$gatekeeper_key" -fv --deep --options runtime --entitlements "$entitlements" "$app"
 done
 

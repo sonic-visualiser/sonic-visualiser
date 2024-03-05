@@ -23,8 +23,6 @@ if [ "$1" = "--no-notarization" ]; then
     shift
 fi
 
-app="Sonic Visualiser"
-
 builddirs="$@"
 if [ -z "$builddirs" ]; then
     usage
@@ -32,7 +30,14 @@ fi
 
 set -u
 
-version=""
+. deploy/metadata.sh
+
+app="$full_name"
+source="$full_name.app"
+volume="$full_versioned"
+volname="$full_name $version"
+target="$volume"/"$full_name".app
+dmg="$volume".dmg
 
 for builddir in $builddirs; do
     if [ ! -f "$builddir/$app" ]; then
@@ -44,20 +49,16 @@ for builddir in $builddirs; do
 	echo "Unable to extract version from builddir $builddir"
 	exit 2
     fi
-    if [ -z "$version" ]; then
-	version="$version_here"
-    elif [ "$version" != "$version_here" ]; then
-	echo "Version $version_here found in builddir $builddir does not match version $version found in prior builddir(s)"
+    case "$version_here" in
+	[0-9].[0-9]) version_here="$version_here".0 ;;
+    esac
+    if [ "$version" != "$version_here" ]; then
+	echo "Version $version_here found in builddir $builddir does not match expected version $version"
 	exit 2
     fi
 done
 
 echo "Version: $version"
-
-source="$app.app"
-volume="$app"-"$version"
-target="$volume"/"$app".app
-dmg="$volume".dmg
 
 if [ -d "$volume" ]; then
     echo "Target directory $volume already exists, not overwriting"
@@ -92,7 +93,7 @@ for builddir in $builddirs; do
 		grep -i 'found' |
 		head -1 |
 		sed 's/Found qmake: //' |
-		sed 's/qmake found: YES (//' |
+		sed 's/qmake[0-9] found: YES (//' |
 		sed 's,/bin/qmake.*,,')
     if [ -z "$qtdir" ]; then
 	echo "Unable to discover QTDIR from build dir $builddir"
@@ -109,12 +110,22 @@ for builddir in $builddirs; do
 
     if [ ! -f "$target/Contents/Macos/$app" ]; then
 	echo "App does not yet exist in target $target, copying verbatim..."
-	cp -rp "$source" "$target"
+	cp -a "$source" "$target"
     else
 	echo "App exists in target $target, merging..."
 	find "$source" -name "$app" -o -name \*.dylib -o -name Qt\* |
 	    while read f; do
-		lipo "$f" "$volume/$f" -create -output "$volume/$f"
+		case "$f" in
+		    *.framework) ;;
+		    *)
+			this=$(lipo -archs "$f")
+			that=$(lipo -archs "$volume/$f")
+			if [ "$this" = "$that" ]; then
+			    echo "File $f already has desired arch(s) in target"
+			else
+			    lipo "$f" "$volume/$f" -create -output "$volume/$f"
+			fi
+		esac
 	    done
 	for helper in vamp-plugin-load-checker piper-vamp-simple-server; do
 	    path="Contents/MacOS/$helper"

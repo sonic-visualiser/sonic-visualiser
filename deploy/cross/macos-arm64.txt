@@ -11,7 +11,7 @@ needs_exe_wrapper = false
 c = 'cc'
 cpp = 'c++'
 strip = 'strip'
-pkgconfig = 'pkg-config'
+pkg-config = 'pkg-config'
 qmake = 'qmake'
 
 [built-in options]

@@ -1,86 +1,27 @@
 #!/bin/bash
 
-## The following assumes we have generated an app password at
-## appleid.apple.com and then stored it to keychain id "altool" using
-## e.g.
-## security add-generic-password -a "cannam+apple@all-day-breakfast.com" \
-##   -w "generated-app-password" -s "altool"
-
 ## NB to verify:
 # spctl -a -v "/Applications/Application.app"
 
 user="appstore@particularprograms.co.uk"
-bundleid="org.sonicvisualiser.SonicVisualiser"
+team_id="73F996B92S"
 
-set -e
+set -eu
 
-dmg="$1"
+. deploy/metadata.sh
 
-if [ ! -f "$dmg" ] || [ -n "$2" ]; then
-    echo "Usage: $0 <dmg>"
-    echo "  e.g. $0 MyApplication-1.0.dmg"
-    exit 2
-fi
-
-set -u
+bundleid="$full_ident"
+dmg="$full_dmg"
 
 echo
 echo "Uploading for notarization..."
 
-uuidfile=.notarization-uuid
-statfile=.notarization-status
-rm -f "$uuidfile" "$statfile"
-
-# At some point we need to switch to...
-#xcrun notarytool submit \
-#    "$dmg" \
-#    --apple-id "$user" \
-#    --keychain-profile altool \
-#    --wait --progress
-
-xcrun altool --notarize-app \
-    -f "$dmg" \
-    --primary-bundle-id "$bundleid" \
-    -u "$user" \
-    -p @keychain:altool 2>&1 | tee "$uuidfile"
-
-uuid=$(cat "$uuidfile" | grep RequestUUID | awk '{ print $3; }')
-
-if [ -z "$uuid" ]; then
-    echo
-    echo "Failed (no UUID returned, check output)"
-    exit 1
-fi
-
-echo "Done, UUID is $uuid"
-
-echo
-echo "Waiting and checking for completion..."
-
-while true ; do
-    sleep 30
-
-    xcrun altool --notarization-info \
-	"$uuid" \
-	-u "$user" \
-	-p @keychain:altool 2>&1 | tee "$statfile"
-    if grep -q 'Package Approved' "$statfile"; then
-	echo
-	echo "Approved! Status output is:"
-	cat "$statfile"
-	break
-    elif grep -q 'in progress' "$statfile" ; then
-	echo
-	echo "Still in progress... Status output is:"
-	cat "$statfile"
-	echo "Waiting..."
-    else 
-	echo
-	echo "Failure or unknown status in output:"
-	cat "$statfile"
-	exit 2
-    fi
-done
+xcrun notarytool submit \
+    "$dmg" \
+    --apple-id "$user" \
+    --team-id "$team_id" \
+    --keychain-profile notarytool-cannam \
+    --wait --progress
 
 echo
 echo "Stapling to package..."
