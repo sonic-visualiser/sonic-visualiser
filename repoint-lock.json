@@ -7,7 +7,7 @@
       "pin": "20e7181744677635bea6957b864cd4920ac0aab6"
     },
     "svgui": {
-      "pin": "4d791bccce877ca425528df3b1331941261622e0"
+      "pin": "7cbbcc546d717b1bca067a9a5da28000acfc1ad2"
     },
     "svapp": {
       "pin": "d07286b92a4220ae47149ddec980640cb58d16de"
@@ -16,7 +16,7 @@
       "pin": "fae540cf4a79ac5ed5a4d4dc0df680b1acbe8628"
     },
     "sv-dependency-builds": {
-      "pin": "c0e0372de677d29048dfa1488afd8d1acb66fb8e"
+      "pin": "2d7667f145b5758eb277423e451bd5c2374dfb22"
     },
     "icons/scalable": {
       "pin": "fa47556361a34604e042c9a1820051424451a024"
