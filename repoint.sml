@@ -1485,13 +1485,24 @@ structure GitControl :> VCS_CONTROL = struct
             let val headfile = FileBits.subpath
                                    context libname
                                    (".git/refs/remotes/" ^ our_remote ^ "/HEAD")
+                val () = if FileBits.verbose ()
+                         then print ("\n=== " ^
+                                     FileBits.libpath context libname ^
+                                     "\n<<< cat \"" ^ headfile ^ "\"\n")
+                         else ()
                 val headspec = FileBits.file_contents headfile
             in
                 case String.tokens (fn c => c = #" ") headspec of
                     ["ref:", refpath] =>
                     (case String.fields (fn c => c = #"/") refpath of
                          "refs" :: "remotes" :: _ :: rest =>
-                         String.concatWith "/" rest
+                         let val branch = String.concatWith "/" rest
+                             val () = if FileBits.verbose ()
+                                      then print (">>> \"" ^ branch ^ "\"\n")
+                                      else ()
+                         in
+                             branch
+                         end
                        | _ =>
                          return_fallback
                              ("Unable to extract default branch from "
