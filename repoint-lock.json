@@ -4,10 +4,10 @@
       "pin": "44c2487763eb248a933e9eff9169cfadee375009"
     },
     "svcore": {
-      "pin": "83dbc54584bd3824fd96c4cdcfeba55a3ed29e63"
+      "pin": "d164b78f6b8548911564b765371aa8eb398791cb"
     },
     "svgui": {
-      "pin": "f385facec5015dcaee876df77f159f67613a530a"
+      "pin": "2aaf1d96d1a9e2aef4078b7c3bc22ef397a7e3ad"
     },
     "svapp": {
       "pin": "70bf9c6b9b1a71a68173de0728f67c47342dafaa"
