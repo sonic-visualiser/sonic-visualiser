@@ -17,17 +17,29 @@
 
 set -e
 
+sv="../build/sonic-visualiser"
+
 if [ -n "$1" ]; then
-    echo "Usage: $0" 1>&2
+    sv="$1"
+    shift
+fi
+
+if [ -n "$1" ]; then
+    echo "Usage: $0 [/optional/path/to/sonic-visualiser]" 1>&2
     exit 2
 fi
 
 set -u
 
-sv="../build/sonic-visualiser"
-if [ ! -f "$sv" -o ! -x "$sv" ]; then
+if [ ! -d "../export-tests" ]; then
     echo "This script must be run from the sonic-visualiser/export-tests directory" 1>&2
-    echo "It expects a sonic-visualiser binary to be found in ../build/" 1>&2
+    exit 1
+fi
+
+if [ ! -f "$sv" -o ! -x "$sv" ]; then
+    echo "Could not find sonic-visualiser." 1>&2
+    echo "If no sonic-visualiser binary is specified in the command line, we expect to" 1>&2
+    echo "find one in ../build/sonic-visualiser" 1>&2
     exit 1
 fi
 
