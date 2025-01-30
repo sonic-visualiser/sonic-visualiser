@@ -96,6 +96,8 @@ server_dependencies = []
 dl_dep = meson.get_compiler('c').find_library('dl', required: false)
 vamphostsdk_dep = dependency('vamp-hostsdk', version: '>= 2.10', required: false)
 
+with_unwind = false
+
 if system == 'linux'
 
   capnp = find_program('capnp')
@@ -134,6 +136,8 @@ if system == 'linux'
   alsa_dep = dependency('alsa')
   
   portaudio_dep = dependency('portaudio-2.0', version: '>= 19', required: false)
+  
+  unwind_dep = dependency('libunwind', required: false)
 
   feature_dependencies = [
     vamphostsdk_dep,
@@ -189,6 +193,15 @@ if system == 'linux'
     '-D__LINUX_ALSASEQ__',
     '-D__LINUX_ALSA__' # for RtMidi
   ]
+
+  if unwind_dep.found() and buildtype.startswith('debug')
+    with_unwind = true
+    feature_defines += [
+      '-DHAVE_UNWIND',
+    ]
+  else
+    unwind_dep = []
+  endif
 
   if portaudio_dep.found()
     feature_defines += [
@@ -1120,6 +1133,12 @@ if with_qt
     'main/PreferencesDialog.cpp',
   ]
 
+  if with_unwind
+    sv_main_files += [
+      'main/segfault.c',
+    ]
+  endif
+
   sv_main_moc_files = qt.preprocess(
     moc_headers: [
       'main/MainWindow.h',
@@ -1202,7 +1221,8 @@ if with_qt
       qt_dep,
       feature_dependencies,
       os_dep,
-      dl_dep
+      dl_dep,
+      unwind_dep
     ],
     cpp_args: [
       feature_defines,
