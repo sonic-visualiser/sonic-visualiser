@@ -96,6 +96,7 @@ server_dependencies = []
 dl_dep = meson.get_compiler('c').find_library('dl', required: false)
 vamphostsdk_dep = dependency('vamp-hostsdk', version: '>= 2.10', required: false)
 
+unwind_dep = []
 with_unwind = false
 
 if system == 'linux'
