@@ -18,7 +18,7 @@
             "vcs": "git",
             "service": "github",
             "owner": "sonic-visualiser",
-            "branch": "thread-paint"
+            "branch": "default"
         },
         "svapp": {
             "vcs": "git",
