@@ -24,22 +24,31 @@ if [ -n "$1" ]; then
     shift
 fi
 
-if [ -n "$1" ]; then
+usage() {
+    echo 1>&2
     echo "Usage: $0 [/optional/path/to/sonic-visualiser]" 1>&2
+}
+
+if [ -n "$1" ]; then
+    usage
     exit 2
 fi
 
 set -u
 
 if [ ! -d "../export-tests" ]; then
+    usage
+    echo 1>&2
     echo "This script must be run from the sonic-visualiser/export-tests directory" 1>&2
     exit 1
 fi
 
 if [ ! -f "$sv" -o ! -x "$sv" ]; then
+    usage
+    echo 1>&2
     echo "Could not find sonic-visualiser." 1>&2
-    echo "If no sonic-visualiser binary is specified in the command line, we expect to" 1>&2
-    echo "find one in ../build/sonic-visualiser" 1>&2
+    echo "If no sonic-visualiser binary is specified on the command line, we expect to" 1>&2
+    echo "find one in ../build/sonic-visualiser ." 1>&2
     exit 1
 fi
 
