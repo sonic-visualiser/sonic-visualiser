@@ -1,4 +1,28 @@
 
+Changes in Sonic Visualiser v5.2 since the previous release 5.0.1
+
+ - Substantially improve responsiveness during scrolling and zooming,
+   with threaded repaints and various perceptual changes. This has the
+   greatest effect on the Mac, where Sonic Visualiser was previously
+   noticeably more sluggish than on other platforms. If threaded
+   repaint causes instability, it can be disabled by setting the
+   SV_NO_THREADED_PAINT environment variable (to anything)
+
+ - Fix habit of holding open the device microphone after recording
+
+ - Improve compatibility with Vamp plugins that return unexpectedly
+   many values in features
+
+ - Improve compatibility with Vamp plugins that express units in
+   variant forms such as Hertz
+
+ - Fix incorrect choice of UI language on systems with more than one
+   of the supported languages configured, and on which English that is
+   not explicitly regionalised to en_US or en_GB has a higher priority
+   than any other supported language. Previously the first other
+   matching language would have been used; now it will be en_US
+
+
 Changes in Sonic Visualiser v5.0.1 (1 Oct 2024) since the previous release 5.0.0:
 
  - Fix occasional crashes in the Mac package, caused by a Qt bug, by
