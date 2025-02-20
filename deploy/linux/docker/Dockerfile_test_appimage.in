@@ -7,7 +7,7 @@ FROM fedora:latest
 RUN echo [[REVISION]]
 
 RUN yum -y update
-RUN yum -y group install GNOME
+RUN yum -y group install cosmic-desktop
 RUN yum -y install libglvnd-opengl
 RUN yum -y install wget
 ADD output/SonicVisualiser-[[REVISION]]-x86_64.AppImage SV.AppImage
