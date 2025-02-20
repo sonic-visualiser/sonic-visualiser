@@ -5,6 +5,8 @@ rdomain="uk.co.particularprograms"
 
 version=$(echo "$all_info" | grep '"version"' | sed -e 's/^.*: "//' -e 's/".*$//')
 
+literalversion="$version"
+
 case "$version" in
     1.0) echo "## Error: Version $version must not be used - it is the App Store sandbox default"; exit 2;;
     [0-9].[0-9]) version="$version".0 ;;

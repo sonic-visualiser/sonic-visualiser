@@ -94,7 +94,7 @@ else
 
     ./deploy/linux/build-and-test-deb.sh
 
-    mv deploy/linux/docker/output/sonic-visualiser_"$version"_amd64.deb \
+    mv deploy/linux/docker/output/sonic-visualiser_"$literalversion"_amd64.deb \
 	packages/
 fi
 
