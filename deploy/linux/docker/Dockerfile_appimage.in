@@ -57,9 +57,9 @@ RUN git config --global http.postBuffer 4M
 WORKDIR /root
 RUN pip3 install meson
 
-RUN wget https://breakfastquay.com/files/releases/rubberband-3.3.0.tar.bz2
-RUN tar xvjf rubberband-3.3.0.tar.bz2
-WORKDIR rubberband-3.3.0
+RUN wget https://breakfastquay.com/files/releases/rubberband-4.0.0.tar.bz2
+RUN tar xvjf rubberband-4.0.0.tar.bz2
+WORKDIR rubberband-4.0.0
 RUN meson setup build -Ddefault_library=static && ninja -C build && ninja -C build install
 WORKDIR /root
 
