@@ -60,7 +60,7 @@ available for it, please contact [Particular Programs Ltd](https://particularpro
 The bulk of the Sonic Visualiser code is
 
  * Copyright (c) 2005-2007 Chris Cannam
- * Copyright (c) 2006-2020 and 2024 Queen Mary University of London
+ * Copyright (c) 2006-2020 and 2024-2025 Queen Mary University of London
  * Copyright (c) 2020-2023 Particular Programs Ltd
 
 with a few exceptions as indicated in the individual source files.
