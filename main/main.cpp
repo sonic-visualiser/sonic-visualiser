@@ -604,6 +604,8 @@ main(int argc, char **argv)
     
     delete gui;
 
+    SVCerr::restoreQtMessageHandler();
+
     cleanupMutex.unlock();
 
     return rv;
