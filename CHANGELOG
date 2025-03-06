@@ -1,12 +1,12 @@
 
 Changes in Sonic Visualiser v5.2 (6 Mar 2025) since the previous release 5.0.1:
 
- - Substantially improve responsiveness during scrolling and zooming,
-   with threaded repaints and various perceptual changes. This has the
-   greatest effect on the Mac, where Sonic Visualiser was previously
-   noticeably more sluggish than on other platforms. If threaded
-   repaint causes instability, it can be disabled by setting the
-   SV_NO_THREADED_PAINT environment variable (to anything)
+ - On the Mac, substantially improve responsiveness during scrolling
+   and zooming, with threaded paint and various perceptual changes.
+   If threaded paint causes instability, it can be disabled by setting
+   the SV_NO_THREADED_PAINT environment variable (to anything).
+   Sonic Visualiser was previously perceptually more sluggish on the
+   Mac than on other platforms, where this change was not necessary
 
  - Fix habit of holding open the device microphone after recording
 
