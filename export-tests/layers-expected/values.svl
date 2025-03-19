@@ -3307,6 +3307,6 @@
     </dataset>
   </data>
   <display>
-    <layer id="5" type="timevalues" name="Estimated f0" model="4"  plotStyle="2" verticalScale="0" scaleMinimum="0" scaleMaximum="0" drawDivisions="true" derivative="false" fillColourMap="Green" colourMap="0"  colourName="Orange" colour="#ff9632" darkBackground="false" />
+    <layer id="5" type="timevalues" name="Estimated f0" model="4"  plotStyle="2" verticalScale="0" scaleMinimum="0" scaleMaximum="0" drawDivisions="true" fillSegments="true" derivative="false" fillColourMap="Green" colourMap="0"  colourName="Orange" colour="#ff9632" darkBackground="false" />
   </display>
 </sv>
