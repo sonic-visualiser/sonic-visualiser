@@ -17,8 +17,8 @@
         "svgui": {
             "vcs": "git",
             "service": "github",
-            "owner": "sonic-visualiser",
-            "branch": "default"
+            "owner": "DMGiulioRomano",
+            "branch": "claude/sonic-visualiser-issue-plan-gy0pxl"
         },
         "svapp": {
             "vcs": "git",
