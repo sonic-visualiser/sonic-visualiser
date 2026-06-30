@@ -1,0 +1,59 @@
+name: macOS .dmg artifact
+
+# Builds Sonic Visualiser on a macOS (Apple Silicon) runner and uploads an
+# installable .dmg as a downloadable artifact. The .dmg is NOT signed with an
+# Apple Developer ID nor notarised, so on first launch Gatekeeper will block
+# it; clear the quarantine flag once after installing:
+#
+#   xattr -dr com.apple.quarantine "/Applications/Sonic Visualiser.app"
+#
+# (or right-click the app -> Open the first time).
+
+on:
+  push:
+    branches: [ "claude/sonic-visualiser-issue-plan-gy0pxl" ]
+  workflow_dispatch:
+
+jobs:
+  build-dmg:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        # polyml provides the SML compiler repoint needs (reliable on arm64);
+        # mercurial is required for the breakfastquay hg subrepositories.
+        run: brew install qt meson ninja capnp mercurial polyml
+
+      - name: Fetch subrepositories (repoint)
+        run: ./repoint install
+
+      - name: Configure
+        run: meson setup build --buildtype release
+
+      - name: Build
+        run: ninja -C build
+
+      - name: Assemble .app bundle
+        run: QTDIR=/opt/homebrew ./deploy/macos/deploy.sh "Sonic Visualiser"
+
+      - name: Ad-hoc code-sign (so it runs on Apple Silicon)
+        run: codesign --force --deep --sign - "Sonic Visualiser.app"
+
+      - name: Build .dmg
+        run: |
+          mkdir -p dmg-staging
+          cp -R "Sonic Visualiser.app" dmg-staging/
+          ln -s /Applications dmg-staging/Applications
+          hdiutil create -volname "Sonic Visualiser" \
+            -srcfolder dmg-staging -ov -format UDZO \
+            "Sonic-Visualiser-arm64.dmg"
+
+      - name: Upload .dmg artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sonic-Visualiser-macOS-arm64
+          path: Sonic-Visualiser-arm64.dmg
+          if-no-files-found: error
