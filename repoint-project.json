@@ -18,7 +18,7 @@
             "vcs": "git",
             "service": "github",
             "owner": "DMGiulioRomano",
-            "branch": "claude/sonic-visualiser-issue-plan-gy0pxl"
+            "branch": "default"
         },
         "svapp": {
             "vcs": "git",
