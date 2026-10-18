@@ -217,10 +217,7 @@ public:
 
     void setMainWindow(MainWindow *mw) {
         m_mainWindow = mw;
-        for (auto f: m_pendingFilepaths) {
-            handleFilepathArgument(f, nullptr);
-        }
-        m_pendingFilepaths.clear();
+        consumePendingFilepaths();
     }
     
     void releaseMainWindow() {
@@ -235,6 +232,16 @@ public:
         if (!success) manager.cancel();
     }
 
+    void postPendingFilepath(QString path) {
+        m_pendingFilepaths.push_back(path);
+    }
+    void consumePendingFilepaths() {
+        auto p(m_pendingFilepaths);
+        m_pendingFilepaths.clear();
+        for (auto f: p) {
+            handleFilepathArgument(f, nullptr);
+        }
+    }
     void handleFilepathArgument(QString path, SVSplash *splash);
 
 protected:
@@ -557,9 +564,18 @@ main(int argc, char **argv)
 
     if (!filesToOpen.empty()) {
         QTimer::singleShot(200, [&]() {
-            for (QString file: filesToOpen) {
-                QApplication::postEvent(&application, new QFileOpenEvent(file));
+            // We want these to be handled via an event to make sure
+            // everything else is ready first, but we don't want an
+            // event for every one, because of risks from e.g. sub
+            // event loops. So post all but the last into the queue,
+            // then fire an event for the last one - whose handler
+            // will consume all of them in order
+            int n = filesToOpen.size();
+            for (int i = 0; i + 1 < n; ++i) {
+                application.postPendingFilepath(filesToOpen[i]);
             }
+            QApplication::postEvent
+                (&application, new QFileOpenEvent(filesToOpen[n-1]));
         });
     }
 
@@ -620,13 +636,20 @@ bool SVApplication::event(QEvent *event){
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 
     QString thePath;
-
+    
     switch (event->type()) {
     case QEvent::FileOpen:
+    {
         SVDEBUG << "SVApplication::event: Handling FileOpen event" << endl;
+        if (!m_pendingFilepaths.empty()) {
+            SVDEBUG << "SVApplication::event: Consuming pending file paths first" << endl;
+            consumePendingFilepaths();
+        }
         thePath = static_cast<QFileOpenEvent *>(event)->file();
         handleFilepathArgument(thePath, nullptr);
+        SVDEBUG << "SVApplication::event: FileOpen event handling complete" << endl;
         return true;
+    }
     default:
         return QApplication::event(event);
     }
@@ -640,7 +663,7 @@ void SVApplication::handleFilepathArgument(QString path, SVSplash *splash){
 
     if (!m_mainWindow) {
         // Not attached yet
-        m_pendingFilepaths.push_back(path);
+        postPendingFilepath(path);
         return;
     }
     
