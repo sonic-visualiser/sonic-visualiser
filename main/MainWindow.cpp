@@ -5319,9 +5319,13 @@ void
 MainWindow::whatsNew()
 {
     QFile changelog(":CHANGELOG");
-    changelog.open(QFile::ReadOnly);
-    QByteArray content = changelog.readAll();
-    QString text = QString::fromUtf8(content);
+    QString text;
+    if (changelog.open(QFile::ReadOnly)) {
+        QByteArray content = changelog.readAll();
+        text = QString::fromUtf8(content);
+    } else {
+        text = tr("(Unable to read changelog from bundled resource)");
+    }
 
     QDialog *d = new QDialog(this);
     d->setWindowTitle(tr("What's New"));
