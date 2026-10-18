@@ -45,6 +45,7 @@
 #include <QSslSocket>
 #include <QFont>
 #include <QFontInfo>
+#include <QMutex>
 
 #include <iostream>
 #include <signal.h>
